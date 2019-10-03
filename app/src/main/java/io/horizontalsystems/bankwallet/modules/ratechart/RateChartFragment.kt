@@ -1,13 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -15,12 +11,16 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), ChartView.Listener {
+class RateChartFragment(
+        private val coin: Coin
+) : BaseBottomSheetDialogFragment(), ChartView.Listener {
 
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
@@ -28,40 +28,25 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
 
-    override fun getTheme(): Int {
-        return R.style.BottomDialog
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.view_bottom_sheet_chart, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setContentView(R.layout.view_bottom_sheet_chart)
+
+        setTitle(getString(R.string.Charts_Title, coin.title))
+        setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
 
         chartView.listener = this
         chartView.setIndicator(chartViewIndicator)
-        chartTitle.text = getString(R.string.Charts_Title, coin.title)
-        closeButton.setOnClickListener { dismiss() }
 
         presenter = ViewModelProviders.of(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         observeData()
         bindActions()
+    }
 
-        dialog?.setOnShowListener {
-            presenter.viewDidLoad()
-
-            // To avoid the bottom sheet stuck in between
-            dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let {
-                BottomSheetBehavior.from(it).apply {
-                    state = BottomSheetBehavior.STATE_EXPANDED
-                    isHideable = true
-                    skipCollapsed = true
-                }
-            }
-        }
+    override fun onShow() {
+        presenter.viewDidLoad()
     }
 
     private fun observeData() {
@@ -82,7 +67,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
             chartView.setData(item.chartData, item.type)
-            chartSubtitle.text = item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) }
+            setSubtitle(item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) })
 
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
                 resources.getColor(R.color.red_d) else

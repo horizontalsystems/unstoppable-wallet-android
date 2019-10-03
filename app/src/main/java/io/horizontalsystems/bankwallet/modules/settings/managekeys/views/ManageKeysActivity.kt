@@ -66,7 +66,6 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         viewModel.confirmBackupEvent.observe(this, Observer {
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
-            val keyName = getString(it.predefinedAccountType.title)
             val description = getString(R.string.ManageKeys_Delete_Alert)
             ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.BACKUP)
         })

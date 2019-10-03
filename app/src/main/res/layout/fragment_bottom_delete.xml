@@ -8,81 +8,6 @@
     android:paddingEnd="8dp"
     android:paddingBottom="8dp">
 
-    <View
-        android:id="@+id/backgroundView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bottom_sheet_floating_background"
-        android:backgroundTint="?attr/ColorLawrence"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/confirmIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/ic_attention"
-        android:tint="?ColorLucian"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/confirmTitle"
-        style="@style/Headline2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="14dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="@string/ManageKeys_Delete_Title"
-        android:textColor="?BottomDialogTextColor"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/confirmIcon"
-        app:layout_constraintEnd_toStartOf="@+id/closeButton"
-        app:layout_constraintStart_toEndOf="@+id/confirmIcon"
-        app:layout_constraintTop_toTopOf="@+id/confirmIcon" />
-
-    <TextView
-        android:id="@+id/confirmSubtitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintLeft_toLeftOf="@id/confirmTitle"
-        app:layout_constraintTop_toBottomOf="@id/confirmTitle"
-        tools:text="Subtitle" />
-
-    <ImageView
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:padding="5dp"
-        android:src="@drawable/close"
-        android:tint="@color/grey"
-        android:background="@drawable/rounded_ripple_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/confirmIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/confirmIcon"
-        />
-
-    <View
-        android:id="@+id/border"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmSubtitle" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -94,7 +19,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/border"
+        app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="3"
         tools:listitem="@layout/view_holder_confirmation" />
 

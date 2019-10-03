@@ -17,8 +17,8 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
-import io.horizontalsystems.bankwallet.ui.dialogs.BackupAlertDialog
 import io.horizontalsystems.bankwallet.ui.dialogs.BalanceSortDialogFragment
+import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
@@ -137,7 +137,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     // LiveData
 
     private fun observeLiveData() {
-        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer {wallet ->
+        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { wallet ->
             ReceiveFragment(wallet, this).also { it.show(childFragmentManager, it.tag) }
         })
 
@@ -177,13 +177,16 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             menuSort?.isVisible = visible
         })
 
-        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {
+        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {(coin, predefinedAccount) ->
             activity?.let { activity ->
-                BackupAlertDialog.show(activity, getString(it.second.title), it.first.title, object : BackupAlertDialog.Listener {
-                    override fun onBackupButtonClick() {
+                val title = getString(R.string.ManageKeys_Delete_Alert_Title)
+                val subtitle = getString(predefinedAccount.title)
+                val description = getString(R.string.ManageKeys_Delete_Alert)
+                ManageKeysDialog.show(title, subtitle, description, activity, object : ManageKeysDialog.Listener {
+                    override fun onClickBackupKey() {
                         viewModel.delegate.openBackup()
                     }
-                })
+                }, ManageKeysDialog.ManageAction.BACKUP)
             }
         })
 

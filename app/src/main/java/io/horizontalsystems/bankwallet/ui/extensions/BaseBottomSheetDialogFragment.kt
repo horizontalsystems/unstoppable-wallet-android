@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 
@@ -34,7 +35,27 @@ open class BaseBottomSheetDialogFragment: BottomSheetDialogFragment() {
         txtSubtitle = view.findViewById(R.id.txtSubtitle)
         headerIcon = view.findViewById(R.id.headerIcon)
 
-        view.findViewById<ImageView>(R.id.closeButton)?.setOnClickListener{ dismiss() }
+        view.findViewById<ImageView>(R.id.closeButton)?.setOnClickListener{ close() }
+
+        dialog?.setOnShowListener {
+            onShow()
+            // To avoid the bottom sheet stuck in between
+            dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let {
+                BottomSheetBehavior.from(it).apply {
+                    state = BottomSheetBehavior.STATE_EXPANDED
+                    isHideable = true
+                    skipCollapsed = true
+                }
+            }
+        }
+    }
+
+    open fun close(){
+        dismiss()
+    }
+
+    open fun onShow(){
+
     }
 
     fun setContentView(@LayoutRes resource: Int) {
