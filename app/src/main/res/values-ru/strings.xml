@@ -285,7 +285,7 @@
     <string name="ManageCoins_title">Валюты</string>
     <string name="ManageCoins_save">Сохранить</string>
     <string name="ManageCoins_AddCoin_Title">Добавить Кошелек</string>
-    <string name="ManageCoins_AddCoin_Text">Это действие сгенерирует новый кошелек для следующих монет:%s </string>
+    <string name="ManageCoins_AddCoin_Text">Это действие сгенерирует новый кошелек для следующих монет: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
