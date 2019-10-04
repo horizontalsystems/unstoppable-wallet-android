@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.app.Activity
 import android.app.KeyguardManager
+import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
 import io.horizontalsystems.bankwallet.BuildConfig
@@ -22,5 +23,11 @@ class SystemInfoManager : ISystemInfoManager {
 
     override val biometricAuthSupported: Boolean
         get() = biometricManager.canAuthenticate() == BIOMETRIC_SUCCESS
+
+    override val deviceModel: String
+        get() = "${Build.MANUFACTURER} ${Build.MODEL}"
+
+    override val osVersion: String
+        get() = "Android ${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})"
 
 }

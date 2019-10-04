@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.reportproblem.appstatus.AppStatusModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
@@ -45,6 +46,10 @@ class ReportProblemActivity : BaseActivity() {
             openTelegramGroup(it)
         })
 
+        router.openAppStatusLiveEvent.observe(this, Observer {
+            AppStatusModule.start(this)
+        })
+
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsReport_Title),
                 leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() }
@@ -56,6 +61,10 @@ class ReportProblemActivity : BaseActivity() {
 
         telegram.setOnSingleClickListener {
             presenter.didTapTelegram()
+        }
+
+        appStatus.setOnSingleClickListener {
+            presenter.didTapAppStatus()
         }
 
         presenter.viewDidLoad()

@@ -77,7 +77,7 @@ object DateHelper {
     }
 
     fun formatDateInUTC(timestamp: Long, dateFormat: String): String {
-        val dateFormatter = SimpleDateFormat(dateFormat, Locale("US"))
+        val dateFormatter = SimpleDateFormat(dateFormat, Locale("EN"))
         dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
         return dateFormatter.format(Date(timestamp * 1000)) //timestamp in seconds
     }

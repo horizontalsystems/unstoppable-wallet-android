@@ -54,6 +54,7 @@ interface ILocalStorage {
     var syncMode: SyncMode
     var sortType: BalanceSortType
     var chartMode: ChartView.ChartType
+    var appVersions: List<AppVersion>
 
     fun clear()
 }
@@ -131,6 +132,7 @@ sealed class DefaultAccountType {
             return wordsCount
         }
     }
+
     class Eos : DefaultAccountType() {
         override fun equals(other: Any?): Boolean {
             return other is Eos
@@ -307,6 +309,12 @@ interface ISystemInfoManager {
     val appVersion: String
     val isSystemLockOff: Boolean
     val biometricAuthSupported: Boolean
+    val deviceModel: String
+    val osVersion: String
+}
+
+interface IAppStatusManager {
+    val status: Map<String, Any>
 }
 
 interface IPinManager {
@@ -389,26 +397,26 @@ interface IPriceAlertsStorage {
     fun deleteExcluding(coinCodes: List<String>)
 }
 
-interface IEmojiHelper{
+interface IEmojiHelper {
     val multiAlerts: String
 
     fun title(signedState: Int): String
     fun body(signedState: Int): String
 }
 
-interface IPriceAlertHandler{
+interface IPriceAlertHandler {
     fun handleAlerts(latestRateData: LatestRateData)
 }
 
-interface IBackgroundPriceAlertManager{
+interface IBackgroundPriceAlertManager {
     fun fetchRates(): Single<LatestRateData>
 }
 
-interface INotificationFactory{
+interface INotificationFactory {
     fun notifications(alertItems: List<PriceAlertItem>): List<AlertNotification>
 }
 
-interface INotificationManager{
+interface INotificationManager {
     val isEnabled: Boolean
     fun show(notifications: List<AlertNotification>)
     fun clear()

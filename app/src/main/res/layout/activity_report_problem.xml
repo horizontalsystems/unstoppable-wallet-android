@@ -36,5 +36,15 @@
         app:icon="@drawable/ic_telegram"
         app:layout_constraintTop_toBottomOf="@+id/mail" />
 
+    <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+        android:id="@+id/appStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="32dp"
+        app:setting_title="@string/SettingsReport_AppStatus"
+        app:setting_arrow="true"
+        app:layout_constraintTop_toBottomOf="@+id/telegram" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

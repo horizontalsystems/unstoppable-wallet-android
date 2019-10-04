@@ -106,6 +106,9 @@
         <activity
             android:name=".modules.backup.eos.BackupEosActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.reportproblem.appstatus.AppStatusActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"
