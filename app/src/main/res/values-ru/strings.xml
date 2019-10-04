@@ -80,7 +80,7 @@
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_To">Кому: </string>
-    <string name="Send_Confirmation_HintMemo">Заметка:</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Итого:</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
@@ -162,9 +162,9 @@
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Источник</string>
-    <string name="FullInfo_Source_Online">доступен</string>
-    <string name="FullInfo_Source_Offline">недоступен</string>
-    <string name="FullInfo_Error_Subtitle">недоступен</string>
+    <string name="FullInfo_Source_Online">Доступен</string>
+    <string name="FullInfo_Source_Offline">Недоступен</string>
+    <string name="FullInfo_Error_Subtitle">Недоступен</string>
     <string name="FullInfo_Error_Retry">Повторить</string>
     <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
@@ -184,7 +184,7 @@
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
     <string name="Settings_Notifications">Уведомления </string>
-    <string name="Settings_ManageCoins">Управление Кошельками</string>
+    <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
