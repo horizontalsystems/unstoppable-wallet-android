@@ -31,15 +31,15 @@
     <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountName">Account Name</string>
-    <string name="Restore_EosActivePrivateKey">Активировать Приватный Ключ</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
     <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Резервная копия</string>
+    <string name="Backup_Intro_Title">Резервная Копия</string>
     <string name="Backup_Intro_TitleShow">Показать Ключ</string>
     <string name="Backup_Intro_Subtitle">Приватный Ключ, который будет показан далее, - это единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и т.д. Убедитесь, что никто не смотрит на ваш экран.\n\nМонеты, контролируемые этим ключом: %s.</string>
     <string name="Backup_Intro_Later">Позже</string>
-    <string name="Backup_Intro_BackupNow">Резервная копия</string>
+    <string name="Backup_Intro_BackupNow">Резервная Копия</string>
     <string name="Backup_DisplayTitle">Приватный Ключ</string>
     <string name="Backup_Confirmation_SecretKey">Я понимаю, что я единственный владелец  Секретного Ключа, который надежно хранится на моем телефоне и позволяет мне контролировать средства в моем кошельке.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
@@ -69,7 +69,7 @@
     <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
-    <string name="Balance_Sort_24hPriceChange">Цена 24 часа (%)</string>
+    <string name="Balance_Sort_24hPriceChange">цене(%) за 24 ч</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
@@ -80,7 +80,7 @@
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_To">Кому: </string>
-    <string name="Send_Confirmation_HintMemo">Заметка:</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Итого:</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
@@ -99,11 +99,11 @@
     <string name="Send_DialogDuration">Продолжительность:</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
-    <string name="Send_DialogMemoHint">Заметка</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Продолжить</string>
     <string name="Send_Sending">Отправка</string>
-    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взымается в %s. Необходимо %s.</string>
+    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взымается в ETH. Необходимо %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s (%s) взымается в %s. Необходимо %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -162,9 +162,9 @@
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Источник</string>
-    <string name="FullInfo_Source_Online">доступен</string>
-    <string name="FullInfo_Source_Offline">недоступен</string>
-    <string name="FullInfo_Error_Subtitle">недоступен</string>
+    <string name="FullInfo_Source_Online">Доступен</string>
+    <string name="FullInfo_Source_Offline">Недоступен</string>
+    <string name="FullInfo_Error_Subtitle">Недоступен</string>
     <string name="FullInfo_Error_Retry">Повторить</string>
     <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
@@ -184,7 +184,7 @@
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
     <string name="Settings_Notifications">Уведомления </string>
-    <string name="Settings_ManageCoins">Управление Кошельками</string>
+    <string name="Settings_ManageCoins">Управление Токенами</string>
     <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
@@ -227,7 +227,7 @@
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Уведомления </string>
     <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для монет, за которыми вы бы хотели следить.\n\nВы будете предупреждены, когда изменение цены за последние 24 часа превысят выбранный порог.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Wallet отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Кошелек отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
     <string name="SettingsNotifications_TurnOn">Включить в настройках</string>
     <string name="SettingsNotifications_Off">Выкл.</string>
     <string name="SettingsNotifications_DeactivateAll">Отключить всё</string>
@@ -282,10 +282,10 @@
     <string name="EditPin_UnlockInfo">Текущий Код</string>
     <string name="EditPin_NewPinInfo">Новый Код</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Валюты</string>
+    <string name="ManageCoins_title">Токены</string>
     <string name="ManageCoins_save">Сохранить</string>
-    <string name="ManageCoins_AddCoin_Title">Добавить Кошелек</string>
-    <string name="ManageCoins_AddCoin_Text">Это действие сгенерирует новый кошелек для следующих монет:%s </string>
+    <string name="ManageCoins_AddCoin_Title">Добавить Токен</string>
+    <string name="ManageCoins_AddCoin_Text">Это действие сгенерирует новый кошелек для следующих монет: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
