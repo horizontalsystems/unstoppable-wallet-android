@@ -73,6 +73,8 @@ class App : Application() {
         lateinit var emojiHelper: IEmojiHelper
         lateinit var notificationManager: INotificationManager
         lateinit var notificationFactory: INotificationFactory
+        lateinit var appStatusManager: IAppStatusManager
+        lateinit var appVersionManager: AppVersionManager
 
         lateinit var instance: App
             private set
@@ -164,6 +166,11 @@ class App : Application() {
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
         backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
+            backgroundManager.registerListener(this)
+        }
+
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage)
+        appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
 

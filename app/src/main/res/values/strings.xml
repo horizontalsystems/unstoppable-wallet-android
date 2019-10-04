@@ -286,6 +286,7 @@
     <string name="SettingsReport_Title">Report a Problem</string>
     <string name="SettingsReport_Email">Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_AppStatus">App Status</string>
 
     <!--Setting_Notifications-->
 

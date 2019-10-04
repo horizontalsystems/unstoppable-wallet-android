@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -27,6 +30,9 @@ class LocalStorageManager : ILocalStorage {
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
     private val CHART_MODE = "prev_chart_mode"
+    private val APP_VERSIONS = "app_versions"
+
+    private val gson = Gson()
 
     override var currentLanguage: String?
         get() = App.preferences.getString(CURRENT_LANGUAGE, null)
@@ -177,6 +183,17 @@ class LocalStorageManager : ILocalStorage {
         }
         set(mode) {
             App.preferences.edit().putString(CHART_MODE, mode.name).apply()
+        }
+
+    override var appVersions: List<AppVersion>
+        get() {
+            val versionsString = App.preferences.getString(APP_VERSIONS, null) ?: return listOf()
+            val type = object : TypeToken<ArrayList<AppVersion>>() {}.type
+            return gson.fromJson(versionsString, type)
+        }
+        set(value) {
+            val versionsString = gson.toJson(value)
+            App.preferences.edit().putString(APP_VERSIONS, versionsString).apply()
         }
 
     override fun clear() {
