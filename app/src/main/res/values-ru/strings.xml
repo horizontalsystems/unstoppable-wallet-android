@@ -69,7 +69,7 @@
     <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
-    <string name="Balance_Sort_24hPriceChange">Цена 24 часа (%)</string>
+    <string name="Balance_Sort_24hPriceChange">по цене (%) за 24 ч</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
@@ -99,11 +99,11 @@
     <string name="Send_DialogDuration">Продолжительность:</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
-    <string name="Send_DialogMemoHint">Заметка</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Продолжить</string>
     <string name="Send_Sending">Отправка</string>
-    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взымается в %s. Необходимо %s.</string>
+    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взымается в ETH. Необходимо %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s (%s) взымается в %s. Необходимо %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -227,7 +227,7 @@
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Уведомления </string>
     <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для монет, за которыми вы бы хотели следить.\n\nВы будете предупреждены, когда изменение цены за последние 24 часа превысят выбранный порог.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Wallet отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Кошелек отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
     <string name="SettingsNotifications_TurnOn">Включить в настройках</string>
     <string name="SettingsNotifications_Off">Выкл.</string>
     <string name="SettingsNotifications_DeactivateAll">Отключить всё</string>
