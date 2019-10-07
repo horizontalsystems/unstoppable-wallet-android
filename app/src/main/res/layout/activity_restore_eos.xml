@@ -1,55 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
-        android:id="@+id/shadowlessToolbar"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/subtitle"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
+                android:id="@+id/eosAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                app:inputFromClipboard="true"
+                app:inputHint="@string/Restore_EosAccountName"
+                app:inputMaxLines="2" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
+                android:id="@+id/eosActivePrivateKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:inputFromClipboard="true"
+                app:inputFromQRCode="true"
+                app:inputHint="@string/Restore_EosActivePrivateKey"
+                app:inputMaxLines="5" />
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:textColor="@color/grey"
+                tools:text="@string/Restore_Enter_Key_Description_Eos" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        tools:text="@string/Restore_Enter_Key_Subtitle"
-        app:layout_constraintTop_toBottomOf="@id/shadowlessToolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_height="@dimen/app_bar_height_tall"
+        android:background="@color/transparent"
+        app:elevation="0dp">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
-        android:id="@+id/eosAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="24dp"
-        app:inputFromClipboard="true"
-        app:inputMaxLines="2"
-        app:inputHint="@string/Restore_EosAccountName"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/subtitle" />
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:collapsedTitleTextAppearance="@style/Title3"
+            app:expandedTitleMarginBottom="16dp"
+            app:expandedTitleMarginStart="16dp"
+            app:expandedTitleTextAppearance="@style/Title2"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
-        android:id="@+id/eosActivePrivateKey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        app:inputFromClipboard="true"
-        app:inputFromQRCode="true"
-        app:inputHint="@string/Restore_EosActivePrivateKey"
-        app:inputMaxLines="5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eosAccount" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:paddingStart="0dp"
+                android:paddingEnd="4dp"
+                app:layout_collapseMode="pin"
+                app:title="@string/Restore_Enter_Key_Title" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
