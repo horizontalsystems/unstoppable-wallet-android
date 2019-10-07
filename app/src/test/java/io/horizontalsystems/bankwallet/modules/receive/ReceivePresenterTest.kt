@@ -22,13 +22,11 @@ class ReceivePresenterTest {
 
     @Before
     fun setUp() {
-        presenter = ReceivePresenter(interactor, router)
-        presenter.view = view
+        presenter = ReceivePresenter(view, router, interactor)
     }
 
     @Test
     fun viewDidLoad() {
-
         presenter.viewDidLoad()
 
         verify(interactor).getReceiveAddress()

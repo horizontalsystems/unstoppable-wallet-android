@@ -2,6 +2,10 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -13,11 +17,10 @@ import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsModule
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_words.*
 
-class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
+class RestoreWordsActivity : BaseActivity() {
 
     private lateinit var viewModel: RestoreWordsViewModel
 
@@ -25,17 +28,15 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_restore_words)
-        shadowlessToolbar.bind(
-                title = getString(R.string.Restore_Enter_Key_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.onDone() })
-        )
 
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val wordsCount = intent.getIntExtra(ModuleField.WORDS_COUNT, 12)
+
         val accountTypeTitleRes = intent.getIntExtra(ModuleField.ACCOUNT_TYPE_TITLE, 0)
         if (accountTypeTitleRes > 0) {
-            subtitle.text = getString(R.string.Restore_Enter_Key_Subtitle, getString(accountTypeTitleRes))
+            description.text = getString(R.string.Restore_Enter_Key_Description_Mnemonic, getString(accountTypeTitleRes), wordsCount.toString())
         }
 
         viewModel = ViewModelProviders.of(this).get(RestoreWordsViewModel::class.java)
@@ -56,7 +57,30 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
             RestoreOptionsModule.start(this, ModuleCode.RESTORE_OPTIONS)
         })
 
-        recyclerInputs.adapter = RestoreWordsAdapter(wordsCount, this)
+        wordsInput.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                isUsingNativeKeyboard()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.restore_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menuOk ->  {
+                viewModel.delegate.onDone(wordsInput.text?.toString())
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -74,18 +98,6 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
             setResult(RESULT_OK, intent)
             finish()
         }
-    }
-
-    //  WordsInputAdapter Listener
-
-    override fun onChange(position: Int, word: String) {
-        if (isUsingNativeKeyboard()) {
-            viewModel.delegate.onChange(position, word)
-        }
-    }
-
-    override fun onDone() {
-        viewModel.delegate.onDone()
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -15,11 +15,10 @@ class RestoreWordsPresenter(
 
     override val words = MutableList(wordsCount) { "" }
 
-    override fun onChange(position: Int, word: String) {
-        words[position] = word
-    }
-
-    override fun onDone() {
+    override fun onDone(wordsString: String?) {
+        val wordList = wordsString?.split(" ") ?: return
+        words.clear()
+        words.addAll(wordList)
         interactor.validate(words)
     }
 

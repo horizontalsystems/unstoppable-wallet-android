@@ -13,8 +13,7 @@ object RestoreWordsModule {
 
     interface ViewDelegate {
         val words: List<String>
-        fun onChange(position: Int, word: String)
-        fun onDone()
+        fun onDone(wordsString: String?)
     }
 
     interface Interactor {
