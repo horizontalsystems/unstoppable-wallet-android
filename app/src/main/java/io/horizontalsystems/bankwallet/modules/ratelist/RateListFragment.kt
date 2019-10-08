@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_rates.*
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
-import java.math.BigDecimal
 import java.util.*
 
 class RatesFragment : Fragment() {
@@ -71,24 +70,16 @@ class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHo
         txCoinCode.text = viewItem.coin.code
         txCoinName.text = viewItem.coin.title
 
-        txValueInFiat.text = if (viewItem.loadingStatus != RateLoadingStatus.Loading) containerView.context.getString(R.string.NotAvailable) else ""
-        txValueInFiat.setTextColor(containerView.context.getColor(R.color.grey_50))
+        txValueInFiat.text = if (viewItem.loadingStatus != RateLoadingStatus.Loading) "----" else ""
+        txValueInFiat.setTextColor(containerView.context.getColor(R.color.grey))
         viewItem.rate?.let { exchangeValue ->
             val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
             txValueInFiat.text = rateString
             txValueInFiat.setTextColor(ContextCompat.getColor(containerView.context, if (viewItem.rateExpired) R.color.grey_50 else R.color.grey))
         }
 
-        txDiff.text = "----"
-        txDiff.setTextColor(containerView.context.getColor(R.color.grey))
-        viewItem.diff?.let { diff ->
-            val diffColor = if (diff < BigDecimal.ZERO)
-                containerView.context.getColor(R.color.red_d) else
-                containerView.context.getColor(R.color.green_d)
-            txDiff.text = App.numberFormatter.format(diff.toDouble(), showSign = true, precision = 2) + "%"
-            txDiff.setTextColor(diffColor)
-        }
         txDiff.visibility = if (viewItem.loadingStatus == RateLoadingStatus.Loading) View.GONE else View.VISIBLE
+        txDiff.bind(viewItem.diff, containerView.context)
 
         loadingSpinner.visibility = if (viewItem.loadingStatus == RateLoadingStatus.Loading) View.VISIBLE else View.GONE
 
