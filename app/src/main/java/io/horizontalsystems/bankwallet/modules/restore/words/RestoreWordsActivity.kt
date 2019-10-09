@@ -79,6 +79,10 @@ class RestoreWordsActivity : BaseActivity() {
                 viewModel.delegate.onDone(wordsInput.text?.toString())
                 return true
             }
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -98,11 +102,6 @@ class RestoreWordsActivity : BaseActivity() {
             setResult(RESULT_OK, intent)
             finish()
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
     }
 
     //  Private
