@@ -16,7 +16,7 @@
 
     <Button
         android:id="@+id/buttonCreate"
-        style="@style/ButtonYellow"
+        style="@style/ButtonPrimaryYellow"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="48dp"
@@ -29,7 +29,7 @@
 
     <Button
         android:id="@+id/buttonRestore"
-        style="@style/ButtonSteel"
+        style="@style/ButtonPrimarySteel"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="48dp"
