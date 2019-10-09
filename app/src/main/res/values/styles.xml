@@ -38,6 +38,7 @@
     <attr name="CellBottomShadeColor" format="reference|color" />
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
     <attr name="ShadingBottomGradient" format="reference" />
+    <attr name="SecondaryButtonStartGradient" format="reference|color" />
 
     <!-- New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />
@@ -108,6 +109,7 @@
         <item name="CellBottomShadeColor">@color/black_50</item>
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_dark</item>
+        <item name="SecondaryButtonStartGradient">#33ffffff</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_d</item>
@@ -176,6 +178,7 @@
         <item name="CellBottomShadeColor">@color/steel_20</item>
         <item name="AddCoinButtonPlaceholder">@color/light</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_light</item>
+        <item name="SecondaryButtonStartGradient">#ffffffff</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_l</item>
