@@ -46,25 +46,19 @@
 
     <!-- Second line-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="23dp"
+    <TextView
+        android:id="@+id/accountCoins"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="37dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp">
-
-        <TextView
-            android:id="@+id/accountCoins"
-            style="@style/Subhead2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:textColor="@color/dimmable_grey"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="BTC, BCH, DASH, ETH, ERC-20" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginBottom="16dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/dimmable_grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="BTC, BCH, DASH, ETH, ERC-20" />
 
     <!-- Actions -->
 
@@ -80,7 +74,7 @@
 
         <Button
             android:id="@+id/buttonNew"
-            style="@style/SendButtonSmallGrey"
+            style="@style/ButtonSecondary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="32dp"
@@ -91,7 +85,7 @@
 
         <Button
             android:id="@+id/buttonImport"
-            style="@style/SendButtonSmallGrey"
+            style="@style/ButtonSecondary"
             android:layout_width="0dp"
             android:minHeight="32dp"
             android:layout_height="wrap_content"
@@ -103,7 +97,7 @@
 
         <Button
             android:id="@+id/buttonUnlink"
-            style="@style/SendButtonSmallGrey"
+            style="@style/ButtonSecondary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -115,7 +109,7 @@
 
         <Button
             android:id="@+id/buttonShow"
-            style="@style/SendButtonSmallGrey"
+            style="@style/ButtonSecondary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="32dp"
@@ -125,36 +119,43 @@
             android:text="@string/ManageKeys_Show"
             android:visibility="gone" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttonBackup"
-            style="@style/SendButtonSmallGrey"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="32dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:background="@drawable/button_secondary_background"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="16dp"
+                android:layout_height="17dp"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp"
                 android:src="@drawable/ic_attention"
-                android:tint="?ColorLucian" />
+                android:tint="?ColorLucian"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonText"
+                app:layout_constraintTop_toTopOf="@+id/imageButtonText"
+                app:layout_constraintBottom_toBottomOf="@+id/imageButtonText"/>
 
             <TextView
+                android:id="@+id/imageButtonText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans_medium"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:textAlignment="center"
+                android:includeFontPadding="false"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/ManageKeys_Backup"
-                android:textColor="@color/stateful_button_text_color"
-                android:textSize="12sp" />
+                android:textColor="@color/button_secondary_text_color_selector"
+                android:textSize="14sp" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

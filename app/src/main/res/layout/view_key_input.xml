@@ -40,9 +40,9 @@
 
         <ImageButton
             android:id="@+id/btnCopy"
-            style="@style/SendImageButtonSmallGrey"
+            style="@style/ImageButtonSecondary"
             android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_copy" />
 

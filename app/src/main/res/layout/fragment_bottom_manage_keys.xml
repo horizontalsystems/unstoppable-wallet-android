@@ -25,7 +25,7 @@
 
     <Button
         android:id="@+id/btnYellow"
-        style="@style/ButtonYellow"
+        style="@style/ButtonPrimaryYellow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -40,7 +40,7 @@
 
     <Button
         android:id="@+id/btnGrey"
-        style="@style/ButtonSteel"
+        style="@style/ButtonPrimarySteel"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"

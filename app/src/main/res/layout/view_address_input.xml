@@ -68,20 +68,10 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/btnAmpersand"
-            style="@style/SendImageButtonSmallGrey"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_small_contact"
-            android:visibility="gone"
-            />
-
-        <ImageButton
             android:id="@+id/btnBarcodeScan"
-            style="@style/SendImageButtonSmallGrey"
+            style="@style/ImageButtonSecondary"
             android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_scan_qr_copy"
             android:visibility="visible"
@@ -89,19 +79,19 @@
 
         <Button
             android:id="@+id/btnPaste"
-            style="@style/SendButtonSmallGrey"
+            style="@style/ButtonSecondary"
             android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_height="32dp"
             android:text="@string/Send_Button_Paste"
             android:visibility="visible"
             />
 
         <ImageButton
             android:id="@+id/btnDeleteAddress"
-            style="@style/SendImageButtonSmallGrey"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:src="@drawable/round_delete_24_px"
+            style="@style/ImageButtonSecondary"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_delete"
             android:visibility="visible"
             />
     </LinearLayout>
