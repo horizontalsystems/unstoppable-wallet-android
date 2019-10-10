@@ -404,7 +404,7 @@
     <!-- Account Types -->
 
     <string name="AccountType_Unstoppable">Unstoppable</string>
-    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20</string>
+    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, GRS, ETH, ERC-20</string>
     <string name="AccountType_Eos">EOS</string>
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOS-based Tokens</string>
     <string name="AccountType_Binance">Binance</string>

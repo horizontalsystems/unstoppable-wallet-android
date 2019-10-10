@@ -62,6 +62,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Ethereum",                "ETH",         18,      CoinType.Ethereum),
             Coin("Bitcoin Cash",            "BCH",          8,      CoinType.BitcoinCash),
             Coin("Dash",                    "DASH",         8,      CoinType.Dash),
+            Coin("Groestlcoin",             "GRS",          8,      CoinType.Groestlcoin),
             Coin("Binance Chain",           "BNB",          8,      CoinType.Binance("BNB")),
             Coin("EOS",                     "EOS",          4,      CoinType.Eos("eosio.token", "EOS")),
             Coin("0x",                      "ZRX",         18,      CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),

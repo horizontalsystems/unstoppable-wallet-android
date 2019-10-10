@@ -48,6 +48,18 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         )
     }
 
+    private val groestlcoinProviders = when {
+        appConfig.testMode -> listOf(
+                GroestlcoinBlockbookProvider(true)
+                //InsightGroestlcoinProvider(true)
+        )
+        else -> listOf(
+                GroestlcoinBlockbookProvider(false),
+                //InsightGroestlcoinProvider(false),
+                BlockChairGroestlcoinProvider()
+        )
+    }
+
     private val binanceProviders = when {
         appConfig.testMode -> listOf(BinanceChainProvider(true))
         else -> listOf(BinanceChainProvider(false))
@@ -62,6 +74,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         is CoinType.BitcoinCash -> bitcoinCashProviders
         is CoinType.Ethereum, is CoinType.Erc20 -> ethereumProviders
         is CoinType.Dash -> dashProviders
+        is CoinType.Groestlcoin -> groestlcoinProviders
         is CoinType.Binance -> binanceProviders
         is CoinType.Eos -> eosProviders
     }
@@ -75,6 +88,9 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         }
         is CoinType.Dash -> {
             dash(localStorage.baseDashProvider ?: dashProviders[0].name)
+        }
+        is CoinType.Groestlcoin -> {
+            dash(localStorage.baseGroestlcoinProvider ?: dashProviders[0].name)
         }
         is CoinType.Binance -> {
             binance(localStorage.baseBinanceProvider ?: binanceProviders[0].name)
@@ -121,6 +137,12 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
 
     override fun dash(name: String): BitcoinForksProvider {
         dashProviders.let { list ->
+            return list.find { it.name == name } ?: list[0]
+        }
+    }
+
+    override fun groestlcoin(name: String): BitcoinForksProvider {
+        groestlcoinProviders.let { list ->
             return list.find { it.name == name } ?: list[0]
         }
     }

@@ -70,6 +70,26 @@ class BlockChairDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
     }
 }
 
+class BlockChairGroestlcoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    override val name = "BlockChair.com"
+
+    override fun url(hash: String): String {
+        return "https://blockchair.com/groestlcoin/transaction/$hash"
+    }
+
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("https://api.blockchair.com/groestlcoin/dashboards/transaction/$hash")
+    }
+
+    override fun convert(json: JsonObject): BitcoinResponse {
+        val response = Gson().fromJson(json, BlockchairBTCResponse::class.java)
+        val transaction = response.data.entries.firstOrNull()
+                ?: throw Exception("Failed to parse transaction response")
+
+        return transaction.value
+    }
+}
+
 class BlockChairEthereumProvider : FullTransactionInfoModule.EthereumForksProvider {
     override val name = "BlockChair.com"
 

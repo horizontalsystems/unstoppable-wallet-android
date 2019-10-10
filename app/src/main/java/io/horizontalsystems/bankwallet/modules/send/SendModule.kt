@@ -10,6 +10,8 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinHandler
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashHandler
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
+import io.horizontalsystems.bankwallet.modules.send.groestlcoin.SendGroestlcoinHandler
+import io.horizontalsystems.bankwallet.modules.send.groestlcoin.SendGroestlcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.eos.SendEosHandler
 import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
 import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumHandler
@@ -67,6 +69,19 @@ object SendModule {
     }
 
     interface ISendDashInteractorDelegate {
+        fun didFetchAvailableBalance(availableBalance: BigDecimal)
+        fun didFetchFee(fee: BigDecimal)
+    }
+
+    interface ISendGroestlcoinInteractor {
+        fun fetchAvailableBalance(address: String?)
+        fun fetchFee(amount: BigDecimal, address: String?)
+        fun validate(address: String)
+        fun send(amount: BigDecimal, address: String): Single<Unit>
+        fun clear()
+    }
+
+    interface ISendGroestlcoinInteractorDelegate {
         fun didFetchAvailableBalance(availableBalance: BigDecimal)
         fun didFetchFee(fee: BigDecimal)
     }
@@ -167,6 +182,17 @@ object SendModule {
             is ISendDashAdapter -> {
                 val interactor = SendDashInteractor(adapter)
                 val handler = SendDashHandler(interactor, viewModel)
+
+                interactor.delegate = handler
+
+                viewModel.amountModuleDelegate = handler
+                viewModel.addressModuleDelegate = handler
+
+                handler
+            }
+            is ISendGroestlcoinAdapter -> {
+                val interactor = SendGroestlcoinInteractor(adapter)
+                val handler = SendGroestlcoinHandler(interactor, viewModel)
 
                 interactor.delegate = handler
 

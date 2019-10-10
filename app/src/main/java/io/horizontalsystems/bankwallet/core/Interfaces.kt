@@ -49,6 +49,7 @@ interface ILocalStorage {
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
+    var baseGroestlcoinProvider: String?
     var baseBinanceProvider: String?
     var baseEosProvider: String?
     var syncMode: SyncMode
@@ -190,6 +191,7 @@ interface ITransactionDataProviderManager {
 
     fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun dash(name: String): FullTransactionInfoModule.BitcoinForksProvider
+    fun groestlcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
     fun binance(name: String): FullTransactionInfoModule.BinanceProvider
@@ -264,6 +266,13 @@ interface ISendBitcoinAdapter {
 }
 
 interface ISendDashAdapter {
+    fun availableBalance(address: String?): BigDecimal
+    fun fee(amount: BigDecimal, address: String?): BigDecimal
+    fun validate(address: String)
+    fun send(amount: BigDecimal, address: String): Single<Unit>
+}
+
+interface ISendGroestlcoinAdapter {
     fun availableBalance(address: String?): BigDecimal
     fun fee(amount: BigDecimal, address: String?): BigDecimal
     fun validate(address: String)

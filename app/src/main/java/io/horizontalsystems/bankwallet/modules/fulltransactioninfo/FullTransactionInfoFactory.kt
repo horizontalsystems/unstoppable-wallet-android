@@ -42,6 +42,13 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
                 provider = providerDASH
                 adapter = FullTransactionBitcoinAdapter(providerDASH, coin, "duff")
             }
+            // GRS, tGRS
+            coin.type is CoinType.Groestlcoin -> {
+                val providerGRS = dataProviderManager.groestlcoin(baseProvider.name)
+
+                provider = providerGRS
+                adapter = FullTransactionBitcoinAdapter(providerGRS, coin, "gro")
+            }
             // BNB
             coin.type is CoinType.Binance -> {
                 val providerBinance = dataProviderManager.binance(baseProvider.name)

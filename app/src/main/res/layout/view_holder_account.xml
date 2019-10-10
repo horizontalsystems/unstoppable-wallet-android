@@ -62,7 +62,7 @@
             android:textColor="@color/deemable_grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="BTC, BCH, DASH, ETH, ERC-20" />
+            tools:text="BTC, BCH, DASH, GRS, ETH, ERC-20" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,6 +8,7 @@ sealed class CoinType : Serializable {
     object BitcoinCash : CoinType()
     object Bitcoin : CoinType()
     object Dash : CoinType()
+    object Groestlcoin : CoinType()
     object Ethereum : CoinType()
 
     class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val gasLimit: Long = 100_000) : CoinType()
@@ -19,7 +20,7 @@ sealed class CoinType : Serializable {
             is Eos -> {
                 return accountType is AccountType.Eos
             }
-            is Bitcoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
+            is Bitcoin, BitcoinCash, Dash, Groestlcoin, Ethereum, is Erc20 -> {
                 if (accountType is AccountType.Mnemonic) {
                     return accountType.words.size == 12 && accountType.salt == null
                 }
@@ -36,7 +37,7 @@ sealed class CoinType : Serializable {
 
     val defaultAccountType: DefaultAccountType
         get() = when (this) {
-            is Erc20, Bitcoin, BitcoinCash, Dash, Ethereum -> {
+            is Erc20, Bitcoin, BitcoinCash, Dash, Groestlcoin, Ethereum -> {
                 DefaultAccountType.Mnemonic(wordsCount = 12)
             }
             is Binance -> DefaultAccountType.Mnemonic(wordsCount = 24)

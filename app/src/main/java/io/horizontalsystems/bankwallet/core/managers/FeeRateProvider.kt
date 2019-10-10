@@ -37,6 +37,10 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRate
         return feeRates(feeRateKit.dash())
     }
 
+    fun groestlcoinFeeRates(): List<FeeRateInfo> {
+        return feeRates(feeRateKit.groestlcoin())
+    }
+
     private fun feeRates(feeRate: FeeRate): List<FeeRateInfo> {
         val feeRatesInfoList = mutableListOf<FeeRateInfo>()
         feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
@@ -68,6 +72,13 @@ class EthereumFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IF
 class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
     override fun feeRates(): List<FeeRateInfo> {
         return feeRateProvider.dashFeeRates()
+    }
+
+}
+
+class GroestlcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override fun feeRates(): List<FeeRateInfo> {
+        return feeRateProvider.groestlcoinFeeRates()
     }
 
 }
