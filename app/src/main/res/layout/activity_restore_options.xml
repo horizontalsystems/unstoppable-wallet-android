@@ -43,9 +43,10 @@
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="48dp"
                 android:text="@string/CoinOption_TimePeriod"
                 android:textColor="@color/grey" />
 
@@ -53,7 +54,6 @@
                 android:id="@+id/fastSync"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="24dp"
                 app:subtitle="@string/CoinOption_Recommended"
                 app:title="@string/CoinOption_Fast" />
 
@@ -68,9 +68,9 @@
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
                 android:text="@string/CoinOption_Fast_Text"
                 android:textColor="@color/grey" />
 
@@ -78,9 +78,10 @@
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="48dp"
                 android:text="@string/CoinOption_Slow_Text"
                 android:textColor="@color/grey" />
 
