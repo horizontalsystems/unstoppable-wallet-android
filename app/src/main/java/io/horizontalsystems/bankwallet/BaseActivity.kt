@@ -67,7 +67,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     override fun onButtonClick() {
                         val imeManager = App.instance.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imeManager.showInputMethodPicker()
-
+                        hideSoftKeyboard()
                         Handler().postDelayed({
                             onBackPressed()
                         }, (1 * 750).toLong())
