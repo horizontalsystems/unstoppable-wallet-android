@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.restore.options
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -10,8 +12,6 @@ import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_restore_options.*
 
 class RestoreOptionsActivity : BaseActivity() {
@@ -22,11 +22,8 @@ class RestoreOptionsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restore_options)
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.CoinOption_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.onDone() })
-        )
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel = ViewModelProviders.of(this).get(RestoreOptionsViewModel::class.java)
         viewModel.init()
@@ -55,5 +52,20 @@ class RestoreOptionsActivity : BaseActivity() {
 
         bip44.setOnClickListener { viewModel.delegate.onSelect(Derivation.bip44) }
         bip49.setOnClickListener { viewModel.delegate.onSelect(Derivation.bip49) }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.restore_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menuOk ->  {
+                viewModel.delegate.onDone()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
