@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -155,9 +156,17 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
             pinPagesAdapter.setEnteredPinLength(pageIndex, length)
         })
 
-        pinView.showFingerprintInput.observe(viewLifecycleOwner, Observer {
-            showFingerprintDialog(it)
+        pinView.showFingerprintButton.observe(viewLifecycleOwner, Observer {
             numpadAdapter.showFingerPrintButton = true
+        })
+
+        pinView.showFingerprintInput.observe(viewLifecycleOwner, Observer {
+            setFingerprintInputScreenVisible(true)
+
+            fingerprintCancelButton.setOnClickListener {
+                setFingerprintInputScreenVisible(false)
+            }
+            showFingerprintDialog(it)
         })
 
         pinView.resetCirclesWithShakeAndDelayForPage.observe(viewLifecycleOwner, Observer { pageIndex ->
@@ -187,7 +196,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         when (item.type) {
             NumPadItemType.NUMBER -> viewDelegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
             NumPadItemType.DELETE -> viewDelegate.onDelete(layoutManager.findFirstVisibleItemPosition())
-            NumPadItemType.FINGER -> viewDelegate.showFingerprintUnlock()
+            NumPadItemType.FINGER -> viewDelegate.showFingerprintInput()
         }
     }
 
@@ -200,11 +209,24 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
+                fingerprintCancelButton.visibility = View.GONE
                 viewDelegate.onFingerprintUnlock()
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                if(errorCode == BiometricConstants.ERROR_USER_CANCELED){
+                    setFingerprintInputScreenVisible(false)
+                }
             }
         })
 
         biometricPrompt.authenticate(promptInfo, cryptoObject)
+    }
+
+    private fun setFingerprintInputScreenVisible(fingerprintVisible: Boolean) {
+        fingerprintInput.visibility = if (fingerprintVisible) View.VISIBLE else View.GONE
+        pinUnlock.visibility = if (fingerprintVisible) View.GONE else View.VISIBLE
     }
 
 }

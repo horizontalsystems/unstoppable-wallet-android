@@ -26,6 +26,7 @@ object PinModule {
         fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject)
         fun showLockView(until: Date)
         fun showPinInput()
+        fun showFingerprintButton()
     }
 
     interface IViewDelegate {
@@ -33,7 +34,8 @@ object PinModule {
         fun onEnter(pin: String, pageIndex: Int)
         fun onDelete(pageIndex: Int)
         fun onFingerprintUnlock() {}
-        fun showFingerprintUnlock() {}
+        fun showFingerprintButton() {}
+        fun showFingerprintInput() {}
         fun resetPin()
     }
 
