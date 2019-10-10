@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
@@ -31,7 +30,9 @@ class RestoreActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_restore)
-        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() }))
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
         viewModel.init()
