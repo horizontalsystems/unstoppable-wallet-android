@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.components.CellView
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.ui.dialogs.PriceAlertStateSelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_alerts.*
 
@@ -25,10 +24,9 @@ class NotificationsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alerts)
-        shadowlessToolbar.bind(
-                title = getString(R.string.SettingsNotifications_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() })
-        )
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         presenter = ViewModelProviders.of(this, NotificationsModule.Factory()).get(NotificationsPresenter::class.java)
 
