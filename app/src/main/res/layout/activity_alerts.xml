@@ -1,83 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:context=".modules.restore.RestoreActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
-            android:id="@+id/shadowlessToolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textWarning"
-            style="@style/Subhead2"
+            <TextView
+                android:id="@+id/textWarning"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="24dp"
+                android:textColor="@color/grey"
+                android:text="@string/SettingsNotifications_NotificationsDisabledWarning"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonAndroidSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/SettingsNotifications_TurnOn"
+                style="@style/ButtonSecondary"
+                android:visibility="invisible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textWarning" />
+
+            <TextView
+                android:id="@+id/textDescription"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsNotifications_Description"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonAndroidSettings" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notifications"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingBottom="32dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textDescription"
+                tools:itemCount="1"
+                tools:listitem="@layout/view_cell" />
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/deactivateAll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/notifications"
+                app:title="@string/SettingsNotifications_DeactivateAll"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height_tall"
+        android:background="@color/transparent"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-            android:textColor="@color/grey"
-            android:text="@string/SettingsNotifications_NotificationsDisabledWarning"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar" />
+            android:layout_height="match_parent"
+            app:collapsedTitleTextAppearance="@style/Title3"
+            app:expandedTitleMarginBottom="16dp"
+            app:expandedTitleMarginStart="16dp"
+            app:expandedTitleTextAppearance="@style/Title2"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-        <Button
-            android:id="@+id/buttonAndroidSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/SettingsNotifications_TurnOn"
-            style="@style/ButtonSecondary"
-            android:visibility="invisible"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textWarning" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:paddingStart="0dp"
+                android:paddingEnd="4dp"
+                app:layout_collapseMode="pin"
+                app:title="@string/SettingsNotifications_Title" />
 
-        <TextView
-            android:id="@+id/textDescription"
-            style="@style/Subhead2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-            android:text="@string/SettingsNotifications_Description"
-            android:textColor="@color/grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAndroidSettings" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notifications"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:paddingBottom="32dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textDescription"
-            tools:itemCount="1"
-            tools:listitem="@layout/view_cell" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <io.horizontalsystems.bankwallet.components.CellView
-            android:id="@+id/deactivateAll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/notifications"
-            app:title="@string/SettingsNotifications_DeactivateAll"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
