@@ -19,23 +19,18 @@ class RateDifferenceTextView : TextView {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun bind(value: BigDecimal?, context: Context) {
-        if (value == null) {
-            text = context.getString(R.string.NotAvailable)
-            setTextColor(context.getColor(R.color.grey_50))
-            setLeftIcon(null)
-        } else {
-            val scaledValue = value.setScale(diffScale, RoundingMode.HALF_EVEN)
+    fun bind(value: BigDecimal, context: Context) {
+        val scaledValue = value.setScale(diffScale, RoundingMode.HALF_EVEN).stripTrailingZeros()
 
-            val iconRes = if (scaledValue >= BigDecimal.ZERO) R.drawable.ic_up_green else R.drawable.ic_down_red
-            val colorAttr = if (scaledValue >= BigDecimal.ZERO) R.attr.ColorRemus else R.attr.ColorLucian
+        val iconRes = if (scaledValue >= BigDecimal.ZERO) R.drawable.ic_up_green else R.drawable.ic_down_red
+        val colorAttr = if (scaledValue >= BigDecimal.ZERO) R.attr.ColorRemus else R.attr.ColorLucian
 
-            text = "${scaledValue.abs()}%"
-            LayoutHelper.getAttr(colorAttr, context.theme)?.let { color ->
-                setTextColor(color)
-            }
-            setLeftIcon(context.getDrawable(iconRes))
+        text = "${scaledValue.abs()}%"
+        LayoutHelper.getAttr(colorAttr, context.theme)?.let { color ->
+            setTextColor(color)
         }
+        setLeftIcon(context.getDrawable(iconRes))
+
     }
 
     private fun setLeftIcon(icon: Drawable?) {
