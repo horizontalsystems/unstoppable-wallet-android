@@ -13,7 +13,7 @@ class NotificationsPresenter(
     private var priceAlerts = listOf<PriceAlert>()
 
     override fun viewDidLoad() {
-        priceAlerts = interactor.priceAlerts
+        priceAlerts = interactor.priceAlerts.sortedBy { it.coin.title }
 
         view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
 
