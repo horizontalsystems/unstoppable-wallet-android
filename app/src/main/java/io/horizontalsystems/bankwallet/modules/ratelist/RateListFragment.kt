@@ -78,10 +78,23 @@ class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHo
             txValueInFiat.setTextColor(ContextCompat.getColor(containerView.context, if (viewItem.rateExpired) R.color.grey_50 else R.color.grey))
         }
 
-        txDiff.visibility = if (viewItem.loadingStatus == RateLoadingStatus.Loading) View.GONE else View.VISIBLE
-        txDiff.bind(viewItem.diff, containerView.context)
+        txDiff.visibility = View.GONE
+        txDiffNa.visibility = View.GONE
 
-        loadingSpinner.visibility = if (viewItem.loadingStatus == RateLoadingStatus.Loading) View.VISIBLE else View.GONE
+        if (viewItem.loadingStatus == RateLoadingStatus.Loading) {
+            loadingSpinner.visibility = View.VISIBLE
+        } else {
+            loadingSpinner.visibility = View.GONE
+
+            viewItem.diff?.let {
+                txDiff.bind(it, containerView.context)
+                txDiff.visibility = View.VISIBLE
+                txDiffNa.visibility = View.GONE
+            } ?: run {
+                txDiff.visibility = View.GONE
+                txDiffNa.visibility = View.VISIBLE
+            }
+        }
 
         bottomShade.visibility = if (isLast) View.VISIBLE else View.GONE
     }

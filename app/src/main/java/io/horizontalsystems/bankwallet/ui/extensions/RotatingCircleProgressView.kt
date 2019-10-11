@@ -11,32 +11,24 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import kotlin.math.max
 
 
 class RotatingCircleProgressView : View {
 
     init {
         mThickness = LayoutHelper.dp(2f, context).toFloat()
-        donutColor = ContextCompat.getColor(context, R.color.grey_donut)
-        circleBackgroundColor = ContextCompat.getColor(context, R.color.grey)
         lastUpdateTime = System.currentTimeMillis()
-        val themedColor = LayoutHelper.getAttr(R.attr.ProgressbarSpinnerColor, context.theme)
-        mCircleColor = themedColor ?: ContextCompat.getColor(context, R.color.dark)
+        mCircleColor = ContextCompat.getColor(context, R.color.grey)
         setPaints()
     }
 
     private lateinit var mCirclePaint: Paint
-    private lateinit var donutPaint: Paint
-    private lateinit var circleBackgroundPaint: Paint
     private var mThickness: Float = 0.toFloat()
 
     private var mCircleRect: RectF = RectF()
     @ColorInt
     private var mCircleColor: Int = 0
-    @ColorInt
-    private var donutColor: Int = 0
-    @ColorInt
-    private var circleBackgroundColor: Int = 0
     private var mSize: Int = 0
     private var circlePadding = 0
 
@@ -75,25 +67,12 @@ class RotatingCircleProgressView : View {
         mCirclePaint.style = Paint.Style.STROKE
         mCirclePaint.strokeWidth = mThickness
         mCirclePaint.strokeCap = Paint.Cap.BUTT
-
-        donutPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        donutPaint.color = donutColor
-        donutPaint.style = Paint.Style.STROKE
-        donutPaint.strokeWidth = mThickness
-        donutPaint.strokeCap = Paint.Cap.BUTT
-
-        circleBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        circleBackgroundPaint.style = Paint.Style.FILL
-        circleBackgroundPaint.color = circleBackgroundColor
     }
 
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val radius = (mSize/2).toFloat()
-        canvas.drawCircle(radius, radius, radius, circleBackgroundPaint)
-        canvas.drawArc(mCircleRect, 0f, 360f, false, donutPaint)
-        canvas.drawArc(mCircleRect, radOffset, Math.max(4f, 360 * animatedProgressValue), false, mCirclePaint)
+        canvas.drawArc(mCircleRect, radOffset, max(4f, 360 * animatedProgressValue), false, mCirclePaint)
         updateAnimation()
     }
 
