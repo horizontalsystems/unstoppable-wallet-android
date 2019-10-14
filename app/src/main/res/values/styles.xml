@@ -35,7 +35,6 @@
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
     <attr name="InputBackground" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
-    <attr name="CellBottomShadeColor" format="reference|color" />
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
     <attr name="ShadingBottomGradient" format="reference" />
     <attr name="SecondaryButtonStartGradient" format="reference|color" />
@@ -106,7 +105,6 @@
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
         <item name="InputBackground">@color/steel_20</item>
         <item name="ConfirmationTextColor">@color/steel_light</item>
-        <item name="CellBottomShadeColor">@color/black_50</item>
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_dark</item>
         <item name="SecondaryButtonStartGradient">#33ffffff</item>
@@ -175,7 +173,6 @@
         <item name="SwipeRefreshBackgroundColor">@color/light</item>
         <item name="InputBackground">@color/white</item>
         <item name="ConfirmationTextColor">@color/dark</item>
-        <item name="CellBottomShadeColor">@color/steel_20</item>
         <item name="AddCoinButtonPlaceholder">@color/light</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_light</item>
         <item name="SecondaryButtonStartGradient">#ffffffff</item>

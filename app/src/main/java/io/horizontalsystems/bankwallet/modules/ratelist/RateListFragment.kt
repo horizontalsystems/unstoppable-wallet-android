@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_rates.*
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
@@ -71,11 +72,15 @@ class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHo
         txCoinName.text = viewItem.coin.title
 
         txValueInFiat.text = if (viewItem.loadingStatus != RateLoadingStatus.Loading) "----" else ""
-        txValueInFiat.setTextColor(containerView.context.getColor(R.color.grey))
+        LayoutHelper.getAttr(R.attr.ColorLeah, containerView.context.theme)?.let { color ->
+            txValueInFiat.setTextColor(color)
+        }
         viewItem.rate?.let { exchangeValue ->
             val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
             txValueInFiat.text = rateString
-            txValueInFiat.setTextColor(ContextCompat.getColor(containerView.context, if (viewItem.rateExpired) R.color.grey_50 else R.color.grey))
+            if (viewItem.rateExpired){
+                txValueInFiat.setTextColor(ContextCompat.getColor(containerView.context, R.color.grey_50))
+            }
         }
 
         txDiff.visibility = View.GONE
