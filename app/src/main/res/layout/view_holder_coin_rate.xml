@@ -101,8 +101,8 @@
         android:id="@+id/bottomShade"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="?CellBottomShadeColor"
-        android:visibility="visible"
+        android:background="@color/steel_20"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
