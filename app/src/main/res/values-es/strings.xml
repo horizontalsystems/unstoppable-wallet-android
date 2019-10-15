@@ -20,7 +20,7 @@
     <string name="Wallet">%s monedero</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">Nueva cartera</string>
+    <string name="Welcome_CreateWallet">Nuevo monedero</string>
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Create-->
     <string name="Create_Title">Nuevo monedero</string>
