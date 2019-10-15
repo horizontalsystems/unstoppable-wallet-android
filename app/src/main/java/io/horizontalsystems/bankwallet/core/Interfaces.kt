@@ -474,6 +474,11 @@ interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
 }
 
+interface IBackgroundRateAlertScheduler {
+    fun startPeriodicWorker()
+    fun stopPeriodicWorker()
+}
+
 enum class FeeRatePriority(val value: Int) {
     LOW(1),
     MEDIUM(2),

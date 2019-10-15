@@ -60,7 +60,7 @@ object NotificationsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = NotificationsView()
             val router = NotificationsRouter()
-            val interactor = NotificationsInteractor(App.priceAlertManager, App.backgroundManager, App.localStorage, App.notificationManager)
+            val interactor = NotificationsInteractor(App.priceAlertManager, App.backgroundManager, App.localStorage, App.notificationManager, App.backgroundRateAlertScheduler)
             val presenter = NotificationsPresenter(view, router, interactor, PriceAlertViewItemFactory())
 
             interactor.delegate = presenter
