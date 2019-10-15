@@ -297,6 +297,7 @@
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
     <string name="SettingsNotifications_Off">Off</string>
     <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="SettingsNotifications_PushNotification">Push Notification</string>
 
     <string name="Notification_Notifications">Notifications %s</string>
     <string name="Notification_Up">Up</string>

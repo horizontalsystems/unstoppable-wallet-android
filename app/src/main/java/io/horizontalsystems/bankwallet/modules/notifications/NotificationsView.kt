@@ -8,6 +8,7 @@ class NotificationsView : NotificationsModule.IView {
     val itemsLiveData = MutableLiveData<List<NotificationsModule.PriceAlertViewItem>>()
     val toggleWarningLiveData = MutableLiveData<Boolean>()
     val showStateSelectorLiveEvent = SingleLiveEvent<Pair<Int, PriceAlert>>()
+    val notificationIsOn = MutableLiveData<Boolean>()
 
     override fun setItems(items: List<NotificationsModule.PriceAlertViewItem>) {
         itemsLiveData.postValue(items)
@@ -23,5 +24,9 @@ class NotificationsView : NotificationsModule.IView {
 
     override fun showStateSelector(itemPosition: Int, priceAlert: PriceAlert) {
         showStateSelectorLiveEvent.postValue(Pair(itemPosition, priceAlert))
+    }
+
+    override fun setNotificationSwitch(enabled: Boolean) {
+        notificationIsOn.postValue(enabled)
     }
 }

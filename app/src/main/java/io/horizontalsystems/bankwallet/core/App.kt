@@ -165,7 +165,7 @@ class App : Application() {
         notificationFactory = NotificationFactory(emojiHelper, instance)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, localStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
             backgroundManager.registerListener(this)
         }
 
@@ -174,7 +174,6 @@ class App : Application() {
             backgroundManager.registerListener(this)
         }
 
-        BackgroundRateAlertScheduler.startPeriodicWorker(instance)
     }
 
 }

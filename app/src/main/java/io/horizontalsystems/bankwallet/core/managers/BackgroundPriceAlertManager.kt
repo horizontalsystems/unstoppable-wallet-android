@@ -6,12 +6,21 @@ import io.reactivex.Single
 
 class BackgroundPriceAlertManager(
         private val priceAlertsStorage: IPriceAlertsStorage,
+        localStorage: ILocalStorage,
         private val rateManager: IRateManager,
         private val currencyManager: ICurrencyManager,
         private val rateStorage: IRateStorage,
         private val priceAlertHandler: IPriceAlertHandler,
         private val notificationManager: INotificationManager
 ) : IBackgroundPriceAlertManager, BackgroundManager.Listener {
+
+    init {
+        if (notificationManager.isEnabled  && localStorage.isAlertNotificationOn) {
+            BackgroundRateAlertScheduler.startPeriodicWorker(App.instance)
+        } else {
+            BackgroundRateAlertScheduler.stopPeriodicWorker(App.instance)
+        }
+    }
 
     override fun fetchRates(): Single<LatestRateData> {
         return rateManager.syncLatestRatesSingle()
