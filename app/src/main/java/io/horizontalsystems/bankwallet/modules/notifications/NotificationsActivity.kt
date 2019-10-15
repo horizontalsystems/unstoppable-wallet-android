@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +45,8 @@ class NotificationsActivity : BaseActivity() {
         notificationItemsAdapter = NotificationItemsAdapter(presenter)
         notifications.adapter = notificationItemsAdapter
 
+        switchNotification.setOnClickListener { switchNotification.switchToggle() }
+
         presenter.viewDidLoad()
     }
 
@@ -55,6 +58,7 @@ class NotificationsActivity : BaseActivity() {
 
         view.toggleWarningLiveData.observe(this, Observer { showWarning ->
             if (showWarning) {
+                switchNotification.visibility = View.GONE
                 textDescription.visibility = View.GONE
                 notifications.visibility = View.GONE
                 deactivateAll.visibility = View.GONE
@@ -62,6 +66,7 @@ class NotificationsActivity : BaseActivity() {
                 textWarning.visibility = View.VISIBLE
                 buttonAndroidSettings.visibility = View.VISIBLE
             } else {
+                switchNotification.visibility = View.VISIBLE
                 textDescription.visibility = View.VISIBLE
                 notifications.visibility = View.VISIBLE
                 deactivateAll.visibility = View.VISIBLE
@@ -79,6 +84,19 @@ class NotificationsActivity : BaseActivity() {
                 }
             }, priceAlertValues, priceAlert.state)
                     .show(supportFragmentManager, "price_alert_value_selector")
+        })
+
+        view.notificationIsOn.observe(this, Observer { enabled ->
+            switchNotification.apply {
+                switchIsChecked = enabled
+
+                switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                    presenter.didSwitchAlertNotification(isChecked)
+                }
+            }
+
+            notifications.alpha = if (enabled) 1f else 0.5f
+            deactivateAll.alpha = if (enabled) 1f else 0.5f
         })
     }
 

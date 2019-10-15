@@ -31,6 +31,7 @@ class LocalStorageManager : ILocalStorage {
     private val SORT_TYPE = "balance_sort_type"
     private val CHART_MODE = "prev_chart_mode"
     private val APP_VERSIONS = "app_versions"
+    private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
 
     private val gson = Gson()
 
@@ -194,6 +195,12 @@ class LocalStorageManager : ILocalStorage {
         set(value) {
             val versionsString = gson.toJson(value)
             App.preferences.edit().putString(APP_VERSIONS, versionsString).apply()
+        }
+
+    override var isAlertNotificationOn: Boolean
+        get() = App.preferences.getBoolean(ALERT_NOTIFICATION_ENABLED, true)
+        set(enabled) {
+            App.preferences.edit().putBoolean(ALERT_NOTIFICATION_ENABLED, enabled).apply()
         }
 
     override fun clear() {

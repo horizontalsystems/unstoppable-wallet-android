@@ -19,16 +19,24 @@ class BackgroundRateAlertScheduler(appContext: Context, workerParams: WorkerPara
 
     companion object {
 
+        private const val backgroundRateFetchWorkName = "BackgroundRateFetchWork"
+
         fun startPeriodicWorker(context: Context) {
             val workRequest = createPeriodicWorkRequest()
 
             WorkManager
                     .getInstance(context)
-                    .enqueueUniquePeriodicWork("BackgroundRateFetchWork", ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+                    .enqueueUniquePeriodicWork(backgroundRateFetchWorkName, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+        }
+
+        fun stopPeriodicWorker(context: Context) {
+            WorkManager
+                    .getInstance(context)
+                    .cancelUniqueWork(backgroundRateFetchWorkName)
         }
 
         private fun createPeriodicWorkRequest() =
-                PeriodicWorkRequestBuilder<BackgroundRateAlertScheduler>(1, TimeUnit.HOURS)
+                PeriodicWorkRequestBuilder<BackgroundRateAlertScheduler>(10, TimeUnit.MINUTES)
                         .setConstraints(createConstraints())
                         .setBackoffCriteria(BackoffPolicy.LINEAR, PeriodicWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
                         .build()

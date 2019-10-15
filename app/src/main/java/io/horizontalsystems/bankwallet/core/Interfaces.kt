@@ -55,6 +55,7 @@ interface ILocalStorage {
     var sortType: BalanceSortType
     var chartMode: ChartView.ChartType
     var appVersions: List<AppVersion>
+    var isAlertNotificationOn: Boolean
 
     fun clear()
 }
