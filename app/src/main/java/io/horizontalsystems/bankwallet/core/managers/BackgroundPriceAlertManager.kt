@@ -11,14 +11,15 @@ class BackgroundPriceAlertManager(
         private val currencyManager: ICurrencyManager,
         private val rateStorage: IRateStorage,
         private val priceAlertHandler: IPriceAlertHandler,
-        private val notificationManager: INotificationManager
+        private val notificationManager: INotificationManager,
+        backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
 ) : IBackgroundPriceAlertManager, BackgroundManager.Listener {
 
     init {
         if (notificationManager.isEnabled  && localStorage.isAlertNotificationOn) {
-            BackgroundRateAlertScheduler.startPeriodicWorker(App.instance)
+            backgroundRateAlertScheduler.startPeriodicWorker()
         } else {
-            BackgroundRateAlertScheduler.stopPeriodicWorker(App.instance)
+            backgroundRateAlertScheduler.stopPeriodicWorker()
         }
     }
 

@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.notifications
 
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IBackgroundRateAlertScheduler
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
-import io.horizontalsystems.bankwallet.core.managers.BackgroundRateAlertScheduler
 import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
@@ -12,7 +11,8 @@ class NotificationsInteractor(
         private val priceAlertManager: PriceAlertManager,
         backgroundManager: BackgroundManager,
         private val localStorage: ILocalStorage,
-        private val notificationManager: INotificationManager
+        private val notificationManager: INotificationManager,
+        private val backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
 ) : NotificationsModule.IInteractor, BackgroundManager.Listener {
 
     init {
@@ -38,11 +38,11 @@ class NotificationsInteractor(
     }
 
     override fun startBackgroundRateFetchWorker() {
-        BackgroundRateAlertScheduler.startPeriodicWorker(App.instance)
+        backgroundRateAlertScheduler.startPeriodicWorker()
     }
 
     override fun stopBackgroundRateFetchWorker() {
-        BackgroundRateAlertScheduler.stopPeriodicWorker(App.instance)
+        backgroundRateAlertScheduler.stopPeriodicWorker()
     }
 
     override fun willEnterForeground() {

@@ -75,6 +75,7 @@ class App : Application() {
         lateinit var notificationFactory: INotificationFactory
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
+        lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
 
         lateinit var instance: App
             private set
@@ -165,7 +166,8 @@ class App : Application() {
         notificationFactory = NotificationFactory(emojiHelper, instance)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, localStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
+        backgroundRateAlertScheduler = BackgroundRateAlertScheduler(instance)
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, localStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager, backgroundRateAlertScheduler).apply {
             backgroundManager.registerListener(this)
         }
 
