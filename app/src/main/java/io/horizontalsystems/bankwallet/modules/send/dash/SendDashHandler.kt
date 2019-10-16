@@ -11,7 +11,7 @@ import java.math.BigDecimal
 class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
                       private val router: SendModule.IRouter)
     : SendModule.ISendHandler, SendModule.ISendDashInteractorDelegate, SendAmountModule.IAmountModuleDelegate,
-      SendAddressModule.IAddressModuleDelegate {
+      SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -108,5 +108,9 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
     override fun scanQrCode() {
         router.scanQrCode()
     }
+
+    // SendFeeModule.IFeeModuleDelegate
+
+    override fun onUpdateFeeRate(feeRate: Long) {}
 
 }
