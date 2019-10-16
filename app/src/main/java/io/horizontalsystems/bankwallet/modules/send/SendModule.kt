@@ -181,6 +181,7 @@ object SendModule {
 
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
+                    presenter.feeModuleDelegate = handler
 
                     handler
                 }
@@ -200,6 +201,7 @@ object SendModule {
 
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
+                    presenter.feeModuleDelegate = handler
 
                     handler
                 }

@@ -118,7 +118,7 @@ class SendActivity : BaseActivity() {
                 }
                 is SendModule.Input.Memo -> {
                     //add memo view
-                    val sendMemoFragment = SendMemoFragment(input.maxLength)
+                    val sendMemoFragment = SendMemoFragment(input.maxLength, mainPresenter.handler)
                     supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendMemoFragment).commitNow()
                 }
                 SendModule.Input.ProceedButton -> {

@@ -10,7 +10,7 @@ import java.math.BigDecimal
 
 class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteractor,
                          private val router: SendModule.IRouter)
-    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate {
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -92,5 +92,9 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     override fun scanQrCode() {
         router.scanQrCode()
     }
+
+    // SendFeeModule.IFeeModuleDelegate
+
+    override fun onUpdateFeeRate(feeRate: Long) {}
 
 }
