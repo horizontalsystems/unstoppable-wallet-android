@@ -53,7 +53,7 @@ class SendAmountPresenterHelper(
 
     fun getCoinAmount(amount: BigDecimal?, inputType: SendModule.InputType, rate: Rate?): BigDecimal? {
         return when (inputType) {
-            SendModule.InputType.CURRENCY -> rate?.let { amount?.divide(it.value, 8, RoundingMode.CEILING) }
+            SendModule.InputType.CURRENCY -> rate?.let { amount?.divide(it.value, coinDecimal, RoundingMode.CEILING) }
             else -> amount
         }
     }

@@ -144,12 +144,15 @@ class SendAmountPresenter(
     override fun onMaxClick() {
         amount = availableBalance
 
+        view.removeTextChangeListener()
+
         syncAmount()
         syncHint()
         syncMaxButton()
         syncError()
 
         moduleDelegate?.onChangeAmount()
+        view.addTextChangeListener()
     }
 
     override fun didRateRetrieve(rate: Rate?) {
