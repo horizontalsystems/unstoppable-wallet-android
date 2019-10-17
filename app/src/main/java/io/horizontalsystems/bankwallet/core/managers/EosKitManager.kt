@@ -16,6 +16,9 @@ class EosKitManager(appConfig: IAppConfigProvider) : IEosKitManager {
     override val eosKit: EosKit?
         get() = kit
 
+    override val statusInfo: Map<String, Any>?
+        get() = eosKit?.statusInfo()
+
     override fun eosKit(wallet: Wallet): EosKit {
         val account = wallet.account
         if (account.type is AccountType.Eos) {

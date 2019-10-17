@@ -171,7 +171,7 @@ class App : Application() {
             backgroundManager.registerListener(this)
         }
 
-        appStatusManager = AppStatusManager(systemInfoManager, localStorage)
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage, accountManager, predefinedAccountTypeManager, walletManager, adapterManager, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }

@@ -114,6 +114,9 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         )
     }
 
+    val statusInfo: Map<String, Any>
+        get() = kit.statusInfo()
+
     companion object {
         const val defaultConfirmationsThreshold = 3
         const val decimal = 8

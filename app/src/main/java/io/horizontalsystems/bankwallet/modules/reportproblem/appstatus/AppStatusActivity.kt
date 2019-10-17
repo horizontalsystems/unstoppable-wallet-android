@@ -66,7 +66,9 @@ class AppStatusActivity : BaseActivity() {
             }
         }
 
-        return "${sb.trimEnd()}\n"
+        val statusString = sb.trimEnd()
+
+        return if (statusString.isEmpty()) "" else "$statusString\n"
     }
 
 }

@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
@@ -225,6 +226,7 @@ sealed class AdapterState {
 
 interface IEthereumKitManager {
     val ethereumKit: EthereumKit?
+    val statusInfo: Map<String, Any>?
 
     fun ethereumKit(wallet: Wallet): EthereumKit
     fun unlink()
@@ -232,8 +234,17 @@ interface IEthereumKitManager {
 
 interface IEosKitManager {
     val eosKit: EosKit?
-    fun eosKit(wallet: Wallet): EosKit
+    val statusInfo: Map<String, Any>?
 
+    fun eosKit(wallet: Wallet): EosKit
+    fun unlink()
+}
+
+interface IBinanceKitManager {
+    val binanceKit: BinanceChainKit?
+    val statusInfo: Map<String, Any>?
+
+    fun binanceKit(wallet: Wallet): BinanceChainKit
     fun unlink()
 }
 
