@@ -21,7 +21,7 @@ class ChartConfig(context: Context, viewHelper: ViewHelper) {
     var height = 0f
     var textSize = viewHelper.dp2px(12f)
     var textPadding = viewHelper.dp2px(4f)
-    var strokeWidth = 1f
+    var strokeWidth = 2f
     var offsetRight = 0f
     var offsetBottom = 0f
     var gridEdgeOffset = viewHelper.dp2px(5f)

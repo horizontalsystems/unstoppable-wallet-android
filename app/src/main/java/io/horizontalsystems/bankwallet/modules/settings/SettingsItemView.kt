@@ -10,6 +10,7 @@ import android.widget.Switch
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
+import kotlinx.android.synthetic.main.view_setting_item.view.*
 
 class SettingsItemView : ConstraintLayout {
 
@@ -28,6 +29,12 @@ class SettingsItemView : ConstraintLayout {
     private lateinit var badgeImageView: ImageView
     private lateinit var arrowImageView: ImageView
 
+    var bottomBorder: Boolean = false
+        set(value) {
+            field = value
+            bottomShade.visibility = if (value) View.VISIBLE else View.INVISIBLE
+        }
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -44,6 +51,7 @@ class SettingsItemView : ConstraintLayout {
             attrTitle = ta.getString(R.styleable.SettingsItemView_setting_title)
             attrIcon = ta.getDrawable(R.styleable.SettingsItemView_setting_icon)
             attrArrow = ta.getBoolean(R.styleable.SettingsItemView_setting_arrow, false)
+            bottomBorder = ta.getBoolean(R.styleable.SettingsItemView_setting_bottom_border, false)
         } finally {
             ta.recycle()
         }

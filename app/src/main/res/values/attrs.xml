@@ -7,11 +7,13 @@
         <attr name="setting_title" format="string" />
         <attr name="setting_icon" format="integer" />
         <attr name="setting_arrow" format="boolean" />
+        <attr name="setting_bottom_border" format="boolean" />
     </declare-styleable>
     <declare-styleable name="MenuItemBig">
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="icon" format="reference" />
+        <attr name="menu_bottom_border" format="boolean" />
     </declare-styleable>
     <declare-styleable name="TransactionInfoItemView">
         <attr name="title" />
