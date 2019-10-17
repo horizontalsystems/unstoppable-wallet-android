@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -66,6 +67,21 @@ class RestoreWordsActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        //fixes scrolling in EditText when it's inside NestedScrollView
+        wordsInput.setOnTouchListener { v, event ->
+            if (wordsInput.hasFocus()) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_SCROLL -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                        return@setOnTouchListener true
+                    }
+                }
+            }
+            return@setOnTouchListener false
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
