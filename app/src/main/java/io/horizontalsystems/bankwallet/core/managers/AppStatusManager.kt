@@ -1,55 +1,114 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppStatusManager
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
+import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.Coin
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class AppStatusManager(
         private val systemInfoManager: ISystemInfoManager,
-        private val localStorage: ILocalStorage
+        private val localStorage: ILocalStorage,
+        private val accountManager: IAccountManager,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val walletManager: IWalletManager,
+        private val adapterManager: IAdapterManager,
+        private val appConfigProvider: IAppConfigProvider,
+        private val ethereumKitManager: IEthereumKitManager,
+        private val eosKitManager: IEosKitManager,
+        private val binanceKitManager: IBinanceKitManager
 ) : IAppStatusManager {
 
     override val status: LinkedHashMap<String, Any>
         get() {
             val status = LinkedHashMap<String, Any>()
 
-            val app = LinkedHashMap<String, Any>()
-            app["Current Time"] = Date()
-            app["App Version"] = systemInfoManager.appVersion
-            app["Device Model"] = systemInfoManager.deviceModel
-            app["OS Version"] = systemInfoManager.osVersion
-
-            status["App Info"] = app
-
-            val versions = LinkedHashMap<String, Date>()
-            localStorage.appVersions.sortedBy { it.timestamp }.forEach { version ->
-                versions[version.version] = Date(version.timestamp)
-            }
-            status["Version History"] = versions
-
-            val bitcoinStatus = LinkedHashMap<String, Any>()
-
-            bitcoinStatus["Synced Until"] = "Jun 2, 2019"
-            val peer1 = LinkedHashMap<String, Any>()
-            peer1["Status"] = "active"
-            peer1["IP Address"] = "192.12.34.1"
-            val testInfo = LinkedHashMap<String, Any>()
-            testInfo["testInfo1"] = "value1"
-            testInfo["testInfo2"] = "value2"
-            peer1["Test Info"] = testInfo
-
-            bitcoinStatus["Peer 1"] = peer1
-
-
-            val blockchainStatus = LinkedHashMap<String, Any>()
-            blockchainStatus["Bitcoin"] = bitcoinStatus
-            blockchainStatus["Bitcoin Cash"] = bitcoinStatus
-
-            status["Blockchain Status"] = blockchainStatus
+            status["App Info"] = getAppInfo()
+            status["Version History"] = getVersionHistory()
+            status["Wallets Status"] = getWalletsStatus()
+            status["Blockchain Status"] = getBlockchainStatus()
 
             return status
         }
+
+    private fun getAppInfo(): Map<String, Any> {
+        val appInfo = LinkedHashMap<String, Any>()
+        appInfo["Current Time"] = Date()
+        appInfo["App Version"] = systemInfoManager.appVersion
+        appInfo["Device Model"] = systemInfoManager.deviceModel
+        appInfo["OS Version"] = systemInfoManager.osVersion
+
+        return appInfo
+    }
+
+    private fun getVersionHistory(): Map<String, Any> {
+        val versions = LinkedHashMap<String, Date>()
+
+        localStorage.appVersions.sortedBy { it.timestamp }.forEach { version ->
+            versions[version.version] = Date(version.timestamp)
+        }
+        return versions
+    }
+
+    private fun getWalletsStatus(): Map<String, Any> {
+        val wallets = LinkedHashMap<String, Any>()
+
+        for (predefinedAccountType in predefinedAccountTypeManager.allTypes) {
+            val account = predefinedAccountTypeManager.account(predefinedAccountType) ?: continue
+            val title = App.instance.getString(predefinedAccountType.title)
+
+            wallets[title] = getAccountDetails(account)
+        }
+        return wallets
+    }
+
+    private fun getAccountDetails(account: Account): LinkedHashMap<String, Any> {
+        val accountDetails = LinkedHashMap<String, Any>()
+
+        when (val accountType = account.type) {
+            is AccountType.Mnemonic -> {
+                accountDetails["Mnemonic"] = accountType.words.count()
+                accountDetails["Derivation"] = accountType.derivation
+            }
+            is AccountType.Eos -> {
+                accountDetails["Account Name"] = accountType.account
+            }
+        }
+        account.defaultSyncMode?.let {
+            accountDetails["Sync Mode"] = it
+        }
+        return accountDetails
+    }
+
+    private fun getBlockchainStatus(): Map<String, Any> {
+        val blockchainStatus = LinkedHashMap<String, Any>()
+
+        blockchainStatus.putAll(getBitcoinForkStatuses())
+        ethereumKitManager.statusInfo?.let { blockchainStatus["Ethereum"] = it }
+        eosKitManager.statusInfo?.let { blockchainStatus["EOS"] = it }
+        binanceKitManager.statusInfo?.let { blockchainStatus["Binance DEX"] = it }
+
+        return blockchainStatus
+    }
+
+    private fun getBitcoinForkStatuses(): Map<String, Any> {
+        val bitcoinChainStatus = LinkedHashMap<String, Any>()
+        val coinIdsToDisplay = listOf("BTC", "BCH", "DASH")
+
+        for (coinId in coinIdsToDisplay) {
+            val coin = getCoin(coinId)
+            val wallet = walletManager.wallet(coin) ?: continue
+            val adapter = adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter
+                    ?: continue
+            bitcoinChainStatus[coin.title] = adapter.statusInfo
+        }
+        return bitcoinChainStatus
+    }
+
+    private fun getCoin(coinId: String): Coin {
+        return appConfigProvider.coins.first { it.coinId == coinId }
+    }
 
 }
