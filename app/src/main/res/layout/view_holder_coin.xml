@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="103dp"
         android:clipChildren="true"
-        android:paddingStart="12dp"
+        android:paddingStart="8dp"
         android:paddingTop="8dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp">

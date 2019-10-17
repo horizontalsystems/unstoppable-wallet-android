@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_menu_item_big.view.*
@@ -26,6 +27,12 @@ class MenuItemBig : ConstraintLayout {
         loadAttributes(attrs)
     }
 
+    var bottomBorder: Boolean = false
+        set(value) {
+            field = value
+            bottomShade.visibility = if (value) View.VISIBLE else View.INVISIBLE
+        }
+
     override fun onFinishInflate() {
         super.onFinishInflate()
 
@@ -41,6 +48,7 @@ class MenuItemBig : ConstraintLayout {
             attrTitle = ta.getString(R.styleable.MenuItemBig_title)
             attrSubtitle = ta.getString(R.styleable.MenuItemBig_subtitle)
             attrIcon = ta.getResourceId(R.styleable.MenuItemBig_icon, 0)
+            bottomBorder = ta.getBoolean(R.styleable.MenuItemBig_menu_bottom_border, false)
         } finally {
             ta.recycle()
         }

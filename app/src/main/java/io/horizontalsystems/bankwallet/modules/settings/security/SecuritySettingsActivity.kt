@@ -62,6 +62,7 @@ class SecuritySettingsActivity : BaseActivity() {
 
         viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->
             changePin.visibility = if (pinEnabled) View.VISIBLE else View.GONE
+            enablePin.bottomBorder = !pinEnabled
         })
 
         viewModel.openEditPinLiveEvent.observe(this, Observer {

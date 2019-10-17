@@ -67,16 +67,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
                 app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_manage_coins"
-                app:setting_title="@string/Settings_ManageCoins" />
-
-            <View
-                android:id="@+id/bottomShade_1"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageCoins" />
+                app:setting_title="@string/Settings_ManageCoins"
+                app:setting_bottom_border="true"/>
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/notifications"
@@ -120,16 +112,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
                 app:setting_icon="@drawable/ic_light_mode"
-                app:setting_title="@string/Settings_LightMode" />
-
-            <View
-                android:id="@+id/bottomShade_2"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lightMode" />
+                app:setting_title="@string/Settings_LightMode"
+                app:setting_bottom_border="true"/>
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/about"
@@ -161,16 +145,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/shareApp"
                 app:setting_icon="@drawable/ic_report"
-                app:setting_title="@string/Settings_Report" />
-
-            <View
-                android:id="@+id/bottomShade_3"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/report" />
+                app:setting_title="@string/Settings_Report"
+                app:setting_bottom_border="true"/>
 
             <TextView
                 android:id="@+id/appName"

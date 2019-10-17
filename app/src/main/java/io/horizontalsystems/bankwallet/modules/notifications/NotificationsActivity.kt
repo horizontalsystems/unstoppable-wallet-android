@@ -97,6 +97,12 @@ class NotificationsActivity : BaseActivity() {
 
             notifications.alpha = if (enabled) 1f else 0.5f
             deactivateAll.alpha = if (enabled) 1f else 0.5f
+
+            //enable/disable clicks on related elements
+            notificationItemsAdapter.clickable = enabled
+            notificationItemsAdapter.notifyDataSetChanged()
+
+            deactivateAll.isEnabled = enabled
         })
     }
 
@@ -119,6 +125,7 @@ class NotificationsActivity : BaseActivity() {
 
 class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : RecyclerView.Adapter<NotificationItemViewHolder>() {
     var items = listOf<NotificationsModule.PriceAlertViewItem>()
+    var clickable = true
 
     init {
         setHasStableIds(true)
@@ -142,15 +149,16 @@ class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : 
     }
 
     override fun onBindViewHolder(holder: NotificationItemViewHolder, position: Int) {
-        holder.bind(items[position], position == itemCount - 1)
+        holder.bind(items[position], position == itemCount - 1, clickable)
     }
 }
 
 class NotificationItemViewHolder(override val containerView: CellView, private val presenter: NotificationsPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(coinViewItem: NotificationsModule.PriceAlertViewItem, lastElement: Boolean) {
+    fun bind(coinViewItem: NotificationsModule.PriceAlertViewItem, lastElement: Boolean, clickable: Boolean) {
         containerView.icon = coinViewItem.code
         containerView.title = coinViewItem.title
+        containerView.subtitle = coinViewItem.code
         containerView.rightTitle = coinViewItem.state.value?.let { "$it%" }
                 ?: itemView.context.getString(R.string.SettingsNotifications_Off)
         containerView.downArrow = true
@@ -159,6 +167,7 @@ class NotificationItemViewHolder(override val containerView: CellView, private v
         containerView.setOnClickListener {
             presenter.didTapItem(adapterPosition)
         }
+        containerView.isEnabled = clickable
     }
 
 }

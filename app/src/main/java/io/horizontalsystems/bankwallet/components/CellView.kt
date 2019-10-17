@@ -6,7 +6,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_cell.view.*
-import kotlinx.android.synthetic.main.view_cell_right.view.*
 
 class CellView : ConstraintLayout {
 

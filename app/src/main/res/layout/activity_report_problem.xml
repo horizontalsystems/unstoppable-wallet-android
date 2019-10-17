@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -34,17 +33,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:title="@string/SettingsReport_Telegram"
         app:icon="@drawable/ic_telegram"
-        app:layout_constraintTop_toBottomOf="@+id/mail" />
+        app:layout_constraintTop_toBottomOf="@+id/mail"
+        app:menu_bottom_border="true"/>
 
     <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
         android:id="@+id/appStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="32dp"
         app:setting_title="@string/SettingsReport_AppStatus"
         app:setting_arrow="true"
-        app:layout_constraintTop_toBottomOf="@+id/telegram" />
+        app:layout_constraintTop_toBottomOf="@+id/telegram"
+        app:setting_bottom_border="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
