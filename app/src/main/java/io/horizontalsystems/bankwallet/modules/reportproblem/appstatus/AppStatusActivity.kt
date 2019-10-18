@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.reportproblem.appstatus
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_app_status.*
 import java.util.*
 
@@ -21,17 +21,29 @@ class AppStatusActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_status)
 
-        presenter = ViewModelProviders.of(this, AppStatusModule.Factory()).get(AppStatusPresenter::class.java)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.SettingsReport_AppStatus),
-                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() },
-                rightBtnItem = TopMenuItem(text = R.string.Alert_Copy) { presenter.didTapCopy(textAppStatus.text.toString()) }
-        )
+        presenter = ViewModelProviders.of(this, AppStatusModule.Factory()).get(AppStatusPresenter::class.java)
 
         observeView(presenter.view as AppStatusView)
 
         presenter.viewDidLoad()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.app_status_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menuCopy ->  {
+                presenter.didTapCopy(textAppStatus.text.toString())
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun observeView(view: AppStatusView) {
