@@ -29,6 +29,9 @@ class FullTransactionBinanceAdapter(private val provider: FullTransactionInfoMod
 
             section.add(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.format(CoinValue(feeCoin, data.fee))))
             section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = App.numberFormatter.format(CoinValue(coin, amount))))
+            if (data.memo.isNotBlank()) {
+                section.add(FullTransactionItem(R.string.FullInfo_Memo, value = data.memo, clickable = true))
+            }
             sections.add(FullTransactionSection(section))
         }
 
