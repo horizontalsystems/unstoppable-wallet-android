@@ -33,6 +33,7 @@ class BinanceChainResponse(json: JsonObject) : BinanceResponse() {
     override var value: BigDecimal = BigDecimal.ZERO
     override var from: String = ""
     override var to: String = ""
+    override var memo: String = ""
 
     init {
         val tx = json["tx"].asJsonObject["value"].asJsonObject
@@ -46,5 +47,6 @@ class BinanceChainResponse(json: JsonObject) : BinanceResponse() {
         from = input["address"].asString
         to = output["address"].asString
         value = coins["amount"].asBigDecimal
+        memo = tx["memo"].asString
     }
 }

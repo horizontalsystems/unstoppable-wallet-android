@@ -62,6 +62,7 @@ abstract class BinanceResponse : FullTransactionResponse {
 
     abstract var fee: BigDecimal
     abstract var value: BigDecimal
+    abstract val memo: String
 
     abstract var from: String
     abstract var to: String
