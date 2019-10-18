@@ -17,8 +17,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import java.util.*
+import java.util.logging.Logger
 
 abstract class BaseActivity : AppCompatActivity() {
+
+    private val logger = Logger.getLogger("BaseActivity")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +72,11 @@ abstract class BaseActivity : AppCompatActivity() {
                         imeManager.showInputMethodPicker()
                         hideSoftKeyboard()
                         Handler().postDelayed({
-                            onBackPressed()
+                            try {
+                                onBackPressed()
+                            } catch (e: NullPointerException) {
+                                logger.warning("showCustomKeyboardAlert -> onBackPressed() caused NullPointerException")
+                            }
                         }, (1 * 750).toLong())
                     }
                 }).show(supportFragmentManager, "custom_keyboard_alert")
