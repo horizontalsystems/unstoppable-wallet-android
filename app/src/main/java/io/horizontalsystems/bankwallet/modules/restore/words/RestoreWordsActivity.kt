@@ -92,7 +92,8 @@ class RestoreWordsActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.menuOk ->  {
-                viewModel.delegate.onDone(wordsInput.text?.toString())
+                val cleanedString = wordsInput.text?.toString()?.trim()?.replace(Regex("(\\s)+"), " ")
+                viewModel.delegate.onDone(cleanedString)
                 return true
             }
         }
