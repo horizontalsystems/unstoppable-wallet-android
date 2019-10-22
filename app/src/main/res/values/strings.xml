@@ -19,7 +19,7 @@
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
 
-    <string name="Wallet">%s wallet</string>
+    <string name="Wallet">%s Wallet</string>
 
     <!--Welcome-->
 
@@ -36,8 +36,8 @@
 
     <string name="Restore_Title">Restore</string>
     <string name="Restore_Enter_Key_Title">Enter Key</string>
-    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s wallet.</string>
-    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
+    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
@@ -389,7 +389,7 @@
     <!--Manage Keys Delete Alert-->
 
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
@@ -406,11 +406,11 @@
     <!-- Account Types -->
 
     <string name="AccountType_Unstoppable">Unstoppable</string>
-    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20</string>
+    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20 tokens</string>
     <string name="AccountType_Eos">EOS</string>
-    <string name="AccountType_Eos_Text" translatable="false">EOS, EOS-based Tokens</string>
+    <string name="AccountType_Eos_Text" translatable="false">EOS, EOS tokens</string>
     <string name="AccountType_Binance">Binance</string>
-    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2</string>
+    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2 tokens</string>
 
     <!--Coin Option-->
 
