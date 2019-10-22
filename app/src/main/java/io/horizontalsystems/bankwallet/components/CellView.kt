@@ -5,9 +5,13 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_cell.view.*
 
 class CellView : ConstraintLayout {
+
+    private val singleLineHeight = 44f
+    private val doubleLineHeight = 60f
 
     var icon: String? = null
         set(value) {
@@ -26,6 +30,7 @@ class CellView : ConstraintLayout {
         set(value) {
             field = value
             cellLeft.subtitle = value
+            layoutParams?.height = LayoutHelper.dp(if(value == null) singleLineHeight else doubleLineHeight, context)
         }
 
     var rightTitle: String? = null
@@ -63,6 +68,13 @@ class CellView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initialize(attrs)
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (!subtitle.isNullOrBlank()) {
+            layoutParams.height = LayoutHelper.dp(doubleLineHeight, context)
+        }
     }
 
     private fun initialize(attrs: AttributeSet) {
