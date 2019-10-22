@@ -146,8 +146,8 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:0559bf3'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:40fcc03'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:ecd24d7'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:34b48e5'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:15df939'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:809e1a5'
