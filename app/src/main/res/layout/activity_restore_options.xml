@@ -30,14 +30,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:subtitle="@string/CoinOption_bip44"
-                app:title="@string/CoinOption_BeforeOctober" />
+                app:title="@string/CoinOption_BeforeNovember" />
 
             <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/bip49"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:subtitle="@string/CoinOption_bip49"
-                app:title="@string/CoinOption_AfterOctober" />
+                app:title="@string/CoinOption_AfterNovember" />
 
             <TextView
                 style="@style/Subhead2"
