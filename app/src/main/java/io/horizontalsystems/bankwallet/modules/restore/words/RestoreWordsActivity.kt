@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsModule
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_words.*
+import java.util.*
 
 class RestoreWordsActivity : BaseActivity() {
 
@@ -92,7 +93,7 @@ class RestoreWordsActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.menuOk ->  {
-                val cleanedString = wordsInput.text?.toString()?.trim()?.replace(Regex("(\\s)+"), " ")
+                val cleanedString = wordsInput.text?.toString()?.trim()?.toLowerCase(Locale.ENGLISH)?.replace(Regex("(\\s)+"), " ")
                 viewModel.delegate.onDone(cleanedString)
                 return true
             }
