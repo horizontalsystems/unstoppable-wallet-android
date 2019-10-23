@@ -420,8 +420,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
     <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
     <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
-    <string name="CoinOption_BeforeOctober">Before October 2019</string>
-    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_BeforeNovember">Before November 2019</string>
+    <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
 
