@@ -151,15 +151,16 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             listener.onItemClick(adapterPosition)
         }
 
-        showFiatAmount(balanceViewItem)
         showChart(balanceViewItem, expanded, chartEnabled)
 
+        showFiatAmount(balanceViewItem, syncing && !expanded)
         updateSecondLineItemsVisibility(expanded)
     }
 
     fun bindPartial(balanceViewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean) {
         viewHolderRoot.isSelected = expanded
 
+        showFiatAmount(balanceViewItem, syncing && !expanded)
         updateSecondLineItemsVisibility(expanded)
 
         if (expanded) {
@@ -175,16 +176,19 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         textProgress.visibility = if (syncing && !expanded) View.VISIBLE else View.GONE
         textSyncedUntil.visibility = if (syncing && !expanded) View.VISIBLE else View.GONE
         coinAmount.visibility = if (syncing && !expanded) View.GONE else View.VISIBLE
-        fiatAmount.visibility = if (syncing && !expanded) View.GONE else View.VISIBLE
     }
 
-    private fun showFiatAmount(balanceViewItem: BalanceViewItem) {
+    private fun showFiatAmount(balanceViewItem: BalanceViewItem, collapsedAndSyncing: Boolean) {
         balanceViewItem.currencyValue?.let {
             fiatAmount.text = App.numberFormatter.format(it, trimmable = true)
-            fiatAmount.visibility = if (it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
             fiatAmount.alpha = if (!balanceViewItem.rateExpired && balanceViewItem.state is AdapterState.Synced) 1f else 0.5f
-        } ?: run {
-            fiatAmount.visibility = View.GONE
+        }
+
+        fiatAmount.visibility = when{
+            collapsedAndSyncing -> View.GONE
+            balanceViewItem.currencyValue == null -> View.GONE
+            balanceViewItem.currencyValue.value.compareTo(BigDecimal.ZERO) == 0 -> View.GONE
+            else -> View.VISIBLE
         }
     }
 
