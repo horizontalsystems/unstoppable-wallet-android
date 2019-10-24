@@ -321,8 +321,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12小时（更加私密）</string>
     <string name="CoinOption_Slow_Text">慢：直接从区块链恢复您过往的交易。如果耗时过长，请前往“设置”中的“管理钱包”，删除Unstoppable条目并使用“快”选项重复此过程。</string>
     <string name="CoinOption_TimePeriod">当首次在Unstoppable中创建钱包时选择时间周期。</string>
-    <string name="CoinOption_BeforeOctober">在2019年10月之前</string>
-    <string name="CoinOption_AfterOctober">在2019年10月之后</string>
+    <string name="CoinOption_BeforeNovember">2019年11月之前</string>
+    <string name="CoinOption_AfterNovember">2019年11月之后</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->

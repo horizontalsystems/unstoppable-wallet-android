@@ -324,8 +324,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 Stunden (mehr privat)</string>
     <string name="CoinOption_Slow_Text">Langsam: Stellt Ihre vergangenen Transaktionen direkt aus der Blockchain her. Mehr Datenschutz, aber sehr langsam. Wenn es zu lange dauert, gehen Sie in den Einstellungen zu Wallets verwalten und löschen Sie den Eintrag Unstoppable. Wiederholen Sie den Prozess mit der Option \"Schnell\".</string>
     <string name="CoinOption_TimePeriod">Wählen Sie den Zeitraum, in dem Sie Ihr Wallet im Unstoppable Wallet das erste Mal erstellt haben.</string>
-    <string name="CoinOption_BeforeOctober">Vor Oktober 2019</string>
-    <string name="CoinOption_AfterOctober">Nach Oktober 2019</string>
+    <string name="CoinOption_BeforeNovember">Vor November 2019</string>
+    <string name="CoinOption_AfterNovember">Nach November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->

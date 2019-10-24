@@ -321,8 +321,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 heures (Plus Privé)</string>
     <string name="CoinOption_Slow_Text">Lent : Restaure vos transactions passées directement à partir de la blockchain. Plus privé mais très lent. Si cela prend trop de temps, allez dans Gérer les portefeuilles dans Paramètres, supprimez l\'entrée Inéluctable et répétez l\'opération avec l\'option Rapide.</string>
     <string name="CoinOption_TimePeriod">Sélectionnez la période pendant laquelle vous avez créé le portefeuille pour la première fois dans Inéluctable.</string>
-    <string name="CoinOption_BeforeOctober">Avant octobre 2019</string>
-    <string name="CoinOption_AfterOctober">Après octobre 2019</string>
+    <string name="CoinOption_BeforeNovember">Avant novembre 2019</string>
+    <string name="CoinOption_AfterNovember">Après novembre 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->

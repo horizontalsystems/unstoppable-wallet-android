@@ -20,7 +20,7 @@
     <string name="Wallet">%s monedero</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">Nueva cartera</string>
+    <string name="Welcome_CreateWallet">Nuevo monedero</string>
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Create-->
     <string name="Create_Title">Nuevo monedero</string>
@@ -327,8 +327,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 horas (Más Privado)</string>
     <string name="CoinOption_Slow_Text">Lento: Restaura sus transacciones pasadas directamente del blockchain. Más privado pero muy lento. Si toma mucho tiempo, vaya a Gestionar Monederos en Ajustes, elimine la entrada de Unstoppable y repita el proceso con la opción Rápida.</string>
     <string name="CoinOption_TimePeriod">Seleccione el período de tiempo de cuando creó por primera vez el monedero en Unstoppable.</string>
-    <string name="CoinOption_BeforeOctober">Antes de Octubre de 2019</string>
-    <string name="CoinOption_AfterOctober">Después de Octubre de 2019</string>
+    <string name="CoinOption_BeforeNovember">Antes de Noviembre de 2019</string>
+    <string name="CoinOption_AfterNovember">Después de Noviembre de 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->

@@ -327,8 +327,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
     <string name="CoinOption_Slow_Text">느린: 블록 체인으로 부터 귀하의 과거 거래내역을 복원합니다. 더 사적이지만 굉장히 느립니다. 만약 너무 느리게 간다면, 설정에서 지갑 관리하기에 가신후, Unstoppable 입장을 삭제하시고 빠른 선택의 과정을 반복 하십시오.</string>
     <string name="CoinOption_TimePeriod">귀하께서 처음으로 Unstoppable에서 지갑을 생성하셨을 때 시간 주기를 선택 하십시오.</string>
-    <string name="CoinOption_BeforeOctober">2019년 10월 전에</string>
-    <string name="CoinOption_AfterOctober">2019년 10월 후에</string>
+    <string name="CoinOption_BeforeNovember">2019년 11월 전에</string>
+    <string name="CoinOption_AfterNovember">2019년 11월 후에</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->

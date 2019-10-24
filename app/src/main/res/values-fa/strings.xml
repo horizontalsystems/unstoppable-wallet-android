@@ -321,8 +321,8 @@
     <string name="CoinOption_MorePrivate">&#8211;۱۲ ساعت (خصوصی تر)</string>
     <string name="CoinOption_Slow_Text">آهسته: معاملات گذشته خود را مستقیماً از زنجیره بلوکی بازیابی کنید. خصوصی تر اما بسیار کند می باشد. اگر مدت زمان طولانی طول کشید ، به مدیریت کیف های پول در تنظیمات بروید ، ورودی غیرقابل توقف را حذف کنید و پروسه را با گزینه سریع تکرار کنید.</string>
     <string name="CoinOption_TimePeriod">وقتی برای اولین بار کیف پول را در غیرقابل توقف ایجاد کردید ، مدت زمان را انتخاب کنید.</string>
-    <string name="CoinOption_BeforeOctober">قبل از اکتبر ۲۰۱۹</string>
-    <string name="CoinOption_AfterOctober">بعد از اکتبر ۲۰۱۹</string>
+    <string name="CoinOption_BeforeNovember">قبل از نوامبر ۲۰۱۹</string>
+    <string name="CoinOption_AfterNovember">بعد از  نوامبر ۲۰۱۹</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->

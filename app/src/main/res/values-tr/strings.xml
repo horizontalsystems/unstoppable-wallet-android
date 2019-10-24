@@ -321,8 +321,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 saat (Daha Gizli)</string>
     <string name="CoinOption_Slow_Text">Yavaş: Geçmiş işlemlerinizi doğrudan blok zincirinden geri yükler. Daha özel ve güvenli ama çok yavaş. Çok uzun sürerse, Ayarlar\'daki Cüzdanları Yönet\'e gidin, Unstoppable girişini silin ve Hızlı seçeneğiyle işlemi tekrarlayın.</string>
     <string name="CoinOption_TimePeriod">Unstoppable uygulamasında cüzdanı ilk oluşturduğunuz süreyi seçin.</string>
-    <string name="CoinOption_BeforeOctober">Ekim 2019’dan önce</string>
-    <string name="CoinOption_AfterOctober">Ekim 2019’dan sonra</string>
+    <string name="CoinOption_BeforeNovember">Kasım 2019’dan önce</string>
+    <string name="CoinOption_AfterNovember">Kasım 2019’dan sonra</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->

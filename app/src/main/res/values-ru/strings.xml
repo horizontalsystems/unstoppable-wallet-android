@@ -321,8 +321,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
     <string name="CoinOption_Slow_Text">Медленно: Восстановление ваших предыдущих транзакций будет непосредственно из блокчейна. Это более приватно, но очень медленно. Если это занимает слишком много времени, перейдите в раздел \"Управление Кошельками\"  в настройках, удалите незавершенную запись и повторите процесс с помощью Быстрой опции.</string>
     <string name="CoinOption_TimePeriod">Выберите период времени, когда вы создали кошелек в Unstoppable.</string>
-    <string name="CoinOption_BeforeOctober">До октября 2019 г.</string>
-    <string name="CoinOption_AfterOctober">После октября 2019 г.</string>
+    <string name="CoinOption_BeforeNovember">До Ноября 2019 г.</string>
+    <string name="CoinOption_AfterNovember">После Ноября 2019 г.</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
