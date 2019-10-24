@@ -308,7 +308,7 @@
     <string name="ManageKeys_Delete_ConfirmationLose">Si usted no respaldó la clave privada para este monedero, perderá el acceso a sus fondos.</string>
     <string name="ManageKeys_Delete_FromPhone">Eliminar del teléfono</string>
     <string name="ManageKeys_Delete_Alert_Title">Se requiere una copia de seguridad</string>
-    <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %@ antes de que pueda eliminarla de este teléfono.</string>
+    <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave privada antes de que pueda eliminarla de este teléfono.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
     <string name="AddCoin_Description">Usted no tiene un monedero que pueda restaurar %1$s. La aplicación puede generar un nuevo monedero para usted. Use el botón de crear, que se encuentra abajo, para generar un nuevo monedero.\n\nPodrá usar el nuevo monedero para las siguientes monedas: %2$s.\n\nUsted también piede utilizar el la clave existente del monedero%3$s si ya tiene uno. Use el botón restaurar para hacerlo.</string>

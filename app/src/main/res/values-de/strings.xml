@@ -284,7 +284,7 @@
     <string name="EditPin_UnlockInfo">Aktuelle Code </string>
     <string name="EditPin_NewPinInfo">Neue Code</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Wallets</string>
+    <string name="ManageCoins_title">Coins</string>
     <string name="ManageCoins_save">Speichern</string>
     <string name="ManageCoins_AddCoin_Title">Wallet hinzufügen</string>
     <string name="ManageCoins_AddCoin_Text">Damit erzeugen Sie ein neues Wallet für folgende Coins: %s</string>

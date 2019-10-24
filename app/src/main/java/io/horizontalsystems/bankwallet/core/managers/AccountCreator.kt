@@ -55,6 +55,7 @@ class AccountCreator(
 
     private fun createMnemonicAccountType(wordsCount: Int): AccountType {
         val words = wordsManager.generateWords(wordsCount)
-        return AccountType.Mnemonic(words, AccountType.Derivation.bip44, salt = null)
+        val derivation = if (wordsCount == 12) AccountType.Derivation.bip49 else AccountType.Derivation.bip44
+        return AccountType.Mnemonic(words, derivation, salt = null)
     }
 }
