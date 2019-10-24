@@ -14,27 +14,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <io.horizontalsystems.bankwallet.modules.settings.MenuItemBig
+    <io.horizontalsystems.bankwallet.components.CellView
         android:id="@+id/mail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        app:imageDrawable="@drawable/ic_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:title="@string/SettingsReport_Email"
-        app:icon="@drawable/ic_email"
-        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
+        app:rightArrow="true"
+        app:title="@string/SettingsReport_Email" />
 
-    <io.horizontalsystems.bankwallet.modules.settings.MenuItemBig
+    <io.horizontalsystems.bankwallet.components.CellView
         android:id="@+id/telegram"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:bottomBorder="true"
+        app:imageDrawable="@drawable/ic_telegram"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:title="@string/SettingsReport_Telegram"
-        app:icon="@drawable/ic_telegram"
         app:layout_constraintTop_toBottomOf="@+id/mail"
-        app:menu_bottom_border="true"/>
+        app:rightArrow="true"
+        app:title="@string/SettingsReport_Telegram" />
 
     <io.horizontalsystems.bankwallet.components.CellView
         android:id="@+id/appStatus"
