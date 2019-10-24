@@ -27,11 +27,11 @@ class ReportProblemActivity : BaseActivity() {
         val router = presenter.router as ReportProblemRouter
 
         presenterView.emailLiveData.observe(this, Observer {
-            mail.setSubtitle(it)
+            mail.subtitle = it
         })
 
         presenterView.telegramGroupLiveData.observe(this, Observer {
-            telegram.setSubtitle(it)
+            telegram.subtitle = it
         })
 
         presenterView.showCopiedLiveEvent.observe(this, Observer {
