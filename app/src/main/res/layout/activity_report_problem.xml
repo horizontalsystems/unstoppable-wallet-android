@@ -36,16 +36,16 @@
         app:layout_constraintTop_toBottomOf="@+id/mail"
         app:menu_bottom_border="true"/>
 
-    <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+    <io.horizontalsystems.bankwallet.components.CellView
         android:id="@+id/appStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        app:bottomBorder="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:setting_title="@string/SettingsReport_AppStatus"
-        app:setting_arrow="true"
         app:layout_constraintTop_toBottomOf="@+id/telegram"
-        app:setting_bottom_border="true"/>
+        app:rightArrow="true"
+        app:title="@string/SettingsReport_AppStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

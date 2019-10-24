@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/switchNotification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -23,8 +23,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:setting_title="@string/SettingsNotifications_PushNotification"
-                app:setting_bottom_border="true"/>
+                app:title="@string/SettingsNotifications_PushNotification"
+                app:bottomBorder="true"/>
 
             <TextView
                 android:id="@+id/textWarning"
