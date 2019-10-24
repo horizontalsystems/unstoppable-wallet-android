@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.components
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -13,11 +15,22 @@ class CellView : ConstraintLayout {
     private val singleLineHeight = 44f
     private val doubleLineHeight = 60f
 
-    var icon: String? = null
+    var coinIcon: String? = null
         set(value) {
             field = value
-            field?.let { cellIcon.bind(it) }
-            cellIcon.visibility = if (value == null) View.GONE else View.VISIBLE
+            field?.let { cellLeft.imageCoinCode = it }
+        }
+
+    var imageDrawable: Drawable? = null
+        set(value) {
+            field = value
+            field?.let { cellLeft.imageDrawable = it }
+        }
+
+    var imageTint: ColorStateList? = null
+        set(value) {
+            field = value
+            cellLeft.imageTint = value
         }
 
     var title: String? = null
@@ -57,6 +70,18 @@ class CellView : ConstraintLayout {
             cellRight.downArrow = value
         }
 
+    var badgeImage: Boolean = false
+        set(value) {
+            field = value
+            cellRight.badge = value
+        }
+
+    var rightArrow: Boolean = false
+        set(value) {
+            field = value
+            cellRight.rightArrow = value
+        }
+
     init {
         inflate(context, R.layout.view_cell, this)
     }
@@ -83,6 +108,9 @@ class CellView : ConstraintLayout {
             title = ta.getString(R.styleable.CellView_title)
             subtitle = ta.getString(R.styleable.CellView_subtitle)
             rightTitle = ta.getString(R.styleable.CellView_rightTitle)
+            imageDrawable = ta.getDrawable(R.styleable.CellView_imageDrawable)
+            imageTint = ta.getColorStateList(R.styleable.CellView_imageTint)
+            rightArrow = ta.getBoolean(R.styleable.CellView_rightArrow, false)
             bottomBorder = ta.getBoolean(R.styleable.CellView_bottomBorder, false)
         } finally {
             ta.recycle()

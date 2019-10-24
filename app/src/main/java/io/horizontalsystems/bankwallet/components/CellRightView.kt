@@ -40,6 +40,19 @@ class CellRightView : ConstraintLayout {
             enableIcon(if (value) downIcon else null)
         }
 
+    var rightArrow: Boolean = false
+        set(value) {
+            field = value
+            enableIcon(if (value) arrowIcon else null)
+        }
+
+    var badge: Boolean = false
+        set(value) {
+            field = value
+            //badge can be shown along with other icon, its visibility shouldn't hide other icons
+            badgeImage.visibility = if (value) View.VISIBLE else View.GONE
+        }
+
     private fun enableIcon(icon: ImageView?) {
         listOf(lightModeIcon, downIcon, arrowIcon, checkIcon).forEach {
             it.visibility = View.GONE

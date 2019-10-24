@@ -156,7 +156,7 @@ class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : 
 class NotificationItemViewHolder(override val containerView: CellView, private val presenter: NotificationsPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(coinViewItem: NotificationsModule.PriceAlertViewItem, lastElement: Boolean, clickable: Boolean) {
-        containerView.icon = coinViewItem.code
+        containerView.coinIcon = coinViewItem.code
         containerView.title = coinViewItem.title
         containerView.subtitle = coinViewItem.code
         containerView.rightTitle = coinViewItem.state.value?.let { "$it%" }

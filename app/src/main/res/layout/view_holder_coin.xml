@@ -51,7 +51,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
             app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
 
-        <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+        <io.horizontalsystems.bankwallet.ui.extensions.IconView
             android:id="@+id/coinIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"

@@ -50,5 +50,8 @@
         <attr name="subtitle" />
         <attr name="rightTitle" format="string" />
         <attr name="bottomBorder" format="boolean" />
+        <attr name="rightArrow" format="boolean" />
+        <attr name="imageDrawable" format="integer" />
+        <attr name="imageTint" format="integer" />
     </declare-styleable>
 </resources>
