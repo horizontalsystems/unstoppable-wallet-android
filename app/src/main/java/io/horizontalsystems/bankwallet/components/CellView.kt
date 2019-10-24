@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import android.widget.CompoundButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
@@ -49,7 +50,13 @@ class CellView : ConstraintLayout {
     var rightTitle: String? = null
         set(value) {
             field = value
-            cellRight.title = rightTitle
+            cellRight.title = value
+        }
+
+    var dropDownText: String? = null
+        set(value) {
+            field = value
+            cellRight.dropdownText = value
         }
 
     var checked: Boolean = false
@@ -64,10 +71,10 @@ class CellView : ConstraintLayout {
             bottomShade.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
-    var downArrow: Boolean = false
+    var dropDownArrow: Boolean = false
         set(value) {
             field = value
-            cellRight.downArrow = value
+            cellRight.dropDownArrow = value
         }
 
     var badgeImage: Boolean = false
@@ -82,6 +89,20 @@ class CellView : ConstraintLayout {
             cellRight.rightArrow = value
         }
 
+    var switchIsChecked: Boolean? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                cellRight.switchIsChecked = value
+            }
+        }
+
+    var switchOnCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
+        set(value) {
+            field = value
+            cellRight.switchOnCheckedChangeListener = value
+        }
+
     init {
         inflate(context, R.layout.view_cell, this)
     }
@@ -93,6 +114,10 @@ class CellView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initialize(attrs)
+    }
+
+    fun switchToggle(){
+        cellRight.switchToggle()
     }
 
     override fun onAttachedToWindow() {

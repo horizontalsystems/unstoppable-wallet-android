@@ -159,9 +159,9 @@ class NotificationItemViewHolder(override val containerView: CellView, private v
         containerView.coinIcon = coinViewItem.code
         containerView.title = coinViewItem.title
         containerView.subtitle = coinViewItem.code
-        containerView.rightTitle = coinViewItem.state.value?.let { "$it%" }
+        containerView.dropDownText = coinViewItem.state.value?.let { "$it%" }
                 ?: itemView.context.getString(R.string.SettingsNotifications_Off)
-        containerView.downArrow = true
+        containerView.dropDownArrow = true
         containerView.bottomBorder = lastElement
 
         containerView.setOnClickListener {

@@ -70,17 +70,17 @@ class MainSettingsFragment : Fragment() {
     private fun subscribeToViewEvents(presenterView: MainSettingsView, presenter: MainSettingsPresenter) {
         presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
             currency?.let {
-                baseCurrency.selectedValue = it
+                baseCurrency.rightTitle = it
             }
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            securityCenter.setInfoBadgeVisibility(!wordListBackedUp)
+            securityCenter.badgeImage = !wordListBackedUp
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
             languageCode?.let {
-                language.selectedValue = it
+                language.rightTitle = it
             }
         })
 

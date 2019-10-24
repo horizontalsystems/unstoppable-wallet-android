@@ -3,12 +3,6 @@
     <attr name="title" format="string" />
     <attr name="subtitle" format="string" />
 
-    <declare-styleable name="SettingsItemView">
-        <attr name="setting_title" format="string" />
-        <attr name="setting_icon" format="integer" />
-        <attr name="setting_arrow" format="boolean" />
-        <attr name="setting_bottom_border" format="boolean" />
-    </declare-styleable>
     <declare-styleable name="MenuItemBig">
         <attr name="title" />
         <attr name="subtitle" />
