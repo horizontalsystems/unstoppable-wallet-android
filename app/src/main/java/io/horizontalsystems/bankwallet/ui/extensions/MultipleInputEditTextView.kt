@@ -11,6 +11,10 @@ import kotlinx.android.synthetic.main.view_multiple_input_edit_text.view.*
 
 class MultipleInputEditTextView : ConstraintLayout {
 
+    interface Listener {
+        fun beforeTextChanged()
+    }
+
     init {
         inflate(context, R.layout.view_multiple_input_edit_text, this)
     }
@@ -19,6 +23,7 @@ class MultipleInputEditTextView : ConstraintLayout {
     private var attrInputFromClipboard: Boolean = false
     private var attrInputHint: String? = null
     private var attrInputMaxLines: Int = 1
+    private var listener: Listener? = null
 
     constructor(context: Context) : super(context)
 
@@ -28,6 +33,10 @@ class MultipleInputEditTextView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         loadAttributes(attrs)
+    }
+
+    fun setListenerForTextInput(listener: Listener) {
+        this.listener = listener
     }
 
     private fun loadAttributes(attrs: AttributeSet) {
@@ -81,7 +90,9 @@ class MultipleInputEditTextView : ConstraintLayout {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int){
+                listener?.beforeTextChanged()
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
 
