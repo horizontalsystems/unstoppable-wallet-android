@@ -181,6 +181,8 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
             override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                     bottomSheetBehavior.isFitToContents = true
+                    bottomSheetDim.alpha = 1f
+                    bottomSheetDim.visibility = View.VISIBLE
                 }
             }
 

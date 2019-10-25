@@ -26,7 +26,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     }
 
     fun setViewItem(transactionViewItem: TransactionViewItem) {
-        transactionLiveData.value = transactionViewItem
+        transactionLiveData.postValue(transactionViewItem)
     }
 
     fun onClickTransactionId() {
