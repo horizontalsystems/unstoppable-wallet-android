@@ -11,12 +11,15 @@ import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
+import io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_eos.*
+import java.util.*
 
-class RestoreEosActivity : BaseActivity() {
+class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
 
     private lateinit var viewModel: RestoreEosViewModel
 
@@ -59,6 +62,8 @@ class RestoreEosActivity : BaseActivity() {
             HudHelper.showErrorMessage(resId)
         })
 
+        eosAccount.setListenerForTextInput(this)
+
         bindActions()
     }
 
@@ -71,7 +76,7 @@ class RestoreEosActivity : BaseActivity() {
         when(item?.itemId){
             R.id.menuOk ->  {
                 viewModel.delegate.onClickDone(
-                        eosAccount.text.trim(),
+                        eosAccount.text.trim().toLowerCase(Locale.ENGLISH),
                         eosActivePrivateKey.text.trim()
                 )
                 return true
@@ -85,6 +90,12 @@ class RestoreEosActivity : BaseActivity() {
         val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
             viewModel.delegate.onQRCodeScan(scanResult.contents)
+        }
+    }
+
+    override fun beforeTextChanged() {
+        if (Utils.isUsingCustomKeyboard(this)) {
+            showCustomKeyboardAlert()
         }
     }
 
