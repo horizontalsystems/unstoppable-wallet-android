@@ -63,7 +63,7 @@
     <string name="Balance_Deposit">دريافت</string>
     <string name="Balance_Send">ارسال</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
-    <string name="Balance_SyncedUntil">تا:٪؜</string>
+    <string name="Balance_SyncedUntil">تا:%s</string>
     <string name="Balance_Syncing">درحال همگام‌سازی…</string>
     <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
     <string name="Balance_Sort_Balance">ارزش</string>
@@ -263,7 +263,7 @@
     <string name="Fingerprint_NotRecognized">اثر انگشت شناخته نشد. دوباره كوشش كنيد</string>
     <string name="Fingerprint_Success">موفقيت!</string>
     <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:٪؜s</string>
+    <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:%؜s</string>
     <string name="UnlockPin_Error_PinIncorrect">نادرست</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">كد گوشي همراه</string>
