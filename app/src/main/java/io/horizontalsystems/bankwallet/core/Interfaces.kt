@@ -16,6 +16,9 @@ import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -376,6 +379,16 @@ interface IRateStorage {
     fun save(rate: Rate)
     fun saveLatest(rate: Rate)
     fun deleteAll()
+}
+
+interface IXRateManager {
+    fun marketInfo(coin: String, currency: String): MarketInfo?
+    fun marketInfoObservable(coin: String, currency: String): Observable<MarketInfo>
+    fun marketInfoObservable(currency: String): Observable<Map<String, MarketInfo>>
+    fun historicalRate(coin: String, currency: String, timestamp: Long): Single<BigDecimal>
+    fun chartInfo(coin: String, currency: String, chartType: ChartType): ChartInfo?
+    fun chartInfoObservable(coin: String, currency: String, chartType: ChartType): Observable<ChartInfo>
+    fun refresh()
 }
 
 interface IRateManager {
