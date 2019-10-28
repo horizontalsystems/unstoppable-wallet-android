@@ -164,6 +164,11 @@
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
+    <string name="Transactions_Processing">Processing</string>
+    <string name="Transactions_Pending">Pending</string>
+    <string name="Transactions_PendingOneDot">Pending.</string>
+    <string name="Transactions_PendingTwoDots">Pending..</string>
+    <string name="Transactions_PendingThreeDots">Pending...</string>
 
     <!--Transaction Info-->
 
