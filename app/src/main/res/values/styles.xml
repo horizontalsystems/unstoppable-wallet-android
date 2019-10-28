@@ -239,10 +239,9 @@
     </style>
 
     <style name="TransactionInfoStatusProgressBarSmall">
-        <item name="android:layout_width">2dp</item>
-        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_width">4dp</item>
+        <item name="android:layout_height">12dp</item>
         <item name="android:layout_marginStart">2dp</item>
-        <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
     </style>
 
     <!--Text Styles-->
