@@ -1,11 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -19,7 +15,7 @@ class TransactionsInteractor(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val currencyManager: ICurrencyManager,
-        private val rateManager: RateManager,
+        private val rateManager: IXRateManager,
         private val connectivityManager: ConnectivityManager) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
@@ -123,7 +119,7 @@ class TransactionsInteractor(
 
         requestedTimestamps[composedKey] = timestamp
 
-        rateManager.rateValueObservable(coin.code, currencyCode, timestamp)
+        rateManager.historicalRate(coin.code, currencyCode, timestamp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
