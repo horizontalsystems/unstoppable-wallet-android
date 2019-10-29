@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import kotlinx.android.synthetic.main.view_address_input.*
 
 class SendAddressFragment(
         private val coin: Coin,
         private val addressModuleDelegate: SendAddressModule.IAddressModuleDelegate,
         private val sendHandler: SendModule.ISendHandler
-) : Fragment() {
+) : SendSubmoduleFragment() {
+
+    private lateinit var presenter: SendAddressPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.view_address_input, container, false)
@@ -30,7 +32,7 @@ class SendAddressFragment(
         btnPaste.visibility = View.VISIBLE
         btnDeleteAddress.visibility = View.GONE
 
-        val presenter = ViewModelProviders.of(this, SendAddressModule.Factory(coin, sendHandler))
+        presenter = ViewModelProviders.of(this, SendAddressModule.Factory(coin, sendHandler))
                 .get(SendAddressPresenter::class.java)
         val presenterView = presenter.view as SendAddressView
         presenter.moduleDelegate = addressModuleDelegate
@@ -63,4 +65,7 @@ class SendAddressFragment(
         })
     }
 
+    override fun init() {
+        presenter.onViewDidLoad()
+    }
 }

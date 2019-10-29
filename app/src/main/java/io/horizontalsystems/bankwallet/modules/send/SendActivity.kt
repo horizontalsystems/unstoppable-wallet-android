@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
@@ -70,7 +71,7 @@ class SendActivity : BaseActivity() {
 
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
-                                         R.anim.slide_in_from_right, R.anim.slide_out_to_right)
+                            R.anim.slide_in_from_right, R.anim.slide_out_to_right)
                     .add(R.id.rootView, ConfirmationFragment(mainPresenter))
                     .addToBackStack("confirmFragment")
                     .commit()
@@ -91,12 +92,15 @@ class SendActivity : BaseActivity() {
     }
 
     private fun addInputItems(wallet: Wallet, inputItems: List<SendModule.Input>) {
+        val fragments = mutableListOf<SendSubmoduleFragment>()
+
         inputItems.forEach { input ->
             when (input) {
                 SendModule.Input.Amount -> {
                     //add amount view
                     mainPresenter.amountModuleDelegate?.let {
-                        val sendAmountFragment =  SendAmountFragment(wallet, it, mainPresenter.handler)
+                        val sendAmountFragment = SendAmountFragment(wallet, it, mainPresenter.handler)
+                        fragments.add(sendAmountFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
                     }
                 }
@@ -104,6 +108,7 @@ class SendActivity : BaseActivity() {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
                         val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
+                        fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()
                     }
@@ -112,6 +117,7 @@ class SendActivity : BaseActivity() {
                     //add fee view
                     mainPresenter.feeModuleDelegate?.let {
                         val sendFeeFragment = SendFeeFragment(input.isAdjustable, wallet.coin, it, mainPresenter.handler)
+                        fragments.add(sendFeeFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment)
                                 .commitNow()
                     }
@@ -119,6 +125,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Memo -> {
                     //add memo view
                     val sendMemoFragment = SendMemoFragment(input.maxLength, mainPresenter.handler)
+                    fragments.add(sendMemoFragment)
                     supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendMemoFragment).commitNow()
                 }
                 SendModule.Input.ProceedButton -> {
@@ -129,6 +136,8 @@ class SendActivity : BaseActivity() {
                 }
             }
         }
+
+        fragments.forEach { it.init() }
 
         mainPresenter.onModulesDidLoad()
     }

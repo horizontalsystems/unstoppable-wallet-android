@@ -17,11 +17,11 @@ class SendFeePresenter(
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
         private val feeCoinData: Pair<Coin, String>?)
-    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IInteractorDelegate, SendFeeModule.IFeeModule {
+    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule {
 
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
-    private var xRate: Rate? = null
+    private var xRate: BigDecimal? = null
     private var inputType = SendModule.InputType.COIN
 
     private var fee: BigDecimal = BigDecimal.ZERO
@@ -80,7 +80,7 @@ class SendFeePresenter(
                 SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
-                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
+                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
                     } ?: throw Exception("Invalid state")
                 }
             }
@@ -92,7 +92,7 @@ class SendFeePresenter(
                 SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
-                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
+                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
                     }
                 }
             }
@@ -119,7 +119,7 @@ class SendFeePresenter(
     // SendFeeModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        interactor.getRate(coin.code)
+        xRate = interactor.getRate(coin.code)
 
         feeRates = interactor.getFeeRates()
 
@@ -152,17 +152,4 @@ class SendFeePresenter(
 
         moduleDelegate?.onUpdateFeeRate(feeRate)
     }
-
-    override fun onClear() {
-        interactor.clear()
-    }
-
-    // SendFeeModule.IInteractorDelegate
-
-    override fun onRateFetched(latestRate: Rate?) {
-        xRate = latestRate
-        syncFeeLabels()
-        syncError()
-    }
-
 }

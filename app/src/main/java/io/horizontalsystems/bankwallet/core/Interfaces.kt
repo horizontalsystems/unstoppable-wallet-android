@@ -383,6 +383,7 @@ interface IRateStorage {
 
 interface IXRateManager {
     fun marketInfo(coin: String, currency: String): MarketInfo?
+    fun getLatestRate(coin: String, currency: String): BigDecimal?
     fun marketInfoObservable(coin: String, currency: String): Observable<MarketInfo>
     fun marketInfoObservable(currency: String): Observable<Map<String, MarketInfo>>
     fun historicalRate(coin: String, currency: String, timestamp: Long): Single<BigDecimal>
