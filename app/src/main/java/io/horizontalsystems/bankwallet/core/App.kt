@@ -24,7 +24,7 @@ class App : Application() {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var secureStorage: ISecuredStorage
-        lateinit var localStorage: ILocalStorage
+        lateinit var localStorage: LocalStorageManager
         lateinit var keyStoreManager: IKeyStoreManager
         lateinit var keyProvider: IKeyProvider
         lateinit var encryptionManager: IEncryptionManager

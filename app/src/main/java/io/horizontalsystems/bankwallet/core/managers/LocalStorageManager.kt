@@ -3,14 +3,15 @@ package io.horizontalsystems.bankwallet.core.managers
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.xrateskit.entities.ChartType
 
-class LocalStorageManager : ILocalStorage {
+class LocalStorageManager : ILocalStorage, IChartTypeStorage {
 
     private val CURRENT_LANGUAGE = "current_language"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
@@ -29,7 +30,7 @@ class LocalStorageManager : ILocalStorage {
     private val BASE_EOS_PROVIDER = "base_eos_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
-    private val CHART_MODE = "prev_chart_mode"
+    private val CHART_TYPE = "prev_chart_type"
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
 
@@ -177,15 +178,6 @@ class LocalStorageManager : ILocalStorage {
             App.preferences.edit().putString(SORT_TYPE, sortType.getAsString()).apply()
         }
 
-    override var chartMode: ChartType
-        get() {
-            val mode = App.preferences.getString(CHART_MODE, null) ?: return ChartType.DAILY
-            return ChartType.valueOf(mode)
-        }
-        set(mode) {
-            App.preferences.edit().putString(CHART_MODE, mode.name).apply()
-        }
-
     override var appVersions: List<AppVersion>
         get() {
             val versionsString = App.preferences.getString(APP_VERSIONS, null) ?: return listOf()
@@ -206,4 +198,14 @@ class LocalStorageManager : ILocalStorage {
     override fun clear() {
         App.preferences.edit().clear().apply()
     }
+
+    //  IChartTypeStorage
+
+    override var chartType: ChartType?
+        get() {
+            return ChartType.fromString(App.preferences.getString(CHART_TYPE, null))
+        }
+        set(mode) {
+            App.preferences.edit().putString(CHART_TYPE, mode?.name).apply()
+        }
 }

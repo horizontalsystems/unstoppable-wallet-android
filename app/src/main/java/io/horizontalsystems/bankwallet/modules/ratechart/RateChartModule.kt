@@ -3,12 +3,12 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 object RateChartModule {
 
@@ -16,7 +16,6 @@ object RateChartModule {
         fun showSpinner()
         fun hideSpinner()
         fun setChartType(type: ChartType)
-        fun enableChartType(type: ChartType)
         fun showChart(viewItem: ChartViewItem)
         fun showSelectedPoint(data: Triple<Long, CurrencyValue, ChartType>)
         fun showError(ex: Throwable)
@@ -29,18 +28,19 @@ object RateChartModule {
     }
 
     interface Interactor {
-        var defaultChartType: ChartType
+        var defaultChartType: ChartType?
 
-        fun subscribeToLatestRate(coinCode: String, currencyCode: String)
-        fun subscribeToChartStats()
-        fun syncStats(coinCode: String, currencyCode: String)
+        fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
+        fun getChartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
+        fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType)
+        fun observeMarketInfo(coinCode: String, currencyCode: String)
         fun clear()
     }
 
     interface InteractorDelegate {
-        fun onReceiveStats(data: StatsData)
-        fun onReceiveLatestRate(rate: Rate)
-        fun onReceiveError(ex: Throwable)
+        fun onUpdate(chartInfo: ChartInfo)
+        fun onUpdate(marketInfo: MarketInfo)
+        fun onError(ex: Throwable)
     }
 
     interface Router
@@ -49,7 +49,7 @@ object RateChartModule {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.rateStatsManager, App.rateStorage, App.localStorage)
+            val interactor = RateChartInteractor(App.xRateManager, App.localStorage)
             val presenter = RateChartPresenter(view, interactor, coin.code, App.currencyManager.baseCurrency, RateChartViewFactory())
 
             interactor.delegate = presenter
