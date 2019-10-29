@@ -22,7 +22,10 @@ class PriceAlertHandler(
         val alertItems = getAlertsToNotify(priceAlerts, latestRateData)
         notificationManager.show(notificationFactory.notifications(alertItems))
 
-        val changedAlerts = getChangedAlerts(priceAlerts, latestRateData)
+        //update latest rates only for notified coins
+        val alertedCoinCodes = alertItems.map { it.coin.code }
+        val filteredPriceAlerts = priceAlerts.filter { alertedCoinCodes.contains(it.coin.code) }
+        val changedAlerts = getChangedAlerts(filteredPriceAlerts, latestRateData)
         if (changedAlerts.isNotEmpty()) {
             priceAlertStorage.save(changedAlerts)
         }
