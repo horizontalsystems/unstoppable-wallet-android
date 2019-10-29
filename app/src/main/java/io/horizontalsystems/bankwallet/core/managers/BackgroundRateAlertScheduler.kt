@@ -26,7 +26,7 @@ class BackgroundRateAlertScheduler(private val context: Context) : IBackgroundRa
 
 
     private fun createPeriodicWorkRequest() =
-            PeriodicWorkRequestBuilder<RateFetchWorker>(10, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<RateFetchWorker>(1, TimeUnit.HOURS)
                     .setConstraints(createConstraints())
                     .setBackoffCriteria(BackoffPolicy.LINEAR, PeriodicWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
                     .build()
