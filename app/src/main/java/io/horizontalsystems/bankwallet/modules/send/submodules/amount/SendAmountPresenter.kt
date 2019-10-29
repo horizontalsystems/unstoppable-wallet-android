@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
@@ -16,13 +19,13 @@ class SendAmountPresenter(
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
         private val baseCurrency: Currency)
-    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
+    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IAmountModule {
 
     var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
 
     private var amount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
-    private var xRate: Rate? = null
+    private var xRate: BigDecimal? = null
 
     override var inputType = SendModule.InputType.COIN
         private set
@@ -32,7 +35,7 @@ class SendAmountPresenter(
 
     override val fiatAmount: CurrencyValue?
         get() {
-            val currencyAmount = xRate?.let { amount?.times(it.value) }
+            val currencyAmount = xRate?.let { amount?.times(it) }
             return currencyAmount?.let { CurrencyValue(baseCurrency, it) }
         }
 
@@ -46,7 +49,7 @@ class SendAmountPresenter(
             SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
-                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate.value))
+                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
                 } ?: throw Exception("Invalid state")
             }
         }
@@ -57,7 +60,7 @@ class SendAmountPresenter(
             SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
-                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate.value))
+                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
                 }
             }
         }
@@ -96,12 +99,21 @@ class SendAmountPresenter(
     // SendModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        interactor.retrieveRate()
-        view.addTextChangeListener()
+        xRate = interactor.getRate()
+
+        inputType = when {
+            xRate == null -> SendModule.InputType.COIN
+            else -> interactor.defaultInputType
+        }
+
+        moduleDelegate?.onChangeInputType(inputType)
 
         syncAmountType()
         syncSwitchButton()
+        syncAmount()
         syncHint()
+
+        view.addTextChangeListener()
     }
 
     override fun onSwitchClick() {
@@ -155,21 +167,6 @@ class SendAmountPresenter(
         view.addTextChangeListener()
     }
 
-    override fun didRateRetrieve(rate: Rate?) {
-        this.xRate = rate
-
-        rate?.let {
-            inputType = interactor.defaultInputType
-
-            moduleDelegate?.onChangeInputType(inputType)
-            syncSwitchButton()
-        }
-
-        syncAmountType()
-        syncAmount()
-        syncHint()
-    }
-
     private fun syncAmount() {
         val amount = presenterHelper.getAmount(amount, inputType, xRate)
         view.setAmount(amount)
@@ -205,7 +202,7 @@ class SendAmountPresenter(
                 }
                 SendModule.InputType.CURRENCY -> {
                     xRate?.let { rate ->
-                        val value = availableBalance.times(rate.value)
+                        val value = availableBalance.times(rate)
                         CurrencyValueInfo(CurrencyValue(baseCurrency, value))
                     }
                 }

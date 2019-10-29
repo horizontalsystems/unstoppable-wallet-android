@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import java.math.BigDecimal
@@ -35,11 +37,7 @@ object SendAmountModule {
 
     interface IInteractor {
         var defaultInputType: SendModule.InputType
-        fun retrieveRate()
-    }
-
-    interface IInteractorDelegate {
-        fun didRateRetrieve(rate: Rate?)
+        fun getRate(): BigDecimal?
     }
 
     interface IAmountModule {
@@ -82,13 +80,12 @@ object SendAmountModule {
             val currencyDecimal = App.appConfigProvider.fiatDecimal
             val baseCurrency = App.currencyManager.baseCurrency
 
-            val interactor = SendAmountInteractor(baseCurrency, App.rateStorage, App.localStorage, wallet.coin)
+            val interactor = SendAmountInteractor(baseCurrency, App.xRateManager, App.localStorage, wallet.coin)
             val sendAmountPresenterHelper =
                     SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal,
                                               currencyDecimal)
             val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
 
-            interactor.delegate = presenter
             sendHandler.amountModule = presenter
 
             return presenter as T

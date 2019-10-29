@@ -7,17 +7,17 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import kotlinx.android.synthetic.main.view_send_memo.*
 
 
 class SendMemoFragment(private val maxLength: Int,
-                       private val handler: SendModule.ISendHandler) : Fragment() {
-
+                       private val handler: SendModule.ISendHandler) : SendSubmoduleFragment() {
+    private lateinit var presenter: SendMemoPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_send_memo, container, false)
@@ -26,7 +26,7 @@ class SendMemoFragment(private val maxLength: Int,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val presenter = ViewModelProviders.of(this, SendMemoModule.Factory(maxLength, handler)).get(SendMemoPresenter::class.java)
+        presenter = ViewModelProviders.of(this, SendMemoModule.Factory(maxLength, handler)).get(SendMemoPresenter::class.java)
         val presenterView = presenter.view as SendMemoView
 
         memoInput.addTextChangedListener(object : TextWatcher {
@@ -43,5 +43,9 @@ class SendMemoFragment(private val maxLength: Int,
         presenterView.maxLength.observe(viewLifecycleOwner, Observer { maxLength ->
             memoInput.filters = arrayOf(InputFilter.LengthFilter(maxLength))
         })
+    }
+
+    override fun init() {
+        presenter.onViewDidLoad()
     }
 }

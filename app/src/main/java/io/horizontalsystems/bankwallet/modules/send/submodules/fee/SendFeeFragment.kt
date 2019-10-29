@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
@@ -12,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.view_send_fee.*
@@ -21,7 +21,7 @@ class SendFeeFragment(
         private val coin: Coin,
         private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
         private val sendHandler: SendModule.ISendHandler
-) : Fragment(), FeeRatePrioritySelector.Listener {
+) : SendSubmoduleFragment(), FeeRatePrioritySelector.Listener {
 
     private var presenter: SendFeePresenter? = null
 
@@ -87,7 +87,9 @@ class SendFeeFragment(
                 feeLayout.visibility = View.VISIBLE
             }
         })
+    }
 
+    override fun init() {
         presenter?.onViewDidLoad()
     }
 

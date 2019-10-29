@@ -7,19 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import kotlinx.android.synthetic.main.view_amount_input.*
 
 class SendAmountFragment(
         private val wallet: Wallet,
         private val amountModuleDelegate: SendAmountModule.IAmountModuleDelegate,
         private val sendHandler:SendModule.ISendHandler
-) : Fragment() {
+) : SendSubmoduleFragment() {
 
     private lateinit var presenter: SendAmountPresenter
 
@@ -75,10 +75,11 @@ class SendAmountFragment(
         presenterView.switchButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             enableCurrencySwitch(enabled)
         })
-
-        presenter.onViewDidLoad()
     }
 
+    override fun init() {
+        presenter.onViewDidLoad()
+    }
 
     private fun setPrefix(prefix: String?) {
         topAmountPrefix.text = prefix

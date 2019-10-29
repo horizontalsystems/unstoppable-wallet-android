@@ -44,6 +44,17 @@ class XRateManager(context: Context,
         return kit.getMarketInfo(coin, currency)
     }
 
+    override fun getLatestRate(coin: String, currency: String): BigDecimal? {
+        val marketInfo = marketInfo(coin, currency)
+
+        return when {
+            marketInfo == null -> null
+            marketInfo.isExpired() -> null
+            else -> marketInfo.rate
+        }
+
+    }
+
     override fun marketInfoObservable(coin: String, currency: String): Observable<MarketInfo> {
         return kit.marketInfoObservable(coin, currency)
     }

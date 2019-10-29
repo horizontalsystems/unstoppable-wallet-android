@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import java.math.BigDecimal
@@ -29,17 +31,11 @@ object SendFeeModule {
         fun onViewDidLoad()
         fun onChangeFeeRate(feeRateInfo: FeeRateInfo)
         fun onClickFeeRatePriority()
-        fun onClear()
     }
 
     interface IInteractor {
-        fun getRate(coinCode: String)
+        fun getRate(coinCode: String): BigDecimal?
         fun getFeeRates(): List<FeeRateInfo>?
-        fun clear()
-    }
-
-    interface IInteractorDelegate {
-        fun onRateFetched(latestRate: Rate?)
     }
 
     interface IFeeModule {
@@ -76,11 +72,10 @@ object SendFeeModule {
 
             val baseCurrency = App.currencyManager.baseCurrency
             val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
-            val interactor = SendFeeInteractor(App.rateStorage, feeRateProvider, App.currencyManager)
+            val interactor = SendFeeInteractor(App.xRateManager, feeRateProvider, App.currencyManager)
 
             val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData)
 
-            interactor.delegate = presenter
             presenter.moduleDelegate = feeModuleDelegate
             sendHandler.feeModule = presenter
 
