@@ -9,18 +9,16 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartFragment(
-        private val coin: Coin
-) : BaseBottomSheetDialogFragment(), ChartView.Listener {
+class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(), ChartView.Listener {
 
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
@@ -66,8 +64,8 @@ class RateChartFragment(
 
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartData, item.type)
-            setSubtitle(item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) })
+            chartView.setData(item.chartPoints, item.chartType)
+            setSubtitle(DateHelper.getFullDateWithShortMonth(item.lastUpdateTimestamp * 1000))
 
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
                 resources.getColor(R.color.red_d) else
@@ -96,16 +94,6 @@ class RateChartFragment(
             pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), outputFormat)
         })
 
-        presenterView.enableChartType.observe(viewLifecycleOwner, Observer { type ->
-            actions[type]?.let { action ->
-                action.isEnabled = true
-                action.setOnClickListener {
-                    presenter.onSelect(type)
-                    resetActions(it)
-                }
-            }
-        })
-
         presenterView.showError.observe(viewLifecycleOwner, Observer {
             chartView.visibility = View.INVISIBLE
             chartError.visibility = View.VISIBLE
@@ -113,7 +101,7 @@ class RateChartFragment(
         })
     }
 
-    // ChartView Listener
+    //  ChartView Listener
 
     override fun onTouchDown() {
         isCancelable = false // enable swipe
@@ -139,10 +127,14 @@ class RateChartFragment(
                 Pair(ChartType.WEEKLY, button1W),
                 Pair(ChartType.MONTHLY, button1M),
                 Pair(ChartType.MONTHLY6, button6M),
-                Pair(ChartType.MONTHLY18, button1Y))
+                Pair(ChartType.MONTHLY12, button1Y)
+        )
 
-        actions.values.forEach {
-            it.isEnabled = false
+        actions.forEach { (type, action) ->
+            action.setOnClickListener {
+                presenter.onSelect(type)
+                resetActions(it)
+            }
         }
     }
 

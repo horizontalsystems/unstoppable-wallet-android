@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.core.managers.StatsResponse
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -57,11 +56,14 @@ interface ILocalStorage {
     var baseEosProvider: String?
     var syncMode: SyncMode
     var sortType: BalanceSortType
-    var chartMode: ChartView.ChartType
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
 
     fun clear()
+}
+
+interface IChartTypeStorage {
+    var chartType: ChartType?
 }
 
 interface ISecuredStorage {
