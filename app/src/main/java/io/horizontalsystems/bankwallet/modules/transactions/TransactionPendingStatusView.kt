@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.content.Context
-import android.os.Handler
+import android.graphics.drawable.Animatable
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
@@ -26,36 +26,8 @@ class TransactionPendingStatusView : ConstraintLayout {
         inflate(context, R.layout.view_transaction_pending_status, this)
     }
 
-    private var threadHandler: Handler? = null
-    private var runnable: Runnable? = null
-    private var animationDelayTime: Long = 150
-
     fun startAnimation() {
-        if (threadHandler == null && runnable == null) {
-            var lastAnimatedIndex = 1
-            threadHandler = Handler()
-            runnable = object : Runnable {
-                override fun run() {
-
-                    threadHandler?.postDelayed(this, animationDelayTime)
-                    if (lastAnimatedIndex == 1) {
-                        pendingText.text = context.getString(R.string.Transactions_PendingOneDot)
-                        lastAnimatedIndex = 2
-                    } else if (lastAnimatedIndex == 2) {
-                        pendingText.text = context.getString(R.string.Transactions_PendingTwoDots)
-                        lastAnimatedIndex = 3
-                    } else if (lastAnimatedIndex == 3) {
-                        pendingText.text = context.getString(R.string.Transactions_PendingThreeDots)
-                        lastAnimatedIndex = 4
-                    } else {
-                        pendingText.text = context.getString(R.string.Transactions_Pending)
-                        lastAnimatedIndex = 1
-                    }
-                    invalidate()
-                }
-            }
-            runnable?.run()
-        }
+        (pendingIcon.background as? Animatable)?.start()
     }
 
 }
