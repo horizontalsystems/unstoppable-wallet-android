@@ -116,7 +116,7 @@
         <item name="ColorLucian">@color/red_d</item>
         <item name="ColorLucianPressed">@color/red_l</item>
         <item name="ColorOz">@color/light</item>
-        <item name="ColorLeah">@color/steel_light</item>
+        <item name="ColorLeah">@color/light_grey</item>
         <!-- New colors: for backgrounds -->
         <item name="ColorJeremy">@color/steel_20</item>
         <item name="ColorElena">@color/steel_20</item>
@@ -163,7 +163,7 @@
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
         <item name="LightBackground">@color/steel_light</item>
         <item name="BottomSendButtonColor">@color/steel_light</item>
-        <item name="BottomSendButtonHighlightedColor">@color/steel_grey</item>
+        <item name="BottomSendButtonHighlightedColor">@color/light_grey</item>
         <item name="BottomSendImageButtonTint">@color/black</item>
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/light</item>
@@ -187,7 +187,7 @@
         <item name="ColorLeah">@color/steel_dark</item>
         <!-- New colors: for backgrounds -->
         <item name="ColorJeremy">@color/steel_light</item>
-        <item name="ColorElena">@color/steel_grey</item>
+        <item name="ColorElena">@color/light_grey</item>
         <item name="ColorLawrence">@color/white</item>
         <item name="ColorLawrencePressed">@color/white_pressed</item>
         <item name="ColorClaude">@color/white</item>
