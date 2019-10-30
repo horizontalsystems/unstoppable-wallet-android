@@ -221,7 +221,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         val chartInfo = viewItem.chartInfo
 
         chartView.visibility = View.VISIBLE
-        chartView.setData(chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }, ChartType.DAILY)
+        chartView.setData(chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }, ChartType.DAILY, chartInfo.startTimestamp, chartInfo.endTimestamp)
     }
 
     private fun setChartVisibility(show: Boolean) {

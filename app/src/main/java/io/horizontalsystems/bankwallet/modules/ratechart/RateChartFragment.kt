@@ -64,8 +64,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartPoints, item.chartType)
-            setSubtitle(DateHelper.getFullDateWithShortMonth(item.lastUpdateTimestamp * 1000))
+            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
                 resources.getColor(R.color.red_d) else
