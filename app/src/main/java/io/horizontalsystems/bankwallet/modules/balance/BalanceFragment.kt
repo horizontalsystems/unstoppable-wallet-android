@@ -39,7 +39,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
-        coinAdapter = BalanceCoinAdapter(this, viewModel.delegate)
+        coinAdapter = BalanceCoinAdapter(this)
 
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
@@ -48,7 +48,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
         switchChartButton.setOnClickListener {
-            viewModel.delegate.onChartClick()
+            viewModel.delegate.onStatsSwitch()
         }
 
         pullToRefresh.setOnRefreshListener {
@@ -61,10 +61,8 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.balance_menu, menu)
-
-        // todo: handle menu states in presenter
         menuSort = menu.findItem(R.id.menuSort)
-        menuSort?.isVisible = viewModel.delegate.itemsCount >= 5
+        menuSort?.isVisible = viewModel.isSortOn.value ?: false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -115,11 +113,11 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     // BalanceAdapter listener
 
     override fun onSendClicked(position: Int) {
-        viewModel.onSendClicked(position)
+        viewModel.delegate.onPay(position)
     }
 
     override fun onReceiveClicked(position: Int) {
-        viewModel.onReceiveClicked(position)
+        viewModel.delegate.onReceive(position)
     }
 
     override fun onItemClick(position: Int) {
@@ -131,7 +129,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     }
 
     override fun onClickChart(position: Int) {
-        viewModel.delegate.openChart(position)
+        viewModel.delegate.onChart(position)
     }
 
     // LiveData
@@ -153,38 +151,30 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             context?.let { ManageWalletsModule.start(it) }
         })
 
-        viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
-            coinAdapter.notifyDataSetChanged()
-            reloadHeader()
-            if (viewModel.delegate.itemsCount > 0) {
-                recyclerCoins.animate().alpha(1f)
-            }
+        viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
+            coinAdapter.setItems(it)
         })
 
-        viewModel.reloadHeaderLiveEvent.observe(viewLifecycleOwner, Observer {
-            reloadHeader()
-        })
-
-        viewModel.reloadItemLiveEvent.observe(viewLifecycleOwner, Observer { position ->
-            coinAdapter.notifyItemChanged(position)
+        viewModel.setHeaderViewItem.observe(viewLifecycleOwner, Observer {
+            setHeaderViewItem(it)
         })
 
         viewModel.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { sortingType ->
             BalanceSortDialogFragment.newInstance(this, sortingType).also { it.show(childFragmentManager, it.tag) }
         })
 
-        viewModel.setSortingOnLiveEvent.observe(viewLifecycleOwner, Observer { visible ->
+        viewModel.isSortOn.observe(viewLifecycleOwner, Observer { visible ->
             menuSort?.isVisible = visible
         })
 
-        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {(coin, predefinedAccount) ->
+        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer { (coin, predefinedAccount) ->
             activity?.let { activity ->
                 val title = getString(R.string.ManageKeys_Delete_Alert_Title)
                 val subtitle = getString(predefinedAccount.title)
                 val description = getString(R.string.ManageKeys_Delete_Alert)
                 ManageKeysDialog.show(title, subtitle, description, activity, object : ManageKeysDialog.Listener {
                     override fun onClickBackupKey() {
-                        viewModel.delegate.openBackup()
+                        viewModel.delegate.onBackupClick()
                     }
                 }, ManageKeysDialog.ManageAction.BACKUP)
             }
@@ -217,9 +207,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
     }
 
-    private fun reloadHeader() {
-        val headerViewItem = viewModel.delegate.getHeaderViewItem()
-
+    private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
         context?.let {
             val color = if (headerViewItem.upToDate) R.color.yellow_d else R.color.yellow_50
             balanceText.setTextColor(ContextCompat.getColor(it, color))

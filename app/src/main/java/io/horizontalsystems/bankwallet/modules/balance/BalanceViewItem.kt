@@ -2,64 +2,72 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.xrateskit.entities.ChartInfo
 import java.math.BigDecimal
 
 data class BalanceViewItem(
+        val wallet: Wallet,
         val coin: Coin,
         val coinValue: CoinValue,
         val exchangeValue: CurrencyValue?,
+        val diff: BigDecimal?,
         val currencyValue: CurrencyValue?,
         val state: AdapterState,
-        val chartData: BalanceChartData?,
-        val rateExpired: Boolean
+        val marketInfoExpired: Boolean,
+        val chartInfo: ChartInfo?
 )
 
 data class BalanceHeaderViewItem(
         val currencyValue: CurrencyValue?,
-        val upToDate: Boolean,
-        val chartEnabled: Boolean
+        val upToDate: Boolean
 )
 
 class BalanceViewItemFactory {
 
-    fun createViewItem(item: BalanceModule.BalanceItem, currency: Currency?): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, isStatsOn: Boolean): BalanceViewItem {
         var exchangeValue: CurrencyValue? = null
         var currencyValue: CurrencyValue? = null
 
-        item.rate?.let { rate ->
-            currency?.let {
-                exchangeValue = CurrencyValue(it, rate.value)
-                currencyValue = CurrencyValue(it, rate.value * item.balance)
+        item.marketInfo?.rate?.let { rate ->
+            exchangeValue = CurrencyValue(currency, rate)
+            item.balance?.let {
+                currencyValue = CurrencyValue(currency, rate * it)
             }
         }
 
         return BalanceViewItem(
+                item.wallet,
                 item.wallet.coin,
-                CoinValue(item.wallet.coin, item.balance),
+                CoinValue(item.wallet.coin, item.balance ?: BigDecimal.ZERO),
                 exchangeValue,
+                item.marketInfo?.diff,
                 currencyValue,
-                item.state,
-                item.chartData,
-                item.rate?.expired ?: false
+                item.state ?: AdapterState.NotReady,
+                item.marketInfo?.isExpired() ?: false,
+                if (isStatsOn) item.chartInfo else null
         )
     }
 
-    fun createHeaderViewItem(items: List<BalanceModule.BalanceItem>, chartEnabled: Boolean, currency: Currency?): BalanceHeaderViewItem {
-        var sum = BigDecimal.ZERO
-        var expired = false
-        val nonZeroItems = items.filter { it.balance > BigDecimal.ZERO }
+    fun headerViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency): BalanceHeaderViewItem {
+        var total = BigDecimal.ZERO
+        var upToDate = true
 
-        nonZeroItems.forEach { balanceItem ->
-            val rate = balanceItem.rate
+        items.forEach { item ->
+            val balance = item.balance
+            val marketInfo = item.marketInfo
 
-            rate?.value?.times(balanceItem.balance)?.let {
-                sum += it
+            if (balance != null && marketInfo != null) {
+                total += balance.multiply(marketInfo.rate)
+
+                upToDate = !marketInfo.isExpired()
             }
 
-            expired = expired || balanceItem.state != AdapterState.Synced || rate?.expired == true
+            if (item.state == null || item.state != AdapterState.Synced) {
+                upToDate = false
+            }
         }
 
-        return BalanceHeaderViewItem(currency?.let { CurrencyValue(it, sum) }, !expired, chartEnabled)
+        return BalanceHeaderViewItem(CurrencyValue(currency, total), upToDate)
     }
 
 }

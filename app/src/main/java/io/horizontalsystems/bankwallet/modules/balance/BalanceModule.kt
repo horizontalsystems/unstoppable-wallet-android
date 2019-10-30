@@ -2,70 +2,85 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.core.managers.StatsData
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 
 object BalanceModule {
 
     interface IView {
+        fun set(viewItems: List<BalanceViewItem>)
+        fun set(headerViewItem: BalanceHeaderViewItem)
+        fun set(statsButtonState: StatsButtonState)
+        fun set(sortIsOn: Boolean)
+        fun showBackupRequired(coin: Coin, predefinedAccountType: IPredefinedAccountType)
         fun didRefresh()
-        fun reload()
-        fun updateItem(position: Int)
-        fun updateHeader()
-        fun setSortingOn(isOn: Boolean)
-        fun showBackupAlert(coin: Coin, predefinedAccountType: IPredefinedAccountType)
-        fun setStatsButton(state: StatsButtonState)
     }
 
     interface IViewDelegate {
-        val itemsCount: Int
-
         fun viewDidLoad()
-        fun getViewItem(position: Int): BalanceViewItem
-        fun getHeaderViewItem(): BalanceHeaderViewItem
         fun refresh()
+
         fun onReceive(position: Int)
         fun onPay(position: Int)
+        fun onChart(position: Int)
+
         fun openManageCoins()
-        fun onClear()
-        fun onSortClick()
-        fun onChartClick()
+
         fun onSortTypeChanged(sortType: BalanceSortType)
-        fun openBackup()
-        fun openChart(position: Int)
+        fun onSortClick()
+        fun onBackupClick()
+        fun onStatsSwitch()
+
+        fun onClear()
     }
 
     interface IInteractor {
+        val wallets: List<Wallet>
+        val baseCurrency: Currency
+        val sortType: BalanceSortType
+
+        fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
+        fun chartInfo(coinCode: String, currencyCode: String): ChartInfo?
+        fun balance(wallet: Wallet): BigDecimal?
+        fun state(wallet: Wallet): AdapterState?
+
+        fun subscribeToWallets()
+        fun subscribeToBaseCurrency()
+        fun subscribeToAdapters(wallets: List<Wallet>)
+
+        fun subscribeToMarketInfo(currencyCode: String)
+        fun subscribeToChartInfo(coinCodes: List<String>, currencyCode: String)
+        fun unsubscribeFromChartInfo()
+
         fun refresh()
-        fun initWallets()
-        fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
-        fun getSortingType(): BalanceSortType
-        fun clear()
-        fun saveSortingType(sortType: BalanceSortType)
-        fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
-        fun syncStats(coinCode: String, currencyCode: String)
         fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType?
+
+        fun saveSortType(sortType: BalanceSortType)
+
+        fun clear()
     }
 
     interface IInteractorDelegate {
         fun didUpdateWallets(wallets: List<Wallet>)
-        fun didUpdateCurrency(currency: Currency)
         fun didUpdateBalance(wallet: Wallet, balance: BigDecimal)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
-        fun didUpdateRate(rate: Rate)
-        fun onReceiveRateStats(data: StatsData)
-        fun onFailFetchChartStats(coinCode: String)
+
+        fun didUpdateCurrency(currency: Currency)
+        fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>)
+        fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String)
+
         fun didRefresh()
-        fun willEnterForeground()
     }
 
     interface IRouter {
-        fun openReceiveDialog(wallet: Wallet)
-        fun openSendDialog(wallet: Wallet)
+        fun openReceive(wallet: Wallet)
+        fun openSend(wallet: Wallet)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
         fun openBackup(account: Account, coinCodesStringRes: Int)
@@ -80,101 +95,21 @@ object BalanceModule {
         NORMAL, HIDDEN, SELECTED
     }
 
-    class DataSource(var currency: Currency, private val sorter: IBalanceSorter) {
-        private var updatedPositions = mutableListOf<Int>()
+    data class BalanceItem(val wallet: Wallet) {
 
-        val count
-            get() = items.count()
+        var balance: BigDecimal? = null
+        var state: AdapterState? = null
+        var marketInfo: MarketInfo? = null
+        var chartInfo: ChartInfo? = null
 
-        val coinCodes: List<CoinCode>
-            get() = items.map { it.wallet.coin.coinId }.distinct()
-
-        var items = listOf<BalanceItem>()
-        var sortType: BalanceSortType = BalanceSortType.Name
-            set(value) {
-                field = value
-                items = sorter.sort(items, sortType)
-            }
-
-        var statsButtonState: StatsButtonState = StatsButtonState.HIDDEN
-
-        @Synchronized
-        fun addUpdatedPosition(position: Int) {
-            updatedPositions.add(position)
-        }
-
-        @Synchronized
-        fun clearUpdatedPositions() {
-            updatedPositions.clear()
-        }
-
-        fun set(items: List<BalanceItem>) {
-            this.items = sorter.sort(items, sortType)
-            clearUpdatedPositions()
-        }
-
-        @Synchronized
-        fun getUpdatedPositions(): List<Int> = updatedPositions.distinct()
-
-        fun getItem(position: Int): BalanceItem = items[position]
-
-        fun getPosition(wallet: Wallet): Int {
-            return items.indexOfFirst { it.wallet == wallet }
-        }
-
-        fun getPositionsByCoinCode(coinCode: String): List<Int> {
-            return items.mapIndexedNotNull { index, balanceItem ->
-                if (balanceItem.wallet.coin.code == coinCode) {
-                    index
-                } else {
-                    null
-                }
-            }
-        }
-
-        fun setBalance(position: Int, balance: BigDecimal) {
-            items[position].balance = balance
-        }
-
-        fun setState(position: Int, state: AdapterState) {
-            items[position].state = state
-
-            if (items.all { it.state == AdapterState.Synced }) {
-                items = sorter.sort(items, sortType)
-            }
-        }
-
-        fun setRate(position: Int, rate: Rate) {
-            items[position].rate = rate
-            items = sorter.sort(items, sortType)
-        }
-
-        fun setChartData(position: Int, data: BalanceChartData) {
-            items[position].chartData = data
-            items = sorter.sort(items, sortType)
-        }
-
-        fun clearRates() {
-            items.forEach { it.rate = null }
-        }
-
-    }
-
-    data class BalanceItem(
-            val wallet: Wallet,
-            var balance: BigDecimal,
-            var state: AdapterState,
-            var rate: Rate? = null) {
-
-        var chartData: BalanceChartData? = null
         val fiatValue: BigDecimal?
-            get() = rate?.let { balance.times(it.value) }
+            get() = marketInfo?.rate?.let { balance?.times(it) }
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
-        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStatsManager, currencyManager, App.backgroundManager, App.rateStorage, App.localStorage, App.rateManager, App.predefinedAccountTypeManager)
-        val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency, BalanceSorter()), App.predefinedAccountTypeManager, BalanceViewItemFactory())
+        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, currencyManager, App.localStorage, App.xRateManager, App.predefinedAccountTypeManager)
+        val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view
         interactor.delegate = presenter
