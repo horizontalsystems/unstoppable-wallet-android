@@ -18,6 +18,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="July 23" />
 
+    <TextView
+        android:id="@+id/timeAgoText"
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:textAlignment="textEnd"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toTopOf="@+id/pinUnlock"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/LockscreenRateList_secondsAgo" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pinUnlock"
         android:layout_width="match_parent"

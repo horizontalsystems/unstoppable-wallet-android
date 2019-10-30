@@ -39,10 +39,18 @@ class RatesFragment : Fragment() {
 
     private fun observeView(view: RateListView) {
         view.currentDate.observe(viewLifecycleOwner, Observer {
-            dateText.text = DateHelper.formatDate(Date(), "MMMM dd")
+            dateText.text = DateHelper.formatDate(Date(), "MMM dd")
         })
         view.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             adapter.notifyDataSetChanged()
+        })
+        view.timeAgo.observe(viewLifecycleOwner, Observer { secondsAgo ->
+            val timeAgo = when {
+                secondsAgo < 60 -> getString(R.string.LockscreenRateList_secondsAgo, secondsAgo)
+                secondsAgo < 60 * 60 -> getString(R.string.LockscreenRateList_minutesAgo, secondsAgo/60)
+                else -> getString(R.string.LockscreenRateList_hoursAgo, secondsAgo/60/60)
+            }
+            timeAgoText.text = timeAgo
         })
     }
 }
