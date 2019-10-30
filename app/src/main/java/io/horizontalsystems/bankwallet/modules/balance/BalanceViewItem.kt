@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.BigDecimal
 
 data class BalanceViewItem(
@@ -16,8 +19,7 @@ data class BalanceViewItem(
 
 data class BalanceHeaderViewItem(
         val currencyValue: CurrencyValue?,
-        val upToDate: Boolean,
-        val chartEnabled: Boolean
+        val upToDate: Boolean
 )
 
 class BalanceViewItemFactory {
@@ -44,7 +46,7 @@ class BalanceViewItemFactory {
         )
     }
 
-    fun createHeaderViewItem(items: List<BalanceModule.BalanceItem>, chartEnabled: Boolean, currency: Currency?): BalanceHeaderViewItem {
+    fun createHeaderViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency?): BalanceHeaderViewItem {
         var sum = BigDecimal.ZERO
         var expired = false
         val nonZeroItems = items.filter { it.balance > BigDecimal.ZERO }
@@ -59,7 +61,7 @@ class BalanceViewItemFactory {
             expired = expired || balanceItem.state != AdapterState.Synced || rate?.expired == true
         }
 
-        return BalanceHeaderViewItem(currency?.let { CurrencyValue(it, sum) }, !expired, chartEnabled)
+        return BalanceHeaderViewItem(currency?.let { CurrencyValue(it, sum) }, !expired)
     }
 
 }

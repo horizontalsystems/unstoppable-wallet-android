@@ -24,7 +24,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val showBackupAlert = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
-    val setStatsButtonState = SingleLiveEvent<BalanceModule.StatsButtonState>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -90,10 +89,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun openChart(coin: Coin) {
         openChartModule.postValue(coin)
-    }
-
-    override fun setStatsButton(state: BalanceModule.StatsButtonState) {
-        setStatsButtonState.postValue(state)
     }
 
 }

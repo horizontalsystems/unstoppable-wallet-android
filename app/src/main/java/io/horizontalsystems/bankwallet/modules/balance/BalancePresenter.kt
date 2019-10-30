@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.StatsButtonState
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -41,9 +40,10 @@ class BalancePresenter(
 
     override fun viewDidLoad() {
         dataSource.sortType = interactor.getSortingType()
-        view?.setStatsButton(dataSource.statsButtonState)
 
         interactor.initWallets()
+
+        updateStats()
 
         flushSubject
                 .debounce(1, TimeUnit.SECONDS)
@@ -73,7 +73,7 @@ class BalancePresenter(
             factory.createViewItem(dataSource.getItem(position), dataSource.currency)
 
     override fun getHeaderViewItem() =
-            factory.createHeaderViewItem(dataSource.items, dataSource.statsButtonState == StatsButtonState.SELECTED, dataSource.currency)
+            factory.createHeaderViewItem(dataSource.items, dataSource.currency)
 
     override fun refresh() {
         interactor.refresh()
@@ -108,21 +108,10 @@ class BalancePresenter(
         router.openSortTypeDialog(dataSource.sortType)
     }
 
-    override fun onChartClick() {
-        dataSource.statsButtonState = if (dataSource.statsButtonState == StatsButtonState.SELECTED) StatsButtonState.NORMAL else StatsButtonState.SELECTED
-        updateStats()
-
-        view?.setStatsButton(dataSource.statsButtonState)
-        view?.reload()
-    }
-
     override fun onSortTypeChanged(sortType: BalanceSortType) {
         dataSource.sortType = sortType
         if (sortType == BalanceSortType.PercentGrowth) {
-            dataSource.statsButtonState = StatsButtonState.SELECTED
             updateStats()
-
-            view?.setStatsButton(dataSource.statsButtonState)
         } else {
             interactor.saveSortingType(sortType)
         }
@@ -149,13 +138,7 @@ class BalancePresenter(
         interactor.fetchRates(dataSource.currency.code, dataSource.coinCodes)
         updateStats()
 
-        if (dataSource.items.isEmpty()) {
-            dataSource.statsButtonState = StatsButtonState.HIDDEN
-        } else if (dataSource.statsButtonState == StatsButtonState.HIDDEN) {
-            dataSource.statsButtonState = StatsButtonState.NORMAL
-        }
         view?.setSortingOn(balanceItems.size >= showSortingButtonThreshold)
-        view?.setStatsButton(dataSource.statsButtonState)
         view?.reload()
     }
 
@@ -188,9 +171,7 @@ class BalancePresenter(
         if (positions.isEmpty())
             return
 
-        if (dataSource.statsButtonState == StatsButtonState.SELECTED) {
-            interactor.syncStats(rate.coinCode, dataSource.currency.code)
-        }
+        interactor.syncStats(rate.coinCode, dataSource.currency.code)
 
         positions.forEach { position ->
             dataSource.setRate(position, rate)
@@ -254,10 +235,8 @@ class BalancePresenter(
     }
 
     private fun updateStats() {
-        if (dataSource.statsButtonState == StatsButtonState.SELECTED) {
-            dataSource.items.forEach { item ->
-                interactor.syncStats(coinCode = item.wallet.coin.code, currencyCode = dataSource.currency.code)
-            }
+        dataSource.items.forEach { item ->
+            interactor.syncStats(coinCode = item.wallet.coin.code, currencyCode = dataSource.currency.code)
         }
     }
 

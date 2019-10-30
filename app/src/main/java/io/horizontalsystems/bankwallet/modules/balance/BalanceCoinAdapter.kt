@@ -66,12 +66,11 @@ class BalanceCoinAdapter(private val listener: Listener, private val viewDelegat
         }
 
         if (holder !is ViewHolderCoin) return
-        val header = viewDelegate.getHeaderViewItem()
         val viewItem = viewDelegate.getViewItem(position)
         if (payloads.isEmpty()) {
-            holder.bind(viewItem, expandedViewPosition == position, header.chartEnabled)
+            holder.bind(viewItem, expandedViewPosition == position)
         } else if (payloads.any { it is Boolean }) {
-            holder.bindPartial(viewItem, expandedViewPosition == position, header.chartEnabled)
+            holder.bindPartial(viewItem, expandedViewPosition == position)
         }
     }
 }
@@ -81,7 +80,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private var syncing = false
 
-    fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean) {
+    fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
         syncing = false
         buttonPay.isEnabled = false
         buttonReceive.isEnabled = true
@@ -128,11 +127,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
         exchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.grey_50 else R.color.grey))
         exchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
-            val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
-            when {
-                chartEnabled -> rateString
-                else -> containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coin.code)
-            }
+            App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
         }
 
         buttonPay.setOnSingleClickListener {
@@ -151,13 +146,13 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             listener.onItemClick(adapterPosition)
         }
 
-        showChart(balanceViewItem, expanded, chartEnabled)
+        showChart(balanceViewItem, expanded)
 
         showFiatAmount(balanceViewItem, syncing && !expanded)
         updateSecondLineItemsVisibility(expanded)
     }
 
-    fun bindPartial(balanceViewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean) {
+    fun bindPartial(balanceViewItem: BalanceViewItem, expanded: Boolean) {
         viewHolderRoot.isSelected = expanded
 
         showFiatAmount(balanceViewItem, syncing && !expanded)
@@ -169,7 +164,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             AnimationHelper.collapse(buttonsWrapper)
         }
 
-        showChart(balanceViewItem, expanded, chartEnabled)
+        showChart(balanceViewItem, expanded)
     }
 
     private fun updateSecondLineItemsVisibility(expanded: Boolean) {
@@ -192,8 +187,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         }
     }
 
-    private fun showChart(viewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean) {
-        if (expanded || !chartEnabled) {
+    private fun showChart(viewItem: BalanceViewItem, expanded: Boolean) {
+        if (expanded) {
             return setChartVisibility(false)
         }
 
