@@ -77,6 +77,7 @@ class ChartView : View {
             ta.getInt(R.styleable.ChartView_gridColor, context.getColor(R.color.steel_20)).let { config.gridColor = it }
             ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.light)).let { config.touchColor = it }
             ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.light)).let { config.indicatorColor = it }
+            ta.getInt(R.styleable.ChartView_partialChartColor, context.getColor(R.color.light)).let { config.partialChartColor = it }
         } finally {
             ta.recycle()
         }
