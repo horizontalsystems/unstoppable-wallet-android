@@ -66,7 +66,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             chartView.visibility = View.VISIBLE
             chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
-            context?.let { coinRateDiff.bind(item.diffValue, it) }
+            context?.let { coinRateDiff.bind(item.diffValue, it, true) }
 
             coinRateHighTitle.text = getString(R.string.Charts_Rate_High, actionTitle(item.chartType))
             coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false, trimmable = true)
