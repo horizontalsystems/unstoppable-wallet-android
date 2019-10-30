@@ -9,7 +9,8 @@ class RateChartView : RateChartModule.View {
     val hideSpinner = SingleLiveEvent<Unit>()
     val setDefaultMode = SingleLiveEvent<ChartType>()
     val setSelectedPoint = SingleLiveEvent<Triple<Long, CurrencyValue, ChartType>>()
-    val showChart = SingleLiveEvent<ChartViewItem>()
+    val showChartInfo = SingleLiveEvent<ChartInfoViewItem>()
+    val showMarketInfo = SingleLiveEvent<MarketInfoViewItem>()
     val showError = SingleLiveEvent<Throwable>()
 
     override fun showSpinner() {
@@ -24,8 +25,12 @@ class RateChartView : RateChartModule.View {
         setDefaultMode.postValue(type)
     }
 
-    override fun showChart(viewItem: ChartViewItem) {
-        showChart.postValue(viewItem)
+    override fun showChartInfo(viewItem: ChartInfoViewItem) {
+        showChartInfo.postValue(viewItem)
+    }
+
+    override fun showMarketInfo(viewItem: MarketInfoViewItem) {
+        showMarketInfo.postValue(viewItem)
     }
 
     override fun showSelectedPoint(data: Triple<Long, CurrencyValue, ChartType>) {

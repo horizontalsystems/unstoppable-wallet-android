@@ -62,7 +62,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             actions[type]?.let { it.isActivated = true }
         })
 
-        presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
+        presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
             chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
@@ -73,14 +73,30 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             coinRateDiff.setTextColor(diffColor)
             coinRateDiff.text = App.numberFormatter.format(item.diffValue.toDouble(), showSign = true, precision = 2) + "%"
 
-            item.rateValue?.let { coinRateLast.text = formatter.format(it, canUseLessSymbol = false) }
-            val shortValue = shortenValue(item.marketCap.value)
-            val marketCap = CurrencyValue(item.marketCap.currency, shortValue.first)
-            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + shortValue.second
+            coinRateHighTitle.text = getString(R.string.Charts_Rate_High, actionTitle(item.chartType))
+            coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false, trimmable = true)
 
-            coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false)
-            coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false)
-            setViewVisibility(marketCapWrap, isVisible = true)
+            coinRateLowTitle.text = getString(R.string.Charts_Rate_Low, actionTitle(item.chartType))
+            coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false, trimmable = true)
+            setViewVisibility(highLowWrap, isVisible = true)
+        })
+
+        presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
+            setSubtitle(DateHelper.getFullDateWithShortMonth(item.timestamp * 1000))
+
+            coinRateLast.text = formatter.format(item.rateValue, canUseLessSymbol = false)
+
+            val shortCapValue = shortenValue(item.marketCap.value)
+            val marketCap = CurrencyValue(item.marketCap.currency, shortCapValue.first)
+            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + shortCapValue.second
+
+            val shortVolumeValue = shortenValue(item.volume.value)
+            val volume = CurrencyValue(item.volume.currency, shortVolumeValue.first)
+            volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + shortVolumeValue.second
+
+            circulationValue.text = formatter.format(item.supply, trimmable = true)
+
+            setViewVisibility(highLowWrap, isVisible = true)
         })
 
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
@@ -137,9 +153,19 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         }
     }
 
+    private fun actionTitle(chartType: ChartView.ChartType): String {
+        return when (chartType) {
+            ChartView.ChartType.DAILY -> getString(R.string.Charts_TimeDuration_Day)
+            ChartView.ChartType.WEEKLY -> getString(R.string.Charts_TimeDuration_Week)
+            ChartView.ChartType.MONTHLY -> getString(R.string.Charts_TimeDuration_Month)
+            ChartView.ChartType.MONTHLY6 -> getString(R.string.Charts_TimeDuration_HalfYear)
+            ChartView.ChartType.MONTHLY18 -> getString(R.string.Charts_TimeDuration_Year)
+        }
+    }
+
     private fun resetActions(current: View) {
         actions.values.forEach { it.isActivated = false }
-        setViewVisibility(marketCapWrap, isVisible = false)
+        setViewVisibility(highLowWrap, isVisible = false)
         current.isActivated = true
     }
 

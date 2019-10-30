@@ -16,7 +16,8 @@ object RateChartModule {
         fun showSpinner()
         fun hideSpinner()
         fun setChartType(type: ChartType)
-        fun showChart(viewItem: ChartViewItem)
+        fun showChartInfo(viewItem: ChartInfoViewItem)
+        fun showMarketInfo(viewItem: MarketInfoViewItem)
         fun showSelectedPoint(data: Triple<Long, CurrencyValue, ChartType>)
         fun showError(ex: Throwable)
     }
@@ -50,7 +51,7 @@ object RateChartModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateChartView()
             val interactor = RateChartInteractor(App.xRateManager, App.localStorage)
-            val presenter = RateChartPresenter(view, interactor, coin.code, App.currencyManager.baseCurrency, RateChartViewFactory())
+            val presenter = RateChartPresenter(view, interactor, coin, App.currencyManager.baseCurrency, RateChartViewFactory())
 
             interactor.delegate = presenter
 

@@ -6,7 +6,7 @@ import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class RateChartInteractor(private val xRateManager: IXRateManager, private val localStorage: IChartTypeStorage)
@@ -14,7 +14,8 @@ class RateChartInteractor(private val xRateManager: IXRateManager, private val l
 
     var delegate: RateChartModule.InteractorDelegate? = null
 
-    private val disposables = CompositeDisposable()
+    private var mInfoDisposable: Disposable? = null
+    private var cInfoDisposable: Disposable? = null
 
     override var defaultChartType: ChartType?
         get() = localStorage.chartType
@@ -31,7 +32,8 @@ class RateChartInteractor(private val xRateManager: IXRateManager, private val l
     }
 
     override fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType) {
-        xRateManager.chartInfoObservable(coinCode, currencyCode, chartType)
+        cInfoDisposable?.dispose()
+        cInfoDisposable = xRateManager.chartInfoObservable(coinCode, currencyCode, chartType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ chartInfo ->
@@ -39,13 +41,11 @@ class RateChartInteractor(private val xRateManager: IXRateManager, private val l
                 }, {
                     delegate?.onError(it)
                 })
-                .let {
-                    disposables.add(it)
-                }
     }
 
     override fun observeMarketInfo(coinCode: String, currencyCode: String) {
-        xRateManager.marketInfoObservable(coinCode, currencyCode)
+        mInfoDisposable?.dispose()
+        mInfoDisposable = xRateManager.marketInfoObservable(coinCode, currencyCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ marketInfo ->
@@ -53,10 +53,10 @@ class RateChartInteractor(private val xRateManager: IXRateManager, private val l
                 }, {
                     delegate?.onError(it)
                 })
-                .let { disposables.add(it) }
     }
 
     override fun clear() {
-        disposables.clear()
+        mInfoDisposable?.dispose()
+        cInfoDisposable?.dispose()
     }
 }
