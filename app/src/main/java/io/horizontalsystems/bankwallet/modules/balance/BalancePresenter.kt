@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.StatsButtonState
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
@@ -26,7 +25,6 @@ class BalancePresenter(
     private var items = listOf<BalanceItem>()
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
-    private var isStatsOn: Boolean = false
 
     private fun handleUpdate(wallets: List<Wallet>) {
         items = wallets.map {
@@ -43,7 +41,6 @@ class BalancePresenter(
 
         view?.set(sortIsOn = items.size >= sortingOnThreshold)
 
-        updateStatsButtonState()
     }
 
     private fun handleRates() {
@@ -54,29 +51,16 @@ class BalancePresenter(
     }
 
     private fun handleStats() {
-        if (isStatsOn) {
-            items.forEach { item ->
-                item.chartInfo = interactor.chartInfo(item.wallet.coin.code, currency.code)
-            }
-            interactor.subscribeToChartInfo(items.map { it.wallet.coin.code }, currency.code)
-        } else {
-            interactor.unsubscribeFromChartInfo()
+        items.forEach { item ->
+            item.chartInfo = interactor.chartInfo(item.wallet.coin.code, currency.code)
         }
-    }
-
-    private fun updateStatsButtonState() {
-        val statsButtonState = when {
-            items.isEmpty() -> StatsButtonState.HIDDEN
-            isStatsOn -> StatsButtonState.SELECTED
-            else -> StatsButtonState.NORMAL
-        }
-        view?.set(statsButtonState = statsButtonState)
+        interactor.subscribeToChartInfo(items.map { it.wallet.coin.code }, currency.code)
     }
 
     private fun updateViewItems() {
         items = sorter.sort(items, sortType)
         val viewItems = items.map { item ->
-            factory.viewItem(item, currency, isStatsOn)
+            factory.viewItem(item, currency)
         }
         view?.set(viewItems = viewItems)
     }
@@ -94,6 +78,7 @@ class BalancePresenter(
         interactor.subscribeToWallets()
         interactor.subscribeToBaseCurrency()
 
+        handleStats()
         updateViewItems()
         updateHeaderViewItem()
     }
@@ -137,11 +122,8 @@ class BalancePresenter(
         this.sortType = sortType
         interactor.saveSortType(sortType)
 
-        if (sortType == BalanceSortType.PercentGrowth && !isStatsOn) {
-            isStatsOn = true
+        if (sortType == BalanceSortType.PercentGrowth) {
             handleStats()
-
-            updateStatsButtonState()
         }
         updateViewItems()
     }
@@ -152,14 +134,6 @@ class BalancePresenter(
             router.openBackup(account, accountType.coinCodes)
             accountToBackup = null
         }
-    }
-
-    override fun onStatsSwitch() {
-        isStatsOn = !isStatsOn
-        handleStats()
-
-        updateViewItems()
-        updateStatsButtonState()
     }
 
     override fun onClear() {

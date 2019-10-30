@@ -16,7 +16,6 @@ object BalanceModule {
     interface IView {
         fun set(viewItems: List<BalanceViewItem>)
         fun set(headerViewItem: BalanceHeaderViewItem)
-        fun set(statsButtonState: StatsButtonState)
         fun set(sortIsOn: Boolean)
         fun showBackupRequired(coin: Coin, predefinedAccountType: IPredefinedAccountType)
         fun didRefresh()
@@ -35,7 +34,6 @@ object BalanceModule {
         fun onSortTypeChanged(sortType: BalanceSortType)
         fun onSortClick()
         fun onBackupClick()
-        fun onStatsSwitch()
 
         fun onClear()
     }
@@ -89,10 +87,6 @@ object BalanceModule {
 
     interface IBalanceSorter {
         fun sort(items: List<BalanceItem>, sortType: BalanceSortType): List<BalanceItem>
-    }
-
-    enum class StatsButtonState {
-        NORMAL, HIDDEN, SELECTED
     }
 
     data class BalanceItem(val wallet: Wallet) {

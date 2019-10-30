@@ -1,18 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.StatsButtonState
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
@@ -27,17 +28,15 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     private lateinit var viewModel: BalanceViewModel
     private lateinit var coinAdapter: BalanceCoinAdapter
-    private var menuSort: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BalanceViewModel::class.java)
         viewModel.init()
         coinAdapter = BalanceCoinAdapter(this)
 
@@ -47,8 +46,8 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
-        switchChartButton.setOnClickListener {
-            viewModel.delegate.onStatsSwitch()
+        sortButton.setOnClickListener {
+            viewModel.delegate.onSortClick()
         }
 
         pullToRefresh.setOnRefreshListener {
@@ -57,21 +56,6 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
         observeLiveData()
         setSwipeBackground()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.balance_menu, menu)
-        menuSort = menu.findItem(R.id.menuSort)
-        menuSort?.isVisible = viewModel.isSortOn.value ?: false
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuSort) {
-            viewModel.delegate.onSortClick()
-            return true
-        }
-
-        return false
     }
 
     override fun onResume() {
@@ -164,7 +148,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.isSortOn.observe(viewLifecycleOwner, Observer { visible ->
-            menuSort?.isVisible = visible
+            sortButton.visibility = if (visible) View.VISIBLE else View.GONE
         })
 
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer { (coin, predefinedAccount) ->
@@ -188,23 +172,6 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             RateChartFragment(coin).also { it.show(childFragmentManager, it.tag) }
         })
 
-        viewModel.setStatsButtonState.observe(viewLifecycleOwner, Observer { statsButtonState ->
-            when (statsButtonState) {
-                StatsButtonState.NORMAL -> {
-                    switchChartButton.visibility = View.VISIBLE
-
-                    switchChartButton.isActivated = false
-                }
-                StatsButtonState.HIDDEN -> {
-                    switchChartButton.visibility = View.GONE
-                }
-                StatsButtonState.SELECTED -> {
-                    switchChartButton.visibility = View.VISIBLE
-
-                    switchChartButton.isActivated = true
-                }
-            }
-        })
     }
 
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
