@@ -125,7 +125,7 @@ class ChartView : View {
     }
 
     fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
-        setColour(points)
+        setColour(points, endTimestamp)
         setPoints(points, chartType, startTimestamp, endTimestamp)
 
         if (config.animated) {
@@ -136,11 +136,13 @@ class ChartView : View {
         }
     }
 
-    private fun setColour(points: List<ChartPoint>) {
+    private fun setColour(points: List<ChartPoint>, endTimestamp: Long) {
         val startPoint = points.firstOrNull() ?: return
         val endPoint = points.lastOrNull() ?: return
 
-        if (startPoint.value > endPoint.value) {
+        if (endPoint.timestamp < endTimestamp) {
+            config.curveColor = config.partialChartColor
+        } else if (startPoint.value > endPoint.value) {
             config.curveColor = config.fallColor
         } else {
             config.curveColor = config.growColor
