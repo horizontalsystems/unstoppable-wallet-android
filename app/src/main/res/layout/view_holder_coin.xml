@@ -135,6 +135,7 @@
                 android:id="@+id/chartView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:partialChartColor="?ColorOz"
                 app:animated="false"
                 app:height="36dp"
                 app:showGrid="false"
