@@ -212,7 +212,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         chartView.visibility = View.INVISIBLE
 
         viewItem.diff?.let {
-            txDiff.bind(it, containerView.context)
+            txDiff.bind(it, containerView.context, false)
             txDiff.visibility = View.VISIBLE
         } ?: run {
             txDiff.visibility = View.GONE

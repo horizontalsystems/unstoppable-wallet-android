@@ -92,7 +92,7 @@ class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHo
             loadingSpinner.visibility = View.GONE
 
             viewItem.diff?.let {
-                txDiff.bind(it, containerView.context)
+                txDiff.bind(it, containerView.context, true)
                 txDiff.visibility = View.VISIBLE
                 txDiffNa.visibility = View.GONE
             } ?: run {
