@@ -15,6 +15,7 @@ class ChartConfig(context: Context, viewHelper: ViewHelper) {
     var growColor = context.getColor(R.color.green_d)
     var fallColor = context.getColor(R.color.red_d)
     var indicatorColor = context.getColor(R.color.light)
+    var partialChartColor = context.getColor(R.color.light)
 
     //  dimens
     var width = 0f
