@@ -66,12 +66,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             chartView.visibility = View.VISIBLE
             chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
-            val diffColor = if (item.diffValue < BigDecimal.ZERO)
-                resources.getColor(R.color.red_d) else
-                resources.getColor(R.color.green_d)
-
-            coinRateDiff.setTextColor(diffColor)
-            coinRateDiff.text = App.numberFormatter.format(item.diffValue.toDouble(), showSign = true, precision = 2) + "%"
+            context?.let { coinRateDiff.bind(item.diffValue, it) }
 
             coinRateHighTitle.text = getString(R.string.Charts_Rate_High, actionTitle(item.chartType))
             coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false, trimmable = true)
