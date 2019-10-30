@@ -13,8 +13,8 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private val linePaint = Paint()
     private val gradient = Paint()
 
-    fun init(points: List<ChartPoint>) {
-        coordinates = chartHelper.setCoordinates(points)
+    fun init(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long) {
+        coordinates = chartHelper.setCoordinates(points, startTimestamp, endTimestamp)
 
         onTouchInactive()
 

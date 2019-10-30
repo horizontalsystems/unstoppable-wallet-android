@@ -124,9 +124,9 @@ class ChartView : View {
         chartIndicator?.init(config)
     }
 
-    fun setData(points: List<ChartPoint>, chartType: ChartType) {
+    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
         setColour(points)
-        setPoints(points, chartType)
+        setPoints(points, chartType, startTimestamp, endTimestamp)
 
         if (config.animated) {
             animator.setFloatValues(0f)
@@ -147,7 +147,7 @@ class ChartView : View {
         }
     }
 
-    private fun setPoints(points: List<ChartPoint>, chartType: ChartType) {
+    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
         helper.scale(points)
 
         var shapeWidth = width.toFloat()
@@ -167,10 +167,10 @@ class ChartView : View {
 
         shape.set(0f, 0f, shapeWidth - config.offsetRight, shapeHeight - config.offsetBottom)
 
-        chartCurve.init(points)
+        chartCurve.init(points, startTimestamp, endTimestamp)
 
         if (config.showGrid) {
-            chartGrid.init(points, chartType)
+            chartGrid.init(chartType, startTimestamp, endTimestamp)
         }
     }
 }

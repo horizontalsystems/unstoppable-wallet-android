@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.lib.chartview
 import android.graphics.RectF
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -27,12 +26,11 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
         return gridLines
     }
 
-    fun setGridColumns(points: List<ChartPoint>, chartType: ChartType): List<GridColumn> {
-        val startTimestamp = points.first().timestamp * 1000
-        val endTimestamp = points.last().timestamp * 1000
+    fun setGridColumns(chartType: ChartType, startTimestamp: Long, endTimestamp: Long): List<GridColumn> {
+        val start = startTimestamp * 1000
+        val end = endTimestamp * 1000
 
-        val date = Date(endTimestamp)
-        val calendar = Calendar.getInstance().apply { time = date }
+        val calendar = Calendar.getInstance().apply { time = Date() }
         var columnLabel = columnLabel(calendar, chartType)
 
         //  We need to move last vertical grid line to nearest hour/day depending on chart type
@@ -53,11 +51,11 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
             }
         }
 
-        val delta = (endTimestamp - startTimestamp) / shape.right
+        val delta = (end - start) / shape.right
         val columns = mutableListOf<GridColumn>()
 
         while (true) {
-            val xAxis = (calendar.time.time - startTimestamp) / delta
+            val xAxis = (calendar.time.time - start) / delta
             if (xAxis <= 0) break
 
             columns.add(GridColumn(xAxis, columnLabel))
