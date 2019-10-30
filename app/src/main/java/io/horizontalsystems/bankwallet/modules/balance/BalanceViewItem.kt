@@ -24,7 +24,7 @@ data class BalanceHeaderViewItem(
 
 class BalanceViewItemFactory {
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, isStatsOn: Boolean): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency): BalanceViewItem {
         var exchangeValue: CurrencyValue? = null
         var currencyValue: CurrencyValue? = null
 
@@ -44,7 +44,7 @@ class BalanceViewItemFactory {
                 currencyValue,
                 item.state ?: AdapterState.NotReady,
                 item.marketInfo?.isExpired() ?: false,
-                if (isStatsOn) item.chartInfo else null
+                item.chartInfo
         )
     }
 

@@ -19,7 +19,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val openChartModule = SingleLiveEvent<Coin>()
 
     val isSortOn = SingleLiveEvent<Boolean>()
-    val setStatsButtonState = SingleLiveEvent<BalanceModule.StatsButtonState>()
     val setHeaderViewItem = SingleLiveEvent<BalanceHeaderViewItem>()
     val setViewItems = SingleLiveEvent<List<BalanceViewItem>>()
     val showBackupAlert = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
@@ -61,10 +60,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun set(sortIsOn: Boolean) {
         isSortOn.postValue(sortIsOn)
-    }
-
-    override fun set(statsButtonState: BalanceModule.StatsButtonState) {
-        setStatsButtonState.postValue(statsButtonState)
     }
 
     override fun set(headerViewItem: BalanceHeaderViewItem) {
