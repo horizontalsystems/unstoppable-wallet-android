@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
@@ -8,7 +9,6 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interac
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -16,7 +16,7 @@ import io.horizontalsystems.xrateskit.entities.MarketInfo
 class RateChartPresenter(
         val view: View,
         private val interactor: Interactor,
-        private val coinCode: CoinCode,
+        private val coin: Coin,
         private val currency: Currency,
         private val factory: RateChartViewFactory)
     : ViewModel(), ViewDelegate, InteractorDelegate {
@@ -26,22 +26,24 @@ class RateChartPresenter(
     private var chartInfo: ChartInfo? = null
         set(value) {
             field = value
-            updateChart()
+            updateChartInfo()
         }
 
     private var marketInfo: MarketInfo? = null
         set(value) {
             field = value
-            updateChart()
+            updateMarketInfo()
         }
 
     //  ViewDelegate
 
     override fun viewDidLoad() {
-        view.showSpinner()
         view.setChartType(chartType)
 
-        fetchChartData()
+        marketInfo = interactor.getMarketInfo(coin.code, currency.code)
+        interactor.observeMarketInfo(coin.code, currency.code)
+
+        fetchChartInfo()
     }
 
     override fun onSelect(type: ChartType) {
@@ -51,24 +53,39 @@ class RateChartPresenter(
         chartType = type
         interactor.defaultChartType = type
 
-        view.showSpinner()
-        fetchChartData()
-    }
-
-    private fun fetchChartData() {
-        interactor.clear()
-
-        marketInfo = interactor.getMarketInfo(coinCode, currency.code)
-        interactor.observeMarketInfo(coinCode, currency.code)
-
-        chartInfo = interactor.getChartInfo(coinCode, currency.code, chartType)
-        interactor.observeChartInfo(coinCode, currency.code, chartType)
-
+        fetchChartInfo()
     }
 
     override fun onTouchSelect(point: ChartPoint) {
         val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
         view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
+    }
+
+    private fun fetchChartInfo() {
+        view.showSpinner()
+
+        chartInfo = interactor.getChartInfo(coin.code, currency.code, chartType)
+        interactor.observeChartInfo(coin.code, currency.code, chartType)
+    }
+
+    private fun updateMarketInfo() {
+        marketInfo?.let {
+            val viewItem = factory.createMarketInfo(it, currency, coin)
+            view.showMarketInfo(viewItem)
+        }
+    }
+
+    private fun updateChartInfo() {
+        val info = chartInfo ?: return
+
+        view.hideSpinner()
+
+        try {
+            val viewItem = factory.createChartInfo(chartType, info, currency)
+            view.showChartInfo(viewItem)
+        } catch (e: Exception) {
+            view.showError(e)
+        }
     }
 
     //  InteractorDelegate
@@ -84,20 +101,6 @@ class RateChartPresenter(
     override fun onError(ex: Throwable) {
         view.hideSpinner()
         view.showError(ex)
-    }
-
-    private fun updateChart() {
-        val cInfo = chartInfo ?: return
-        val mInfo = marketInfo ?: return
-
-        view.hideSpinner()
-
-        try {
-            val viewItem = factory.createViewItem(chartType, cInfo, mInfo, currency)
-            view.showChart(viewItem)
-        } catch (e: Exception) {
-            view.showError(e)
-        }
     }
 
     //  ViewModel

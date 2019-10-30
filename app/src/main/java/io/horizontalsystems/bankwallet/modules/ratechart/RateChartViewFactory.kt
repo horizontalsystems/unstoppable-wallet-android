@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
@@ -9,30 +11,36 @@ import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 
-data class ChartViewItem(
+data class ChartInfoViewItem(
         val chartType: ChartView.ChartType,
         val chartPoints: List<ChartPoint>,
-        val rateValue: CurrencyValue?,
-        val marketCap: CurrencyValue,
         val lowValue: CurrencyValue,
         val highValue: CurrencyValue,
         val diffValue: BigDecimal,
-        val lastUpdateTimestamp: Long,
         val startTimestamp: Long,
         val endTimestamp: Long
 )
 
+data class MarketInfoViewItem(
+        val rateValue: CurrencyValue,
+        val marketCap: CurrencyValue,
+        val volume: CurrencyValue,
+        val supply: CoinValue,
+        val timestamp: Long
+)
+
 class RateChartViewFactory {
-    fun createViewItem(type: ChartType, chartInfo: ChartInfo, marketInfo: MarketInfo, currency: Currency): ChartViewItem {
+    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, currency: Currency): ChartInfoViewItem {
         val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }
+
+        val startValue = chartPoints.firstOrNull()?.value ?: 0f
+        val endValue = chartPoints.lastOrNull()?.value ?: 0f
 
         val minValue = chartPoints.minBy { it.value }?.value ?: 0f
         val maxValue = chartPoints.maxBy { it.value }?.value ?: 0f
 
         val lowValue = CurrencyValue(currency, minValue.toBigDecimal())
         val highValue = CurrencyValue(currency, maxValue.toBigDecimal())
-        val marketCap = CurrencyValue(currency, marketInfo.marketCap.toBigDecimal())
-        val rateValue = CurrencyValue(currency, marketInfo.rate)
 
         val chartType = when (type) {
             ChartType.DAILY -> ChartView.ChartType.DAILY
@@ -42,17 +50,26 @@ class RateChartViewFactory {
             ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY18
         }
 
-        return ChartViewItem(
+        val diffValue = ((endValue - startValue) / startValue * 100).toBigDecimal()
+
+        return ChartInfoViewItem(
                 chartType,
                 chartPoints,
-                rateValue,
-                marketCap,
                 lowValue,
                 highValue,
-                marketInfo.diff,
-                marketInfo.timestamp,
+                diffValue,
                 chartInfo.startTimestamp,
                 chartInfo.endTimestamp
+        )
+    }
+
+    fun createMarketInfo(marketInfo: MarketInfo, currency: Currency, coin: Coin): MarketInfoViewItem {
+        return MarketInfoViewItem(
+                CurrencyValue(currency, marketInfo.rate),
+                CurrencyValue(currency, marketInfo.marketCap.toBigDecimal()),
+                CurrencyValue(currency, marketInfo.volume.toBigDecimal()),
+                CoinValue(coin, marketInfo.supply.toBigDecimal()),
+                marketInfo.timestamp
         )
     }
 }
