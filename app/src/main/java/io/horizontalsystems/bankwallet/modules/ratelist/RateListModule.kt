@@ -18,6 +18,7 @@ object RateListModule {
     interface IView {
         fun showCurrentDate(currentDate: Date)
         fun reload()
+        fun setTimeAgo(secondsAgo: Long)
     }
 
     interface IRouter {

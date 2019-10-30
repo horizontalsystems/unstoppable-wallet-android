@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratelist
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -12,10 +13,11 @@ import java.util.concurrent.TimeUnit
 class RateListPresenter(
         val view: RateListView,
         private val interactor: RateListModule.IInteractor,
-        private val dataSource: RateListModule.DataSource): ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate  {
+        private val dataSource: RateListModule.DataSource) : ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate {
 
     private val reloadViewSubject = PublishSubject.create<Unit>()
     private var disposables = CompositeDisposable()
+    private var rateDate: Long = 0
 
     override val itemsCount: Int
         get() {
@@ -50,7 +52,16 @@ class RateListPresenter(
     @Synchronized
     override fun didUpdateRate(rate: Rate) {
         dataSource.setRate(rate, interactor.currency)
+        updateTimeAgo(rate.timestamp)
         postViewReload()
+    }
+
+    private fun updateTimeAgo(timestamp: Long) {
+        if (rateDate < timestamp) {
+            rateDate = timestamp
+            val secondsAgo = DateHelper.getSecondsAgo(timestamp * 1000)
+            view.setTimeAgo(secondsAgo)
+        }
     }
 
     override fun onReceive(statsData: StatsData) {

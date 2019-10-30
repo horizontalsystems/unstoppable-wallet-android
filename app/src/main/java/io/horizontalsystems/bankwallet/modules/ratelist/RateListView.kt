@@ -7,6 +7,7 @@ import java.util.*
 class RateListView : RateListModule.IView {
 
     var currentDate = MutableLiveData<Date>()
+    var timeAgo = MutableLiveData<Long>()
     val reloadLiveEvent = SingleLiveEvent<Void>()
 
 
@@ -16,5 +17,9 @@ class RateListView : RateListModule.IView {
 
     override fun reload() {
         reloadLiveEvent.call()
+    }
+
+    override fun setTimeAgo(secondsAgo: Long) {
+        timeAgo.postValue(secondsAgo)
     }
 }
