@@ -6,7 +6,7 @@ class BalanceSorter : BalanceModule.IBalanceSorter {
         return when (sortType) {
             BalanceSortType.Value -> items.sortedByDescending { it.fiatValue }
             BalanceSortType.Name -> items.sortedBy { it.wallet.coin.title }
-            BalanceSortType.PercentGrowth -> items.sortedByDescending { it.chartData?.diff }
+            BalanceSortType.PercentGrowth -> items.sortedByDescending { it.marketInfo?.diff }
         }
     }
 }

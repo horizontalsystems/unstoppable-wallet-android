@@ -1,15 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.entities.*
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
-import org.mockito.Mockito.mock
-import java.math.BigDecimal
-
-class BalanceViewItemFactoryTest {
+/*class BalanceViewItemFactoryTest {
 
     private val factory = BalanceViewItemFactory()
     val currency = mock(Currency::class.java)
@@ -291,4 +282,4 @@ class BalanceViewItemFactoryTest {
         Assert.assertTrue(viewItem.upToDate)
     }
 
-}
+}*/

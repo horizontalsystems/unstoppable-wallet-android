@@ -1,24 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IBalanceAdapter
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.TestScheduler
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
-import org.mockito.Mockito.mock
-import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
-
-class BalancePresenterTest {
+/*class BalancePresenterTest {
 
     private val interactor = mock(BalanceModule.IInteractor::class.java)
     private val view = mock(BalanceModule.IView::class.java)
@@ -224,3 +206,5 @@ class BalancePresenterTest {
     }
 
 }
+
+ */
