@@ -4,63 +4,53 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.CurrentDateProvider
-import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.util.*
 
 object RateListModule {
 
     interface IView {
-        fun showCurrentDate(currentDate: Date)
-        fun reload()
-        fun setTimeAgo(secondsAgo: Long)
+        fun show(item: RateListViewItem)
     }
 
-    interface IRouter {
-    }
+    interface IRouter
 
     interface IViewDelegate {
         fun viewDidLoad()
-        val itemsCount: Int
-        fun getViewItem(position: Int): RateViewItem
     }
 
     interface IInteractor {
-        val currentDate: Date
         val currency: Currency
         val coins: List<Coin>
 
         fun clear()
-        fun initRateList()
-        fun getRateStats(coinCodes: List<String>, currencyCode: String)
-        fun fetchRates(coinCodes: List<String>, currencyCode: String)
+        fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
+        fun subscribeToMarketInfo(currencyCode: String)
+        fun setupXRateManager(coinCodes: List<String>)
     }
 
     interface IInteractorDelegate {
-        fun onReceive(statsData: StatsData)
-        fun onFailStats(coinCode: String)
-        fun didUpdateRate(rate: Rate)
-        fun willEnterForeground()
+        fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>)
+    }
+
+    interface IRateListFactory{
+        fun marketInfoViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>) : RateListViewItem
     }
 
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateListView()
             val interactor = RatesInteractor(
-                    App.rateStatsManager,
-                    App.rateStorage,
-                    CurrentDateProvider(),
-                    App.backgroundManager,
+                    App.xRateManager,
                     App.currencyManager,
                     App.walletStorage,
                     App.appConfigProvider,
                     RateListSorter())
-            val presenter = RateListPresenter(view, interactor, DataSource())
+            val presenter = RateListPresenter(view, interactor, RateListFactory(CurrentDateProvider()))
 
             interactor.delegate = presenter
 
@@ -68,47 +58,6 @@ object RateListModule {
         }
     }
 
-    class DataSource() {
-
-        private val chartType = ChartView.ChartType.DAILY.name
-
-        var items = listOf<RateViewItem>()
-
-        fun setViewItems(coins: List<Coin>){
-            items = coins.map { RateViewItem(it) }
-        }
-
-        val coinCodes: List<String>
-            get() {
-                return items.map { it.coin.code }
-            }
-
-        fun setChartData(statsData: StatsData) {
-            val chartDiff = statsData.diff[chartType]
-            getPositionByCoinCode(statsData.coinCode)?.let { position ->
-                items[position].diff = chartDiff
-                items[position].loadingStatus = RateLoadingStatus.Loaded
-            }
-        }
-
-        fun setRate(rate: Rate, baseCurrency: Currency) {
-            getPositionByCoinCode(rate.coinCode)?.let { position ->
-                items[position].rate = CurrencyValue(baseCurrency, rate.value)
-                items[position].rateExpired = rate.expired
-            }
-        }
-
-        fun setStatsFailed(coinCode: String) {
-            getPositionByCoinCode(coinCode)?.let { position ->
-                items[position].loadingStatus = RateLoadingStatus.Failed
-            }
-        }
-
-        private fun getPositionByCoinCode(coinCode: String): Int? {
-            val index = items.indexOfFirst { it.coin.code == coinCode }
-            return if (index >= 0) index else null
-        }
-    }
 }
 
 class RateListSorter {
@@ -126,13 +75,5 @@ class RateListSorter {
     }
 }
 
-class RateViewItem(val coin: Coin) {
-    var rateExpired: Boolean = false
-    var rate: CurrencyValue? = null
-    var diff: BigDecimal? = null
-    var loadingStatus: RateLoadingStatus = RateLoadingStatus.Loading
-}
-
-enum class RateLoadingStatus {
-    Loading, Loaded, Failed
-}
+class RateListViewItem(val currentDate: Date, val lastUpdateTimestamp: Long?, val rateViewItems: List<RateViewItem>)
+class RateViewItem(val coin: Coin, var rateExpired: Boolean?, var rate: CurrencyValue?, var diff: BigDecimal?)
