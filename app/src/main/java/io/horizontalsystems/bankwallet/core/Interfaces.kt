@@ -5,7 +5,6 @@ import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
-import io.horizontalsystems.bankwallet.core.managers.StatsResponse
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -384,6 +383,7 @@ interface IRateStorage {
 }
 
 interface IXRateManager {
+    fun set(coins: List<String>)
     fun marketInfo(coin: String, currency: String): MarketInfo?
     fun getLatestRate(coin: String, currency: String): BigDecimal?
     fun marketInfoObservable(coin: String, currency: String): Observable<MarketInfo>
@@ -397,11 +397,6 @@ interface IXRateManager {
 interface IRateManager {
     fun syncLatestRates()
     fun syncLatestRatesSingle(): Single<LatestRateData>
-}
-
-interface IRateStatsManager {
-    val statsFlowable: Flowable<StatsResponse>
-    fun syncStats(coinCode: String, currencyCode: String)
 }
 
 interface IAccountsStorage {

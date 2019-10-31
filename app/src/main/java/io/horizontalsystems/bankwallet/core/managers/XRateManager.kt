@@ -20,7 +20,7 @@ class XRateManager(context: Context,
 ) : IXRateManager {
 
     private val disposables = CompositeDisposable()
-    private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code)
+    private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code, 60*10)
 
     init {
         walletManager.walletsUpdatedSignal
@@ -38,6 +38,10 @@ class XRateManager(context: Context,
                 }.let {
                     disposables.add(it)
                 }
+    }
+
+    override fun set(coins: List<String>) {
+        kit.set(coins)
     }
 
     override fun marketInfo(coin: String, currency: String): MarketInfo? {

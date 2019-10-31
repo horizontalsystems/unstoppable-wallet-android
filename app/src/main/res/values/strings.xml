@@ -454,8 +454,6 @@
 
     <!--Lockscreen Rate list-->
 
-    <string name="LockscreenRateList_secondsAgo">updated\n%d sec ago</string>
-    <string name="LockscreenRateList_minutesAgo">updated\n%d min ago</string>
-    <string name="LockscreenRateList_hoursAgo">updated\n%d hrs ago</string>
+    <string name="LockscreenRateList_updated">updated\n%s</string>
 
 </resources>

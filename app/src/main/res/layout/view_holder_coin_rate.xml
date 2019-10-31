@@ -69,26 +69,11 @@
         style="@style/Subhead1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/NotAvailable"
+        android:text="----"
         android:textColor="@color/grey_50"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/txCoinName"
         app:layout_constraintEnd_toEndOf="@+id/txValueInFiat" />
-
-    <ProgressBar
-        android:id="@+id/loadingSpinner"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:backgroundTint="@color/grey"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/grey"
-        android:indeterminateTintMode="src_atop"
-        android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="@+id/txCoinName"
-        app:layout_constraintEnd_toEndOf="@+id/txValueInFiat"/>
 
     <View
         android:id="@+id/divider"
