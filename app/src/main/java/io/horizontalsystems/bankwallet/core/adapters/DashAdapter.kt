@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
+import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
@@ -38,7 +39,7 @@ class DashAdapter(override val kit: DashKit) :
     // DashKit Listener
     //
 
-    override fun onBalanceUpdate(balance: Long) {
+    override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
     }
 

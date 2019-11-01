@@ -33,6 +33,11 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
         interactor.fetchFee(amountModule.coinAmount.value, addressModule.currentAddress)
     }
 
+    private fun syncMinimumAmount() {
+        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress))
+        syncValidation()
+    }
+
     // SendModule.ISendHandler
 
     override lateinit var amountModule: SendAmountModule.IAmountModule
@@ -50,6 +55,7 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
 
     override fun onModulesDidLoad() {
         syncAvailableBalance()
+        syncMinimumAmount()
     }
 
     override fun onAddressScan(address: String) {
@@ -99,6 +105,7 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
     override fun onUpdateAddress() {
         syncAvailableBalance()
         syncFee()
+        syncMinimumAmount()
     }
 
     override fun onUpdateAmount(amount: BigDecimal) {

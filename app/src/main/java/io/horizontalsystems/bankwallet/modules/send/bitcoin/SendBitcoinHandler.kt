@@ -33,6 +33,11 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
         interactor.fetchFee(amountModule.coinAmount.value, feeModule.feeRate, addressModule.currentAddress)
     }
 
+    private fun syncMinimumAmount() {
+        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress))
+        syncValidation()
+    }
+
     // SendModule.ISendHandler
 
     override lateinit var amountModule: SendAmountModule.IAmountModule
@@ -50,6 +55,7 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
 
     override fun onModulesDidLoad() {
         syncAvailableBalance()
+        syncMinimumAmount()
     }
 
     override fun onAddressScan(address: String) {
@@ -100,6 +106,7 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     override fun onUpdateAddress() {
         syncAvailableBalance()
         syncFee()
+        syncMinimumAmount()
     }
 
     override fun onUpdateAmount(amount: BigDecimal) {

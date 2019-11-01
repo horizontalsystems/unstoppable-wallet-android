@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bitcoincore.AbstractKit
-import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelectorError
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -49,7 +48,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     override val debugInfo: String = ""
 
     override val balance: BigDecimal
-        get() = BigDecimal.valueOf(kit.balance).divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+        get() = BigDecimal.valueOf(kit.balance.spendable).divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
@@ -81,7 +80,11 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     }
 
     fun availableBalance(feeRate: Long, address: String?): BigDecimal {
-        return BigDecimal.ZERO.max(balance.subtract(fee(balance, feeRate, address)))
+        return BigDecimal.valueOf(kit.maximumSpendableValue(address, feeRate.toInt(), mapOf())).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+    }
+
+    fun minimumSendAmount(address: String?): BigDecimal {
+        return BigDecimal.valueOf(kit.minimumSpendableValue(address).toLong()).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
     }
 
     fun fee(amount: BigDecimal, feeRate: Long, address: String?): BigDecimal {
@@ -89,8 +92,6 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
             val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate.toInt())
             BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
-        } catch (e: UnspentOutputSelectorError.InsufficientUnspentOutputs) {
-            BigDecimal.valueOf(e.fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO
         }

@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
 import io.horizontalsystems.bitcoincash.BitcoinCashKit.NetworkType
 import io.horizontalsystems.bitcoincore.BitcoinCore
+import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.reactivex.Single
@@ -38,7 +39,7 @@ class BitcoinCashAdapter(override val kit: BitcoinCashKit)
     // BitcoinCashKit Listener
     //
 
-    override fun onBalanceUpdate(balance: Long) {
+    override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
     }
 

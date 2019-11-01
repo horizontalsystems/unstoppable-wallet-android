@@ -48,6 +48,10 @@ class SendAmountFragment(
             setAmount(amount)
         })
 
+        presenterView.availableBalance.observe(viewLifecycleOwner, Observer { amount ->
+            setAvailableBalance(amount)
+        })
+
         presenterView.hint.observe(viewLifecycleOwner, Observer { hint ->
             setHint(hint)
         })
@@ -68,8 +72,8 @@ class SendAmountFragment(
             revertAmount(amount)
         })
 
-        presenterView.hintErrorBalance.observe(viewLifecycleOwner, Observer { hintErrorBalance ->
-            setBalanceError(hintErrorBalance)
+        presenterView.validationError.observe(viewLifecycleOwner, Observer {
+            setValidationError(it)
         })
 
         presenterView.switchButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
@@ -90,12 +94,17 @@ class SendAmountFragment(
         editTxtAmount.setSelection(editTxtAmount.text.length)
     }
 
+    private fun setAvailableBalance(availableBalance: String) {
+        availableBalanceValue.setText(availableBalance)
+    }
+
     private fun setHint(hint: String?) {
         txtHintInfo.text = hint
     }
 
     private fun setMaxButtonVisibility(visible: Boolean) {
-        btnMax.visibility = if (visible) View.VISIBLE else View.GONE
+        // since the max button used to align amount field title it may be "invisible" not "gone"
+        btnMax.visibility = if (visible) View.VISIBLE else View.INVISIBLE
     }
 
     private fun enableAmountChangeListener() {
@@ -113,15 +122,23 @@ class SendAmountFragment(
         editTxtAmount.startAnimation(shake)
     }
 
-    private fun setBalanceError(balanceError: String?) {
-        txtHintError.visibility = if (balanceError == null) View.GONE else View.VISIBLE
-        txtHintInfo.visibility = if (balanceError == null) View.VISIBLE else View.GONE
+    private fun setValidationError(error: SendAmountModule.ValidationError?) {
+        txtHintError.visibility = if (error == null) View.GONE else View.VISIBLE
+        txtHintInfo.visibility = if (error == null) View.VISIBLE else View.GONE
 
-        val errorText: String? = balanceError?.let {
-            context?.getString(R.string.Send_Error_BalanceAmount, it)
+        txtHintError.text = when (error) {
+            is SendAmountModule.ValidationError.InsufficientBalance -> {
+                error.availableBalance?.let {
+                    context?.getString(R.string.Send_Error_BalanceAmount, it.getFormatted())
+                }
+            }
+            is SendAmountModule.ValidationError.TooFewAmount -> {
+                error.minimumAmount?.let {
+                    context?.getString(R.string.Send_Error_MinimumAmount, it.getFormatted())
+                }
+            }
+            else -> null
         }
-
-        txtHintError.text = errorText
     }
 
     private fun enableCurrencySwitch(enabled: Boolean) {
