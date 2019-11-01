@@ -452,8 +452,8 @@
     <string name="Charts_Volume">Volume</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
 
-    <!--Lockscreen Rate list-->
+    <!--Rate list-->
 
-    <string name="LockscreenRateList_updated">updated\n%s</string>
+    <string name="RateList_updated">updated\n%s</string>
 
 </resources>

@@ -52,7 +52,7 @@ class RatesFragment : Fragment() {
             return
 
         val time = DateHelper.formatDate(Date(lastUpdateTimestamp), "HH:mm")
-        timeAgoText.text = getString(R.string.LockscreenRateList_updated, time)
+        timeAgoText.text = getString(R.string.RateList_updated, time)
     }
 }
 
