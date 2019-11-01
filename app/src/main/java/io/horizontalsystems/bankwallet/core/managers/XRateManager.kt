@@ -44,12 +44,12 @@ class XRateManager(context: Context,
         kit.set(coins)
     }
 
-    override fun marketInfo(coin: String, currency: String): MarketInfo? {
-        return kit.getMarketInfo(coin, currency)
+    override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
+        return kit.getMarketInfo(coinCode, currencyCode)
     }
 
-    override fun getLatestRate(coin: String, currency: String): BigDecimal? {
-        val marketInfo = marketInfo(coin, currency)
+    override fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal? {
+        val marketInfo = marketInfo(coinCode, currencyCode)
 
         return when {
             marketInfo == null -> null
@@ -59,24 +59,24 @@ class XRateManager(context: Context,
 
     }
 
-    override fun marketInfoObservable(coin: String, currency: String): Observable<MarketInfo> {
-        return kit.marketInfoObservable(coin, currency)
+    override fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo> {
+        return kit.marketInfoObservable(coinCode, currencyCode)
     }
 
-    override fun marketInfoObservable(currency: String): Observable<Map<String, MarketInfo>> {
-        return kit.marketInfoMapObservable(currency)
+    override fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>> {
+        return kit.marketInfoMapObservable(currencyCode)
     }
 
-    override fun historicalRate(coin: String, currency: String, timestamp: Long): Single<BigDecimal> {
-        return kit.historicalRate(coin, currency, timestamp)
+    override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
+        return kit.historicalRate(coinCode, currencyCode, timestamp)
     }
 
-    override fun chartInfo(coin: String, currency: String, chartType: ChartType): ChartInfo? {
-        return kit.getChartInfo(coin, currency, chartType)
+    override fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
+        return kit.getChartInfo(coinCode, currencyCode, chartType)
     }
 
-    override fun chartInfoObservable(coin: String, currency: String, chartType: ChartType): Observable<ChartInfo> {
-        return kit.chartInfoObservable(coin, currency, chartType)
+    override fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
+        return kit.chartInfoObservable(coinCode, currencyCode, chartType)
     }
 
     override fun refresh() {

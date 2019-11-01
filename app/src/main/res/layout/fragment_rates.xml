@@ -29,7 +29,7 @@
         android:textColor="@color/grey"
         app:layout_constraintBottom_toTopOf="@+id/pinUnlock"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="@string/LockscreenRateList_secondsAgo" />
+        tools:text="@string/RateList_updated" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pinUnlock"

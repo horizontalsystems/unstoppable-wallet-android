@@ -381,16 +381,15 @@ interface IRateStorage {
     fun saveLatest(rate: Rate)
     fun deleteAll()
 }
-
 interface IXRateManager {
     fun set(coins: List<String>)
-    fun marketInfo(coin: String, currency: String): MarketInfo?
-    fun getLatestRate(coin: String, currency: String): BigDecimal?
-    fun marketInfoObservable(coin: String, currency: String): Observable<MarketInfo>
-    fun marketInfoObservable(currency: String): Observable<Map<String, MarketInfo>>
-    fun historicalRate(coin: String, currency: String, timestamp: Long): Single<BigDecimal>
-    fun chartInfo(coin: String, currency: String, chartType: ChartType): ChartInfo?
-    fun chartInfoObservable(coin: String, currency: String, chartType: ChartType): Observable<ChartInfo>
+    fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
+    fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal?
+    fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo>
+    fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>>
+    fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal>
+    fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
+    fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun refresh()
 }
 
