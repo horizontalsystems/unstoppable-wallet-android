@@ -25,6 +25,10 @@ class SendBitcoinInteractor(private val adapter: ISendBitcoinAdapter) : SendModu
                 .let { disposables.add(it) }
     }
 
+    override fun fetchMinimumAmount(address: String?): BigDecimal {
+        return adapter.minimumSendAmount(address)
+    }
+
     override fun validate(address: String) {
         adapter.validate(address)
     }

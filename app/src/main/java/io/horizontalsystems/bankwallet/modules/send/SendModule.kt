@@ -49,6 +49,7 @@ object SendModule {
 
     interface ISendBitcoinInteractor {
         fun fetchAvailableBalance(feeRate: Long, address: String?)
+        fun fetchMinimumAmount(address: String?): BigDecimal
         fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?)
         fun validate(address: String)
         fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
@@ -62,6 +63,7 @@ object SendModule {
 
     interface ISendDashInteractor {
         fun fetchAvailableBalance(address: String?)
+        fun fetchMinimumAmount(address: String?): BigDecimal
         fun fetchFee(amount: BigDecimal, address: String?)
         fun validate(address: String)
         fun send(amount: BigDecimal, address: String): Single<Unit>

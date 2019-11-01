@@ -16,8 +16,9 @@ object SendAmountModule {
     interface IView {
         fun setAmountType(prefix: String?)
         fun setAmount(amount: String)
+        fun setAvailableBalance(availableBalance: String)
         fun setHint(hint: String?)
-        fun setHintErrorBalance(hintErrorBalance: String?)
+        fun setValidationError(error: ValidationError?)
 
         fun setSwitchButtonEnabled(enabled: Boolean)
         fun setMaxButtonVisible(visible: Boolean)
@@ -57,6 +58,7 @@ object SendAmountModule {
 
         fun setAmount(amount: BigDecimal)
         fun setAvailableBalance(availableBalance: BigDecimal)
+        fun setMinimumAmount(minimumAmount: BigDecimal)
     }
 
     interface IAmountModuleDelegate {
@@ -67,6 +69,7 @@ object SendAmountModule {
     open class ValidationError : Exception() {
         class EmptyValue(val field: String) : ValidationError()
         class InsufficientBalance(val availableBalance: AmountInfo?) : ValidationError()
+        class TooFewAmount(val minimumAmount: AmountInfo?) : ValidationError()
     }
 
 

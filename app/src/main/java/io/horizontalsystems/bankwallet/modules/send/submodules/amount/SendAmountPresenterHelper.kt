@@ -46,6 +46,17 @@ class SendAmountPresenterHelper(
         }
     }
 
+    fun getAvailableBalance(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: BigDecimal?): String? {
+        return when (inputType) {
+            SendModule.InputType.CURRENCY -> {
+                rate?.let { numberFormatter.format(CurrencyValue(baseCurrency, coinAmount?.times(it) ?: BigDecimal.ZERO)) }
+            }
+            SendModule.InputType.COIN -> {
+                numberFormatter.format(CoinValue(coin, coinAmount ?: BigDecimal.ZERO), realNumber = true)
+            }
+        }
+    }
+
     fun getAmountPrefix(inputType: SendModule.InputType, rate: BigDecimal?): String? {
         return when {
             inputType == SendModule.InputType.COIN -> coin.code

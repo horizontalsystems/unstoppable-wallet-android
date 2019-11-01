@@ -25,6 +25,10 @@ class SendDashInteractor(private val adapter: ISendDashAdapter) : SendModule.ISe
                 .let { disposables.add(it) }
     }
 
+    override fun fetchMinimumAmount(address: String?): BigDecimal {
+        return adapter.minimumSendAmount(address)
+    }
+
     override fun validate(address: String) {
         adapter.validate(address)
     }

@@ -6,13 +6,14 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 class SendAmountView : SendAmountModule.IView {
 
     val amount = MutableLiveData<String>()
+    val availableBalance = MutableLiveData<String>()
     val hint = MutableLiveData<String?>()
     val amountInputPrefix = MutableLiveData<String?>()
     val maxButtonVisibleValue = MutableLiveData<Boolean>()
     val addTextChangeListener = SingleLiveEvent<Unit>()
     val removeTextChangeListener = SingleLiveEvent<Unit>()
     val revertAmount = SingleLiveEvent<String>()
-    val hintErrorBalance = MutableLiveData<String?>()
+    val validationError = MutableLiveData<SendAmountModule.ValidationError?>()
     val switchButtonEnabled = MutableLiveData<Boolean>()
 
     override fun setAmountType(prefix: String?) {
@@ -21,6 +22,10 @@ class SendAmountView : SendAmountModule.IView {
 
     override fun setAmount(amount: String) {
         this.amount.value = amount
+    }
+
+    override fun setAvailableBalance(availableBalance: String) {
+        this.availableBalance.value = availableBalance
     }
 
     override fun setHint(hint: String?) {
@@ -43,8 +48,8 @@ class SendAmountView : SendAmountModule.IView {
         revertAmount.value = amount
     }
 
-    override fun setHintErrorBalance(hintErrorBalance: String?) {
-        this.hintErrorBalance.value = hintErrorBalance
+    override fun setValidationError(error: SendAmountModule.ValidationError?) {
+        this.validationError.value = error
     }
 
     override fun setSwitchButtonEnabled(enabled: Boolean) {
