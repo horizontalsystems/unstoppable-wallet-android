@@ -17,7 +17,7 @@ class RateListPresenter(
 
         val marketInfos = coins.map { it.code to interactor.getMarketInfo(it.code, currency.code)}.toMap()
 
-        val item = factory.marketInfoViewItem(coins, currency, marketInfos)
+        val item = factory.rateListViewItem(coins, currency, marketInfos)
         view.show(item)
 
         val coinCodes = coins.map { it.code }
@@ -28,7 +28,7 @@ class RateListPresenter(
     //IInteractorDelegate
 
     override fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>) {
-        val item = factory.marketInfoViewItem(interactor.coins, interactor.currency, marketInfos)
+        val item = factory.rateListViewItem(interactor.coins, interactor.currency, marketInfos)
         view.show(item)
     }
 

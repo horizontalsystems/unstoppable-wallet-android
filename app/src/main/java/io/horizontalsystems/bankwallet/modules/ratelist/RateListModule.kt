@@ -37,8 +37,8 @@ object RateListModule {
         fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>)
     }
 
-    interface IRateListFactory{
-        fun marketInfoViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>) : RateListViewItem
+    interface IRateListFactory {
+        fun rateListViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>): RateListViewItem
     }
 
     class Factory : ViewModelProvider.Factory {
