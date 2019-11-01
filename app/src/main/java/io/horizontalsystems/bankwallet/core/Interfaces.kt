@@ -381,6 +381,7 @@ interface IRateStorage {
     fun saveLatest(rate: Rate)
     fun deleteAll()
 }
+
 interface IXRateManager {
     fun set(coins: List<String>)
     fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?

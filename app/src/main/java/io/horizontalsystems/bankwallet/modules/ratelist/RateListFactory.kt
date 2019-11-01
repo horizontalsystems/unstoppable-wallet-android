@@ -8,14 +8,14 @@ import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateListFactory(private val currentDateProvider: ICurrentDateProvider) : RateListModule.IRateListFactory {
 
-    override fun marketInfoViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>) : RateListViewItem {
+    override fun rateListViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>) : RateListViewItem {
         val items = coins.map { viewItem(it, currency, marketInfos[it.code]) }
         return RateListViewItem(currentDateProvider.currentDate, lastUpdateTimestamp(marketInfos), items)
     }
 
     private fun lastUpdateTimestamp(marketInfos: Map<String, MarketInfo?>): Long? {
-        val allTimestamps = marketInfos.map { it.value?.timestamp }
-        return allTimestamps.requireNoNulls().max()
+        val allTimestamps = marketInfos.map { it.value?.timestamp }.filterNotNull()
+        return allTimestamps.max()
     }
 
     private fun viewItem(coin: Coin, currency: Currency, marketInfo: MarketInfo?): RateViewItem {
