@@ -4,7 +4,6 @@ import android.text.SpannableString
 import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
-import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -151,10 +150,6 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getRateStats(hostType: HostType, coinCode: String, currency: String): Single<RateStatData>
-    fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
-    fun getRateByHour(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
-    fun getLatestRateData(hostType: HostType, currency: String): Single<LatestRateData>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
@@ -396,11 +391,6 @@ interface IXRateManager {
     fun refresh()
 }
 
-interface IRateManager {
-    fun syncLatestRates()
-    fun syncLatestRatesSingle(): Single<LatestRateData>
-}
-
 interface IAccountsStorage {
     val isAccountsEmpty: Boolean
 
@@ -430,11 +420,11 @@ interface IEmojiHelper {
 }
 
 interface IPriceAlertHandler {
-    fun handleAlerts(latestRateData: LatestRateData)
+    fun handleAlerts(latestRatesMap: Map<String, BigDecimal?>)
 }
 
 interface IBackgroundPriceAlertManager {
-    fun fetchRates(): Single<LatestRateData>
+    fun fetchRates(): Single<Unit>
 }
 
 interface INotificationFactory {

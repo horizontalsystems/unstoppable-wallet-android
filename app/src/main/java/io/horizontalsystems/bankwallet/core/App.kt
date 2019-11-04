@@ -50,8 +50,6 @@ class App : Application() {
         lateinit var defaultWalletCreator: DefaultWalletCreator
         lateinit var walletRemover: WalletRemover
 
-        lateinit var rateSyncScheduler: RateSyncScheduler
-        lateinit var rateManager: RateManager
         lateinit var xRateManager: IXRateManager
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
@@ -124,7 +122,7 @@ class App : Application() {
         localStorage = LocalStorageManager()
 
         wordsManager = WordsManager(localStorage)
-        networkManager = NetworkManager(appConfigProvider)
+        networkManager = NetworkManager()
         accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
@@ -150,9 +148,6 @@ class App : Application() {
 
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
-        rateManager = RateManager(rateStorage, networkManager, walletStorage, currencyManager, connectivityManager)
-        rateSyncScheduler = RateSyncScheduler(rateManager, walletManager, currencyManager, connectivityManager)
-
         xRateManager = XRateManager(this, walletManager, currencyManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
@@ -168,7 +163,7 @@ class App : Application() {
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
         backgroundRateAlertScheduler = BackgroundRateAlertScheduler(instance)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, localStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager, backgroundRateAlertScheduler).apply {
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(localStorage, backgroundRateAlertScheduler, priceAlertsStorage, xRateManager, walletStorage, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
             backgroundManager.registerListener(this)
         }
 
