@@ -1,33 +1,55 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.reactivex.Single
 
 class BackgroundPriceAlertManager(
-        private val priceAlertsStorage: IPriceAlertsStorage,
         localStorage: ILocalStorage,
-        private val rateManager: IRateManager,
+        backgroundRateAlertScheduler: IBackgroundRateAlertScheduler,
+        private val priceAlertsStorage: IPriceAlertsStorage,
+        private val rateManager: IXRateManager,
+        private val walletStorage: IWalletStorage,
         private val currencyManager: ICurrencyManager,
         private val rateStorage: IRateStorage,
         private val priceAlertHandler: IPriceAlertHandler,
-        private val notificationManager: INotificationManager,
-        backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
+        private val notificationManager: INotificationManager
 ) : IBackgroundPriceAlertManager, BackgroundManager.Listener {
 
     init {
-        if (notificationManager.isEnabled  && localStorage.isAlertNotificationOn) {
+        if (notificationManager.isEnabled && localStorage.isAlertNotificationOn) {
             backgroundRateAlertScheduler.startPeriodicWorker()
         } else {
             backgroundRateAlertScheduler.stopPeriodicWorker()
         }
     }
 
-    override fun fetchRates(): Single<LatestRateData> {
-        return rateManager.syncLatestRatesSingle()
-                .doOnSuccess {
-                    priceAlertHandler.handleAlerts(it)
-                }
+    override fun fetchRates(): Single<Unit> {
+        val coinCodes = walletStorage.enabledCoins().map { it.code }
+        val currencyCode = currencyManager.baseCurrency.code
+        var hasExpiredRate = false
+        val ratesMap = coinCodes.map {
+            val marketInfo = rateManager.marketInfo(it, currencyCode)
+            if (marketInfo?.isExpired() == true) {
+                hasExpiredRate = true
+            }
+            it to marketInfo?.rate
+        }.toMap()
+
+         return when {
+            !hasExpiredRate -> {
+                priceAlertHandler.handleAlerts(ratesMap)
+                Single.just(Unit)
+            }
+            else -> {
+                rateManager.set(coinCodes)
+                rateManager.marketInfoObservable(currencyCode)
+                        .firstOrError()
+                        .doOnSuccess { marketInfoMap ->
+                            priceAlertHandler.handleAlerts(coinCodes.map { it to marketInfoMap[it]?.rate }.toMap())
+                        }
+                        .map { Unit }
+            }
+        }
     }
 
     override fun didEnterBackground() {
