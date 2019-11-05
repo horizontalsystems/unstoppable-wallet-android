@@ -19,7 +19,9 @@ import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInterac
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
+import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -48,11 +50,11 @@ object SendModule {
     }
 
     interface ISendBitcoinInteractor {
-        fun fetchAvailableBalance(feeRate: Long, address: String?)
+        fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>)
         fun fetchMinimumAmount(address: String?): BigDecimal
-        fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?)
+        fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>)
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
+        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>): Single<Unit>
         fun clear()
     }
 
@@ -123,6 +125,7 @@ object SendModule {
         var addressModule: SendAddressModule.IAddressModule
         var feeModule: SendFeeModule.IFeeModule
         var memoModule: SendMemoModule.IMemoModule
+        var hodlerModule: SendHodlerModule.IHodlerModule
 
         val inputItems: List<Input>
         var delegate: ISendHandlerDelegate
@@ -173,6 +176,7 @@ object SendModule {
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
                     presenter.feeModuleDelegate = handler
+                    presenter.hodlerModuleDelegate = handler
 
                     handler
                 }
@@ -247,6 +251,7 @@ object SendModule {
         class Fee(val isAdjustable: Boolean) : Input()
         class Memo(val maxLength: Int): Input()
         object ProceedButton : Input()
+        object Hodler : Input()
     }
 
     sealed class AmountInfo {

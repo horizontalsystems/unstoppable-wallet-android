@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/lockTimeMenuTitle"
+        style="@style/Subhead1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:text="@string/Send_DialogLockTime"
+        android:textColor="@color/grey" />
+
+    <TextView
+        android:id="@+id/lockTimeMenu"
+        style="@style/Subhead1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lockTimeMenuArrow"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:includeFontPadding="false"
+        android:textColor="?TextColorGreyLightToDark" />
+
+    <ImageView
+        android:id="@+id/lockTimeMenuArrow"
+        app:layout_constraintBottom_toBottomOf="@+id/lockTimeMenu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lockTimeMenu"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:src="@drawable/ic_down"
+        android:tint="@color/grey" />
+
+    <View
+        android:id="@+id/border2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/steel_20" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

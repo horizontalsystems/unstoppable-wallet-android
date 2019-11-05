@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddre
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragment
+import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -108,6 +109,14 @@ class SendActivity : BaseActivity() {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
                         val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
+                        fragments.add(sendAddressFragment)
+                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
+                                .commitNow()
+                    }
+                }
+                SendModule.Input.Hodler -> {
+                    mainPresenter.hodlerModuleDelegate?.let {
+                        val sendAddressFragment = SendHodlerFragment(it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()
