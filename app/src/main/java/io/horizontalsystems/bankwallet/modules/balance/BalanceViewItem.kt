@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
 import java.math.BigDecimal
 
 data class BalanceViewItem(
@@ -14,7 +14,7 @@ data class BalanceViewItem(
         val currencyValue: CurrencyValue?,
         val state: AdapterState,
         val marketInfoExpired: Boolean,
-        val chartInfo: ChartInfo?
+        val chartInfoState: ChartInfoState
 )
 
 data class BalanceHeaderViewItem(
@@ -44,7 +44,7 @@ class BalanceViewItemFactory {
                 currencyValue,
                 item.state ?: AdapterState.NotReady,
                 item.marketInfo?.isExpired() ?: false,
-                item.chartInfo
+                item.chartInfoState
         )
     }
 

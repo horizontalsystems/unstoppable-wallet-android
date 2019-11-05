@@ -25,7 +25,6 @@ import java.util.*
 import javax.crypto.SecretKey
 
 interface IAdapterManager {
-    val adapterCreationObservable: Flowable<Wallet>
     val adaptersReadyObservable: Flowable<Unit>
     fun preloadAdapters()
     fun refresh()
@@ -465,7 +464,7 @@ interface ICurrentDateProvider {
 
 interface IWalletManager {
     val wallets: List<Wallet>
-    val walletsUpdatedSignal: Observable<Unit>
+    val walletsUpdatedObservable: Observable<List<Wallet>>
     fun wallet(coin: Coin): Wallet?
 
     fun loadWallets()

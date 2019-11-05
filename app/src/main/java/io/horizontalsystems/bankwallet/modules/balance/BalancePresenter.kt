@@ -6,9 +6,11 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
+import java.util.concurrent.Executors
 
 class BalancePresenter(
         private val interactor: BalanceModule.IInteractor,
@@ -21,74 +23,34 @@ class BalancePresenter(
 
     var view: BalanceModule.IView? = null
 
-    private var accountToBackup: Account? = null
+    private val executor = Executors.newCachedThreadPool()
+
     private var items = listOf<BalanceItem>()
+    private var viewItems = mutableListOf<BalanceViewItem>()
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
-
-    private fun handleUpdate(wallets: List<Wallet>) {
-        items = wallets.map {
-            BalanceItem(it).apply {
-                balance = interactor.balance(it)
-                state = interactor.state(it)
-            }
-        }
-
-        interactor.subscribeToAdapters(wallets)
-
-        handleRates()
-        handleStats()
-
-        view?.set(sortIsOn = items.size >= sortingOnThreshold)
-
-    }
-
-    private fun handleRates() {
-        items.forEach { item ->
-            item.marketInfo = interactor.marketInfo(item.wallet.coin.code, currency.code)
-        }
-        interactor.subscribeToMarketInfo(currency.code)
-    }
-
-    private fun handleStats() {
-        items.forEach { item ->
-            item.chartInfo = interactor.chartInfo(item.wallet.coin.code, currency.code)
-        }
-        interactor.subscribeToChartInfo(items.map { it.wallet.coin.code }, currency.code)
-    }
-
-    private fun updateViewItems() {
-        items = sorter.sort(items, sortType)
-        val viewItems = items.map { item ->
-            factory.viewItem(item, currency)
-        }
-        view?.set(viewItems = viewItems)
-    }
-
-    private fun updateHeaderViewItem() {
-        val headerViewItem = factory.headerViewItem(items, currency)
-        view?.set(headerViewItem = headerViewItem)
-    }
+    private var accountToBackup: Account? = null
 
     // IViewDelegate
 
-    override fun viewDidLoad() {
-        handleUpdate(wallets = interactor.wallets)
+    override fun onLoad() {
+        executor.submit {
+            interactor.subscribeToWallets()
+            interactor.subscribeToBaseCurrency()
 
-        interactor.subscribeToWallets()
-        interactor.subscribeToBaseCurrency()
+            handleUpdate(interactor.wallets)
 
-        handleStats()
-        updateViewItems()
-        updateHeaderViewItem()
+            updateViewItems()
+            updateHeaderViewItem()
+        }
     }
 
-    override fun refresh() {
+    override fun onRefresh() {
         interactor.refresh()
     }
 
-    override fun onReceive(position: Int) {
-        val wallet = items.getOrNull(position)?.wallet ?: return
+    override fun onReceive(viewItem: BalanceViewItem) {
+        val wallet = viewItem.wallet
 
         if (wallet.account.isBackedUp) {
             router.openReceive(wallet)
@@ -100,17 +62,15 @@ class BalancePresenter(
         }
     }
 
-    override fun onPay(position: Int) {
-        val wallet = items.getOrNull(position)?.wallet ?: return
-        router.openSend(wallet)
+    override fun onPay(viewItem: BalanceViewItem) {
+        router.openSend(viewItem.wallet)
     }
 
-    override fun onChart(position: Int) {
-        val wallet = items.getOrNull(position)?.wallet ?: return
-        router.openChart(wallet.coin)
+    override fun onChart(viewItem: BalanceViewItem) {
+        router.openChart(viewItem.wallet.coin)
     }
 
-    override fun openManageCoins() {
+    override fun onAddCoinClick() {
         router.openManageCoins()
     }
 
@@ -118,13 +78,10 @@ class BalancePresenter(
         router.openSortTypeDialog(sortType)
     }
 
-    override fun onSortTypeChanged(sortType: BalanceSortType) {
+    override fun onSortTypeChange(sortType: BalanceSortType) {
         this.sortType = sortType
         interactor.saveSortType(sortType)
 
-        if (sortType == BalanceSortType.PercentGrowth) {
-            handleStats()
-        }
         updateViewItems()
     }
 
@@ -142,6 +99,7 @@ class BalancePresenter(
 
     // IInteractorDelegate
 
+    @Synchronized
     override fun didUpdateWallets(wallets: List<Wallet>) {
         handleUpdate(wallets)
 
@@ -149,26 +107,36 @@ class BalancePresenter(
         updateHeaderViewItem()
     }
 
+    @Synchronized
+    override fun didPrepareAdapters() {
+        handleAdaptersReady()
+
+        updateViewItems()
+        updateHeaderViewItem()
+    }
+
+    @Synchronized
     override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal) {
-        val item = items.find { it.wallet == wallet } ?: return
+        updateItem(wallet) { item ->
+            item.balance = balance
+        }
 
-        item.balance = balance
-
-        updateViewItems()
         updateHeaderViewItem()
     }
 
+    @Synchronized
     override fun didUpdateState(wallet: Wallet, state: AdapterState) {
-        val item = items.find { it.wallet == wallet } ?: return
+        updateItem(wallet) { item ->
+            item.state = state
+        }
 
-        item.state = state
-
-        updateViewItems()
         updateHeaderViewItem()
     }
 
+    @Synchronized
     override fun didUpdateCurrency(currency: Currency) {
         this.currency = currency
+
         handleRates()
         handleStats()
 
@@ -176,27 +144,104 @@ class BalancePresenter(
         updateHeaderViewItem()
     }
 
+    @Synchronized
     override fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>) {
-        items.forEach { item ->
+        items.forEachIndexed { index, item ->
             marketInfo[item.wallet.coin.code]?.let {
                 item.marketInfo = it
+                viewItems[index] = factory.viewItem(item, currency)
             }
         }
-        updateViewItems()
+        view?.set(viewItems)
         updateHeaderViewItem()
     }
 
+    @Synchronized
     override fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String) {
-        items.forEach { item ->
-            if (item.wallet.coin.code == coinCode) {
-                item.chartInfo = chartInfo
-            }
-        }
-        updateViewItems()
+        updateChartInfo(ChartInfoState.Loaded(chartInfo), coinCode)
+    }
+
+    @Synchronized
+    override fun didFailChartInfo(coinCode: String) {
+        updateChartInfo(ChartInfoState.Failed, coinCode)
     }
 
     override fun didRefresh() {
         view?.didRefresh()
     }
+
+    private fun handleUpdate(wallets: List<Wallet>) {
+        items = wallets.map { BalanceItem(it) }
+
+        handleAdaptersReady()
+        handleRates()
+        handleStats()
+
+        view?.set(sortIsOn = items.size >= sortingOnThreshold)
+    }
+
+    private fun handleAdaptersReady() {
+        interactor.subscribeToAdapters(items.map { it.wallet })
+
+        items.forEach { item ->
+            item.balance = interactor.balance(item.wallet)
+            item.state = interactor.state(item.wallet)
+        }
+    }
+
+    private fun handleRates() {
+        interactor.subscribeToMarketInfo(currency.code)
+
+        items.forEach { item ->
+            item.marketInfo = interactor.marketInfo(item.wallet.coin.code, currency.code)
+        }
+    }
+
+    private fun handleStats() {
+        interactor.subscribeToChartInfo(items.map { it.wallet.coin.code }, currency.code)
+
+        items.forEach { item ->
+            item.chartInfoState =
+                    interactor.chartInfo(item.wallet.coin.code, currency.code)?.let {
+                        ChartInfoState.Loaded(it)
+                    } ?: ChartInfoState.Loading
+        }
+    }
+
+    private fun updateItem(wallet: Wallet, updateBlock: (BalanceItem) -> Unit) {
+        val index = items.indexOfFirst { it.wallet == wallet }
+        if (index == -1)
+            return
+
+        val item = items[index]
+        updateBlock(item)
+        viewItems[index] = factory.viewItem(item, currency)
+
+        view?.set(viewItems)
+    }
+
+    private fun updateViewItems() {
+        items = sorter.sort(items, sortType)
+
+        viewItems = items.map { factory.viewItem(it, currency) }.toMutableList()
+
+        view?.set(viewItems)
+    }
+
+    private fun updateHeaderViewItem() {
+        val headerViewItem = factory.headerViewItem(items, currency)
+        view?.set(headerViewItem)
+    }
+
+    private fun updateChartInfo(chartInfoState: ChartInfoState, coinCode: String) {
+        items.forEachIndexed { index, item ->
+            if (item.wallet.coin.code == coinCode) {
+                item.chartInfoState = chartInfoState
+                viewItems[index] = factory.viewItem(item, currency)
+            }
+        }
+        view?.set(viewItems)
+    }
+
 
 }

@@ -27,7 +27,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     fun init() {
         BalanceModule.init(this, this)
 
-        delegate.viewDidLoad()
+        delegate.onLoad()
     }
 
     // IRouter

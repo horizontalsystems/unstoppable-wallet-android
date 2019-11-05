@@ -51,7 +51,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         }
 
         pullToRefresh.setOnRefreshListener {
-            viewModel.delegate.refresh()
+            viewModel.delegate.onRefresh()
         }
 
         observeLiveData()
@@ -71,7 +71,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     // BalanceSort listener
 
     override fun onSortItemSelect(sortType: BalanceSortType) {
-        viewModel.delegate.onSortTypeChanged(sortType)
+        viewModel.delegate.onSortTypeChange(sortType)
     }
 
     private fun setSwipeBackground() {
@@ -96,24 +96,24 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     // BalanceAdapter listener
 
-    override fun onSendClicked(position: Int) {
-        viewModel.delegate.onPay(position)
+    override fun onSendClicked(viewItem: BalanceViewItem) {
+       viewModel.delegate.onPay(viewItem)
     }
 
-    override fun onReceiveClicked(position: Int) {
-        viewModel.delegate.onReceive(position)
+    override fun onReceiveClicked(viewItem: BalanceViewItem) {
+        viewModel.delegate.onReceive(viewItem)
     }
 
-    override fun onItemClick(position: Int) {
-        coinAdapter.toggleViewHolder(position)
+    override fun onItemClicked(viewItem: BalanceViewItem) {
+        coinAdapter.toggleViewHolder(viewItem)
     }
 
-    override fun onAddCoinClick() {
-        viewModel.delegate.openManageCoins()
+    override fun onChartClicked(viewItem: BalanceViewItem) {
+       viewModel.delegate.onChart(viewItem)
     }
 
-    override fun onClickChart(position: Int) {
-        viewModel.delegate.onChart(position)
+    override fun onAddCoinClicked() {
+        viewModel.delegate.onAddCoinClick()
     }
 
     // LiveData

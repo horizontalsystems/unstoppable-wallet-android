@@ -54,11 +54,11 @@ class BalanceInteractor(
     }
 
     override fun subscribeToWallets() {
-        walletManager.walletsUpdatedSignal
+        walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe {
-                    onUpdateWallets()
+                .subscribe { wallets ->
+                    onUpdateWallets(wallets)
                 }.let {
                     disposables.add(it)
                 }
@@ -67,7 +67,7 @@ class BalanceInteractor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    onUpdateWallets()
+                    onAdaptersReady()
                 }.let {
                     disposables.add(it)
                 }
@@ -127,16 +127,14 @@ class BalanceInteractor(
             rateManager.chartInfoObservable(coinCode, currencyCode, ChartType.DAILY)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe {
+                    .subscribe({
                         delegate?.didUpdateChartInfo(it, coinCode)
-                    }.let {
+                    }, {
+                        delegate?.didFailChartInfo(coinCode)
+                    }).let {
                         chartInfoDisposables.add(it)
                     }
         }
-    }
-
-    override fun unsubscribeFromChartInfo() {
-        chartInfoDisposables.clear()
     }
 
     override fun refresh() {
@@ -165,8 +163,12 @@ class BalanceInteractor(
         delegate?.didUpdateCurrency(currencyManager.baseCurrency)
     }
 
-    private fun onUpdateWallets() {
-        delegate?.didUpdateWallets(walletManager.wallets)
+    private fun onUpdateWallets(wallets: List<Wallet>) {
+        delegate?.didUpdateWallets(wallets)
+    }
+
+    private fun onAdaptersReady() {
+        delegate?.didPrepareAdapters()
     }
 
 }
