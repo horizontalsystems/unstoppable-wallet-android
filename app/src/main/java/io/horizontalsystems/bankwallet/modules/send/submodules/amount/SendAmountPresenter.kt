@@ -27,6 +27,7 @@ class SendAmountPresenter(
     private var amount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var minimumAmount: BigDecimal? = null
+    private var minimumRequiredBalance: BigDecimal = BigDecimal.ZERO
     private var xRate: BigDecimal? = null
 
     override var inputType = SendModule.InputType.COIN
@@ -95,12 +96,17 @@ class SendAmountPresenter(
     override fun setAvailableBalance(availableBalance: BigDecimal) {
         this.availableBalance = availableBalance
 
+        syncMaxButton()
         syncAvailableBalance()
         syncError()
     }
 
     override fun setMinimumAmount(minimumAmount: BigDecimal) {
         this.minimumAmount = minimumAmount
+    }
+
+    override fun setMinimumRequiredBalance(minimumRequiredBalance: BigDecimal) {
+        this.minimumRequiredBalance = minimumRequiredBalance
     }
 
     // SendModule.IViewDelegate
@@ -162,7 +168,7 @@ class SendAmountPresenter(
     }
 
     override fun onMaxClick() {
-        amount = availableBalance
+        amount = availableBalance?.subtract(minimumRequiredBalance)
 
         view.removeTextChangeListener()
 
@@ -197,8 +203,20 @@ class SendAmountPresenter(
     }
 
     private fun syncMaxButton() {
-        val visible = amount?.let { it == BigDecimal.ZERO } ?: true
-        view.setMaxButtonVisible(visible)
+        val noneNullAvailableBalance = availableBalance ?: run {
+            view.setMaxButtonVisible(false)
+            return
+        }
+
+        amount?.let {
+            if (it > BigDecimal.ZERO) {
+                view.setMaxButtonVisible(false)
+                return
+            }
+        }
+
+        val hasSpendableBalance = noneNullAvailableBalance - minimumRequiredBalance > BigDecimal.ZERO
+        view.setMaxButtonVisible(hasSpendableBalance)
     }
 
     private fun syncSwitchButton() {
@@ -214,6 +232,8 @@ class SendAmountPresenter(
 
         availableBalance?.let {
             if (amount > it) throw InsufficientBalance(amountInfo(it))
+
+            if (it - amount < minimumRequiredBalance) throw SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance(CoinValue(coin, minimumRequiredBalance))
         }
     }
 

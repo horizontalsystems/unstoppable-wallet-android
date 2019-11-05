@@ -59,6 +59,7 @@ object SendAmountModule {
         fun setAmount(amount: BigDecimal)
         fun setAvailableBalance(availableBalance: BigDecimal)
         fun setMinimumAmount(minimumAmount: BigDecimal)
+        fun setMinimumRequiredBalance(minimumRequiredBalance: BigDecimal)
     }
 
     interface IAmountModuleDelegate {
@@ -69,6 +70,7 @@ object SendAmountModule {
     open class ValidationError : Exception() {
         class EmptyValue(val field: String) : ValidationError()
         class InsufficientBalance(val availableBalance: AmountInfo?) : ValidationError()
+        class NotEnoughForMinimumRequiredBalance(val minimumRequiredBalance: CoinValue) : ValidationError()
         class TooFewAmount(val minimumAmount: AmountInfo?) : ValidationError()
     }
 

@@ -123,6 +123,7 @@
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_Error_MinimumAmount">Minimum Amount %s</string>
+    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
 
     <string name="Send_DialogTitle">Confirm</string>
     <string name="Send_DialogAvailableBalance">Available Balance</string>

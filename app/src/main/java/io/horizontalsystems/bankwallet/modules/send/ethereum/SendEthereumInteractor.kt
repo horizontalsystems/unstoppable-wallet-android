@@ -9,6 +9,9 @@ class SendEthereumInteractor(private val adapter: ISendEthereumAdapter) : SendMo
     override val ethereumBalance: BigDecimal
         get() = adapter.ethereumBalance
 
+    override val minimumRequiredBalance: BigDecimal
+        get() = adapter.minimumRequiredBalance
+
     override fun availableBalance(gasPrice: Long): BigDecimal {
         return adapter.availableBalance(gasPrice)
     }

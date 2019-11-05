@@ -15,8 +15,15 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val fee: BigDecimal, contractAddress: String, gasLimit: Long)
-    : EthereumBaseAdapter(kit, decimal) {
+class Erc20Adapter(
+        context: Context,
+        kit: EthereumKit,
+        decimal: Int,
+        private val fee: BigDecimal,
+        contractAddress: String,
+        gasLimit: Long,
+        override val minimumRequiredBalance: BigDecimal
+) : EthereumBaseAdapter(kit, decimal) {
 
     private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress, gasLimit)
 

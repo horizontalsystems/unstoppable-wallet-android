@@ -77,6 +77,7 @@ object SendModule {
 
     interface ISendEthereumInteractor {
         val ethereumBalance: BigDecimal
+        val minimumRequiredBalance: BigDecimal
 
         fun availableBalance(gasPrice: Long): BigDecimal
         fun validate(address: String)

@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
@@ -136,6 +137,9 @@ class SendAmountFragment(
                 error.minimumAmount?.let {
                     context?.getString(R.string.Send_Error_MinimumAmount, it.getFormatted())
                 }
+            }
+            is SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance -> {
+                context?.getString(R.string.Send_Error_MinRequiredBalance,  App.numberFormatter.format(error.minimumRequiredBalance))
             }
             else -> null
         }
