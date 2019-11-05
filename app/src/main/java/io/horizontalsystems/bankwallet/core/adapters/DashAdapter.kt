@@ -102,15 +102,15 @@ class DashAdapter(override val kit: DashKit) :
     // ISendDashAdapter
 
     override fun availableBalance(address: String?): BigDecimal {
-        return availableBalance(feeRate, address)
+        return availableBalance(feeRate, address, mapOf())
     }
 
     override fun fee(amount: BigDecimal, address: String?): BigDecimal {
-        return fee(amount, feeRate, address)
+        return fee(amount, feeRate, address, mapOf())
     }
 
     override fun send(amount: BigDecimal, address: String): Single<Unit> {
-        return send(amount, address, feeRate)
+        return send(amount, address, feeRate, mapOf())
     }
 
     companion object {

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 
 class SendPresenter(private val interactor: SendModule.ISendInteractor,
                     val router: SendModule.IRouter
@@ -12,6 +13,7 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
     var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
     var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
     var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
+    var hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate? = null
 
     override lateinit var view: SendModule.IView
 

@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.binancechainkit.BinanceChainKit
+import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.xrateskit.entities.ChartInfo
@@ -269,11 +270,11 @@ interface IReceiveAdapter {
 }
 
 interface ISendBitcoinAdapter {
-    fun availableBalance(feeRate: Long, address: String?): BigDecimal
+    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>): BigDecimal
     fun minimumSendAmount(address: String?): BigDecimal
-    fun fee(amount: BigDecimal, feeRate: Long, address: String?): BigDecimal
+    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>): Single<Unit>
 }
 
 interface ISendDashAdapter {

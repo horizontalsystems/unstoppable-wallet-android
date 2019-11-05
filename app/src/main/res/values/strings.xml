@@ -136,6 +136,12 @@
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogLockTime">Lock Time</string>
+    <string name="Send_LockTime_Off">Off</string>
+    <string name="Send_LockTime_Hour">Hour</string>
+    <string name="Send_LockTime_Month">Month</string>
+    <string name="Send_LockTime_HalfYear">Half Year</string>
+    <string name="Send_LockTime_Year">Year</string>
     <string name="Send_Sending">Sending</string>
 
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
