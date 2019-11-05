@@ -12,8 +12,8 @@ import java.util.*
 class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
     override val name = "HorizontalSystems.xyz"
 
-    override fun url(hash: String): String {
-        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/tx/$hash"
+    override fun url(hash: String): String? {
+        return null
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
