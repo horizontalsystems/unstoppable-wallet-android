@@ -10,6 +10,7 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.ConcurrentHashMap
 
 class AdapterManager(
         private val walletManager: IWalletManager,
@@ -21,30 +22,29 @@ class AdapterManager(
 
     private val handler: Handler
     private val disposables = CompositeDisposable()
-    private val adapterCreationSubject = PublishSubject.create<Wallet>()
     private val adaptersReadySubject = PublishSubject.create<Unit>()
+    private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
-    override val adapterCreationObservable: Flowable<Wallet> = adapterCreationSubject.toFlowable(BackpressureStrategy.BUFFER)
     override val adaptersReadyObservable: Flowable<Unit> = adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
 
     init {
         start()
         handler = Handler(looper)
 
-        disposables.add(walletManager.walletsUpdatedSignal
+        disposables.add(walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe {
-                    initAdapters()
+                .subscribe { wallets ->
+                    initAdapters(wallets)
                 }
         )
     }
 
     override fun preloadAdapters() {
-        initAdapters()
+        handler.post {
+            initAdapters(walletManager.wallets)
+        }
     }
-
-    private val adaptersMap = mutableMapOf<Wallet, IAdapter>()
 
     override fun refresh() {
         handler.post {
@@ -56,31 +56,28 @@ class AdapterManager(
         binanceKitManager.binanceKit?.refresh()
     }
 
-    private fun initAdapters() {
-        handler.post {
-            val wallets = walletManager.wallets
-            val disabledWallets = adaptersMap.keys.subtract(wallets)
+    private fun initAdapters(wallets: List<Wallet>) {
+        val disabledWallets = adaptersMap.keys.subtract(wallets)
 
-            wallets.forEach { wallet ->
-                if (!adaptersMap.containsKey(wallet)) {
-                    adapterFactory.adapter(wallet)?.let { adapter ->
-                        adaptersMap[wallet] = adapter
-                        adapterCreationSubject.onNext(wallet)
+        wallets.forEach { wallet ->
+            if (!adaptersMap.containsKey(wallet)) {
+                adapterFactory.adapter(wallet)?.let { adapter ->
+                    adaptersMap[wallet] = adapter
 
-                        adapter.start()
-                    }
-                }
-            }
-
-            adaptersReadySubject.onNext(Unit)
-
-            disabledWallets.forEach { wallet ->
-                adaptersMap.remove(wallet)?.let { disabledAdapter ->
-                    disabledAdapter.stop()
-                    adapterFactory.unlinkAdapter(disabledAdapter)
+                    adapter.start()
                 }
             }
         }
+
+        adaptersReadySubject.onNext(Unit)
+
+        disabledWallets.forEach { wallet ->
+            adaptersMap.remove(wallet)?.let { disabledAdapter ->
+                disabledAdapter.stop()
+                adapterFactory.unlinkAdapter(disabledAdapter)
+            }
+        }
+
     }
 
     override fun stopKits() {
@@ -108,4 +105,5 @@ class AdapterManager(
     override fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter? {
         return adaptersMap[wallet]?.let { it as? IReceiveAdapter }
     }
+
 }

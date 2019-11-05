@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
@@ -23,11 +24,11 @@ class BalanceCoinAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
-        fun onSendClicked(position: Int)
-        fun onReceiveClicked(position: Int)
-        fun onItemClick(position: Int)
-        fun onAddCoinClick()
-        fun onClickChart(position: Int)
+        fun onSendClicked(viewItem: BalanceViewItem)
+        fun onReceiveClicked(viewItem: BalanceViewItem)
+        fun onChartClicked(viewItem: BalanceViewItem)
+        fun onItemClicked(viewItem: BalanceViewItem)
+        fun onAddCoinClicked()
     }
 
     private var items: List<BalanceViewItem> = listOf()
@@ -37,7 +38,11 @@ class BalanceCoinAdapter(
 
     private var expandedViewPosition: Int? = null
 
-    fun toggleViewHolder(position: Int) {
+    fun toggleViewHolder(viewItem: BalanceViewItem) {
+        val position= items.indexOf(viewItem)
+        if (position == -1)
+            return
+
         expandedViewPosition?.let {
             notifyItemChanged(it, false)
         }
@@ -63,7 +68,7 @@ class BalanceCoinAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             addCoinType -> ViewHolderAddCoin(inflate(parent, R.layout.view_holder_add_coin))
-            else -> ViewHolderCoin(inflate(parent, R.layout.view_holder_coin), listener)
+            else -> ViewHolderCoin(inflate(parent, R.layout.view_holder_coin))
         }
     }
 
@@ -71,25 +76,57 @@ class BalanceCoinAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (holder is ViewHolderAddCoin) {
-            holder.manageCoins.setOnSingleClickListener { listener.onAddCoinClick() }
+            holder.manageCoins.setOnSingleClickListener { listener.onAddCoinClicked() }
         }
 
         if (holder !is ViewHolderCoin) return
 
         if (payloads.isEmpty()) {
-            holder.bind(items[position], expandedViewPosition == position)
+            val item = items[position]
+            holder.bind(item, expandedViewPosition == position, ViewHolderCoinListener(item, listener))
         } else if (payloads.any { it is Boolean }) {
             holder.bindPartial(items[position], expandedViewPosition == position)
+        }
+    }
+
+    // ViewHolderCoin.Listener
+
+    private class ViewHolderCoinListener(
+            private val item: BalanceViewItem,
+            private val adapterListener: Listener
+    ) : ViewHolderCoin.Listener {
+
+        override fun onSendClicked() {
+            adapterListener.onSendClicked(item)
+        }
+
+        override fun onReceiveClicked() {
+            adapterListener.onReceiveClicked(item)
+        }
+
+        override fun onChartClicked() {
+            adapterListener.onChartClicked(item)
+        }
+
+        override fun onItemClicked() {
+            adapterListener.onItemClicked(item)
         }
     }
 }
 
 class ViewHolderAddCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class ViewHolderCoin(override val containerView: View, private val listener: BalanceCoinAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var syncing = false
 
-    fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
+    interface Listener {
+        fun onSendClicked()
+        fun onReceiveClicked()
+        fun onChartClicked()
+        fun onItemClicked()
+    }
+
+    fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean, listener: Listener) {
         syncing = false
         buttonPay.isEnabled = false
         buttonReceive.isEnabled = true
@@ -138,25 +175,25 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         exchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
             when {
-                balanceViewItem.chartInfo != null -> rateString
+                balanceViewItem.chartInfoState is ChartInfoState.Loaded -> rateString
                 else -> containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coin.code)
             }
         }
 
         buttonPay.setOnSingleClickListener {
-            listener.onSendClicked(adapterPosition)
+            listener.onSendClicked()
         }
 
-        chartButton.setOnClickListener { listener.onClickChart(adapterPosition) }
+        chartButton.setOnClickListener { listener.onChartClicked() }
 
         buttonReceive.setOnSingleClickListener {
-            listener.onReceiveClicked(adapterPosition)
+            listener.onReceiveClicked()
         }
 
         viewHolderRoot.isSelected = expanded
         buttonsWrapper.visibility = if (expanded) View.VISIBLE else View.GONE
         containerView.setOnClickListener {
-            listener.onItemClick(adapterPosition)
+            listener.onItemClicked()
         }
 
         showChart(balanceViewItem, expanded)
@@ -201,7 +238,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
     }
 
     private fun showChart(viewItem: BalanceViewItem, expanded: Boolean) {
-        if (expanded || viewItem.chartInfo == null) {
+        if (expanded || viewItem.chartInfoState !is ChartInfoState.Loaded) {
             return setChartVisibility(false)
         }
 
@@ -218,7 +255,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             txDiff.visibility = View.GONE
         }
 
-        val chartInfo = viewItem.chartInfo
+        val chartInfo = viewItem.chartInfoState.chartInfo
 
         chartView.visibility = View.VISIBLE
         chartView.setData(chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }, ChartType.DAILY, chartInfo.startTimestamp, chartInfo.endTimestamp)

@@ -4,6 +4,7 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IXRateManager
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -20,13 +21,13 @@ class XRateManager(context: Context,
 ) : IXRateManager {
 
     private val disposables = CompositeDisposable()
-    private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code, 60*10)
+    private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code, 60 * 10)
 
     init {
-        walletManager.walletsUpdatedSignal
+        walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
-                .subscribe {
-                    onWalletsUpdated()
+                .subscribe { wallets ->
+                    onWalletsUpdated(wallets)
                 }.let {
                     disposables.add(it)
                 }
@@ -83,8 +84,8 @@ class XRateManager(context: Context,
         kit.refresh()
     }
 
-    private fun onWalletsUpdated() {
-        kit.set(walletManager.wallets.map { it.coin.code })
+    private fun onWalletsUpdated(wallets: List<Wallet>) {
+        kit.set(wallets.map { it.coin.code })
     }
 
     private fun onBaseCurrencyUpdated() {

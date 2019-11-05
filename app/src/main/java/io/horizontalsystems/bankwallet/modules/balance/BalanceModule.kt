@@ -22,16 +22,16 @@ object BalanceModule {
     }
 
     interface IViewDelegate {
-        fun viewDidLoad()
-        fun refresh()
+        fun onLoad()
+        fun onRefresh()
 
-        fun onReceive(position: Int)
-        fun onPay(position: Int)
-        fun onChart(position: Int)
+        fun onReceive(viewItem: BalanceViewItem)
+        fun onPay(viewItem: BalanceViewItem)
+        fun onChart(viewItem: BalanceViewItem)
 
-        fun openManageCoins()
+        fun onAddCoinClick()
 
-        fun onSortTypeChanged(sortType: BalanceSortType)
+        fun onSortTypeChange(sortType: BalanceSortType)
         fun onSortClick()
         fun onBackupClick()
 
@@ -54,7 +54,6 @@ object BalanceModule {
 
         fun subscribeToMarketInfo(currencyCode: String)
         fun subscribeToChartInfo(coinCodes: List<String>, currencyCode: String)
-        fun unsubscribeFromChartInfo()
 
         fun refresh()
         fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType?
@@ -66,12 +65,15 @@ object BalanceModule {
 
     interface IInteractorDelegate {
         fun didUpdateWallets(wallets: List<Wallet>)
+        fun didPrepareAdapters()
         fun didUpdateBalance(wallet: Wallet, balance: BigDecimal)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
 
         fun didUpdateCurrency(currency: Currency)
         fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>)
+
         fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String)
+        fun didFailChartInfo(coinCode: String)
 
         fun didRefresh()
     }
@@ -90,14 +92,19 @@ object BalanceModule {
     }
 
     data class BalanceItem(val wallet: Wallet) {
-
         var balance: BigDecimal? = null
         var state: AdapterState? = null
         var marketInfo: MarketInfo? = null
-        var chartInfo: ChartInfo? = null
+        var chartInfoState: ChartInfoState = ChartInfoState.Loading
 
         val fiatValue: BigDecimal?
             get() = marketInfo?.rate?.let { balance?.times(it) }
+    }
+
+    sealed class ChartInfoState {
+        object Loading : ChartInfoState()
+        class Loaded(val chartInfo: ChartInfo) : ChartInfoState()
+        object Failed : ChartInfoState()
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {
