@@ -50,7 +50,7 @@ class App : Application() {
         lateinit var defaultWalletCreator: DefaultWalletCreator
         lateinit var walletRemover: WalletRemover
 
-        lateinit var xRateManager: IXRateManager
+        lateinit var xRateManager: IRateManager
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
@@ -148,7 +148,7 @@ class App : Application() {
 
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
-        xRateManager = XRateManager(this, walletManager, currencyManager)
+        xRateManager = RateManager(this, walletManager, currencyManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)

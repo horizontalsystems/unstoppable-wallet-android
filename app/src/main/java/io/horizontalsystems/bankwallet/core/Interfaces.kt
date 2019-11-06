@@ -380,7 +380,7 @@ interface IRateStorage {
     fun deleteAll()
 }
 
-interface IXRateManager {
+interface IRateManager {
     fun set(coins: List<String>)
     fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
     fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal?

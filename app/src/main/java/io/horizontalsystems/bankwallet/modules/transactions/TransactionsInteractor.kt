@@ -15,7 +15,7 @@ class TransactionsInteractor(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val currencyManager: ICurrencyManager,
-        private val rateManager: IXRateManager,
+        private val rateManager: IRateManager,
         private val connectivityManager: ConnectivityManager) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null

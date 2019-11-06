@@ -7,7 +7,7 @@ class BackgroundPriceAlertManager(
         localStorage: ILocalStorage,
         backgroundRateAlertScheduler: IBackgroundRateAlertScheduler,
         private val priceAlertsStorage: IPriceAlertsStorage,
-        private val rateManager: IXRateManager,
+        private val rateManager: IRateManager,
         private val walletStorage: IWalletStorage,
         private val currencyManager: ICurrencyManager,
         private val rateStorage: IRateStorage,

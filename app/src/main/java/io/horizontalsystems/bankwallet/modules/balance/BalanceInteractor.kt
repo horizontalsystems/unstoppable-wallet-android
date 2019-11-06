@@ -15,7 +15,7 @@ class BalanceInteractor(
         private val adapterManager: IAdapterManager,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
-        private val rateManager: IXRateManager,
+        private val rateManager: IRateManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager
 ) : BalanceModule.IInteractor {
 
