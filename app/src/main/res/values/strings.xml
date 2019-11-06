@@ -122,7 +122,7 @@
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
-    <string name="Send_Error_MinimumAmount">Minimum Amount %s</string>
+    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
 
@@ -139,10 +139,10 @@
     <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_DialogLockTime">Lock Time</string>
     <string name="Send_LockTime_Off">Off</string>
-    <string name="Send_LockTime_Hour">Hour</string>
-    <string name="Send_LockTime_Month">Month</string>
-    <string name="Send_LockTime_HalfYear">Half Year</string>
-    <string name="Send_LockTime_Year">Year</string>
+    <string name="Send_LockTime_Hour">1 hour</string>
+    <string name="Send_LockTime_Month">1 month</string>
+    <string name="Send_LockTime_HalfYear">6 months</string>
+    <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">Sending</string>
 
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
