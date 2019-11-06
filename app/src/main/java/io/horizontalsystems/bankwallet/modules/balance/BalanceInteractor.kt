@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.os.Handler
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -22,7 +21,6 @@ class BalanceInteractor(
 
     var delegate: BalanceModule.IInteractorDelegate? = null
 
-    private val refreshTimeout: Long = 1
     private var disposables = CompositeDisposable()
     private var adapterDisposables = CompositeDisposable()
     private var marketInfoDisposables = CompositeDisposable()
@@ -141,7 +139,7 @@ class BalanceInteractor(
         adapterManager.refresh()
         rateManager.refresh()
 
-        Handler().postDelayed({ delegate?.didRefresh() }, refreshTimeout * 1000)
+        delegate?.didRefresh()
     }
 
     override fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType? {

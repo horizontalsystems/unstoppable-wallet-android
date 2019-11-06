@@ -46,7 +46,9 @@ class BalancePresenter(
     }
 
     override fun onRefresh() {
-        interactor.refresh()
+        executor.submit {
+            interactor.refresh()
+        }
     }
 
     override fun onReceive(viewItem: BalanceViewItem) {
@@ -79,10 +81,12 @@ class BalancePresenter(
     }
 
     override fun onSortTypeChange(sortType: BalanceSortType) {
-        this.sortType = sortType
-        interactor.saveSortType(sortType)
+        executor.submit {
+            this.sortType = sortType
+            interactor.saveSortType(sortType)
 
-        updateViewItems()
+            updateViewItems()
+        }
     }
 
     override fun onBackupClick() {
