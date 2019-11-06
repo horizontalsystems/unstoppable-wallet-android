@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
-import io.horizontalsystems.bankwallet.core.IXRateManager
+import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class RateChartInteractor(private val xRateManager: IXRateManager, private val localStorage: IChartTypeStorage)
+class RateChartInteractor(private val xRateManager: IRateManager, private val localStorage: IChartTypeStorage)
     : RateChartModule.Interactor {
 
     var delegate: RateChartModule.InteractorDelegate? = null
