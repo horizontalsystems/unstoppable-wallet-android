@@ -5,13 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
 
     <View
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
         android:background="@drawable/input_background_themed"
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"
