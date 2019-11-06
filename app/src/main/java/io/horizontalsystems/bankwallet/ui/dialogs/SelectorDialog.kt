@@ -21,6 +21,7 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
 
     private var listener: Listener? = null
     private var items = listOf<SelectorItem>()
+    private var title: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
@@ -35,7 +36,8 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
         recyclerView.adapter = SelectorAdapter(items, this)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        dialogTitle.setText(R.string.Send_DialogLockTime)
+        dialogTitle.visibility = if (title == null) View.GONE else View.VISIBLE
+        dialogTitle.text = title
 
         hideKeyBoard()
 
@@ -61,10 +63,11 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     }
 
     companion object {
-        fun newInstance(listener: Listener? = null, items: List<SelectorItem>): SelectorDialog {
+        fun newInstance(listener: Listener? = null, items: List<SelectorItem>, title: String?): SelectorDialog {
             val dialog = SelectorDialog()
             dialog.listener = listener
             dialog.items = items
+            dialog.title = title
             return dialog
         }
     }

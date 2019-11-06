@@ -45,7 +45,7 @@ class SendHodlerFragment(
             }
 
             SelectorDialog
-                    .newInstance(this, selectorItems)
+                    .newInstance(this, selectorItems, getString(R.string.Send_DialogLockTime))
                     .show(this.parentFragmentManager, "time_intervals_selector")
 
         })
