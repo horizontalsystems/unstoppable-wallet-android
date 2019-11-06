@@ -121,10 +121,11 @@ class BalancePresenter(
         }
     }
 
-    override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal) {
+    override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal) {
         executor.submit {
             updateItem(wallet) { item ->
                 item.balance = balance
+                item.balanceLocked = balanceLocked
             }
 
             updateHeaderViewItem()
@@ -197,6 +198,7 @@ class BalancePresenter(
 
         items.forEach { item ->
             item.balance = interactor.balance(item.wallet)
+            item.balanceLocked = interactor.balanceLocked(item.wallet)
             item.state = interactor.state(item.wallet)
         }
     }

@@ -262,6 +262,7 @@ interface IBalanceAdapter {
     val stateUpdatedFlowable: Flowable<Unit>
 
     val balance: BigDecimal
+    val balanceLocked: BigDecimal get() = BigDecimal.ZERO
     val balanceUpdatedFlowable: Flowable<Unit>
 
 }

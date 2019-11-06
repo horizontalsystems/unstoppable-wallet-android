@@ -14,7 +14,9 @@ data class BalanceViewItem(
         val currencyValue: CurrencyValue?,
         val state: AdapterState,
         val marketInfoExpired: Boolean,
-        val chartInfoState: ChartInfoState
+        val chartInfoState: ChartInfoState,
+        val coinValueLocked: CoinValue,
+        val currencyValueLocked: CurrencyValue?
 )
 
 data class BalanceHeaderViewItem(
@@ -25,26 +27,31 @@ data class BalanceHeaderViewItem(
 class BalanceViewItemFactory {
 
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency): BalanceViewItem {
+        val balanceTotal = item.balanceTotal ?: BigDecimal.ZERO
+        val balanceLocked = item.balanceLocked ?: BigDecimal.ZERO
+
         var exchangeValue: CurrencyValue? = null
-        var currencyValue: CurrencyValue? = null
+        var currencyValueTotal: CurrencyValue? = null
+        var currencyValueLocked: CurrencyValue? = null
 
         item.marketInfo?.rate?.let { rate ->
             exchangeValue = CurrencyValue(currency, rate)
-            item.balance?.let {
-                currencyValue = CurrencyValue(currency, rate * it)
-            }
+            currencyValueTotal = CurrencyValue(currency, rate * balanceTotal)
+            currencyValueLocked = CurrencyValue(currency, rate * balanceLocked)
         }
 
         return BalanceViewItem(
                 item.wallet,
                 item.wallet.coin,
-                CoinValue(item.wallet.coin, item.balance ?: BigDecimal.ZERO),
+                CoinValue(item.wallet.coin, balanceTotal),
                 exchangeValue,
                 item.marketInfo?.diff,
-                currencyValue,
+                currencyValueTotal,
                 item.state ?: AdapterState.NotReady,
                 item.marketInfo?.isExpired() ?: false,
-                item.chartInfoState
+                item.chartInfoState,
+                CoinValue(item.wallet.coin, balanceLocked),
+                currencyValueLocked
         )
     }
 
@@ -53,11 +60,11 @@ class BalanceViewItemFactory {
         var upToDate = true
 
         items.forEach { item ->
-            val balance = item.balance
+            val balanceTotal = item.balanceTotal
             val marketInfo = item.marketInfo
 
-            if (balance != null && marketInfo != null) {
-                total += balance.multiply(marketInfo.rate)
+            if (balanceTotal != null && marketInfo != null) {
+                total += balanceTotal.multiply(marketInfo.rate)
 
                 upToDate = !marketInfo.isExpired()
             }
