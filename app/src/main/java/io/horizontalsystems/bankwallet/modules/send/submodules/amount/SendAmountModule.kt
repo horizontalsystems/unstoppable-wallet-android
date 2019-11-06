@@ -59,6 +59,7 @@ object SendAmountModule {
         fun setAmount(amount: BigDecimal)
         fun setAvailableBalance(availableBalance: BigDecimal)
         fun setMinimumAmount(minimumAmount: BigDecimal)
+        fun setMaximumAmount(maximumAmount: BigDecimal?)
         fun setMinimumRequiredBalance(minimumRequiredBalance: BigDecimal)
     }
 
@@ -72,6 +73,7 @@ object SendAmountModule {
         class InsufficientBalance(val availableBalance: AmountInfo?) : ValidationError()
         class NotEnoughForMinimumRequiredBalance(val minimumRequiredBalance: CoinValue) : ValidationError()
         class TooFewAmount(val minimumAmount: AmountInfo?) : ValidationError()
+        class MaxAmountLimit(val maximumAmount: AmountInfo?) : ValidationError()
     }
 
 
