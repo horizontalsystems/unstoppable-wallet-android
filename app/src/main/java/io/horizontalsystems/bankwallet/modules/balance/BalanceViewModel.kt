@@ -75,7 +75,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun didRefresh() {
-        didRefreshLiveEvent.call()
+        didRefreshLiveEvent.postValue(null)
     }
 
     // ViewModel

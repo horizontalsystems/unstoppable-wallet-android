@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -97,7 +98,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     // BalanceAdapter listener
 
     override fun onSendClicked(viewItem: BalanceViewItem) {
-       viewModel.delegate.onPay(viewItem)
+        viewModel.delegate.onPay(viewItem)
     }
 
     override fun onReceiveClicked(viewItem: BalanceViewItem) {
@@ -109,7 +110,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     }
 
     override fun onChartClicked(viewItem: BalanceViewItem) {
-       viewModel.delegate.onChart(viewItem)
+        viewModel.delegate.onChart(viewItem)
     }
 
     override fun onAddCoinClicked() {
@@ -128,7 +129,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
-            pullToRefresh.isRefreshing = false
+            Handler().postDelayed({ pullToRefresh.isRefreshing = false }, 1000)
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
