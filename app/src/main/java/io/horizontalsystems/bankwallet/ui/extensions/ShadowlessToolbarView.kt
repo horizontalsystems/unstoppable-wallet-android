@@ -22,19 +22,8 @@ class ShadowlessToolbarView : ConstraintLayout {
 
     fun bind(title: String?, leftBtnItem: TopMenuItem? = null, rightBtnItem: TopMenuItem? = null) {
         title?.let { toolbarTitle.text = it }
-        leftBtnItem?.let { leftItem ->
-            leftItem.icon?.let {
-                leftImageButton.setImageResource(it)
-                leftImageButton.visibility = View.VISIBLE
-                leftItem.onClick?.let { click -> leftImageButton?.setOnClickListener { click.invoke() } }
-            } ?:run {
-                leftItem.text?.let {
-                    leftTextButton.visibility = View.VISIBLE
-                    leftTextButton.setText(it)
-                    leftItem.onClick?.let { click -> leftTextButton?.setOnClickListener { click.invoke() } }
-                }
-            }
-        }
+
+        bindLeftButton(leftBtnItem)
 
         rightBtnItem?.let { rightItem ->
             rightItem.icon?.let { imageRes ->
@@ -46,6 +35,25 @@ class ShadowlessToolbarView : ConstraintLayout {
                     rightTextButton.visibility = View.VISIBLE
                     rightTextButton.setText(textRes)
                     rightItem.onClick?.let { click -> rightTextButton?.setOnClickListener { click.invoke() } }
+                }
+            }
+        }
+    }
+
+    fun bindLeftButton(leftBtnItem: TopMenuItem? = null) {
+        leftTextButton.visibility = View.GONE
+        leftImageButton.visibility = View.GONE
+
+        leftBtnItem?.let { leftItem ->
+            leftItem.icon?.let {
+                leftImageButton.setImageResource(it)
+                leftImageButton.visibility = View.VISIBLE
+                leftItem.onClick?.let { click -> leftImageButton?.setOnClickListener { click.invoke() } }
+            } ?:run {
+                leftItem.text?.let {
+                    leftTextButton.visibility = View.VISIBLE
+                    leftTextButton.setText(it)
+                    leftItem.onClick?.let { click -> leftTextButton?.setOnClickListener { click.invoke() } }
                 }
             }
         }

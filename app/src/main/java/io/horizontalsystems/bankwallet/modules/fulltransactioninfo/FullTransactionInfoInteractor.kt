@@ -8,7 +8,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class FullTransactionInfoInteractor(private val transactionInfoFactory: FullTransactionInfoFactory, private var dataProviderManager: TransactionDataProviderManager, private val clipboardManager: TextHelper)
+class FullTransactionInfoInteractor(
+        private val transactionInfoFactory: FullTransactionInfoFactory,
+        private var dataProviderManager: TransactionDataProviderManager,
+        private val clipboardManager: TextHelper)
     : FullTransactionInfoModule.Interactor, FullTransactionInfoModule.ProviderDelegate {
 
     val disposables = CompositeDisposable()

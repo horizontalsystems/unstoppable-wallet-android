@@ -22,7 +22,7 @@ object FullTransactionInfoModule {
         fun openUrl(url: String)
         fun openProviderSettings(coin: Coin, transactionHash: String)
         fun share(url: String)
-        fun showShareButton()
+        fun setShareButtonVisibility(visible: Boolean)
     }
 
     interface ViewDelegate {

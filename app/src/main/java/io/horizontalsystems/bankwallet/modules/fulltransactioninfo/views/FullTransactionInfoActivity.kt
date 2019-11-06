@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -39,7 +39,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         val transactionHash = intent.getStringExtra(transactionHashKey)
         val wallet = intent.getParcelableExtra<Wallet>(walletKey)
 
-        viewModel = ViewModelProviders.of(this).get(FullTransactionInfoViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FullTransactionInfoViewModel::class.java)
         viewModel.init(transactionHash, wallet)
 
         setContentView(R.layout.activity_full_transaction_info)
@@ -54,10 +54,9 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         //
         // LiveData
         //
-        viewModel.showShareButton.observe(this, Observer {
-            shadowlessToolbar.bind(
-                    title = null,
-                    leftBtnItem = TopMenuItem(text = R.string.Button_Share, onClick = { viewModel.share() })
+        viewModel.shareButtonVisibility.observe(this, Observer { visible ->
+            shadowlessToolbar.bindLeftButton(
+                    leftBtnItem = if (visible) TopMenuItem(text = R.string.Button_Share, onClick = { viewModel.share() }) else null
             )
         })
 
@@ -210,6 +209,7 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
                     if (!viewModel.delegate.canShowTransactionInProviderSite) {
                         holder.transactionLink.visibility = View.GONE
                     } else {
+                        holder.transactionLink.visibility = View.VISIBLE
                         val changeProviderStyle = SpannableString(providerName)
                         changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
 

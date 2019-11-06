@@ -17,7 +17,7 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val showShareLiveEvent = SingleLiveEvent<String>()
     val openLinkLiveEvent = SingleLiveEvent<String>()
     val openProviderSettingsEvent = SingleLiveEvent<Pair<Coin, String>>()
-    val showShareButton = SingleLiveEvent<Void>()
+    val shareButtonVisibility = MutableLiveData<Boolean>()
 
     fun init(transactionHash: String, wallet: Wallet) {
         FullTransactionInfoModule.init(this, this, wallet, transactionHash)
@@ -40,8 +40,8 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     // IView
     //
 
-    override fun showShareButton() {
-        showShareButton.call()
+    override fun setShareButtonVisibility(visible: Boolean) {
+        shareButtonVisibility.postValue(visible)
     }
 
     override fun showLoading() {
