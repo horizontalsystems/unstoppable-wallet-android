@@ -42,11 +42,12 @@ class RateManager(context: Context,
     }
 
     override fun set(coins: List<String>) {
-        kit.set(coins)
+        val convertedCoins = coins.map { converted(it) }
+        kit.set(convertedCoins)
     }
 
     override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
-        return kit.getMarketInfo(coinCode, currencyCode)
+        return kit.getMarketInfo(converted(coinCode), currencyCode)
     }
 
     override fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal? {
@@ -61,23 +62,26 @@ class RateManager(context: Context,
     }
 
     override fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo> {
-        return kit.marketInfoObservable(coinCode, currencyCode)
+        return kit.marketInfoObservable(converted(coinCode), currencyCode)
     }
 
     override fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>> {
         return kit.marketInfoMapObservable(currencyCode)
+                .map { marketInfo ->
+                    marketInfo.map { unconverted(it.key) to it.value }.toMap()
+                }
     }
 
     override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        return kit.historicalRate(coinCode, currencyCode, timestamp)
+        return kit.historicalRate(converted(coinCode), currencyCode, timestamp)
     }
 
     override fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
-        return kit.getChartInfo(coinCode, currencyCode, chartType)
+        return kit.getChartInfo(converted(coinCode), currencyCode, chartType)
     }
 
     override fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
-        return kit.chartInfoObservable(coinCode, currencyCode, chartType)
+        return kit.chartInfoObservable(converted(coinCode), currencyCode, chartType)
     }
 
     override fun refresh() {
@@ -85,11 +89,27 @@ class RateManager(context: Context,
     }
 
     private fun onWalletsUpdated(wallets: List<Wallet>) {
-        kit.set(wallets.map { it.coin.code })
+        kit.set(wallets.map { converted(it.coin.code) })
     }
 
     private fun onBaseCurrencyUpdated() {
         kit.set(currencyManager.baseCurrency.code)
+    }
+
+    private fun converted(coinCode: String) : String {
+        return when (coinCode) {
+            "HOT" -> "HOLO"
+            else -> coinCode
+        }
+
+    }
+
+    private fun unconverted(coinCode: String) : String {
+        return when (coinCode) {
+            "HOLO" -> "HOT"
+            else -> coinCode
+        }
+
     }
 
 }
