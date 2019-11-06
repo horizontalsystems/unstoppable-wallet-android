@@ -40,6 +40,13 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
         syncValidation()
     }
 
+    private fun syncMaximumAmount() {
+        hodlerModule?.let {
+            amountModule.setMaximumAmount(interactor.fetchMaximumAmount(it.pluginData()))
+            syncValidation()
+        }
+    }
+
     // SendModule.ISendHandler
 
     override lateinit var amountModule: SendAmountModule.IAmountModule
@@ -63,6 +70,7 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     override fun onModulesDidLoad() {
         syncAvailableBalance()
         syncMinimumAmount()
+        syncMaximumAmount()
     }
 
     override fun onAddressScan(address: String) {
@@ -134,5 +142,6 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     override fun onUpdateLockTimeInterval(timeInterval: LockTimeInterval?) {
         syncAvailableBalance()
         syncFee()
+        syncMaximumAmount()
     }
 }

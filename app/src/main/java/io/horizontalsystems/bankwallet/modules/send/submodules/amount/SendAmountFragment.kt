@@ -138,6 +138,11 @@ class SendAmountFragment(
                     context?.getString(R.string.Send_Error_MinimumAmount, it.getFormatted())
                 }
             }
+            is SendAmountModule.ValidationError.MaxAmountLimit -> {
+                error.maximumAmount?.let {
+                    context?.getString(R.string.Send_Error_MaximumAmount, it.getFormatted())
+                }
+            }
             is SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance -> {
                 context?.getString(R.string.Send_Error_MinRequiredBalance,  App.numberFormatter.format(error.minimumRequiredBalance))
             }

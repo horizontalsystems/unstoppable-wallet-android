@@ -35,6 +35,10 @@ class SendBitcoinInteractor(private val adapter: ISendBitcoinAdapter,
         return adapter.minimumSendAmount(address)
     }
 
+    override fun fetchMaximumAmount(pluginData: Map<Byte, IPluginData>): BigDecimal? {
+        return adapter.maximumSendAmount(pluginData)
+    }
+
     override fun validate(address: String) {
         adapter.validate(address)
     }

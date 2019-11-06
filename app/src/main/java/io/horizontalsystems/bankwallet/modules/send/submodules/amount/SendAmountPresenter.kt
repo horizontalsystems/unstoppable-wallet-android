@@ -27,6 +27,7 @@ class SendAmountPresenter(
     private var amount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var minimumAmount: BigDecimal? = null
+    private var maximumAmount: BigDecimal? = null
     private var minimumRequiredBalance: BigDecimal = BigDecimal.ZERO
     private var xRate: BigDecimal? = null
 
@@ -103,6 +104,10 @@ class SendAmountPresenter(
 
     override fun setMinimumAmount(minimumAmount: BigDecimal) {
         this.minimumAmount = minimumAmount
+    }
+
+    override fun setMaximumAmount(maximumAmount: BigDecimal?) {
+        this.maximumAmount = maximumAmount
     }
 
     override fun setMinimumRequiredBalance(minimumRequiredBalance: BigDecimal) {
@@ -234,6 +239,10 @@ class SendAmountPresenter(
             if (amount > it) throw InsufficientBalance(amountInfo(it))
 
             if (it - amount < minimumRequiredBalance) throw SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance(CoinValue(coin, minimumRequiredBalance))
+        }
+
+        maximumAmount?.let {
+            if (amount > it) throw SendAmountModule.ValidationError.MaxAmountLimit(amountInfo(it))
         }
     }
 
