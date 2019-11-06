@@ -15,10 +15,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
-class RateManager(context: Context,
-                  private val walletManager: IWalletManager,
-                  private val currencyManager: ICurrencyManager
-) : IRateManager {
+class RateManager(context: Context, walletManager: IWalletManager, private val currencyManager: ICurrencyManager) : IRateManager {
 
     private val disposables = CompositeDisposable()
     private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code, 60 * 10)
