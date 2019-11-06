@@ -31,7 +31,7 @@ class RateDifferenceTextView : TextView {
             setTextColor(resources.getColor(R.color.grey, context.theme))
         }
 
-        text = "${scaledValue.abs()}%"
+        text = "${scaledValue.abs().toPlainString()}%"
 
         val iconRes = if (scaledValue >= BigDecimal.ZERO) R.drawable.ic_up_green else R.drawable.ic_down_red
         setLeftIcon(context.getDrawable(iconRes))
