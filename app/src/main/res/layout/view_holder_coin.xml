@@ -19,7 +19,7 @@
         android:clipChildren="true"
         android:paddingStart="8dp"
         android:paddingTop="8dp"
-        android:paddingEnd="10dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="10dp">
 
         <!-- first line -->
@@ -209,7 +209,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonsWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -220,14 +220,43 @@
         android:paddingBottom="8dp"
         android:visibility="visible">
 
+        <TextView
+            android:id="@+id/coinAmountLocked"
+            style="@style/Subhead2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:paddingBottom="12dp"
+            android:textColor="@color/grey"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0.000078 BTC" />
+
+        <TextView
+            android:id="@+id/fiatAmountLocked"
+            style="@style/Subhead1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:layout_marginEnd="4dp"
+            android:textColor="?ColorLeah"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingBottom="12dp"
+            tools:text="$52.50" />
+
         <Button
             android:id="@+id/buttonReceive"
             style="@style/ButtonPrimaryGreen"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/Balance_Deposit" />
+            android:text="@string/Balance_Deposit"
+            app:layout_constraintEnd_toStartOf="@+id/buttonPay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coinAmountLocked" />
 
         <Button
             android:id="@+id/buttonPay"
@@ -235,9 +264,11 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="4dp"
-            android:layout_weight="1"
+            app:layout_constraintStart_toEndOf="@id/buttonReceive"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coinAmountLocked"
             android:text="@string/Balance_Send" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

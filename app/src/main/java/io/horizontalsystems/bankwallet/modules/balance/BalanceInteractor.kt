@@ -47,6 +47,10 @@ class BalanceInteractor(
         return adapterManager.getBalanceAdapterForWallet(wallet)?.balance
     }
 
+    override fun balanceLocked(wallet: Wallet): BigDecimal? {
+        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceLocked
+    }
+
     override fun state(wallet: Wallet): AdapterState? {
         return adapterManager.getBalanceAdapterForWallet(wallet)?.state
     }
@@ -89,7 +93,7 @@ class BalanceInteractor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateBalance(wallet, adapter.balance)
+                        delegate?.didUpdateBalance(wallet, adapter.balance, adapter.balanceLocked)
                     }.let {
                         adapterDisposables.add(it)
                     }

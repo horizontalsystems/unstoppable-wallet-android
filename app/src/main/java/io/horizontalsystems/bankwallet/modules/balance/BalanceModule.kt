@@ -46,6 +46,7 @@ object BalanceModule {
         fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun chartInfo(coinCode: String, currencyCode: String): ChartInfo?
         fun balance(wallet: Wallet): BigDecimal?
+        fun balanceLocked(wallet: Wallet): BigDecimal?
         fun state(wallet: Wallet): AdapterState?
 
         fun subscribeToWallets()
@@ -66,7 +67,7 @@ object BalanceModule {
     interface IInteractorDelegate {
         fun didUpdateWallets(wallets: List<Wallet>)
         fun didPrepareAdapters()
-        fun didUpdateBalance(wallet: Wallet, balance: BigDecimal)
+        fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
 
         fun didUpdateCurrency(currency: Currency)
@@ -93,6 +94,18 @@ object BalanceModule {
 
     data class BalanceItem(val wallet: Wallet) {
         var balance: BigDecimal? = null
+        var balanceLocked: BigDecimal? = null
+        val balanceTotal: BigDecimal?
+            get() {
+                var result = balance ?: return null
+
+                balanceLocked?.let { balanceLocked ->
+                    result += balanceLocked
+                }
+
+                return result
+            }
+
         var state: AdapterState? = null
         var marketInfo: MarketInfo? = null
         var chartInfoState: ChartInfoState = ChartInfoState.Loading

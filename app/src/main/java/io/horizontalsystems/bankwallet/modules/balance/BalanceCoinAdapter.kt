@@ -168,6 +168,8 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         coinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         coinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
 
+        showLockedBalance(balanceViewItem)
+
         coinIcon.bind(balanceViewItem.coin)
         textCoinName.text = balanceViewItem.coin.title
 
@@ -200,6 +202,23 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
         showFiatAmount(balanceViewItem, syncing && !expanded)
         updateSecondLineItemsVisibility(expanded)
+    }
+
+    private fun showLockedBalance(balanceViewItem: BalanceViewItem) {
+        coinAmountLocked.visibility = View.GONE
+        fiatAmountLocked.visibility = View.GONE
+
+        if (balanceViewItem.coinValueLocked.value > BigDecimal.ZERO) {
+            coinAmountLocked.visibility = View.VISIBLE
+            coinAmountLocked.text = App.numberFormatter.format(balanceViewItem.coinValueLocked)
+
+            balanceViewItem.currencyValueLocked?.let {
+                fiatAmountLocked.visibility = View.VISIBLE
+
+                fiatAmountLocked.text = App.numberFormatter.format(it, trimmable = true)
+                fiatAmountLocked.alpha = if (!balanceViewItem.marketInfoExpired && balanceViewItem.state is AdapterState.Synced) 1f else 0.5f
+            }
+        }
     }
 
     fun bindPartial(balanceViewItem: BalanceViewItem, expanded: Boolean) {
