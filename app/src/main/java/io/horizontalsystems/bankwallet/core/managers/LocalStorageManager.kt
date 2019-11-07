@@ -33,6 +33,7 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     private val CHART_TYPE = "prev_chart_type"
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
+    private val LOCK_TIME_ENABLED = "lock_time_enabled"
 
     private val gson = Gson()
 
@@ -193,6 +194,12 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
         get() = App.preferences.getBoolean(ALERT_NOTIFICATION_ENABLED, true)
         set(enabled) {
             App.preferences.edit().putBoolean(ALERT_NOTIFICATION_ENABLED, enabled).apply()
+        }
+
+    override var isLockTimeEnabled: Boolean
+        get() = App.preferences.getBoolean(LOCK_TIME_ENABLED, false)
+        set(enabled) {
+            App.preferences.edit().putBoolean(LOCK_TIME_ENABLED, enabled).apply()
         }
 
     override fun clear() {

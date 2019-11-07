@@ -27,6 +27,7 @@ object MainSettingsModule {
         fun didTapReportProblem()
         fun didTapTellFriends()
         fun didTapNotifications()
+        fun didTapExperimentalFeatures()
     }
 
     interface IMainSettingsInteractor {
@@ -57,6 +58,7 @@ object MainSettingsModule {
         fun showReportProblem()
         fun showShareApp(appWebPageLink: String)
         fun showNotifications()
+        fun showExperimentalFeatures()
     }
 
     class Factory : ViewModelProvider.Factory {

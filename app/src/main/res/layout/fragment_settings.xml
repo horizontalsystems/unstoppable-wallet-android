@@ -67,7 +67,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
                 app:rightArrow="true"
                 app:imageDrawable="@drawable/ic_manage_coins"
-                app:title="@string/Settings_ManageCoins"
+                app:title="@string/Settings_ManageCoins"/>
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/experimentalFeatures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/manageCoins"
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_experimental"
+                app:title="@string/Settings_ExperimentalFeatures"
                 app:bottomBorder="true"/>
 
             <io.horizontalsystems.bankwallet.components.CellView
@@ -77,7 +88,7 @@
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageCoins"
+                app:layout_constraintTop_toBottomOf="@+id/experimentalFeatures"
                 app:rightArrow="true"
                 app:imageDrawable="@drawable/ic_notification"
                 app:title="@string/Settings_Notifications" />

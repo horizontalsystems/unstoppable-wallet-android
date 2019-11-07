@@ -56,6 +56,7 @@ interface ILocalStorage {
     var sortType: BalanceSortType
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
+    var isLockTimeEnabled: Boolean
 
     fun clear()
 }
