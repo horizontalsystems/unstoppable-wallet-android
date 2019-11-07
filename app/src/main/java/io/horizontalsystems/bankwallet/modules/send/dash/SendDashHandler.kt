@@ -45,7 +45,7 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
     override lateinit var addressModule: SendAddressModule.IAddressModule
     override lateinit var feeModule: SendFeeModule.IFeeModule
     override lateinit var memoModule: SendMemoModule.IMemoModule
-    override lateinit var hodlerModule: SendHodlerModule.IHodlerModule
+    override var hodlerModule: SendHodlerModule.IHodlerModule? = null
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
 

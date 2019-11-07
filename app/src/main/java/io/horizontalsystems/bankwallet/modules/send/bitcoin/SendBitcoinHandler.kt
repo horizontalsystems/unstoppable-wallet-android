@@ -28,11 +28,11 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     }
 
     private fun syncAvailableBalance() {
-        interactor.fetchAvailableBalance(feeModule.feeRate, addressModule.currentAddress, hodlerModule.pluginData())
+        interactor.fetchAvailableBalance(feeModule.feeRate, addressModule.currentAddress, hodlerModule?.pluginData())
     }
 
     private fun syncFee() {
-        interactor.fetchFee(amountModule.coinAmount.value, feeModule.feeRate, addressModule.currentAddress, hodlerModule.pluginData())
+        interactor.fetchFee(amountModule.coinAmount.value, feeModule.feeRate, addressModule.currentAddress, hodlerModule?.pluginData())
     }
 
     private fun syncMinimumAmount() {
@@ -46,16 +46,19 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     override lateinit var addressModule: SendAddressModule.IAddressModule
     override lateinit var feeModule: SendFeeModule.IFeeModule
     override lateinit var memoModule: SendMemoModule.IMemoModule
-    override lateinit var hodlerModule: SendHodlerModule.IHodlerModule
+    override var hodlerModule: SendHodlerModule.IHodlerModule? = null
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
 
-    override val inputItems: List<SendModule.Input> = listOf(
-            SendModule.Input.Amount,
-            SendModule.Input.Address,
-            SendModule.Input.Hodler,
-            SendModule.Input.Fee(true),
-            SendModule.Input.ProceedButton)
+    override val inputItems: List<SendModule.Input> =
+            mutableListOf<SendModule.Input>().apply {
+                add(SendModule.Input.Amount)
+                add(SendModule.Input.Address)
+                if (interactor.isLockTimeEnabled)
+                    add(SendModule.Input.Hodler)
+                add(SendModule.Input.Fee(true))
+                add(SendModule.Input.ProceedButton)
+            }
 
     override fun onModulesDidLoad() {
         syncAvailableBalance()
@@ -76,7 +79,7 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     }
 
     override fun sendSingle(): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, hodlerModule.pluginData())
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, hodlerModule?.pluginData())
     }
 
     // SendModule.ISendBitcoinInteractorDelegate

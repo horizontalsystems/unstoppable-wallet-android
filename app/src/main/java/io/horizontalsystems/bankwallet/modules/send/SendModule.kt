@@ -50,11 +50,13 @@ object SendModule {
     }
 
     interface ISendBitcoinInteractor {
-        fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>)
+        val isLockTimeEnabled: Boolean
+
+        fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
         fun fetchMinimumAmount(address: String?): BigDecimal
-        fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>)
+        fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>): Single<Unit>
+        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit>
         fun clear()
     }
 
@@ -125,7 +127,7 @@ object SendModule {
         var addressModule: SendAddressModule.IAddressModule
         var feeModule: SendFeeModule.IFeeModule
         var memoModule: SendMemoModule.IMemoModule
-        var hodlerModule: SendHodlerModule.IHodlerModule
+        var hodlerModule: SendHodlerModule.IHodlerModule?
 
         val inputItems: List<Input>
         var delegate: ISendHandlerDelegate
@@ -168,7 +170,7 @@ object SendModule {
 
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
-                    val bitcoinInteractor = SendBitcoinInteractor(adapter)
+                    val bitcoinInteractor = SendBitcoinInteractor(adapter, App.localStorage)
                     val handler = SendBitcoinHandler(bitcoinInteractor, router)
 
                     bitcoinInteractor.delegate = handler
