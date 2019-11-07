@@ -23,7 +23,7 @@ class BalancePresenter(
 
     var view: BalanceModule.IView? = null
 
-    private val executor = Executors.newCachedThreadPool()
+    private val executor = Executors.newSingleThreadExecutor()
 
     private var items = listOf<BalanceItem>()
     private var viewItems = mutableListOf<BalanceViewItem>()
@@ -103,71 +103,79 @@ class BalancePresenter(
 
     // IInteractorDelegate
 
-    @Synchronized
     override fun didUpdateWallets(wallets: List<Wallet>) {
-        handleUpdate(wallets)
+        executor.submit {
+            handleUpdate(wallets)
 
-        updateViewItems()
-        updateHeaderViewItem()
+            updateViewItems()
+            updateHeaderViewItem()
+        }
     }
 
-    @Synchronized
     override fun didPrepareAdapters() {
-        handleAdaptersReady()
+        executor.submit {
+            handleAdaptersReady()
 
-        updateViewItems()
-        updateHeaderViewItem()
+            updateViewItems()
+            updateHeaderViewItem()
+        }
     }
 
-    @Synchronized
     override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal) {
-        updateItem(wallet) { item ->
-            item.balance = balance
-        }
-
-        updateHeaderViewItem()
-    }
-
-    @Synchronized
-    override fun didUpdateState(wallet: Wallet, state: AdapterState) {
-        updateItem(wallet) { item ->
-            item.state = state
-        }
-
-        updateHeaderViewItem()
-    }
-
-    @Synchronized
-    override fun didUpdateCurrency(currency: Currency) {
-        this.currency = currency
-
-        handleRates()
-        handleStats()
-
-        updateViewItems()
-        updateHeaderViewItem()
-    }
-
-    @Synchronized
-    override fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>) {
-        items.forEachIndexed { index, item ->
-            marketInfo[item.wallet.coin.code]?.let {
-                item.marketInfo = it
-                viewItems[index] = factory.viewItem(item, currency)
+        executor.submit {
+            updateItem(wallet) { item ->
+                item.balance = balance
             }
+
+            updateHeaderViewItem()
         }
-        view?.set(viewItems)
-        updateHeaderViewItem()
     }
 
-    @Synchronized
+    override fun didUpdateState(wallet: Wallet, state: AdapterState) {
+        executor.submit {
+            updateItem(wallet) { item ->
+                item.state = state
+            }
+
+            updateHeaderViewItem()
+        }
+    }
+
+    override fun didUpdateCurrency(currency: Currency) {
+        executor.submit {
+            this.currency = currency
+
+            handleRates()
+            handleStats()
+
+            updateViewItems()
+            updateHeaderViewItem()
+        }
+    }
+
+    override fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>) {
+        executor.submit {
+            items.forEachIndexed { index, item ->
+                marketInfo[item.wallet.coin.code]?.let {
+                    item.marketInfo = it
+                    viewItems[index] = factory.viewItem(item, currency)
+                }
+            }
+            view?.set(viewItems)
+            updateHeaderViewItem()
+        }
+    }
+
     override fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String) {
-        updateChartInfo(ChartInfoState.Loaded(chartInfo), coinCode)
+        executor.submit {
+            updateChartInfo(ChartInfoState.Loaded(chartInfo), coinCode)
+        }
     }
 
-    @Synchronized
     override fun didFailChartInfo(coinCode: String) {
-        updateChartInfo(ChartInfoState.Failed, coinCode)
+        executor.submit {
+            updateChartInfo(ChartInfoState.Failed, coinCode)
+        }
     }
 
     override fun didRefresh() {
