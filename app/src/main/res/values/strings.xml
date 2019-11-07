@@ -173,7 +173,8 @@
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
-    <string name="Transactions_Processing">Processing</string>
+    <string name="Transactions_Receiving">Receiving</string>
+    <string name="Transactions_Sending">Sending</string>
     <string name="Transactions_Pending">Pending</string>
 
     <!--Transaction Info-->
