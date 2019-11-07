@@ -69,10 +69,10 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         kit.refresh()
     }
 
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>): Single<Unit> {
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit> {
         return Single.create { emitter ->
             try {
-                kit.send(address, (amount * satoshisInBitcoin).toLong(), feeRate = feeRate.toInt(), pluginData = pluginData)
+                kit.send(address, (amount * satoshisInBitcoin).toLong(), feeRate = feeRate.toInt(), pluginData = pluginData ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -80,18 +80,18 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         }
     }
 
-    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>): BigDecimal {
-        return BigDecimal.valueOf(kit.maximumSpendableValue(address, feeRate.toInt(), pluginData)).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
+        return BigDecimal.valueOf(kit.maximumSpendableValue(address, feeRate.toInt(), pluginData ?: mapOf())).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
     }
 
     fun minimumSendAmount(address: String?): BigDecimal {
         return BigDecimal.valueOf(kit.minimumSpendableValue(address).toLong()).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
     }
 
-    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>): BigDecimal {
+    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
-            val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate.toInt(), pluginData = pluginData)
+            val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate.toInt(), pluginData = pluginData ?: mapOf())
             BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO

@@ -271,11 +271,11 @@ interface IReceiveAdapter {
 }
 
 interface ISendBitcoinAdapter {
-    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>): BigDecimal
+    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun minimumSendAmount(address: String?): BigDecimal
-    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>): BigDecimal
+    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>): Single<Unit>
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit>
 }
 
 interface ISendDashAdapter {
