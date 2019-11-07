@@ -26,7 +26,7 @@ class TransactionStatusWithTimeView : ConstraintLayout {
         inflate(context, R.layout.view_transaction_status, this)
     }
 
-    fun bind(transactionStatus: TransactionStatus, time: String?) {
+    fun bind(transactionStatus: TransactionStatus, incoming: Boolean, time: String?) {
         txTime.visibility = View.GONE
         completedIcon.visibility = View.GONE
         transactionProgressView.visibility = View.GONE
@@ -39,7 +39,7 @@ class TransactionStatusWithTimeView : ConstraintLayout {
                 completedIcon.visibility = View.VISIBLE
             }
             is TransactionStatus.Processing -> {
-                transactionProgressView.bind(transactionStatus.progress)
+                transactionProgressView.bind(transactionStatus.progress, incoming)
                 transactionProgressView.visibility = View.VISIBLE
             }
             else -> {
