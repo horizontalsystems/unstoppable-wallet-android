@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
@@ -109,11 +108,10 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
 
     }
 
-    private fun getErrorText(error: Throwable): Int {
+    private fun getErrorText(error: Throwable): String {
         return when (error) {
-            is WrongParameters -> R.string.Error
-            is UnknownHostException -> R.string.Hud_Text_NoInternet
-            else -> R.string.Hud_Network_Issue
+            is UnknownHostException -> getString(R.string.Hud_Text_NoInternet)
+            else -> getString(R.string.Hud_UnknownError, error)
         }
     }
 
