@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.math.BigDecimal
@@ -42,6 +43,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
             CoinValue(feeCoin, transactionItem.record.fee)
         }
 
+        val lockInfo = TransactionLockInfo.from(record.to.firstOrNull()?.pluginData)
+
         return TransactionViewItem(
                 wallet,
                 record.transactionHash,
@@ -55,7 +58,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 incoming,
                 if (record.timestamp == 0L) null else Date(record.timestamp * 1000),
                 status,
-                rate
+                rate,
+                lockInfo
         )
     }
 
