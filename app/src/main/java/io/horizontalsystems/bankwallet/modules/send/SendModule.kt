@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.hodler.LockTimeInterval
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -148,7 +149,8 @@ object SendModule {
 
     data class SendConfirmationAmountViewItem(val primaryInfo: AmountInfo,
                                               val secondaryInfo: AmountInfo?,
-                                              val receiver: String) : SendConfirmationViewItem()
+                                              val receiver: String,
+                                              val locked: Boolean = false) : SendConfirmationViewItem()
 
     data class SendConfirmationFeeViewItem(val primaryInfo: AmountInfo,
                                            val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
@@ -159,6 +161,8 @@ object SendModule {
     data class SendConfirmationMemoViewItem(val memo: String?) : SendConfirmationViewItem()
 
     data class SendConfirmationDurationViewItem(val duration: Long?) : SendConfirmationViewItem()
+
+    data class SendConfirmationLockTimeViewItem(val lockTimeInterval: LockTimeInterval) : SendConfirmationViewItem()
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
 

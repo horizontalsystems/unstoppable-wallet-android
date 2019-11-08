@@ -90,5 +90,31 @@
                 android:textColor="@color/grey"
                 tools:text="Instant" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lockTimeWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Send_Confirmation_LockTime"
+                android:textColor="@color/grey" />
+
+            <TextView
+                android:id="@+id/textLockTime"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                tools:text="1 hour" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

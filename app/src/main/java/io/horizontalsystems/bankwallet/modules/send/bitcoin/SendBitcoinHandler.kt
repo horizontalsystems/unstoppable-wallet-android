@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
+import io.horizontalsystems.hodler.HodlerData
+import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -78,12 +80,25 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     }
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
-        return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
-                                                          amountModule.secondaryAmountInfo(),
-                                                          addressModule.validAddress()),
-                SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
-                SendModule.SendConfirmationDurationViewItem(feeModule.duration))
+        val hodlerData = hodlerModule?.pluginData()?.get(HodlerPlugin.id) as? HodlerData
+        val lockTimeInterval = hodlerData?.lockTimeInterval
+
+        return mutableListOf<SendModule.SendConfirmationViewItem>().apply {
+            add(SendModule.SendConfirmationAmountViewItem(
+                    amountModule.primaryAmountInfo(),
+                    amountModule.secondaryAmountInfo(),
+                    addressModule.validAddress(),
+                    lockTimeInterval != null))
+
+            add(SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
+
+            add(SendModule.SendConfirmationDurationViewItem(feeModule.duration))
+
+            lockTimeInterval?.let {
+                add(SendModule.SendConfirmationLockTimeViewItem(it))
+            }
+        }
+
     }
 
     override fun sendSingle(): Single<Unit> {

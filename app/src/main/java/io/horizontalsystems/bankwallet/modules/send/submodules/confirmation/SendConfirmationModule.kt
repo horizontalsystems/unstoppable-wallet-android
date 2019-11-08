@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.hodler.LockTimeInterval
 
 object SendConfirmationModule {
 
@@ -40,11 +41,13 @@ object SendConfirmationModule {
             val secondaryName: String?,
             val secondaryAmount: String?,
             val receiver: String,
-            val memo: String?)
+            val memo: String?,
+            val locked: Boolean)
 
     data class SecondaryItemData(
             val feeAmount: String?,
-            val estimatedTime: Long?)
+            val estimatedTime: Long?,
+            val lockTimeInterval: LockTimeInterval?)
 
 
     class Factory() : ViewModelProvider.Factory {
