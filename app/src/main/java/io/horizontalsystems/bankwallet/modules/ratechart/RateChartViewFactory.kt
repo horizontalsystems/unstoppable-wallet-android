@@ -26,6 +26,7 @@ data class MarketInfoViewItem(
         val marketCap: CurrencyValue,
         val volume: CurrencyValue,
         val supply: CoinValue,
+        val maxSupply: CoinValue?,
         val timestamp: Long
 )
 
@@ -69,6 +70,7 @@ class RateChartViewFactory {
                 CurrencyValue(currency, marketInfo.marketCap.toBigDecimal()),
                 CurrencyValue(currency, marketInfo.volume.toBigDecimal()),
                 CoinValue(coin, marketInfo.supply.toBigDecimal()),
+                MaxSupplyMap.maxSupplies[coin.code]?.let { CoinValue(coin, it) },
                 marketInfo.timestamp
         )
     }

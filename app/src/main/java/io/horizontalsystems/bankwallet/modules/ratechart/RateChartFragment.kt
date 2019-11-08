@@ -91,6 +91,12 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
             circulationValue.text = formatter.format(item.supply, trimmable = true)
 
+            totalSupplyValue.text = item.maxSupply?.let {
+                formatter.format(it, trimmable = true)
+            } ?: run {
+                getString(R.string.NotAvailable)
+            }
+
             setViewVisibility(highLowWrap, isVisible = true)
         })
 

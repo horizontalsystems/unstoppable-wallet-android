@@ -261,7 +261,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="horizontal"
             android:paddingTop="8dp">
 
@@ -269,7 +268,7 @@
                 android:id="@+id/volumeTitle"
                 style="@font/noto_sans_regular"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/Charts_Volume24"
                 android:textColor="@color/grey"
@@ -278,7 +277,7 @@
             <TextView
                 android:id="@+id/volumeValue"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/noto_sans_regular"
                 android:textAlignment="textEnd"
@@ -291,7 +290,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="horizontal"
             android:paddingTop="8dp">
 
@@ -299,7 +297,7 @@
                 android:id="@+id/coinMarketCapTitle"
                 style="@font/noto_sans_regular"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/Charts_MarketCap"
                 android:textColor="@color/grey"
@@ -308,7 +306,7 @@
             <TextView
                 android:id="@+id/coinMarketCap"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/noto_sans_regular"
                 android:textAlignment="textEnd"
@@ -321,7 +319,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="horizontal"
             android:paddingTop="8dp">
 
@@ -329,7 +326,7 @@
                 android:id="@+id/circulationTitle"
                 style="@font/noto_sans_regular"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/Charts_inCirculation"
                 android:textColor="@color/grey"
@@ -338,7 +335,7 @@
             <TextView
                 android:id="@+id/circulationValue"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/noto_sans_regular"
                 android:textAlignment="textEnd"
@@ -348,10 +345,39 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/totalSupplyTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Charts_TotalSupply"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/totalSupplyValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                tools:text="100M BTC" />
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/sourceValue"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_regular"
             android:paddingTop="8dp"
             android:text="@string/Charts_CryptoCompare"
