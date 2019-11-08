@@ -43,7 +43,7 @@ class WalletStorage(
         val enabledWallets = mutableListOf<EnabledWallet>()
 
         wallets.forEachIndexed { index, wallet ->
-            enabledWallets.add(EnabledWallet(wallet.coin.code, wallet.account.id, index, wallet.syncMode))
+            enabledWallets.add(EnabledWallet(wallet.coin.coinId, wallet.account.id, index, wallet.syncMode))
         }
 
         storage.save(enabledWallets)
