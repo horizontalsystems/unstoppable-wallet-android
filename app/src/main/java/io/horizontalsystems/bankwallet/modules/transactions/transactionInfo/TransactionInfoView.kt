@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.info.InfoModule
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -55,6 +56,13 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             }
         })
 
+        viewModel.showLockInfo.observe(lifecycleOwner, Observer { lockDate ->
+            val title = context.getString(R.string.Info_LockTime_Title)
+            val description = context.getString(R.string.Info_LockTime_Description, DateHelper.formatDate(lockDate, "MMM dd, yyyy"))
+
+            InfoModule.start(context, InfoModule.InfoParameters(title, description))
+        })
+
         viewModel.transactionLiveData.observe(lifecycleOwner, Observer { txRecord ->
             txRecord?.let { txRec ->
 
@@ -87,6 +95,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 if (txRec.lockInfo != null) {
                     itemLockTime.visibility = View.VISIBLE
                     itemLockTime.bindInfo(context.getString(R.string.TransactionInfo_LockTime), DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy"))
+                    itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
                 } else {
                     itemLockTime.visibility = View.GONE
                 }

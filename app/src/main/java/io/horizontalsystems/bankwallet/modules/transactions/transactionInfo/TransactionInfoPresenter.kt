@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import io.horizontalsystems.bankwallet.entities.Wallet
+import java.util.*
 
 class TransactionInfoPresenter(
         private val interactor: TransactionInfoModule.Interactor,
@@ -18,6 +19,10 @@ class TransactionInfoPresenter(
 
     override fun openFullInfo(transactionHash: String, wallet: Wallet) {
         router.openFullInfo(transactionHash, wallet)
+    }
+
+    override fun onClickLockInfo(lockDate: Date) {
+        router.openLockInfo(lockDate)
     }
 
 }

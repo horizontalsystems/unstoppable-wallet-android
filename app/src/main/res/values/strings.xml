@@ -195,6 +195,11 @@
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
 
+    <!-- Info -->
+
+    <string name="Info_LockTime_Title">Lock Time</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
+
     <!--Full Info-->
 
     <string name="FullInfo_Title">Transaction</string>
