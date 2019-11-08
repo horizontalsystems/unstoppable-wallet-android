@@ -52,4 +52,10 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
             delegate.onCopy(it)
         }
     }
+
+    fun onClickRecipientHash() {
+        transactionLiveData.value?.lockInfo?.originalAddress?.let {
+            delegate.onCopy(it)
+        }
+    }
 }

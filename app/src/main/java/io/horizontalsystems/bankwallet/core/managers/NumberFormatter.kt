@@ -98,7 +98,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     }
 
     override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
-        val spannable = SpannableString(format(currencyValue, showNegativeSign = true, trimmable = true, canUseLessSymbol = true))
+        val spannable = SpannableString(format(currencyValue, showNegativeSign = false, trimmable = true, canUseLessSymbol = true))
 
         //  set color
         val amountTextColor = if (isIncoming) R.color.green_d else R.color.yellow_d
