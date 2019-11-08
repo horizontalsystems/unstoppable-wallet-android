@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import java.util.*
 
 class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, TransactionInfoModule.Router {
 
@@ -12,17 +13,26 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     val transactionLiveData = SingleLiveEvent<TransactionViewItem>()
     val showFullInfoLiveEvent = SingleLiveEvent<Pair<String, Wallet>>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
+    val showLockInfo = SingleLiveEvent<Date>()
 
     fun init() {
         TransactionInfoModule.init(this, this)
     }
 
+    // IView
+
     override fun showCopied() {
         showCopiedLiveEvent.call()
     }
 
+    // IRouter
+
     override fun openFullInfo(transactionHash: String, wallet: Wallet) {
         showFullInfoLiveEvent.value = Pair(transactionHash, wallet)
+    }
+
+    override fun openLockInfo(lockDate: Date) {
+        showLockInfo.postValue(lockDate)
     }
 
     fun setViewItem(transactionViewItem: TransactionViewItem) {
@@ -58,4 +68,11 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
             delegate.onCopy(it)
         }
     }
+
+    fun onClickLockInfo() {
+        transactionLiveData.value?.lockInfo?.lockedUntil?.let {
+            delegate.onClickLockInfo(it)
+        }
+    }
+
 }
