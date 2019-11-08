@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
+import io.horizontalsystems.hodler.HodlerPlugin
 import kotlinx.android.synthetic.main.view_address_input.*
 
 class SendAddressFragment(
@@ -51,12 +52,15 @@ class SendAddressFragment(
         })
 
         presenterView.error.observe(viewLifecycleOwner, Observer { error ->
-            error?.let {
-                val errorText = context?.getString(R.string.Send_Error_IncorrectAddress)
-                txtAddressError.visibility = View.VISIBLE
-                txtAddressError.text = errorText
-            } ?: run {
-                txtAddressError.visibility = View.GONE
+            when (error) {
+                null -> txtAddressError.visibility = View.GONE
+                else -> {
+                    txtAddressError.text = when (error) {
+                        is HodlerPlugin.UnsupportedAddressType -> getString(R.string.Send_Error_UnsupportedAddress)
+                        else -> getString(R.string.Send_Error_IncorrectAddress)
+                    }
+                    txtAddressError.visibility = View.VISIBLE
+                }
             }
         })
 

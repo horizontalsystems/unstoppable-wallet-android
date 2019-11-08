@@ -122,6 +122,7 @@
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
