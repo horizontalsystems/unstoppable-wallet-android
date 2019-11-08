@@ -56,6 +56,7 @@ class AdapterManager(
         binanceKitManager.binanceKit?.refresh()
     }
 
+    @Synchronized
     private fun initAdapters(wallets: List<Wallet>) {
         val disabledWallets = adaptersMap.keys.subtract(wallets)
 
