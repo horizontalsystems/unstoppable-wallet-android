@@ -115,7 +115,7 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     // SendAddressModule.ModuleDelegate
 
     override fun validate(address: String) {
-        interactor.validate(address)
+        interactor.validate(address, hodlerModule?.pluginData())
     }
 
     override fun onUpdateAddress() {
@@ -140,6 +140,7 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     }
 
     override fun onUpdateLockTimeInterval(timeInterval: LockTimeInterval?) {
+        syncValidation()
         syncAvailableBalance()
         syncFee()
         syncMaximumAmount()

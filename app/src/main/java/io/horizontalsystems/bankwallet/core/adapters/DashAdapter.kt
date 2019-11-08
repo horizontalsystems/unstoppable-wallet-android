@@ -109,6 +109,10 @@ class DashAdapter(override val kit: DashKit) :
         return fee(amount, feeRate, address, mapOf())
     }
 
+    override fun validate(address: String) {
+        validate(address, mapOf())
+    }
+
     override fun send(amount: BigDecimal, address: String): Single<Unit> {
         return send(amount, address, feeRate, mapOf())
     }
