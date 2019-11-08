@@ -9,14 +9,30 @@ class SendAddressPresenter(val view: SendAddressModule.IView,
 
     var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
 
-    override var currentAddress: String? = null
-        private set(value) {
-            field = value
-            moduleDelegate?.onUpdateAddress()
+    private var enteredAddress: String? = null
+
+    override val currentAddress: String?
+        get() = try {
+            validAddress()
+        } catch (e: Exception) {
+            null
         }
 
     override fun validAddress(): String {
-        return currentAddress ?: throw SendAddressModule.ValidationError.InvalidAddress()
+        val address = enteredAddress ?: throw SendAddressModule.ValidationError.InvalidAddress()
+
+        try {
+            moduleDelegate?.validate(address)
+
+            view.setAddress(address)
+            view.setAddressError(null)
+        } catch (e: Exception) {
+            view.setAddress(address)
+            view.setAddressError(e)
+            throw e
+        }
+
+        return address
     }
 
     override fun didScanQrCode(address: String) {
@@ -40,31 +56,29 @@ class SendAddressPresenter(val view: SendAddressModule.IView,
     }
 
     override fun onAddressDeleteClicked() {
-        updateAddress(null)
+        view.setAddress(null)
+        view.setAddressError(null)
+
+        enteredAddress = null
+        moduleDelegate?.onUpdateAddress()
         updatePasteButtonState()
     }
 
     private fun onAddressEnter(address: String) {
         val (parsedAddress, amount) = interactor.parseAddress(address)
 
+        enteredAddress = parsedAddress
+
         try {
-            moduleDelegate?.validate(parsedAddress)
-
-            updateAddress(parsedAddress, null)
-
-            amount?.let { parsedAmount ->
-                moduleDelegate?.onUpdateAmount(parsedAmount)
-            }
-        } catch (ex: Exception) {
-            updateAddress(parsedAddress, ex)
+            validAddress()
+        } catch (e: Exception) {
         }
-    }
 
-    private fun updateAddress(address: String?, error: Exception? = null) {
-        view.setAddress(address)
-        view.setAddressError(error)
+        moduleDelegate?.onUpdateAddress()
 
-        this.currentAddress = if (error == null) address else null
+        amount?.let { parsedAmount ->
+            moduleDelegate?.onUpdateAmount(parsedAmount)
+        }
     }
 
     private fun updatePasteButtonState() {
