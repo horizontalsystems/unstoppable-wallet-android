@@ -57,7 +57,7 @@ object SendModule {
         fun fetchMinimumAmount(address: String?): BigDecimal
         fun fetchMaximumAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
         fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
-        fun validate(address: String)
+        fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
         fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit>
         fun clear()
     }

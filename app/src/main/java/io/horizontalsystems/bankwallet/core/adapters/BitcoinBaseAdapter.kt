@@ -84,7 +84,11 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     }
 
     fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
-        return BigDecimal.valueOf(kit.maximumSpendableValue(address, feeRate.toInt(), pluginData ?: mapOf())).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+        return try {
+            BigDecimal.valueOf(kit.maximumSpendableValue(address, feeRate.toInt(), pluginData ?: mapOf())).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+        } catch (e: Exception) {
+            BigDecimal.ZERO
+        }
     }
 
     fun minimumSendAmount(address: String?): BigDecimal {
@@ -107,8 +111,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         }
     }
 
-    fun validate(address: String) {
-        kit.validateAddress(address)
+    fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
+        kit.validateAddress(address, pluginData ?: mapOf())
     }
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
