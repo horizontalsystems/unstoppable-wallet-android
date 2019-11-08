@@ -39,11 +39,12 @@ object MaxSupplyMap {
             "NEXO" to BigDecimal(1_000_000_000),
             "ORBS" to BigDecimal(10_000_000_000),
             "PAXG" to BigDecimal(2_410),
+            "PPT" to BigDecimal(53_252_246),
             "PTI" to BigDecimal(3_600_000_000),
             "POLY" to BigDecimal(1_000_000_000),
             "PGL" to BigDecimal(220_000_000),
             "NPXS" to BigDecimal(259_810_708_833),
-            "R" to BigDecimal(484_450_000),
+            "R" to BigDecimal(1_000_000_000),
             "SNT" to BigDecimal(6_804_870_174),
             "WTC" to BigDecimal(70_000_000),
             "ZIL" to BigDecimal(21_000_000_000)
