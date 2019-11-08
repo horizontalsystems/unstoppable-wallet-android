@@ -469,7 +469,8 @@
     <string name="Charts_MarketCap">Mkt. Cap</string>
     <string name="Charts_Volume24">Volume (24 hours)</string>
     <string name="Charts_inCirculation">in Circulation</string>
-    <string name="Charts_CryptoCompare">@CryptoCompare.com</string>
+    <string name="Charts_TotalSupply">Total</string>
+    <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
