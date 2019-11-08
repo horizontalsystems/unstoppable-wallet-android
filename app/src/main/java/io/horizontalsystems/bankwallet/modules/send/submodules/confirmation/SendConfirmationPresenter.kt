@@ -6,10 +6,11 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationA
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationDurationViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationFeeViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationMemoViewItem
+import io.horizontalsystems.hodler.LockTimeInterval
 
 class SendConfirmationPresenter(
         val view: SendConfirmationModule.IView,
-        private val interactor: SendConfirmationModule.IInteractor )
+        private val interactor: SendConfirmationModule.IInteractor)
     : ViewModel(), SendConfirmationModule.IViewDelegate, SendConfirmationModule.IInteractorDelegate {
 
     private var receiver = ""
@@ -24,6 +25,7 @@ class SendConfirmationPresenter(
         var secondaryFeeAmount: String? = null
         var memo: String? = null
         var duration: Long? = null
+        var lockTimeInterval: LockTimeInterval? = null
 
         confirmationViewItems?.forEach { item ->
             when (item) {
@@ -44,6 +46,9 @@ class SendConfirmationPresenter(
                 is SendConfirmationDurationViewItem -> {
                     duration = item.duration
                 }
+                is SendModule.SendConfirmationLockTimeViewItem -> {
+                    lockTimeInterval = item.lockTimeInterval
+                }
             }
         }
 
@@ -53,7 +58,8 @@ class SendConfirmationPresenter(
                 secondaryName = secondaryName,
                 secondaryAmount = secondaryAmount,
                 receiver = receiver,
-                memo = memo
+                memo = memo,
+                locked = lockTimeInterval != null
         )
 
         view.loadPrimaryItems(primaryViewItem)
@@ -63,7 +69,8 @@ class SendConfirmationPresenter(
                     "$primaryFeeAmount${secondaryFeeAmount?.let { secondaryFeeAmount -> " | $secondaryFeeAmount" }
                             ?: ""}"
                 },
-                estimatedTime = duration
+                estimatedTime = duration,
+                lockTimeInterval = lockTimeInterval
         )
 
         view.loadSecondaryItems(secondaryViewItem)

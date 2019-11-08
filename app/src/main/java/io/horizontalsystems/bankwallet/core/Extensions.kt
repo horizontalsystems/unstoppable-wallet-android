@@ -6,7 +6,9 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.view.SingleClickListener
+import io.horizontalsystems.hodler.LockTimeInterval
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -91,4 +93,14 @@ fun ByteArray.toHexString(): String {
 // Intent & Parcelable Enum
 fun Intent.putParcelableExtra(key: String, value: Parcelable) {
     putExtra(key, value)
+}
+
+fun LockTimeInterval?.stringResId(): Int {
+    return when (this) {
+        LockTimeInterval.hour -> R.string.Send_LockTime_Hour
+        LockTimeInterval.month -> R.string.Send_LockTime_Month
+        LockTimeInterval.halfYear -> R.string.Send_LockTime_HalfYear
+        LockTimeInterval.year -> R.string.Send_LockTime_Year
+        null -> R.string.Send_LockTime_Off
+    }
 }

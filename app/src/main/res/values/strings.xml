@@ -113,6 +113,7 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
+    <string name="Send_Confirmation_LockTime">Lock Time:</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
