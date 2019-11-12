@@ -230,6 +230,7 @@ class SendAmountPresenter(
 
     private fun validate() {
         val amount = this.amount ?: return
+        if (amount <= BigDecimal.ZERO) return
 
         minimumAmount?.let {
             if (amount < it) throw TooFewAmount(amountInfo(it))
