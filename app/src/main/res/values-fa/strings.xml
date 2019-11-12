@@ -20,13 +20,16 @@
     <string name="Wallet">%s کیف پول</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">کیف پول جدید</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
     <!--Create-->
-    <string name="Create_Title">کیف پول جدید</string>
+    <string name="Create_Title">Create Wallet</string>
     <string name="Create_Description">برای شروع ، یک ارز رمزگذاری شده انتخاب کنید. بعداً می توانید ارزهای رمزنگاری شده دیگری را اضافه کنید.</string>
     <!--Restore-->
     <string name="Restore_Title">بازگرداني</string>
+    <string name="Restore_Enter_Key_Title">Enter Key</string>
+    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Description">برای بازیابی کیف پول موجود، باید یک کلید خصوصی برای آن کیف پول وارد کنید.\n\nپس از بازیابی یک کیف پول، می توانید با رفتن به بخش مدیریت کلیدها در تنظیمات برنامه، کیف پول های بیشتری را بازیابی کنید.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
@@ -52,8 +55,6 @@
     <string name="Backup_Button_Next">بعدي</string>
     <string name="Backup_Button_Submit">ثبت</string>
     <string name="Backup_Button_ShowKey">نمایش کلید</string>
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">کلید مخفی</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">کلید خصوصی</string>
@@ -65,8 +66,9 @@
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
     <string name="Balance_SyncedUntil">تا:٪؜</string>
     <string name="Balance_Syncing">درحال همگام‌سازی…</string>
+    <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
-    <string name="Balance_Sort_Balance">ارزش</string>
+    <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
@@ -84,14 +86,20 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">جمع کل:</string>
     <string name="Send_Confirmation_EstimateTime">برآورد زمان:</string>
+    <string name="Send_Confirmation_LockTime">Lock Time:</string>
     <string name="Send_Confirmation_Send_Button">ارسال</string>
     <string name="Send_ScanQrCode">اسكن كنيد Qr را</string>
     <string name="Send_Success">\u2713 ارسال شد</string>
     <string name="Send_Error_InvalidAddress">ادرس كي وارد كرديد غلط است دوباره چك نماييد ادرس تان را!</string>
     <string name="Send_Error_InsufficientBalance">بودجه شما كافي نيست.</string>
     <string name="Send_Error_IncorrectAddress">آدرس اشتباه است</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
     <string name="Send_Error_BalanceAmount">مانده حساب %s</string>
+    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
+    <string name="Send_Error_MaximumAmount">Max. amount %s</string>
+    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
     <string name="Send_DialogTitle">تاييد</string>
+    <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">سرعت تراکنش:</string>
     <string name="Send_TxSpeed_Low">پایین</string>
     <string name="Send_TxSpeed_Medium">متوسط</string>
@@ -101,6 +109,12 @@
     <string name="Send_DialogTotal">مجموع:</string>
     <string name="Send_DialogMemoHint">یادداشت</string>
     <string name="Send_DialogProceed">پردازش</string>
+    <string name="Send_DialogLockTime">Lock Time</string>
+    <string name="Send_LockTime_Off">Off</string>
+    <string name="Send_LockTime_Hour">1 hour</string>
+    <string name="Send_LockTime_Month">1 month</string>
+    <string name="Send_LockTime_HalfYear">6 months</string>
+    <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">در حال ارسال</string>
     <string name="Send_ERC_Alert">پرداخت هزینه های معامله برای %s (ERC20) در Ethereum. شما نیاز به %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
@@ -109,9 +123,6 @@
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
     <string name="Deposit_Your_Address">آدرس شما</string>
     <string name="Deposit_Your_Account">حساب کاربری شما</string>
-    <string name="Receive_Alert_NotBackedUp_Title">تهیه نسخه پشتیبان لازم است</string>
-    <string name="Receive_Alert_NotBackedUp_Button">پيشتيباني</string>
-    <string name="Receive_Alert_NotBackedUp_Description">قبل از دریافت بودجه %2$s، باید از کیف پول%1$s نسخه پشتیبان تهیه کنید.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
     <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
@@ -127,6 +138,9 @@
     <string name="Transactions_Title">معاملات</string>
     <string name="Transactions_FilterAll">همه</string>
     <string name="Transactions_EmptyList">شما معاملات نداشته ايد تا هنوز</string>
+    <string name="Transactions_Receiving">Receiving</string>
+    <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Pending">Pending</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
     <string name="TransactionInfo_Status">وضيعت</string>
@@ -137,9 +151,14 @@
     <string name="TransactionInfo_Time">زمان</string>
     <string name="TransactionInfo_ButtonVerify">تامين كنيد</string>
     <string name="TransactionInfo_Status_Pending">در حالت انتظار</string>
+    <string name="TransactionInfo_LockTime">Time Lock</string>
+    <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">چارت هاي تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
     <string name="TransactionInfo_FootNote">ارزش این تراکنش به عنوان 0 ظاهر می شود زیرا به آدرس شخصی شما ارسال شده بود</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Title">Time Lock</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
     <!--Full Info-->
     <string name="FullInfo_Title">معاملات</string>
     <string name="FullInfo_Time">زمان</string>
@@ -185,6 +204,7 @@
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
     <string name="Settings_ManageCoins">مدیریت سکه ها</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">بازیابی كيف پول</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
@@ -224,6 +244,7 @@
     <string name="SettingsReport_Title">گزارش مشکل</string>
     <string name="SettingsReport_Email">ايميل</string>
     <string name="SettingsReport_Telegram">تلگرام</string>
+    <string name="SettingsReport_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">اطلاعیه ها</string>
     <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت را برای سکه هایی که می خواهید تماشا کنید تنظیم کنید.\n\nوقتی تغییر قیمت برای ۲۴ ساعت گذشته بیش از آستانه انتخاب شده باشد ، به شما هشدار داده می شود.</string>
@@ -231,6 +252,7 @@
     <string name="SettingsNotifications_TurnOn">روشن کردن در تنظیمات</string>
     <string name="SettingsNotifications_Off">خاموش</string>
     <string name="SettingsNotifications_DeactivateAll">غیر فعال کردن همه</string>
+    <string name="SettingsNotifications_PushNotification">Push Notification</string>
     <string name="Notification_Notifications">اطلاعیه ها%s</string>
     <string name="Notification_Up">بالا</string>
     <string name="Notification_Down">پایین</string>
@@ -256,6 +278,7 @@
     <string name="Hud_Text_Copied">کپی انجام شد</string>
     <string name="Hud_Text_InvalidPinError">رمز عبور غلط ميباشد</string>
     <string name="Hud_Network_Issue">مشكل انترنت. لطفاً چند دقيقه بعد كوشش كنيد</string>
+    <string name="Hud_UnknownError">Unknown Error %s</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>
@@ -287,6 +310,14 @@
     <string name="ManageCoins_AddCoin_Title">اضافه کردن کیف پول</string>
     <string name="ManageCoins_AddCoin_Text">این عملکرد یک کیف پول جدید برای سکه های زیر تولید می کند:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">در این مرحله ، کیف پول قادر به ایجاد حساب های کیف پول جدید EOS نیست. شما فقط قادر به بازیابی کیف پول موجود هستید.</string>
+    <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Experimental</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+    <!-- Bitcoin Hodling -->
+    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
+    <string name="BitcoinHodling_LockTime">Time Lock</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
     <string name="ManageKeys_Description">موارد هایلایت شده زیر کیف های پول فعال شما هستند که در آن هر کیف پول مسئول مجموعه های مختلف ارزهای رمزگذاری شده است.\n\nبا تهیه نسخه پشتیبان از کلید خصوصی آن کیف پول باید از هر کیف پول هایلایت شده نسخه پشتیبان تهیه کنید. در صورت گم شدن ، دزدیده شدن ، خراب شدن و غیره ، این کلید تنها راه برای بازگرداندن وجه شما است.</string>
@@ -321,8 +352,8 @@
     <string name="CoinOption_MorePrivate">&#8211;۱۲ ساعت (خصوصی تر)</string>
     <string name="CoinOption_Slow_Text">آهسته: معاملات گذشته خود را مستقیماً از زنجیره بلوکی بازیابی کنید. خصوصی تر اما بسیار کند می باشد. اگر مدت زمان طولانی طول کشید ، به مدیریت کیف های پول در تنظیمات بروید ، ورودی غیرقابل توقف را حذف کنید و پروسه را با گزینه سریع تکرار کنید.</string>
     <string name="CoinOption_TimePeriod">وقتی برای اولین بار کیف پول را در غیرقابل توقف ایجاد کردید ، مدت زمان را انتخاب کنید.</string>
-    <string name="CoinOption_BeforeOctober">قبل از اکتبر ۲۰۱۹</string>
-    <string name="CoinOption_AfterOctober">بعد از اکتبر ۲۰۱۹</string>
+    <string name="CoinOption_BeforeNovember">Before November 2019</string>
+    <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
@@ -336,10 +367,15 @@
     <string name="Charts_Rate_High">بالا</string>
     <string name="Charts_Rate_Low">پایین</string>
     <string name="Charts_MarketCap">Mkt. ظرفیت</string>
+    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_inCirculation">in Circulation</string>
+    <string name="Charts_TotalSupply">Total</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">درجه صدا</string>
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
+    <!--Rate list-->
+    <string name="RateList_updated">updated\n%s</string>
 </resources>
