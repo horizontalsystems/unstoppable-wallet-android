@@ -20,13 +20,16 @@
     <string name="Wallet">%s wallet</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">Wallet Erstellen</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Create-->
-    <string name="Create_Title">Wallet Erstellen</string>
+    <string name="Create_Title">Create Wallet</string>
     <string name="Create_Description">Wählen Sie eine Kryptowährung. Sie können später weitere Kryptowährungen hinzufügen.</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
+    <string name="Restore_Enter_Key_Title">Enter Key</string>
+    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Description">Um ein bestehendes Wallet wiederherzustellen, müssen Sie einen geheimen Schlüssel für das Wallet eingeben. \n\nSobald Sie ein Wallet wiederhergestellt haben, können Sie andere Wallete über den Abschnitt Wallet Manager in den Sicherheitseinstellungen der App wiederherstellen.</string>
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
@@ -52,8 +55,6 @@
     <string name="Backup_Button_Next">Weiter</string>
     <string name="Backup_Button_Submit">Abschicken</string>
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">Offlineschlüssel</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Privater Schlüssel</string>
@@ -65,8 +66,9 @@
     <string name="Balance_RatePerCoin">%s pro %s</string>
     <string name="Balance_SyncedUntil">bis: %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
+    <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Coins hinzufügen</string>
-    <string name="Balance_Sort_Balance">Wert</string>
+    <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Preis (%)</string>
@@ -84,14 +86,20 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Insgesamt:</string>
     <string name="Send_Confirmation_EstimateTime">Geschätzte Zeit:</string>
+    <string name="Send_Confirmation_LockTime">Lock Time:</string>
     <string name="Send_Confirmation_Send_Button">Senden</string>
     <string name="Send_ScanQrCode">QR-Code Scannen</string>
     <string name="Send_Success">\u2713 Gesendet</string>
     <string name="Send_Error_InvalidAddress">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
     <string name="Send_Error_InsufficientBalance">Nicht genug Geldmittel.</string>
     <string name="Send_Error_IncorrectAddress">Falscher Adresse</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
     <string name="Send_Error_BalanceAmount">Guthaben %s</string>
+    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
+    <string name="Send_Error_MaximumAmount">Max. amount %s</string>
+    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
     <string name="Send_DialogTitle">Bestätigen</string>
+    <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaktionsgeschwindigkeit:</string>
     <string name="Send_TxSpeed_Low">Niedrig</string>
     <string name="Send_TxSpeed_Medium">Mittel</string>
@@ -101,6 +109,12 @@
     <string name="Send_DialogTotal">Insgesamt:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Fortfahren</string>
+    <string name="Send_DialogLockTime">Lock Time</string>
+    <string name="Send_LockTime_Off">Off</string>
+    <string name="Send_LockTime_Hour">1 hour</string>
+    <string name="Send_LockTime_Month">1 month</string>
+    <string name="Send_LockTime_HalfYear">6 months</string>
+    <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">Wird gesendet</string>
     <string name="Send_ERC_Alert">Transaktionsgebühren für %s (ERC20) in Ethereum bezahlt. Du brauchst %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
@@ -109,9 +123,6 @@
     <string name="Deposit_Share">Teilen</string>
     <string name="Deposit_Your_Address">Deine Adresse</string>
     <string name="Deposit_Your_Account">Dein Konto</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup erforderlich</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Sicherung</string>
-    <string name="Receive_Alert_NotBackedUp_Description">Sie müssen das %1$s Wallet sichern, bevor Sie %2$s erhalten können.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
     <string name="Timestamp_MinAgo">Vor %d Min</string>
@@ -127,6 +138,9 @@
     <string name="Transactions_Title">Transaktionen</string>
     <string name="Transactions_FilterAll">ALLE</string>
     <string name="Transactions_EmptyList">Transaktionsliste ist leer</string>
+    <string name="Transactions_Receiving">Receiving</string>
+    <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Pending">Pending</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktion</string>
     <string name="TransactionInfo_Status">Status</string>
@@ -137,9 +151,14 @@
     <string name="TransactionInfo_Time">Zeit</string>
     <string name="TransactionInfo_ButtonVerify">Prüfen</string>
     <string name="TransactionInfo_Status_Pending">Anstehend</string>
+    <string name="TransactionInfo_LockTime">Time Lock</string>
+    <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historischer Rate</string>
     <string name="TransactionInfo_Fee">Gebühr</string>
     <string name="TransactionInfo_FootNote">Der Wert dieser Transaktion ist gleich 0, da die Transaktion an Ihre eigene Adresse gesendet wurde</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Title">Time Lock</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaktion</string>
     <string name="FullInfo_Time">Zeit</string>
@@ -185,6 +204,7 @@
     <string name="Settings_SecurityCenter">Sicherheit</string>
     <string name="Settings_Notifications">Benachrichtigungen</string>
     <string name="Settings_ManageCoins">Coins Verwalten</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">Wallet Wiederherstellen</string>
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
@@ -224,6 +244,7 @@
     <string name="SettingsReport_Title">Problem melden</string>
     <string name="SettingsReport_Email">E-Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Benachrichtigungen</string>
     <string name="SettingsNotifications_Description">Legen Sie einen Preisänderungsalarm für die Coins fest, die Sie beobachten möchten. \n\nSie werden benachrichtigt, wenn die Preisänderung in den letzten 24 die gewählte Grenze übersteigt.</string>
@@ -231,6 +252,7 @@
     <string name="SettingsNotifications_TurnOn">In Einstellungen einschalten</string>
     <string name="SettingsNotifications_Off">Aus</string>
     <string name="SettingsNotifications_DeactivateAll">Alle deaktivieren</string>
+    <string name="SettingsNotifications_PushNotification">Push Notification</string>
     <string name="Notification_Notifications">Benachrichtigung: %s</string>
     <string name="Notification_Up">Hoch</string>
     <string name="Notification_Down">Runter</string>
@@ -256,6 +278,7 @@
     <string name="Hud_Text_Copied">Kopiert</string>
     <string name="Hud_Text_InvalidPinError">Falscher Code</string>
     <string name="Hud_Network_Issue">Netzwerkprobleme. Bitte noch einmal versuchen.</string>
+    <string name="Hud_UnknownError">Unknown Error %s</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Anmeldung per Fingerabdruck</string>
     <string name="Fingerprint_Hint">Touchsensor</string>
@@ -289,6 +312,14 @@
     <string name="ManageCoins_AddCoin_Title">Wallet hinzufügen</string>
     <string name="ManageCoins_AddCoin_Text">Damit erzeugen Sie ein neues Wallet für folgende Coins: %s</string>
     <string name="ManageCoins_EOSAlert_CreateButton">Im Moment kann das Wallet keine neuen EOS-Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
+    <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Experimental</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+    <!-- Bitcoin Hodling -->
+    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
+    <string name="BitcoinHodling_LockTime">Time Lock</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Wallets verwalten</string>
     <string name="ManageKeys_Description">Aktive Wallets sind hervorgehoben. Diese sind für verschiedene Kryptowährungen verantwortlich.
@@ -324,8 +355,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 Stunden (mehr privat)</string>
     <string name="CoinOption_Slow_Text">Langsam: Stellt Ihre vergangenen Transaktionen direkt aus der Blockchain her. Mehr Datenschutz, aber sehr langsam. Wenn es zu lange dauert, gehen Sie in den Einstellungen zu Wallets verwalten und löschen Sie den Eintrag Unstoppable. Wiederholen Sie den Prozess mit der Option \"Schnell\".</string>
     <string name="CoinOption_TimePeriod">Wählen Sie den Zeitraum, in dem Sie Ihr Wallet im Unstoppable Wallet das erste Mal erstellt haben.</string>
-    <string name="CoinOption_BeforeOctober">Vor Oktober 2019</string>
-    <string name="CoinOption_AfterOctober">Nach Oktober 2019</string>
+    <string name="CoinOption_BeforeNovember">Before November 2019</string>
+    <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
@@ -339,10 +370,15 @@
     <string name="Charts_Rate_High">Hoch</string>
     <string name="Charts_Rate_Low">Niedrig</string>
     <string name="Charts_MarketCap">Mkt. Kap.</string>
+    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_inCirculation">in Circulation</string>
+    <string name="Charts_TotalSupply">Total</string>
     <string name="Charts_MarketCap_Thousand">Tsd.</string>
     <string name="Charts_MarketCap_Million">Mill.</string>
     <string name="Charts_MarketCap_Billion">Mrd.</string>
     <string name="Charts_MarketCap_Trillion">Trill.</string>
     <string name="Charts_Volume">Lautstärke</string>
     <string name="Charts_Error_NotAvailable">Diagramm nicht verfügbar</string>
+    <!--Rate list-->
+    <string name="RateList_updated">updated\n%s</string>
 </resources>
