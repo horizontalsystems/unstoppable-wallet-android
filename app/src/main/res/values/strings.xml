@@ -24,12 +24,12 @@
     <!--Welcome-->
 
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
 
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Title">Create Wallet</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
 
     <!--Restore-->
@@ -72,10 +72,8 @@
     <string name="Backup_Button_Submit">Submit</string>
     <string name="Backup_Button_ShowKey">Show Key</string>
 
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">Secret Key</string>
-
     <!--Backup Eos-->
+
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
@@ -90,7 +88,7 @@
     <string name="Balance_Syncing">Syncing…</string>
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Value</string>
+    <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
@@ -191,7 +189,7 @@
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Pending</string>
-    <string name="TransactionInfo_LockTime">Lock Time</string>
+    <string name="TransactionInfo_LockTime">Time Lock</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
@@ -199,7 +197,7 @@
 
     <!-- Info -->
 
-    <string name="Info_LockTime_Title">Lock Time</string>
+    <string name="Info_LockTime_Title">Time Lock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
 
     <!--Full Info-->
@@ -403,13 +401,13 @@
     <!-- Experimental Feature -->
 
     <string name="ExperimentalFeatures_Title">Experimental</string>
-    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">Bitcoin HODLing</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
 
     <!-- Bitcoin Hodling -->
 
-    <string name="BitcoinHodling_Title">Bitcoin HODLing</string>
-    <string name="BitcoinHodling_LockTime">Lock Time</string>
+    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
+    <string name="BitcoinHodling_LockTime">Time Lock</string>
     <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!--Manage Keys-->
