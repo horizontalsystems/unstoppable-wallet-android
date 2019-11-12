@@ -20,13 +20,16 @@
     <string name="Wallet">%s Кошелек</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">Создать Кошелек</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Create-->
-    <string name="Create_Title">Создать Кошелек</string>
+    <string name="Create_Title">Create Wallet</string>
     <string name="Create_Description">Выберите одну криптовалюту для начала. Вы сможете добавить другие криптовалюты позже.</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
+    <string name="Restore_Enter_Key_Title">Введите ключ</string>
+    <string name="Restore_Enter_Key_Description_Eos">Введите приватный ключ для %s кошелька.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Description">Чтобы восстановить существующий кошелек вам нужно ввести приватный ключ для этого кошелька.\n\nКак только вы восстановите один кошелек, вы сможете восстановить больше кошельков, перейдя в раздел \"Управление Кошельками\" в настройках приложения.</string>
     <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
@@ -52,8 +55,6 @@
     <string name="Backup_Button_Next">Далее</string>
     <string name="Backup_Button_Submit">Отправить</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">Секретный Ключ</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
@@ -65,8 +66,9 @@
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
+    <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_AddCoins">Добавить Кошелек</string>
-    <string name="Balance_Sort_Balance">Балансу</string>
+    <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
     <string name="Balance_Sort_24hPriceChange">цене(%) за 24 ч</string>
@@ -84,14 +86,20 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Итого:</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
+    <string name="Send_Confirmation_LockTime">Lock Time:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
+    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
+    <string name="Send_Error_MaximumAmount">Max. amount %s</string>
+    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
     <string name="Send_DialogTitle">Подтвердить</string>
+    <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Скорость транзакции:</string>
     <string name="Send_TxSpeed_Low">Низкая</string>
     <string name="Send_TxSpeed_Medium">Средняя</string>
@@ -101,6 +109,12 @@
     <string name="Send_DialogTotal">Итого:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Продолжить</string>
+    <string name="Send_DialogLockTime">Lock Time</string>
+    <string name="Send_LockTime_Off">Выкл.</string>
+    <string name="Send_LockTime_Hour">1 час</string>
+    <string name="Send_LockTime_Month">1 месяц</string>
+    <string name="Send_LockTime_HalfYear">6 месяцев</string>
+    <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взымается в ETH. Необходимо %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s (%s) взымается в %s. Необходимо %s.</string>
@@ -109,9 +123,6 @@
     <string name="Deposit_Share">Поделиться</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <string name="Deposit_Your_Account">Ваш Аккаунт</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Необходима Резервная Копия</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
-    <string name="Receive_Alert_NotBackedUp_Description">Вам нужно сделать резервную копию %1$s ключа, прежде чем вы сможете получать %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%d мин назад</string>
@@ -127,6 +138,9 @@
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
     <string name="Transactions_EmptyList">У Вас нет транзакций!</string>
+    <string name="Transactions_Receiving">Получение</string>
+    <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Pending">Pending</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
     <string name="TransactionInfo_Status">Статус</string>
@@ -137,9 +151,14 @@
     <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonVerify">Проверить</string>
     <string name="TransactionInfo_Status_Pending">В процессе</string>
+    <string name="TransactionInfo_LockTime">Time Lock</string>
+    <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <string name="TransactionInfo_Fee">Комиссия</string>
     <string name="TransactionInfo_FootNote">Значение этой транзакции выглядит как 0, потому что она была отправлена на свой собственный адрес</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Title">Time Lock</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -185,6 +204,7 @@
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
     <string name="Settings_Notifications">Уведомления </string>
     <string name="Settings_ManageCoins">Управление Токенами</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
@@ -224,6 +244,7 @@
     <string name="SettingsReport_Title">Наши Контакты</string>
     <string name="SettingsReport_Email">Эл. почта</string>
     <string name="SettingsReport_Telegram">Telegram </string>
+    <string name="SettingsReport_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Уведомления </string>
     <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для монет, за которыми вы бы хотели следить.\n\nВы будете предупреждены, когда изменение цены за последние 24 часа превысят выбранный порог.</string>
@@ -231,6 +252,7 @@
     <string name="SettingsNotifications_TurnOn">Включить в настройках</string>
     <string name="SettingsNotifications_Off">Выкл.</string>
     <string name="SettingsNotifications_DeactivateAll">Отключить всё</string>
+    <string name="SettingsNotifications_PushNotification">Push Notification</string>
     <string name="Notification_Notifications">Уведомления %s</string>
     <string name="Notification_Up">Вверх</string>
     <string name="Notification_Down">Вниз</string>
@@ -256,6 +278,7 @@
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_InvalidPinError">Неверный Код</string>
     <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
+    <string name="Hud_UnknownError">Unknown Error %s</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Отпечаток пальца для входа</string>
     <string name="Fingerprint_Hint">Коснитесь датчика</string>
@@ -287,6 +310,14 @@
     <string name="ManageCoins_AddCoin_Title">Добавить Токен</string>
     <string name="ManageCoins_AddCoin_Text">Это действие сгенерирует новый кошелек для следующих монет: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
+    <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Experimental</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+    <!-- Bitcoin Hodling -->
+    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
+    <string name="BitcoinHodling_LockTime">Time Lock</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
     <string name="ManageKeys_Description">Ниже выделены ваши активные кошельки, где каждый кошелек отвечает за разный набор криптовалют.\n\nВы должны сделать резервную копию каждого выделенного кошелька, записав его приватный ключ. Этот ключ - единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и тд</string>
@@ -321,8 +352,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
     <string name="CoinOption_Slow_Text">Медленно: Восстановление ваших предыдущих транзакций будет непосредственно из блокчейна. Это более приватно, но очень медленно. Если это занимает слишком много времени, перейдите в раздел \"Управление Кошельками\"  в настройках, удалите незавершенную запись и повторите процесс с помощью Быстрой опции.</string>
     <string name="CoinOption_TimePeriod">Выберите период времени, когда вы создали кошелек в Unstoppable.</string>
-    <string name="CoinOption_BeforeOctober">До октября 2019 г.</string>
-    <string name="CoinOption_AfterOctober">После октября 2019 г.</string>
+    <string name="CoinOption_BeforeNovember">Before November 2019</string>
+    <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
@@ -336,10 +367,15 @@
     <string name="Charts_Rate_High">Высокая</string>
     <string name="Charts_Rate_Low">Низкая</string>
     <string name="Charts_MarketCap">Рын. Кап.</string>
+    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_inCirculation">in Circulation</string>
+    <string name="Charts_TotalSupply">Total</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
     <string name="Charts_MarketCap_Billion">млр.</string>
     <string name="Charts_MarketCap_Trillion">трл.</string>
     <string name="Charts_Volume">Объём</string>
     <string name="Charts_Error_NotAvailable">График недоступен</string>
+    <!--Rate list-->
+    <string name="RateList_updated">updated\n%s</string>
 </resources>
