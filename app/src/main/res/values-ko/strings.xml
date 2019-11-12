@@ -20,13 +20,16 @@
     <string name="Wallet">%s 지갑</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">새 지갑</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
     <!--Create-->
-    <string name="Create_Title">새 지갑</string>
+    <string name="Create_Title">Create Wallet</string>
     <string name="Create_Description">시작하려면 한가지의 가상화폐를 선택하십시오. 귀하께서는 나중에 다른 가상화폐를 추가하실 수 있습니다.</string>
     <!--Restore-->
     <string name="Restore_Title">복구</string>
+    <string name="Restore_Enter_Key_Title">Enter Key</string>
+    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Description">기존으 지갑을 복원시키려면 귀하께서는 개인 암호를 입력 하셔야 합니다.\n\n하나의 지갑을 복원 시키시면 다른 지갑들도 앱의 보안 설정에서 지갑 관리 섹션을 통해 복원 하실 수 있습니다.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
@@ -52,8 +55,6 @@
     <string name="Backup_Button_Next">다음</string>
     <string name="Backup_Button_Submit">제출하기</string>
     <string name="Backup_Button_ShowKey">암호 보이기</string>
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">비밀 키</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
@@ -65,8 +66,9 @@
     <string name="Balance_RatePerCoin">%s 당 %s</string>
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
+    <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
-    <string name="Balance_Sort_Balance">Value</string>
+    <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
     <string name="Balance_Sort_Az">이름</string>
     <string name="Balance_Sort_24hPriceChange">24시간 가격 (%)</string>
@@ -84,14 +86,20 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">합계:</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
+    <string name="Send_Confirmation_LockTime">Lock Time:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_ScanQrCode">QR 코드 스캔</string>
     <string name="Send_Success">\u2713 보냄</string>
     <string name="Send_Error_InvalidAddress">주소가 올바르지 않습니다. 다시 확인하고 시도해주세요!</string>
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
     <string name="Send_Error_BalanceAmount">잔액%s</string>
+    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
+    <string name="Send_Error_MaximumAmount">Max. amount %s</string>
+    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
     <string name="Send_DialogTitle">확인</string>
+    <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">거래 속도:</string>
     <string name="Send_TxSpeed_Low">낮음</string>
     <string name="Send_TxSpeed_Medium">보통</string>
@@ -101,6 +109,12 @@
     <string name="Send_DialogTotal">합계:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">진행</string>
+    <string name="Send_DialogLockTime">Lock Time</string>
+    <string name="Send_LockTime_Off">Off</string>
+    <string name="Send_LockTime_Hour">1 hour</string>
+    <string name="Send_LockTime_Month">1 month</string>
+    <string name="Send_LockTime_HalfYear">6 months</string>
+    <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">전송중</string>
     <string name="Send_ERC_Alert">%@ (ERC20) 에 대한 거래 수수료는 Ethereum 로 지불되었습니다. 귀하는 %@ ETH 가 필요합니다.</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
@@ -109,9 +123,6 @@
     <string name="Deposit_Share">공유</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
     <string name="Deposit_Your_Account">내 계정</string>
-    <string name="Receive_Alert_NotBackedUp_Title">백업이 필요합니다</string>
-    <string name="Receive_Alert_NotBackedUp_Button">백업</string>
-    <string name="Receive_Alert_NotBackedUp_Description">귀하께서 %2$s를 받기전에 %1$s 지갑의 백업이 필요합니다.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
     <string name="Timestamp_MinAgo">%d분 전</string>
@@ -127,6 +138,9 @@
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
     <string name="Transactions_EmptyList">당신은 아직 거래를 하지 않았습니다.</string>
+    <string name="Transactions_Receiving">Receiving</string>
+    <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Pending">Pending</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">거래기록</string>
     <string name="TransactionInfo_Status">상태</string>
@@ -137,9 +151,14 @@
     <string name="TransactionInfo_Time">시간</string>
     <string name="TransactionInfo_ButtonVerify">확인</string>
     <string name="TransactionInfo_Status_Pending">보류 중</string>
+    <string name="TransactionInfo_LockTime">Time Lock</string>
+    <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
     <string name="TransactionInfo_Fee">수수료</string>
     <string name="TransactionInfo_FootNote">이 거래의 가치는 귀하의 주소로 전송되었으므로 0으로 나타납니다</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Title">Time Lock</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -185,6 +204,7 @@
     <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
     <string name="Settings_ManageCoins">코인 관리</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
@@ -230,6 +250,7 @@
     <string name="SettingsReport_Title">문제점 보고</string>
     <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">알림</string>
     <string name="SettingsNotifications_Description">귀하께서 보고싶으신 코인들의 가격 변동 설정 알람 설정을 하십시오.\n\n귀하께서는 24시간 전의 가격 변동이 선택하신 기대치에 도달할 경우에 알림을 받을 것 입니다.</string>
@@ -237,6 +258,7 @@
     <string name="SettingsNotifications_TurnOn">설정에서 켜십시오</string>
     <string name="SettingsNotifications_Off">끄기</string>
     <string name="SettingsNotifications_DeactivateAll">전부 비활성화</string>
+    <string name="SettingsNotifications_PushNotification">Push Notification</string>
     <string name="Notification_Notifications">알림%s</string>
     <string name="Notification_Up">위로</string>
     <string name="Notification_Down">아래로</string>
@@ -262,6 +284,7 @@
     <string name="Hud_Text_Copied">복사됨</string>
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
     <string name="Hud_Network_Issue">네트워크에 문제가 있습니다. 잠시 후 다시 시도해 주세요</string>
+    <string name="Hud_UnknownError">Unknown Error %s</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">지문인식 로그인</string>
     <string name="Fingerprint_Hint">터치 센서</string>
@@ -293,6 +316,14 @@
     <string name="ManageCoins_AddCoin_Title">지갑 추가하기</string>
     <string name="ManageCoins_AddCoin_Text">이 행동은 다음 코인에 대한 새로운 지갑을 생성합니다:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">현재 지갑에서 새 EOS 지갑 계정을 만들 수 없습니다. 기존 파일만 복원할 수 있습니다.</string>
+    <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Experimental</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+    <!-- Bitcoin Hodling -->
+    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
+    <string name="BitcoinHodling_LockTime">Time Lock</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
     <string name="ManageKeys_Description">아래 강조표시가 된부분은 각각의 지갑이 다른 세트의 가상화폐에 책임이 있는 귀하께서 사용중인 지갑입니다. \n\n귀하께서는 개인 암호를 백업 시킴으로써 각각의 강조표시된 지갑들도 백업을 하셔야 합니다. 이 암호는 귀하께서 휴대폰 분실, 도난, 파손 등을 당하셨을때 복원 할 수 있는 유일한 암호 입니다.</string>
@@ -327,8 +358,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
     <string name="CoinOption_Slow_Text">느린: 블록 체인으로 부터 귀하의 과거 거래내역을 복원합니다. 더 사적이지만 굉장히 느립니다. 만약 너무 느리게 간다면, 설정에서 지갑 관리하기에 가신후, Unstoppable 입장을 삭제하시고 빠른 선택의 과정을 반복 하십시오.</string>
     <string name="CoinOption_TimePeriod">귀하께서 처음으로 Unstoppable에서 지갑을 생성하셨을 때 시간 주기를 선택 하십시오.</string>
-    <string name="CoinOption_BeforeOctober">2019년 10월 전에</string>
-    <string name="CoinOption_AfterOctober">2019년 10월 후에</string>
+    <string name="CoinOption_BeforeNovember">Before November 2019</string>
+    <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
@@ -342,10 +373,15 @@
     <string name="Charts_Rate_High">높음</string>
     <string name="Charts_Rate_Low">낮음</string>
     <string name="Charts_MarketCap">시가총액</string>
+    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_inCirculation">in Circulation</string>
+    <string name="Charts_TotalSupply">Total</string>
     <string name="Charts_MarketCap_Thousand">천</string>
     <string name="Charts_MarketCap_Million">백만</string>
     <string name="Charts_MarketCap_Billion">십억</string>
     <string name="Charts_MarketCap_Trillion">조</string>
     <string name="Charts_Volume">음량</string>
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
+    <!--Rate list-->
+    <string name="RateList_updated">updated\n%s</string>
 </resources>
