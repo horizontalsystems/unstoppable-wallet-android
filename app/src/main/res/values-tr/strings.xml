@@ -20,13 +20,16 @@
     <string name="Wallet">%s cüzdanı</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">Yeni Cüzdan</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Create-->
-    <string name="Create_Title">Yeni Cüzdan</string>
+    <string name="Create_Title">Create Wallet</string>
     <string name="Create_Description">Başlamak için bir kripto para birimi seçin. Daha sonra başka kripto para birimleri ekleyebileceksiniz.</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
+    <string name="Restore_Enter_Key_Title">Enter Key</string>
+    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Description">Cüzdanı geri yüklemek için o cüzdanın gizli anahtarını girmelisiniz.\n\nDaha fazla cüzdanı geri yüklemek için bir cüzdanı geri yükledikten sonra Ayarlardaki Anahtarları Yönet bölümüne gidin.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
@@ -52,8 +55,6 @@
     <string name="Backup_Button_Next">İleri</string>
     <string name="Backup_Button_Submit">Onayla</string>
     <string name="Backup_Button_ShowKey">Anahtarı Göster</string>
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">Gizli Anahtar</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
@@ -65,8 +66,9 @@
     <string name="Balance_RatePerCoin">%s = 1 %s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
+    <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
-    <string name="Balance_Sort_Balance">Değer</string>
+    <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
     <string name="Balance_Sort_24hPriceChange">24 saat Değişiklik</string>
@@ -84,14 +86,20 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Toplam:</string>
     <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
+    <string name="Send_Confirmation_LockTime">Lock Time:</string>
     <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
     <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
     <string name="Send_Error_InsufficientBalance">Yetersiz bakiye.</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
+    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
+    <string name="Send_Error_MaximumAmount">Max. amount %s</string>
+    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
     <string name="Send_DialogTitle">Onayla</string>
+    <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">İşlem hızı:</string>
     <string name="Send_TxSpeed_Low">Yavaş</string>
     <string name="Send_TxSpeed_Medium">Ortadüzey</string>
@@ -101,6 +109,12 @@
     <string name="Send_DialogTotal">Toplam:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Devam</string>
+    <string name="Send_DialogLockTime">Lock Time</string>
+    <string name="Send_LockTime_Off">Off</string>
+    <string name="Send_LockTime_Hour">1 hour</string>
+    <string name="Send_LockTime_Month">1 month</string>
+    <string name="Send_LockTime_HalfYear">6 months</string>
+    <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
@@ -109,9 +123,6 @@
     <string name="Deposit_Share">Paylaş</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
     <string name="Deposit_Your_Account">Hesabınız</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Yedekleme Gerekli</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Yedekle</string>
-    <string name="Receive_Alert_NotBackedUp_Description">Öncelikle %1$s cüzdanınızı yedeklemeniz gerekiyor daha sonra %2$s kripto parasını alabilirsiniz.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
     <string name="Timestamp_MinAgo">%d dk önce</string>
@@ -127,6 +138,9 @@
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
     <string name="Transactions_EmptyList">Henüz hesap işlemi bulunmuyor</string>
+    <string name="Transactions_Receiving">Receiving</string>
+    <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Pending">Pending</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Hesap işlemi</string>
     <string name="TransactionInfo_Status">Durum</string>
@@ -137,9 +151,14 @@
     <string name="TransactionInfo_Time">Tarih</string>
     <string name="TransactionInfo_ButtonVerify">Doğrula</string>
     <string name="TransactionInfo_Status_Pending">Devam ediyor</string>
+    <string name="TransactionInfo_LockTime">Time Lock</string>
+    <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
     <string name="TransactionInfo_Fee">Masraf</string>
     <string name="TransactionInfo_FootNote">Kendi adresinize gönderildiğinden bu işlemin değeri 0 olarak görünür</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Title">Time Lock</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Hesap işlemi</string>
     <string name="FullInfo_Time">Tarih</string>
@@ -185,6 +204,7 @@
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
     <string name="Settings_Notifications">Bildirimler</string>
     <string name="Settings_ManageCoins">Kredileri Yönet</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">Cüzdanı Geri Yükle</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
@@ -224,6 +244,7 @@
     <string name="SettingsReport_Title">Sorunu Bildir</string>
     <string name="SettingsReport_Email">E-posta</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Bildirimler</string>
     <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın.\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarılırsınız.</string>
@@ -231,6 +252,7 @@
     <string name="SettingsNotifications_TurnOn">Ayarlardan aç</string>
     <string name="SettingsNotifications_Off">Kapat</string>
     <string name="SettingsNotifications_DeactivateAll">Etkisizleştir</string>
+    <string name="SettingsNotifications_PushNotification">Push Notification</string>
     <string name="Notification_Notifications">Bildirimler %s</string>
     <string name="Notification_Up">Yukarı</string>
     <string name="Notification_Down">Aşağı</string>
@@ -256,6 +278,7 @@
     <string name="Hud_Text_Copied">Kopyalandı</string>
     <string name="Hud_Text_InvalidPinError">Şimdiki Kod</string>
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
+    <string name="Hud_UnknownError">Unknown Error %s</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Parmak iziyle giriş</string>
     <string name="Fingerprint_Hint">Dokunmatik sensör</string>
@@ -287,6 +310,14 @@
     <string name="ManageCoins_AddCoin_Title">Cüzdan Ekle</string>
     <string name="ManageCoins_AddCoin_Text">Bu işlem, şu kripto paralar için yeni Cüzdan oluşturacak: %s</string>
     <string name="ManageCoins_EOSAlert_CreateButton">Uygulama henüz EOS cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
+    <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Experimental</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+    <!-- Bitcoin Hodling -->
+    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
+    <string name="BitcoinHodling_LockTime">Time Lock</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Cüzdanları yönet</string>
     <string name="ManageKeys_Description">Aşağıda vurgulanan, her cüzdanın farklı kripto para birimlerinden sorumlu olduğu aktif cüzdanlarınızdır.\n\nVurgulanan her cüzdanı, o cüzdanın özel anahtarını kesinlikte yedeklemelisiniz. Bu anahtar, telefonunuz kaybolur, çalınır yada kırılırsa, Kripto paranızı geri kazanmanın tek yoludur.</string>
@@ -321,8 +352,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 saat (Daha Gizli)</string>
     <string name="CoinOption_Slow_Text">Yavaş: Geçmiş işlemlerinizi doğrudan blok zincirinden geri yükler. Daha özel ve güvenli ama çok yavaş. Çok uzun sürerse, Ayarlar\'daki Cüzdanları Yönet\'e gidin, Unstoppable girişini silin ve Hızlı seçeneğiyle işlemi tekrarlayın.</string>
     <string name="CoinOption_TimePeriod">Unstoppable uygulamasında cüzdanı ilk oluşturduğunuz süreyi seçin.</string>
-    <string name="CoinOption_BeforeOctober">Ekim 2019’dan önce</string>
-    <string name="CoinOption_AfterOctober">Ekim 2019’dan sonra</string>
+    <string name="CoinOption_BeforeNovember">Before November 2019</string>
+    <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
@@ -336,10 +367,15 @@
     <string name="Charts_Rate_High">Yüksek</string>
     <string name="Charts_Rate_Low">Düşük</string>
     <string name="Charts_MarketCap">P. Değeri</string>
+    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_inCirculation">in Circulation</string>
+    <string name="Charts_TotalSupply">Total</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Hacim</string>
     <string name="Charts_Error_NotAvailable">Grafik yok</string>
+    <!--Rate list-->
+    <string name="RateList_updated">updated\n%s</string>
 </resources>
