@@ -29,7 +29,7 @@
     <string name="Welcome_Version" translatable="false">version %s</string>
 
     <!--Create-->
-    <string name="Create_Title">Create Wallet</string>
+    <string name="Create_Title">New Wallet</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
 
     <!--Restore-->
@@ -57,11 +57,6 @@
     <string name="Backup_Intro_BackupNow">Backup</string>
 
     <string name="Backup_DisplayTitle">Private Key</string>
-
-    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
-    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
 
     <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
