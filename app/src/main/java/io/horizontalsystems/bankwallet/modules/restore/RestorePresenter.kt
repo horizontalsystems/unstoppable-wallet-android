@@ -38,6 +38,10 @@ class RestorePresenter(
         interactor.restore(accountType, syncMode)
     }
 
+    override fun onClickClose() {
+        router.close()
+    }
+
     // IInteractor Delegate
 
     override fun didRestore() {

@@ -20,6 +20,7 @@ object RestoreModule {
         fun viewDidLoad()
         fun onSelect(accountType: IPredefinedAccountType)
         fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
+        fun onClickClose()
     }
 
     interface Interactor {
