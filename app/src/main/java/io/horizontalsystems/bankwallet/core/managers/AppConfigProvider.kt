@@ -68,9 +68,9 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("ELF",       "Aelf",                    "ELF",         18,      CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e")),
             Coin("AURA",      "Aurora DAO",              "AURA",        18,      CoinType.Erc20("0xCdCFc0f66c522Fd086A1b725ea3c0Eeb9F9e8814")),
             Coin("ANKR",      "Ankr Network",            "ANKR",         8,      CoinType.Binance("ANKR-E97")),
-            Coin("BNT",       "Bancor",                  "BNT",         18,      CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C")),
+            Coin("BNT",       "Bancor ERC20",            "BNT",         18,      CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C")),
             Coin("BAT",       "Basic Attention Token",   "BAT",         18,      CoinType.Erc20("0x0D8775F648430679A709E98d2b0Cb6250d2887EF")),
-            Coin("BNB-ERC20", "Binance Token",           "BNB",         18,      CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
+            Coin("BNB-ERC20", "Binance ERC20",           "BNB",         18,      CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
             Coin("BUSD",      "Binance USD",             "BUSD",         8,      CoinType.Binance("BUSD-BD1")),
             Coin("BTCB",      "Bitcoin BEP2",            "BTCB",         8,      CoinType.Binance("BTCB-1DE")),
             Coin("CAS",       "Cashaaa",                 "CAS",          8,      CoinType.Binance("CAS-167")),
@@ -119,9 +119,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("TUSD",      "TrueUSD",                 "TUSD",        18,      CoinType.Erc20("0x0000000000085d4780B73119b644AE5ecd22b376")),
             Coin("USDT",      "Tether USD",              "USDT",         6,      CoinType.Erc20("0xdAC17F958D2ee523a2206206994597C13D831ec7")),
             Coin("USDC",      "USD Coin",                "USDC",         6,      CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
-            Coin("WTC",       "Walton",                  "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74")),
-            Coin("WAX",       "WAX",                     "WAX",          8,      CoinType.Erc20("0x39Bb259F66E1C59d5ABEF88375979b4D20D98022")),
-            Coin("ZIL",       "Zilliqa",                 "ZIL",         12,      CoinType.Erc20("0x05f4a42e251f2d52b8ed15E9FEdAacFcEF1FAD27"))
+            Coin("WTC",       "Walton",                  "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74"))
     )
 
     override val predefinedAccountTypes: List<IPredefinedAccountType> = listOf(
