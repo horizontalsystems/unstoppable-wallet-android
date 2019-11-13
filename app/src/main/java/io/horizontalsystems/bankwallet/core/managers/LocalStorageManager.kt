@@ -34,6 +34,7 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
+    private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
 
     private val gson = Gson()
 
@@ -200,6 +201,12 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
         get() = App.preferences.getBoolean(LOCK_TIME_ENABLED, false)
         set(enabled) {
             App.preferences.edit().putBoolean(LOCK_TIME_ENABLED, enabled).apply()
+        }
+
+    override var encryptedSampleText: String?
+        get() = App.preferences.getString(ENCRYPTION_CHECKER_TEXT, null)
+        set(encryptedText) {
+            App.preferences.edit().putString(ENCRYPTION_CHECKER_TEXT, encryptedText).apply()
         }
 
     override fun clear() {

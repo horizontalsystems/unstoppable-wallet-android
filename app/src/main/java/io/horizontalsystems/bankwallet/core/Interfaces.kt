@@ -57,6 +57,7 @@ interface ILocalStorage {
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
     var isLockTimeEnabled: Boolean
+    var encryptedSampleText: String?
 
     fun clear()
 }
