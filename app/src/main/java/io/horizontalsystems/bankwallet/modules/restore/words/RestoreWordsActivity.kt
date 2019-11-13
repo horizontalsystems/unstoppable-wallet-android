@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
@@ -41,7 +41,7 @@ class RestoreWordsActivity : BaseActivity() {
             description.text = getString(R.string.Restore_Enter_Key_Description_Mnemonic, getString(accountTypeTitleRes), wordsCount.toString())
         }
 
-        viewModel = ViewModelProviders.of(this).get(RestoreWordsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RestoreWordsViewModel::class.java)
         viewModel.init(wordsCount)
 
         viewModel.errorLiveData.observe(this, Observer {

@@ -4,6 +4,7 @@ class UnsupportedAccountException : Exception()
 class EosUnsupportedException : Exception()
 class WrongAccountTypeForThisProvider : Exception()
 class CoinException(val errorTextRes: Int?, val nonTranslatableText: String? = null) : Exception()
+class InvalidMnemonicWordsCountException : Exception()
 
 // Chart
 class NoRateStats: Exception()
