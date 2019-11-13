@@ -430,7 +430,7 @@
             app:fallColor="@color/red_d"
             app:growColor="@color/green_d"
             app:indicatorColor="?ColorOz"
-            app:partialChartColor="?ColorOz"
+            app:partialChartColor="@color/grey_50"
             app:textColor="@color/grey"
             app:touchColor="?ColorOz" />
 
