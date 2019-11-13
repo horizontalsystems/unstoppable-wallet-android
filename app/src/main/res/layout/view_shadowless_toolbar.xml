@@ -36,14 +36,16 @@
         style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="13dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="3dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="3dp"
+        android:includeFontPadding="false"
         android:textColor="?ColorJacob"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/toolbarTitle"
         tools:text="Share" />
 
     <TextView
@@ -53,12 +55,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="3dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="3dp"
+        android:includeFontPadding="false"
         android:textColor="?ColorJacob"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/toolbarTitle"
         tools:text="Close" />
 
     <TextView
