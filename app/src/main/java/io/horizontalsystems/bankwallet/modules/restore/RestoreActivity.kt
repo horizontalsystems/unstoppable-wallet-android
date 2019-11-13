@@ -2,11 +2,9 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
@@ -30,11 +28,9 @@ class RestoreActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_restore)
-
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RestoreViewModel::class.java)
         viewModel.init()
 
         val adapter = RestoreNavigationAdapter(viewModel)
@@ -65,6 +61,21 @@ class RestoreActivity : BaseActivity() {
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.restore_wallet_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menuCopy -> {
+                viewModel.delegate.onClickClose()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
