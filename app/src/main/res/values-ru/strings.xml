@@ -309,9 +309,9 @@
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Функции</string>
     <string name="ExperimentalFeatures_Description">Ниже приведены экспериментальные функции. Несмотря на то, что мы протестировали эти функции, мы не можем гарантировать, что они будут работать так, как ожидалось во всех возможных случаях. По этому, просим вас пользоваться ими с осторожностью.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">Заблокировать Биткойны</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Временная Блокировка</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">Временно заблокировать</string>
+    <string name="BitcoinHodling_Title">Времен.Блокировка</string>
     <string name="BitcoinHodling_LockTime">TimeLock</string>
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Keys-->
@@ -364,8 +364,8 @@
     <string name="Charts_Rate_Low">Низкая</string>
     <string name="Charts_MarketCap">Рын. Кап.</string>
     <string name="Charts_Volume24">Объем (24 ч)</string>
-    <string name="Charts_inCirculation">Циркулирующее предл.</string>
-    <string name="Charts_TotalSupply">Общее предл.</string>
+    <string name="Charts_inCirculation">Выпущено </string>
+    <string name="Charts_TotalSupply">Макс.выпуск</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
     <string name="Charts_MarketCap_Billion">млр.</string>
