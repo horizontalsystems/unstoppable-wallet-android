@@ -23,10 +23,13 @@
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Create-->
-    <string name="Create_Title">Создать Кошелек</string>
+    <string name="Create_Title">Новый кошелек</string>
     <string name="Create_Description">Выберите одну криптовалюту для начала. Вы сможете добавить другие криптовалюты позже.</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
+    <string name="Restore_Enter_Key_Title">Введите ключ</string>
+    <string name="Restore_Enter_Key_Description_Eos">Введите приватный ключ для %s кошелька.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Введите ваш приватный ключ для %1s кошелька, который состоит из %2s слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
     <string name="Restore_Description">Чтобы восстановить существующий кошелек вам нужно ввести приватный ключ для этого кошелька.\n\nКак только вы восстановите один кошелек, вы сможете восстановить больше кошельков, перейдя в раздел \"Управление Кошельками\" в настройках приложения.</string>
     <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
@@ -41,10 +44,6 @@
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная Копия</string>
     <string name="Backup_DisplayTitle">Приватный Ключ</string>
-    <string name="Backup_Confirmation_SecretKey">Я понимаю, что я единственный владелец  Секретного Ключа, который надежно хранится на моем телефоне и позволяет мне контролировать средства в моем кошельке.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Я понимаю, что изменение ПИН-кода телефона или удаление данных приложения в настройках Android удалит секретный ключ с устройства. Мне нужно повторно ввести мой секретный ключ, чтобы восстановить доступ к моему кошельку.</string>
-    <string name="Backup_Confirmation_Disclaimer">Я понимаю, что разработчики этого приложения не могут нести ответственность за любые непреднамеренные ошибки или проблемы, которые могут возникнуть при использовании этого приложения.</string>
     <string name="Backup_Confirmation_Description">Введите слова из вашего приватного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
@@ -52,8 +51,6 @@
     <string name="Backup_Button_Next">Далее</string>
     <string name="Backup_Button_Submit">Отправить</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">Секретный Ключ</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
@@ -65,7 +62,8 @@
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
-    <string name="Balance_AddCoins">Добавить Кошелек</string>
+    <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
+    <string name="Balance_AddCoins">Добавить Токен</string>
     <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
@@ -84,14 +82,20 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Итого:</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
+    <string name="Send_Confirmation_LockTime">TimeLock:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
+    <string name="Send_Error_UnsupportedAddress">Временная блокировка работает только с адресами P2PKH (начинаются с 1)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
+    <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
+    <string name="Send_Error_MaximumAmount">Макс. сумма %s</string>
+    <string name="Send_Error_MinRequiredBalance">Мин. обязательный остаток %s</string>
     <string name="Send_DialogTitle">Подтвердить</string>
+    <string name="Send_DialogAvailableBalance">Доступный Баланс</string>
     <string name="Send_DialogSpeed">Скорость транзакции:</string>
     <string name="Send_TxSpeed_Low">Низкая</string>
     <string name="Send_TxSpeed_Medium">Средняя</string>
@@ -101,6 +105,12 @@
     <string name="Send_DialogTotal">Итого:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Продолжить</string>
+    <string name="Send_DialogLockTime">TimeLock</string>
+    <string name="Send_LockTime_Off">Выкл.</string>
+    <string name="Send_LockTime_Hour">1 час</string>
+    <string name="Send_LockTime_Month">1 месяц</string>
+    <string name="Send_LockTime_HalfYear">6 месяцев</string>
+    <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взымается в ETH. Необходимо %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s (%s) взымается в %s. Необходимо %s.</string>
@@ -109,9 +119,6 @@
     <string name="Deposit_Share">Поделиться</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <string name="Deposit_Your_Account">Ваш Аккаунт</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Необходима Резервная Копия</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
-    <string name="Receive_Alert_NotBackedUp_Description">Вам нужно сделать резервную копию %1$s ключа, прежде чем вы сможете получать %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%d мин назад</string>
@@ -127,6 +134,9 @@
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
     <string name="Transactions_EmptyList">У Вас нет транзакций!</string>
+    <string name="Transactions_Receiving">Получение</string>
+    <string name="Transactions_Sending">Отправка</string>
+    <string name="Transactions_Pending">В процессе</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
     <string name="TransactionInfo_Status">Статус</string>
@@ -137,9 +147,14 @@
     <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonVerify">Проверить</string>
     <string name="TransactionInfo_Status_Pending">В процессе</string>
+    <string name="TransactionInfo_LockTime">TimeLock</string>
+    <string name="TransactionInfo_RecipientHash">Получатель</string>
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <string name="TransactionInfo_Fee">Комиссия</string>
     <string name="TransactionInfo_FootNote">Значение этой транзакции выглядит как 0, потому что она была отправлена на свой собственный адрес</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Title">TimeLock</string>
+    <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -185,6 +200,7 @@
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
     <string name="Settings_Notifications">Уведомления </string>
     <string name="Settings_ManageCoins">Управление Токенами</string>
+    <string name="Settings_ExperimentalFeatures">Экспериментальные Функции</string>
     <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
@@ -224,6 +240,7 @@
     <string name="SettingsReport_Title">Наши Контакты</string>
     <string name="SettingsReport_Email">Эл. почта</string>
     <string name="SettingsReport_Telegram">Telegram </string>
+    <string name="SettingsReport_AppStatus">Статус Приложения</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Уведомления </string>
     <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для монет, за которыми вы бы хотели следить.\n\nВы будете предупреждены, когда изменение цены за последние 24 часа превысят выбранный порог.</string>
@@ -231,6 +248,7 @@
     <string name="SettingsNotifications_TurnOn">Включить в настройках</string>
     <string name="SettingsNotifications_Off">Выкл.</string>
     <string name="SettingsNotifications_DeactivateAll">Отключить всё</string>
+    <string name="SettingsNotifications_PushNotification">Push уведомления</string>
     <string name="Notification_Notifications">Уведомления %s</string>
     <string name="Notification_Up">Вверх</string>
     <string name="Notification_Down">Вниз</string>
@@ -256,6 +274,7 @@
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_InvalidPinError">Неверный Код</string>
     <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
+    <string name="Hud_UnknownError">Неизвестная Ошибка %s</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Отпечаток пальца для входа</string>
     <string name="Fingerprint_Hint">Коснитесь датчика</string>
@@ -287,6 +306,14 @@
     <string name="ManageCoins_AddCoin_Title">Добавить Токен</string>
     <string name="ManageCoins_AddCoin_Text">Это действие сгенерирует новый кошелек для следующих монет: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
+    <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Функции</string>
+    <string name="ExperimentalFeatures_Description">Ниже приведены экспериментальные функции. Несмотря на то, что мы протестировали эти функции, мы не можем гарантировать, что они будут работать так, как ожидалось во всех возможных случаях. По этому, просим вас пользоваться ими с осторожностью.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Заблокировать Биткойны</string>
+    <!-- Bitcoin Hodling -->
+    <string name="BitcoinHodling_Title">Временно заблокировать</string>
+    <string name="BitcoinHodling_LockTime">TimeLock</string>
+    <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
     <string name="ManageKeys_Description">Ниже выделены ваши активные кошельки, где каждый кошелек отвечает за разный набор криптовалют.\n\nВы должны сделать резервную копию каждого выделенного кошелька, записав его приватный ключ. Этот ключ - единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и тд</string>
@@ -321,8 +348,8 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
     <string name="CoinOption_Slow_Text">Медленно: Восстановление ваших предыдущих транзакций будет непосредственно из блокчейна. Это более приватно, но очень медленно. Если это занимает слишком много времени, перейдите в раздел \"Управление Кошельками\"  в настройках, удалите незавершенную запись и повторите процесс с помощью Быстрой опции.</string>
     <string name="CoinOption_TimePeriod">Выберите период времени, когда вы создали кошелек в Unstoppable.</string>
-    <string name="CoinOption_BeforeOctober">До октября 2019 г.</string>
-    <string name="CoinOption_AfterOctober">После октября 2019 г.</string>
+    <string name="CoinOption_BeforeNovember">До Ноября 2019 г.</string>
+    <string name="CoinOption_AfterNovember">После Ноября 2019 г.</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
@@ -336,10 +363,15 @@
     <string name="Charts_Rate_High">Высокая</string>
     <string name="Charts_Rate_Low">Низкая</string>
     <string name="Charts_MarketCap">Рын. Кап.</string>
+    <string name="Charts_Volume24">Объем (24 ч)</string>
+    <string name="Charts_inCirculation">Циркулирующее предл.</string>
+    <string name="Charts_TotalSupply">Общее предл.</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
     <string name="Charts_MarketCap_Billion">млр.</string>
     <string name="Charts_MarketCap_Trillion">трл.</string>
     <string name="Charts_Volume">Объём</string>
     <string name="Charts_Error_NotAvailable">График недоступен</string>
+    <!--Rate list-->
+    <string name="RateList_updated">обновлено\n%s</string>
 </resources>
