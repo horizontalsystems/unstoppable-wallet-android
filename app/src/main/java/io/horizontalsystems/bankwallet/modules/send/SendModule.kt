@@ -176,7 +176,7 @@ object SendModule {
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
                     val bitcoinInteractor = SendBitcoinInteractor(adapter, App.localStorage)
-                    val handler = SendBitcoinHandler(bitcoinInteractor, router)
+                    val handler = SendBitcoinHandler(bitcoinInteractor, router, wallet.coin.type)
 
                     bitcoinInteractor.delegate = handler
 
@@ -256,7 +256,7 @@ object SendModule {
         object Amount : Input()
         object Address : Input()
         class Fee(val isAdjustable: Boolean) : Input()
-        class Memo(val maxLength: Int): Input()
+        class Memo(val maxLength: Int) : Input()
         object ProceedButton : Input()
         object Hodler : Input()
     }
