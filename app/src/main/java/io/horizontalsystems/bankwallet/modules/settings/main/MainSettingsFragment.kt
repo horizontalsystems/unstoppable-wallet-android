@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,9 @@ class MainSettingsFragment : Fragment() {
         subscribeToRouterEvents(router)
 
         presenter.viewDidLoad()
+
+        //currently language setting is not working on API 23, 24, 25
+        language.visibility = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) View.VISIBLE else View.GONE
     }
 
     private fun bindViewListeners(presenter: MainSettingsPresenter) {
