@@ -28,18 +28,21 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDialogFragment.Listener, ReceiveFragment.Listener {
 
     private lateinit var viewModel: BalanceViewModel
-    private lateinit var coinAdapter: BalanceCoinAdapter
+    private val coinAdapter = BalanceCoinAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(BalanceViewModel::class.java)
         viewModel.init()
-        coinAdapter = BalanceCoinAdapter(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
@@ -57,11 +60,6 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
         observeLiveData()
         setSwipeBackground()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        coinAdapter.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {

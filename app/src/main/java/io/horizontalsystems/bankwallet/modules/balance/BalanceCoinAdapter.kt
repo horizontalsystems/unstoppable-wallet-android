@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
@@ -56,8 +57,15 @@ class BalanceCoinAdapter(
     }
 
     fun setItems(items: List<BalanceViewItem>) {
-        this.items = items
-        notifyDataSetChanged()
+        // Update with regular method for the initial load to avoid showing balance tab with empty list
+        if (this.items.isEmpty()) {
+            this.items = items
+            notifyDataSetChanged()
+        } else {
+            val diffResult = DiffUtil.calculateDiff(BalanceViewItemDiff(this.items, items))
+            this.items = items
+            diffResult.dispatchUpdatesTo(this)
+        }
     }
 
     override fun getItemCount() = items.size + 1
