@@ -27,6 +27,8 @@ class BalancePresenter(
 
     private var items = listOf<BalanceItem>()
     private var viewItems = mutableListOf<BalanceViewItem>()
+    private val viewItemsCopy: List<BalanceViewItem>
+        get() = viewItems.map { it.copy() }
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
     private var accountToBackup: Account? = null
@@ -162,7 +164,7 @@ class BalancePresenter(
                     viewItems[index] = factory.viewItem(item, currency)
                 }
             }
-            view?.set(viewItems)
+            view?.set(viewItemsCopy)
             updateHeaderViewItem()
         }
     }
@@ -231,7 +233,7 @@ class BalancePresenter(
         updateBlock(item)
         viewItems[index] = factory.viewItem(item, currency)
 
-        view?.set(viewItems)
+        view?.set(viewItemsCopy)
     }
 
     private fun updateViewItems() {
@@ -239,7 +241,7 @@ class BalancePresenter(
 
         viewItems = items.map { factory.viewItem(it, currency) }.toMutableList()
 
-        view?.set(viewItems)
+        view?.set(viewItemsCopy)
     }
 
     private fun updateHeaderViewItem() {
@@ -254,7 +256,7 @@ class BalancePresenter(
                 viewItems[index] = factory.viewItem(item, currency)
             }
         }
-        view?.set(viewItems)
+        view?.set(viewItemsCopy)
     }
 
 
