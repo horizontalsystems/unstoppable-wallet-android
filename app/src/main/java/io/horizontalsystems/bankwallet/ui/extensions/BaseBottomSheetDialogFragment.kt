@@ -13,12 +13,28 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 
-open class BaseBottomSheetDialogFragment: BottomSheetDialogFragment() {
+open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private var content: ViewStub? = null
     private var txtTitle: TextView? = null
     private var txtSubtitle: TextView? = null
     private var headerIcon: ImageView? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private val disableCloseOnSwipeBehavior = object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+    }
+
+    var shouldCloseOnSwipe: Boolean = true
+        set(shouldClose) {
+            field = shouldClose
+            setUpSwipeBehavior()
+        }
 
     override fun getTheme(): Int {
         return R.style.BottomDialog
@@ -35,26 +51,34 @@ open class BaseBottomSheetDialogFragment: BottomSheetDialogFragment() {
         txtSubtitle = view.findViewById(R.id.txtSubtitle)
         headerIcon = view.findViewById(R.id.headerIcon)
 
-        view.findViewById<ImageView>(R.id.closeButton)?.setOnClickListener{ close() }
+        view.findViewById<ImageView>(R.id.closeButton)?.setOnClickListener { close() }
 
         dialog?.setOnShowListener {
             onShow()
             // To avoid the bottom sheet stuck in between
             dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let {
-                BottomSheetBehavior.from(it).apply {
+                bottomSheetBehavior = BottomSheetBehavior.from(it).apply {
                     state = BottomSheetBehavior.STATE_EXPANDED
                     isHideable = true
                     skipCollapsed = true
                 }
+                setUpSwipeBehavior()
             }
         }
     }
 
-    open fun close(){
+    private fun setUpSwipeBehavior() {
+        if (shouldCloseOnSwipe)
+            bottomSheetBehavior?.removeBottomSheetCallback(disableCloseOnSwipeBehavior)
+        else
+            bottomSheetBehavior?.addBottomSheetCallback(disableCloseOnSwipeBehavior)
+    }
+
+    open fun close() {
         dismiss()
     }
 
-    open fun onShow(){
+    open fun onShow() {
 
     }
 

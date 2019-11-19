@@ -120,14 +120,14 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
     //  ChartView Listener
 
     override fun onTouchDown() {
-        isCancelable = false // enable swipe
+        shouldCloseOnSwipe = false
 
         setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = true)
         setViewVisibility(chartActions, isVisible = false)
     }
 
     override fun onTouchUp() {
-        isCancelable = true // enable swipe
+        shouldCloseOnSwipe = true
 
         setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = false)
         setViewVisibility(chartActions, isVisible = true)

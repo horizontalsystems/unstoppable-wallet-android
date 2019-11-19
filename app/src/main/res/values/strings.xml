@@ -29,7 +29,7 @@
     <string name="Welcome_Version" translatable="false">version %s</string>
 
     <!--Create-->
-    <string name="Create_Title">Create Wallet</string>
+    <string name="Create_Title">New Wallet</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
 
     <!--Restore-->
@@ -57,11 +57,6 @@
     <string name="Backup_Intro_BackupNow">Backup</string>
 
     <string name="Backup_DisplayTitle">Private Key</string>
-
-    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
-    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
 
     <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
@@ -111,7 +106,7 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_LockTime">Lock Time:</string>
+    <string name="Send_Confirmation_LockTime">TimeLock:</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
@@ -137,7 +132,7 @@
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
-    <string name="Send_DialogLockTime">Lock Time</string>
+    <string name="Send_DialogLockTime">TimeLock</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
     <string name="Send_LockTime_Month">1 month</string>
@@ -189,7 +184,7 @@
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Pending</string>
-    <string name="TransactionInfo_LockTime">Time Lock</string>
+    <string name="TransactionInfo_LockTime">TimeLock</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
@@ -197,7 +192,7 @@
 
     <!-- Info -->
 
-    <string name="Info_LockTime_Title">Time Lock</string>
+    <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
 
     <!--Full Info-->
@@ -407,7 +402,7 @@
     <!-- Bitcoin Hodling -->
 
     <string name="BitcoinHodling_Title">Lock Bitcoins</string>
-    <string name="BitcoinHodling_LockTime">Time Lock</string>
+    <string name="BitcoinHodling_LockTime">TimeLock</string>
     <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!--Manage Keys-->
@@ -476,7 +471,7 @@
     <string name="Charts_MarketCap">Mkt. Cap</string>
     <string name="Charts_Volume24">Volume (24 hours)</string>
     <string name="Charts_inCirculation">in Circulation</string>
-    <string name="Charts_TotalSupply">Total</string>
+    <string name="Charts_TotalSupply">Total Supply</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>

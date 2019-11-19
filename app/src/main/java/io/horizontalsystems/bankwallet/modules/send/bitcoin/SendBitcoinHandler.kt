@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -13,7 +14,8 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteractor,
-                         private val router: SendModule.IRouter)
+                         private val router: SendModule.IRouter,
+                         private val coinType: CoinType)
     : SendModule.ISendHandler, SendModule.ISendBitcoinInteractorDelegate, SendAmountModule.IAmountModuleDelegate,
       SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate, SendHodlerModule.IHodlerModuleDelegate {
 
@@ -63,7 +65,7 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
             mutableListOf<SendModule.Input>().apply {
                 add(SendModule.Input.Amount)
                 add(SendModule.Input.Address)
-                if (interactor.isLockTimeEnabled)
+                if (coinType is CoinType.Bitcoin && interactor.isLockTimeEnabled)
                     add(SendModule.Input.Hodler)
                 add(SendModule.Input.Fee(true))
                 add(SendModule.Input.ProceedButton)
