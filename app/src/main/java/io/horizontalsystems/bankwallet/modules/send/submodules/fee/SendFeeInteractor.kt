@@ -2,35 +2,20 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
-import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 
-class SendFeeInteractor(private val rateStorage: IRateStorage,
+class SendFeeInteractor(private val rateManager: IRateManager,
                         private val feeRateProvider: IFeeRateProvider?,
                         private val currencyManager: ICurrencyManager) : SendFeeModule.IInteractor {
 
-    private var disposable: Disposable? = null
-
-    var delegate: SendFeeModule.IInteractorDelegate? = null
-
-    override fun getRate(coinCode: String) {
-        disposable = rateStorage.latestRateObservable(coinCode, currencyManager.baseCurrency.code)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    delegate?.onRateFetched(if (it.expired) null else it)
-                }
+    override fun getRate(coinCode: String): BigDecimal? {
+        return rateManager.getLatestRate(coinCode, currencyManager.baseCurrency.code)
     }
 
     override fun getFeeRates(): List<FeeRateInfo>? {
         return feeRateProvider?.feeRates()
-    }
-
-    override fun clear() {
-        disposable?.dispose()
     }
 
 }

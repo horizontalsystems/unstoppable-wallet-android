@@ -1,47 +1,77 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
-import io.horizontalsystems.bankwallet.core.NoRateStats
-import io.horizontalsystems.bankwallet.core.managers.StatsData
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 
-data class ChartViewItem(
-        val type: ChartType,
-        val rateValue: CurrencyValue?,
-        val marketCap: CurrencyValue,
+data class ChartInfoViewItem(
+        val chartType: ChartView.ChartType,
+        val chartPoints: List<ChartPoint>,
         val lowValue: CurrencyValue,
         val highValue: CurrencyValue,
         val diffValue: BigDecimal,
-        val chartData: List<ChartPoint>,
-        val lastUpdateTimestamp: Long? = null
+        val startTimestamp: Long,
+        val endTimestamp: Long
+)
+
+data class MarketInfoViewItem(
+        val rateValue: CurrencyValue,
+        val marketCap: CurrencyValue,
+        val volume: CurrencyValue,
+        val supply: CoinValue,
+        val maxSupply: CoinValue?,
+        val timestamp: Long
 )
 
 class RateChartViewFactory {
-    fun createViewItem(chartType: ChartType, statData: StatsData, rate: Rate?, currency: Currency): ChartViewItem {
-        val diff = statData.diff[chartType.name] ?: throw NoRateStats()
-        val points = statData.stats[chartType.name] ?: throw NoRateStats()
+    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, currency: Currency): ChartInfoViewItem {
+        val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }
 
-        val minValue = points.minBy { it.value }?.value ?: 0f
-        val maxValue = points.maxBy { it.value }?.value ?: 0f
+        val startValue = chartPoints.firstOrNull()?.value ?: 0f
+        val endValue = chartPoints.lastOrNull()?.value ?: 0f
+
+        val minValue = chartPoints.minBy { it.value }?.value ?: 0f
+        val maxValue = chartPoints.maxBy { it.value }?.value ?: 0f
 
         val lowValue = CurrencyValue(currency, minValue.toBigDecimal())
         val highValue = CurrencyValue(currency, maxValue.toBigDecimal())
-        val marketCap = CurrencyValue(currency, statData.marketCap)
-        val rateValue = rate?.let { CurrencyValue(currency, it.value) }
 
-        return ChartViewItem(
+        val chartType = when (type) {
+            ChartType.DAILY -> ChartView.ChartType.DAILY
+            ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
+            ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
+            ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
+            ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY18
+        }
+
+        val diffValue = ((endValue - startValue) / startValue * 100).toBigDecimal()
+
+        return ChartInfoViewItem(
                 chartType,
-                rateValue,
-                marketCap,
+                chartPoints,
                 lowValue,
                 highValue,
-                diff,
-                points,
-                rate?.timestamp?.times(1000)
+                diffValue,
+                chartInfo.startTimestamp,
+                chartInfo.endTimestamp
+        )
+    }
+
+    fun createMarketInfo(marketInfo: MarketInfo, currency: Currency, coin: Coin): MarketInfoViewItem {
+        return MarketInfoViewItem(
+                CurrencyValue(currency, marketInfo.rate),
+                CurrencyValue(currency, marketInfo.marketCap.toBigDecimal()),
+                CurrencyValue(currency, marketInfo.volume.toBigDecimal()),
+                CoinValue(coin, marketInfo.supply.toBigDecimal()),
+                MaxSupplyMap.maxSupplies[coin.code]?.let { CoinValue(coin, it) },
+                marketInfo.timestamp
         )
     }
 }

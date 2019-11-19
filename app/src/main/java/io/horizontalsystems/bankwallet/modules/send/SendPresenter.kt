@@ -1,11 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
+
 class SendPresenter(private val interactor: SendModule.ISendInteractor,
-                    private val router: SendModule.IRouter,
-                    override val handler: SendModule.ISendHandler) :
-        SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
+                    val router: SendModule.IRouter
+) : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
+
+    var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
+    var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
+    var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
+    var hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate? = null
 
     override lateinit var view: SendModule.IView
+
+    override lateinit var handler: SendModule.ISendHandler
 
     // SendModule.IViewDelegate
 
@@ -30,6 +42,10 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
     }
 
     override fun onClear() {
+        interactor.clear()
+    }
+
+    override fun onCleared() {
         interactor.clear()
     }
 

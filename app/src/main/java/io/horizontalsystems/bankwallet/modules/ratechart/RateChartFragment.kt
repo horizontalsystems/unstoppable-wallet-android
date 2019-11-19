@@ -1,26 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), ChartView.Listener {
+class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(), ChartView.Listener {
 
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
@@ -28,40 +26,25 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
 
-    override fun getTheme(): Int {
-        return R.style.BottomDialog
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.view_bottom_sheet_chart, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setContentView(R.layout.view_bottom_sheet_chart)
+
+        setTitle(getString(R.string.Charts_Title, coin.title))
+        setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
 
         chartView.listener = this
         chartView.setIndicator(chartViewIndicator)
-        chartTitle.text = getString(R.string.Charts_Title, coin.title)
-        closeButton.setOnClickListener { dismiss() }
 
         presenter = ViewModelProviders.of(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         observeData()
         bindActions()
+    }
 
-        dialog?.setOnShowListener {
-            presenter.viewDidLoad()
-
-            // To avoid the bottom sheet stuck in between
-            dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let {
-                BottomSheetBehavior.from(it).apply {
-                    state = BottomSheetBehavior.STATE_EXPANDED
-                    isHideable = true
-                    skipCollapsed = true
-                }
-            }
-        }
+    override fun onShow() {
+        presenter.viewDidLoad()
     }
 
     private fun observeData() {
@@ -79,26 +62,42 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
             actions[type]?.let { it.isActivated = true }
         })
 
-        presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
+        presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartData, item.type)
-            chartSubtitle.text = item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) }
+            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
-            val diffColor = if (item.diffValue < BigDecimal.ZERO)
-                resources.getColor(R.color.red_d) else
-                resources.getColor(R.color.green_d)
+            context?.let { coinRateDiff.bind(item.diffValue, it, true) }
 
-            coinRateDiff.setTextColor(diffColor)
-            coinRateDiff.text = App.numberFormatter.format(item.diffValue.toDouble(), showSign = true, precision = 2) + "%"
+            coinRateHighTitle.text = getString(R.string.Charts_Rate_High, actionTitle(item.chartType))
+            coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false, trimmable = true)
 
-            item.rateValue?.let { coinRateLast.text = formatter.format(it, canUseLessSymbol = false) }
-            val shortValue = shortenValue(item.marketCap.value)
-            val marketCap = CurrencyValue(item.marketCap.currency, shortValue.first)
-            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + shortValue.second
+            coinRateLowTitle.text = getString(R.string.Charts_Rate_Low, actionTitle(item.chartType))
+            coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false, trimmable = true)
+            setViewVisibility(highLowWrap, isVisible = true)
+        })
 
-            coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false)
-            coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false)
-            setViewVisibility(marketCapWrap, isVisible = true)
+        presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
+            setSubtitle(DateHelper.getFullDateWithShortMonth(item.timestamp * 1000))
+
+            coinRateLast.text = formatter.format(item.rateValue, canUseLessSymbol = false)
+
+            val shortCapValue = shortenValue(item.marketCap.value)
+            val marketCap = CurrencyValue(item.marketCap.currency, shortCapValue.first)
+            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + shortCapValue.second
+
+            val shortVolumeValue = shortenValue(item.volume.value)
+            val volume = CurrencyValue(item.volume.currency, shortVolumeValue.first)
+            volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + shortVolumeValue.second
+
+            circulationValue.text = formatter.format(item.supply, trimmable = true)
+
+            totalSupplyValue.text = item.maxSupply?.let {
+                formatter.format(it, trimmable = true)
+            } ?: run {
+                getString(R.string.NotAvailable)
+            }
+
+            setViewVisibility(highLowWrap, isVisible = true)
         })
 
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
@@ -111,16 +110,6 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
             pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), outputFormat)
         })
 
-        presenterView.enableChartType.observe(viewLifecycleOwner, Observer { type ->
-            actions[type]?.let { action ->
-                action.isEnabled = true
-                action.setOnClickListener {
-                    presenter.onSelect(type)
-                    resetActions(it)
-                }
-            }
-        })
-
         presenterView.showError.observe(viewLifecycleOwner, Observer {
             chartView.visibility = View.INVISIBLE
             chartError.visibility = View.VISIBLE
@@ -128,17 +117,17 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         })
     }
 
-    // ChartView Listener
+    //  ChartView Listener
 
     override fun onTouchDown() {
-        isCancelable = false // enable swipe
+        shouldCloseOnSwipe = false
 
         setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = true)
         setViewVisibility(chartActions, isVisible = false)
     }
 
     override fun onTouchUp() {
-        isCancelable = true // enable swipe
+        shouldCloseOnSwipe = true
 
         setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = false)
         setViewVisibility(chartActions, isVisible = true)
@@ -154,16 +143,30 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
                 Pair(ChartType.WEEKLY, button1W),
                 Pair(ChartType.MONTHLY, button1M),
                 Pair(ChartType.MONTHLY6, button6M),
-                Pair(ChartType.MONTHLY18, button1Y))
+                Pair(ChartType.MONTHLY12, button1Y)
+        )
 
-        actions.values.forEach {
-            it.isEnabled = false
+        actions.forEach { (type, action) ->
+            action.setOnClickListener {
+                presenter.onSelect(type)
+                resetActions(it)
+            }
+        }
+    }
+
+    private fun actionTitle(chartType: ChartView.ChartType): String {
+        return when (chartType) {
+            ChartView.ChartType.DAILY -> getString(R.string.Charts_TimeDuration_Day)
+            ChartView.ChartType.WEEKLY -> getString(R.string.Charts_TimeDuration_Week)
+            ChartView.ChartType.MONTHLY -> getString(R.string.Charts_TimeDuration_Month)
+            ChartView.ChartType.MONTHLY6 -> getString(R.string.Charts_TimeDuration_HalfYear)
+            ChartView.ChartType.MONTHLY18 -> getString(R.string.Charts_TimeDuration_Year)
         }
     }
 
     private fun resetActions(current: View) {
         actions.values.forEach { it.isActivated = false }
-        setViewVisibility(marketCapWrap, isVisible = false)
+        setViewVisibility(highLowWrap, isVisible = false)
         current.isActivated = true
     }
 

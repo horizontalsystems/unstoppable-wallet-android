@@ -4,14 +4,14 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
 import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteractor,
-                         private val router: SendModule.IRouter) : SendModule.ISendHandler,
-        SendAmountModule.IAmountModuleDelegate,
-        SendAddressModule.IAddressModuleDelegate {
+                         private val router: SendModule.IRouter)
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -31,6 +31,7 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     override lateinit var addressModule: SendAddressModule.IAddressModule
     override lateinit var feeModule: SendFeeModule.IFeeModule
     override lateinit var memoModule: SendMemoModule.IMemoModule
+    override var hodlerModule: SendHodlerModule.IHodlerModule? = null
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
 
@@ -44,7 +45,9 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
+                                                          amountModule.secondaryAmountInfo(),
+                                                          addressModule.validAddress()),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
@@ -91,5 +94,9 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     override fun scanQrCode() {
         router.scanQrCode()
     }
+
+    // SendFeeModule.IFeeModuleDelegate
+
+    override fun onUpdateFeeRate(feeRate: Long) {}
 
 }

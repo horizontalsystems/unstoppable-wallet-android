@@ -24,12 +24,12 @@ class RestorePresenter(
     override fun onSelect(accountType: IPredefinedAccountType) {
         when (accountType) {
             is UnstoppableAccountType ->
-                router.startRestoreWordsModule(12)
+                router.startRestoreWordsModule(12, accountType.title)
             is BinanceAccountType -> {
-                router.startRestoreWordsModule(24)
+                router.startRestoreWordsModule(24, accountType.title)
             }
             is EosAccountType -> {
-                router.startRestoreEosModule()
+                router.startRestoreEosModule(accountType.title)
             }
         }
     }
@@ -38,7 +38,11 @@ class RestorePresenter(
         interactor.restore(accountType, syncMode)
     }
 
-    // Interactor Delegate
+    override fun onClickClose() {
+        router.close()
+    }
+
+    // IInteractor Delegate
 
     override fun didRestore() {
         router.startMainModule()

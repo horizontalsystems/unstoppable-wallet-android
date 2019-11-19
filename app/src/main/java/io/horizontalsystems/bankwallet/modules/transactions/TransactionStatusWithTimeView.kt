@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_transaction_status.view.*
 
 
-open class TransactionStatusWithTimeView : ConstraintLayout {
+class TransactionStatusWithTimeView : ConstraintLayout {
 
     constructor(context: Context) : super(context) {
         initializeViews()
@@ -26,39 +26,28 @@ open class TransactionStatusWithTimeView : ConstraintLayout {
         inflate(context, R.layout.view_transaction_status, this)
     }
 
-    fun bind(transactionStatus: TransactionStatus, time: String?) {
-        txTime.text = time
-        txTime.visibility = View.VISIBLE
-        progressBarWrapper.visibility = View.GONE
-        pendingIcon.visibility = View.GONE
+    fun bind(transactionStatus: TransactionStatus, incoming: Boolean, time: String?) {
+        txTime.visibility = View.GONE
         completedIcon.visibility = View.GONE
+        transactionProgressView.visibility = View.GONE
+        transactionPendingStatusView.visibility = View.GONE
 
         when (transactionStatus) {
             is TransactionStatus.Completed -> {
+                txTime.text = time
+                txTime.visibility = View.VISIBLE
                 completedIcon.visibility = View.VISIBLE
             }
             is TransactionStatus.Processing -> {
-                progressBarWrapper.visibility = View.VISIBLE
-                fillProgress(transactionStatus)
+                transactionProgressView.bind(transactionStatus.progress, incoming)
+                transactionProgressView.visibility = View.VISIBLE
             }
             else -> {
-                txTime.visibility = View.GONE
-                pendingIcon.visibility = View.VISIBLE
-                progressBarWrapper.visibility = View.VISIBLE
-                fillProgress()
+                transactionPendingStatusView.visibility = View.VISIBLE
+                transactionPendingStatusView.startAnimation()
             }
         }
         invalidate()
     }
 
-    private fun fillProgress(transactionStatus: TransactionStatus.Processing = TransactionStatus.Processing(0.0)) {
-        val bars = listOf(progressBar1, progressBar2, progressBar3)
-        val filledBars = bars.size * transactionStatus.progress
-
-        bars.forEachIndexed { index, bar ->
-            bar.setImageResource(if (filledBars > 0.0 && index < filledBars)
-                R.drawable.status_progress_bar_grey_small else
-                R.drawable.status_progress_bar_grey_20_small)
-        }
-    }
 }

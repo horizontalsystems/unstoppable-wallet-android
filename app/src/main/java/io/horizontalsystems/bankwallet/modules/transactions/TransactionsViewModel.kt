@@ -70,7 +70,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     }
 
     override fun openTransactionInfo(transactionViewItem: TransactionViewItem) {
-        transactionViewItemLiveEvent.value = transactionViewItem
+        transactionViewItemLiveEvent.postValue(transactionViewItem)
     }
 
     override fun onCleared() {

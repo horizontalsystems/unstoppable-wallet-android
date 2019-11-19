@@ -24,7 +24,7 @@ class App : Application() {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var secureStorage: ISecuredStorage
-        lateinit var localStorage: ILocalStorage
+        lateinit var localStorage: LocalStorageManager
         lateinit var keyStoreManager: IKeyStoreManager
         lateinit var keyProvider: IKeyProvider
         lateinit var encryptionManager: IEncryptionManager
@@ -50,9 +50,7 @@ class App : Application() {
         lateinit var defaultWalletCreator: DefaultWalletCreator
         lateinit var walletRemover: WalletRemover
 
-        lateinit var rateSyncScheduler: RateSyncScheduler
-        lateinit var rateManager: RateManager
-        lateinit var rateStatsManager: IRateStatsManager
+        lateinit var xRateManager: IRateManager
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
@@ -73,6 +71,9 @@ class App : Application() {
         lateinit var emojiHelper: IEmojiHelper
         lateinit var notificationManager: INotificationManager
         lateinit var notificationFactory: INotificationFactory
+        lateinit var appStatusManager: IAppStatusManager
+        lateinit var appVersionManager: AppVersionManager
+        lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
 
         lateinit var instance: App
             private set
@@ -121,8 +122,7 @@ class App : Application() {
         localStorage = LocalStorageManager()
 
         wordsManager = WordsManager(localStorage)
-        networkManager = NetworkManager(appConfigProvider)
-        rateStatsManager = RateStatsManager(networkManager, rateStorage)
+        networkManager = NetworkManager()
         accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
@@ -148,8 +148,7 @@ class App : Application() {
 
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
-        rateManager = RateManager(rateStorage, networkManager, walletStorage, currencyManager, connectivityManager)
-        rateSyncScheduler = RateSyncScheduler(rateManager, walletManager, currencyManager, connectivityManager)
+        xRateManager = RateManager(this, walletManager, currencyManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
@@ -163,11 +162,16 @@ class App : Application() {
         notificationFactory = NotificationFactory(emojiHelper, instance)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
+        backgroundRateAlertScheduler = BackgroundRateAlertScheduler(instance)
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(localStorage, backgroundRateAlertScheduler, priceAlertsStorage, xRateManager, walletStorage, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
             backgroundManager.registerListener(this)
         }
 
-        BackgroundRateAlertScheduler.startPeriodicWorker(instance)
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage, accountManager, predefinedAccountTypeManager, walletManager, adapterManager, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager)
+        appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
+            backgroundManager.registerListener(this)
+        }
+
     }
 
 }

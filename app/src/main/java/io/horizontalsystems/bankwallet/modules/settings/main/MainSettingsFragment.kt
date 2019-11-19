@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
 import io.horizontalsystems.bankwallet.modules.reportproblem.ReportProblemModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
+import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
 import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -43,6 +45,9 @@ class MainSettingsFragment : Fragment() {
         subscribeToRouterEvents(router)
 
         presenter.viewDidLoad()
+
+        //currently language setting is not working on API 23, 24, 25
+        language.visibility = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) View.VISIBLE else View.GONE
     }
 
     private fun bindViewListeners(presenter: MainSettingsPresenter) {
@@ -51,6 +56,8 @@ class MainSettingsFragment : Fragment() {
         notifications.setOnClickListener { presenter.didTapNotifications() }
 
         manageCoins.setOnClickListener { presenter.didManageCoins() }
+
+        experimentalFeatures.setOnClickListener { presenter.didTapExperimentalFeatures() }
 
         baseCurrency.setOnClickListener { presenter.didTapBaseCurrency() }
 
@@ -70,17 +77,17 @@ class MainSettingsFragment : Fragment() {
     private fun subscribeToViewEvents(presenterView: MainSettingsView, presenter: MainSettingsPresenter) {
         presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
             currency?.let {
-                baseCurrency.selectedValue = it
+                baseCurrency.rightTitle = it
             }
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            securityCenter.setInfoBadgeVisibility(!wordListBackedUp)
+            securityCenter.badgeImage = !wordListBackedUp
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
             languageCode?.let {
-                language.selectedValue = it
+                language.rightTitle = it
             }
         })
 
@@ -142,6 +149,10 @@ class MainSettingsFragment : Fragment() {
 
         router.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { ManageWalletsModule.start(it) }
+        })
+
+        router.showExperimentalFeaturesLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let { ExperimentalFeaturesModule.start(it) }
         })
 
         router.openLinkLiveEvent.observe(viewLifecycleOwner, Observer { link ->

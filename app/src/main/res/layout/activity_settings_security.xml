@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/manageKeys"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,46 +35,40 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:setting_arrow="true"
-                app:setting_icon="@drawable/ic_manage_keys"
-                app:setting_title="@string/SettingsSecurity_ManageKeys" />
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_manage_keys"
+                app:title="@string/SettingsSecurity_ManageKeys"
+                app:bottomBorder="true"/>
 
-            <View
-                android:id="@+id/bottomShade_1"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageKeys" />
-
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/enablePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:layout_constraintTop_toBottomOf="@+id/manageKeys"
-                app:setting_icon="@drawable/ic_passcode"
-                app:setting_title="@string/SettingsSecurity_EnablePin" />
+                app:imageDrawable="@drawable/ic_passcode"
+                app:title="@string/SettingsSecurity_EnablePin"/>
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/changePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/enablePin"
-                app:setting_arrow="true"
-                app:setting_title="@string/SettingsSecurity_EditPin" />
+                app:rightArrow="true"
+                app:title="@string/SettingsSecurity_EditPin"
+                app:bottomBorder="true"/>
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:layout_constraintTop_toBottomOf="@+id/changePin"
-                app:setting_icon="@drawable/ic_fingerprint"
-                app:setting_title="@string/SettingsSecurity_Fingerprint" />
+                app:imageDrawable="@drawable/ic_fingerprint"
+                app:title="@string/SettingsSecurity_Fingerprint"
+                app:bottomBorder="true"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -3,82 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp"
-    android:paddingBottom="8dp">
-
-    <View
-        android:id="@+id/backgroundView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bottom_sheet_floating_background"
-        android:backgroundTint="?attr/BottomSheetBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/addKeyIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/addKeyTitle"
-        style="@style/Headline2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="14dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="?BottomDialogTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/addKeyIcon"
-        app:layout_constraintEnd_toStartOf="@+id/closeButton"
-        app:layout_constraintStart_toEndOf="@+id/addKeyIcon"
-        app:layout_constraintTop_toTopOf="@+id/addKeyIcon"
-        tools:text="@string/AddCoin_Title" />
-
-    <TextView
-        android:id="@+id/addKeySubtitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintLeft_toLeftOf="@id/addKeyTitle"
-        app:layout_constraintTop_toBottomOf="@id/addKeyTitle"
-        tools:text="Subtitle" />
-
-    <ImageView
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:padding="5dp"
-        android:src="@drawable/close"
-        android:tint="@color/grey"
-        android:background="@drawable/rounded_ripple_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/addKeyIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/addKeyIcon"
-        />
-
-    <View
-        android:id="@+id/border"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addKeySubtitle" />
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/addKeyInfo"
@@ -92,12 +17,12 @@
         android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/AddCoin_Description" />
 
     <Button
         android:id="@+id/btnYellow"
-        style="@style/ButtonYellow"
+        style="@style/ButtonPrimaryYellow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -112,7 +37,7 @@
 
     <Button
         android:id="@+id/btnGrey"
-        style="@style/ButtonSteel"
+        style="@style/ButtonPrimarySteel"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"

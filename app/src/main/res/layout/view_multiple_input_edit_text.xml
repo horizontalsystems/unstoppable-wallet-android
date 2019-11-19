@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/input_background_themed"
-    android:minHeight="40dp"
+    android:minHeight="44dp"
     android:paddingStart="12dp"
     android:paddingEnd="8dp">
 
@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
+                android:background="@color/transparent"
                 android:singleLine="false"
                 android:textColor="?attr/TextColorBarsToDark"
                 android:textColorHint="@color/grey_50" />
@@ -40,27 +41,27 @@
 
         <ImageButton
             android:id="@+id/btnQRCodeScan"
-            style="@style/SendImageButtonSmallGrey"
+            style="@style/ImageButtonSecondary"
             android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_scan_qr_copy"
             android:visibility="visible" />
 
         <Button
             android:id="@+id/btnPaste"
-            style="@style/SendButtonSmallGrey"
+            style="@style/ButtonSecondary"
             android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_height="32dp"
             android:text="@string/Send_Button_Paste"
             android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/btnDeleteInput"
-            style="@style/SendImageButtonSmallGrey"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:src="@drawable/round_delete_24_px"
+            style="@style/ImageButtonSecondary"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_delete"
             android:visibility="gone" />
     </LinearLayout>
 

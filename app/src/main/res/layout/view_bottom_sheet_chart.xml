@@ -3,80 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp"
-    android:paddingBottom="8dp">
-
-    <View
-        android:id="@+id/backgroundView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bottom_sheet_floating_background"
-        android:backgroundTint="?attr/BottomSheetBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/chartCoinIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/chartTitle"
-        style="@style/Headline2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="14dp"
-        android:textColor="?BottomDialogTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/chartCoinIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/chartCoinIcon"
-        app:layout_constraintTop_toTopOf="@+id/chartCoinIcon"
-        tools:text="Bitcoin Rate" />
-
-    <TextView
-        android:id="@+id/chartSubtitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintLeft_toLeftOf="@id/chartTitle"
-        app:layout_constraintTop_toBottomOf="@id/chartTitle"
-        tools:text="Subtitle" />
-
-    <ImageView
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:padding="5dp"
-        android:src="@drawable/close"
-        android:tint="@color/grey"
-        android:background="@drawable/rounded_ripple_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/chartCoinIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/chartCoinIcon"
-        />
-
-    <View
-        android:id="@+id/border1"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartSubtitle" />
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/coinRateWrap"
@@ -88,7 +15,7 @@
         android:paddingEnd="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border1">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/coinRateLast"
@@ -99,7 +26,7 @@
             android:textSize="16sp"
             tools:text="3,979.87" />
 
-        <TextView
+        <io.horizontalsystems.bankwallet.ui.extensions.RateDifferenceTextView
             android:id="@+id/coinRateDiff"
             style="@style/Headline2"
             android:layout_width="wrap_content"
@@ -210,7 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textColor="?BottomDialogTextColor"
+            android:textColor="?ColorLeah"
             android:textSize="14sp"
             tools:text="3,867.50" />
 
@@ -227,7 +154,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/marketCapWrap"
+        android:id="@+id/highLowWrap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -235,94 +162,229 @@
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="16dp"
+        android:paddingBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coinChartView">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="34dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/coinMarketCap"
-                android:layout_width="match_parent"
-                android:layout_height="17dp"
-                android:width="0dp"
-                android:fontFamily="@font/noto_sans_regular"
-                android:textColor="?BottomDialogTextColor"
-                android:textSize="12sp"
-                tools:text="$ 100.92 B" />
-
-            <TextView
-                android:id="@+id/coinMarketCapTitle"
-                style="@font/noto_sans_regular"
-                android:layout_width="match_parent"
-                android:layout_height="17dp"
-                android:width="0dp"
-                android:text="@string/Charts_MarketCap"
-                android:textColor="@color/grey"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="34dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/coinRateHigh"
-                android:layout_width="match_parent"
-                android:layout_height="17dp"
-                android:width="0dp"
-                android:fontFamily="@font/noto_sans_regular"
-                android:textColor="?BottomDialogTextColor"
-                android:textSize="12sp"
-                tools:text="$ 12000.10" />
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/coinRateHighTitle"
                 style="@font/noto_sans_regular"
-                android:layout_width="match_parent"
-                android:layout_height="17dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:width="0dp"
                 android:text="@string/Charts_Rate_High"
                 android:textColor="@color/grey"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/coinRateHigh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/noto_sans_regular"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                tools:text="$ 12000.10" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="34dp"
+            android:layout_height="20dp"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/coinRateLow"
-                android:layout_width="match_parent"
-                android:layout_height="17dp"
-                android:width="0dp"
-                android:fontFamily="@font/noto_sans_regular"
-                android:textColor="?BottomDialogTextColor"
-                android:textSize="12sp"
-                tools:text="$ 11000.30" />
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/coinRateLowTitle"
                 style="@font/noto_sans_regular"
-                android:layout_width="match_parent"
-                android:layout_height="17dp"
-                android:width="0dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp"
                 android:text="@string/Charts_Rate_Low"
                 android:textColor="@color/grey"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/coinRateLow"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:width="0dp"
+                android:fontFamily="@font/noto_sans_regular"
+                android:singleLine="true"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                tools:text="$ 11000.30" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/border3"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/steel_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highLowWrap" />
+
+    <LinearLayout
+        android:id="@+id/marketCapWrap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/volumeTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Charts_Volume24"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/volumeValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                tools:text="$ 1.92 B" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/coinMarketCapTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Charts_MarketCap"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/coinMarketCap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                tools:text="$ 100.92 B" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/circulationTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Charts_inCirculation"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/circulationValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                tools:text="100.92B BTC" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/totalSupplyTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Charts_TotalSupply"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/totalSupplyValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                tools:text="100M BTC" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/sourceValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_regular"
+            android:paddingTop="8dp"
+            android:text="@string/Charts_CryptoCompare"
+            android:textAlignment="textEnd"
+            android:textColor="@color/grey"
+            android:textSize="12sp" />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -368,6 +430,7 @@
             app:fallColor="@color/red_d"
             app:growColor="@color/green_d"
             app:indicatorColor="?ColorOz"
+            app:partialChartColor="@color/grey_50"
             app:textColor="@color/grey"
             app:touchColor="?ColorOz" />
 

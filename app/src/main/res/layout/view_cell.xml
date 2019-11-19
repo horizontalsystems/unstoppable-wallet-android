@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="match_parent"
+    android:minHeight="44dp"
     android:background="@drawable/clickable_background_color_lawrence">
 
     <View
@@ -14,22 +15,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/cellIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <io.horizontalsystems.bankwallet.components.CellLeftView
         android:id="@+id/cellLeft"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toStartOf="@+id/cellRight"
-        app:layout_constraintStart_toEndOf="@+id/cellIcon" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <io.horizontalsystems.bankwallet.components.CellRightView
         android:id="@+id/cellRight"

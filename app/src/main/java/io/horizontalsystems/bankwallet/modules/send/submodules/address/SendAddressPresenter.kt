@@ -1,21 +1,38 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
-class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor)
-    : SendAddressModule.IViewDelegate, SendAddressModule.IInteractorDelegate, SendAddressModule.IAddressModule {
+import androidx.lifecycle.ViewModel
 
-    var view: SendAddressModule.IView? = null
+class SendAddressPresenter(val view: SendAddressModule.IView,
+                           private val interactor: SendAddressModule.IInteractor)
+    : ViewModel(), SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate,
+      SendAddressModule.IViewDelegate {
+
     var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
 
-    // SendAddressModule.IAddressModule
+    private var enteredAddress: String? = null
 
-    override var currentAddress: String? = null
-        private set(value) {
-            field = value
-            moduleDelegate?.onUpdateAddress()
+    override val currentAddress: String?
+        get() = try {
+            validAddress()
+        } catch (e: Exception) {
+            null
         }
 
     override fun validAddress(): String {
-        return currentAddress ?: throw SendAddressModule.ValidationError.InvalidAddress()
+        val address = enteredAddress ?: throw SendAddressModule.ValidationError.InvalidAddress()
+
+        try {
+            moduleDelegate?.validate(address)
+
+            view.setAddress(address)
+            view.setAddressError(null)
+        } catch (e: Exception) {
+            view.setAddress(address)
+            view.setAddressError(e)
+            throw e
+        }
+
+        return address
     }
 
     override fun didScanQrCode(address: String) {
@@ -39,35 +56,33 @@ class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor
     }
 
     override fun onAddressDeleteClicked() {
-        updateAddress(null)
+        view.setAddress(null)
+        view.setAddressError(null)
+
+        enteredAddress = null
+        moduleDelegate?.onUpdateAddress()
         updatePasteButtonState()
     }
 
     private fun onAddressEnter(address: String) {
         val (parsedAddress, amount) = interactor.parseAddress(address)
 
+        enteredAddress = parsedAddress
+
         try {
-            moduleDelegate?.validate(parsedAddress)
+            validAddress()
+        } catch (e: Exception) {
+        }
 
-            updateAddress(parsedAddress, null)
+        moduleDelegate?.onUpdateAddress()
 
-            amount?.let { parsedAmount ->
-                moduleDelegate?.onUpdateAmount(parsedAmount)
-            }
-        } catch (ex: Exception) {
-            updateAddress(parsedAddress, ex)
+        amount?.let { parsedAmount ->
+            moduleDelegate?.onUpdateAmount(parsedAmount)
         }
     }
 
-    private fun updateAddress(address: String?, error: Exception? = null) {
-        view?.setAddress(address)
-        view?.setAddressError(error)
-
-        this.currentAddress = if (error == null) address else null
-    }
-
     private fun updatePasteButtonState() {
-        view?.setPasteButtonState(interactor.clipboardHasPrimaryClip)
+        view.setPasteButtonState(interactor.clipboardHasPrimaryClip)
     }
 
 }

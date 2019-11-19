@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
+import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
@@ -38,7 +39,7 @@ class DashAdapter(override val kit: DashKit) :
     // DashKit Listener
     //
 
-    override fun onBalanceUpdate(balance: Long) {
+    override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
     }
 
@@ -101,15 +102,19 @@ class DashAdapter(override val kit: DashKit) :
     // ISendDashAdapter
 
     override fun availableBalance(address: String?): BigDecimal {
-        return availableBalance(feeRate, address)
+        return availableBalance(feeRate, address, mapOf())
     }
 
     override fun fee(amount: BigDecimal, address: String?): BigDecimal {
-        return fee(amount, feeRate, address)
+        return fee(amount, feeRate, address, mapOf())
+    }
+
+    override fun validate(address: String) {
+        validate(address, mapOf())
     }
 
     override fun send(amount: BigDecimal, address: String): Single<Unit> {
-        return send(amount, address, feeRate)
+        return send(amount, address, feeRate, mapOf())
     }
 
     companion object {

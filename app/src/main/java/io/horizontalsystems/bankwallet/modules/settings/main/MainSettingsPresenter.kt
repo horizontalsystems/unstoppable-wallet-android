@@ -31,6 +31,10 @@ class MainSettingsPresenter(
         router.showManageCoins()
     }
 
+    override fun didTapExperimentalFeatures() {
+        router.showExperimentalFeatures()
+    }
+
     override fun didTapBaseCurrency() {
         router.showBaseCurrencySettings()
     }

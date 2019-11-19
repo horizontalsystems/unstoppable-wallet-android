@@ -66,7 +66,6 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         viewModel.confirmBackupEvent.observe(this, Observer {
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
-            val keyName = getString(it.predefinedAccountType.title)
             val description = getString(R.string.ManageKeys_Delete_Alert)
             ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.BACKUP)
         })
@@ -87,12 +86,12 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             }
         })
 
-        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { wordsCount ->
-            RestoreWordsModule.startForResult(this, wordsCount, ModuleCode.RESTORE_WORDS)
+        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { (wordsCount, titleRes) ->
+            RestoreWordsModule.startForResult(this, wordsCount, titleRes, ModuleCode.RESTORE_WORDS)
         })
 
-        viewModel.startRestoreEosLiveEvent.observe(this, Observer {
-            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
+        viewModel.startRestoreEosLiveEvent.observe(this, Observer { titleRes ->
+            RestoreEosModule.startForResult(this, titleRes, ModuleCode.RESTORE_EOS)
         })
 
         viewModel.showItemsEvent.observe(this, Observer { list ->

@@ -15,13 +15,14 @@ class ChartConfig(context: Context, viewHelper: ViewHelper) {
     var growColor = context.getColor(R.color.green_d)
     var fallColor = context.getColor(R.color.red_d)
     var indicatorColor = context.getColor(R.color.light)
+    var partialChartColor = context.getColor(R.color.grey_50)
 
     //  dimens
     var width = 0f
     var height = 0f
     var textSize = viewHelper.dp2px(12f)
     var textPadding = viewHelper.dp2px(4f)
-    var strokeWidth = 1f
+    var strokeWidth = 2f
     var offsetRight = 0f
     var offsetBottom = 0f
     var gridEdgeOffset = viewHelper.dp2px(5f)

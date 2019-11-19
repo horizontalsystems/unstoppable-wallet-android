@@ -57,8 +57,8 @@ object ManageWalletsModule {
     }
 
     interface IRouter {
-        fun openRestoreWordsModule(wordsCount: Int)
-        fun openRestoreEosModule()
+        fun openRestoreWordsModule(wordsCount: Int, titleRes: Int)
+        fun openRestoreEosModule(titleRes: Int)
         fun close()
     }
 

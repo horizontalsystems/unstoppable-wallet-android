@@ -77,6 +77,7 @@ class ChartView : View {
             ta.getInt(R.styleable.ChartView_gridColor, context.getColor(R.color.steel_20)).let { config.gridColor = it }
             ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.light)).let { config.touchColor = it }
             ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.light)).let { config.indicatorColor = it }
+            ta.getInt(R.styleable.ChartView_partialChartColor, context.getColor(R.color.light)).let { config.partialChartColor = it }
         } finally {
             ta.recycle()
         }
@@ -124,9 +125,9 @@ class ChartView : View {
         chartIndicator?.init(config)
     }
 
-    fun setData(points: List<ChartPoint>, chartType: ChartType) {
-        setColour(points)
-        setPoints(points, chartType)
+    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
+        setColour(points, endTimestamp)
+        setPoints(points, chartType, startTimestamp, endTimestamp)
 
         if (config.animated) {
             animator.setFloatValues(0f)
@@ -136,18 +137,20 @@ class ChartView : View {
         }
     }
 
-    private fun setColour(points: List<ChartPoint>) {
+    private fun setColour(points: List<ChartPoint>, endTimestamp: Long) {
         val startPoint = points.firstOrNull() ?: return
         val endPoint = points.lastOrNull() ?: return
 
-        if (startPoint.value > endPoint.value) {
+        if (endPoint.timestamp < endTimestamp) {
+            config.curveColor = config.partialChartColor
+        } else if (startPoint.value > endPoint.value) {
             config.curveColor = config.fallColor
         } else {
             config.curveColor = config.growColor
         }
     }
 
-    private fun setPoints(points: List<ChartPoint>, chartType: ChartType) {
+    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
         helper.scale(points)
 
         var shapeWidth = width.toFloat()
@@ -167,10 +170,10 @@ class ChartView : View {
 
         shape.set(0f, 0f, shapeWidth - config.offsetRight, shapeHeight - config.offsetBottom)
 
-        chartCurve.init(points)
+        chartCurve.init(points, startTimestamp, endTimestamp)
 
         if (config.showGrid) {
-            chartGrid.init(points, chartType)
+            chartGrid.init(chartType, startTimestamp, endTimestamp)
         }
     }
 }

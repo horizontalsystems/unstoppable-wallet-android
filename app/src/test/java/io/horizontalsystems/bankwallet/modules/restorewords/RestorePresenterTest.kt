@@ -29,10 +29,9 @@ class RestorePresenterTest {
         repeat(12) {
             val word = "word-$it"
             words.add(it, word)
-            presenter.onChange(it, word)
         }
 
-        presenter.onDone()
+        presenter.onDone(words.joinToString(separator = " " ))
         verify(interactor).validate(words)
     }
 

@@ -7,13 +7,10 @@ import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
 class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
 
-    fun setCoordinates(points: List<ChartPoint>): List<Coordinate> {
+    fun setCoordinates(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long): List<Coordinate> {
         val width = shape.width()
         val height = shape.height()
         val bottom = config.valueTop - (config.valueStep * 4)
-
-        val startTimestamp = points.first().timestamp
-        val endTimestamp = points.last().timestamp
 
         val deltaX = (endTimestamp - startTimestamp) / width
         val deltaY = height / (config.valueStep * 4)

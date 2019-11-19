@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -10,17 +11,17 @@ import java.math.BigDecimal
 
 
 class SendFeePresenter(
+        val view: SendFeeModule.IView,
         private val interactor: SendFeeModule.IInteractor,
         private val helper: SendFeePresenterHelper,
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
         private val feeCoinData: Pair<Coin, String>?)
-    : SendFeeModule.IViewDelegate, SendFeeModule.IInteractorDelegate, SendFeeModule.IFeeModule {
+    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule {
 
-    var view: SendFeeModule.IView? = null
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
-    private var xRate: Rate? = null
+    private var xRate: BigDecimal? = null
     private var inputType = SendModule.InputType.COIN
 
     private var fee: BigDecimal = BigDecimal.ZERO
@@ -35,20 +36,20 @@ class SendFeePresenter(
     private fun syncError() {
         try {
             validate()
-            view?.setInsufficientFeeBalanceError(null)
+            view.setInsufficientFeeBalanceError(null)
         } catch (e: SendFeeModule.InsufficientFeeBalance) {
-            view?.setInsufficientFeeBalanceError(e)
+            view.setInsufficientFeeBalanceError(e)
         }
     }
 
     private fun syncFeeLabels() {
-        view?.setPrimaryFee(helper.feeAmount(fee, SendModule.InputType.COIN, xRate))
-        view?.setSecondaryFee(helper.feeAmount(fee, SendModule.InputType.CURRENCY, xRate))
+        view.setPrimaryFee(helper.feeAmount(fee, SendModule.InputType.COIN, xRate))
+        view.setSecondaryFee(helper.feeAmount(fee, SendModule.InputType.CURRENCY, xRate))
     }
 
     private fun syncFeeRateLabels() {
-        view?.setDuration(feeRateInfo.duration)
-        view?.setFeePriority(feeRateInfo.priority)
+        view.setDuration(feeRateInfo.duration)
+        view.setFeePriority(feeRateInfo.priority)
     }
 
     private fun validate() {
@@ -79,7 +80,7 @@ class SendFeePresenter(
                 SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
-                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
+                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
                     } ?: throw Exception("Invalid state")
                 }
             }
@@ -91,7 +92,7 @@ class SendFeePresenter(
                 SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
-                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
+                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
                     }
                 }
             }
@@ -118,7 +119,7 @@ class SendFeePresenter(
     // SendFeeModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        interactor.getRate(coin.code)
+        xRate = interactor.getRate(coin.code)
 
         feeRates = interactor.getFeeRates()
 
@@ -133,7 +134,7 @@ class SendFeePresenter(
 
     override fun onClickFeeRatePriority() {
         feeRates?.let {
-            view?.showFeeRatePrioritySelector(it.map { rateInfo ->
+            view.showFeeRatePrioritySelector(it.map { rateInfo ->
                 feeRateInfoViewItem(rateInfo)
             })
         }
@@ -151,17 +152,4 @@ class SendFeePresenter(
 
         moduleDelegate?.onUpdateFeeRate(feeRate)
     }
-
-    override fun onClear() {
-        interactor.clear()
-    }
-
-    // SendFeeModule.IInteractorDelegate
-
-    override fun onRateFetched(latestRate: Rate?) {
-        xRate = latestRate
-        syncFeeLabels()
-        syncError()
-    }
-
 }

@@ -1,110 +1,112 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
-import io.horizontalsystems.bankwallet.entities.LatestRateData
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import android.content.Context
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.xrateskit.XRatesKit
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.HttpException
 import java.math.BigDecimal
-import java.net.SocketTimeoutException
 
-class RateManager(private val storage: IRateStorage,
-                  private val networkManager: INetworkManager,
-                  private val walletStorage: IWalletStorage,
-                  private val currencyManager: ICurrencyManager,
-                  private val connectivityManager: ConnectivityManager) : IRateManager {
+class RateManager(context: Context, walletManager: IWalletManager, private val currencyManager: ICurrencyManager) : IRateManager {
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-    private val latestRateFallbackThreshold = 60 * 10 // 10 minutes
+    private val disposables = CompositeDisposable()
+    private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code, 60 * 10)
 
-    override fun syncLatestRatesSingle(): Single<LatestRateData> {
-        val coinCodes = walletStorage.enabledCoins().map { it.code }
-        return refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
-    }
+    init {
+        walletManager.walletsUpdatedObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe { wallets ->
+                    onWalletsUpdated(wallets)
+                }.let {
+                    disposables.add(it)
+                }
 
-    override fun syncLatestRates() {
-        disposables.clear()
-        if (connectivityManager.isConnected) {
-            syncLatestRatesSingle()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe({
-
-                    },{
-                        //request failed
-                    })
-                    .let { disposables.add(it) }
-        }
-    }
-
-    private fun refreshLatestRates(coinCodes: List<String>, currencyCode: String): Single<LatestRateData> {
-        return networkManager.getLatestRateData(HostType.MAIN, currencyCode)
-                .onErrorResumeNext(networkManager.getLatestRateData(HostType.FALLBACK, currencyCode))
-                .doOnSuccess {
-                    latestRateData ->
-                    coinCodes.forEach { coinCode ->
-                        latestRateData.rates[coinCode]?.toBigDecimalOrNull()?.let {
-                            val rate = Rate(coinCode, latestRateData.currency, it, latestRateData.timestamp, true)
-                            storage.saveLatest(rate)
-                        }
-                    }
+        currencyManager.baseCurrencyUpdatedSignal
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    onBaseCurrencyUpdated()
+                }.let {
+                    disposables.add(it)
                 }
     }
 
-    private fun getLatestRateFallback(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        if (timestamp < ((System.currentTimeMillis() / 1000) - latestRateFallbackThreshold)) {
-            return Single.error(Throwable())
+    override fun set(coins: List<String>) {
+        val convertedCoins = coins.map { converted(it) }
+        kit.set(convertedCoins)
+    }
+
+    override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
+        return kit.getMarketInfo(converted(coinCode), currencyCode)
+    }
+
+    override fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal? {
+        val marketInfo = marketInfo(coinCode, currencyCode)
+
+        return when {
+            marketInfo == null -> null
+            marketInfo.isExpired() -> null
+            else -> marketInfo.rate
         }
 
-        return storage.latestRateObservable(coinCode, currencyCode)
-                .firstOrError()
-                .flatMap {
-                    if (it.expired) {
-                        Single.error(Throwable())
-                    } else {
-                        Single.just(it.value)
-                    }
+    }
+
+    override fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo> {
+        return kit.marketInfoObservable(converted(coinCode), currencyCode)
+    }
+
+    override fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>> {
+        return kit.marketInfoMapObservable(currencyCode)
+                .map { marketInfo ->
+                    marketInfo.map { unconverted(it.key) to it.value }.toMap()
                 }
     }
 
-    fun rateValueObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        return storage.rateSingle(coinCode, currencyCode, timestamp)
-                .map { it.value }
-                .onErrorResumeNext(
-                        getLatestRateFallback(coinCode, currencyCode, timestamp)
-                                .doOnSuccess {
-                                    getRateFromNetwork(coinCode, currencyCode, timestamp)
-                                            .subscribeOn(Schedulers.io())
-                                            .subscribe({ /* success */ }, { /* request failed */ })
-                                }
-                                .onErrorResumeNext(getRateFromNetwork(coinCode, currencyCode, timestamp))
-                )
+    override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
+        return kit.historicalRate(converted(coinCode), currencyCode, timestamp)
     }
 
-    private fun getRateFromNetwork(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        return networkManager.getRateByHour(HostType.MAIN, coinCode, currencyCode, timestamp)
-                .onErrorResumeNext { throwable: Throwable ->
-                    when (throwable) {
-                        is SocketTimeoutException ->
-                            networkManager.getRateByHour(HostType.FALLBACK, coinCode, currencyCode, timestamp)
-                                    .onErrorResumeNext(networkManager.getRateByDay(HostType.FALLBACK, coinCode, currencyCode, timestamp))
-                        is HttpException ->
-                            networkManager.getRateByDay(HostType.MAIN, coinCode, currencyCode, timestamp)
-                                    .onErrorResumeNext(networkManager.getRateByDay(HostType.FALLBACK, coinCode, currencyCode, timestamp))
-                        else -> Single.error(Throwable())
-                    }
-                }
-                .doOnSuccess { rateFromNetwork ->
-                    storage.save(Rate(coinCode, currencyCode, rateFromNetwork, timestamp, false))
-                }
+    override fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
+        return kit.getChartInfo(converted(coinCode), currencyCode, chartType)
     }
 
-    fun clear() {
-        disposables.clear()
-        storage.deleteAll()
+    override fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
+        return kit.chartInfoObservable(converted(coinCode), currencyCode, chartType)
     }
+
+    override fun refresh() {
+        kit.refresh()
+    }
+
+    private fun onWalletsUpdated(wallets: List<Wallet>) {
+        kit.set(wallets.map { converted(it.coin.code) })
+    }
+
+    private fun onBaseCurrencyUpdated() {
+        kit.set(currencyManager.baseCurrency.code)
+    }
+
+    private fun converted(coinCode: String) : String {
+        return when (coinCode) {
+            "HOT" -> "HOLO"
+            else -> coinCode
+        }
+
+    }
+
+    private fun unconverted(coinCode: String) : String {
+        return when (coinCode) {
+            "HOLO" -> "HOT"
+            else -> coinCode
+        }
+
+    }
+
 }

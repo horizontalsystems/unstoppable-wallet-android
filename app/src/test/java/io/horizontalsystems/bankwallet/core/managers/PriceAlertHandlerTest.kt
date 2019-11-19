@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.IPriceAlertsStorage
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import junit.framework.Assert.assertEquals
 import org.junit.Before
@@ -21,12 +20,10 @@ class PriceAlertHandlerTest {
     private val notificationFactory = mock<INotificationFactory>()
     private val handler = PriceAlertHandler(priceAlertStorage, notificationManager, notificationFactory)
 
-    private val btcCoin = Coin("Bitcoin", "BTC", 0, CoinType.Bitcoin)
-    private val ethCoin = Coin("Ethereum", "ETH", 0, CoinType.Ethereum)
+    private val btcCoin = Coin("BTC", "Bitcoin", "BTC", 0, CoinType.Bitcoin)
+    private val ethCoin = Coin("ETH", "Ethereum", "ETH", 0, CoinType.Ethereum)
 
-    private val rates = mapOf("BTC" to "8600", "ETH" to "120")
-    private val ratesWithOnlyBtc = mapOf("BTC" to "8600")
-    private val latestRateData = LatestRateData(rates, "USD", 123456)
+    private val latestRateData = mapOf("BTC" to 8600.toBigDecimal(), "ETH" to 120.toBigDecimal())
     private val priceAlert1 = PriceAlert(btcCoin, PriceAlert.State.PERCENT_3, 8200.toBigDecimal())
     private val priceAlert2 = PriceAlert(ethCoin, PriceAlert.State.PERCENT_2, 100.toBigDecimal())
 
@@ -55,7 +52,7 @@ class PriceAlertHandlerTest {
     @Test
     fun handleAlerts_ReceivedOnlyBtcRate() {
         val expectedItem1 = PriceAlertItem(btcCoin, 3)
-        val latestRateDataWithOnlyBtc = LatestRateData(ratesWithOnlyBtc, "USD", 123456)
+        val latestRateDataWithOnlyBtc = mapOf("BTC" to 8600.toBigDecimal())
 
         handler.handleAlerts(latestRateDataWithOnlyBtc)
 

@@ -13,8 +13,8 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     val confirmCreateEvent = SingleLiveEvent<ManageAccountItem>()
     val confirmBackupEvent = SingleLiveEvent<ManageAccountItem>()
     val startBackupModuleLiveEvent = SingleLiveEvent<ManageAccountItem>()
-    val startRestoreWordsLiveEvent = SingleLiveEvent<Int>()
-    val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
+    val startRestoreWordsLiveEvent = SingleLiveEvent<Pair<Int,Int>>()
+    val startRestoreEosLiveEvent = SingleLiveEvent<Int>()
     val closeLiveEvent = SingleLiveEvent<Void>()
 
     lateinit var delegate: ManageKeysModule.ViewDelegate
@@ -24,7 +24,7 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
         delegate.viewDidLoad()
     }
 
-    //  View
+    //  IView
 
     override fun show(items: List<ManageAccountItem>) {
         showItemsEvent.postValue(items)
@@ -56,12 +56,12 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
         startBackupModuleLiveEvent.postValue(accountItem)
     }
 
-    override fun startRestoreWords(wordsCount: Int) {
-        startRestoreWordsLiveEvent.postValue(wordsCount)
+    override fun startRestoreWords(wordsCount: Int, titleRes: Int) {
+        startRestoreWordsLiveEvent.postValue(Pair(wordsCount, titleRes))
     }
 
-    override fun startRestoreEos() {
-        startRestoreEosLiveEvent.call()
+    override fun startRestoreEos(titleRes: Int) {
+        startRestoreEosLiveEvent.postValue(titleRes)
     }
 
     override fun close() {

@@ -1,61 +1,62 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IRateStatsManager
-import io.horizontalsystems.bankwallet.core.IRateStorage
-import io.horizontalsystems.bankwallet.core.managers.StatsData
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
+import io.horizontalsystems.bankwallet.core.IChartTypeStorage
+import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class RateChartInteractor(
-        private val rateStatsManager: IRateStatsManager,
-        private val rateStorage: IRateStorage,
-        private val localStorage: ILocalStorage)
+class RateChartInteractor(private val xRateManager: IRateManager, private val localStorage: IChartTypeStorage)
     : RateChartModule.Interactor {
 
-    private val disposables = CompositeDisposable()
     var delegate: RateChartModule.InteractorDelegate? = null
 
-    override var defaultChartType: ChartType
-        get() = localStorage.chartMode
+    private var mInfoDisposable: Disposable? = null
+    private var cInfoDisposable: Disposable? = null
+
+    override var defaultChartType: ChartType?
+        get() = localStorage.chartType
         set(value) {
-            localStorage.chartMode = value
+            localStorage.chartType = value
         }
 
-    override fun syncStats(coinCode: String, currencyCode: String) {
-        rateStatsManager.syncStats(coinCode, currencyCode)
+    override fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo? {
+        return xRateManager.marketInfo(coinCode, currencyCode)
     }
 
-    override fun subscribeToChartStats() {
-        rateStatsManager.statsFlowable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    if (it is StatsData) {
-                        delegate?.onReceiveStats(it)
-                    }
-                }, {
-                    delegate?.onReceiveError(it)
-                })
-                .let { disposables.add(it) }
+    override fun getChartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
+        return xRateManager.chartInfo(coinCode, currencyCode, chartType)
     }
 
-    override fun subscribeToLatestRate(coinCode: String, currencyCode: String) {
-        rateStorage.latestRateObservable(coinCode, currencyCode)
+    override fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType) {
+        cInfoDisposable?.dispose()
+        cInfoDisposable = xRateManager.chartInfoObservable(coinCode, currencyCode, chartType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.onReceiveLatestRate(it)
+                .subscribe({ chartInfo ->
+                    delegate?.onUpdate(chartInfo)
                 }, {
-                    delegate?.onReceiveError(it)
+                    delegate?.onError(it)
                 })
-                .let { disposables.add(it) }
+    }
+
+    override fun observeMarketInfo(coinCode: String, currencyCode: String) {
+        mInfoDisposable?.dispose()
+        mInfoDisposable = xRateManager.marketInfoObservable(coinCode, currencyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ marketInfo ->
+                    delegate?.onUpdate(marketInfo)
+                }, {
+                    delegate?.onError(it)
+                })
     }
 
     override fun clear() {
-        disposables.clear()
+        mInfoDisposable?.dispose()
+        cInfoDisposable?.dispose()
     }
-
 }

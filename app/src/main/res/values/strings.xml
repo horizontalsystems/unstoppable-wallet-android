@@ -19,12 +19,12 @@
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
 
-    <string name="Wallet">%s wallet</string>
+    <string name="Wallet">%s Wallet</string>
 
     <!--Welcome-->
 
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
 
@@ -35,6 +35,9 @@
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>
+    <string name="Restore_Enter_Key_Title">Enter Key</string>
+    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
@@ -55,11 +58,6 @@
 
     <string name="Backup_DisplayTitle">Private Key</string>
 
-    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
-    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
-
     <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
     <string name="Backup_Confirmation_CheckTitle">Check…</string>
@@ -69,10 +67,8 @@
     <string name="Backup_Button_Submit">Submit</string>
     <string name="Backup_Button_ShowKey">Show Key</string>
 
-    <!--Backup Words-->
-    <string name="Backup_Words_Title">Secret Key</string>
-
     <!--Backup Eos-->
+
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
@@ -85,8 +81,9 @@
     <string name="Balance_RatePerCoin">%s per %s</string>
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
+    <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Value</string>
+    <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
@@ -109,6 +106,7 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
+    <string name="Send_Confirmation_LockTime">TimeLock:</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
@@ -117,9 +115,14 @@
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
+    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
+    <string name="Send_Error_MaximumAmount">Max. amount %s</string>
+    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
 
     <string name="Send_DialogTitle">Confirm</string>
+    <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed:</string>
     <string name="Send_TxSpeed_Low">Low</string>
     <string name="Send_TxSpeed_Medium">Medium</string>
@@ -129,6 +132,12 @@
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogLockTime">TimeLock</string>
+    <string name="Send_LockTime_Off">Off</string>
+    <string name="Send_LockTime_Hour">1 hour</string>
+    <string name="Send_LockTime_Month">1 month</string>
+    <string name="Send_LockTime_HalfYear">6 months</string>
+    <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">Sending</string>
 
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
@@ -140,10 +149,6 @@
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <string name="Deposit_Your_Account">Your Account</string>
-
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
 
     <!--Timestamp-->
 
@@ -164,6 +169,9 @@
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
+    <string name="Transactions_Receiving">Receiving</string>
+    <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Pending">Pending</string>
 
     <!--Transaction Info-->
 
@@ -176,9 +184,16 @@
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_LockTime">TimeLock</string>
+    <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+
+    <!-- Info -->
+
+    <string name="Info_LockTime_Title">TimeLock</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
 
     <!--Full Info-->
 
@@ -232,6 +247,7 @@
     <string name="Settings_SecurityCenter">Security Center</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">Manage Coins</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
@@ -287,6 +303,7 @@
     <string name="SettingsReport_Title">Report a Problem</string>
     <string name="SettingsReport_Email">Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_AppStatus">App Status</string>
 
     <!--Setting_Notifications-->
 
@@ -296,6 +313,7 @@
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
     <string name="SettingsNotifications_Off">Off</string>
     <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="SettingsNotifications_PushNotification">Push Notification</string>
 
     <string name="Notification_Notifications">Notifications %s</string>
     <string name="Notification_Up">Up</string>
@@ -330,6 +348,7 @@
     <string name="Hud_Text_Copied">Copied</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
+    <string name="Hud_UnknownError">Unknown Error %s</string>
 
     <!--Fingerprint texts-->
 
@@ -374,6 +393,18 @@
     <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
 
+    <!-- Experimental Feature -->
+
+    <string name="ExperimentalFeatures_Title">Experimental</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+
+    <!-- Bitcoin Hodling -->
+
+    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
+    <string name="BitcoinHodling_LockTime">TimeLock</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
+
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Wallets</string>
@@ -387,7 +418,7 @@
     <!--Manage Keys Delete Alert-->
 
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
@@ -404,11 +435,11 @@
     <!-- Account Types -->
 
     <string name="AccountType_Unstoppable">Unstoppable</string>
-    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20</string>
+    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20 tokens</string>
     <string name="AccountType_Eos">EOS</string>
-    <string name="AccountType_Eos_Text" translatable="false">EOS, EOS-based Tokens</string>
+    <string name="AccountType_Eos_Text" translatable="false">EOS, EOS tokens</string>
     <string name="AccountType_Binance">Binance</string>
-    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2</string>
+    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2 tokens</string>
 
     <!--Coin Option-->
 
@@ -435,14 +466,22 @@
     <string name="Charts_TimeDuration_Year">1Y</string>
 
     <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
+    <string name="Charts_Rate_High">%s High</string>
+    <string name="Charts_Rate_Low">%s Low</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_inCirculation">in Circulation</string>
+    <string name="Charts_TotalSupply">Total Supply</string>
+    <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Volume</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
+
+    <!--Rate list-->
+
+    <string name="RateList_updated">updated\n%s</string>
 
 </resources>

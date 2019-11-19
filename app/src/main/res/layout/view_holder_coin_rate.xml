@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+    <io.horizontalsystems.bankwallet.ui.extensions.IconView
         android:id="@+id/coinIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -46,7 +46,7 @@
 
     <TextView
         android:id="@+id/txValueInFiat"
-        style="@style/Subhead1"
+        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -55,32 +55,25 @@
         app:layout_constraintTop_toTopOf="@+id/txCoinCode"
         tools:text="$400" />
 
-    <TextView
+    <io.horizontalsystems.bankwallet.ui.extensions.RateDifferenceTextView
         android:id="@+id/txDiff"
-        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="?ColorLucian"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/txCoinName"
         app:layout_constraintEnd_toEndOf="@+id/txValueInFiat"
         tools:text="+ 0.87%" />
 
-    <ProgressBar
-        android:id="@+id/loadingSpinner"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:backgroundTint="@color/grey"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/grey"
-        android:indeterminateTintMode="src_atop"
+    <TextView
+        android:id="@+id/txDiffNa"
+        style="@style/Subhead1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="----"
+        android:textColor="@color/grey_50"
         android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="@+id/txCoinName"
-        app:layout_constraintEnd_toEndOf="@+id/txValueInFiat"/>
+        app:layout_constraintBottom_toBottomOf="@+id/txCoinName"
+        app:layout_constraintEnd_toEndOf="@+id/txValueInFiat" />
 
     <View
         android:id="@+id/divider"
@@ -93,8 +86,8 @@
         android:id="@+id/bottomShade"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="?CellBottomShadeColor"
-        android:visibility="visible"
+        android:background="@color/steel_20"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

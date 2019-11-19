@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -21,6 +20,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
+import java.util.logging.Logger
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
@@ -112,6 +112,7 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
 
     private val noTransactionsView = 0
     private val transactionView = 1
+    private val logger = Logger.getLogger("TransactionsAdapter")
 
     interface Listener {
         fun onItemClick(item: TransactionViewItem)
@@ -140,7 +141,11 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
         }
 
         if (holder is ViewHolderTransaction) {
-            holder.bind(viewModel.delegate.itemForIndex(position), showBottomShade = (position == itemCount - 1))
+            try {
+                holder.bind(viewModel.delegate.itemForIndex(position), showBottomShade = (position == itemCount - 1))
+            } catch (e: ArrayIndexOutOfBoundsException) {
+                logger.warning("throwing exception ArrayIndexOutOfBoundsException in TransactionsFragment")
+            }
         }
     }
 
@@ -163,11 +168,12 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txValueInFiat.text = transactionRecord.currencyValue?.let {
             App.numberFormatter.formatForTransactions(it, transactionRecord.incoming)
         }
+        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (transactionRecord.lockInfo != null) R.drawable.ic_lock else 0, 0)
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
         directionIcon.setImageResource(if (transactionRecord.incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txStatusWithTimeView.bind(transactionRecord.status, time)
+        txStatusWithTimeView.bind(transactionRecord.status, transactionRecord.incoming, time)
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
     }
 }

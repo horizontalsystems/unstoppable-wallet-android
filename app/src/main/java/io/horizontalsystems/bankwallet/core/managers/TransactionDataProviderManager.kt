@@ -53,7 +53,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         else -> listOf(BinanceChainProvider(false))
     }
 
-    private val eosProviders = listOf(EosInfraProvider(), EosGreymassProvider())
+    private val eosProviders = listOf(EosGreymassProvider())
 
     override val baseProviderUpdatedSignal = PublishSubject.create<Unit>()
 

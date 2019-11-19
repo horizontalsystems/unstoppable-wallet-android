@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
-import io.horizontalsystems.bankwallet.modules.send.SendModule
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.hodler.LockTimeInterval
 
 object SendConfirmationModule {
 
-    const val ConfirmationInfoKey = "confirmation_info_key"
+    //const val ConfirmationInfoKey = "confirmation_info_key"
 
     interface IView{
         fun loadPrimaryItems(primaryItemData: PrimaryItemData)
@@ -29,15 +31,6 @@ object SendConfirmationModule {
         fun didCopyToClipboard()
     }
 
-    fun init(view: SendConfirmationViewModel, confirmationViewItems: List<SendModule.SendConfirmationViewItem>) {
-        val interactor = SendConfirmationInteractor(TextHelper)
-        val presenter = SendConfirmationPresenter(interactor, confirmationViewItems)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
-    }
-
     enum class SendButtonState {
         ACTIVE, SENDING
     }
@@ -48,10 +41,27 @@ object SendConfirmationModule {
             val secondaryName: String?,
             val secondaryAmount: String?,
             val receiver: String,
-            val memo: String?)
+            val memo: String?,
+            val locked: Boolean)
 
     data class SecondaryItemData(
             val feeAmount: String?,
-            val estimatedTime: Long?)
+            val estimatedTime: Long?,
+            val lockTimeInterval: LockTimeInterval?)
+
+
+    class Factory() : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+            val view = SendConfirmationView()
+            val interactor = SendConfirmationInteractor(TextHelper)
+            val presenter = SendConfirmationPresenter(view, interactor )
+
+            interactor.delegate = presenter
+
+            return presenter as T
+        }
+    }
 
 }

@@ -1,141 +1,58 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
-import android.content.Context
-import android.graphics.PorterDuff
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.AttributeSet
-import android.view.View
-import android.view.animation.AnimationUtils
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_amount_input.view.*
+import androidx.lifecycle.MutableLiveData
+import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class SendAmountView : ConstraintLayout {
+class SendAmountView : SendAmountModule.IView {
 
-    private var delegate: SendAmountModule.IViewDelegate? = null
+    val amount = MutableLiveData<String>()
+    val availableBalance = MutableLiveData<String>()
+    val hint = MutableLiveData<String?>()
+    val amountInputPrefix = MutableLiveData<String?>()
+    val maxButtonVisibleValue = MutableLiveData<Boolean>()
+    val addTextChangeListener = SingleLiveEvent<Unit>()
+    val removeTextChangeListener = SingleLiveEvent<Unit>()
+    val revertAmount = SingleLiveEvent<String>()
+    val validationError = MutableLiveData<SendAmountModule.ValidationError?>()
+    val switchButtonEnabled = MutableLiveData<Boolean>()
 
-    init {
-        inflate(context, R.layout.view_amount_input, this)
-
-        btnSwitch.visibility = View.VISIBLE
-        btnMax.visibility = View.VISIBLE
-        btnSwitch.imageTintMode = PorterDuff.Mode.SRC_IN
-
-        invalidate()
+    override fun setAmountType(prefix: String?) {
+        amountInputPrefix.value = prefix
     }
 
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, lifecycleOwner: LifecycleOwner, sendAmountViewModel: SendAmountViewModel) : super(context) {
-
-        delegate = sendAmountViewModel.delegate
-
-        btnMax.setOnClickListener { delegate?.onMaxClick() }
-
-        btnSwitch.setOnClickListener { delegate?.onSwitchClick() }
-
-        delegate?.onViewDidLoad()
-
-        sendAmountViewModel.amountInputPrefix.observe(lifecycleOwner, Observer { prefix ->
-            setPrefix(prefix)
-        })
-
-        sendAmountViewModel.amount.observe(lifecycleOwner, Observer { amount ->
-            setAmount(amount)
-        })
-
-        sendAmountViewModel.hint.observe(lifecycleOwner, Observer { hint ->
-            setHint(hint)
-        })
-
-        sendAmountViewModel.maxButtonVisibleValue.observe(lifecycleOwner, Observer { visible ->
-            setMaxButtonVisibility(visible)
-        })
-
-        sendAmountViewModel.addTextChangeListener.observe(lifecycleOwner, Observer {
-            enableAmountChangeListener()
-        })
-
-        sendAmountViewModel.removeTextChangeListener.observe(lifecycleOwner, Observer {
-            removeAmountChangeListener()
-        })
-
-        sendAmountViewModel.revertAmount.observe(lifecycleOwner, Observer { amount ->
-            revertAmount(amount)
-        })
-
-        sendAmountViewModel.hintErrorBalance.observe(lifecycleOwner, Observer { hintErrorBalance ->
-            setBalanceError(hintErrorBalance)
-        })
-
-        sendAmountViewModel.switchButtonEnabled.observe(lifecycleOwner, Observer { enabled ->
-            enableCurrencySwitch(enabled)
-        })
+    override fun setAmount(amount: String) {
+        this.amount.value = amount
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    private fun setPrefix(prefix: String?) {
-        topAmountPrefix.text = prefix
+    override fun setAvailableBalance(availableBalance: String) {
+        this.availableBalance.value = availableBalance
     }
 
-    private fun setAmount(amount: String) {
-        editTxtAmount.setText(amount)
-        editTxtAmount.setSelection(editTxtAmount.text.length)
+    override fun setHint(hint: String?) {
+        this.hint.value = hint
     }
 
-    private fun setHint(hint: String?) {
-        txtHintInfo.text = hint
+    override fun setMaxButtonVisible(visible: Boolean) {
+        maxButtonVisibleValue.value = visible
     }
 
-    private fun setMaxButtonVisibility(visible: Boolean) {
-        btnMax.visibility = if (visible) View.VISIBLE else View.GONE
+    override fun addTextChangeListener() {
+        addTextChangeListener.call()
     }
 
-    private fun enableAmountChangeListener() {
-        editTxtAmount.addTextChangedListener(textChangeListener)
+    override fun removeTextChangeListener() {
+        removeTextChangeListener.call()
     }
 
-    private fun removeAmountChangeListener() {
-        editTxtAmount.removeTextChangedListener(textChangeListener)
+    override fun revertAmount(amount: String) {
+        revertAmount.value = amount
     }
 
-    private fun revertAmount(amount: String) {
-        editTxtAmount.setText(amount)
-        editTxtAmount.setSelection(amount.length)
-        val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
-        editTxtAmount.startAnimation(shake)
+    override fun setValidationError(error: SendAmountModule.ValidationError?) {
+        this.validationError.value = error
     }
 
-    private fun setBalanceError(balanceError: String?) {
-        txtHintError.visibility = if (balanceError == null) View.GONE else View.VISIBLE
-        txtHintInfo.visibility = if (balanceError == null) View.VISIBLE else View.GONE
-
-        val errorText: String? = balanceError?.let {
-            context.getString(R.string.Send_Error_BalanceAmount, it)
-        }
-
-        txtHintError.text = errorText
+    override fun setSwitchButtonEnabled(enabled: Boolean) {
+        switchButtonEnabled.value = enabled
     }
-
-    private fun enableCurrencySwitch(enabled: Boolean) {
-        btnSwitch.isEnabled = enabled
-    }
-
-    private val textChangeListener = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            val amountText = s?.toString() ?: ""
-            delegate?.onAmountChange(amountText)
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-    }
-
 }

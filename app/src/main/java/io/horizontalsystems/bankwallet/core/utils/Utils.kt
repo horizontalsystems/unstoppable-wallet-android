@@ -14,7 +14,7 @@ object Utils {
         for (i in 0 until inputMethodProperties.size) {
             val imi = inputMethodProperties[i]
             if (imi.id == Settings.Secure.getString(context.contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD)) {
-                if (imi.serviceInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
+                if ((imi.serviceInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) {
                     return true
                 }
             }

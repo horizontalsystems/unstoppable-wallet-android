@@ -8,11 +8,11 @@ import io.reactivex.schedulers.Schedulers
 class PriceAlertManager(private val walletManager: IWalletManager, private val priceAlertsStorage: IPriceAlertsStorage) {
 
     init {
-        walletManager.walletsUpdatedSignal
+        walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe {
-                    val enabledCoins = walletManager.wallets.map { it.coin.code }
+                .subscribe { wallets ->
+                    val enabledCoins = wallets.map { it.coin.code }
 
                     priceAlertsStorage.deleteExcluding(enabledCoins)
                 }
@@ -22,7 +22,8 @@ class PriceAlertManager(private val walletManager: IWalletManager, private val p
         val priceAlerts = priceAlertsStorage.all()
 
         return walletManager.wallets.map { wallet ->
-            priceAlerts.firstOrNull { it.coin == wallet.coin } ?: PriceAlert(wallet.coin, PriceAlert.State.OFF)
+            priceAlerts.firstOrNull { it.coin == wallet.coin }
+                    ?: PriceAlert(wallet.coin, PriceAlert.State.OFF)
         }
     }
 

@@ -24,12 +24,13 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
-    override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean): String? {
+    override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean, trimmable: Boolean): String? {
         var value = coinValue.value.abs()
 
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
+            trimmable -> customFormatter.maximumFractionDigits = 0
             !realNumber && value > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
             value.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.maximumFractionDigits = 0
             else -> customFormatter.maximumFractionDigits = 8
@@ -54,7 +55,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return formatted
     }
 
-    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean, shorten: Boolean): String? {
+    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
 
         val absValue = currencyValue.value.abs()
         var value = absValue
@@ -97,7 +98,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     }
 
     override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
-        val spannable = SpannableString(format(currencyValue, showNegativeSign = true, trimmable = true, canUseLessSymbol = true))
+        val spannable = SpannableString(format(currencyValue, showNegativeSign = false, trimmable = true, canUseLessSymbol = true))
 
         //  set color
         val amountTextColor = if (isIncoming) R.color.green_d else R.color.yellow_d

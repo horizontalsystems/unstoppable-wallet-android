@@ -102,7 +102,7 @@ class SwitchableViewHolder(override val containerView: CellView, private val pre
     }
 
     fun bind(coinViewItem: CreateWalletModule.CoinViewItem, lastElement: Boolean) {
-        containerView.icon = coinViewItem.code
+        containerView.coinIcon = coinViewItem.code
         containerView.title = coinViewItem.code
         containerView.subtitle = coinViewItem.title
         containerView.checked = coinViewItem.selected

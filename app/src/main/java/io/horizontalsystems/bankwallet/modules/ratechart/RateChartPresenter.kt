@@ -1,48 +1,49 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.managers.StatsData
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateChartPresenter(
         val view: View,
         private val interactor: Interactor,
-        private val coinCode: CoinCode,
+        private val coin: Coin,
         private val currency: Currency,
-        private val factory: RateChartViewFactory) : ViewModel(), ViewDelegate, InteractorDelegate {
+        private val factory: RateChartViewFactory)
+    : ViewModel(), ViewDelegate, InteractorDelegate {
 
-    private var latestRate: Rate? = null
+    private var chartType = interactor.defaultChartType ?: ChartType.DAILY
+
+    private var chartInfo: ChartInfo? = null
         set(value) {
             field = value
-            updateChart()
+            updateChartInfo()
         }
 
-    private var statsData: StatsData? = null
+    private var marketInfo: MarketInfo? = null
         set(value) {
             field = value
-            updateChart()
+            updateMarketInfo()
         }
-
-    private var chartType = interactor.defaultChartType
 
     //  ViewDelegate
 
     override fun viewDidLoad() {
-        view.showSpinner()
-        view.setChartType(interactor.defaultChartType)
+        view.setChartType(chartType)
 
-        interactor.subscribeToChartStats()
-        interactor.subscribeToLatestRate(coinCode, currency.code)
-        interactor.syncStats(coinCode, currency.code)
+        marketInfo = interactor.getMarketInfo(coin.code, currency.code)
+        interactor.observeMarketInfo(coin.code, currency.code)
+
+        fetchChartInfo()
     }
 
     override fun onSelect(type: ChartType) {
@@ -52,8 +53,7 @@ class RateChartPresenter(
         chartType = type
         interactor.defaultChartType = type
 
-        view.showSpinner()
-        updateChart()
+        fetchChartInfo()
     }
 
     override fun onTouchSelect(point: ChartPoint) {
@@ -61,51 +61,46 @@ class RateChartPresenter(
         view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
     }
 
-    //  InteractorDelegate
+    private fun fetchChartInfo() {
+        view.showSpinner()
 
-    @Synchronized
-    override fun onReceiveStats(data: StatsData) {
-        if (data.coinCode != coinCode)
-            return
-
-        statsData = data
+        chartInfo = interactor.getChartInfo(coin.code, currency.code, chartType)
+        interactor.observeChartInfo(coin.code, currency.code, chartType)
     }
 
-    @Synchronized
-    override fun onReceiveLatestRate(rate: Rate) {
-        latestRate = rate
-    }
-
-    private fun updateChart() {
-        val stats = statsData?.stats ?: return
-
-        for (type in stats.keys) {
-            val chartType = ChartType.fromString(type) ?: continue
-            val chartPoints = stats[chartType.name] ?: continue
-            if (chartPoints.size > 10) {
-                view.enableChartType(chartType)
-            }
+    private fun updateMarketInfo() {
+        marketInfo?.let {
+            val viewItem = factory.createMarketInfo(it, currency, coin)
+            view.showMarketInfo(viewItem)
         }
-
-        showChart()
     }
 
-    override fun onReceiveError(ex: Throwable) {
-        view.hideSpinner()
-        view.showError(ex)
-    }
-
-    private fun showChart() {
-        val statsData = statsData ?: return
+    private fun updateChartInfo() {
+        val info = chartInfo ?: return
 
         view.hideSpinner()
 
         try {
-            val viewItem = factory.createViewItem(chartType, statsData, latestRate, currency)
-            view.showChart(viewItem)
+            val viewItem = factory.createChartInfo(chartType, info, currency)
+            view.showChartInfo(viewItem)
         } catch (e: Exception) {
             view.showError(e)
         }
+    }
+
+    //  InteractorDelegate
+
+    override fun onUpdate(marketInfo: MarketInfo) {
+        this.marketInfo = marketInfo
+    }
+
+    override fun onUpdate(chartInfo: ChartInfo) {
+        this.chartInfo = chartInfo
+    }
+
+    override fun onError(ex: Throwable) {
+        view.hideSpinner()
+        view.showError(ex)
     }
 
     //  ViewModel
@@ -113,5 +108,4 @@ class RateChartPresenter(
     override fun onCleared() {
         interactor.clear()
     }
-
 }

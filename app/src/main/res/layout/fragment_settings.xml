@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/securityCenter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,84 +54,79 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:setting_arrow="true"
-                app:setting_icon="@drawable/ic_security"
-                app:setting_title="@string/Settings_SecurityCenter" />
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_security"
+                app:title="@string/Settings_SecurityCenter" />
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/manageCoins"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
-                app:setting_arrow="true"
-                app:setting_icon="@drawable/ic_manage_coins"
-                app:setting_title="@string/Settings_ManageCoins" />
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_manage_coins"
+                app:title="@string/Settings_ManageCoins"/>
 
-            <View
-                android:id="@+id/bottomShade_1"
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/experimentalFeatures"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageCoins" />
+                app:layout_constraintTop_toBottomOf="@+id/manageCoins"
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_experimental"
+                app:title="@string/Settings_ExperimentalFeatures"
+                app:bottomBorder="true"/>
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageCoins"
-                app:setting_arrow="true"
-                app:setting_icon="@drawable/ic_notification"
-                app:setting_title="@string/Settings_Notifications" />
+                app:layout_constraintTop_toBottomOf="@+id/experimentalFeatures"
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_notification"
+                app:title="@string/Settings_Notifications" />
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/baseCurrency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/notifications"
-                app:setting_arrow="true"
-                app:setting_icon="@drawable/ic_currency"
-                app:setting_title="@string/Settings_BaseCurrency" />
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_currency"
+                app:title="@string/Settings_BaseCurrency" />
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/language"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
-                app:setting_arrow="true"
-                app:setting_icon="@drawable/ic_language"
-                app:setting_title="@string/Settings_Language" />
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_language"
+                app:title="@string/Settings_Language" />
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/lightMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
-                app:setting_icon="@drawable/ic_light_mode"
-                app:setting_title="@string/Settings_LightMode" />
+                app:imageDrawable="@drawable/ic_light_mode"
+                app:title="@string/Settings_LightMode"
+                app:bottomBorder="true"/>
 
-            <View
-                android:id="@+id/bottomShade_2"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lightMode" />
-
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,38 +134,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lightMode"
-                app:setting_arrow="true"
-                app:setting_icon="@drawable/ic_attention"
-                app:setting_title="@string/Settings_About" />
+                app:rightArrow="true"
+                app:imageDrawable="@drawable/ic_attention"
+                app:title="@string/Settings_About" />
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/shareApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about"
-                app:setting_icon="@drawable/ic_share"
-                app:setting_title="@string/Settings_ShareThisWallet" />
+                app:imageDrawable="@drawable/ic_share"
+                app:title="@string/Settings_ShareThisWallet" />
 
-            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/report"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/shareApp"
-                app:setting_icon="@drawable/ic_report"
-                app:setting_title="@string/Settings_Report" />
-
-            <View
-                android:id="@+id/bottomShade_3"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/report" />
+                app:imageDrawable="@drawable/ic_report"
+                app:title="@string/Settings_Report"
+                app:bottomBorder="true"/>
 
             <TextView
                 android:id="@+id/appName"

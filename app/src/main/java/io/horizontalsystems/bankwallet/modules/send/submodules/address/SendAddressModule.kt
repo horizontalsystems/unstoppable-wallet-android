@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import java.math.BigDecimal
 
@@ -50,19 +53,22 @@ object SendAddressModule {
         class InvalidAddress : ValidationError()
     }
 
-    fun init(view: SendAddressViewModel, coin: Coin, moduleDelegate: IAddressModuleDelegate?): SendAddressPresenter {
-        val addressParser = App.addressParserFactory.parser(coin)
-        val interactor = SendAddressInteractor(TextHelper, addressParser)
-        val presenter = SendAddressPresenter(interactor)
 
-        view.delegate = presenter
+    class Factory(private val coin: Coin,
+                  private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
 
-        presenter.view = view
-        presenter.moduleDelegate = moduleDelegate
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        interactor.delegate = presenter
+            val view = SendAddressView()
+            val addressParser = App.addressParserFactory.parser(coin)
+            val interactor = SendAddressInteractor(TextHelper, addressParser)
+            val presenter = SendAddressPresenter(view, interactor)
 
-        return presenter
+            interactor.delegate = presenter
+            sendHandler.addressModule = presenter
+
+            return presenter as T
+        }
     }
 
 }

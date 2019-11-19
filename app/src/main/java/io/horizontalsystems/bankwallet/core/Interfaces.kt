@@ -4,17 +4,19 @@ import android.text.SpannableString
 import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
-import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
-import io.horizontalsystems.bankwallet.core.managers.StatsResponse
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.binancechainkit.BinanceChainKit
+import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -24,7 +26,6 @@ import java.util.*
 import javax.crypto.SecretKey
 
 interface IAdapterManager {
-    val adapterCreationObservable: Flowable<Wallet>
     val adaptersReadyObservable: Flowable<Unit>
     fun preloadAdapters()
     fun refresh()
@@ -53,9 +54,15 @@ interface ILocalStorage {
     var baseEosProvider: String?
     var syncMode: SyncMode
     var sortType: BalanceSortType
-    var chartMode: ChartView.ChartType
+    var appVersions: List<AppVersion>
+    var isAlertNotificationOn: Boolean
+    var isLockTimeEnabled: Boolean
 
     fun clear()
+}
+
+interface IChartTypeStorage {
+    var chartType: ChartType?
 }
 
 interface ISecuredStorage {
@@ -131,6 +138,7 @@ sealed class DefaultAccountType {
             return wordsCount
         }
     }
+
     class Eos : DefaultAccountType() {
         override fun equals(other: Any?): Boolean {
             return other is Eos
@@ -143,10 +151,6 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getRateStats(hostType: HostType, coinCode: String, currency: String): Single<RateStatData>
-    fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
-    fun getRateByHour(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
-    fun getLatestRateData(hostType: HostType, currency: String): Single<LatestRateData>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
@@ -222,6 +226,7 @@ sealed class AdapterState {
 
 interface IEthereumKitManager {
     val ethereumKit: EthereumKit?
+    val statusInfo: Map<String, Any>?
 
     fun ethereumKit(wallet: Wallet): EthereumKit
     fun unlink()
@@ -229,8 +234,17 @@ interface IEthereumKitManager {
 
 interface IEosKitManager {
     val eosKit: EosKit?
-    fun eosKit(wallet: Wallet): EosKit
+    val statusInfo: Map<String, Any>?
 
+    fun eosKit(wallet: Wallet): EosKit
+    fun unlink()
+}
+
+interface IBinanceKitManager {
+    val binanceKit: BinanceChainKit?
+    val statusInfo: Map<String, Any>?
+
+    fun binanceKit(wallet: Wallet): BinanceChainKit
     fun unlink()
 }
 
@@ -248,6 +262,7 @@ interface IBalanceAdapter {
     val stateUpdatedFlowable: Flowable<Unit>
 
     val balance: BigDecimal
+    val balanceLocked: BigDecimal get() = BigDecimal.ZERO
     val balanceUpdatedFlowable: Flowable<Unit>
 
 }
@@ -257,14 +272,17 @@ interface IReceiveAdapter {
 }
 
 interface ISendBitcoinAdapter {
-    fun availableBalance(feeRate: Long, address: String?): BigDecimal
-    fun fee(amount: BigDecimal, feeRate: Long, address: String?): BigDecimal
-    fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
+    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
+    fun minimumSendAmount(address: String?): BigDecimal
+    fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
+    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
+    fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit>
 }
 
 interface ISendDashAdapter {
     fun availableBalance(address: String?): BigDecimal
+    fun minimumSendAmount(address: String?): BigDecimal
     fun fee(amount: BigDecimal, address: String?): BigDecimal
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String): Single<Unit>
@@ -272,6 +290,7 @@ interface ISendDashAdapter {
 
 interface ISendEthereumAdapter {
     val ethereumBalance: BigDecimal
+    val minimumRequiredBalance: BigDecimal
 
     fun availableBalance(gasPrice: Long): BigDecimal
     fun fee(gasPrice: Long): BigDecimal
@@ -307,6 +326,12 @@ interface ISystemInfoManager {
     val appVersion: String
     val isSystemLockOff: Boolean
     val biometricAuthSupported: Boolean
+    val deviceModel: String
+    val osVersion: String
+}
+
+interface IAppStatusManager {
+    val status: Map<String, Any>
 }
 
 interface IPinManager {
@@ -359,13 +384,15 @@ interface IRateStorage {
 }
 
 interface IRateManager {
-    fun syncLatestRates()
-    fun syncLatestRatesSingle(): Single<LatestRateData>
-}
-
-interface IRateStatsManager {
-    val statsFlowable: Flowable<StatsResponse>
-    fun syncStats(coinCode: String, currencyCode: String)
+    fun set(coins: List<String>)
+    fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
+    fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal?
+    fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo>
+    fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>>
+    fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal>
+    fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
+    fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
+    fun refresh()
 }
 
 interface IAccountsStorage {
@@ -389,26 +416,26 @@ interface IPriceAlertsStorage {
     fun deleteExcluding(coinCodes: List<String>)
 }
 
-interface IEmojiHelper{
+interface IEmojiHelper {
     val multiAlerts: String
 
     fun title(signedState: Int): String
     fun body(signedState: Int): String
 }
 
-interface IPriceAlertHandler{
-    fun handleAlerts(latestRateData: LatestRateData)
+interface IPriceAlertHandler {
+    fun handleAlerts(latestRatesMap: Map<String, BigDecimal?>)
 }
 
-interface IBackgroundPriceAlertManager{
-    fun fetchRates(): Single<LatestRateData>
+interface IBackgroundPriceAlertManager {
+    fun fetchRates(): Single<Unit>
 }
 
-interface INotificationFactory{
+interface INotificationFactory {
     fun notifications(alertItems: List<PriceAlertItem>): List<AlertNotification>
 }
 
-interface INotificationManager{
+interface INotificationManager {
     val isEnabled: Boolean
     fun show(notifications: List<AlertNotification>)
     fun clear()
@@ -441,7 +468,7 @@ interface ICurrentDateProvider {
 
 interface IWalletManager {
     val wallets: List<Wallet>
-    val walletsUpdatedSignal: Observable<Unit>
+    val walletsUpdatedObservable: Observable<List<Wallet>>
     fun wallet(coin: Coin): Wallet?
 
     fun loadWallets()
@@ -450,8 +477,8 @@ interface IWalletManager {
 }
 
 interface IAppNumberFormatter {
-    fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false): String?
-    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true, shorten: Boolean = false): String?
+    fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false, trimmable: Boolean = false): String?
+    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
     fun formatForTransactions(coinValue: CoinValue): String?
     fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
     fun format(value: Double, showSign: Boolean = false, precision: Int = 8): String
@@ -463,6 +490,11 @@ interface IFeeRateProvider {
 
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
+}
+
+interface IBackgroundRateAlertScheduler {
+    fun startPeriodicWorker()
+    fun stopPeriodicWorker()
 }
 
 enum class FeeRatePriority(val value: Int) {

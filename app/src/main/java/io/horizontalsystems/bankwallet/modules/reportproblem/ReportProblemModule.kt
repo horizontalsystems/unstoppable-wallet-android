@@ -18,6 +18,7 @@ object ReportProblemModule {
         fun viewDidLoad()
         fun didTapEmail()
         fun didTapTelegram()
+        fun didTapAppStatus()
     }
 
     interface IInteractor {
@@ -29,6 +30,7 @@ object ReportProblemModule {
     interface IRouter {
         fun openSendMail(recipient: String)
         fun openTelegram(group: String)
+        fun openAppStatus()
     }
 
     interface IRouterDelegate {

@@ -8,10 +8,10 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.info.InfoModule
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.view.*
 
 class TransactionInfoView : ConstraintLayoutWithHeader {
@@ -56,26 +56,49 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             }
         })
 
+        viewModel.showLockInfo.observe(lifecycleOwner, Observer { lockDate ->
+            val title = context.getString(R.string.Info_LockTime_Title)
+            val description = context.getString(R.string.Info_LockTime_Description, DateHelper.formatDate(lockDate, "MMM dd, yyyy"))
+
+            InfoModule.start(context, InfoModule.InfoParameters(title, description))
+        })
+
         viewModel.transactionLiveData.observe(lifecycleOwner, Observer { txRecord ->
             txRecord?.let { txRec ->
 
                 setTitle(context.getString(R.string.TransactionInfo_Title))
                 setSubtitle(txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) })
-                setHeaderIcon(LayoutHelper.getCoinDrawableResource(txRec.wallet.coin.code))
+                setHeaderIcon(if (txRec.incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
 
                 itemId.apply {
                     bindHashId(context.getString(R.string.TransactionInfo_Id), txRec.transactionHash)
                     setOnClickListener { viewModel.onClickTransactionId() }
                 }
 
-                fiatValue.apply {
-                    val fiatValueText = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
-                    text = fiatValueText?.let { "$fiatValueText ${if (txRec.sentToSelf) "*" else ""}" }
-                    setTextColor(resources.getColor(if (txRec.incoming) R.color.green_d else R.color.yellow_d, null))
+                if (txRec.currencyValue != null) {
+                    fiatValue.visibility = View.VISIBLE
+                    fiatName.visibility = View.VISIBLE
+
+                    val fiatValueText = App.numberFormatter.format(txRec.currencyValue, showNegativeSign = false, canUseLessSymbol = false)
+                    fiatValue.text = fiatValueText?.let { "$fiatValueText${if (txRec.sentToSelf) " *" else ""}" }
+                    fiatValue.setTextColor(resources.getColor(if (txRec.incoming) R.color.green_d else R.color.yellow_d, null))
+                    fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (txRec.lockInfo != null) R.drawable.ic_lock else 0, 0)
+                    fiatName.text = txRec.currencyValue.currency.code
+                } else {
+                    fiatValue.visibility = View.GONE
+                    fiatName.visibility = View.GONE
                 }
 
                 coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
                 txInfoCoinName.text = txRec.wallet.coin.title
+
+                if (txRec.lockInfo != null) {
+                    itemLockTime.visibility = View.VISIBLE
+                    itemLockTime.bindInfo(context.getString(R.string.TransactionInfo_LockTime), DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy"))
+                    itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
+                } else {
+                    itemLockTime.visibility = View.GONE
+                }
 
                 if (txRec.rate == null) {
                     itemRate.visibility = View.GONE
@@ -120,6 +143,14 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemTo.visibility = View.VISIBLE
                     itemTo.setOnClickListener { viewModel.onClickTo() }
                     itemTo.bindAddress(context.getString(R.string.TransactionInfo_To), txRec.to)
+                }
+
+                if (txRec.incoming || txRec.lockInfo == null) {
+                    itemRecipientHash.visibility = View.GONE
+                } else {
+                    itemRecipientHash.visibility = View.VISIBLE
+                    itemRecipientHash.setOnClickListener { viewModel.onClickRecipientHash() }
+                    itemRecipientHash.bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), txRec.lockInfo.originalAddress)
                 }
 
                 listener?.openTransactionInfo()

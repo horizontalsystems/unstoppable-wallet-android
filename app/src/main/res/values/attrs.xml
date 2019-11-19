@@ -3,16 +3,6 @@
     <attr name="title" format="string" />
     <attr name="subtitle" format="string" />
 
-    <declare-styleable name="SettingsItemView">
-        <attr name="setting_title" format="string" />
-        <attr name="setting_icon" format="integer" />
-        <attr name="setting_arrow" format="boolean" />
-    </declare-styleable>
-    <declare-styleable name="MenuItemBig">
-        <attr name="title" />
-        <attr name="subtitle" />
-        <attr name="icon" format="reference" />
-    </declare-styleable>
     <declare-styleable name="TransactionInfoItemView">
         <attr name="title" />
         <attr name="value" format="string" />
@@ -41,6 +31,7 @@
         <attr name="touchColor" format="color" />
         <attr name="textColor" format="color" />
         <attr name="gridColor" format="color" />
+        <attr name="partialChartColor" format="color" />
         <attr name="indicatorColor" format="color" />
     </declare-styleable>
     <declare-styleable name="CellView">
@@ -48,5 +39,8 @@
         <attr name="subtitle" />
         <attr name="rightTitle" format="string" />
         <attr name="bottomBorder" format="boolean" />
+        <attr name="rightArrow" format="boolean" />
+        <attr name="imageDrawable" format="integer" />
+        <attr name="imageTint" format="integer" />
     </declare-styleable>
 </resources>

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.components
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
@@ -28,20 +29,62 @@ class CellRightView : ConstraintLayout {
             cellTitle.visibility = if (value == null) View.GONE else View.VISIBLE
         }
 
+    var dropdownText: String? = null
+        set(value) {
+            field = value
+
+            dropdownValueText.text = value
+            dropdownValueText.visibility = if (value == null) View.GONE else View.VISIBLE
+        }
+
     var checked: Boolean = false
         set(value) {
             field = value
             enableIcon(if (value) checkIcon else null)
         }
 
-    var downArrow: Boolean = false
+    var dropDownArrow: Boolean = false
         set(value) {
             field = value
-            enableIcon(if (value) downIcon else null)
+            enableIcon(if (value) dropDownIcon else null)
         }
 
+    var rightArrow: Boolean = false
+        set(value) {
+            field = value
+            enableIcon(if (value) arrowIcon else null)
+        }
+
+    var switchIsChecked: Boolean = false
+        set(isChecked) {
+            switchView.setOnCheckedChangeListener(null)
+            switchView.isChecked = isChecked
+            switchView.visibility = View.VISIBLE
+            field = isChecked
+            switchView.setOnCheckedChangeListener(switchOnCheckedChangeListener)
+            invalidate()
+        }
+
+    var switchOnCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
+        set(value) {
+            field = value
+            switchView.setOnCheckedChangeListener(value)
+            invalidate()
+        }
+
+    var badge: Boolean = false
+        set(value) {
+            field = value
+            //badge can be shown along with other icon, its visibility shouldn't hide other icons
+            badgeImage.visibility = if (value) View.VISIBLE else View.GONE
+        }
+
+    fun switchToggle() {
+        switchView.toggle()
+    }
+
     private fun enableIcon(icon: ImageView?) {
-        listOf(lightModeIcon, downIcon, arrowIcon, checkIcon).forEach {
+        listOf(lightModeIcon, dropDownIcon, arrowIcon, checkIcon).forEach {
             it.visibility = View.GONE
         }
 

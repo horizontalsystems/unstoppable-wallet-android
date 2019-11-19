@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.IPriceAlertHandler
 import io.horizontalsystems.bankwallet.core.IPriceAlertsStorage
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
-import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import java.math.BigDecimal
 import kotlin.math.abs
@@ -16,21 +15,24 @@ class PriceAlertHandler(
         private val notificationFactory: INotificationFactory
 ) : IPriceAlertHandler {
 
-    override fun handleAlerts(latestRateData: LatestRateData) {
+    override fun handleAlerts(latestRatesMap: Map<String, BigDecimal?>) {
         val priceAlerts = priceAlertStorage.all()
 
-        val alertItems = getAlertsToNotify(priceAlerts, latestRateData)
+        val alertItems = getAlertsToNotify(priceAlerts, latestRatesMap)
         notificationManager.show(notificationFactory.notifications(alertItems))
 
-        val changedAlerts = getChangedAlerts(priceAlerts, latestRateData)
+        //update latest rates only for notified coins
+        val alertedCoinCodes = alertItems.map { it.coin.code }
+        val filteredPriceAlerts = priceAlerts.filter { alertedCoinCodes.contains(it.coin.code) }
+        val changedAlerts = getChangedAlerts(filteredPriceAlerts, latestRatesMap)
         if (changedAlerts.isNotEmpty()) {
             priceAlertStorage.save(changedAlerts)
         }
     }
 
-    private fun getAlertsToNotify(priceAlerts: List<PriceAlert>, latestRateData: LatestRateData): List<PriceAlertItem> {
+    private fun getAlertsToNotify(priceAlerts: List<PriceAlert>, latestRatesMap: Map<String, BigDecimal?>): List<PriceAlertItem> {
         return priceAlerts.mapNotNull { priceAlert ->
-            val latestRate = latestRateData.rates[priceAlert.coin.code]?.toBigDecimalOrNull() ?: run {
+            val latestRate = latestRatesMap[priceAlert.coin.code] ?: run {
                 return@mapNotNull null
             }
 
@@ -56,10 +58,10 @@ class PriceAlertHandler(
         return if (diff < 0) -threshold else threshold
     }
 
-    private fun getChangedAlerts(priceAlerts: List<PriceAlert>, latestRateData: LatestRateData): List<PriceAlert> {
+    private fun getChangedAlerts(priceAlerts: List<PriceAlert>, latestRatesMap: Map<String, BigDecimal?>): List<PriceAlert> {
         val changedAlerts = mutableListOf<PriceAlert>()
         priceAlerts.forEach { priceAlert ->
-            latestRateData.rates[priceAlert.coin.code]?.toBigDecimalOrNull()?.let { rate ->
+            latestRatesMap[priceAlert.coin.code]?.let { rate ->
                 priceAlert.lastRate = rate
                 changedAlerts.add(priceAlert)
             }

@@ -4,8 +4,10 @@ import io.horizontalsystems.bankwallet.core.IAddressParser
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import java.math.BigDecimal
 
-class SendAddressInteractor(private val textHelper: IClipboardManager,
-                            private val addressParser: IAddressParser) : SendAddressModule.IInteractor {
+class SendAddressInteractor(
+        private val textHelper: IClipboardManager,
+        private val addressParser: IAddressParser)
+    : SendAddressModule.IInteractor {
 
     var delegate: SendAddressModule.IInteractorDelegate? = null
 

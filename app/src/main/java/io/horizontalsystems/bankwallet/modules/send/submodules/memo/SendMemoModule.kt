@@ -1,5 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.memo
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.modules.send.SendModule
+
 
 object SendMemoModule {
 
@@ -8,8 +12,6 @@ object SendMemoModule {
     }
 
     interface IViewDelegate {
-        var view: IView
-
         fun onViewDidLoad()
         fun onTextEntered(memo: String)
     }
@@ -18,11 +20,19 @@ object SendMemoModule {
         val memo: String?
     }
 
-    fun init(view: SendMemoViewModel, maxLength: Int): IMemoModule {
-        val presenter = SendMemoPresenter(maxLength)
-        view.delegate = presenter
+    class Factory(private val maxLength: Int, private val handler: SendModule.ISendHandler) : ViewModelProvider.Factory {
 
-        return presenter
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+            val view = SendMemoView()
+            val presenter = SendMemoPresenter(maxLength, view)
+
+            handler.memoModule = presenter
+
+            return presenter as T
+
+        }
     }
+
 
 }

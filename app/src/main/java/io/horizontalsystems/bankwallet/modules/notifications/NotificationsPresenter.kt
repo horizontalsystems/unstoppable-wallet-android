@@ -13,9 +13,10 @@ class NotificationsPresenter(
     private var priceAlerts = listOf<PriceAlert>()
 
     override fun viewDidLoad() {
-        priceAlerts = interactor.priceAlerts
+        priceAlerts = interactor.priceAlerts.sortedBy { it.coin.title }
 
         view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
+        view.setNotificationSwitch(interactor.notificationIsOn)
 
         checkPriceAlertsEnabled()
     }
@@ -50,6 +51,16 @@ class NotificationsPresenter(
 
     override fun didEnterForeground() {
         checkPriceAlertsEnabled()
+    }
+
+    override fun didSwitchAlertNotification(enabled: Boolean) {
+        if (enabled) {
+            interactor.startBackgroundRateFetchWorker()
+        } else {
+            interactor.stopBackgroundRateFetchWorker()
+        }
+        interactor.notificationIsOn = enabled
+        view.setNotificationSwitch(interactor.notificationIsOn)
     }
 
     private fun checkPriceAlertsEnabled() {

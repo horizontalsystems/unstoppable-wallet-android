@@ -32,7 +32,7 @@ class FullTransactionEosAdapter(val provider: FullTransactionInfoModule.EosProvi
                 section.add(FullTransactionItem(R.string.FullInfo_From, value = action.from, clickable = true, icon = FullTransactionIcon.PERSON))
                 section.add(FullTransactionItem(R.string.FullInfo_To, value = action.to, clickable = true, icon = FullTransactionIcon.PERSON))
 
-                if (action.memo.isNotEmpty()) {
+                if (action.memo.isNotBlank()) {
                     section.add(FullTransactionItem(R.string.FullInfo_Memo, value = action.memo, clickable = true))
                 }
 

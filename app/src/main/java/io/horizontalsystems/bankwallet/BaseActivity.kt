@@ -8,10 +8,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -20,8 +17,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import java.util.*
+import java.util.logging.Logger
 
 abstract class BaseActivity : AppCompatActivity() {
+
+    private val logger = Logger.getLogger("BaseActivity")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +45,16 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     protected fun hideSoftKeyboard() {
         getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
@@ -60,9 +70,13 @@ abstract class BaseActivity : AppCompatActivity() {
                     override fun onButtonClick() {
                         val imeManager = App.instance.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imeManager.showInputMethodPicker()
-
+                        hideSoftKeyboard()
                         Handler().postDelayed({
-                            onBackPressed()
+                            try {
+                                onBackPressed()
+                            } catch (e: NullPointerException) {
+                                logger.warning("showCustomKeyboardAlert -> onBackPressed() caused NullPointerException")
+                            }
                         }, (1 * 750).toLong())
                     }
                 }).show(supportFragmentManager, "custom_keyboard_alert")

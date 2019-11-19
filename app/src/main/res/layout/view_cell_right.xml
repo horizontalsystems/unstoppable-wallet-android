@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textColor="?TextColorBarsToDark"
+        android:textColor="@color/grey"
         tools:text="Label" />
 
     <ImageView
@@ -22,11 +22,21 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:tint="?ColorJacob"
-        app:layout_constraintEnd_toStartOf="@+id/downIcon"
+        app:layout_constraintEnd_toStartOf="@+id/dropDownIcon"
         app:srcCompat="@drawable/ic_light_mode" />
 
+    <TextView
+        android:id="@+id/dropdownValueText"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="?TextColorBarsToDark"
+        tools:text="Label" />
+
     <ImageView
-        android:id="@+id/downIcon"
+        android:id="@+id/dropDownIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
@@ -36,14 +46,23 @@
         app:srcCompat="@drawable/ic_down" />
 
     <ImageView
+        android:id="@+id/badgeImage"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_attention"
+        android:tint="?ColorLucian"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/arrowIcon" />
+
+    <ImageView
         android:id="@+id/arrowIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:tint="?ColorJacob"
-        app:layout_constraintEnd_toStartOf="@+id/checkIcon"
-        app:srcCompat="@drawable/ic_right_arrrow" />
+        android:tint="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_arrow_right" />
 
     <ImageView
         android:id="@+id/checkIcon"
@@ -55,6 +74,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_checkmark" />
 
-
+    <Switch
+        android:id="@+id/switchView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="16dp"
+        android:checked="true"
+        android:saveEnabled="false"
+        android:theme="@style/SwitchTheme"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </LinearLayout>

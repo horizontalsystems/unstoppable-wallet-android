@@ -16,7 +16,7 @@ class NumberFormatterTest {
 
     private lateinit var formatter: NumberFormatter
     private val usdCurrency = Currency(code = "USD", symbol = "$")
-    private val btcCoin: Coin = Coin("Bitcoin","BTC",8, CoinType.Bitcoin)
+    private val btcCoin: Coin = Coin("BTC", "Bitcoin","BTC",8, CoinType.Bitcoin)
     private val defaultLocale = Locale("en")
 
     @Before

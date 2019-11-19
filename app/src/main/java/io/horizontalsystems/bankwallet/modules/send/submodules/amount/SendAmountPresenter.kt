@@ -1,29 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
-import io.horizontalsystems.bankwallet.entities.*
+import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.InsufficientBalance
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.TooFewAmount
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 
 class SendAmountPresenter(
+        val view: SendAmountModule.IView,
         private val interactor: SendAmountModule.IInteractor,
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
         private val baseCurrency: Currency)
-    : SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
+    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IAmountModule {
 
-    var view: SendAmountModule.IView? = null
     var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
 
     private var amount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
-    private var xRate: Rate? = null
-
-    // SendAmountModule.IAmountModule
+    private var minimumAmount: BigDecimal? = null
+    private var maximumAmount: BigDecimal? = null
+    private var minimumRequiredBalance: BigDecimal = BigDecimal.ZERO
+    private var xRate: BigDecimal? = null
 
     override var inputType = SendModule.InputType.COIN
         private set
@@ -33,7 +39,7 @@ class SendAmountPresenter(
 
     override val fiatAmount: CurrencyValue?
         get() {
-            val currencyAmount = xRate?.let { amount?.times(it.value) }
+            val currencyAmount = xRate?.let { amount?.times(it) }
             return currencyAmount?.let { CurrencyValue(baseCurrency, it) }
         }
 
@@ -47,7 +53,7 @@ class SendAmountPresenter(
             SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
-                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate.value))
+                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
                 } ?: throw Exception("Invalid state")
             }
         }
@@ -58,7 +64,7 @@ class SendAmountPresenter(
             SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
-                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate.value))
+                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
                 }
             }
         }
@@ -91,22 +97,45 @@ class SendAmountPresenter(
     override fun setAvailableBalance(availableBalance: BigDecimal) {
         this.availableBalance = availableBalance
 
+        syncMaxButton()
+        syncAvailableBalance()
         syncError()
+    }
+
+    override fun setMinimumAmount(minimumAmount: BigDecimal) {
+        this.minimumAmount = minimumAmount
+    }
+
+    override fun setMaximumAmount(maximumAmount: BigDecimal?) {
+        this.maximumAmount = maximumAmount
+    }
+
+    override fun setMinimumRequiredBalance(minimumRequiredBalance: BigDecimal) {
+        this.minimumRequiredBalance = minimumRequiredBalance
     }
 
     // SendModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        interactor.retrieveRate()
-        view?.addTextChangeListener()
+        xRate = interactor.getRate()
+
+        inputType = when {
+            xRate == null -> SendModule.InputType.COIN
+            else -> interactor.defaultInputType
+        }
+
+        moduleDelegate?.onChangeInputType(inputType)
 
         syncAmountType()
         syncSwitchButton()
+        syncAmount()
         syncHint()
+
+        view.addTextChangeListener()
     }
 
     override fun onSwitchClick() {
-        view?.removeTextChangeListener()
+        view.removeTextChangeListener()
 
         inputType = when (inputType) {
             SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
@@ -119,8 +148,9 @@ class SendAmountPresenter(
         syncAmount()
         syncHint()
         syncError()
+        syncAvailableBalance()
 
-        view?.addTextChangeListener()
+        view.addTextChangeListener()
     }
 
     override fun onAmountChange(amountString: String) {
@@ -130,7 +160,7 @@ class SendAmountPresenter(
         if (amount != null && amount.scale() > decimal) {
             val amountNumber = amount.setScale(decimal, RoundingMode.FLOOR)
             val revertedInput = amountNumber.toPlainString()
-            view?.revertAmount(revertedInput)
+            view.revertAmount(revertedInput)
         } else {
             this.amount = presenterHelper.getCoinAmount(amount, inputType, xRate)
 
@@ -143,7 +173,9 @@ class SendAmountPresenter(
     }
 
     override fun onMaxClick() {
-        amount = availableBalance
+        amount = availableBalance?.subtract(minimumRequiredBalance)
+
+        view.removeTextChangeListener()
 
         syncAmount()
         syncHint()
@@ -151,73 +183,91 @@ class SendAmountPresenter(
         syncError()
 
         moduleDelegate?.onChangeAmount()
-    }
-
-    override fun didRateRetrieve(rate: Rate?) {
-        this.xRate = rate
-
-        rate?.let {
-            inputType = interactor.defaultInputType
-
-            moduleDelegate?.onChangeInputType(inputType)
-            syncSwitchButton()
-        }
-
-        syncAmountType()
-        syncAmount()
-        syncHint()
+        view.addTextChangeListener()
     }
 
     private fun syncAmount() {
         val amount = presenterHelper.getAmount(amount, inputType, xRate)
-        view?.setAmount(amount)
+        view.setAmount(amount)
+    }
+
+    private fun syncAvailableBalance() {
+        presenterHelper.getAvailableBalance(availableBalance, inputType, xRate)?.let {
+            view.setAvailableBalance(it)
+        }
     }
 
     private fun syncAmountType() {
         val prefix = presenterHelper.getAmountPrefix(inputType, xRate)
-        view?.setAmountType(prefix)
+        view.setAmountType(prefix)
     }
 
     private fun syncHint() {
         val hint = presenterHelper.getHint(this.amount, inputType, xRate)
-        view?.setHint(hint)
+        view.setHint(hint)
     }
 
     private fun syncMaxButton() {
-        val visible = amount?.let { it == BigDecimal.ZERO } ?: true
-        view?.setMaxButtonVisible(visible)
+        val noneNullAvailableBalance = availableBalance ?: run {
+            view.setMaxButtonVisible(false)
+            return
+        }
+
+        amount?.let {
+            if (it > BigDecimal.ZERO) {
+                view.setMaxButtonVisible(false)
+                return
+            }
+        }
+
+        val hasSpendableBalance = noneNullAvailableBalance - minimumRequiredBalance > BigDecimal.ZERO
+        view.setMaxButtonVisible(hasSpendableBalance)
     }
 
     private fun syncSwitchButton() {
-        view?.setSwitchButtonEnabled(xRate != null)
+        view.setSwitchButtonEnabled(xRate != null)
     }
 
     private fun validate() {
         val amount = this.amount ?: return
-        val availableBalance = this.availableBalance ?: return
+        if (amount <= BigDecimal.ZERO) return
 
-        if (availableBalance < amount) {
-            val amountInfo = when (inputType) {
-                SendModule.InputType.COIN -> {
-                    CoinValueInfo(CoinValue(coin, availableBalance))
-                }
-                SendModule.InputType.CURRENCY -> {
-                    xRate?.let { rate ->
-                        val value = availableBalance.times(rate.value)
-                        CurrencyValueInfo(CurrencyValue(baseCurrency, value))
-                    }
+        minimumAmount?.let {
+            if (amount < it) throw TooFewAmount(amountInfo(it))
+        }
+
+        availableBalance?.let {
+            if (amount > it) throw InsufficientBalance(amountInfo(it))
+
+            if (it - amount < minimumRequiredBalance) throw SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance(CoinValue(coin, minimumRequiredBalance))
+        }
+
+        maximumAmount?.let {
+            if (amount > it) throw SendAmountModule.ValidationError.MaxAmountLimit(amountInfo(it))
+        }
+    }
+
+    private fun amountInfo(coinValue: BigDecimal): SendModule.AmountInfo? {
+        return when (inputType) {
+            SendModule.InputType.COIN -> {
+                CoinValueInfo(CoinValue(coin, coinValue))
+            }
+            SendModule.InputType.CURRENCY -> {
+                xRate?.let { rate ->
+                    val value = coinValue.times(rate)
+                    CurrencyValueInfo(CurrencyValue(baseCurrency, value))
                 }
             }
-            throw InsufficientBalance(amountInfo)
         }
     }
 
     private fun syncError() {
         try {
             validate()
-            view?.setHintErrorBalance(null)
-        } catch (insufficientBalance: InsufficientBalance) {
-            view?.setHintErrorBalance(insufficientBalance.availableBalance?.getFormatted())
+
+            view.setValidationError(null)
+        } catch (e: SendAmountModule.ValidationError) {
+            view.setValidationError(e)
         }
     }
 

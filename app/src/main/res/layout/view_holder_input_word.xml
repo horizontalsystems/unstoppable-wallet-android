@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<io.horizontalsystems.bankwallet.ui.extensions.InputTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/wordInput"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="4dp" />

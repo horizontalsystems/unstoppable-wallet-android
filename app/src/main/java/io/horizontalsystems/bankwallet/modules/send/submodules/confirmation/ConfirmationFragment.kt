@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.WrongParameters
-import io.horizontalsystems.bankwallet.modules.send.SendViewModel
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter
+import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
@@ -19,49 +19,50 @@ import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
 
-class ConfirmationFragment : Fragment() {
+class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment() {
 
-    private var sendViewModel: SendViewModel? = null
-    private var confirmationViewModel: SendConfirmationViewModel? = null
     private var sendButtonView: ConfirmationSendButtonView? = null
+    private var presenter: SendConfirmationPresenter? = null
+    private var sendView: SendView? = null
+    private var presenterView: SendConfirmationView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
+
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
                 leftBtnItem = TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }
-        ))
-    }
+                ))
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        activity?.let {
-            sendViewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
-        }
+        sendView = sendPresenter?.view as SendView
+        presenter = ViewModelProviders.of(this, SendConfirmationModule.Factory())
+                .get(SendConfirmationPresenter::class.java)
 
-        confirmationViewModel = ViewModelProviders.of(this).get(SendConfirmationViewModel::class.java)
-
-        sendViewModel?.confirmationViewItems?.observe(viewLifecycleOwner, Observer {
-            confirmationViewModel?.init(it)
+        sendView?.confirmationViewItems?.observe(viewLifecycleOwner, Observer {
+            presenter?.confirmationViewItems = it
+            presenter?.onViewDidLoad()
         })
 
-        confirmationViewModel?.addPrimaryDataViewItem?.observe(viewLifecycleOwner, Observer { primaryViewItem ->
+        presenterView = presenter?.view as SendConfirmationView
+
+        presenterView?.addPrimaryDataViewItem?.observe(viewLifecycleOwner, Observer { primaryViewItem ->
             context?.let {
                 val primaryItemView = ConfirmationPrimaryView(it)
-                primaryItemView.bind(primaryViewItem) { confirmationViewModel?.delegate?.onReceiverClick() }
+                primaryItemView.bind(primaryViewItem) { presenter?.onReceiverClick() }
                 confirmationLinearLayout.addView(primaryItemView)
             }
         })
 
-        confirmationViewModel?.showCopied?.observe(viewLifecycleOwner, Observer {
+        presenterView?.showCopied?.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
         })
 
-        confirmationViewModel?.addSecondaryDataViewItem?.observe(viewLifecycleOwner, Observer { secondaryData ->
+        presenterView?.addSecondaryDataViewItem?.observe(viewLifecycleOwner, Observer { secondaryData ->
             context?.let {
                 val secondaryDataView = ConfirmationSecondaryView(it)
                 secondaryDataView.bind(secondaryData)
@@ -69,24 +70,24 @@ class ConfirmationFragment : Fragment() {
             }
         })
 
-        confirmationViewModel?.addSendButton?.observe(viewLifecycleOwner, Observer {
+        presenterView?.addSendButton?.observe(viewLifecycleOwner, Observer {
             context?.let {
                 sendButtonView = ConfirmationSendButtonView(it)
                 sendButtonView?.setOnClickListener {
                     sendButtonView?.bind(SendConfirmationModule.SendButtonState.SENDING)
-                    sendViewModel?.delegate?.onSendConfirmed()
+                    sendView?.delegate?.onSendConfirmed()
                 }
 
                 confirmationLinearLayout.addView(sendButtonView)
             }
         })
 
-        sendViewModel?.error?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->
+        sendView?.error?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->
             errorMsgTextRes?.let { HudHelper.showErrorMessage(getErrorText(it)) }
-            confirmationViewModel?.delegate?.onSendError()
+            presenter?.onSendError()
         })
 
-        sendViewModel?.errorInDialog?.observe(viewLifecycleOwner, Observer { coinThrowable ->
+        sendView?.errorInDialog?.observe(viewLifecycleOwner, Observer { coinThrowable ->
             fragmentManager?.let { fragManager ->
                 val errorText = coinThrowable.errorTextRes?.let { getString(it) } ?: coinThrowable.nonTranslatableText
                 AlertDialogFragment.newInstance(
@@ -100,17 +101,17 @@ class ConfirmationFragment : Fragment() {
             }
         })
 
-        confirmationViewModel?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->
+        presenterView?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->
             sendButtonView?.bind(state)
         })
 
+
     }
 
-    private fun getErrorText(error: Throwable): Int {
+    private fun getErrorText(error: Throwable): String {
         return when (error) {
-            is WrongParameters -> R.string.Error
-            is UnknownHostException -> R.string.Hud_Text_NoInternet
-            else -> R.string.Hud_Network_Issue
+            is UnknownHostException -> getString(R.string.Hud_Text_NoInternet)
+            else -> getString(R.string.Hud_UnknownError, error)
         }
     }
 

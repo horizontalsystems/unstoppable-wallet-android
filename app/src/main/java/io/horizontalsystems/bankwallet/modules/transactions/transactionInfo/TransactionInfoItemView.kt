@@ -6,6 +6,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 
 class TransactionInfoItemView : ConstraintLayout {
@@ -56,6 +57,16 @@ class TransactionInfoItemView : ConstraintLayout {
         decoratedText.text = address
         decoratedText.visibility = View.VISIBLE
         decoratedText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.hash, 0, 0, 0)
+
+        invalidate()
+    }
+
+    fun bindInfo(title: String, info: String) {
+        txtTitle.text = title
+        valueText.text = info
+        valueText.visibility = View.VISIBLE
+        valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info, 0)
+        valueText.compoundDrawablePadding = LayoutHelper.dp(16f, context)
 
         invalidate()
     }

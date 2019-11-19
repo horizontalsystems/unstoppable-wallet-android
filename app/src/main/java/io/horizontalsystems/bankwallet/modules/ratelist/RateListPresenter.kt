@@ -1,79 +1,40 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.managers.StatsData
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateListPresenter(
         val view: RateListView,
         private val interactor: RateListModule.IInteractor,
-        private val dataSource: RateListModule.DataSource): ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate  {
+        private val factory: RateListModule.IRateListFactory
+) : ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate {
 
-    private val reloadViewSubject = PublishSubject.create<Unit>()
-    private var disposables = CompositeDisposable()
-
-    override val itemsCount: Int
-        get() {
-            return dataSource.items.size
-        }
+    //IViewDelegate
 
     override fun viewDidLoad() {
-        dataSource.setViewItems(interactor.coins)
+        val coins = interactor.coins
+        val currency = interactor.currency
 
-        view.showCurrentDate(interactor.currentDate)
+        val marketInfos = coins.map { it.code to interactor.getMarketInfo(it.code, currency.code)}.toMap()
 
-        interactor.initRateList()
+        val item = factory.rateListViewItem(coins, currency, marketInfos)
+        view.show(item)
 
-        interactor.fetchRates(dataSource.coinCodes, interactor.currency.code)
-        interactor.getRateStats(dataSource.coinCodes, interactor.currency.code)
-
-        reloadViewSubject
-                .throttleLast(1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { view.reload() }
-                .subscribe()?.let { disposables.add(it) }
-
-        postViewReload()
+        val coinCodes = coins.map { it.code }
+        interactor.setupXRateManager(coinCodes)
+        interactor.subscribeToMarketInfo(currency.code)
     }
 
-    override fun willEnterForeground() {
-        interactor.getRateStats(dataSource.coinCodes, interactor.currency.code)
-    }
+    //IInteractorDelegate
 
-    @Synchronized
-    override fun didUpdateRate(rate: Rate) {
-        dataSource.setRate(rate, interactor.currency)
-        postViewReload()
-    }
-
-    override fun onReceive(statsData: StatsData) {
-        dataSource.setChartData(statsData)
-        postViewReload()
-    }
-
-    override fun onFailStats(coinCode: String) {
-        dataSource.setStatsFailed(coinCode)
-        postViewReload()
-    }
-
-    override fun getViewItem(position: Int): RateViewItem {
-        return dataSource.items[position]
+    override fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>) {
+        val item = factory.rateListViewItem(interactor.coins, interactor.currency, marketInfos)
+        view.show(item)
     }
 
     override fun onCleared() {
         super.onCleared()
-        disposables.clear()
         interactor.clear()
     }
 
-    private fun postViewReload() {
-        reloadViewSubject.onNext(Unit)
-    }
 }

@@ -39,7 +39,7 @@
 
     <Button
         android:id="@+id/buttonBack"
-        style="@style/ButtonSteel"
+        style="@style/ButtonPrimarySteel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -53,6 +53,7 @@
 
     <Button
         android:id="@+id/buttonNext"
+        style="@style/ButtonPrimaryYellow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"

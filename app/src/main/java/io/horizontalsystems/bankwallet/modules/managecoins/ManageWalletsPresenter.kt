@@ -14,7 +14,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     private var items = mutableListOf<ManageWalletItem>()
     private var popularItems = mutableListOf<ManageWalletItem>()
-    private val popularCoinCodes = listOf("BTC", "BCH", "ETH", "DASH", "EOS", "BNB")
+    private val popularCoinIds = listOf("BTC", "BCH", "ETH", "DASH", "EOS", "BNB")
     private var currentItem: ManageWalletItem? = null
 
     //  ViewDelegate
@@ -22,8 +22,8 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
     override fun viewDidLoad() {
         val wallets = interactor.wallets
 
-        val popularCoins = interactor.coins.filter { popularCoinCodes.contains(it.code) }
-        val coins = interactor.coins.filter { !popularCoinCodes.contains(it.code) }
+        val popularCoins = interactor.coins.filter { popularCoinIds.contains(it.coinId) }
+        val coins = interactor.coins.filter { !popularCoinIds.contains(it.coinId) }
 
         popularItems = popularCoins.map { coin ->
             ManageWalletItem(coin, wallets.find { it.coin == coin })
@@ -47,13 +47,16 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     override fun onClickRestoreKey() {
         val item = currentItem ?: return
+        val predefinedAccountType = interactor.predefinedAccountTypes.firstOrNull {
+            it.defaultAccountType == item.coin.type.defaultAccountType
+        } ?: return
 
         when (val accountType = item.coin.type.defaultAccountType) {
             is DefaultAccountType.Mnemonic -> {
-                router.openRestoreWordsModule(accountType.wordsCount)
+                router.openRestoreWordsModule(accountType.wordsCount, predefinedAccountType.title)
             }
             is DefaultAccountType.Eos -> {
-                router.openRestoreEosModule()
+                router.openRestoreEosModule(predefinedAccountType.title)
             }
         }
     }

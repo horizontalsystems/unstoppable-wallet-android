@@ -43,7 +43,7 @@
 //        presenter.view = view
 //    }
 //
-//    // ViewDelegate
+//    // IViewDelegate
 //
 //    @Test
 //    fun onViewDidLoad() {
@@ -126,7 +126,7 @@
 //        verify(view).setPasteButtonState(true)
 //    }
 //
-//    // InteractorDelegate
+//    // IInteractorDelegate
 //
 //    @Test
 //    fun didRateRetrieve() {

@@ -47,7 +47,7 @@
 
     <Button
         android:id="@+id/btnRetry"
-        style="@style/ButtonSmallGrey_4"
+        style="@style/ButtonSecondary"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginStart="8dp"

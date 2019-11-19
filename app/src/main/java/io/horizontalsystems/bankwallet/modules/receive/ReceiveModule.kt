@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
@@ -35,13 +37,18 @@ object ReceiveModule {
         fun shareAddress(address: String)
     }
 
-    fun init(wallet: Wallet, view: ReceiveViewModel, router: IRouter) {
-        val interactor = ReceiveInteractor(wallet, App.adapterManager, TextHelper)
-        val presenter = ReceivePresenter(interactor, router)
+    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
 
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = ReceiveView()
+            val router = ReceiveRouter()
+            val interactor = ReceiveInteractor(wallet, App.adapterManager, TextHelper)
+            val presenter = ReceivePresenter(view, router, interactor)
+
+            interactor.delegate = presenter
+
+            return presenter as T
+        }
     }
 
 }

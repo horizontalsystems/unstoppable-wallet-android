@@ -3,20 +3,23 @@ package io.horizontalsystems.bankwallet.modules.restore.eos
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_eos.*
-import kotlinx.android.synthetic.main.activity_restore_words.shadowlessToolbar
+import java.util.*
 
-class RestoreEosActivity : BaseActivity() {
+class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
 
     private lateinit var viewModel: RestoreEosViewModel
 
@@ -24,11 +27,13 @@ class RestoreEosActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restore_eos)
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.Restore_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { onClickDone() })
-        )
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val accountTypeTitleRes = intent.getIntExtra(ModuleField.ACCOUNT_TYPE_TITLE, 0)
+        if (accountTypeTitleRes > 0) {
+            description.text = getString(R.string.Restore_Enter_Key_Description_Eos, getString(accountTypeTitleRes))
+        }
 
         viewModel = ViewModelProviders.of(this).get(RestoreEosViewModel::class.java)
         viewModel.init()
@@ -57,7 +62,27 @@ class RestoreEosActivity : BaseActivity() {
             HudHelper.showErrorMessage(resId)
         })
 
+        eosAccount.setListenerForTextInput(this)
+
         bindActions()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.restore_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menuOk ->  {
+                viewModel.delegate.onClickDone(
+                        eosAccount.text.trim().toLowerCase(Locale.ENGLISH),
+                        eosActivePrivateKey.text.trim()
+                )
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -68,11 +93,10 @@ class RestoreEosActivity : BaseActivity() {
         }
     }
 
-    private fun onClickDone() {
-        viewModel.delegate.onClickDone(
-                eosAccount.text.trim(),
-                eosActivePrivateKey.text.trim()
-        )
+    override fun beforeTextChanged() {
+        if (Utils.isUsingCustomKeyboard(this)) {
+            showCustomKeyboardAlert()
+        }
     }
 
     private fun bindActions() {

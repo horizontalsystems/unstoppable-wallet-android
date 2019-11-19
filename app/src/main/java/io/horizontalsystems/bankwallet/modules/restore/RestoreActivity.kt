@@ -2,11 +2,9 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
@@ -17,7 +15,6 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
@@ -31,9 +28,9 @@ class RestoreActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_restore)
-        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() }))
+        setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RestoreViewModel::class.java)
         viewModel.init()
 
         val adapter = RestoreNavigationAdapter(viewModel)
@@ -48,12 +45,12 @@ class RestoreActivity : BaseActivity() {
             HudHelper.showErrorMessage(R.string.Restore_RestoreFailed)
         })
 
-        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { wordsCount ->
-            RestoreWordsModule.startForResult(this, wordsCount, ModuleCode.RESTORE_WORDS)
+        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { (wordsCount, titleRes) ->
+            RestoreWordsModule.startForResult(this, wordsCount, titleRes, ModuleCode.RESTORE_WORDS)
         })
 
-        viewModel.startRestoreEosLiveEvent.observe(this, Observer {
-            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
+        viewModel.startRestoreEosLiveEvent.observe(this, Observer {titleRes ->
+            RestoreEosModule.startForResult(this, titleRes, ModuleCode.RESTORE_EOS)
         })
 
         viewModel.startMainModuleLiveEvent.observe(this, Observer {
@@ -64,6 +61,21 @@ class RestoreActivity : BaseActivity() {
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.restore_wallet_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menuCopy -> {
+                viewModel.delegate.onClickClose()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

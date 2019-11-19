@@ -23,9 +23,7 @@
     <attr name="TransactionDetailBackground" format="reference|color" />
     <attr name="TransactionDetailValueTextColor" format="reference|color" />
     <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
-    <attr name="TransactionInfoMoreButtonBackground" format="reference|color" />
     <attr name="LightBackground" format="color" />
-    <attr name="BottomSheetBackground" format="reference|color" />
     <attr name="BottomSendButtonColor" format="reference|color" />
     <attr name="BottomSendButtonHighlightedColor" format="reference|color" />
     <attr name="BottomSendImageButtonTint" format="reference|color" />
@@ -37,9 +35,9 @@
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
     <attr name="InputBackground" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
-    <attr name="CellBottomShadeColor" format="reference|color" />
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
     <attr name="ShadingBottomGradient" format="reference" />
+    <attr name="SecondaryButtonStartGradient" format="reference|color" />
 
     <!-- New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />
@@ -71,6 +69,7 @@
         <item name="actionMenuTextColor">?ColorJacob</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_d</item>
+        <item name="android:homeAsUpIndicator">@drawable/back</item>
 
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
@@ -94,9 +93,7 @@
         <item name="TransactionDetailBackground">@color/steel_dark</item>
         <item name="TransactionDetailValueTextColor">@color/light</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
-        <item name="TransactionInfoMoreButtonBackground">@color/stateful_transaction_info_more_button_dark_color</item>
         <item name="LightBackground">@color/steel_20</item>
-        <item name="BottomSheetBackground">@color/dark</item>
         <item name="BottomSendButtonColor">@color/steel_20</item>
         <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
         <item name="BottomSendImageButtonTint">@color/white</item>
@@ -106,11 +103,11 @@
         <item name="TransactionTagColor">@color/stateful_tag_filter_text_color_dark</item>
         <item name="ProgressbarSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
-        <item name="InputBackground">@color/steel_dark</item>
+        <item name="InputBackground">@color/steel_20</item>
         <item name="ConfirmationTextColor">@color/steel_light</item>
-        <item name="CellBottomShadeColor">@color/black_50</item>
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_dark</item>
+        <item name="SecondaryButtonStartGradient">#33ffffff</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_d</item>
@@ -119,7 +116,7 @@
         <item name="ColorLucian">@color/red_d</item>
         <item name="ColorLucianPressed">@color/red_l</item>
         <item name="ColorOz">@color/light</item>
-        <item name="ColorLeah">@color/steel_light</item>
+        <item name="ColorLeah">@color/light_grey</item>
         <!-- New colors: for backgrounds -->
         <item name="ColorJeremy">@color/steel_20</item>
         <item name="ColorElena">@color/steel_20</item>
@@ -141,6 +138,7 @@
         <item name="actionMenuTextColor">?ColorJacob</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_l</item>
+        <item name="android:homeAsUpIndicator">@drawable/back</item>
 
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
@@ -163,11 +161,9 @@
         <item name="TransactionDetailBackground">@color/white</item>
         <item name="TransactionDetailValueTextColor">@color/dark</item>
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
-        <item name="TransactionInfoMoreButtonBackground">@color/stateful_transaction_info_more_button_light_color</item>
         <item name="LightBackground">@color/steel_light</item>
-        <item name="BottomSheetBackground">@color/light</item>
         <item name="BottomSendButtonColor">@color/steel_light</item>
-        <item name="BottomSendButtonHighlightedColor">@color/steel_grey</item>
+        <item name="BottomSendButtonHighlightedColor">@color/light_grey</item>
         <item name="BottomSendImageButtonTint">@color/black</item>
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/light</item>
@@ -177,9 +173,9 @@
         <item name="SwipeRefreshBackgroundColor">@color/light</item>
         <item name="InputBackground">@color/white</item>
         <item name="ConfirmationTextColor">@color/dark</item>
-        <item name="CellBottomShadeColor">@color/steel_20</item>
         <item name="AddCoinButtonPlaceholder">@color/light</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_light</item>
+        <item name="SecondaryButtonStartGradient">#ffffffff</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_l</item>
@@ -191,87 +187,11 @@
         <item name="ColorLeah">@color/steel_dark</item>
         <!-- New colors: for backgrounds -->
         <item name="ColorJeremy">@color/steel_light</item>
-        <item name="ColorElena">@color/steel_grey</item>
+        <item name="ColorElena">@color/light_grey</item>
         <item name="ColorLawrence">@color/white</item>
         <item name="ColorLawrencePressed">@color/white_pressed</item>
         <item name="ColorClaude">@color/white</item>
         <item name="ColorGwen">@drawable/light_gradient_background</item>
-    </style>
-
-    <style name="Button" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingTop">13dp</item>
-        <item name="android:paddingBottom">14dp</item>
-        <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
-        <item name="android:background">@drawable/button_yellow_background</item>
-    </style>
-
-    <style name="ButtonSecondary">
-        <item name="android:background">@drawable/button_secondary_background</item>
-        <item name="android:fontFamily">@font/noto_sans_medium</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingStart">9dp</item>
-        <item name="android:paddingEnd">9dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">7dp</item>
-        <item name="android:textColor">@color/button_secondary_text_color_selector</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="ButtonSteel" parent="Button">
-        <item name="android:background">@drawable/button_steel_background</item>
-        <item name="android:textColor">@color/button_text_color_selector</item>
-    </style>
-
-    <style name="SendButtonSmallGrey" parent="Button">
-        <item name="android:background">@drawable/button_grey_background_4_themed</item>
-        <item name="android:textColor">@color/stateful_button_text_color</item>
-        <item name="android:fontFamily">@font/noto_sans_medium</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:paddingTop">3dp</item>
-        <item name="android:paddingBottom">3dp</item>
-        <item name="android:paddingEnd">8dp</item>
-        <item name="android:paddingStart">8dp</item>
-    </style>
-
-    <style name="SendImageButtonSmallGrey" parent="SendButtonSmallGrey">
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:paddingEnd">3dp</item>
-        <item name="android:paddingStart">3dp</item>
-        <item name="android:scaleType">fitCenter</item>
-        <item name="android:tint">@color/button_image_tint_color_selector</item>
-    </style>
-
-    <style name="ButtonSmallGrey_4" parent="SendButtonSmallGrey">
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">7dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="ButtonGreen" parent="Button">
-        <item name="android:textColor">@color/button_text_color_selector</item>
-        <item name="android:background">@drawable/button_green_background</item>
-    </style>
-
-    <style name="ButtonYellow" parent="Button">
-        <item name="android:textColor">@color/button_text_color_selector</item>
-        <item name="android:background">@drawable/button_yellow_background</item>
-    </style>
-
-    <style name="ButtonDestructive" parent="Button">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/button_red_background</item>
     </style>
 
     <style name="ToolbarStyle">
@@ -319,10 +239,9 @@
     </style>
 
     <style name="TransactionInfoStatusProgressBarSmall">
-        <item name="android:layout_width">2dp</item>
-        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_width">4dp</item>
+        <item name="android:layout_height">12dp</item>
         <item name="android:layout_marginStart">2dp</item>
-        <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
     </style>
 
     <!--Text Styles-->
@@ -385,6 +304,61 @@
     <style name="Micro">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">10sp</item>
+    </style>
+
+
+    <!--Button Styles-->
+
+    <style name="Button" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/button_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">13dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+    </style>
+
+    <style name="ButtonSecondary">
+        <item name="android:background">@drawable/button_secondary_background</item>
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingStart">9dp</item>
+        <item name="android:paddingEnd">9dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:textColor">@color/button_secondary_text_color_selector</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ImageButtonSecondary" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingEnd">3dp</item>
+        <item name="android:paddingStart">3dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/button_secondary_background</item>
+    </style>
+
+    <style name="ButtonPrimaryGreen" parent="Button">
+        <item name="android:background">@drawable/button_green_background</item>
+    </style>
+
+    <style name="ButtonPrimarySteel" parent="Button">
+        <item name="android:background">@drawable/button_steel_background</item>
+    </style>
+
+    <style name="ButtonPrimaryYellow" parent="Button">
+        <item name="android:background">@drawable/button_yellow_background</item>
+    </style>
+
+    <style name="ButtonPrimaryDestructive" parent="Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/button_red_background</item>
     </style>
 
 

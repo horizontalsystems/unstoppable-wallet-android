@@ -1,18 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationAmountViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationDurationViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationFeeViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationMemoViewItem
+import io.horizontalsystems.hodler.LockTimeInterval
 
 class SendConfirmationPresenter(
-        private val interactor: SendConfirmationModule.IInteractor,
-        private val confirmationViewItems: List<SendModule.SendConfirmationViewItem>)
-    : SendConfirmationModule.IViewDelegate, SendConfirmationModule.IInteractorDelegate {
+        val view: SendConfirmationModule.IView,
+        private val interactor: SendConfirmationModule.IInteractor)
+    : ViewModel(), SendConfirmationModule.IViewDelegate, SendConfirmationModule.IInteractorDelegate {
 
-    var view: SendConfirmationViewModel? = null
     private var receiver = ""
+    var confirmationViewItems: List<SendModule.SendConfirmationViewItem>? = null
 
     override fun onViewDidLoad() {
         var primaryName = ""
@@ -23,8 +25,9 @@ class SendConfirmationPresenter(
         var secondaryFeeAmount: String? = null
         var memo: String? = null
         var duration: Long? = null
+        var lockTimeInterval: LockTimeInterval? = null
 
-        confirmationViewItems.forEach { item ->
+        confirmationViewItems?.forEach { item ->
             when (item) {
                 is SendConfirmationAmountViewItem -> {
                     primaryName = item.primaryInfo.getAmountName()
@@ -43,6 +46,9 @@ class SendConfirmationPresenter(
                 is SendConfirmationDurationViewItem -> {
                     duration = item.duration
                 }
+                is SendModule.SendConfirmationLockTimeViewItem -> {
+                    lockTimeInterval = item.lockTimeInterval
+                }
             }
         }
 
@@ -52,23 +58,25 @@ class SendConfirmationPresenter(
                 secondaryName = secondaryName,
                 secondaryAmount = secondaryAmount,
                 receiver = receiver,
-                memo = memo
+                memo = memo,
+                locked = lockTimeInterval != null
         )
 
-        view?.loadPrimaryItems(primaryViewItem)
+        view.loadPrimaryItems(primaryViewItem)
 
         val secondaryViewItem = SendConfirmationModule.SecondaryItemData(
                 feeAmount = primaryFeeAmount?.let { primaryFeeAmount ->
                     "$primaryFeeAmount${secondaryFeeAmount?.let { secondaryFeeAmount -> " | $secondaryFeeAmount" }
                             ?: ""}"
                 },
-                estimatedTime = duration
+                estimatedTime = duration,
+                lockTimeInterval = lockTimeInterval
         )
 
-        view?.loadSecondaryItems(secondaryViewItem)
+        view.loadSecondaryItems(secondaryViewItem)
 
-        view?.loadSendButton()
-        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
+        view.loadSendButton()
+        view.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
 
     override fun onReceiverClick() {
@@ -76,11 +84,11 @@ class SendConfirmationPresenter(
     }
 
     override fun didCopyToClipboard() {
-        view?.showCopied()
+        view.showCopied()
     }
 
     override fun onSendError() {
-        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
+        view.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
 
 }

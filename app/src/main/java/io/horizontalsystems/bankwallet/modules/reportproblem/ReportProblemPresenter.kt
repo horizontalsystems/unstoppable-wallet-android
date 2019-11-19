@@ -21,6 +21,10 @@ class ReportProblemPresenter(
         router.openTelegram(interactor.telegramGroup)
     }
 
+    override fun didTapAppStatus() {
+        router.openAppStatus()
+    }
+
     override fun didFailSendMail() {
         interactor.copyToClipboard(interactor.email)
         view.showCopied()

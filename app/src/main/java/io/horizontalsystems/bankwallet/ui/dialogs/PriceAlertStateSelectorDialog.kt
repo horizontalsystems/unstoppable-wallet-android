@@ -61,7 +61,7 @@ class PriceAlertAdapter(
 
     override fun onBindViewHolder(holder: PriceAlertStateViewHolder, position: Int) {
         val item = list[position]
-        holder.bind(item, item == selectedItem)
+        holder.bind(item, item == selectedItem, position == 0)
     }
 
     override fun getItemCount() = list.size
@@ -76,9 +76,10 @@ class PriceAlertStateViewHolder(
         containerView.setOnClickListener { onClickCallback(adapterPosition) }
     }
 
-    fun bind(state: PriceAlert.State, isSelected: Boolean) {
+    fun bind(state: PriceAlert.State, isSelected: Boolean, firstItem: Boolean) {
         itemTitle.text = state.value?.let { "$it%" }
                 ?: itemView.context.getString(R.string.SettingsNotifications_Off)
         itemTitle.isSelected = isSelected
+        topDivider.visibility = if (firstItem) View.INVISIBLE else View.VISIBLE
     }
 }

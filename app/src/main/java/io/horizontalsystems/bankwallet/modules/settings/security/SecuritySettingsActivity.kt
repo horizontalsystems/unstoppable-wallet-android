@@ -49,7 +49,7 @@ class SecuritySettingsActivity : BaseActivity() {
         //  Handling view model live events
 
         viewModel.backupAlertVisibleLiveData.observe(this, Observer { alert ->
-            manageKeys.setInfoBadgeVisibility(alert)
+            manageKeys.badgeImage = alert
         })
 
         viewModel.openManageKeysLiveEvent.observe(this, Observer {
@@ -62,6 +62,7 @@ class SecuritySettingsActivity : BaseActivity() {
 
         viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->
             changePin.visibility = if (pinEnabled) View.VISIBLE else View.GONE
+            enablePin.bottomBorder = !pinEnabled
         })
 
         viewModel.openEditPinLiveEvent.observe(this, Observer {

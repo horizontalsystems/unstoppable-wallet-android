@@ -20,6 +20,7 @@ object RestoreModule {
         fun viewDidLoad()
         fun onSelect(accountType: IPredefinedAccountType)
         fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
+        fun onClickClose()
     }
 
     interface Interactor {
@@ -32,8 +33,8 @@ object RestoreModule {
     }
 
     interface Router {
-        fun startRestoreWordsModule(wordsCount: Int)
-        fun startRestoreEosModule()
+        fun startRestoreWordsModule(wordsCount: Int, titleRes: Int)
+        fun startRestoreEosModule(titleRes: Int)
         fun startMainModule()
         fun close()
     }

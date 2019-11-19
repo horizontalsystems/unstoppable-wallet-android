@@ -19,15 +19,13 @@ class DataProviderSettingsInteractorTest {
     private val dataProviderManager = mock(ITransactionDataProviderManager::class.java)
     private val networkManager = mock(INetworkManager::class.java)
     private val delegate = mock(DataProviderSettingsModule.InteractorDelegate::class.java)
-    private val coin = mock(Coin::class.java)
+    private val coin = Coin("BTC", "Bitcoin", "BTC", 8, CoinType.Bitcoin)
 
     private lateinit var interactor: DataProviderSettingsInteractor
 
     @Before
     fun setup() {
         RxBaseTest.setup()
-
-        whenever(coin.type).thenReturn(mock(CoinType.Bitcoin::class.java))
 
         interactor = DataProviderSettingsInteractor(dataProviderManager, networkManager)
         interactor.delegate = delegate

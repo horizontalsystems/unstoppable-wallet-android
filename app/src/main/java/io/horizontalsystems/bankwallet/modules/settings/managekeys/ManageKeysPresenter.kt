@@ -10,7 +10,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
 
     private var currentItem: ManageAccountItem? = null
 
-    //  ViewDelegate
+    //  IViewDelegate
 
     override var items = listOf<ManageAccountItem>()
 
@@ -30,13 +30,13 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
     override fun onClickRestore(accountType: IPredefinedAccountType) {
         when (accountType) {
             is UnstoppableAccountType -> {
-                router.startRestoreWords(12)
+                router.startRestoreWords(12, accountType.title)
             }
             is BinanceAccountType -> {
-                router.startRestoreWords(24)
+                router.startRestoreWords(24, accountType.title)
             }
             is EosAccountType -> {
-                router.startRestoreEos()
+                router.startRestoreEos(accountType.title)
             }
         }
     }
@@ -80,7 +80,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         interactor.clear()
     }
 
-    //  InteractorDelegate
+    //  IInteractorDelegate
 
     override fun didLoad(accounts: List<ManageAccountItem>) {
         items = accounts
