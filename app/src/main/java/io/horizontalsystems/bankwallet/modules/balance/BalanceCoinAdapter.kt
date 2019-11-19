@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
@@ -168,6 +169,10 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         coinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         coinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
 
+        val typeLabel = balanceViewItem.coin.type.typeLabel()
+        coinTypeLabel.text = typeLabel
+        coinTypeLabel.background = if (typeLabel != null) LayoutHelper.d(R.drawable.label_background, containerView.context) else null
+
         showLockedBalance(balanceViewItem)
 
         coinIcon.bind(balanceViewItem.coin)
@@ -237,9 +242,8 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
     }
 
     private fun updateSecondLineItemsVisibility(expanded: Boolean) {
-        textProgress.visibility = if (syncing && !expanded) View.VISIBLE else View.GONE
-        textSyncedUntil.visibility = if (syncing && !expanded) View.VISIBLE else View.GONE
-        coinAmount.visibility = if (syncing && !expanded) View.GONE else View.VISIBLE
+        syncingStateGroup.visibility = if (syncing && !expanded) View.VISIBLE else View.GONE
+        coinAmountGroup.visibility = if (syncing && !expanded) View.GONE else View.VISIBLE
     }
 
     private fun showFiatAmount(balanceViewItem: BalanceViewItem, collapsedAndSyncing: Boolean) {

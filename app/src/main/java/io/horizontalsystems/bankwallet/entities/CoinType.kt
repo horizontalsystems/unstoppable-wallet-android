@@ -34,6 +34,15 @@ sealed class CoinType : Serializable {
         return false
     }
 
+    fun typeLabel(): String? {
+        return when (this) {
+            is Erc20 -> "ERC20"
+            is Eos -> if (symbol != "EOS") "EOS" else null
+            is Binance -> if (symbol != "BNB") "BEP2" else null
+            else -> null
+        }
+    }
+
     val defaultAccountType: DefaultAccountType
         get() = when (this) {
             is Erc20, Bitcoin, BitcoinCash, Dash, Ethereum -> {
