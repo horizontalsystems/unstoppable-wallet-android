@@ -15,6 +15,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import java.util.*
 import java.util.logging.Logger
@@ -53,6 +55,13 @@ abstract class BaseActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (this !is LockScreenActivity && App.lockManager.isLocked) {
+            LockScreenModule.startForUnlock(this, 1)
+        }
     }
 
     protected fun hideSoftKeyboard() {
