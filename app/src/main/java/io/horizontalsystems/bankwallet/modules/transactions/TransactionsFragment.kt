@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import io.horizontalsystems.bankwallet.R
@@ -35,15 +35,21 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(TransactionsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(TransactionsViewModel::class.java)
         viewModel.init()
 
+        val layoutManager = NpaLinearLayoutManager(context)
         transactionsAdapter.viewModel = viewModel
-        recyclerTags.adapter = filterAdapter
+        transactionsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                layoutManager.scrollToPosition(0)
+            }
+        });
 
+        recyclerTags.adapter = filterAdapter
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
-        recyclerTransactions.layoutManager = NpaLinearLayoutManager(context)
+        recyclerTransactions.layoutManager = layoutManager
         recyclerTransactions.addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 filterAdapter.filterChangeable = newState == SCROLL_STATE_IDLE
