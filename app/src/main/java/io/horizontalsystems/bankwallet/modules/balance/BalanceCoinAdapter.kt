@@ -107,7 +107,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
         }
 
-        chartButton.setOnClickListener {
+        chartViewWrapper.setOnClickListener {
             balanceViewItem?.let {
                 listener.onChartClicked(it)
             }
@@ -161,7 +161,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             exchangeRate.text = xExchangeRateText
         }
 
-        viewHolderRoot.isSelected = expanded
+        containerView.isSelected = expanded
         buttonsWrapper.visibility = if (expanded) View.VISIBLE else View.GONE
 
         showChart(balanceViewItem, expanded)
@@ -185,7 +185,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
     }
 
     fun bindPartial(balanceViewItem: BalanceViewItem, expanded: Boolean) {
-        viewHolderRoot.isSelected = expanded
+        containerView.isSelected = expanded
 
         showFiatAmount(balanceViewItem, syncing && !expanded)
         updateSecondLineItemsVisibility(expanded)
@@ -201,7 +201,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun updateSecondLineItemsVisibility(expanded: Boolean) {
         syncingStateGroup.visibility = if (syncing && !expanded) View.VISIBLE else View.GONE
-        coinAmountGroup.visibility = if (syncing && !expanded) View.GONE else View.VISIBLE
+        coinAmountGroup.visibility = if (syncing && !expanded) View.INVISIBLE else View.VISIBLE
     }
 
     private fun showFiatAmount(balanceViewItem: BalanceViewItem, collapsedAndSyncing: Boolean) {
@@ -246,11 +246,9 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun setChartVisibility(show: Boolean) {
         if (show) {
-            chartButton.visibility = View.VISIBLE
             chartViewWrapper.visibility = View.VISIBLE
             txDiff.visibility = View.VISIBLE
         } else {
-            chartButton.visibility = View.INVISIBLE
             chartViewWrapper.visibility = View.GONE
             txDiff.visibility = View.INVISIBLE
         }
