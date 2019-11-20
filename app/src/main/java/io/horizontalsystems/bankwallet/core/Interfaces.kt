@@ -345,7 +345,6 @@ interface IPinManager {
 }
 
 interface ILockManager {
-    val lockStateUpdatedSignal: PublishSubject<Unit>
     var isLocked: Boolean
     fun onUnlock()
 }
