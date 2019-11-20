@@ -44,9 +44,9 @@ class TransactionInfoItemView : ConstraintLayout {
         invalidate()
     }
 
-    fun bindStatus(transactionStatus: TransactionStatus) {
+    fun bindStatus(transactionStatus: TransactionStatus, incoming: Boolean) {
         txtTitle.setText(R.string.TransactionInfo_Status)
-        transactionStatusView.bind(transactionStatus)
+        transactionStatusView.bind(transactionStatus, incoming)
         transactionStatusView.visibility = View.VISIBLE
 
         invalidate()
