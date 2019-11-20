@@ -127,7 +127,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 }
 
-                itemStatus.bindStatus(txRec.status)
+                itemStatus.bindStatus(txRec.status, txRec.incoming)
 
                 if (txRec.from.isNullOrEmpty() || !txRec.showFromAddress) {
                     itemFrom.visibility = View.GONE

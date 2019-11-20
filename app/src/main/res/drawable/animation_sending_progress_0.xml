@@ -7,15 +7,15 @@
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_status_proccessing_1"
+        android:drawable="@drawable/ic_status_sending_1"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_status_proccessing_2"
+        android:drawable="@drawable/ic_status_sending_2"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_status_proccessing_3"
+        android:drawable="@drawable/ic_status_sending_3"
         android:duration="@integer/animation_duration" />
 
 </animation-list>

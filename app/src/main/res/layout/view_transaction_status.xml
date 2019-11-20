@@ -25,16 +25,6 @@
         app:layout_constraintStart_toEndOf="@+id/txTime"
         app:layout_constraintTop_toTopOf="@+id/txTime" />
 
-    <io.horizontalsystems.bankwallet.modules.transactions.TransactionPendingStatusView
-        android:id="@+id/transactionPendingStatusView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
     <io.horizontalsystems.bankwallet.modules.transactions.TransactionProgressView
         android:id="@+id/transactionProgressView"
         android:layout_width="match_parent"

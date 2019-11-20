@@ -171,7 +171,6 @@
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
     <string name="Transactions_Receiving">Receiving</string>
     <string name="Transactions_Sending">Sending</string>
-    <string name="Transactions_Pending">Pending</string>
 
     <!--Transaction Info-->
 
@@ -183,7 +182,6 @@
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
     <string name="TransactionInfo_LockTime">TimeLock</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
