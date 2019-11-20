@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
@@ -174,13 +172,9 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     }
 
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
-        context?.let {
-            val color = if (headerViewItem.upToDate) R.color.yellow_d else R.color.yellow_50
-            balanceText.setTextColor(ContextCompat.getColor(it, color))
-        }
-
-        balanceText.text = headerViewItem.currencyValue?.let {
-            App.numberFormatter.format(it)
+        headerViewItem.apply {
+            balanceText.text = xBalanceText
+            balanceText.setTextColor(xBalanceTextColor)
         }
     }
 }
