@@ -10,12 +10,14 @@ import io.horizontalsystems.feeratekit.FeeRateKit
 
 class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRateKit.Listener {
 
-    private val feeRateKit = FeeRateKit(
-            infuraProjectId = appConfig.infuraProjectId,
-            infuraProjectSecret = appConfig.infuraProjectSecret,
-            context = context,
-            listener = this
-    )
+    private val feeRateKit by lazy {
+        FeeRateKit(
+                infuraProjectId = appConfig.infuraProjectId,
+                infuraProjectSecret = appConfig.infuraProjectSecret,
+                context = context,
+                listener = this
+        )
+    }
 
     override fun onRefresh(rates: List<FeeRate>) {
 

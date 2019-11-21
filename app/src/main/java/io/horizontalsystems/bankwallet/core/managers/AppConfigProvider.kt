@@ -44,8 +44,6 @@ class AppConfigProvider : IAppConfigProvider {
             val coinsString = App.instance.getString(R.string.localizations)
             return coinsString.split(",")
         }
-    override val defaultCoinCodes: List<String>
-        get() = listOf("BTC", "ETH")
 
     override val featuredCoins: List<Coin>
         get() = listOf(

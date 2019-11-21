@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class WalletManager(private val accountManager: IAccountManager, private val walletFactory: IWalletFactory, private val storage: IWalletStorage)
@@ -15,9 +16,11 @@ class WalletManager(private val accountManager: IAccountManager, private val wal
     override val walletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
     private val cache = WalletsCache()
-    private val disposable = accountManager.accountsFlowable.subscribe {
-        loadWallets()
-    }
+    private val disposable = accountManager.accountsFlowable
+            .observeOn(Schedulers.io())
+            .subscribe {
+                loadWallets()
+            }
 
     override fun wallet(coin: Coin): Wallet? {
         val account = accountManager.account(coin.type) ?: return null

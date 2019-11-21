@@ -36,7 +36,7 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
 
-    private val gson = Gson()
+    val gson by lazy { Gson() }
 
     override var currentLanguage: String?
         get() = App.preferences.getString(CURRENT_LANGUAGE, null)

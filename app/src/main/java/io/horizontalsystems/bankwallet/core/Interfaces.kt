@@ -364,7 +364,6 @@ interface IAppConfigProvider {
     val testMode: Boolean
     val localizations: List<String>
     val currencies: List<Currency>
-    val defaultCoinCodes: List<String>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
     val predefinedAccountTypes: List<IPredefinedAccountType>
