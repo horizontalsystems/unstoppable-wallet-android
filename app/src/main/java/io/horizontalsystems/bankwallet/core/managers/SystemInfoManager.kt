@@ -13,7 +13,7 @@ class SystemInfoManager : ISystemInfoManager {
 
     override val appVersion: String = BuildConfig.VERSION_NAME
 
-    private val biometricManager = BiometricManager.from(App.instance)
+    private val biometricManager by lazy { BiometricManager.from(App.instance) }
 
     override val isSystemLockOff: Boolean
         get() {

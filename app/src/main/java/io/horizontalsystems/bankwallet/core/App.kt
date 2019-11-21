@@ -171,7 +171,6 @@ class App : Application() {
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
-
     }
 
 }

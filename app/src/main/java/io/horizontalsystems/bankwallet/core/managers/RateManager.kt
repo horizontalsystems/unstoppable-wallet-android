@@ -18,11 +18,14 @@ import java.math.BigDecimal
 class RateManager(context: Context, walletManager: IWalletManager, private val currencyManager: ICurrencyManager) : IRateManager {
 
     private val disposables = CompositeDisposable()
-    private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code, 60 * 10)
+    private val kit: XRatesKit by lazy {
+        XRatesKit.create(context, currencyManager.baseCurrency.code, 60 * 10)
+    }
 
     init {
         walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe { wallets ->
                     onWalletsUpdated(wallets)
                 }.let {
@@ -31,6 +34,7 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
 
         currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe {
                     onBaseCurrencyUpdated()
                 }.let {
