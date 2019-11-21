@@ -42,7 +42,9 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         transactionsAdapter.viewModel = viewModel
         transactionsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                layoutManager.scrollToPosition(0)
+                if (positionStart == 0) {
+                    layoutManager.scrollToPosition(0)
+                }
             }
         });
 
