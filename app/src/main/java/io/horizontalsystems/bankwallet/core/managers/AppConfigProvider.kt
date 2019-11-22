@@ -21,6 +21,11 @@ class AppConfigProvider : IAppConfigProvider {
     override val infuraProjectId = "2a1306f1d12f4c109a4d4fb9be46b02e"
     override val infuraProjectSecret = "fc479a9290b64a84a15fa6544a130218"
 
+    // Bitcoin-Core RPC config
+    override val btcCoreRpcUrl: String = ""
+    override val btcCoreRpcUser: String? = null
+    override val btcCoreRpcPassword: String? = null
+
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
 

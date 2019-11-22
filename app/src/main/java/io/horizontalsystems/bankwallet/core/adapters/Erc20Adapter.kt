@@ -20,7 +20,7 @@ class Erc20Adapter(
         kit: EthereumKit,
         decimal: Int,
         private val fee: BigDecimal,
-        contractAddress: String,
+        val contractAddress: String,
         gasLimit: Long,
         override val minimumRequiredBalance: BigDecimal,
         override val minimumSendAmount: BigDecimal
@@ -59,8 +59,16 @@ class Erc20Adapter(
 
     // ISendEthereumAdapter
 
-    override fun sendSingle(address: String, amount: String, gasPrice: Long): Single<Unit> {
-        return erc20Kit.send(address, amount, gasPrice).map { Unit }
+    override fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
+        return erc20Kit.send(address, amount, gasPrice, gasLimit).map { Unit }
+    }
+
+    override fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long> {
+
+        val poweredDecimal = value.scaleByPowerOfTen(decimal)
+        val noScaleDecimal = poweredDecimal.setScale(0)
+
+        return erc20Kit.estimateGas(toAddress, contractAddress, noScaleDecimal.toBigInteger(), gasPrice)
     }
 
     override fun availableBalance(gasPrice: Long): BigDecimal {
