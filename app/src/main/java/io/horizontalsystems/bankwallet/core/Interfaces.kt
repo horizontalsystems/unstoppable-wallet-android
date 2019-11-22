@@ -270,7 +270,9 @@ interface ISendEthereumAdapter {
     fun availableBalance(gasPrice: Long): BigDecimal
     fun fee(gasPrice: Long): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, gasPrice: Long): Single<Unit>
+    fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit>
+    fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>
+
 }
 
 interface ISendBinanceAdapter {
@@ -333,6 +335,9 @@ interface IAppConfigProvider {
     val ipfsFallbackGateway: String
     val infuraProjectId: String?
     val infuraProjectSecret: String?
+    val btcCoreRpcUrl: String?
+    val btcCoreRpcUser: String?
+    val btcCoreRpcPassword: String?
     val fiatDecimal: Int
     val maxDecimal: Int
     val testMode: Boolean
