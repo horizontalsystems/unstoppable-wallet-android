@@ -125,10 +125,10 @@ class BalancePresenter(
 
     override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal) {
         executor.submit {
-            updateItem(wallet) { item ->
+            updateItem(wallet, { item ->
                 item.balance = balance
                 item.balanceLocked = balanceLocked
-            }
+            }, BalanceViewItem.UpdateType.BALANCE)
 
             updateHeaderViewItem()
         }
@@ -136,9 +136,9 @@ class BalancePresenter(
 
     override fun didUpdateState(wallet: Wallet, state: AdapterState) {
         executor.submit {
-            updateItem(wallet) { item ->
+            updateItem(wallet, { item ->
                 item.state = state
-            }
+            }, BalanceViewItem.UpdateType.STATE)
 
             updateHeaderViewItem()
         }
@@ -161,7 +161,7 @@ class BalancePresenter(
             items.forEachIndexed { index, item ->
                 marketInfo[item.wallet.coin.code]?.let {
                     item.marketInfo = it
-                    viewItems[index] = factory.viewItem(item, currency)
+                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO)
                 }
             }
             view?.set(viewItemsCopy)
@@ -224,14 +224,14 @@ class BalancePresenter(
         }
     }
 
-    private fun updateItem(wallet: Wallet, updateBlock: (BalanceItem) -> Unit) {
+    private fun updateItem(wallet: Wallet, updateBlock: (BalanceItem) -> Unit, updateType: BalanceViewItem.UpdateType?) {
         val index = items.indexOfFirst { it.wallet == wallet }
         if (index == -1)
             return
 
         val item = items[index]
         updateBlock(item)
-        viewItems[index] = factory.viewItem(item, currency)
+        viewItems[index] = factory.viewItem(item, currency, updateType)
 
         view?.set(viewItemsCopy)
     }
@@ -239,7 +239,7 @@ class BalancePresenter(
     private fun updateViewItems() {
         items = sorter.sort(items, sortType)
 
-        viewItems = items.map { factory.viewItem(it, currency) }.toMutableList()
+        viewItems = items.map { factory.viewItem(it, currency, null) }.toMutableList()
 
         view?.set(viewItemsCopy)
     }
@@ -253,7 +253,7 @@ class BalancePresenter(
         items.forEachIndexed { index, item ->
             if (item.wallet.coin.code == coinCode) {
                 item.chartInfoState = chartInfoState
-                viewItems[index] = factory.viewItem(item, currency)
+                viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.CHART_INFO)
             }
         }
         view?.set(viewItemsCopy)
