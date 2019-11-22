@@ -20,4 +20,7 @@ class BalanceViewItemDiff(private val oldItems: List<BalanceViewItem>, private v
         return oldItems[oldItemPosition] == newItems[newItemPosition]
     }
 
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        return newItems[newItemPosition].updateType
+    }
 }

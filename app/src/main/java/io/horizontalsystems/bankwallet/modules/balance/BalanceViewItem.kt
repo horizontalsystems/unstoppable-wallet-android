@@ -22,8 +22,16 @@ data class BalanceViewItem(
         val marketInfoExpired: Boolean,
         val chartInfoState: ChartInfoState,
         val coinValueLocked: CoinValue,
-        val currencyValueLocked: CurrencyValue?
+        val currencyValueLocked: CurrencyValue?,
+        val updateType: UpdateType?
 ) {
+    enum class UpdateType {
+        MARKET_INFO,
+        CHART_INFO,
+        BALANCE,
+        STATE
+    }
+
     var xSyncing = false
     var xButtonPayEnabled = false
     var xButtonReceiveEnabled = true
@@ -127,7 +135,7 @@ data class BalanceHeaderViewItem(
 
 class BalanceViewItemFactory {
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?): BalanceViewItem {
         val balanceTotal = item.balanceTotal ?: BigDecimal.ZERO
         val balanceLocked = item.balanceLocked ?: BigDecimal.ZERO
 
@@ -152,7 +160,8 @@ class BalanceViewItemFactory {
                 item.marketInfo?.isExpired() ?: false,
                 item.chartInfoState,
                 CoinValue(item.wallet.coin, balanceLocked),
-                currencyValueLocked
+                currencyValueLocked,
+                updateType
         )
     }
 
