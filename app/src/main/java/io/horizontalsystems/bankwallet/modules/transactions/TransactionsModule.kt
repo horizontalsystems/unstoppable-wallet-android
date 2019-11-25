@@ -30,15 +30,16 @@ data class TransactionViewItem(
         val lockInfo: TransactionLockInfo?)
 
 
-data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String) {
+data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?) {
 
     companion object {
-        fun from(pluginData: Map<Byte, IPluginOutputData>?): TransactionLockInfo? {
+        fun from(pluginData: Map<Byte, IPluginOutputData>?, valueToAmount: (Long?) -> BigDecimal?): TransactionLockInfo? {
             val hodlerPluginData = pluginData?.get(HodlerPlugin.id) ?: return null
             val hodlerOutputData = hodlerPluginData as? HodlerOutputData ?: return null
             val lockedUntil = hodlerOutputData.approxUnlockTime ?: return null
+            val lockedValue = valueToAmount(hodlerOutputData.value)
 
-            return TransactionLockInfo(Date(lockedUntil * 1000), hodlerOutputData.addressString)
+            return TransactionLockInfo(Date(lockedUntil * 1000), hodlerOutputData.addressString, lockedValue)
         }
     }
 }

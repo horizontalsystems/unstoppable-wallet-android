@@ -25,6 +25,7 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
             }
         }
 
+        val sentToSelf = isSentToSelf(record)
         val incoming = record.amount > BigDecimal.ZERO
         var toAddress: String? = null
         var fromAddress: String? = null
@@ -35,15 +36,24 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
             toAddress = record.to.firstOrNull { !it.mine }?.address
         }
 
-        val currencyValue = rate?.let { CurrencyValue(it.currency, record.amount * it.value) }
+        val lockInfo = record.lockInfo
+        val currencyValue = rate?.let {
+            var amount = record.amount
+            val amountLocked = lockInfo?.amount
+            if (sentToSelf && amountLocked != null) {
+                amount = amountLocked
+            }
+
+            CurrencyValue(it.currency, amount * it.value)
+        }
+
         val coin = transactionItem.wallet.coin
+        val date = if (record.timestamp == 0L) null else Date(record.timestamp * 1000)
 
         val feeCoinValue = transactionItem.record.fee?.let {
             val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
             CoinValue(feeCoin, transactionItem.record.fee)
         }
-
-        val lockInfo = TransactionLockInfo.from(record.to.firstOrNull()?.pluginData)
 
         return TransactionViewItem(
                 wallet,
@@ -53,10 +63,10 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 feeCoinValue,
                 fromAddress,
                 toAddress,
-                isSentToSelf(record),
+                sentToSelf,
                 showFromAddress(wallet.coin.type),
                 incoming,
-                if (record.timestamp == 0L) null else Date(record.timestamp * 1000),
+                date,
                 status,
                 rate,
                 lockInfo

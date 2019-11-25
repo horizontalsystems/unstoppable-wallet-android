@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.core.IPluginOutputData
 import java.math.BigDecimal
 import java.util.*
@@ -13,7 +14,8 @@ data class TransactionRecord(
         val fee: BigDecimal? = null,
         val timestamp: Long,
         val from: List<TransactionAddress>,
-        val to: List<TransactionAddress>)
+        val to: List<TransactionAddress>,
+        val lockInfo: TransactionLockInfo? = null)
     : Comparable<TransactionRecord> {
 
     override fun compareTo(other: TransactionRecord): Int {

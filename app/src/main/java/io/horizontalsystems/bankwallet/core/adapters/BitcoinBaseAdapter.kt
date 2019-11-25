@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
@@ -121,16 +122,27 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 transactionIndex = transaction.transactionIndex,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockHeight?.toLong(),
-                amount = transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
-                fee = transaction.fee?.toBigDecimal()?.divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
+                amount = satoshiToBTC(transaction.amount),
+                fee = satoshiToBTC(transaction.fee),
                 timestamp = transaction.timestamp,
                 from = transaction.from.map { TransactionAddress(it.address, it.mine, it.pluginData) },
-                to = transaction.to.map { TransactionAddress(it.address, it.mine, it.pluginData) }
+                to = transaction.to.map { TransactionAddress(it.address, it.mine, it.pluginData) },
+                lockInfo = TransactionLockInfo.from(transaction.to.firstOrNull()?.pluginData) {
+                    satoshiToBTC(it)
+                }
         )
     }
 
     val statusInfo: Map<String, Any>
         get() = kit.statusInfo()
+
+    private fun satoshiToBTC(value: Long): BigDecimal {
+        return value.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+    }
+
+    private fun satoshiToBTC(value: Long?): BigDecimal? {
+        return satoshiToBTC(value ?: return null)
+    }
 
     companion object {
         const val defaultConfirmationsThreshold = 3
