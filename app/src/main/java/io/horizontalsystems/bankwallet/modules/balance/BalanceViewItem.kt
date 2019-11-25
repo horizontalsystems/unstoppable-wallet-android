@@ -59,7 +59,6 @@ data class BalanceViewItem(
     var xFiatAmountAlpha: Float? = null
 
     val xTypeLabelText = coin.type.typeLabel()
-    val xCoinTypeLabelBg = if (xTypeLabelText != null) LayoutHelper.d(R.drawable.label_background, App.instance) else null
 
     init {
 
