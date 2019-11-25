@@ -50,10 +50,10 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     override val debugInfo: String = ""
 
     override val balance: BigDecimal
-        get() = BigDecimal.valueOf(kit.balance.spendable).divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+        get() = satoshiToBTC(kit.balance.spendable)
 
     override val balanceLocked: BigDecimal
-        get() = BigDecimal.valueOf(kit.balance.unspendable).divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+        get() = satoshiToBTC(kit.balance.unspendable)
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
@@ -86,27 +86,28 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
 
     fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
         return try {
-            BigDecimal.valueOf(kit.maximumSpendableValue(address, feeRate.toInt(), pluginData ?: mapOf())).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate.toInt(), pluginData ?: mapOf())
+            satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO
         }
     }
 
     fun minimumSendAmount(address: String?): BigDecimal {
-        return BigDecimal.valueOf(kit.minimumSpendableValue(address).toLong()).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+        return satoshiToBTC(kit.minimumSpendableValue(address).toLong(), RoundingMode.CEILING)
     }
 
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal? {
         return kit.maximumSpendLimit(pluginData)?.let { maximumSpendLimit ->
-            BigDecimal.valueOf(maximumSpendLimit).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+            satoshiToBTC(maximumSpendLimit, RoundingMode.CEILING)
         }
     }
 
     fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
-            val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate.toInt(), pluginData = pluginData ?: mapOf())
-            BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+            val fee = kit.fee(satoshiAmount, address, senderPay = true, feeRate = feeRate.toInt(), pluginData = pluginData ?: mapOf())
+            satoshiToBTC(fee, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO
         }
@@ -136,8 +137,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     val statusInfo: Map<String, Any>
         get() = kit.statusInfo()
 
-    private fun satoshiToBTC(value: Long): BigDecimal {
-        return value.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+    private fun satoshiToBTC(value: Long, roundingMode: RoundingMode = RoundingMode.HALF_EVEN): BigDecimal {
+        return BigDecimal(value).divide(satoshisInBitcoin, decimal, roundingMode)
     }
 
     private fun satoshiToBTC(value: Long?): BigDecimal? {
