@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
-import java.math.BigDecimal
 
 class BalanceCoinAdapter(
         private val listener: Listener
@@ -32,24 +31,6 @@ class BalanceCoinAdapter(
 
     private val coinType = 1
     private val addCoinType = 2
-
-    private var expandedViewPosition: Int? = null
-
-    fun toggleViewHolder(viewItem: BalanceViewItem) {
-        val position= items.indexOf(viewItem)
-        if (position == -1)
-            return
-
-        expandedViewPosition?.let {
-            notifyItemChanged(it, false)
-        }
-
-        if (expandedViewPosition != position) {
-            notifyItemChanged(position, true)
-        }
-
-        expandedViewPosition = if (expandedViewPosition == position) null else position
-    }
 
     fun setItems(items: List<BalanceViewItem>) {
         // Update with regular method for the initial load to avoid showing balance tab with empty list
@@ -86,10 +67,9 @@ class BalanceCoinAdapter(
         if (holder !is ViewHolderCoin) return
 
         if (payloads.isEmpty()) {
-            val item = items[position]
-            holder.bind(item, expandedViewPosition == position)
-        } else if (payloads.any { it is Boolean }) {
-            holder.bindPartial(items[position], expandedViewPosition == position)
+            holder.bind(items[position])
+        } else {
+            holder.bindUpdate(items[position], payloads)
         }
     }
 }
@@ -98,7 +78,6 @@ class ViewHolderAddCoin(override val containerView: View) : RecyclerView.ViewHol
 class ViewHolderCoin(override val containerView: View, private val listener: BalanceCoinAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var balanceViewItem: BalanceViewItem? = null
-    private var syncing = false
 
     init {
         containerView.setOnClickListener {
@@ -126,11 +105,10 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         }
     }
 
-    fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
+    fun bind(balanceViewItem: BalanceViewItem) {
         this.balanceViewItem = balanceViewItem
 
         balanceViewItem.apply {
-            syncing = xSyncing
             iconProgress.visibility = xIconProgressVisibility
             xTextProgressText?.let {
                 textProgress.text = it
@@ -141,9 +119,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
             textSyncedUntil.text = xTextSyncedUntilText
             buttonPay.isEnabled = xButtonPayEnabled
-            xCoinIconVisibility?.let {
-                coinIcon.visibility = it
-            }
+            coinIcon.visibility = xCoinIconVisibility
             imgSyncFailed.visibility = xImgSyncFailedVisibility
 
             coinAmount.text = xCoinAmountText
@@ -159,15 +135,15 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             exchangeRate.setTextColor(xExchangeRateTextColor)
             exchangeRate.text = xExchangeRateText
+
+            containerView.isSelected = xExpanded
+            buttonsWrapper.visibility = xButtonsWrapperVisibility
+
+            showChart(balanceViewItem)
+
+            showFiatAmount(balanceViewItem)
+            updateSecondLineItemsVisibility(balanceViewItem)
         }
-
-        containerView.isSelected = expanded
-        buttonsWrapper.visibility = if (expanded) View.VISIBLE else View.GONE
-
-        showChart(balanceViewItem, expanded)
-
-        showFiatAmount(balanceViewItem, syncing && !expanded)
-        updateSecondLineItemsVisibility(expanded)
     }
 
     private fun showLockedBalance(balanceViewItem: BalanceViewItem) {
@@ -184,44 +160,108 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         }
     }
 
-    fun bindPartial(balanceViewItem: BalanceViewItem, expanded: Boolean) {
-        containerView.isSelected = expanded
+    fun bindUpdate(balanceViewItem: BalanceViewItem, payloads: MutableList<Any>) {
+        payloads.forEach {
+            when (it) {
+                BalanceViewItem.UpdateType.EXPANDED -> {
+                    balanceViewItem.apply {
+                        containerView.isSelected = xExpanded
 
-        showFiatAmount(balanceViewItem, syncing && !expanded)
-        updateSecondLineItemsVisibility(expanded)
+                        showFiatAmount(balanceViewItem)
+                        updateSecondLineItemsVisibility(balanceViewItem)
 
-        if (expanded) {
-            AnimationHelper.expand(buttonsWrapper)
-        } else {
-            AnimationHelper.collapse(buttonsWrapper)
+                        if (xExpanded) {
+                            AnimationHelper.expand(buttonsWrapper)
+                        } else {
+                            AnimationHelper.collapse(buttonsWrapper)
+                        }
+
+                        showChart(balanceViewItem)
+                    }
+                }
+                BalanceViewItem.UpdateType.STATE -> {
+                    balanceViewItem.apply {
+                        iconProgress.visibility = xIconProgressVisibility
+                        xTextProgressText?.let {
+                            textProgress.text = it
+                        }
+                        buttonReceive.isEnabled = xButtonReceiveEnabled
+                        xIconProgressValue?.let {
+                            iconProgress.setProgress(it)
+                        }
+
+                        textSyncedUntil.text = xTextSyncedUntilText
+                        buttonPay.isEnabled = xButtonPayEnabled
+                        coinIcon.visibility = xCoinIconVisibility
+                        imgSyncFailed.visibility = xImgSyncFailedVisibility
+
+                        coinAmount.alpha = xCoinAmountAlpha
+
+                        xFiatAmountLockedAlpha?.let {
+                            fiatAmountLocked.alpha = it
+                        }
+
+                        fiatAmount.visibility = xFiatAmountVisibility
+
+                        xFiatAmountAlpha?.let {
+                            fiatAmount.alpha = it
+                        }
+
+                        syncingStateGroup.visibility = xSyncingStateGroupVisibility
+                        coinAmountGroup.visibility = xCoinAmountGroupVisibility
+                    }
+                }
+                BalanceViewItem.UpdateType.BALANCE -> {
+                    balanceViewItem.apply {
+                        coinAmount.text = xCoinAmountText
+
+                        showFiatAmount(balanceViewItem)
+                        showLockedBalance(balanceViewItem)
+
+                        buttonPay.isEnabled = xButtonPayEnabled
+                    }
+                }
+                BalanceViewItem.UpdateType.MARKET_INFO -> {
+                    balanceViewItem.apply {
+                        exchangeRate.setTextColor(xExchangeRateTextColor)
+                        exchangeRate.text = xExchangeRateText
+
+                        showFiatAmount(balanceViewItem)
+
+                        fiatAmountLocked.visibility = xFiatAmountLockedVisibility
+                        fiatAmountLocked.text = xFiatAmountLockedText
+                        xFiatAmountLockedAlpha?.let {
+                            fiatAmountLocked.alpha = it
+                        }
+                    }
+                }
+                BalanceViewItem.UpdateType.CHART_INFO -> {
+                    showChart(balanceViewItem)
+                }
+            }
         }
-
-        showChart(balanceViewItem, expanded)
     }
 
-    private fun updateSecondLineItemsVisibility(expanded: Boolean) {
-        syncingStateGroup.visibility = if (syncing && !expanded) View.VISIBLE else View.GONE
-        coinAmountGroup.visibility = if (syncing && !expanded) View.INVISIBLE else View.VISIBLE
-    }
-
-    private fun showFiatAmount(balanceViewItem: BalanceViewItem, collapsedAndSyncing: Boolean) {
-        fiatAmount.visibility = when {
-            collapsedAndSyncing -> View.GONE
-            balanceViewItem.currencyValue == null -> View.GONE
-            balanceViewItem.currencyValue.value.compareTo(BigDecimal.ZERO) == 0 -> View.GONE
-            else -> View.VISIBLE
-        }
-
+    private fun updateSecondLineItemsVisibility(balanceViewItem: BalanceViewItem) {
         balanceViewItem.apply {
+            syncingStateGroup.visibility = xSyncingStateGroupVisibility
+            coinAmountGroup.visibility = xCoinAmountGroupVisibility
+        }
+    }
+
+    private fun showFiatAmount(balanceViewItem: BalanceViewItem) {
+        balanceViewItem.apply {
+            fiatAmount.visibility = xFiatAmountVisibility
             fiatAmount.text = xFiatAmountText
+
             xFiatAmountAlpha?.let {
                 fiatAmount.alpha = it
             }
         }
     }
 
-    private fun showChart(viewItem: BalanceViewItem, expanded: Boolean) {
-        if (expanded || viewItem.chartInfoState !is ChartInfoState.Loaded) {
+    private fun showChart(viewItem: BalanceViewItem) {
+        if (viewItem.xExpanded || viewItem.chartInfoState !is ChartInfoState.Loaded) {
             return setChartVisibility(false)
         }
 

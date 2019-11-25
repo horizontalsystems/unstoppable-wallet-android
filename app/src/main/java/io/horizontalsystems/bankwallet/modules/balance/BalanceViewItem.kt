@@ -23,16 +23,17 @@ data class BalanceViewItem(
         val chartInfoState: ChartInfoState,
         val coinValueLocked: CoinValue,
         val currencyValueLocked: CurrencyValue?,
-        val updateType: UpdateType?
+        var updateType: UpdateType?,
+        var xExpanded: Boolean
 ) {
     enum class UpdateType {
         MARKET_INFO,
         CHART_INFO,
         BALANCE,
-        STATE
+        STATE,
+        EXPANDED
     }
 
-    var xSyncing = false
     var xButtonPayEnabled = false
     var xButtonReceiveEnabled = true
     var xImgSyncFailedVisibility = View.INVISIBLE
@@ -40,7 +41,7 @@ data class BalanceViewItem(
     var xTextProgressText: String? = null
     var xIconProgressValue: Float? = null
     var xTextSyncedUntilText: String? = null
-    var xCoinIconVisibility: Int? = null
+    var xCoinIconVisibility = View.VISIBLE
 
     val xCoinAmountText = App.numberFormatter.format(coinValue)
     val xCoinAmountAlpha = if (state is AdapterState.Synced) 1f else 0.3f
@@ -69,7 +70,15 @@ data class BalanceViewItem(
     val xTypeLabelText = coin.type.typeLabel()
     val xCoinTypeLabelBg = if (xTypeLabelText != null) LayoutHelper.d(R.drawable.label_background, App.instance) else null
 
+    val xButtonsWrapperVisibility = if (xExpanded) View.VISIBLE else View.GONE
+
+    val xFiatAmountVisibility: Int
+
+    val xSyncingStateGroupVisibility: Int
+    val xCoinAmountGroupVisibility: Int
+
     init {
+        var xSyncing = false
 
         state.let { adapterState ->
             when (adapterState) {
@@ -119,6 +128,16 @@ data class BalanceViewItem(
             xFiatAmountText = App.numberFormatter.format(it, trimmable = true)
             xFiatAmountAlpha = if (!marketInfoExpired && state is AdapterState.Synced) 1f else 0.5f
         }
+
+        xFiatAmountVisibility = when {
+            xSyncing && !xExpanded -> View.GONE
+            currencyValue == null -> View.GONE
+            currencyValue.value.compareTo(BigDecimal.ZERO) == 0 -> View.GONE
+            else -> View.VISIBLE
+        }
+
+        xSyncingStateGroupVisibility = if (xSyncing && !xExpanded) View.VISIBLE else View.GONE
+        xCoinAmountGroupVisibility = if (xSyncing && !xExpanded) View.INVISIBLE else View.VISIBLE
     }
 }
 
@@ -135,7 +154,7 @@ data class BalanceHeaderViewItem(
 
 class BalanceViewItemFactory {
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
         val balanceTotal = item.balanceTotal ?: BigDecimal.ZERO
         val balanceLocked = item.balanceLocked ?: BigDecimal.ZERO
 
@@ -161,7 +180,8 @@ class BalanceViewItemFactory {
                 item.chartInfoState,
                 CoinValue(item.wallet.coin, balanceLocked),
                 currencyValueLocked,
-                updateType
+                updateType,
+                expanded
         )
     }
 

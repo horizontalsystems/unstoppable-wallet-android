@@ -102,7 +102,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     }
 
     override fun onItemClicked(viewItem: BalanceViewItem) {
-        coinAdapter.toggleViewHolder(viewItem)
+        viewModel.delegate.onItem(viewItem)
     }
 
     override fun onChartClicked(viewItem: BalanceViewItem) {

@@ -18,7 +18,7 @@ class BalancePresenter(
         private val sorter: BalanceModule.IBalanceSorter,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val factory: BalanceViewItemFactory,
-        private val sortingOnThreshold: Int = 5
+        private val sortingOnThreshold: Int = 2
 ) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     var view: BalanceModule.IView? = null
@@ -72,6 +72,42 @@ class BalancePresenter(
 
     override fun onChart(viewItem: BalanceViewItem) {
         router.openChart(viewItem.wallet.coin)
+    }
+
+    private var expandedViewItem: BalanceViewItem? = null
+
+    override fun onItem(viewItem: BalanceViewItem) {
+        val itemIndex = viewItems.indexOfFirst { it.wallet == viewItem.wallet }
+        if (itemIndex == -1) return
+
+        var indexToCollapse: Int = -1
+        var indexToExpand: Int = -1
+
+        if (viewItem.wallet == expandedViewItem?.wallet) {
+            indexToCollapse = itemIndex
+
+            expandedViewItem = null
+        } else {
+            expandedViewItem?.let { expandedViewItem ->
+                indexToCollapse = viewItems.indexOfFirst { it.wallet == expandedViewItem.wallet }
+            }
+
+            indexToExpand = itemIndex
+
+            expandedViewItem = viewItem
+        }
+
+        if (indexToCollapse != -1) {
+            viewItems[indexToCollapse].xExpanded = false
+            viewItems[indexToCollapse].updateType = BalanceViewItem.UpdateType.EXPANDED
+        }
+
+        if (indexToExpand != -1) {
+            viewItems[indexToExpand].xExpanded = true
+            viewItems[indexToExpand].updateType = BalanceViewItem.UpdateType.EXPANDED
+        }
+
+        view?.set(viewItemsCopy)
     }
 
     override fun onAddCoinClick() {
@@ -161,7 +197,7 @@ class BalancePresenter(
             items.forEachIndexed { index, item ->
                 marketInfo[item.wallet.coin.code]?.let {
                     item.marketInfo = it
-                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO)
+                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, it.equals(expandedViewItem?.wallet))
                 }
             }
             view?.set(viewItemsCopy)
@@ -231,7 +267,7 @@ class BalancePresenter(
 
         val item = items[index]
         updateBlock(item)
-        viewItems[index] = factory.viewItem(item, currency, updateType)
+        viewItems[index] = factory.viewItem(item, currency, updateType, viewItems[index].xExpanded)
 
         view?.set(viewItemsCopy)
     }
@@ -239,7 +275,7 @@ class BalancePresenter(
     private fun updateViewItems() {
         items = sorter.sort(items, sortType)
 
-        viewItems = items.map { factory.viewItem(it, currency, null) }.toMutableList()
+        viewItems = items.map { factory.viewItem(it, currency, null, it.wallet == expandedViewItem?.wallet) }.toMutableList()
 
         view?.set(viewItemsCopy)
     }
@@ -253,7 +289,7 @@ class BalancePresenter(
         items.forEachIndexed { index, item ->
             if (item.wallet.coin.code == coinCode) {
                 item.chartInfoState = chartInfoState
-                viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.CHART_INFO)
+                viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.CHART_INFO, viewItems[index].xExpanded)
             }
         }
         view?.set(viewItemsCopy)
