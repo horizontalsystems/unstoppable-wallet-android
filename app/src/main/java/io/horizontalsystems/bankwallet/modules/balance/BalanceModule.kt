@@ -28,6 +28,7 @@ object BalanceModule {
         fun onReceive(viewItem: BalanceViewItem)
         fun onPay(viewItem: BalanceViewItem)
         fun onChart(viewItem: BalanceViewItem)
+        fun onItem(viewItem: BalanceViewItem)
 
         fun onAddCoinClick()
 
