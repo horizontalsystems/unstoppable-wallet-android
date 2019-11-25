@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.math.BigDecimal
@@ -26,6 +25,7 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
         }
 
         val sentToSelf = isSentToSelf(record)
+        val lockInfo = record.lockInfo
         val incoming = record.amount > BigDecimal.ZERO
         var toAddress: String? = null
         var fromAddress: String? = null
@@ -36,9 +36,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
             toAddress = record.to.firstOrNull { !it.mine }?.address
         }
 
-        val lockInfo = record.lockInfo
+        var amount = record.amount
         val currencyValue = rate?.let {
-            var amount = record.amount
             val amountLocked = lockInfo?.amount
             if (sentToSelf && amountLocked != null) {
                 amount = amountLocked
@@ -58,7 +57,7 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
         return TransactionViewItem(
                 wallet,
                 record.transactionHash,
-                CoinValue(coin, record.amount),
+                CoinValue(coin, amount),
                 currencyValue,
                 feeCoinValue,
                 fromAddress,
