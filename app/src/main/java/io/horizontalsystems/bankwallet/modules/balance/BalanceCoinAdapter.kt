@@ -126,7 +126,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             coinAmount.alpha = xCoinAmountAlpha
 
             coinTypeLabel.text = xTypeLabelText
-            coinTypeLabel.background = xCoinTypeLabelBg
 
             showLockedBalance(balanceViewItem)
 
@@ -208,7 +207,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
                         }
 
                         syncingStateGroup.visibility = xSyncingStateGroupVisibility
-                        coinAmountGroup.visibility = xCoinAmountGroupVisibility
+                        coinAmount.visibility = xCoinAmountVisibility
+                        coinTypeLabel.visibility = xCoinTypeLabelVisibility
                     }
                 }
                 BalanceViewItem.UpdateType.BALANCE -> {
@@ -245,7 +245,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
     private fun updateSecondLineItemsVisibility(balanceViewItem: BalanceViewItem) {
         balanceViewItem.apply {
             syncingStateGroup.visibility = xSyncingStateGroupVisibility
-            coinAmountGroup.visibility = xCoinAmountGroupVisibility
+            coinAmount.visibility = xCoinAmountVisibility
+            coinTypeLabel.visibility = xCoinTypeLabelVisibility
         }
     }
 
