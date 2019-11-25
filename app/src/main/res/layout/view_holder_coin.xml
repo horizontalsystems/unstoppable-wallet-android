@@ -12,12 +12,6 @@
     android:paddingBottom="8dp">
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/coinAmountGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="coinAmount,coinTypeLabel" />
-
-    <androidx.constraintlayout.widget.Group
         android:id="@+id/syncingStateGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

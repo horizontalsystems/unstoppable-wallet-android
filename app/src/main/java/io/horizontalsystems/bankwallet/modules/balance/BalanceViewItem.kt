@@ -68,14 +68,14 @@ data class BalanceViewItem(
     var xFiatAmountAlpha: Float? = null
 
     val xTypeLabelText = coin.type.typeLabel()
-    val xCoinTypeLabelBg = if (xTypeLabelText != null) LayoutHelper.d(R.drawable.label_background, App.instance) else null
 
     val xButtonsWrapperVisibility = if (xExpanded) View.VISIBLE else View.GONE
 
     val xFiatAmountVisibility: Int
 
     val xSyncingStateGroupVisibility: Int
-    val xCoinAmountGroupVisibility: Int
+    val xCoinAmountVisibility: Int
+    val xCoinTypeLabelVisibility: Int
 
     init {
         var xSyncing = false
@@ -137,7 +137,12 @@ data class BalanceViewItem(
         }
 
         xSyncingStateGroupVisibility = if (xSyncing && !xExpanded) View.VISIBLE else View.GONE
-        xCoinAmountGroupVisibility = if (xSyncing && !xExpanded) View.INVISIBLE else View.VISIBLE
+        xCoinAmountVisibility = if (xSyncing && !xExpanded) View.INVISIBLE else View.VISIBLE
+
+        xCoinTypeLabelVisibility = when {
+            xSyncing && !xExpanded -> View.GONE
+            else -> if (xTypeLabelText == null) View.GONE else View.VISIBLE
+        }
     }
 }
 
