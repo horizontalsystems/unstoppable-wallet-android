@@ -94,7 +94,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 if (txRec.lockInfo != null) {
                     itemLockTime.visibility = View.VISIBLE
-                    itemLockTime.bindInfo(context.getString(R.string.TransactionInfo_LockTime), DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy"))
+                    itemLockTime.bindInfo(context.getString(R.string.TransactionInfo_LockTime), DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy, h a"))
                     itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
                 } else {
                     itemLockTime.visibility = View.GONE
@@ -117,7 +117,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 }
 
                 footNote.apply {
-                    if (txRec.sentToSelf) {
+                    if (txRec.sentToSelf && txRec.lockInfo == null) {
                         val footNoteText = "* ${context.getString(R.string.TransactionInfo_FootNote)}"
                         text = footNoteText
                         visibility = View.VISIBLE
