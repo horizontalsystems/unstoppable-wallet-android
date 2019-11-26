@@ -9,10 +9,24 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModu
 import io.reactivex.Single
 import java.math.BigDecimal
 
+sealed class FeeState() {
+    object Loading : FeeState()
+    class Value(val gasLimit: Long) : FeeState()
+    class Error(val error: Exception) : FeeState()
+
+    val isLoading: Boolean
+        get() = this is Loading
+
+    val isValid: Boolean
+        get() = this is Value
+}
+
 class SendEthereumHandler(private val interactor: SendModule.ISendEthereumInteractor,
                           private val router: SendModule.IRouter)
     : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate,
       SendFeeModule.IFeeModuleDelegate {
+
+    private var estimateGasLimitState: FeeState = FeeState.Value(0)
 
     private fun syncValidation() {
         try {
@@ -30,9 +44,10 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
         amountModule.setAvailableBalance(interactor.availableBalance(gasPrice = feeModule.feeRate))
     }
 
-    private fun syncFee() {
-        feeModule.setFee(interactor.fee(feeModule.feeRate))
-    }
+//    private fun syncFee() {
+//
+//        feeModule.setFee(interactor.fee(feeModule.feeRate))
+//    }
 
     // SendModule.ISendHandler
 
@@ -61,7 +76,12 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
     }
 
     override fun sendSingle(): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate)
+        val value = estimateGasLimitState
+        if (value !is FeeState.Value) {
+            throw Exception("SendTransactionError.unknown")
+        }
+
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, value.gasLimit)
     }
 
     override fun onModulesDidLoad() {
@@ -69,7 +89,7 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
         amountModule.setMinimumAmount(interactor.minimumAmount)
         syncAvailableBalance()
         feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
-        syncFee()
+        feeModule.fetchFeeRate()
     }
 
     override fun onAddressScan(address: String) {
@@ -108,8 +128,26 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
 
     override fun onUpdateFeeRate(feeRate: Long) {
         syncAvailableBalance()
-        syncFee()
         syncValidation()
+        syncEstimateGasLimit()
     }
+
+    private fun syncEstimateGasLimit() {
+        guard let address = try? addressModule.validAddress() else {
+            onReceive(gasLimit: 0)
+            return
+        }
+            gasDisposeBag = DisposeBag()
+
+            estimateGasLimitState = .loading
+                    syncState()
+            syncValidation()
+
+            interactor.estimateGasLimit(to: address, value: amountModule.currentAmount, gasPrice: feePriorityModule.feeRate)
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+            .observeOn(MainScheduler.instance)
+                    .subscribe(onSuccess: onReceive, onError: onGasLimitError)
+                    .disposed(by: gasDisposeBag)
+        }
 
 }

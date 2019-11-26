@@ -89,7 +89,7 @@ object SendModule {
         fun availableBalance(gasPrice: Long): BigDecimal
         fun validate(address: String)
         fun fee(gasPrice: Long): BigDecimal
-        fun send(amount: BigDecimal, address: String, gasPrice: Long): Single<Unit>
+        fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit>
     }
 
     interface ISendBinanceInteractor {

@@ -35,7 +35,13 @@ object SendFeeModule {
 
     interface IInteractor {
         fun getRate(coinCode: String): BigDecimal?
-        fun getFeeRates(): List<FeeRateInfo>?
+        fun syncFeeRate()
+        fun onClear()
+    }
+
+    interface IInteractorDelegate {
+        fun didUpdate(feeRate: List<FeeRateInfo>)
+        fun didReceiveError(error: Throwable)
     }
 
     interface IFeeModule {
@@ -46,6 +52,7 @@ object SendFeeModule {
         val duration: Long?
 
         fun setFee(fee: BigDecimal)
+        fun fetchFeeRate()
         fun setAvailableFeeBalance(availableFeeBalance: BigDecimal)
         fun setInputType(inputType: SendModule.InputType)
     }
@@ -77,6 +84,7 @@ object SendFeeModule {
             val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData)
 
             presenter.moduleDelegate = feeModuleDelegate
+            interactor.delegate = presenter
             sendHandler.feeModule = presenter
 
             return presenter as T
