@@ -4,26 +4,15 @@ import android.os.Build
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILanguageManager
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import java.util.*
 
-class LanguageManager(private val localStorage: ILocalStorage, private val appConfigProvider: IAppConfigProvider, fallbackLanguage: String) : ILanguageManager {
+class LanguageManager(private val appConfigProvider: IAppConfigProvider, fallbackLanguage: String) : ILanguageManager {
 
-    override var currentLocale: Locale = localStorage.currentLanguage?.let { Locale(it) } ?: preferredSystemLocale ?: Locale(fallbackLanguage)
+    override var currentLocale: Locale = App.instance.getLocale()
         set(value) {
             field = value
 
-            localStorage.currentLanguage = value.language
-
-            val configuration = App.instance.resources.configuration
-            configuration.setLocale(currentLocale)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                App.instance.createConfigurationContext(configuration)
-            } else {
-                val displayMetrics = App.instance.resources.displayMetrics
-                App.instance.resources.updateConfiguration(configuration, displayMetrics)
-            }
+            App.instance.setLocale(currentLocale)
         }
 
     override var currentLanguage: String

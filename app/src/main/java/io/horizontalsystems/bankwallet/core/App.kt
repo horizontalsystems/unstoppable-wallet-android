@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.preference.PreferenceManager
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.leakcanary.LeakCanary
@@ -11,8 +13,10 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
+import io.horizontalsystems.bankwallet.localehelper.LocaleHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
+import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -140,7 +144,7 @@ class App : Application() {
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
-        languageManager = LanguageManager(localStorage, appConfigProvider, "en")
+        languageManager = LanguageManager(appConfigProvider, "en")
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
@@ -173,4 +177,28 @@ class App : Application() {
         }
     }
 
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(localeAwareContext(base))
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        localeAwareContext(this)
+    }
+
+    fun localeAwareContext(base: Context): Context {
+        return LocaleHelper.onAttach(base)
+    }
+
+    fun getLocale(): Locale {
+        return LocaleHelper.getLocale(this)
+    }
+
+    fun setLocale(currentLocale: Locale) {
+        LocaleHelper.setLocale(this, currentLocale)
+    }
+
+    fun isLocaleRTL(): Boolean {
+        return LocaleHelper.isRTL(Locale.getDefault())
+    }
 }

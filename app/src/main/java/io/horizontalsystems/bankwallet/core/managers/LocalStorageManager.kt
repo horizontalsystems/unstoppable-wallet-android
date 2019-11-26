@@ -13,7 +13,6 @@ import io.horizontalsystems.xrateskit.entities.ChartType
 
 class LocalStorageManager : ILocalStorage, IChartTypeStorage {
 
-    private val CURRENT_LANGUAGE = "current_language"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -37,12 +36,6 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
 
     val gson by lazy { Gson() }
-
-    override var currentLanguage: String?
-        get() = App.preferences.getString(CURRENT_LANGUAGE, null)
-        set(language) {
-            App.preferences.edit().putString(CURRENT_LANGUAGE, language).apply()
-        }
 
     override var isBackedUp: Boolean
         get() = App.preferences.getBoolean(WORDLIST_BACKUP, false)

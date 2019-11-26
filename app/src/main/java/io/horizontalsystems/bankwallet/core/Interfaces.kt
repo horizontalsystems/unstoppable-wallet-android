@@ -37,7 +37,6 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
-    var currentLanguage: String?
     var isBackedUp: Boolean
     var isFingerprintEnabled: Boolean
     var sendInputType: SendModule.InputType?
