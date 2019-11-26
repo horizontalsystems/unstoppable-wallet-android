@@ -147,7 +147,7 @@
     <string name="TransactionInfo_Time">Hora</string>
     <string name="TransactionInfo_ButtonVerify">Verificar</string>
     <string name="TransactionInfo_Status_Pending">Pendiente</string>
-    <string name="TransactionInfo_LockTime">TimeLock</string>
+    <string name="TransactionInfo_LockedUntil">TimeLock</string>
     <string name="TransactionInfo_RecipientHash">Destinatario</string>
     <string name="TransactionInfo_HistoricalRate">Estado histórico</string>
     <string name="TransactionInfo_Fee">Comisión</string>

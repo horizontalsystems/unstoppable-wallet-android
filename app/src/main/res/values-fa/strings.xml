@@ -147,7 +147,7 @@
     <string name="TransactionInfo_Time">زمان</string>
     <string name="TransactionInfo_ButtonVerify">تایید</string>
     <string name="TransactionInfo_Status_Pending">در حالت انتظار</string>
-    <string name="TransactionInfo_LockTime">قفل زمان</string>
+    <string name="TransactionInfo_LockedUntil">قفل زمان</string>
     <string name="TransactionInfo_RecipientHash">گیرنده</string>
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
