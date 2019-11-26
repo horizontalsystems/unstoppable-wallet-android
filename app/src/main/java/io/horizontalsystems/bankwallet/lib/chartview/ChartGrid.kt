@@ -43,10 +43,10 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private fun drawLines(canvas: Canvas) {
         gridLines.forEach {
             canvas.drawLine(shape.left, it.y, shape.right, it.y, gridPaint)
-            canvas.drawLine(shape.right, it.y, shape.right + config.offsetRight, it.y, gridPaint)
+            canvas.drawLine(shape.right, it.y, shape.right, it.y, gridPaint)
 
             // Labels
-            canvas.drawText(it.value, shape.right + config.textPadding, it.y + config.textSize + config.textPadding, textPaint)
+            // canvas.drawText(it.value, shape.right + config.textPadding, it.y + config.textSize + config.textPadding, textPaint)
         }
     }
 
@@ -69,6 +69,6 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
         // right of price columns
         // canvas.drawLine(shape.right + offsetWidth, shape.top, shape.right + offsetWidth, shape.bottom, gridPaint)
         // bottom
-        canvas.drawLine(shape.left, shape.bottom, shape.right + config.offsetRight, shape.bottom, gridPaint)
+        canvas.drawLine(shape.left, shape.bottom, shape.right, shape.bottom, gridPaint)
     }
 }
