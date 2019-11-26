@@ -147,7 +147,7 @@
     <string name="TransactionInfo_Time">时间</string>
     <string name="TransactionInfo_ButtonVerify">验证</string>
     <string name="TransactionInfo_Status_Pending">待处理</string>
-    <string name="TransactionInfo_LockTime">时间锁定</string>
+    <string name="TransactionInfo_LockedUntil">时间锁定</string>
     <string name="TransactionInfo_RecipientHash">收款人</string>
     <string name="TransactionInfo_HistoricalRate">历史价格</string>
     <string name="TransactionInfo_Fee">费用</string>

@@ -147,7 +147,7 @@
     <string name="TransactionInfo_Time">Tarih</string>
     <string name="TransactionInfo_ButtonVerify">Doğrula</string>
     <string name="TransactionInfo_Status_Pending">Devam ediyor</string>
-    <string name="TransactionInfo_LockTime">TimeLock</string>
+    <string name="TransactionInfo_LockedUntil">TimeLock</string>
     <string name="TransactionInfo_RecipientHash">Alıcı</string>
     <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
     <string name="TransactionInfo_Fee">Masraf</string>

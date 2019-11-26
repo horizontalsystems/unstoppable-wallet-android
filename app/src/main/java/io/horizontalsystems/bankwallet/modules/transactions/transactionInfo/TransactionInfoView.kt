@@ -94,7 +94,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 if (txRec.lockInfo != null) {
                     itemLockTime.visibility = View.VISIBLE
-                    itemLockTime.bindInfo(context.getString(R.string.TransactionInfo_LockTime), DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy, h a"))
+                    itemLockTime.bindInfo(context.getString(R.string.TransactionInfo_LockedUntil), DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy, h a"))
                     itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
                 } else {
                     itemLockTime.visibility = View.GONE
