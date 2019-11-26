@@ -18,7 +18,7 @@ class BalancePresenter(
         private val sorter: BalanceModule.IBalanceSorter,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val factory: BalanceViewItemFactory,
-        private val sortingOnThreshold: Int = 2
+        private val sortingOnThreshold: Int = 5
 ) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     var view: BalanceModule.IView? = null
