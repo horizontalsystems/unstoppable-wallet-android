@@ -17,7 +17,7 @@ class SendFeePresenter(
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
         private val feeCoinData: Pair<Coin, String>?)
-    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule {
+    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule, SendFeeModule.IInteractorDelegate {
 
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
@@ -107,6 +107,9 @@ class SendFeePresenter(
         syncError()
     }
 
+    override fun fetchFeeRate() {
+    }
+
     override fun setAvailableFeeBalance(availableFeeBalance: BigDecimal) {
         this.availableFeeBalance = availableFeeBalance
         syncError()
@@ -120,16 +123,15 @@ class SendFeePresenter(
 
     override fun onViewDidLoad() {
         xRate = interactor.getRate(coin.code)
+        feeRates = interactor.syncFeeRates()
 
-        feeRates = interactor.getFeeRates()
-
-        feeRates?.find { it.priority == FeeRatePriority.MEDIUM }?.let {
-            feeRateInfo = it
-        }
-
-        syncFeeRateLabels()
-        syncFeeLabels()
-        syncError()
+//        feeRates?.find { it.priority == FeeRatePriority.MEDIUM }?.let {
+//            feeRateInfo = it
+//        }
+//
+//        syncFeeRateLabels()
+//        syncFeeLabels()
+//        syncError()
     }
 
     override fun onClickFeeRatePriority() {
@@ -151,5 +153,30 @@ class SendFeePresenter(
         syncFeeRateLabels()
 
         moduleDelegate?.onUpdateFeeRate(feeRate)
+    }
+
+    override fun didUpdate(feeRates: List<FeeRateInfo>) {
+
+        this.feeRates = feeRates
+        this.duration
+
+        view?.set(duration: feeRate.duration(priority: feeRatePriority))
+        view?.set(enabled: true)
+
+        moduleDelegate.onUpdateFeeRate()
+
+        delegate?.onUpdateFeePriority()
+    }
+
+    override fun didReceiveError(error: Throwable) {
+        self.error = error
+
+        delegate?.onUpdateFeePriority()
+    }
+
+    // ViewModel
+
+    override fun onCleared() {
+        interactor.onClear()
     }
 }

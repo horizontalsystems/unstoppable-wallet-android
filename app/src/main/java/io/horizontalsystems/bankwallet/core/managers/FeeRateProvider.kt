@@ -42,7 +42,7 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRate
         val feeRatesInfoList = mutableListOf<FeeRateInfo>()
         feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
         feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, feeRate.mediumPriorityDuration))
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.mediumPriority, feeRate.highPriorityDuration))
+        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
 
         return feeRatesInfoList
     }

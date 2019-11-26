@@ -466,7 +466,7 @@ interface IAppNumberFormatter {
 }
 
 interface IFeeRateProvider {
-    fun feeRates(): List<FeeRateInfo>
+    fun feeRates(): Single<List<FeeRateInfo>>
 }
 
 interface IAddressParser {
