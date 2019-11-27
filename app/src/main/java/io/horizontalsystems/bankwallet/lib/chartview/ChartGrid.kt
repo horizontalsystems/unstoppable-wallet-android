@@ -15,7 +15,7 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private var gridLines = listOf<GridLine>()
 
     private var gridPaint = Paint()
-    private var textPaint = Paint()
+    private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     fun init(chartType: ChartView.ChartType, startTimestamp: Long, endTimestamp: Long) {
         gridColumns = gridHelper.setGridColumns(chartType, startTimestamp, endTimestamp)
@@ -28,7 +28,6 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
 
         textPaint.apply {
             textSize = config.textSize
-            style = Paint.Style.FILL
             color = config.textColor
             typeface = Typeface.create(config.textFont, Typeface.NORMAL)
         }
