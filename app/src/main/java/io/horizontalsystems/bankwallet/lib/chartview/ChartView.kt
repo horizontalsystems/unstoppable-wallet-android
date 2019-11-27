@@ -35,8 +35,7 @@ class ChartView : View {
 
     var listener: Listener? = null
 
-    private val viewHelper = ViewHelper(context)
-    private val config = ChartConfig(context, viewHelper)
+    private val config = ChartConfig(context)
     private val helper = ScaleHelper(config)
 
     private val shape = RectF()
@@ -74,9 +73,11 @@ class ChartView : View {
             ta.getInt(R.styleable.ChartView_growColor, context.getColor(R.color.green_d)).let { config.growColor = it }
             ta.getInt(R.styleable.ChartView_fallColor, context.getColor(R.color.red_d)).let { config.fallColor = it }
             ta.getInt(R.styleable.ChartView_textColor, context.getColor(R.color.grey)).let { config.textColor = it }
+            ta.getInt(R.styleable.ChartView_textPriceColor, context.getColor(R.color.light_grey)).let { config.textPriceColor = it }
             ta.getInt(R.styleable.ChartView_gridColor, context.getColor(R.color.steel_20)).let { config.gridColor = it }
             ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.light)).let { config.touchColor = it }
             ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.light)).let { config.indicatorColor = it }
+            ta.getInt(R.styleable.ChartView_gridDottedColor, context.getColor(R.color.white_50)).let { config.gridDottedColor = it }
             ta.getInt(R.styleable.ChartView_partialChartColor, context.getColor(R.color.light)).let { config.partialChartColor = it }
         } finally {
             ta.recycle()
@@ -164,7 +165,7 @@ class ChartView : View {
         }
 
         if (config.showGrid) {
-            config.offsetBottom = viewHelper.dp2px(20f)
+            config.offsetBottom = config.dp2px(20f)
         }
 
         shape.set(0f, 0f, shapeWidth, shapeHeight - config.offsetBottom)

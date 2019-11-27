@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.lib.chartview
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.Typeface
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
@@ -29,6 +30,7 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
             textSize = config.textSize
             style = Paint.Style.FILL
             color = config.textColor
+            typeface = Typeface.create(config.textFont, Typeface.NORMAL)
         }
     }
 
@@ -43,10 +45,6 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private fun drawLines(canvas: Canvas) {
         gridLines.forEach {
             canvas.drawLine(shape.left, it.y, shape.right, it.y, gridPaint)
-            canvas.drawLine(shape.right, it.y, shape.right, it.y, gridPaint)
-
-            // Labels
-            // canvas.drawText(it.value, shape.right + config.textPadding, it.y + config.textSize + config.textPadding, textPaint)
         }
     }
 
@@ -57,7 +55,7 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
             }
 
             // Labels
-            canvas.drawText(it.value, it.x, shape.bottom + config.textSize + config.textPadding, textPaint)
+            canvas.drawText(it.value, config.xAxisPrice(it.x, shape.right, it.value), shape.bottom + config.textSize + config.textPadding, textPaint)
         }
     }
 
