@@ -100,6 +100,7 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
     private fun converted(coinCode: String) : String {
         return when (coinCode) {
             "HOT" -> "HOLO"
+            "SAI" -> "DAI"
             else -> coinCode
         }
 
@@ -108,6 +109,7 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
     private fun unconverted(coinCode: String) : String {
         return when (coinCode) {
             "HOLO" -> "HOT"
+            "DAI" -> "SAI"
             else -> coinCode
         }
 
