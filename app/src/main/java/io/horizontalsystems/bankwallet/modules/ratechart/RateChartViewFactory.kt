@@ -40,7 +40,7 @@ class RateChartViewFactory {
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
             ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
             ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
-            ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY18
+            ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12
         }
 
         val diffValue = ((endValue - startValue) / startValue * 100).toBigDecimal()

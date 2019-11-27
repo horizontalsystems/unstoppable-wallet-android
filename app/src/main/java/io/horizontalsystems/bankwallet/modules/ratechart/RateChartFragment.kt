@@ -151,7 +151,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             ChartView.ChartType.WEEKLY -> getString(R.string.Charts_TimeDuration_Week)
             ChartView.ChartType.MONTHLY -> getString(R.string.Charts_TimeDuration_Month)
             ChartView.ChartType.MONTHLY6 -> getString(R.string.Charts_TimeDuration_HalfYear)
-            ChartView.ChartType.MONTHLY18 -> getString(R.string.Charts_TimeDuration_Year)
+            ChartView.ChartType.MONTHLY12 -> getString(R.string.Charts_TimeDuration_Year)
         }
     }
 

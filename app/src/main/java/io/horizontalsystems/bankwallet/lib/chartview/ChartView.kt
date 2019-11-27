@@ -24,13 +24,7 @@ class ChartView : View {
         WEEKLY,
         MONTHLY,
         MONTHLY6,
-        MONTHLY18;
-
-        companion object {
-            val annualPoints = 53
-            val map = values().associateBy(ChartType::name)
-            fun fromString(type: String?): ChartType? = map[type]
-        }
+        MONTHLY12;
     }
 
     var listener: Listener? = null
