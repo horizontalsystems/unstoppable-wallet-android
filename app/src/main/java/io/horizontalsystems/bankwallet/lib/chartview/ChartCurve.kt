@@ -15,7 +15,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private val linePaint = Paint()
     private val gridPaint = Paint()
     private val gradient = Paint()
-    private var textPaint = Paint()
+    private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var isTouchActive = false
 
     fun init(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long) {
@@ -41,7 +41,6 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 
         textPaint.apply {
             textSize = config.textPriceSize
-            style = Paint.Style.FILL
             color = config.textPriceColor
             typeface = Typeface.create(config.textFont, Typeface.BOLD)
         }
