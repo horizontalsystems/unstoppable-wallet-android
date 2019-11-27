@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
@@ -12,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.PriceAlertRecord
 import io.horizontalsystems.bankwallet.entities.Rate
 
-@Database(version = 11, exportSchema = false, entities = [
+@Database(version = 12, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     PriceAlertRecord::class,
@@ -52,7 +49,8 @@ abstract class AppDatabase : RoomDatabase() {
                             migrateToAccountStructure,
                             MIGRATION_8_9,
                             MIGRATION_9_10,
-                            MIGRATION_10_11
+                            MIGRATION_10_11,
+                            renameCoinDaiToSai
                     )
                     .build()
         }
@@ -148,6 +146,13 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWallet` (`coinId` TEXT NOT NULL, `accountId` TEXT NOT NULL, `walletOrder` INTEGER, `syncMode` TEXT, PRIMARY KEY(`coinId`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
                 database.execSQL("INSERT INTO EnabledWallet (`coinId`,`accountId`,`walletOrder`,`syncMode`) SELECT `coinCode`,`accountId`,`walletOrder`,`syncMode` FROM TempEnabledWallet")
                 database.execSQL("DROP TABLE TempEnabledWallet")
+            }
+        }
+
+        private val renameCoinDaiToSai: Migration = object : Migration(11, 12) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("INSERT INTO EnabledWallet (`coinId`,`accountId`,`walletOrder`,`syncMode`) SELECT 'SAI',`accountId`,`walletOrder`,`syncMode` FROM EnabledWallet WHERE `coinId` = 'DAI'")
+                database.execSQL("DELETE FROM EnabledWallet WHERE `coinId` = 'DAI'")
             }
         }
     }

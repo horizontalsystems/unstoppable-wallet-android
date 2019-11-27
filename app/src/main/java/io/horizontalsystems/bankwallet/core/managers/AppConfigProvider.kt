@@ -76,7 +76,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("MCO",       "Crypto.com",              "MCO",          8,      CoinType.Erc20("0xB63B606Ac810a52cCa15e44bB630fd42D8d1d83d")),
             Coin("CRO",       "Crypto.com Chain",        "CRO",          8,      CoinType.Erc20("0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b")),
             Coin("CRPT",      "Crypterium",              "CRPT",         8,      CoinType.Binance("CRPT-8C9")),
-            Coin("DAI",       "Dai",                     "DAI",         18,      CoinType.Erc20("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")),
+            Coin("SAI",       "Sai Stablecoin",          "SAI",         18,      CoinType.Erc20("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")),
             Coin("MANA",      "Decentraland",            "MANA",        18,      CoinType.Erc20("0x0F5D2fB29fb7d3CFeE444a200298f468908cC942")),
             Coin("DGD",       "Digix DAO",               "DGD",          9,      CoinType.Erc20("0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A")),
             Coin("DGX",       "Digix Gold",              "DGX",          9,      CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF", gasLimit = 300_000, minimumSendAmount = BigDecimal("0.001"))),
