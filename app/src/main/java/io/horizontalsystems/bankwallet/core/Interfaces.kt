@@ -291,6 +291,7 @@ interface ISendDashAdapter {
 interface ISendEthereumAdapter {
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
+    val minimumSendAmount: BigDecimal
 
     fun availableBalance(gasPrice: Long): BigDecimal
     fun fee(gasPrice: Long): BigDecimal

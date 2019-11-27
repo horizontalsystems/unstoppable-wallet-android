@@ -66,6 +66,7 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
 
     override fun onModulesDidLoad() {
         amountModule.setMinimumRequiredBalance(interactor.minimumRequiredBalance)
+        amountModule.setMinimumAmount(interactor.minimumAmount)
         syncAvailableBalance()
         feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
         syncFee()
