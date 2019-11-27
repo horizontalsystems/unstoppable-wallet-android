@@ -153,96 +153,17 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/highLowWrap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinChartView">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/coinRateHighTitle"
-                style="@font/noto_sans_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:width="0dp"
-                android:text="@string/Charts_Rate_High"
-                android:textColor="@color/grey"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/coinRateHigh"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/noto_sans_regular"
-                android:paddingStart="0dp"
-                android:paddingEnd="16dp"
-                android:singleLine="true"
-                android:textAlignment="textEnd"
-                android:textColor="?ColorLeah"
-                android:textSize="14sp"
-                tools:text="$ 12000.10" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/coinRateLowTitle"
-                style="@font/noto_sans_regular"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingStart="8dp"
-                android:paddingEnd="0dp"
-                android:text="@string/Charts_Rate_Low"
-                android:textColor="@color/grey"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/coinRateLow"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:width="0dp"
-                android:fontFamily="@font/noto_sans_regular"
-                android:singleLine="true"
-                android:textAlignment="textEnd"
-                android:textColor="?ColorLeah"
-                android:textSize="14sp"
-                tools:text="$ 11000.30" />
-        </LinearLayout>
-    </LinearLayout>
-
     <View
         android:id="@+id/border3"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/highLowWrap" />
+        app:layout_constraintTop_toBottomOf="@+id/coinChartView" />
 
     <LinearLayout
         android:id="@+id/marketCapWrap"
@@ -431,6 +352,8 @@
             app:growColor="@color/green_d"
             app:indicatorColor="?ColorOz"
             app:partialChartColor="@color/grey_50"
+            app:textPriceColor="?ColorLeah"
+            app:gridDottedColor="?ColorNina"
             app:textColor="@color/grey"
             app:touchColor="?ColorOz" />
 

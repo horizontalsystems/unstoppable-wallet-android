@@ -67,13 +67,6 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
             context?.let { coinRateDiff.bind(item.diffValue, it, true) }
-
-            coinRateHighTitle.text = getString(R.string.Charts_Rate_High, actionTitle(item.chartType))
-            coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false, trimmable = true)
-
-            coinRateLowTitle.text = getString(R.string.Charts_Rate_Low, actionTitle(item.chartType))
-            coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false, trimmable = true)
-            setViewVisibility(highLowWrap, isVisible = true)
         })
 
         presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
@@ -96,8 +89,6 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             } ?: run {
                 getString(R.string.NotAvailable)
             }
-
-            setViewVisibility(highLowWrap, isVisible = true)
         })
 
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
@@ -166,7 +157,6 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
     private fun resetActions(current: View) {
         actions.values.forEach { it.isActivated = false }
-        setViewVisibility(highLowWrap, isVisible = false)
         current.isActivated = true
     }
 

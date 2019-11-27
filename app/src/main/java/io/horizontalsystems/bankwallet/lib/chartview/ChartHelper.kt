@@ -15,16 +15,29 @@ class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
         val deltaX = (endTimestamp - startTimestamp) / width
         val deltaY = height / (config.valueStep * 4)
 
-        val coordinates = mutableListOf<Coordinate>()
-
-        for (point in points) {
+        return points.map { point ->
             val x = (point.timestamp - startTimestamp) / deltaX
             val y = height - deltaY * (point.value - bottom)
 
-            coordinates.add(Coordinate(x, y, point))
+            Coordinate(x, y, point)
+        }
+    }
+
+    fun getTopAndLow(coordinates: List<Coordinate>): Pair<Coordinate, Coordinate> {
+        var topCoordinate = coordinates[0]
+        var lowCoordinate = coordinates[0]
+
+        for (coordinate in coordinates) {
+            if (coordinate.point.value > topCoordinate.point.value) {
+                topCoordinate = coordinate
+            }
+
+            if (coordinate.point.value < lowCoordinate.point.value) {
+                lowCoordinate = coordinate
+            }
         }
 
-        return coordinates
+        return Pair(topCoordinate, lowCoordinate)
     }
 
     companion object {

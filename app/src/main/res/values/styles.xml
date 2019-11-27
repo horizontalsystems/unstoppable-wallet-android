@@ -55,6 +55,7 @@
     <attr name="ColorLawrencePressed" format="reference|color" />
     <attr name="ColorClaude" format="reference|color" />
     <attr name="ColorGwen" format="reference" />
+    <attr name="ColorNina" format="reference" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -124,6 +125,7 @@
         <item name="ColorLawrencePressed">@color/steel_dark_pressed</item>
         <item name="ColorClaude">@color/dark</item>
         <item name="ColorGwen">@color/dark</item>
+        <item name="ColorNina">@color/white_50</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -192,6 +194,7 @@
         <item name="ColorLawrencePressed">@color/white_pressed</item>
         <item name="ColorClaude">@color/white</item>
         <item name="ColorGwen">@drawable/light_gradient_background</item>
+        <item name="ColorNina">@color/black_50</item>
     </style>
 
     <style name="ToolbarStyle">
