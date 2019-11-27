@@ -45,7 +45,7 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
             }
             ChartType.MONTHLY6,
-            ChartType.MONTHLY18 -> {
+            ChartType.MONTHLY12 -> {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
                 calendar.set(Calendar.DATE, 1)
             }
@@ -72,7 +72,7 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
             ChartType.WEEKLY -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
             ChartType.MONTHLY -> calendar.add(Calendar.DAY_OF_MONTH, -6)    // 6 days
             ChartType.MONTHLY6 -> calendar.add(Calendar.MONTH, -1)          // 1 month
-            ChartType.MONTHLY18 -> calendar.add(Calendar.MONTH, -2)         // 2 month
+            ChartType.MONTHLY12 -> calendar.add(Calendar.MONTH, -2)         // 2 month
         }
     }
 
@@ -82,7 +82,7 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
             ChartType.WEEKLY -> DateHelper.getShortDayOfWeek(calendar.time)
             ChartType.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
             ChartType.MONTHLY6 -> DateHelper.getShortMonth(calendar.time)
-            ChartType.MONTHLY18 -> DateHelper.getShortMonth(calendar.time)
+            ChartType.MONTHLY12 -> DateHelper.getShortMonth(calendar.time)
         }
     }
 }
