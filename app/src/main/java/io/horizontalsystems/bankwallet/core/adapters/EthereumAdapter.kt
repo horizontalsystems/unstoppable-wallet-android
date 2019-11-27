@@ -35,6 +35,9 @@ class EthereumAdapter(kit: EthereumKit)
     override val minimumRequiredBalance: BigDecimal
         get() = BigDecimal.ZERO
 
+    override val minimumSendAmount: BigDecimal
+        get() = BigDecimal.ZERO
+
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = ethereumKit.balanceFlowable.map { Unit }
 

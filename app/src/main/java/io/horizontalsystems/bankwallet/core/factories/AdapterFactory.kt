@@ -25,7 +25,7 @@ class AdapterFactory(
             is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet))
-            is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), wallet.coin.decimal, coinType.fee, coinType.address, coinType.gasLimit, coinType.minimumRequiredBalance)
+            is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), wallet.coin.decimal, coinType.fee, coinType.address, coinType.gasLimit, coinType.minimumRequiredBalance, coinType.minimumSendAmount)
         }
     }
 

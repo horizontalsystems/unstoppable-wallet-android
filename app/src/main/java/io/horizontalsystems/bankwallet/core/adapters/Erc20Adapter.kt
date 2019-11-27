@@ -22,7 +22,8 @@ class Erc20Adapter(
         private val fee: BigDecimal,
         contractAddress: String,
         gasLimit: Long,
-        override val minimumRequiredBalance: BigDecimal
+        override val minimumRequiredBalance: BigDecimal,
+        override val minimumSendAmount: BigDecimal
 ) : EthereumBaseAdapter(kit, decimal) {
 
     private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress, gasLimit)
