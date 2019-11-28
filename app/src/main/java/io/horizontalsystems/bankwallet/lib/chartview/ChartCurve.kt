@@ -32,11 +32,12 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
             isAntiAlias = true
         }
 
+        val dottedWidth = config.dp2px(2f)
         gridPaint.apply {
             color = config.gridDottedColor
             strokeWidth = config.strokeWidthDotted
             style = Paint.Style.STROKE
-            pathEffect = DashPathEffect(floatArrayOf(7f, 7f), 0f)
+            pathEffect = DashPathEffect(floatArrayOf(dottedWidth, dottedWidth), 0f)
         }
 
         textPaint.apply {
