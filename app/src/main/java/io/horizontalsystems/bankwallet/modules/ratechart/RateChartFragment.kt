@@ -145,16 +145,6 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         }
     }
 
-    private fun actionTitle(chartType: ChartView.ChartType): String {
-        return when (chartType) {
-            ChartView.ChartType.DAILY -> getString(R.string.Charts_TimeDuration_Day)
-            ChartView.ChartType.WEEKLY -> getString(R.string.Charts_TimeDuration_Week)
-            ChartView.ChartType.MONTHLY -> getString(R.string.Charts_TimeDuration_Month)
-            ChartView.ChartType.MONTHLY6 -> getString(R.string.Charts_TimeDuration_HalfYear)
-            ChartView.ChartType.MONTHLY12 -> getString(R.string.Charts_TimeDuration_Year)
-        }
-    }
-
     private fun resetActions(current: View) {
         actions.values.forEach { it.isActivated = false }
         current.isActivated = true
