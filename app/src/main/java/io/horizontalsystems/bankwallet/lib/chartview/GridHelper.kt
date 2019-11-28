@@ -4,27 +4,10 @@ import android.graphics.RectF
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
-import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import java.util.*
 
 class GridHelper(private val shape: RectF, private val config: ChartConfig) {
-
-    fun setGridLines(): List<GridLine> {
-        var y: Float
-        var value = config.valueTop
-        val gridLines = mutableListOf<GridLine>()
-
-        repeat(4) {
-            val gridSpacing = shape.bottom / 4
-            y = gridSpacing * it + shape.top
-
-            gridLines.add(GridLine(y, String.format("%.${config.valuePrecision}f", value)))
-            value -= config.valueStep
-        }
-
-        return gridLines
-    }
 
     fun setGridColumns(chartType: ChartType, startTimestamp: Long, endTimestamp: Long): List<GridColumn> {
         val start = startTimestamp * 1000

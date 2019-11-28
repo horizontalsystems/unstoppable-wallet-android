@@ -6,20 +6,17 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
-import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
 
 class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private val gridHelper = GridHelper(shape, config)
 
     private var gridColumns = listOf<GridColumn>()
-    private var gridLines = listOf<GridLine>()
 
     private var gridPaint = Paint()
     private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     fun init(chartType: ChartView.ChartType, startTimestamp: Long, endTimestamp: Long) {
         gridColumns = gridHelper.setGridColumns(chartType, startTimestamp, endTimestamp)
-        gridLines = gridHelper.setGridLines()
 
         gridPaint.apply {
             color = config.gridColor
@@ -36,15 +33,8 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     fun draw(canvas: Canvas) {
         if (!config.showGrid) return
 
-        drawLines(canvas)
         drawColumns(canvas)
         drawFrameLines(canvas)
-    }
-
-    private fun drawLines(canvas: Canvas) {
-        gridLines.forEach {
-            canvas.drawLine(shape.left, it.y, shape.right, it.y, gridPaint)
-        }
     }
 
     private fun drawColumns(canvas: Canvas) {
@@ -59,12 +49,12 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     }
 
     private fun drawFrameLines(canvas: Canvas) {
+        // top
+        canvas.drawLine(shape.left, shape.top, shape.right, shape.top, gridPaint)
         // left
         canvas.drawLine(shape.left, shape.top, shape.left, shape.bottom, gridPaint)
         // right
         canvas.drawLine(shape.right, shape.top, shape.right, shape.bottom, gridPaint)
-        // right of price columns
-        // canvas.drawLine(shape.right + offsetWidth, shape.top, shape.right + offsetWidth, shape.bottom, gridPaint)
         // bottom
         canvas.drawLine(shape.left, shape.bottom, shape.right, shape.bottom, gridPaint)
     }
