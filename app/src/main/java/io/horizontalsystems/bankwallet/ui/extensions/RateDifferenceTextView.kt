@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -31,7 +32,7 @@ class RateDifferenceTextView : TextView {
             setTextColor(resources.getColor(R.color.grey, context.theme))
         }
 
-        text = "${scaledValue.abs().toPlainString()}%"
+        text = App.numberFormatter.format(scaledValue.abs(), diffScale) + "%"
 
         val iconRes = if (scaledValue >= BigDecimal.ZERO) R.drawable.ic_up_green else R.drawable.ic_down_red
         setLeftIcon(context.getDrawable(iconRes))

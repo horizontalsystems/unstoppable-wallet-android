@@ -128,6 +128,14 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return format
     }
 
+    override fun format(value: BigDecimal, precision: Int): String? {
+        val numberFormat = getFormatter(languageManager.currentLocale)?.apply {
+            maximumFractionDigits = precision
+        }
+
+        return numberFormat?.format(value)
+    }
+
     private fun getFormatter(locale: Locale): NumberFormat? {
         return formatters[locale.language] ?: run {
             val newFormatter = NumberFormat.getInstance(locale).apply {
