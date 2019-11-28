@@ -97,22 +97,22 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
         kit.set(currencyManager.baseCurrency.code)
     }
 
-    private fun converted(coinCode: String) : String {
+    private fun converted(coinCode: String): String {
         return when (coinCode) {
             "HOT" -> "HOLO"
-            "SAI" -> "DAI"
+            "SAI",
+            "DAI" -> "SAI-DAI" // invalid code excludes xrates for this coin
             else -> coinCode
         }
 
     }
 
-    private fun unconverted(coinCode: String) : String {
+    private fun unconverted(coinCode: String): String {
         return when (coinCode) {
             "HOLO" -> "HOT"
-            "DAI" -> "SAI"
+            "DAI",
+            "SAI" -> "DAI-SAI" // invalid code excludes xrates for this coin
             else -> coinCode
         }
-
     }
-
 }
