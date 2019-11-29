@@ -47,6 +47,12 @@ class CellView : ConstraintLayout {
             layoutParams?.height = LayoutHelper.dp(if(value == null) singleLineHeight else doubleLineHeight, context)
         }
 
+    var subtitleLabel: String? = null
+        set(value) {
+            field = value
+            cellLeft.subtitleLabel = value
+        }
+
     var rightTitle: String? = null
         set(value) {
             field = value

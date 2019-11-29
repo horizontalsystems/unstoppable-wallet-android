@@ -56,6 +56,19 @@
         app:layout_constraintTop_toBottomOf="@+id/coinTitle"
         tools:text="BTC" />
 
+    <TextView
+        android:id="@+id/coinTypeLabel"
+        style="@style/TextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/coinCode"
+        app:layout_constraintStart_toEndOf="@+id/coinCode"
+        app:layout_constraintTop_toTopOf="@+id/coinCode"
+        tools:text="ERC20"
+        tools:visibility="visible"/>
+
     <Switch
         android:id="@+id/toggleSwitch"
         android:layout_width="wrap_content"

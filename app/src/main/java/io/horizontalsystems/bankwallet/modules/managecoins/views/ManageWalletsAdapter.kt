@@ -91,6 +91,8 @@ class ManageWalletsAdapter(private val listener: Listener) : RecyclerView.Adapte
 
         coinTitle.text = coin.title
         coinCode.text = coin.code
+        coinTypeLabel.text = coin.type.typeLabel()
+        coinTypeLabel.visibility = if (coin.type.typeLabel() != null) View.VISIBLE else View.GONE
         coinIcon.bind(coin)
         bottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 

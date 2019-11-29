@@ -198,6 +198,7 @@ class CoinViewHolder(override val containerView: CellView, onClick: (isChecked: 
         containerView.coinIcon = coinViewItem.coin.code
         containerView.title = coinViewItem.coin.code
         containerView.subtitle = coinViewItem.coin.title
+        containerView.subtitleLabel = coinViewItem.coin.type.typeLabel()
         containerView.switchIsChecked = coinViewItem.enabled
         containerView.bottomBorder = lastElement
     }
