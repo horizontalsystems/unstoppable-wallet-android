@@ -9,12 +9,13 @@ import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletViewItem
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CreateWalletActivity
+import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 
 object CreateWalletModule {
 
     interface IView {
-        fun setItems(featuredViewItems: List<ManageWalletViewItem>, viewItems: List<ManageWalletViewItem>)
+        fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>)
         fun setCreateButton(enabled: Boolean)
         fun showError(exception: Exception)
     }
@@ -27,8 +28,8 @@ object CreateWalletModule {
 
     interface IViewDelegate {
         fun onLoad()
-        fun onEnable(viewItem: ManageWalletViewItem)
-        fun onDisable(viewItem: ManageWalletViewItem)
+        fun onEnable(viewItem: CoinToggleViewItem)
+        fun onDisable(viewItem: CoinToggleViewItem)
         fun onCreateButtonClick()
         fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin)
         fun onCancelSelectingCoinSettings()

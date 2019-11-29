@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore.restorecoins
+package io.horizontalsystems.bankwallet.modules.createwallet.view
 
 import android.app.Activity
 import android.content.Intent
@@ -12,27 +12,28 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.PresentationMode
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
-import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
+import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
+import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletPresenter
+import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter
+import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
-import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
-class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
-    private lateinit var presenter: RestoreCoinsPresenter
+class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
+    private lateinit var presenter: CreateWalletPresenter
     private lateinit var coinItemsAdapter: CoinItemsAdapter
     private var buttonEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_restore_coins)
+        setContentView(R.layout.activity_create_wallet)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -42,15 +43,10 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         val predefinedAccountTypeString = intent.extras?.getString(ModuleField.PREDEFINED_ACCOUNT_TYPE)
         val predefinedAccountType = PredefinedAccountType.fromString(predefinedAccountTypeString)
 
-        predefinedAccountType?.let {
-            presenter = ViewModelProvider(this, RestoreCoinsModule.Factory(presentationMode, it)).get(RestoreCoinsPresenter::class.java)
-        } ?: kotlin.run {
-            //predefinedAccountType must not be null
-            finish()
-        }
+        presenter = ViewModelProvider(this, CreateWalletModule.Factory(presentationMode, predefinedAccountType)).get(CreateWalletPresenter::class.java)
 
-        observeView(presenter.view as RestoreCoinsView)
-        observeRouter(presenter.router as RestoreCoinsRouter)
+        observeView(presenter.view as CreateWalletView)
+        observeRouter(presenter.router as CreateWalletRouter)
 
         coinItemsAdapter = CoinItemsAdapter(this)
         coins.adapter = coinItemsAdapter
@@ -59,21 +55,21 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.restore_menu, menu)
+        menuInflater.inflate(R.menu.create_menu, menu)
         return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.menuRestore)?.apply {
+        menu?.findItem(R.id.menuCreate)?.apply {
             isEnabled = buttonEnabled
         }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.menuRestore -> {
-                presenter.onProceedButtonClick()
+        when(item?.itemId){
+            R.id.menuCreate ->  {
+                presenter.onCreateButtonClick()
                 return true
             }
         }
@@ -95,15 +91,8 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
                     presenter.onSelectCoinSettings(coinSettings.settings, coin)
                 }
             }
-            ModuleCode.RESTORE -> {
-                val accountType = data?.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
-                        ?: return
-                presenter.didRestore(accountType)
-            }
         }
     }
-
-    //ManageWalletsAdapter.Listener
 
     override fun enable(item: CoinToggleViewItem) {
         presenter.onEnable(item)
@@ -113,19 +102,14 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         presenter.onDisable(item)
     }
 
-    private fun observeView(view: RestoreCoinsView) {
-        view.setTitle.observe(this, Observer { predefinedAccountType ->
-            val typeTitle = getString(predefinedAccountType.title)
-            collapsingToolbar.title = getString(R.string.Wallet, typeTitle)
-        })
-
-        view.coinsLiveData.observe(this, Observer {(featuredItems, coinItems) ->
-            coinItemsAdapter.featuredCoins = featuredItems
-            coinItemsAdapter.coins = coinItems
+    private fun observeView(view: CreateWalletView) {
+        view.coinsLiveData.observe(this, Observer { (featured, coins) ->
+            coinItemsAdapter.featuredCoins = featured
+            coinItemsAdapter.coins = coins
             coinItemsAdapter.notifyDataSetChanged()
         })
 
-        view.proceedButtonEnabled.observe(this, Observer { enabled ->
+        view.createButtonEnabled.observe(this, Observer { enabled ->
             buttonEnabled = enabled
             invalidateOptionsMenu()
         })
@@ -141,17 +125,13 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         })
     }
 
-    private fun observeRouter(router: RestoreCoinsRouter) {
+    private fun observeRouter(router: CreateWalletRouter) {
         router.startMainModuleLiveEvent.observe(this, Observer {
             MainModule.startAsNewTask(this)
-            setResult(RESULT_OK, Intent())
             finish()
         })
         router.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
             CoinSettingsModule.startForResult(coin, coinSettings, this)
-        })
-        router.showRestoreEvent.observe(this, Observer { predefinedAccountType ->
-            RestoreModule.startForResult(this, predefinedAccountType)
         })
         router.close.observe(this, Observer {
             finish()

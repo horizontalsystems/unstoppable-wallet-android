@@ -39,7 +39,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".modules.createwallet.CreateWalletActivity"
+            android:name=".modules.createwallet.view.CreateWalletActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.main.MainActivity"
