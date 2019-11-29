@@ -17,8 +17,9 @@ import kotlinx.android.parcel.Parcelize
 object CoinSettingsModule {
 
     interface IView {
-        fun update(syncMode: SyncMode)
         fun update(derivation: Derivation)
+        fun setTitle(title: String)
+        fun update(syncMode: SyncMode, coinTitle: String)
     }
 
     interface IViewDelegate {

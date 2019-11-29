@@ -11,6 +11,8 @@ class CoinSettingsPresenter(
 ) : ViewModel(), CoinSettingsModule.IViewDelegate {
 
     override fun viewDidLoad() {
+        view.setTitle(coin.title)
+
         for ((key, value) in coinSettings) {
             when (key) {
                 CoinSetting.Derivation -> {
@@ -19,7 +21,7 @@ class CoinSettingsPresenter(
                 }
                 CoinSetting.SyncMode -> {
                     val syncMode = SyncMode.valueOf(value)
-                    view.update(syncMode)
+                    view.update(syncMode, coin.title)
                 }
             }
         }
@@ -27,7 +29,7 @@ class CoinSettingsPresenter(
 
     override fun onSelect(syncMode: SyncMode) {
         coinSettings[CoinSetting.SyncMode] = syncMode.value
-        view.update(syncMode)
+        view.update(syncMode, coin.title)
     }
 
     override fun onSelect(derivation: AccountType.Derivation) {
