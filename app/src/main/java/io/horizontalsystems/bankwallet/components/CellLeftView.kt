@@ -25,6 +25,13 @@ class CellLeftView : ConstraintLayout {
             cellSubtitle.visibility = if (value == null) View.GONE else View.VISIBLE
         }
 
+    var subtitleLabel: String? = null
+        set(value) {
+            field = value
+            coinTypeLabel.text = value
+            coinTypeLabel.visibility = if (value == null) View.GONE else View.VISIBLE
+        }
+
     var imageResource: Int? = null
         set(value) {
             field = value
