@@ -21,7 +21,7 @@ class BinanceKitManager(appConfig: IAppConfigProvider) : IBinanceKitManager {
 
     override fun binanceKit(wallet: Wallet): BinanceChainKit {
         val account = wallet.account
-        if (account.type is AccountType.Mnemonic) {
+        if (account.type is AccountType.Mnemonic && account.type.words.size == 24) {
             useCount += 1
 
             kit?.let { return it }

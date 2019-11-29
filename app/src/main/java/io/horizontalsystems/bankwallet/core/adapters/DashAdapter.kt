@@ -126,9 +126,10 @@ class DashAdapter(override val kit: DashKit) :
 
         private fun createKit(wallet: Wallet, testMode: Boolean): DashKit {
             val account = wallet.account
-            if (account.type is AccountType.Mnemonic) {
+            val accountType = account.type
+            if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return DashKit(context = App.instance,
-                        words = account.type.words,
+                        words = accountType.words,
                         walletId = account.id,
                         syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
                         networkType = getNetworkType(testMode),
