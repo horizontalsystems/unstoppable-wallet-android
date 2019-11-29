@@ -55,7 +55,7 @@ class ChartConfig(private val context: Context) {
     }
 
     fun yAxisPrice(y: Float, maxY: Float): Float {
-        if (y + textPriceSize >= maxY - offsetBottom) {
+        if (y + textPadding >= maxY - offsetBottom) {
             return y - (textPadding * 1.5f)
         }
 
