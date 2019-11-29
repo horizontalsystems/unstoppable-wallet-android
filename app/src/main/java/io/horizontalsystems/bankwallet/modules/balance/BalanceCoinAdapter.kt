@@ -15,9 +15,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
-class BalanceCoinAdapter(
-        private val listener: Listener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
         fun onSendClicked(viewItem: BalanceViewItem)
@@ -227,6 +225,10 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
                         exchangeRate.text = xExchangeRateText
 
                         showFiatAmount(balanceViewItem)
+
+                        diff?.let {
+                            txDiff.bind(it, containerView.context, false)
+                        }
 
                         fiatAmountLocked.visibility = xFiatAmountLockedVisibility
                         fiatAmountLocked.text = xFiatAmountLockedText
