@@ -32,18 +32,21 @@ class ManageWalletsDialog(
         super.onViewCreated(view, savedInstanceState)
         setContentView(R.layout.fragment_bottom_manage_keys)
 
-        setTitle(activity?.getString(R.string.Deposit_Title, coin.code))
-        setSubtitle(coin.title)
+        setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
+        setSubtitle(getString(R.string.AddCoin_Subtitle, coin.title))
         setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
 
         addKeyInfo = view.findViewById(R.id.addKeyInfo)
         btnCreateKey = view.findViewById(R.id.btnYellow)
         btnRestoreKey = view.findViewById(R.id.btnGrey)
 
+        val walletName = getString(predefinedAccountType.title)
         addKeyInfo.text = getString(
-                R.string.AddCoin_Description, "${coin.title} (${coin.code})",
-                getString(predefinedAccountType.coinCodes),
-                getString(predefinedAccountType.title)
+                R.string.AddCoin_Description,
+                walletName,
+                coin.title,
+                walletName,
+                getString(predefinedAccountType.coinCodes)
         )
 
         bindActions()

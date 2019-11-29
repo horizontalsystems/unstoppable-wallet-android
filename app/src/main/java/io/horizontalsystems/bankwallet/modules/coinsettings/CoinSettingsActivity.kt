@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import kotlinx.android.synthetic.main.activity_restore_options.*
+import kotlinx.android.synthetic.main.activity_coin_settings.*
 
 class CoinSettingsActivity : BaseActivity() {
 
@@ -22,7 +22,7 @@ class CoinSettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_restore_options)
+        setContentView(R.layout.activity_coin_settings)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -44,9 +44,15 @@ class CoinSettingsActivity : BaseActivity() {
     }
 
     private fun observeView(view: CoinSettingsView) {
-        view.syncModeLiveEvent.observe(this, Observer {
-            fastSync.checked = it == SyncMode.Fast
-            slowSync.checked = it == SyncMode.Slow
+        view.titleData.observe(this, Observer { title ->
+            collapsingToolbar.title = title
+        })
+
+        view.syncModeLiveEvent.observe(this, Observer {(syncMode, coinTitle) ->
+            fastSync.checked = syncMode == SyncMode.Fast
+            slowSync.checked = syncMode == SyncMode.Slow
+            speedDescriptionOne.text = getString(R.string.CoinOption_Fast_Text, coinTitle)
+            speedDescriptionTwo.text = getString(R.string.CoinOption_Slow_Text, coinTitle)
             speedGroup.visibility = View.VISIBLE
         })
 

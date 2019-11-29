@@ -33,7 +33,7 @@
 
     <!--Create-->
     <string name="Create_Title">New Wallet</string>
-    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
+    <string name="Create_Description">Select cryptocurrencies for the wallet. You will be able to add or remove coins later as well.</string>
 
     <!--Restore-->
 
@@ -396,19 +396,19 @@
     <!-- Experimental Feature -->
 
     <string name="ExperimentalFeatures_Title">Experimental</string>
-    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
 
     <!-- Bitcoin Hodling -->
 
     <string name="BitcoinHodling_Title">Lock Bitcoins</string>
     <string name="BitcoinHodling_LockTime">TimeLock</string>
-    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet app version 0.10 or newer with BIP44 address format for the Bitcoin.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet controls a set of cryptocurrencies.\n\nYou must backup each highlighted wallet by backing up the private key for it. This key is the only way to restore and access your funds if your phone is ever lost, stolen or the app malfunctions.</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
@@ -428,7 +428,8 @@
     <!-- Manage Keys Alert -->
 
     <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Subtitle">%s Wallet</string>
+    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
@@ -446,11 +447,12 @@
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast">Fast</string>
     <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">Fast: Restores %s transaction history via secure third party server. Less private but fast.</string>
     <string name="CoinOption_Slow">Slow</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
-    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores %s transaction history directly from the blockchain. More private but slow.</string>
+    <string name="CoinOption_BipDescriptionOne">If you\'re creating a new wallet and not sure about this setting than select BIP49.</string>
+    <string name="CoinOption_BipDescriptionTWo">If you\'re restoring an existing wallet with bitcoins on it then you should select the correct address type.</string>
     <string name="CoinOption_BeforeNovember">Before November 2019</string>
     <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>

@@ -11,7 +11,7 @@ class CoinSettingsManager: ICoinSettingsManager {
         coin.type.settings.forEach { setting ->
             when(setting) {
                 CoinSetting.Derivation -> {
-                    coinSettings[CoinSetting.Derivation] = AccountType.Derivation.bip44.value
+                    coinSettings[CoinSetting.Derivation] = AccountType.Derivation.bip49.value
                 }
                 CoinSetting.SyncMode -> {
                     if (accountOrigin == AccountOrigin.Restored) {

@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:constraint_referenced_ids="bip44,bip49,bipDescription"/>
+                app:constraint_referenced_ids="bip44,bip49,bipDescriptionOne,bipDescriptionTwo"/>
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/speedGroup"
@@ -52,18 +52,32 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
-                android:id="@+id/bipDescription"
+                android:id="@+id/bipDescriptionOne"
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                android:paddingBottom="48dp"
-                android:text="@string/CoinOption_TimePeriod"
+                android:text="@string/CoinOption_BipDescriptionOne"
                 android:textColor="@color/grey"
                 app:layout_constraintTop_toBottomOf="@+id/bip49"
                 app:layout_constraintStart_toStartOf="@+id/bip49"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/bipDescriptionTwo"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="24dp"
+                android:paddingBottom="48dp"
+                android:text="@string/CoinOption_BipDescriptionTWo"
+                android:textColor="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/bipDescriptionOne"
+                app:layout_constraintStart_toStartOf="@+id/bipDescriptionOne"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <io.horizontalsystems.bankwallet.components.CellView
@@ -72,8 +86,8 @@
                 android:layout_height="60dp"
                 app:subtitle="@string/CoinOption_Recommended"
                 app:title="@string/CoinOption_Fast"
-                app:layout_constraintTop_toBottomOf="@+id/bipDescription"
-                app:layout_constraintStart_toStartOf="@+id/bipDescription"
+                app:layout_constraintTop_toBottomOf="@+id/bipDescriptionTwo"
+                app:layout_constraintStart_toStartOf="@+id/bipDescriptionTwo"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <io.horizontalsystems.bankwallet.components.CellView
@@ -94,11 +108,11 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                android:text="@string/CoinOption_Fast_Text"
                 android:textColor="@color/grey"
-                app:layout_constraintTop_toBottomOf="@+id/slowSync"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/slowSync"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/slowSync"
+                tools:text="@string/CoinOption_Fast_Text" />
 
             <TextView
                 android:id="@+id/speedDescriptionTwo"
@@ -109,11 +123,11 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
                 android:paddingBottom="48dp"
-                android:text="@string/CoinOption_Slow_Text"
                 android:textColor="@color/grey"
-                app:layout_constraintTop_toBottomOf="@+id/speedDescriptionOne"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/speedDescriptionOne"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/speedDescriptionOne"
+                tools:text="@string/CoinOption_Slow_Text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
@@ -142,7 +156,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/CoinOption_Title" />
+                tools:title="Bitcoin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

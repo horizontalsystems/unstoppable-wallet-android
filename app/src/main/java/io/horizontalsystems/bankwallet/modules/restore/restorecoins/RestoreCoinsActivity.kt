@@ -59,12 +59,12 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.restore_menu, menu)
+        menuInflater.inflate(R.menu.restore_coins_menu, menu)
         return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.menuRestore)?.apply {
+        menu?.findItem(R.id.menuNext)?.apply {
             isEnabled = buttonEnabled
         }
         return true
@@ -72,7 +72,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menuRestore -> {
+            R.id.menuNext -> {
                 presenter.onProceedButtonClick()
                 return true
             }
