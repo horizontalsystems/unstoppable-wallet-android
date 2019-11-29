@@ -2,7 +2,8 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletViewItem
+import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
+import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItemState
 
 class CreateWalletPresenter(
         private val presentationMode: PresentationMode,
@@ -24,7 +25,7 @@ class CreateWalletPresenter(
         view.setCreateButton(wallets.isNotEmpty())
     }
 
-    override fun onEnable(viewItem: ManageWalletViewItem) {
+    override fun onEnable(viewItem: CoinToggleViewItem) {
         val coin = viewItem.coin
         try {
             val account = resolveAccount(coin.type.predefinedAccountType)
@@ -40,7 +41,7 @@ class CreateWalletPresenter(
         }
     }
 
-    override fun onDisable(viewItem: ManageWalletViewItem) {
+    override fun onDisable(viewItem: CoinToggleViewItem) {
         wallets.remove(viewItem.coin)
         syncCreateButton()
     }
@@ -70,9 +71,9 @@ class CreateWalletPresenter(
         syncViewItems()
     }
 
-    private fun viewItem(coin: Coin): ManageWalletViewItem {
+    private fun viewItem(coin: Coin): CoinToggleViewItem {
         val enabled = wallets[coin] != null
-        return ManageWalletViewItem(coin, enabled)
+        return CoinToggleViewItem(coin, CoinToggleViewItemState.ToggleVisible(enabled))
     }
 
     private fun syncViewItems() {

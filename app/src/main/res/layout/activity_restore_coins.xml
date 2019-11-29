@@ -44,7 +44,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/Create_Title" />
+                tools:title="@string/Create_Title" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

@@ -6,15 +6,13 @@ import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 
 class RestoreCoinsView : RestoreCoinsModule.IView {
-    val featuredCoinsLiveData = MutableLiveData<List<CoinToggleViewItem>>()
-    val coinsLiveData = MutableLiveData<List<CoinToggleViewItem>>()
+    val coinsLiveData = MutableLiveData<Pair<List<CoinToggleViewItem>, List<CoinToggleViewItem>>>()
     val proceedButtonEnabled = MutableLiveData<Boolean>()
     val setTitle = MutableLiveData<PredefinedAccountType>()
     val errorLiveEvent = SingleLiveEvent<Exception>()
 
     override fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>) {
-        featuredCoinsLiveData.postValue(featuredViewItems)
-        coinsLiveData.postValue(viewItems)
+        coinsLiveData.postValue(Pair(featuredViewItems, viewItems))
     }
 
     override fun setProceedButton(enabled: Boolean) {

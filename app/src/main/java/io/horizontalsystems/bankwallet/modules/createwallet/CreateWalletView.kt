@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletViewItem
+import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 
 class CreateWalletView : CreateWalletModule.IView {
-    val coinsLiveData = MutableLiveData<Pair<List<ManageWalletViewItem>, List<ManageWalletViewItem>>>()
+    val coinsLiveData = MutableLiveData<Pair<List<CoinToggleViewItem>, List<CoinToggleViewItem>>>()
     val createButtonEnabled = MutableLiveData<Boolean>()
     val errorLiveEvent = SingleLiveEvent<Exception>()
 
-    override fun setItems(featuredViewItems: List<ManageWalletViewItem>, viewItems: List<ManageWalletViewItem>) {
+    override fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>) {
         coinsLiveData.postValue(Pair(featuredViewItems, viewItems))
     }
 

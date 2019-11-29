@@ -67,7 +67,7 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="actionMenuTextAppearance">@style/Headline2</item>
-        <item name="actionMenuTextColor">?ColorJacob</item>
+        <item name="actionMenuTextColor">@color/stateful_button_yellow_color</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_d</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
@@ -137,7 +137,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:actionMenuTextAppearance">@style/Headline2</item>
-        <item name="actionMenuTextColor">?ColorJacob</item>
+        <item name="actionMenuTextColor">@color/stateful_button_yellow_color</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_l</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
