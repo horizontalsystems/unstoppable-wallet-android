@@ -2,53 +2,50 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 
 object RestoreModule {
 
     interface View {
-        fun reload(items: List<IPredefinedAccountType>)
+        fun reload(items: List<PredefinedAccountType>)
         fun showError(ex: Exception)
     }
 
     interface ViewDelegate {
-        val items: List<IPredefinedAccountType>
+        val items: List<PredefinedAccountType>
 
         fun viewDidLoad()
-        fun onSelect(accountType: IPredefinedAccountType)
-        fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
+        fun onSelect(predefinedAccountType: PredefinedAccountType)
         fun onClickClose()
-    }
-
-    interface Interactor {
-        fun restore(accountType: AccountType, syncMode: SyncMode?)
-    }
-
-    interface InteractorDelegate {
-        fun didRestore()
-        fun didFailRestore(e: Exception)
+        fun onRestore()
     }
 
     interface Router {
-        fun startRestoreWordsModule(wordsCount: Int, titleRes: Int)
-        fun startRestoreEosModule(titleRes: Int)
-        fun startMainModule()
         fun close()
+        fun startRestoreCoins(predefinedAccountType: PredefinedAccountType)
     }
 
     fun start(context: Context) {
         context.startActivity(Intent(context, RestoreActivity::class.java))
     }
 
+    fun startForResult(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType) {
+        when(predefinedAccountType){
+            PredefinedAccountType.Standard -> RestoreWordsModule.startForResult(context, 12, predefinedAccountType.title, ModuleCode.RESTORE)
+            PredefinedAccountType.Binance -> RestoreWordsModule.startForResult(context, 24, predefinedAccountType.title, ModuleCode.RESTORE)
+            PredefinedAccountType.Eos -> RestoreEosModule.startForResult(context, predefinedAccountType.title, ModuleCode.RESTORE)
+        }
+    }
+
     fun init(view: RestoreViewModel, router: Router) {
-        val interactor = RestoreInteractor(App.accountCreator)
-        val presenter = RestorePresenter(router, interactor, App.predefinedAccountTypeManager)
+        val presenter = RestorePresenter(router, App.predefinedAccountTypeManager)
 
         view.delegate = presenter
         presenter.view = view
-        interactor.delegate = presenter
     }
 }

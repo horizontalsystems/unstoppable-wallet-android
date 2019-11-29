@@ -81,7 +81,7 @@ interface IAccountManager {
 
     fun account(coinType: CoinType): Account?
     fun preloadAccounts()
-    fun create(account: Account)
+    fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
     fun clear()
@@ -95,55 +95,29 @@ interface IBackupManager {
 }
 
 interface IAccountCreator {
-    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account
-    fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account
-    fun createNewAccount(coin: Coin)
+    fun newAccount(predefinedAccountType: PredefinedAccountType): Account
+    fun restoredAccount(accountType: AccountType): Account
 }
 
 interface IAccountFactory {
-    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode?): Account
+    fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
 }
 
 interface IWalletFactory {
-    fun wallet(coin: Coin, account: Account, syncMode: SyncMode?): Wallet
+    fun wallet(coin: Coin, account: Account, settings: CoinSettings): Wallet
 }
 
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
     fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
+    fun delete(wallets: List<Wallet>)
 }
 
 interface IPredefinedAccountTypeManager {
-    val allTypes: List<IPredefinedAccountType>
-    fun account(predefinedAccountType: IPredefinedAccountType): Account?
-    fun createAccount(predefinedAccountType: IPredefinedAccountType): Account?
-    fun predefinedAccountType(type: AccountType): IPredefinedAccountType?
-}
-
-interface IPredefinedAccountType {
-    val title: Int // resource id
-    val coinCodes: Int // resource id
-    val defaultAccountType: DefaultAccountType
-    fun supports(accountType: AccountType): Boolean
-}
-
-sealed class DefaultAccountType {
-    class Mnemonic(val wordsCount: Int) : DefaultAccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Mnemonic && other.wordsCount == wordsCount
-        }
-
-        override fun hashCode(): Int {
-            return wordsCount
-        }
-    }
-
-    class Eos : DefaultAccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Eos
-        }
-    }
+    val allTypes: List<PredefinedAccountType>
+    fun account(predefinedAccountType: PredefinedAccountType): Account?
+    fun predefinedAccountType(type: AccountType): PredefinedAccountType?
 }
 
 interface IRandomProvider {
@@ -366,7 +340,6 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
-    val predefinedAccountTypes: List<IPredefinedAccountType>
 }
 
 interface OneTimerDelegate {
@@ -442,7 +415,8 @@ interface INotificationManager {
 
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
-    fun save(coins: List<EnabledWallet>)
+    fun save(enabledWallets: List<EnabledWallet>)
+    fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
 }
 
@@ -472,6 +446,8 @@ interface IWalletManager {
 
     fun loadWallets()
     fun enable(wallets: List<Wallet>)
+    fun save(wallets: List<Wallet>)
+    fun delete(wallets: List<Wallet>)
     fun clear()
 }
 
@@ -495,6 +471,11 @@ interface IAddressParser {
 interface IBackgroundRateAlertScheduler {
     fun startPeriodicWorker()
     fun stopPeriodicWorker()
+}
+
+interface ICoinSettingsManager{
+    fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin) : CoinSettings
+    fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings) : CoinSettings
 }
 
 enum class FeeRatePriority(val value: Int) {

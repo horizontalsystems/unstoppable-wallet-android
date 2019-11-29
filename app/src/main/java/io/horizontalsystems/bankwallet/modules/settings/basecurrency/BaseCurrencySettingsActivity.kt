@@ -36,7 +36,7 @@ class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Lis
 
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsCurrency_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() })
+                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
         )
 
         adapter = CurrencySwitcherAdapter(this)

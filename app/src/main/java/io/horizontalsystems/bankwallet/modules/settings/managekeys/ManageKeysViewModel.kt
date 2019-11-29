@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule.Router {
@@ -10,11 +12,10 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     val showItemsEvent = SingleLiveEvent<List<ManageAccountItem>>()
     val showErrorEvent = SingleLiveEvent<Exception>()
     val confirmUnlinkEvent = SingleLiveEvent<ManageAccountItem>()
-    val confirmCreateEvent = SingleLiveEvent<ManageAccountItem>()
     val confirmBackupEvent = SingleLiveEvent<ManageAccountItem>()
-    val startBackupModuleLiveEvent = SingleLiveEvent<ManageAccountItem>()
-    val startRestoreWordsLiveEvent = SingleLiveEvent<Pair<Int,Int>>()
-    val startRestoreEosLiveEvent = SingleLiveEvent<Int>()
+    val showCreateWalletLiveEvent = SingleLiveEvent<PredefinedAccountType>()
+    val showCoinRestoreLiveEvent = SingleLiveEvent<PredefinedAccountType>()
+    val showBackupModule = SingleLiveEvent<Pair<Account, PredefinedAccountType>>()
     val closeLiveEvent = SingleLiveEvent<Void>()
 
     lateinit var delegate: ManageKeysModule.ViewDelegate
@@ -28,10 +29,6 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
 
     override fun show(items: List<ManageAccountItem>) {
         showItemsEvent.postValue(items)
-    }
-
-    override fun showCreateConfirmation(accountItem: ManageAccountItem) {
-        confirmCreateEvent.postValue(accountItem)
     }
 
     override fun showBackupConfirmation(accountItem: ManageAccountItem) {
@@ -52,16 +49,16 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
 
     //  Router
 
-    override fun startBackupModule(accountItem: ManageAccountItem) {
-        startBackupModuleLiveEvent.postValue(accountItem)
+    override fun showCreateWallet(predefinedAccountType: PredefinedAccountType) {
+        showCreateWalletLiveEvent.postValue(predefinedAccountType)
     }
 
-    override fun startRestoreWords(wordsCount: Int, titleRes: Int) {
-        startRestoreWordsLiveEvent.postValue(Pair(wordsCount, titleRes))
+    override fun showCoinRestore(predefinedAccountType: PredefinedAccountType) {
+        showCoinRestoreLiveEvent.postValue(predefinedAccountType)
     }
 
-    override fun startRestoreEos(titleRes: Int) {
-        startRestoreEosLiveEvent.postValue(titleRes)
+    override fun showBackup(account: Account, predefinedAccountType: PredefinedAccountType) {
+        showBackupModule.postValue(Pair(account, predefinedAccountType))
     }
 
     override fun close() {

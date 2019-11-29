@@ -36,7 +36,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }
+                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() }
                 ))
 
         sendView = sendPresenter?.view as SendView

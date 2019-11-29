@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
+import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoincore.models.TransactionStatus
@@ -160,6 +162,14 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     companion object {
         const val defaultConfirmationsThreshold = 3
         const val decimal = 8
+
+        fun getSyncMode(mode: SyncMode?): BitcoinCore.SyncMode {
+            return when (mode) {
+                SyncMode.Slow -> BitcoinCore.SyncMode.Full()
+                SyncMode.New -> BitcoinCore.SyncMode.NewWallet()
+                else -> BitcoinCore.SyncMode.Api()
+            }
+        }
     }
 
 }

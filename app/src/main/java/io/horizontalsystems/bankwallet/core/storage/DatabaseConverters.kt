@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import java.math.BigDecimal
 
 class DatabaseConverters {
@@ -20,18 +18,6 @@ class DatabaseConverters {
         return bigDecimal?.toPlainString()
     }
 
-    // SyncMode
-
-    @TypeConverter
-    fun toString(syncMode: SyncMode?): String? {
-        return syncMode?.value
-    }
-
-    @TypeConverter
-    fun toSyncMode(string: String?): SyncMode? {
-        return SyncMode.fromString(string)
-    }
-
     // List<String>
 
     @TypeConverter
@@ -42,18 +28,6 @@ class DatabaseConverters {
     @TypeConverter
     fun toString(value: List<String>?): String? {
         return value?.joinToString(separator = ",")
-    }
-
-    // Derivation
-
-    @TypeConverter
-    fun toDerivation(value: String?): AccountType.Derivation? {
-        return value?.let { AccountType.Derivation.valueOf(it) }
-    }
-
-    @TypeConverter
-    fun toString(derivation: AccountType.Derivation?): String? {
-        return derivation?.toString()
     }
 
     // SecretString
