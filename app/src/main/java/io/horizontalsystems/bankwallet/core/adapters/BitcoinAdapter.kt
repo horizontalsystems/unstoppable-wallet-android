@@ -114,7 +114,7 @@ class BitcoinAdapter(override val kit: BitcoinKit)
         private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
             val account = wallet.account
             val accountType = account.type
-            if (accountType is AccountType.Mnemonic) {
+            if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return BitcoinKit(context = App.instance,
                         words = accountType.words,
                         walletId = account.id,
