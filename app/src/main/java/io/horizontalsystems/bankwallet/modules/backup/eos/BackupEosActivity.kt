@@ -17,7 +17,7 @@ class BackupEosActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup_eos)
-        shadowlessToolbar.bind(getString(R.string.Backup_DisplayTitle), TopMenuItem(R.drawable.back, onClick = { onBackPressed() }))
+        shadowlessToolbar.bind(getString(R.string.Backup_DisplayTitle), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
 
         bind(intent.getStringExtra(ACCOUNT), intent.getStringExtra(ACTIVE_PRIVATE_KEY))
     }

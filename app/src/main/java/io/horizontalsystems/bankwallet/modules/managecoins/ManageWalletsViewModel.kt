@@ -1,20 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinSettings
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
-    val showManageKeysDialog = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
-    val openRestoreWordsModule = SingleLiveEvent<Pair<Int,Int>>()
-    val openRestoreEosModule = SingleLiveEvent<Int>()
+    val showManageKeysDialog = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
+    val openRestoreModule = SingleLiveEvent<PredefinedAccountType>()
+    val setViewItems = MutableLiveData<Pair<List<CoinToggleViewItem>, List<CoinToggleViewItem>>>()
     val showErrorEvent = SingleLiveEvent<Exception>()
     val closeLiveDate = SingleLiveEvent<Void>()
+    val showCoinSettings = SingleLiveEvent<Pair<Coin, CoinSettings>>()
 
     lateinit var delegate: ManageWalletsModule.IViewDelegate
 
@@ -26,11 +29,15 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     // View
 
+    override fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>) {
+        setViewItems.postValue(Pair(featuredViewItems, viewItems))
+    }
+
     override fun updateCoins() {
         coinsLoadedLiveEvent.call()
     }
 
-    override fun showNoAccountDialog(coin: Coin, predefinedAccountType: IPredefinedAccountType) {
+    override fun showNoAccountDialog(coin: Coin, predefinedAccountType: PredefinedAccountType) {
         showManageKeysDialog.postValue(Pair(coin, predefinedAccountType))
     }
 
@@ -44,22 +51,16 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     // Router
 
-    override fun openRestoreWordsModule(wordsCount: Int, titleRes: Int) {
-        openRestoreWordsModule.postValue(Pair(wordsCount, titleRes))
+    override fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings) {
+        showCoinSettings.postValue(Pair(coin, coinSettingsToRequest))
     }
 
-    override fun openRestoreEosModule(titleRes: Int) {
-        openRestoreEosModule.postValue(titleRes)
+    override fun openRestore(predefinedAccountType: PredefinedAccountType) {
+        openRestoreModule.postValue(predefinedAccountType)
     }
 
     override fun close() {
         closeLiveDate.call()
-    }
-
-    // View model
-
-    override fun onCleared() {
-        delegate.onClear()
     }
 
 }

@@ -4,11 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
@@ -25,10 +26,10 @@ class BackupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
 
-        val account = intent.getParcelableExtra<Account>(ACCOUNT_KEY)
-        val accountCoins = intent.getStringExtra(ACCOUNT_COINS)
+        val account = intent.getParcelableExtra<Account>(ModuleField.ACCOUNT)
+        val accountCoins = intent.getStringExtra(ModuleField.ACCOUNT_COINS)
 
-        viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BackupViewModel::class.java)
         viewModel.init(account)
 
         buttonBack.setOnSingleClickListener { viewModel.delegate.onClickCancel() }
@@ -88,13 +89,11 @@ class BackupActivity : BaseActivity() {
     }
 
     companion object {
-        const val ACCOUNT_KEY = "account_key"
-        const val ACCOUNT_COINS = "account_coins"
 
         fun start(context: Context, account: Account, coinCodes: String) {
             val intent = Intent(context, BackupActivity::class.java).apply {
-                putExtra(ACCOUNT_KEY, account)
-                putExtra(ACCOUNT_COINS, coinCodes)
+                putExtra(ModuleField.ACCOUNT, account)
+                putExtra(ModuleField.ACCOUNT_COINS, coinCodes)
             }
 
             context.startActivity(intent)

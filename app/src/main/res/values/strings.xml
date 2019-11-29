@@ -11,6 +11,9 @@
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
+    <string name="Button_Next">Next</string>
+    <string name="Button_Restore">Restore</string>
+    <string name="Button_Enable">Enable</string>
     <string name="Button_Back">Back</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
@@ -388,8 +391,6 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
-    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
 
     <!-- Experimental Feature -->
@@ -433,7 +434,7 @@
 
     <!-- Account Types -->
 
-    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Unstoppable">Standard</string>
     <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20 tokens</string>
     <string name="AccountType_Eos">EOS</string>
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOS tokens</string>

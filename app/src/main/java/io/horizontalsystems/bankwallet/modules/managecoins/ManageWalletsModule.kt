@@ -3,67 +3,61 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.managecoins.views.ManageWalletsActivity
 
 object ManageWalletsModule {
 
     interface IView {
         fun updateCoins()
-        fun showNoAccountDialog(coin: Coin, predefinedAccountType: IPredefinedAccountType)
+        fun showNoAccountDialog(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun showSuccess()
         fun showError(e: Exception)
+        fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
 
-        fun onClickCreateKey()
-        fun onClickRestoreKey()
+        fun onEnable(viewItem: CoinToggleViewItem)
+        fun onDisable(viewItem: CoinToggleViewItem)
+        fun onSelect(viewItem: CoinToggleViewItem)
+        fun onSelectNewAccount(predefinedAccountType: PredefinedAccountType)
+        fun onSelectRestoreAccount(predefinedAccountType: PredefinedAccountType)
+
+        fun didRestore(accountType: AccountType)
         fun onClickCancel()
-        fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
-
-        val popularItemsCount: Int
-        fun popularItem(position: Int): ManageWalletViewItem
-        val itemsCount: Int
-        fun item(position: Int): ManageWalletViewItem
-
-        fun enablePopularCoin(position: Int)
-        fun disablePopularCoin(position: Int)
-
-        fun enableCoin(position: Int)
-        fun disableCoin(position: Int)
-
-        fun saveChanges()
-        fun onClear() {}
+        fun onSelect(coinSettings: MutableMap<CoinSetting, String>, coin: Coin)
     }
 
     interface IInteractor {
         val coins: List<Coin>
+        val featuredCoins: List<Coin>
+        val accounts: List<Account>
         val wallets: List<Wallet>
-        val predefinedAccountTypes: List<IPredefinedAccountType>
-        fun wallet(coin: Coin): Wallet?
-        fun saveWallets(wallets: List<Wallet>)
-        fun createWallet(coin: Coin): Wallet
-        fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode?): Wallet
+
+        fun save(wallet: Wallet)
+        fun delete(wallet: Wallet)
+
+        fun createAccount(predefinedAccountType: PredefinedAccountType): Account
+        fun createRestoredAccount(accountType: AccountType): Account
+        fun save(account: Account)
+
+        fun coinSettingsToSave(coin: Coin, origin: AccountOrigin, requestedCoinSettings: MutableMap<CoinSetting, String>): CoinSettings
+        fun coinSettingsToRequest(coin: Coin, origin: AccountOrigin): CoinSettings
     }
 
     interface IInteractorDelegate {
-        fun didSaveChanges()
     }
 
     interface IRouter {
-        fun openRestoreWordsModule(wordsCount: Int, titleRes: Int)
-        fun openRestoreEosModule(titleRes: Int)
+        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings)
+        fun openRestore(predefinedAccountType: PredefinedAccountType)
         fun close()
     }
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {
-        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountCreator, App.walletFactory, App.predefinedAccountTypeManager)
+        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.coinSettingsManager)
         val presenter = ManageWalletsPresenter(interactor, router)
 
         view.delegate = presenter
@@ -75,4 +69,19 @@ object ManageWalletsModule {
         val intent = Intent(context, ManageWalletsActivity::class.java)
         context.startActivity(intent)
     }
+}
+
+data class CoinToggleViewItem(val coin: Coin, val state: CoinToggleViewItemState)
+
+sealed class CoinToggleViewItemState {
+    object ToggleHidden : CoinToggleViewItemState()
+    class ToggleVisible(val enabled: Boolean) : CoinToggleViewItemState()
+
+    fun description(): String {
+        return when (this) {
+            is ToggleHidden -> "hidden"
+            is ToggleVisible -> "enabled_${this.enabled}"
+        }
+    }
+
 }

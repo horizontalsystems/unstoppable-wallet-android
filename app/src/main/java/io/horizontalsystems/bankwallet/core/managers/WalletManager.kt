@@ -25,19 +25,31 @@ class WalletManager(private val accountManager: IAccountManager, private val wal
     override fun wallet(coin: Coin): Wallet? {
         val account = accountManager.account(coin.type) ?: return null
 
-        return walletFactory.wallet(coin, account, account.defaultSyncMode)
+        return walletFactory.wallet(coin, account, mutableMapOf())
     }
 
     override fun loadWallets() {
         val wallets = storage.wallets(accountManager.accounts)
         cache.set(wallets)
-        walletsUpdatedObservable.onNext(wallets)
+        notifyChange()
     }
 
     override fun enable(wallets: List<Wallet>) {
         storage.save(wallets)
         cache.set(wallets)
-        walletsUpdatedObservable.onNext(wallets)
+        notifyChange()
+    }
+
+    override fun save(wallets: List<Wallet>) {
+        storage.save(wallets)
+        cache.add(wallets)
+        notifyChange()
+    }
+
+    override fun delete(wallets: List<Wallet>) {
+        storage.delete(wallets)
+        cache.remove(wallets)
+        notifyChange()
     }
 
     override fun clear() {
@@ -45,9 +57,21 @@ class WalletManager(private val accountManager: IAccountManager, private val wal
         disposable.dispose()
     }
 
+    private fun notifyChange() {
+        walletsUpdatedObservable.onNext(cache.walletsSet.toList())
+    }
+
     private class WalletsCache {
         var walletsSet = mutableSetOf<Wallet>()
             private set
+
+        fun add(wallets: List<Wallet>) {
+            walletsSet.addAll(wallets)
+        }
+
+        fun remove(wallets: List<Wallet>) {
+            walletsSet.removeAll(wallets)
+        }
 
         fun set(wallets: List<Wallet>) {
             walletsSet = wallets.toMutableSet()

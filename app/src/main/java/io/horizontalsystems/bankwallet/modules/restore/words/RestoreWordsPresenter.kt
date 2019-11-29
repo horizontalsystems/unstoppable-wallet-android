@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.InvalidMnemonicWordsCountException
 
 class RestoreWordsPresenter(
         private val wordsCount: Int,
-        private val showSyncMode: Boolean,
         private val interactor: RestoreWordsModule.Interactor,
         private val router: RestoreWordsModule.Router)
     : RestoreWordsModule.ViewDelegate, RestoreWordsModule.InteractorDelegate {
@@ -26,11 +25,7 @@ class RestoreWordsPresenter(
     //  Interactor Delegate
 
     override fun didValidate() {
-        if (showSyncMode) {
-            router.startSyncModeModule()
-        } else {
-            router.notifyRestored()
-        }
+        router.notifyRestored()
     }
 
     override fun didFailToValidate(exception: Exception) {

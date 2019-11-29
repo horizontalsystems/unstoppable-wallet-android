@@ -2,11 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
@@ -17,7 +13,7 @@ object BalanceModule {
         fun set(viewItems: List<BalanceViewItem>)
         fun set(headerViewItem: BalanceHeaderViewItem)
         fun set(sortIsOn: Boolean)
-        fun showBackupRequired(coin: Coin, predefinedAccountType: IPredefinedAccountType)
+        fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun didRefresh()
     }
 
@@ -58,7 +54,7 @@ object BalanceModule {
         fun subscribeToChartInfo(coinCodes: List<String>, currencyCode: String)
 
         fun refresh()
-        fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType?
+        fun predefinedAccountType(wallet: Wallet): PredefinedAccountType?
 
         fun saveSortType(sortType: BalanceSortType)
 

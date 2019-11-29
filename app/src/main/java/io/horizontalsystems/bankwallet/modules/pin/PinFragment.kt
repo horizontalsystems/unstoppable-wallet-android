@@ -124,7 +124,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         })
 
         pinView.showBackButton.observe(viewLifecycleOwner, Observer {
-            shadowlessToolbar.bind(null, TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }))
+            shadowlessToolbar.bind(null, TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() }))
         })
 
         pinView.title.observe(viewLifecycleOwner, Observer {

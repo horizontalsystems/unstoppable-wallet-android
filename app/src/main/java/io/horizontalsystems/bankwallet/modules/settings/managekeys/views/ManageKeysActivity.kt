@@ -3,16 +3,17 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.PresentationMode
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
-import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
+import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
+import io.horizontalsystems.bankwallet.modules.restore.restorecoins.RestoreCoinsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysViewModel
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDeleteAlert
@@ -28,11 +29,11 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(ManageKeysViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ManageKeysViewModel::class.java)
         viewModel.init()
 
         setContentView(R.layout.activity_manage_keys)
-        shadowlessToolbar.bind(getString(R.string.ManageKeys_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() }))
+        shadowlessToolbar.bind(getString(R.string.ManageKeys_Title), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
 
         val adapter = ManageKeysAdapter(viewModel)
         recyclerView.adapter = adapter
@@ -56,13 +57,6 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             }
         })
 
-        viewModel.confirmCreateEvent.observe(this, Observer {
-            val title = getString(R.string.ManageCoins_AddCoin_Title)
-            val subtitle = getString(it.predefinedAccountType.title)
-            val description = getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.coinCodes))
-            ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.CREATE)
-        })
-
         viewModel.confirmBackupEvent.observe(this, Observer {
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
@@ -80,18 +74,16 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             }
         })
 
-        viewModel.startBackupModuleLiveEvent.observe(this, Observer {
-            it.account?.let { account ->
-                BackupModule.start(this, account, getString(it.predefinedAccountType.coinCodes))
-            }
+        viewModel.showBackupModule.observe(this, Observer { (account, predefinedAccountType) ->
+            BackupModule.start(this, account, getString(predefinedAccountType.coinCodes))
         })
 
-        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { (wordsCount, titleRes) ->
-            RestoreWordsModule.startForResult(this, wordsCount, titleRes, ModuleCode.RESTORE_WORDS)
+        viewModel.showCreateWalletLiveEvent.observe(this, Observer { predefinedAccountType ->
+            CreateWalletModule.startInApp(this, predefinedAccountType)
         })
 
-        viewModel.startRestoreEosLiveEvent.observe(this, Observer { titleRes ->
-            RestoreEosModule.startForResult(this, titleRes, ModuleCode.RESTORE_EOS)
+        viewModel.showCoinRestoreLiveEvent.observe(this, Observer { predefinedAccountType->
+            RestoreCoinsModule.start(this, predefinedAccountType, PresentationMode.InApp)
         })
 
         viewModel.showItemsEvent.observe(this, Observer { list ->
@@ -113,20 +105,13 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         val accountType = data.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
 
         when (requestCode) {
-            ModuleCode.RESTORE_WORDS -> {
-                viewModel.delegate.onConfirmRestore(accountType, data.getParcelableExtra(ModuleField.SYNCMODE))
-            }
-            ModuleCode.RESTORE_EOS -> {
+            ModuleCode.RESTORE_COINS -> {
                 viewModel.delegate.onConfirmRestore(accountType)
             }
         }
     }
 
     //  ManageKeysDialog Listener
-
-    override fun onClickCreateKey() {
-        viewModel.delegate.onConfirmCreate()
-    }
 
     override fun onClickBackupKey() {
         viewModel.delegate.onConfirmBackup()

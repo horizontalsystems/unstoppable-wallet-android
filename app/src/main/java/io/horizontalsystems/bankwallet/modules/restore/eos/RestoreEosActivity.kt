@@ -6,7 +6,7 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
@@ -35,7 +35,7 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
             description.text = getString(R.string.Restore_Enter_Key_Description_Eos, getString(accountTypeTitleRes))
         }
 
-        viewModel = ViewModelProviders.of(this).get(RestoreEosViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RestoreEosViewModel::class.java)
         viewModel.init()
 
         viewModel.setAccount.observe(this, Observer {
@@ -74,7 +74,7 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
-            R.id.menuOk ->  {
+            R.id.menuRestore ->  {
                 viewModel.delegate.onClickDone(
                         eosAccount.text.trim().toLowerCase(Locale.ENGLISH),
                         eosActivePrivateKey.text.trim()

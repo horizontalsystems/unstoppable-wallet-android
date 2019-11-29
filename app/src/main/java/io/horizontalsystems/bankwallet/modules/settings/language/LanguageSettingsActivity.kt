@@ -36,7 +36,7 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
 
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsLanguage_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() })
+                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
                 )
 
         adapter = LanguageSettingsAdapter(this)

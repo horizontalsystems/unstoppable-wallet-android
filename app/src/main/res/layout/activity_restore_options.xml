@@ -2,59 +2,92 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="vertical">
+            android:layout_marginTop="12dp">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/bipsGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:constraint_referenced_ids="bip44,bip49,bipDescription"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/speedGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:constraint_referenced_ids="fastSync,slowSync,speedDescriptionOne,speedDescriptionTwo"/>
 
             <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/bip44"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:subtitle="@string/CoinOption_bip44"
-                app:title="@string/CoinOption_BeforeNovember" />
+                app:title="@string/CoinOption_BeforeNovember"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/bip49"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:subtitle="@string/CoinOption_bip49"
-                app:title="@string/CoinOption_AfterNovember" />
+                app:title="@string/CoinOption_AfterNovember"
+                app:layout_constraintTop_toBottomOf="@+id/bip44"
+                app:layout_constraintStart_toStartOf="@+id/bip44"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
+                android:id="@+id/bipDescription"
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                android:layout_marginBottom="48dp"
+                android:paddingBottom="48dp"
                 android:text="@string/CoinOption_TimePeriod"
-                android:textColor="@color/grey" />
+                android:textColor="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/bip49"
+                app:layout_constraintStart_toStartOf="@+id/bip49"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/fastSync"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:subtitle="@string/CoinOption_Recommended"
-                app:title="@string/CoinOption_Fast" />
+                app:title="@string/CoinOption_Fast"
+                app:layout_constraintTop_toBottomOf="@+id/bipDescription"
+                app:layout_constraintStart_toStartOf="@+id/bipDescription"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/slowSync"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:subtitle="@string/CoinOption_MorePrivate"
-                app:title="@string/CoinOption_Slow" />
+                app:title="@string/CoinOption_Slow"
+                app:layout_constraintTop_toBottomOf="@+id/fastSync"
+                app:layout_constraintStart_toStartOf="@+id/fastSync"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
+                android:id="@+id/speedDescriptionOne"
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,20 +95,27 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:text="@string/CoinOption_Fast_Text"
-                android:textColor="@color/grey" />
+                android:textColor="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/slowSync"
+                app:layout_constraintStart_toStartOf="@+id/slowSync"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
+                android:id="@+id/speedDescriptionTwo"
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
-                android:layout_marginBottom="48dp"
+                android:paddingBottom="48dp"
                 android:text="@string/CoinOption_Slow_Text"
-                android:textColor="@color/grey" />
+                android:textColor="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/speedDescriptionOne"
+                app:layout_constraintStart_toStartOf="@+id/speedDescriptionOne"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.appbar.AppBarLayout

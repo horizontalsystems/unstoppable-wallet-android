@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.core.DefaultAccountType
 import java.io.Serializable
 import java.math.BigDecimal
 
@@ -43,12 +42,30 @@ sealed class CoinType : Serializable {
         }
     }
 
-    val defaultAccountType: DefaultAccountType
+    val predefinedAccountType: PredefinedAccountType
         get() = when (this) {
-            is Erc20, Bitcoin, BitcoinCash, Dash, Ethereum -> {
-                DefaultAccountType.Mnemonic(wordsCount = 12)
-            }
-            is Binance -> DefaultAccountType.Mnemonic(wordsCount = 24)
-            is Eos -> DefaultAccountType.Eos()
+            is Bitcoin,
+            is Erc20,
+            is BitcoinCash,
+            is Dash,
+            is Ethereum -> PredefinedAccountType.Standard
+            is Binance -> PredefinedAccountType.Binance
+            is Eos -> PredefinedAccountType.Eos
         }
+
+    val settings: List<CoinSetting>
+         get() = when (this) {
+            is Bitcoin ->  listOf(CoinSetting.Derivation, CoinSetting.SyncMode)
+            is BitcoinCash -> listOf(CoinSetting.SyncMode)
+            is Dash ->  listOf(CoinSetting.SyncMode)
+            else -> listOf()
+        }
+
 }
+
+enum class CoinSetting {
+    Derivation,
+    SyncMode
+}
+
+typealias CoinSettings = MutableMap<CoinSetting, String>

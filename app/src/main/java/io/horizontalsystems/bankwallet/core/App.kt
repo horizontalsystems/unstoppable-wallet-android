@@ -51,7 +51,6 @@ class App : Application() {
         lateinit var backupManager: IBackupManager
         lateinit var accountCreator: IAccountCreator
         lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
-        lateinit var defaultWalletCreator: DefaultWalletCreator
         lateinit var walletRemover: WalletRemover
 
         lateinit var xRateManager: IRateManager
@@ -78,6 +77,7 @@ class App : Application() {
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
         lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
+        lateinit var coinSettingsManager: ICoinSettingsManager
 
         lateinit var instance: App
             private set
@@ -130,9 +130,8 @@ class App : Application() {
         accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
-        defaultWalletCreator = DefaultWalletCreator(walletManager, appConfigProvider, walletFactory)
-        accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager, defaultWalletCreator)
-        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager, accountCreator)
+        accountCreator = AccountCreator(AccountFactory(), wordsManager)
+        predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
         walletRemover = WalletRemover(accountManager, walletManager)
 
         randomManager = RandomProvider()
@@ -175,6 +174,7 @@ class App : Application() {
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
+        coinSettingsManager = CoinSettingsManager()
     }
 
     override fun attachBaseContext(base: Context) {

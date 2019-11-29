@@ -7,20 +7,20 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 
 class ManageWalletsDialog(
         private val listener: Listener,
         private val coin: Coin,
-        private val predefinedAccountType: IPredefinedAccountType)
+        private val predefinedAccountType: PredefinedAccountType)
     : BaseBottomSheetDialogFragment() {
 
     interface Listener {
-        fun onClickCreateKey()
-        fun onClickRestoreKey() {}
+        fun onClickCreateKey(predefinedAccountType: PredefinedAccountType)
+        fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {}
         fun onCancel() {}
     }
 
@@ -61,18 +61,18 @@ class ManageWalletsDialog(
 
     private fun bindActions() {
         btnCreateKey.setOnClickListener {
-            listener.onClickCreateKey()
+            listener.onClickCreateKey(predefinedAccountType)
             dismiss()
         }
 
         btnRestoreKey.setOnClickListener {
-            listener.onClickRestoreKey()
+            listener.onClickRestoreKey(predefinedAccountType)
             dismiss()
         }
     }
 
     companion object {
-        fun show(activity: FragmentActivity, listener: Listener, coin: Coin, predefinedAccountType: IPredefinedAccountType) {
+        fun show(activity: FragmentActivity, listener: Listener, coin: Coin, predefinedAccountType: PredefinedAccountType) {
             val fragment = ManageWalletsDialog(listener, coin, predefinedAccountType)
             val transaction = activity.supportFragmentManager.beginTransaction()
 

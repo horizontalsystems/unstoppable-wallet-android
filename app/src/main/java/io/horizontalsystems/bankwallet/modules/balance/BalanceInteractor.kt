@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -146,7 +147,7 @@ class BalanceInteractor(
         delegate?.didRefresh()
     }
 
-    override fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType? {
+    override fun predefinedAccountType(wallet: Wallet): PredefinedAccountType? {
         return predefinedAccountTypeManager.predefinedAccountType(wallet.account.type)
     }
 

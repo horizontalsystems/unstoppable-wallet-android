@@ -3,17 +3,15 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysActivity
 
 object ManageKeysModule {
 
     interface View {
         fun show(items: List<ManageAccountItem>)
-        fun showCreateConfirmation(accountItem: ManageAccountItem)
         fun showBackupConfirmation(accountItem: ManageAccountItem)
         fun showUnlinkConfirmation(accountItem: ManageAccountItem)
         fun showSuccess()
@@ -24,24 +22,23 @@ object ManageKeysModule {
         val items: List<ManageAccountItem>
 
         fun viewDidLoad()
-        fun onClickNew(accountItem: ManageAccountItem)
+        fun onClickCreate(accountItem: ManageAccountItem)
         fun onClickBackup(accountItem: ManageAccountItem)
-        fun onClickRestore(accountType: IPredefinedAccountType)
+        fun onClickRestore(accountItem: ManageAccountItem)
         fun onClickUnlink(accountItem: ManageAccountItem)
-        fun onClickShow(accountItem: ManageAccountItem)
 
         fun onConfirmCreate()
         fun onConfirmBackup()
         fun onConfirmUnlink(accountId: String)
-        fun onConfirmRestore(accountType: AccountType, syncMode: SyncMode? = null)
+        fun onConfirmRestore(accountType: AccountType)
         fun onClear()
     }
 
     interface Interactor {
-        val predefinedAccountTypes: List<IPredefinedAccountType>
-        fun account(predefinedAccountType: IPredefinedAccountType): Account?
-        fun createAccount(predefinedAccountType: IPredefinedAccountType)
-        fun restoreAccount(accountType: AccountType, syncMode: SyncMode?)
+        val predefinedAccountTypes: List<PredefinedAccountType>
+        fun account(predefinedAccountType: PredefinedAccountType): Account?
+        fun createAccount(predefinedAccountType: PredefinedAccountType)
+        fun restoreAccount(accountType: AccountType)
 
         fun loadAccounts()
         fun deleteAccount(id: String)
@@ -53,10 +50,10 @@ object ManageKeysModule {
     }
 
     interface Router {
-        fun startBackupModule(accountItem: ManageAccountItem)
-        fun startRestoreWords(wordsCount: Int, titleRes: Int)
-        fun startRestoreEos(titleRes: Int)
         fun close()
+        fun showCreateWallet(predefinedAccountType: PredefinedAccountType)
+        fun showBackup(account: Account, predefinedAccountType: PredefinedAccountType)
+        fun showCoinRestore(predefinedAccountType: PredefinedAccountType)
     }
 
     fun init(view: ManageKeysViewModel, router: Router) {
@@ -73,4 +70,4 @@ object ManageKeysModule {
     }
 }
 
-data class ManageAccountItem(val predefinedAccountType: IPredefinedAccountType, val account: Account?)
+data class ManageAccountItem(val predefinedAccountType: PredefinedAccountType, val account: Account?)

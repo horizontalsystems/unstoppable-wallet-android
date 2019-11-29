@@ -156,8 +156,8 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
 
     override var syncMode: SyncMode
         get() {
-            val syncString = App.preferences.getString(SYNC_MODE, SyncMode.FAST.value)
-            return syncString?.let { SyncMode.fromString(syncString) } ?: SyncMode.FAST
+            val syncString = App.preferences.getString(SYNC_MODE, SyncMode.Fast.value)
+            return syncString?.let { SyncMode.valueOf(syncString) } ?: SyncMode.Fast
         }
         set(syncMode) {
             App.preferences.edit().putString(SYNC_MODE, syncMode.value).apply()
