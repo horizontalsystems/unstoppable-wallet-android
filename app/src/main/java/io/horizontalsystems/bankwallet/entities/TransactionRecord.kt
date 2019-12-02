@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
-import io.horizontalsystems.bitcoincore.core.IPluginOutputData
 import java.math.BigDecimal
 import java.util.*
 
@@ -57,5 +56,4 @@ data class TransactionItem(val wallet: Wallet, val record: TransactionRecord) : 
 
 class TransactionAddress(
         val address: String,
-        val mine: Boolean,
-        val pluginData: Map<Byte, IPluginOutputData>? = null)
+        val mine: Boolean)
