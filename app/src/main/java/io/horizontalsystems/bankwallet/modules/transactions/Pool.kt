@@ -68,10 +68,10 @@ class Pool(val state: State) {
         val unusedRecordsSize = state.unusedRecords.size
         if (unusedRecordsSize > limit) return null
 
-        val hashFrom = state.records.lastOrNull()?.let { Pair(it.transactionHash, it.interTransactionIndex) }
+        val recordFrom = state.records.lastOrNull()
         val fetchLimit = limit + 1 - unusedRecordsSize
 
-        return TransactionsModule.FetchData(state.wallet, hashFrom, fetchLimit)
+        return TransactionsModule.FetchData(state.wallet, recordFrom, fetchLimit)
     }
 
     fun add(transactionRecords: List<TransactionRecord>) {

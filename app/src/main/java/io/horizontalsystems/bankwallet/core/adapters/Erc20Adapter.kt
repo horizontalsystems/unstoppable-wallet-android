@@ -48,8 +48,8 @@ class Erc20Adapter(
 
     // ITransactionsAdapter
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return erc20Kit.transactions(from?.let { TransactionKey(it.first.hexStringToByteArray(), it.second) }, limit).map {
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return erc20Kit.transactions(from?.let { TransactionKey(it.transactionHash.hexStringToByteArray(), it.interTransactionIndex) }, limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
@@ -90,6 +90,7 @@ class Erc20Adapter(
         }
 
         return TransactionRecord(
+                uid = "${transaction.transactionHash}${transaction.interTransactionIndex}",
                 transactionHash = transaction.transactionHash,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = transaction.interTransactionIndex,

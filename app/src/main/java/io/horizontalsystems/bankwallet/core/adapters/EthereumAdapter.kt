@@ -43,8 +43,8 @@ class EthereumAdapter(kit: EthereumKit)
 
     // ITransactionsAdapter
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return ethereumKit.transactions(from?.first, limit).map {
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return ethereumKit.transactions(from?.transactionHash, limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
@@ -74,6 +74,7 @@ class EthereumAdapter(kit: EthereumKit)
         val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.movePointLeft(decimal)
 
         return TransactionRecord(
+                uid = transaction.hash,
                 transactionHash = transaction.hash,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = 0,

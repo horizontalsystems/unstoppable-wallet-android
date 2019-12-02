@@ -38,7 +38,7 @@ sealed class TransactionStatus {
 
 object TransactionsModule {
 
-    data class FetchData(val wallet: Wallet, val from: Pair<String, Int>?, val limit: Int)
+    data class FetchData(val wallet: Wallet, val from: TransactionRecord?, val limit: Int)
 
     interface IView {
         fun showFilters(filters: List<Wallet?>)

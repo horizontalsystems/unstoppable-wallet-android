@@ -131,6 +131,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         }
 
         return TransactionRecord(
+                uid = transaction.uid,
                 transactionHash = transaction.transactionHash,
                 transactionIndex = transaction.transactionIndex,
                 interTransactionIndex = 0,

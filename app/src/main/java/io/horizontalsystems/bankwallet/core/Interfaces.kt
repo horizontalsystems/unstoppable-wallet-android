@@ -253,7 +253,7 @@ interface ITransactionsAdapter {
     val lastBlockHeight: Int?
     val lastBlockHeightUpdatedFlowable: Flowable<Unit>
 
-    fun getTransactions(from: Pair<String, Int>? = null, limit: Int): Single<List<TransactionRecord>>
+    fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>>
     val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
 }
 
