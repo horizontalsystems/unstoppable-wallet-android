@@ -95,8 +95,8 @@ class BitcoinCashAdapter(override val kit: BitcoinCashKit)
         // ignored for now
     }
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return kit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
     companion object {

@@ -65,8 +65,8 @@ class BinanceAdapter(
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return binanceKit.transactions(asset, from?.first, limit).map { list ->
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return binanceKit.transactions(asset, from?.transactionHash, limit).map { list ->
             list.map { transactionRecord(it) }
         }
     }
@@ -91,6 +91,7 @@ class BinanceAdapter(
         }
 
         return TransactionRecord(
+                uid = transaction.hash,
                 transactionHash = transaction.hash,
                 transactionIndex = 0,
                 interTransactionIndex = 0,

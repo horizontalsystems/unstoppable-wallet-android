@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import java.math.BigDecimal
-import java.util.*
 
 data class TransactionRecord(
+        val uid: String,
         val transactionHash: String,
         val transactionIndex: Int,
         val interTransactionIndex: Int,
@@ -28,13 +28,13 @@ data class TransactionRecord(
 
     override fun equals(other: Any?): Boolean {
         if (other is TransactionRecord) {
-            return transactionHash == other.transactionHash && interTransactionIndex == other.interTransactionIndex
+            return uid == other.uid
         }
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(transactionHash, interTransactionIndex)
+        return uid.hashCode()
     }
 }
 

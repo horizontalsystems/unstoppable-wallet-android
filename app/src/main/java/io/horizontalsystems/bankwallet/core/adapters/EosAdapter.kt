@@ -47,8 +47,8 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = token.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return eosKit.transactions(token, from?.second, limit).map { list ->
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return eosKit.transactions(token, from?.interTransactionIndex, limit).map { list ->
             list.map { transactionRecord(it) }
         }
     }
@@ -71,6 +71,7 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
         }
 
         return TransactionRecord(
+                uid = transaction.id,
                 transactionHash = transaction.id,
                 transactionIndex = 0,
                 interTransactionIndex = transaction.actionSequence,
