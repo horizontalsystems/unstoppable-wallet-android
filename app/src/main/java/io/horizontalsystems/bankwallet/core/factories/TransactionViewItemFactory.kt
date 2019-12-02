@@ -37,12 +37,12 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
         }
 
         var amount = record.amount
-        val currencyValue = rate?.let {
-            val amountLocked = lockInfo?.amount
-            if (sentToSelf && amountLocked != null) {
-                amount = amountLocked
-            }
 
+        if (sentToSelf && lockInfo?.amount != null) {
+            amount = lockInfo.amount
+        }
+
+        val currencyValue = rate?.let {
             CurrencyValue(it.currency, amount * it.value)
         }
 
