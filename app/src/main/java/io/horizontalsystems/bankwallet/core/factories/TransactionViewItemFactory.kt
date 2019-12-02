@@ -13,7 +13,9 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
         var status: TransactionStatus = TransactionStatus.Pending
 
-        if (record.blockHeight != null && lastBlockHeight != null) {
+        if (record.failed) {
+            status = TransactionStatus.Failed
+        } else if (record.blockHeight != null && lastBlockHeight != null) {
 
             val confirmations = lastBlockHeight - record.blockHeight.toInt() + 1
             if (confirmations >= 0) {

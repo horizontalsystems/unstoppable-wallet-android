@@ -14,7 +14,8 @@ data class TransactionRecord(
         val timestamp: Long,
         val from: List<TransactionAddress>,
         val to: List<TransactionAddress>,
-        val lockInfo: TransactionLockInfo? = null)
+        val lockInfo: TransactionLockInfo? = null,
+        val failed: Boolean = false)
     : Comparable<TransactionRecord> {
 
     override fun compareTo(other: TransactionRecord): Int {

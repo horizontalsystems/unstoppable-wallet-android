@@ -29,13 +29,12 @@ open class TransactionInfoStatusView : ConstraintLayout {
 
     fun bind(transactionStatus: TransactionStatus, incoming: Boolean) {
         progressBarWrapper.visibility = View.GONE
-        statusIcon.visibility = View.GONE
         confirmedText.visibility = View.GONE
         progressText.visibility = View.GONE
+        failedText.visibility = View.GONE
 
         when (transactionStatus) {
             is TransactionStatus.Completed -> {
-                statusIcon.visibility = View.VISIBLE
                 confirmedText.visibility = View.VISIBLE
             }
             is TransactionStatus.Processing -> {
@@ -49,9 +48,9 @@ open class TransactionInfoStatusView : ConstraintLayout {
     }
 
     private fun fillProgress(progress: Double = 0.0, incoming: Boolean) {
-        progressBar1.setImageResource(if(progress >= 0.33) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
-        progressBar2.setImageResource(if(progress >= 0.66) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
-        progressBar3.setImageResource(if(progress > 1.0) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
+        progressBar1.setImageResource(if (progress >= 0.33) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
+        progressBar2.setImageResource(if (progress >= 0.66) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
+        progressBar3.setImageResource(if (progress > 1.0) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
         progressBarWrapper.visibility = View.VISIBLE
 
         progressText.setText(if (incoming) R.string.Transactions_Receiving else R.string.Transactions_Sending)
