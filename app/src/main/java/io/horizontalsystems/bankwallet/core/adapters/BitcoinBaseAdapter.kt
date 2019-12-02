@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.models.TransactionStatus
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.reactivex.BackpressureStrategy
@@ -121,7 +122,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     }
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        val hodlerOutputData = transaction.to.first { it.pluginId == HodlerPlugin.id }.pluginData as? HodlerOutputData
+        val hodlerOutputData = transaction.to.firstOrNull { it.pluginId == HodlerPlugin.id }?.pluginData as? HodlerOutputData
         var transactionLockInfo: TransactionLockInfo? = null
 
         hodlerOutputData?.approxUnlockTime?.let { approxUnlockTime ->
@@ -139,6 +140,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 timestamp = transaction.timestamp,
                 from = transaction.from.map { TransactionAddress(it.address, it.mine) },
                 to = transaction.to.map { TransactionAddress(it.address, it.mine) },
+                failed = transaction.status == TransactionStatus.INVALID,
                 lockInfo = transactionLockInfo
         )
     }
