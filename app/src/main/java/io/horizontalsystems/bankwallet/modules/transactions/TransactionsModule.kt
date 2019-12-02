@@ -5,9 +5,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bitcoincore.core.IPluginOutputData
-import io.horizontalsystems.hodler.HodlerOutputData
-import io.horizontalsystems.hodler.HodlerPlugin
 import java.math.BigDecimal
 import java.util.*
 
@@ -30,19 +27,7 @@ data class TransactionViewItem(
         val lockInfo: TransactionLockInfo?)
 
 
-data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?) {
-
-    companion object {
-        fun from(pluginData: Map<Byte, IPluginOutputData>?, valueToAmount: (Long?) -> BigDecimal?): TransactionLockInfo? {
-            val hodlerPluginData = pluginData?.get(HodlerPlugin.id) ?: return null
-            val hodlerOutputData = hodlerPluginData as? HodlerOutputData ?: return null
-            val lockedUntil = hodlerOutputData.approxUnlockTime ?: return null
-            val lockedValue = valueToAmount(hodlerOutputData.value)
-
-            return TransactionLockInfo(Date(lockedUntil * 1000), hodlerOutputData.addressString, lockedValue)
-        }
-    }
-}
+data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?)
 
 sealed class TransactionStatus {
     object Pending : TransactionStatus()

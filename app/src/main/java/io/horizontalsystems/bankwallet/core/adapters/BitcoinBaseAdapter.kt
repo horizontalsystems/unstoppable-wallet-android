@@ -7,12 +7,15 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.hodler.HodlerOutputData
+import io.horizontalsystems.hodler.HodlerPlugin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.*
 
 abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
@@ -118,6 +121,14 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     }
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
+        val hodlerOutputData = transaction.to.first { it.pluginId == HodlerPlugin.id }.pluginData as? HodlerOutputData
+        var transactionLockInfo: TransactionLockInfo? = null
+
+        hodlerOutputData?.approxUnlockTime?.let { approxUnlockTime ->
+            val lockedValueBTC = satoshiToBTC(hodlerOutputData.lockedValue)
+            transactionLockInfo = TransactionLockInfo(Date(approxUnlockTime * 1000), hodlerOutputData.addressString, lockedValueBTC)
+        }
+
         return TransactionRecord(
                 transactionHash = transaction.transactionHash,
                 transactionIndex = transaction.transactionIndex,
@@ -126,11 +137,9 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 amount = satoshiToBTC(transaction.amount),
                 fee = satoshiToBTC(transaction.fee),
                 timestamp = transaction.timestamp,
-                from = transaction.from.map { TransactionAddress(it.address, it.mine, it.pluginData) },
-                to = transaction.to.map { TransactionAddress(it.address, it.mine, it.pluginData) },
-                lockInfo = TransactionLockInfo.from(transaction.to.firstOrNull()?.pluginData) {
-                    satoshiToBTC(it)
-                }
+                from = transaction.from.map { TransactionAddress(it.address, it.mine) },
+                to = transaction.to.map { TransactionAddress(it.address, it.mine) },
+                lockInfo = transactionLockInfo
         )
     }
 
