@@ -34,6 +34,9 @@ open class TransactionInfoStatusView : ConstraintLayout {
         failedText.visibility = View.GONE
 
         when (transactionStatus) {
+            is TransactionStatus.Failed -> {
+                failedText.visibility = View.VISIBLE
+            }
             is TransactionStatus.Completed -> {
                 confirmedText.visibility = View.VISIBLE
             }
