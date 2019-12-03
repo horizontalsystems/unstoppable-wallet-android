@@ -457,10 +457,12 @@
     <string name="CoinOption_Slow_Text">Slow: Restores %s transaction history directly from the blockchain. More private but slow.</string>
     <string name="CoinOption_BipDescriptionOne">If you\'re creating a new wallet and not sure about this setting than select BIP49.</string>
     <string name="CoinOption_BipDescriptionTWo">If you\'re restoring an existing wallet with bitcoins on it then you should select the correct address type.</string>
-    <string name="CoinOption_BeforeNovember">Before November 2019</string>
-    <string name="CoinOption_AfterNovember">After November 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
+    <string name="CoinOption_bip84">BIP-84</string>
+    <string name="CoinOption_bip44_Subtitle">Legacy</string>
+    <string name="CoinOption_bip49_Subtitle">Segwit Compatible</string>
+    <string name="CoinOption_bip84_Subtitle">Native Segwit</string>
 
     <!--Charts-->
 

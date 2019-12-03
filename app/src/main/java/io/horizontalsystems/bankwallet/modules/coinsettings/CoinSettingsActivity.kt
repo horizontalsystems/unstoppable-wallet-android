@@ -41,6 +41,7 @@ class CoinSettingsActivity : BaseActivity() {
 
         bip44.setOnClickListener { presenter.onSelect(Derivation.bip44) }
         bip49.setOnClickListener { presenter.onSelect(Derivation.bip49) }
+        bip84.setOnClickListener { presenter.onSelect(Derivation.bip84) }
     }
 
     private fun observeView(view: CoinSettingsView) {
@@ -59,6 +60,7 @@ class CoinSettingsActivity : BaseActivity() {
         view.derivationLiveEvent.observe(this, Observer {
             bip44.checked = it == Derivation.bip44
             bip49.checked = it == Derivation.bip49
+            bip84.checked = it == Derivation.bip84
             bipsGroup.visibility = View.VISIBLE
         })
     }
