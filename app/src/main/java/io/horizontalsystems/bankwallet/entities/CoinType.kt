@@ -18,7 +18,11 @@ sealed class CoinType : Serializable {
             is Eos -> {
                 return accountType is AccountType.Eos
             }
-            is Bitcoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
+            is Bitcoin,
+            is BitcoinCash,
+            is Dash,
+            is Ethereum,
+            is Erc20 -> {
                 if (accountType is AccountType.Mnemonic) {
                     return accountType.words.size == 12 && accountType.salt == null
                 }
