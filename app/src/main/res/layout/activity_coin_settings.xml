@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:constraint_referenced_ids="bip44,bip49,bipDescriptionOne,bipDescriptionTwo"/>
+                app:constraint_referenced_ids="bip44,bip49,bip84,bipDescriptionOne,bipDescriptionTwo"/>
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/speedGroup"
@@ -35,8 +35,8 @@
                 android:id="@+id/bip44"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:subtitle="@string/CoinOption_bip44"
-                app:title="@string/CoinOption_BeforeNovember"
+                app:subtitle="@string/CoinOption_bip44_Subtitle"
+                app:title="@string/CoinOption_bip44"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -45,10 +45,20 @@
                 android:id="@+id/bip49"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:subtitle="@string/CoinOption_bip49"
-                app:title="@string/CoinOption_AfterNovember"
+                app:subtitle="@string/CoinOption_bip49_Subtitle"
+                app:title="@string/CoinOption_bip49"
                 app:layout_constraintTop_toBottomOf="@+id/bip44"
                 app:layout_constraintStart_toStartOf="@+id/bip44"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/bip84"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:subtitle="@string/CoinOption_bip84_Subtitle"
+                app:title="@string/CoinOption_bip84"
+                app:layout_constraintTop_toBottomOf="@+id/bip49"
+                app:layout_constraintStart_toStartOf="@+id/bip49"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
@@ -61,8 +71,8 @@
                 android:layout_marginEnd="24dp"
                 android:text="@string/CoinOption_BipDescriptionOne"
                 android:textColor="@color/grey"
-                app:layout_constraintTop_toBottomOf="@+id/bip49"
-                app:layout_constraintStart_toStartOf="@+id/bip49"
+                app:layout_constraintTop_toBottomOf="@+id/bip84"
+                app:layout_constraintStart_toStartOf="@+id/bip84"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
