@@ -228,11 +228,16 @@ abstract class AppDatabase : RoomDatabase() {
                 }
 
                 val walletsCursor = database.query("SELECT * FROM EnabledWallet")
+                var walletSyncMode: String? = null
                 while (walletsCursor.moveToNext()) {
                     val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
                     if (coinIdColumnIndex >= 0) {
                         val coinId = walletsCursor.getString(coinIdColumnIndex)
 
+                        val syncModeColumnIndex = walletsCursor.getColumnIndex("syncMode")
+                        if (syncModeColumnIndex >= 0){
+                            walletSyncMode = walletsCursor.getString(syncModeColumnIndex)
+                        }
 
                         if (oldDerivation != null && coinId == "BTC") {
                             database.execSQL("""
@@ -244,7 +249,7 @@ abstract class AppDatabase : RoomDatabase() {
                         }
 
                         if (coinId == "BTC" || coinId == "BCH" || coinId == "DASH") {
-                            val newSyncMode = oldSyncMode?.toLowerCase()?.capitalize()?.let { SyncMode.valueOf(it) }
+                            val newSyncMode = walletSyncMode?.toLowerCase()?.capitalize()?.let { SyncMode.valueOf(it) }
                                     ?: SyncMode.Fast
                             database.execSQL("""
                                 UPDATE new_EnabledWallet
