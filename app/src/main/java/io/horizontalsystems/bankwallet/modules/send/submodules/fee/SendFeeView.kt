@@ -41,7 +41,6 @@ class SendFeeView : SendFeeModule.IView {
     }
 
     override fun setFee(fee: SendModule.AmountInfo, convertedFee: SendModule.AmountInfo?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun setError(error: Exception?) {
