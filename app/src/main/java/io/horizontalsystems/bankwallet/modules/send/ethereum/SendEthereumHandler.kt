@@ -137,6 +137,7 @@ class SendEthereumHandler(
     override fun onModulesDidLoad() {
         feeModule.fetchFeeRate()
         amountModule.setMinimumRequiredBalance(interactor.minimumRequiredBalance)
+        amountModule.setMinimumAmount(interactor.minimumAmount)
         feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
         syncState()
         syncEstimateGasLimit()

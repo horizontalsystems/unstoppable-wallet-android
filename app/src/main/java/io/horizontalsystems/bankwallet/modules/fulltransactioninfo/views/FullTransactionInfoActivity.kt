@@ -67,11 +67,11 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         viewModel.loadingLiveData.observe(this, Observer { coinCode ->
             if (coinCode == true) {
-                processSpinner.visibility = View.VISIBLE
+                progressLoading.visibility = View.VISIBLE
                 recyclerTransactionInfo.visibility = View.INVISIBLE
                 transactionRecordAdapter.notifyDataSetChanged()
             } else {
-                processSpinner.visibility = View.INVISIBLE
+                progressLoading.visibility = View.INVISIBLE
             }
         })
 
