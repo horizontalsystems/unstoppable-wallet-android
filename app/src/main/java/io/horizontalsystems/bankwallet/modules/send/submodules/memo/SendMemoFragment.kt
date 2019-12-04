@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
@@ -26,7 +26,7 @@ class SendMemoFragment(private val maxLength: Int,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProviders.of(this, SendMemoModule.Factory(maxLength, handler)).get(SendMemoPresenter::class.java)
+        presenter = ViewModelProvider(this, SendMemoModule.Factory(maxLength, handler)).get(SendMemoPresenter::class.java)
         val presenterView = presenter.view as SendMemoView
 
         memoInput.addTextChangedListener(object : TextWatcher {

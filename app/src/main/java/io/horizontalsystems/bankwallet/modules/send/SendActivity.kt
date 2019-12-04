@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
@@ -42,12 +42,16 @@ class SendActivity : BaseActivity() {
                 rightBtnItem = TopMenuItem(R.drawable.close, onClick = { onBackPressed() })
         )
 
-        mainPresenter = ViewModelProviders.of(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
+        mainPresenter = ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
 
         subscribeToViewEvents(mainPresenter.view as SendView, wallet)
         subscribeToRouterEvents(mainPresenter.router as SendRouter)
 
         mainPresenter.onViewDidLoad()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private fun subscribeToRouterEvents(router: SendRouter) {

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.modules.send.SendView
@@ -40,7 +40,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
                 ))
 
         sendView = sendPresenter?.view as SendView
-        presenter = ViewModelProviders.of(this, SendConfirmationModule.Factory())
+        presenter = ViewModelProvider(this, SendConfirmationModule.Factory())
                 .get(SendConfirmationPresenter::class.java)
 
         sendView?.confirmationViewItems?.observe(viewLifecycleOwner, Observer {

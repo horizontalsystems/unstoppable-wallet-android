@@ -1,60 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.send.ethereum
 
+import io.horizontalsystems.bankwallet.entities.FeeState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
+import io.horizontalsystems.erc20kit.core.Erc20Kit
+import io.horizontalsystems.erc20kit.models.ValidationError
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
-sealed class FeeState() {
-    object Loading : FeeState()
-    class Value(val gasLimit: Long) : FeeState()
-    class Error(val error: Exception) : FeeState()
 
-    val isLoading: Boolean
-        get() = this is Loading
-
-    val isValid: Boolean
-        get() = this is Value
-}
-
-class SendEthereumHandler(private val interactor: SendModule.ISendEthereumInteractor,
-                          private val router: SendModule.IRouter)
+class SendEthereumHandler(
+        private val interactor: SendModule.ISendEthereumInteractor,
+        private val router: SendModule.IRouter)
     : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate,
       SendFeeModule.IFeeModuleDelegate {
 
     private var estimateGasLimitState: FeeState = FeeState.Value(0)
-
-    private fun syncValidation() {
-        try {
-            amountModule.validAmount()
-            addressModule.validAddress()
-
-            delegate.onChange(true)
-
-        } catch (e: Exception) {
-            delegate.onChange(false)
-        }
-    }
-
-    private fun syncAvailableBalance() {
-        amountModule.setAvailableBalance(interactor.availableBalance(gasPrice = feeModule.feeRate))
-    }
-
-//    private fun syncFee() {
-//
-//        feeModule.setFee(interactor.fee(feeModule.feeRate))
-//    }
-
-    // SendModule.ISendHandler
+    private var disposable: Disposable? = null
 
     override lateinit var amountModule: SendAmountModule.IAmountModule
     override lateinit var addressModule: SendAddressModule.IAddressModule
     override lateinit var feeModule: SendFeeModule.IFeeModule
     override lateinit var memoModule: SendMemoModule.IMemoModule
+
     override var hodlerModule: SendHodlerModule.IHodlerModule? = null
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
@@ -66,6 +41,80 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
                 SendModule.Input.Fee(true),
                 SendModule.Input.ProceedButton)
 
+    private fun syncValidation() {
+        try {
+            amountModule.validAmount()
+            addressModule.validAddress()
+
+            val currentState = feeModule.isValid && feeModule.feeRateState.isValid && estimateGasLimitState.isValid
+            delegate.onChange(currentState)
+
+        } catch (e: Exception) {
+            delegate.onChange(false)
+        }
+    }
+
+    private fun syncState() {
+
+        val loading = feeModule.feeRateState.isLoading || estimateGasLimitState.isLoading
+
+        amountModule.setLoading(loading)
+        feeModule.setLoading(loading)
+
+        if (loading)
+            return
+
+        if (feeModule.feeRateState is FeeState.Error) {
+
+            feeModule.setFee(BigDecimal.ZERO)
+            processFee((feeModule.feeRateState as FeeState.Error).error)
+
+        } else if (estimateGasLimitState is FeeState.Error) {
+
+            feeModule.setFee(BigDecimal.ZERO)
+            processFee((estimateGasLimitState as FeeState.Error).error)
+
+        } else if (feeModule.feeRateState is FeeState.Value && estimateGasLimitState is FeeState.Value) {
+
+            amountModule.setAvailableBalance(interactor.availableBalance(
+                    (feeModule.feeRateState as FeeState.Value).value, (estimateGasLimitState as FeeState.Value).value))
+
+            feeModule.setError(null)
+            feeModule.setFee(interactor.fee((feeModule.feeRateState as FeeState.Value).value,
+                                            (estimateGasLimitState as FeeState.Value).value))
+        }
+    }
+
+    private fun processFee(error: Exception) {
+        feeModule.setError(if (error is ValidationError) null else error)
+    }
+
+    private fun syncEstimateGasLimit() {
+        try {
+
+            val amount = amountModule.validAmount()
+            val address = addressModule.validAddress()
+
+            estimateGasLimitState = FeeState.Loading
+
+            syncState()
+            syncValidation()
+
+            disposable?.dispose()
+            disposable = interactor.estimateGasLimit(address, amount, feeModule.feeRate)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ gasLimit ->
+                                   onReceiveGasLimit(gasLimit)
+                               }, { error ->
+                                   onGasLimitError(error as Exception)
+                               })
+
+
+        } catch (e: Exception) {
+            onReceiveGasLimit(0)
+        }
+    }
+
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
@@ -76,20 +125,21 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
     }
 
     override fun sendSingle(): Single<Unit> {
-        val value = estimateGasLimitState
-        if (value !is FeeState.Value) {
+        val gasLimit = estimateGasLimitState
+        if (gasLimit !is FeeState.Value) {
             throw Exception("SendTransactionError.unknown")
         }
 
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, value.gasLimit)
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate,
+                               gasLimit.value)
     }
 
     override fun onModulesDidLoad() {
-        amountModule.setMinimumRequiredBalance(interactor.minimumRequiredBalance)
-        amountModule.setMinimumAmount(interactor.minimumAmount)
-        syncAvailableBalance()
-        feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
         feeModule.fetchFeeRate()
+        amountModule.setMinimumRequiredBalance(interactor.minimumRequiredBalance)
+        feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
+        syncState()
+        syncEstimateGasLimit()
     }
 
     override fun onAddressScan(address: String) {
@@ -100,6 +150,7 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
 
     override fun onChangeAmount() {
         syncValidation()
+        syncEstimateGasLimit()
     }
 
     override fun onChangeInputType(inputType: SendModule.InputType) {
@@ -114,6 +165,7 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
 
     override fun onUpdateAddress() {
         syncValidation()
+        syncEstimateGasLimit()
     }
 
     override fun onUpdateAmount(amount: BigDecimal) {
@@ -124,30 +176,31 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
         router.scanQrCode()
     }
 
-    // SendFeeModule.IFeeModuleDelegate
+    private fun onReceiveGasLimit(gasLimit: Long) {
+        estimateGasLimitState = FeeState.Value(gasLimit)
 
-    override fun onUpdateFeeRate(feeRate: Long) {
-        syncAvailableBalance()
+        syncState()
+        syncValidation()
+    }
+
+    private fun onGasLimitError(error: Exception) {
+        estimateGasLimitState = FeeState.Error(error)
+
+        syncState()
+        syncValidation()
+    }
+
+    override fun sync() {
+        if (feeModule.feeRateState.isError || estimateGasLimitState.isError) {
+            feeModule.fetchFeeRate()
+            syncEstimateGasLimit()
+        }
+    }
+
+    // SendFeeModule.IFeeModuleDelegate
+    override fun onUpdateFeeRate() {
+        syncState()
         syncValidation()
         syncEstimateGasLimit()
     }
-
-    private fun syncEstimateGasLimit() {
-        guard let address = try? addressModule.validAddress() else {
-            onReceive(gasLimit: 0)
-            return
-        }
-            gasDisposeBag = DisposeBag()
-
-            estimateGasLimitState = .loading
-                    syncState()
-            syncValidation()
-
-            interactor.estimateGasLimit(to: address, value: amountModule.currentAmount, gasPrice: feePriorityModule.feeRate)
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .observeOn(MainScheduler.instance)
-                    .subscribe(onSuccess: onReceive, onError: onGasLimitError)
-                    .disposed(by: gasDisposeBag)
-        }
-
 }

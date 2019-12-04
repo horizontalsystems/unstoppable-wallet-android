@@ -28,7 +28,7 @@
         tools:text="0.12345678 BTC" />
 
     <ProgressBar
-        android:id="@+id/progressLoading"
+        android:id="@+id/processSpinner"
         style="?android:attr/progressBarStyle"
         android:layout_width="24dp"
         android:layout_height="24dp"

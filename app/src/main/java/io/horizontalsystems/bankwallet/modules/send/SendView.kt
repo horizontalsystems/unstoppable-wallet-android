@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.CoinException
+import java.time.Instant
+import kotlin.math.log
 
 class SendView : SendModule.IView {
 
@@ -20,7 +22,7 @@ class SendView : SendModule.IView {
     }
 
     override fun setSendButtonEnabled(enabled: Boolean) {
-        sendButtonEnabled.value = enabled
+        sendButtonEnabled.postValue(enabled)
     }
 
     override fun showErrorInToast(error: Throwable) {

@@ -87,11 +87,13 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     override val ethereumBalance: BigDecimal
         get() = balance
 
-    override fun availableBalance(gasPrice: Long): BigDecimal {
-        return BigDecimal.ZERO.max(balance - fee(gasPrice))
+    override fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal {
+        if(gasLimit == null)
+            return balance
+        return BigDecimal.ZERO.max(balance - fee(gasPrice, gasLimit))
     }
 
-    override fun fee(gasPrice: Long): BigDecimal {
+    override fun fee(gasPrice: Long, gasLimit: Long): BigDecimal {
         return ethereumKit.fee(gasPrice).movePointLeft(decimal)
     }
 

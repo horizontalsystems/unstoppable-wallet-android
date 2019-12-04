@@ -71,15 +71,17 @@ class Erc20Adapter(
         return erc20Kit.estimateGas(toAddress, contractAddress, noScaleDecimal.toBigInteger(), gasPrice)
     }
 
-    override fun availableBalance(gasPrice: Long): BigDecimal {
-        return balance - fee
+    override fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal {
+        return BigDecimal.ZERO.max(balance - fee)
     }
 
     override val ethereumBalance: BigDecimal
         get() = balanceInBigDecimal(ethereumKit.balance, EthereumAdapter.decimal)
 
-    override fun fee(gasPrice: Long): BigDecimal {
-        return erc20Kit.fee(gasPrice).movePointLeft(EthereumAdapter.decimal)
+    override fun fee(gasPrice: Long, gasLimit: Long): BigDecimal {
+        val value = BigDecimal(gasPrice) * BigDecimal(gasLimit)
+
+        return value.movePointLeft(EthereumAdapter.decimal)
     }
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {

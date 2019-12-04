@@ -3,9 +3,6 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.entities.FeeRateInfo
-import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -29,7 +26,12 @@ class SendFeeInteractor(
 
         feeRateProvider.feeRates()
                     .subscribeOn(Schedulers.io())
-                    .subscribe({ delegate?.didUpdate(it) }, { delegate?.didReceiveError(it) })
+                    .subscribe({
+                                   delegate?.didUpdate(it)
+                               },
+                               {
+                                   delegate?.didReceiveError(it as Exception)
+                               })
                     .let { disposables.add(it) }
     }
 

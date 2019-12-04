@@ -22,7 +22,7 @@ class AppConfigProvider : IAppConfigProvider {
     override val infuraProjectSecret = "fc479a9290b64a84a15fa6544a130218"
 
     // Bitcoin-Core RPC config
-    override val btcCoreRpcUrl: String = ""
+    override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/apg"
     override val btcCoreRpcUser: String? = null
     override val btcCoreRpcPassword: String? = null
 

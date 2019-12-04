@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -14,14 +14,15 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.ethereumkit.api.models.ApiError
 import kotlinx.android.synthetic.main.view_send_fee.*
 
 class SendFeeFragment(
         private val feeIsAdjustable: Boolean,
         private val coin: Coin,
         private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
-        private val sendHandler: SendModule.ISendHandler
-) : SendSubmoduleFragment(), FeeRatePrioritySelector.Listener {
+        private val sendHandler: SendModule.ISendHandler)
+    : SendSubmoduleFragment(), FeeRatePrioritySelector.Listener {
 
     private var presenter: SendFeePresenter? = null
 
@@ -33,15 +34,16 @@ class SendFeeFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProviders.of(this, SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate))
+        presenter = ViewModelProvider(this, SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate))
                 .get(SendFeePresenter::class.java)
         val presenterView = presenter?.view as SendFeeView
 
+        txError.visibility = View.GONE
         txSpeedLayout.visibility = if (feeIsAdjustable) View.VISIBLE else View.GONE
         txSpeedLayout.setOnClickListener {
             presenter?.onClickFeeRatePriority()
         }
-
+        txFeeLoading.text = getString(R.string.Alert_Loading)
         presenterView.primaryFee.observe(viewLifecycleOwner, Observer { txFeePrimary.text = " $it" })
 
         presenterView.secondaryFee.observe(viewLifecycleOwner, Observer { fiatFee ->
@@ -87,6 +89,14 @@ class SendFeeFragment(
                 feeLayout.visibility = View.VISIBLE
             }
         })
+
+        presenterView.setLoading.observe(viewLifecycleOwner, Observer { loading ->
+            setLoading(loading)
+        })
+
+        presenterView.setError.observe(viewLifecycleOwner, Observer { error ->
+            setError(error)
+        })
     }
 
     override fun init() {
@@ -96,4 +106,29 @@ class SendFeeFragment(
     override fun onSelectFeeRate(feeRate: FeeRateInfo) {
         presenter?.onChangeFeeRate(feeRate)
     }
+
+    private fun setLoading(loading: Boolean) {
+
+        txFeePrimary.visibility = if (!loading) View.VISIBLE else View.GONE
+        txFeeSecondary.visibility = if (!loading) View.VISIBLE else View.GONE
+        txFeeLoading.visibility = if (loading) View.VISIBLE else View.GONE
+
+        context?.let {
+            txSpeedMenu.setTextColor(it.getColor(if (loading) R.color.grey_50 else R.color.grey))
+        }
+        txSpeedLayout.isEnabled = (!loading)
+    }
+
+    private fun setError(error: Exception) {
+
+        if (error is ApiError)
+            txError.text = getString(R.string.Send_Error_WrongParameters)
+
+        txError.visibility = View.VISIBLE
+        txFeeTitle.visibility = View.GONE
+        txFeeLoading.visibility = View.GONE
+        txFeePrimary.visibility = View.GONE
+        txFeeSecondary.visibility = View.GONE
+    }
 }
+

@@ -120,6 +120,17 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/txError"
+                style="@style/Subhead2"
+                android:layout_width="217dp"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="Error while fetching fee"
+                android:textColor="@color/red_d"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/txFeeLoading"
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"

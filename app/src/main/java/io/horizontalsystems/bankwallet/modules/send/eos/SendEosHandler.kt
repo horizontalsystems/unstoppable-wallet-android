@@ -9,8 +9,9 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModu
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
-                     private val router: SendModule.IRouter)
+class SendEosHandler(
+        private val interactor: SendModule.ISendEosInteractor,
+        private val router: SendModule.IRouter)
     : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate {
 
     private fun syncValidation() {
@@ -38,6 +39,7 @@ class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
     override var hodlerModule: SendHodlerModule.IHodlerModule? = null
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
+    override fun sync() {}
 
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
@@ -92,5 +94,4 @@ class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
     override fun scanQrCode() {
         router.scanQrCode()
     }
-
 }
