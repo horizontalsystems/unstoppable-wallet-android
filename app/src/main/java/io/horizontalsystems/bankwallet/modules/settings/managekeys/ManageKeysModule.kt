@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysActivity
 
@@ -14,8 +13,6 @@ object ManageKeysModule {
         fun show(items: List<ManageAccountItem>)
         fun showBackupConfirmation(accountItem: ManageAccountItem)
         fun showUnlinkConfirmation(accountItem: ManageAccountItem)
-        fun showSuccess()
-        fun showError(error: Exception)
     }
 
     interface ViewDelegate {
@@ -27,18 +24,14 @@ object ManageKeysModule {
         fun onClickRestore(accountItem: ManageAccountItem)
         fun onClickUnlink(accountItem: ManageAccountItem)
 
-        fun onConfirmCreate()
         fun onConfirmBackup()
         fun onConfirmUnlink(accountId: String)
-        fun onConfirmRestore(accountType: AccountType)
         fun onClear()
     }
 
     interface Interactor {
         val predefinedAccountTypes: List<PredefinedAccountType>
         fun account(predefinedAccountType: PredefinedAccountType): Account?
-        fun createAccount(predefinedAccountType: PredefinedAccountType)
-        fun restoreAccount(accountType: AccountType)
 
         fun loadAccounts()
         fun deleteAccount(id: String)
@@ -57,7 +50,7 @@ object ManageKeysModule {
     }
 
     fun init(view: ManageKeysViewModel, router: Router) {
-        val interactor = ManageKeysInteractor(App.accountManager, App.accountCreator, App.predefinedAccountTypeManager)
+        val interactor = ManageKeysInteractor(App.accountManager, App.predefinedAccountTypeManager)
         val presenter = ManageKeysPresenter(interactor, router)
 
         view.delegate = presenter

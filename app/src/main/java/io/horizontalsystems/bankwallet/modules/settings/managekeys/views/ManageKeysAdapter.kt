@@ -44,6 +44,8 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             accountName.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
             accountCoins.text = containerView.resources.getString(predefinedAccount.coinCodes)
 
+            buttonNew.isEnabled = predefinedAccount.createSupported()
+
             if (item.account == null) {
                 changeStates(isEnabled = false)
 

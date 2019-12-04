@@ -36,7 +36,6 @@ class CreateWalletPresenter(
                 router.showCoinSettings(coin, coinSettingsToRequest)
             }
         } catch (e: Exception) {
-            view.showError(e)
             syncViewItems()
         }
     }
@@ -44,6 +43,10 @@ class CreateWalletPresenter(
     override fun onDisable(viewItem: CoinToggleViewItem) {
         wallets.remove(viewItem.coin)
         syncCreateButton()
+    }
+
+    override fun onSelect(viewItem: CoinToggleViewItem) {
+        view.showNotSupported(viewItem.coin.type.predefinedAccountType)
     }
 
     override fun onCreateButtonClick() {
@@ -72,8 +75,17 @@ class CreateWalletPresenter(
     }
 
     private fun viewItem(coin: Coin): CoinToggleViewItem {
-        val enabled = wallets[coin] != null
-        return CoinToggleViewItem(coin, CoinToggleViewItemState.ToggleVisible(enabled))
+        val state:CoinToggleViewItemState = when {
+            coin.type.predefinedAccountType.createSupported() -> {
+                val enabled = wallets[coin] != null
+                CoinToggleViewItemState.ToggleVisible(enabled)
+            }
+            else -> {
+                CoinToggleViewItemState.ToggleHidden
+            }
+        }
+
+        return CoinToggleViewItem(coin, state)
     }
 
     private fun syncViewItems() {

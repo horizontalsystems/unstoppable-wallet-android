@@ -16,6 +16,7 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
     interface Listener {
         fun enable(item: CoinToggleViewItem)
         fun disable(item: CoinToggleViewItem)
+        fun onSelect(item: CoinToggleViewItem)
     }
 
     private val typeFeatured = 0
@@ -41,20 +42,10 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
             typeFeatured, typeAll -> {
                 val cellView = CellView(parent.context)
                 cellView.layoutParams = getCellViewLayoutParams()
-                CoinViewHolder(cellView) { isChecked, index ->
-                    onSwitchChanged(isChecked, index)
-                }
+                CoinViewHolder(cellView)
             }
             typeTopDescription -> ViewHolderTopDescription(inflate(parent, R.layout.view_holder_top_description, false))
             else -> ViewHolderDivider(inflate(parent, R.layout.view_holder_coin_manager_divider, false))
-        }
-    }
-
-    private fun onSwitchChanged(isChecked: Boolean, index: Int) {
-        if (isChecked) {
-            listener.enable(getItemByPosition(index))
-        } else {
-            listener.disable(getItemByPosition(index))
         }
     }
 
@@ -69,7 +60,18 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
         when (holder) {
             is CoinViewHolder -> {
                 val item = getItemByPosition(position)
-                holder.bind(item, isLastItemInGroup(position))
+                holder.bind(
+                        item,
+                        isLastItemInGroup(position),
+                        onClick = { index ->
+                            listener.onSelect(getItemByPosition(index))
+                        },
+                        onSwitch = { isChecked, index ->
+                            when {
+                                isChecked -> listener.enable(getItemByPosition(index))
+                                else -> listener.disable(getItemByPosition(index))
+                            }
+                        })
             }
         }
     }
@@ -84,34 +86,43 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
     }
 
     private fun getItemByPosition(position: Int): CoinToggleViewItem {
-        return if (position < featuredCoins.size+1) {
-            featuredCoins[position-1]
+        return if (position < featuredCoins.size + 1) {
+            featuredCoins[position - 1]
         } else {
             val index = when {
                 showDivider -> position - featuredCoins.size - 2
-                else -> position-1
+                else -> position - 1
             }
             coins[index]
         }
     }
 }
 
-class CoinViewHolder(override val containerView: CellView, onClick: (isChecked: Boolean, position: Int) -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    init {
-        containerView.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            onClick.invoke(isChecked, adapterPosition)
-        }
-    }
+class CoinViewHolder(override val containerView: CellView) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(coinViewItem: CoinToggleViewItem, lastElement: Boolean) {
+    fun bind(
+            coinViewItem: CoinToggleViewItem,
+            lastElement: Boolean,
+            onClick: (position: Int) -> Unit,
+            onSwitch: (isChecked: Boolean, position: Int) -> Unit
+    ) {
         containerView.coinIcon = coinViewItem.coin.code
         containerView.title = coinViewItem.coin.code
         containerView.subtitle = coinViewItem.coin.title
         containerView.subtitleLabel = coinViewItem.coin.type.typeLabel()
         containerView.bottomBorder = lastElement
+
         when (val state = coinViewItem.state) {
             is CoinToggleViewItemState.ToggleVisible -> {
                 containerView.switchIsChecked = state.enabled
+                containerView.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                    onSwitch.invoke(isChecked, adapterPosition)
+                }
+            }
+            is CoinToggleViewItemState.ToggleHidden -> {
+                containerView.setOnClickListener {
+                    onClick.invoke(adapterPosition)
+                }
             }
         }
     }

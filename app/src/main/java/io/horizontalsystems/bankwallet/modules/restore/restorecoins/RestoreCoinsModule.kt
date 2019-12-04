@@ -16,7 +16,6 @@ object RestoreCoinsModule {
 
     interface IView {
         fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>)
-        fun showError(exception: Exception)
         fun setProceedButton(enabled: Boolean)
         fun setTitle(predefinedAccountType: PredefinedAccountType)
     }

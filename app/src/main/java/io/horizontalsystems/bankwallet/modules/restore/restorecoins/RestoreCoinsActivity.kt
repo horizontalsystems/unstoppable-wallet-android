@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -22,7 +21,6 @@ import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapte
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
 class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
@@ -113,6 +111,10 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         presenter.onDisable(item)
     }
 
+    override fun onSelect(item: CoinToggleViewItem) {
+        //not used here
+    }
+
     private fun observeView(view: RestoreCoinsView) {
         view.setTitle.observe(this, Observer { predefinedAccountType ->
             val typeTitle = getString(predefinedAccountType.title)
@@ -130,15 +132,6 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
             invalidateOptionsMenu()
         })
 
-        view.errorLiveEvent.observe(this, Observer {
-            if (it is EosUnsupportedException) {
-                AlertDialogFragment.newInstance(
-                        R.string.Alert_TitleWarning,
-                        R.string.ManageCoins_EOSAlert_CreateButton,
-                        R.string.Alert_Ok
-                ).show(supportFragmentManager, "alert_dialog")
-            }
-        })
     }
 
     private fun observeRouter(router: RestoreCoinsRouter) {

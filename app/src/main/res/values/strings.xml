@@ -395,7 +395,7 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
-    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
+    <string name="ManageCoins_Alert_CantCreateDescription">At this point, the wallet is not able to create new %s wallet accounts. You\'re only able to restore the existing one.</string>
 
     <!-- Experimental Feature -->
 

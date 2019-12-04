@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.restore.restorecoins
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 
@@ -9,7 +8,6 @@ class RestoreCoinsView : RestoreCoinsModule.IView {
     val coinsLiveData = MutableLiveData<Pair<List<CoinToggleViewItem>, List<CoinToggleViewItem>>>()
     val proceedButtonEnabled = MutableLiveData<Boolean>()
     val setTitle = MutableLiveData<PredefinedAccountType>()
-    val errorLiveEvent = SingleLiveEvent<Exception>()
 
     override fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>) {
         coinsLiveData.postValue(Pair(featuredViewItems, viewItems))
@@ -23,7 +21,4 @@ class RestoreCoinsView : RestoreCoinsModule.IView {
         setTitle.postValue(predefinedAccountType)
     }
 
-    override fun showError(exception: Exception) {
-        errorLiveEvent.postValue(exception)
-    }
 }

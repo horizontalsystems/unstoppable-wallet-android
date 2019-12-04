@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import io.horizontalsystems.bankwallet.entities.AccountType
-
 class ManageKeysPresenter(
         private val interactor: ManageKeysModule.Interactor,
         private val router: ManageKeysModule.Router)
@@ -43,15 +41,6 @@ class ManageKeysPresenter(
         }
     }
 
-    override fun onConfirmCreate() {
-        try {
-            currentItem?.let { interactor.createAccount(it.predefinedAccountType) }
-            view?.showSuccess()
-        } catch (e: Exception) {
-            view?.showError(e)
-        }
-    }
-
     override fun onConfirmBackup() {
         currentItem?.let {
             val account = it.account ?: return
@@ -61,10 +50,6 @@ class ManageKeysPresenter(
 
     override fun onConfirmUnlink(accountId: String) {
         interactor.deleteAccount(accountId)
-    }
-
-    override fun onConfirmRestore(accountType: AccountType) {
-        interactor.restoreAccount(accountType)
     }
 
     override fun onClear() {

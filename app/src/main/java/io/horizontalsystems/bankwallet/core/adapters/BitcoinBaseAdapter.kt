@@ -215,7 +215,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
             return when (mode) {
                 SyncMode.Slow -> BitcoinCore.SyncMode.Full()
                 SyncMode.New -> BitcoinCore.SyncMode.NewWallet()
-                else -> BitcoinCore.SyncMode.Api()
+                SyncMode.Fast -> BitcoinCore.SyncMode.Api()
+                null -> throw AdapterErrorWrongParameters("SyncMode is null")
             }
         }
     }
