@@ -7,10 +7,8 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
-import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.erc20kit.models.ValidationError
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -145,6 +143,10 @@ class SendEthereumHandler(
 
     override fun onAddressScan(address: String) {
         addressModule.didScanQrCode(address)
+    }
+
+    override fun onClear() {
+        disposable?.dispose()
     }
 
     // SendAmountModule.IAmountModuleDelegate

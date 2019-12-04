@@ -43,10 +43,14 @@ class SendPresenter(
 
     override fun onClear() {
         interactor.clear()
+
     }
+
+    // ViewModel
 
     override fun onCleared() {
         interactor.clear()
+        handler.onClear()
     }
 
     // SendModule.ISendInteractorDelegate
