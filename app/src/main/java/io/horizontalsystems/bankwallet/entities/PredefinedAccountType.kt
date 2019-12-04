@@ -41,7 +41,7 @@ sealed class PredefinedAccountType {
         return false
     }
 
-    fun createSupported(): Boolean = when (this) {
+    fun isCreationSupported(): Boolean = when (this) {
         is Standard, is Binance -> true
         is Eos -> false
     }

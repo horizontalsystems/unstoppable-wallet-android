@@ -76,7 +76,7 @@ class CreateWalletPresenter(
 
     private fun viewItem(coin: Coin): CoinToggleViewItem {
         val state:CoinToggleViewItemState = when {
-            coin.type.predefinedAccountType.createSupported() -> {
+            coin.type.predefinedAccountType.isCreationSupported() -> {
                 val enabled = wallets[coin] != null
                 CoinToggleViewItemState.ToggleVisible(enabled)
             }

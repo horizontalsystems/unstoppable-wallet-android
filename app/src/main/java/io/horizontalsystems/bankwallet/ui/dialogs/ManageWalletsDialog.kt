@@ -37,7 +37,7 @@ class ManageWalletsDialog(
         setSubtitle(getString(R.string.AddCoin_Subtitle, coin.title))
         setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
 
-        btnYellow.isEnabled = predefinedAccountType.createSupported()
+        btnYellow.isEnabled = predefinedAccountType.isCreationSupported()
 
         addKeyInfo = view.findViewById(R.id.addKeyInfo)
         btnCreateKey = view.findViewById(R.id.btnYellow)
