@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -33,7 +33,7 @@ class SendAddressFragment(
         btnPaste.visibility = View.VISIBLE
         btnDeleteAddress.visibility = View.GONE
 
-        presenter = ViewModelProviders.of(this, SendAddressModule.Factory(coin, sendHandler))
+        presenter = ViewModelProvider(this, SendAddressModule.Factory(coin, sendHandler))
                 .get(SendAddressPresenter::class.java)
         val presenterView = presenter.view as SendAddressView
         presenter.moduleDelegate = addressModuleDelegate

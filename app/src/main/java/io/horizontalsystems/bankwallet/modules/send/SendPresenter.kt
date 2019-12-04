@@ -6,9 +6,10 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 
-class SendPresenter(private val interactor: SendModule.ISendInteractor,
-                    val router: SendModule.IRouter
-) : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
+class SendPresenter(
+        private val interactor: SendModule.ISendInteractor,
+        val router: SendModule.IRouter)
+    : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
 
     var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
     var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
@@ -16,7 +17,6 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
     var hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate? = null
 
     override lateinit var view: SendModule.IView
-
     override lateinit var handler: SendModule.ISendHandler
 
     // SendModule.IViewDelegate
@@ -51,6 +51,10 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
 
     // SendModule.ISendInteractorDelegate
 
+    override fun sync() {
+        handler.sync()
+    }
+
     override fun didSend() {
         router.closeWithSuccess()
     }
@@ -64,5 +68,4 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
     override fun onChange(isValid: Boolean) {
         view.setSendButtonEnabled(isValid)
     }
-
 }

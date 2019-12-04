@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -19,8 +19,8 @@ import kotlinx.android.synthetic.main.view_amount_input.*
 class SendAmountFragment(
         private val wallet: Wallet,
         private val amountModuleDelegate: SendAmountModule.IAmountModuleDelegate,
-        private val sendHandler:SendModule.ISendHandler
-) : SendSubmoduleFragment() {
+        private val sendHandler: SendModule.ISendHandler)
+    : SendSubmoduleFragment() {
 
     private lateinit var presenter: SendAmountPresenter
 
@@ -32,7 +32,7 @@ class SendAmountFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProviders.of(this, SendAmountModule.Factory(wallet, sendHandler))
+        presenter = ViewModelProvider(this, SendAmountModule.Factory(wallet, sendHandler))
                 .get(SendAmountPresenter::class.java)
         val presenterView = presenter.view as SendAmountView
         presenter.moduleDelegate = amountModuleDelegate
@@ -80,6 +80,10 @@ class SendAmountFragment(
         presenterView.switchButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             enableCurrencySwitch(enabled)
         })
+
+        presenterView.setLoading.observe(viewLifecycleOwner, Observer { loading ->
+            setLoading(loading)
+        })
     }
 
     override fun init() {
@@ -88,6 +92,11 @@ class SendAmountFragment(
 
     private fun setPrefix(prefix: String?) {
         topAmountPrefix.text = prefix
+    }
+
+    private fun setLoading(loading: Boolean) {
+        availableBalanceValue.visibility = if (!loading) View.VISIBLE else View.INVISIBLE
+        processSpinner.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
     private fun setAmount(amount: String) {
@@ -124,6 +133,8 @@ class SendAmountFragment(
     }
 
     private fun setValidationError(error: SendAmountModule.ValidationError?) {
+
+        processSpinner.visibility = View.INVISIBLE
         txtHintError.visibility = if (error == null) View.GONE else View.VISIBLE
         txtHintInfo.visibility = if (error == null) View.VISIBLE else View.GONE
 
@@ -144,7 +155,8 @@ class SendAmountFragment(
                 }
             }
             is SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance -> {
-                context?.getString(R.string.Send_Error_MinRequiredBalance,  App.numberFormatter.format(error.minimumRequiredBalance))
+                context?.getString(R.string.Send_Error_MinRequiredBalance,
+                                   App.numberFormatter.format(error.minimumRequiredBalance))
             }
             else -> null
         }

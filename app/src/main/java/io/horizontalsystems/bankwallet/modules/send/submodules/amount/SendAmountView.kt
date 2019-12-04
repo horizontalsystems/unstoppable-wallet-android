@@ -15,6 +15,7 @@ class SendAmountView : SendAmountModule.IView {
     val revertAmount = SingleLiveEvent<String>()
     val validationError = MutableLiveData<SendAmountModule.ValidationError?>()
     val switchButtonEnabled = MutableLiveData<Boolean>()
+    val setLoading = MutableLiveData<Boolean>()
 
     override fun setAmountType(prefix: String?) {
         amountInputPrefix.value = prefix
@@ -25,7 +26,7 @@ class SendAmountView : SendAmountModule.IView {
     }
 
     override fun setAvailableBalance(availableBalance: String) {
-        this.availableBalance.value = availableBalance
+        this.availableBalance.postValue(availableBalance)
     }
 
     override fun setHint(hint: String?) {
@@ -33,7 +34,7 @@ class SendAmountView : SendAmountModule.IView {
     }
 
     override fun setMaxButtonVisible(visible: Boolean) {
-        maxButtonVisibleValue.value = visible
+        maxButtonVisibleValue.postValue(visible)
     }
 
     override fun addTextChangeListener() {
@@ -49,10 +50,14 @@ class SendAmountView : SendAmountModule.IView {
     }
 
     override fun setValidationError(error: SendAmountModule.ValidationError?) {
-        this.validationError.value = error
+        this.validationError.postValue(error)
     }
 
     override fun setSwitchButtonEnabled(enabled: Boolean) {
         switchButtonEnabled.value = enabled
+    }
+
+    override fun setLoading(loading: Boolean) {
+        setLoading.postValue(loading)
     }
 }

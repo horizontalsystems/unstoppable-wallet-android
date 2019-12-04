@@ -10,8 +10,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
-class SendBitcoinInteractor(private val adapter: ISendBitcoinAdapter,
-                            private val storage: ILocalStorage) : SendModule.ISendBitcoinInteractor {
+class SendBitcoinInteractor(
+        private val adapter: ISendBitcoinAdapter,
+        private val storage: ILocalStorage)
+    : SendModule.ISendBitcoinInteractor {
+
     private val disposables = CompositeDisposable()
 
     var delegate: SendModule.ISendBitcoinInteractorDelegate? = null
@@ -24,10 +27,10 @@ class SendBitcoinInteractor(private val adapter: ISendBitcoinAdapter,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ availableBalance ->
-                    delegate?.didFetchAvailableBalance(availableBalance)
-                }, {
+                               delegate?.didFetchAvailableBalance(availableBalance)
+                           }, {
 
-                })
+                           })
                 .let { disposables.add(it) }
     }
 
@@ -48,14 +51,15 @@ class SendBitcoinInteractor(private val adapter: ISendBitcoinAdapter,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ fee ->
-                    delegate?.didFetchFee(fee)
-                }, {
+                               delegate?.didFetchFee(fee)
+                           }, {
 
-                })
+                           })
                 .let { disposables.add(it) }
     }
 
-    override fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit> {
+    override fun send(amount: BigDecimal, address: String, feeRate: Long,
+                      pluginData: Map<Byte, IPluginData>?): Single<Unit> {
         return adapter.send(amount, address, feeRate, pluginData)
     }
 

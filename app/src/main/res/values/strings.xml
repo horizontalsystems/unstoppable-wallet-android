@@ -1,6 +1,8 @@
 <resources>
     <string name="App_Name">Unstoppable</string>
 
+    <!--Common-->
+
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Cancel</string>
     <string name="Alert_Copy">Copy</string>
@@ -8,6 +10,7 @@
     <string name="Alert_Close">Close</string>
     <string name="Alert_Success">Success</string>
     <string name="Alert_Copied">Copied</string>
+    <string name="Alert_Loading">Loading...</string>
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
@@ -123,6 +126,7 @@
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
+    <string name="Send_Error_WrongParameters">Wrong parameters</string>
 
     <string name="Send_DialogTitle">Confirm</string>
     <string name="Send_DialogAvailableBalance">Available Balance</string>

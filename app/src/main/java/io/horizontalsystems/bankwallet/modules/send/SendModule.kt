@@ -86,10 +86,12 @@ object SendModule {
         val minimumRequiredBalance: BigDecimal
         val minimumAmount: BigDecimal
 
-        fun availableBalance(gasPrice: Long): BigDecimal
+        fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal
         fun validate(address: String)
-        fun fee(gasPrice: Long): BigDecimal
+        fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
         fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit>
+        fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>
+
     }
 
     interface ISendBinanceInteractor {
@@ -121,6 +123,7 @@ object SendModule {
     }
 
     interface ISendInteractorDelegate {
+        fun sync()
         fun didSend()
         fun didFailToSend(error: Throwable)
     }
@@ -135,8 +138,10 @@ object SendModule {
         val inputItems: List<Input>
         var delegate: ISendHandlerDelegate
 
+        fun sync()
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
+
         @Throws
         fun confirmationViewItems(): List<SendConfirmationViewItem>
         fun sendSingle(): Single<Unit>

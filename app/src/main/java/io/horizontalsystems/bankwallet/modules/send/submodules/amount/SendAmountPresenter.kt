@@ -83,6 +83,10 @@ class SendAmountPresenter(
         return amount
     }
 
+    override fun setLoading(loading: Boolean) {
+        view.setLoading(loading)
+    }
+
     override fun setAmount(amount: BigDecimal) {
         this.amount = amount
 
@@ -239,7 +243,8 @@ class SendAmountPresenter(
         availableBalance?.let {
             if (amount > it) throw InsufficientBalance(amountInfo(it))
 
-            if (it - amount < minimumRequiredBalance) throw SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance(CoinValue(coin, minimumRequiredBalance))
+            if (it - amount < minimumRequiredBalance)
+                throw SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance(CoinValue(coin, minimumRequiredBalance))
         }
 
         maximumAmount?.let {
@@ -264,8 +269,8 @@ class SendAmountPresenter(
     private fun syncError() {
         try {
             validate()
-
             view.setValidationError(null)
+
         } catch (e: SendAmountModule.ValidationError) {
             view.setValidationError(e)
         }

@@ -9,15 +9,14 @@ class SendAddressView : SendAddressModule.IView {
     val pasteButtonEnabled = MutableLiveData<Boolean>()
 
     override fun setAddress(address: String?) {
-        addressText.value = address
+        addressText.postValue(address)
     }
 
     override fun setAddressError(error: Exception?) {
-        this.error.value = error
+        this.error.postValue(error)
     }
 
     override fun setPasteButtonState(enabled: Boolean) {
-        pasteButtonEnabled.value = enabled
+        pasteButtonEnabled.postValue(enabled)
     }
-
 }
