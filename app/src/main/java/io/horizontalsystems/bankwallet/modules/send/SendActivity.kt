@@ -50,10 +50,6 @@ class SendActivity : BaseActivity() {
         mainPresenter.onViewDidLoad()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     private fun subscribeToRouterEvents(router: SendRouter) {
         router.closeWithSuccess.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.Send_Success)

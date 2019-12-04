@@ -141,6 +141,7 @@ object SendModule {
         fun sync()
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
+        fun onClear() {}
 
         @Throws
         fun confirmationViewItems(): List<SendConfirmationViewItem>
