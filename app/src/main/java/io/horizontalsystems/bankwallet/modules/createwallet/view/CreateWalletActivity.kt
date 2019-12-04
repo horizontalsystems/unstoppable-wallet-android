@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -102,6 +101,10 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
         presenter.onDisable(item)
     }
 
+    override fun onSelect(item: CoinToggleViewItem) {
+        presenter.onSelect(item)
+    }
+
     private fun observeView(view: CreateWalletView) {
         view.coinsLiveData.observe(this, Observer { (featured, coins) ->
             coinItemsAdapter.featuredCoins = featured
@@ -114,14 +117,12 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             invalidateOptionsMenu()
         })
 
-        view.errorLiveEvent.observe(this, Observer {
-            if (it is EosUnsupportedException) {
-                AlertDialogFragment.newInstance(
-                        R.string.Alert_TitleWarning,
-                        R.string.ManageCoins_EOSAlert_CreateButton,
-                        R.string.Alert_Ok
-                ).show(supportFragmentManager, "alert_dialog")
-            }
+        view.showNotSupported.observe(this, Observer {predefinedAccountType ->
+            AlertDialogFragment.newInstance(
+                    R.string.Alert_TitleWarning,
+                    getString(R.string.ManageCoins_Alert_CantCreateDescription, getString(predefinedAccountType.title)),
+                    R.string.Alert_Ok
+            ).show(supportFragmentManager, "alert_dialog")
         })
     }
 

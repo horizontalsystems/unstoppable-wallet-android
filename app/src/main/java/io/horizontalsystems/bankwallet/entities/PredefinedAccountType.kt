@@ -41,6 +41,11 @@ sealed class PredefinedAccountType {
         return false
     }
 
+    fun createSupported(): Boolean = when (this) {
+        is Standard, is Binance -> true
+        is Eos -> false
+    }
+
     override fun toString(): String {
         return when (this) {
             is Standard -> STANDARD

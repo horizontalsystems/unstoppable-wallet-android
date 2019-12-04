@@ -7,7 +7,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -18,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
 import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageWalletsDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_coins.*
@@ -61,15 +59,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Mana
         })
 
         viewModel.showErrorEvent.observe(this, Observer {
-            if (it is EosUnsupportedException) {
-                AlertDialogFragment.newInstance(
-                        R.string.Alert_TitleWarning,
-                        R.string.ManageCoins_EOSAlert_CreateButton,
-                        R.string.Alert_Ok
-                ).show(supportFragmentManager, "alert_dialog")
-
-                onCancel() // will uncheck coin
-            }
+            onCancel() // will uncheck coin
         })
 
         viewModel.closeLiveDate.observe(this, Observer {

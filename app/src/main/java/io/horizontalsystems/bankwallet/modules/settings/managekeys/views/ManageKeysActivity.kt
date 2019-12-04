@@ -1,21 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.EosUnsupportedException
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PresentationMode
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.restorecoins.RestoreCoinsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysViewModel
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDeleteAlert
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog.ManageAction
@@ -64,16 +58,6 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.BACKUP)
         })
 
-        viewModel.showErrorEvent.observe(this, Observer {
-            if (it is EosUnsupportedException) {
-                AlertDialogFragment.newInstance(
-                        R.string.Alert_TitleWarning,
-                        R.string.ManageCoins_EOSAlert_CreateButton,
-                        R.string.Alert_Ok
-                ).show(supportFragmentManager, "alert_dialog")
-            }
-        })
-
         viewModel.showBackupModule.observe(this, Observer { (account, predefinedAccountType) ->
             BackupModule.start(this, account, getString(predefinedAccountType.coinCodes))
         })
@@ -94,21 +78,6 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (data == null || resultCode != RESULT_OK)
-            return
-
-        val accountType = data.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
-
-        when (requestCode) {
-            ModuleCode.RESTORE_COINS -> {
-                viewModel.delegate.onConfirmRestore(accountType)
-            }
-        }
     }
 
     //  ManageKeysDialog Listener

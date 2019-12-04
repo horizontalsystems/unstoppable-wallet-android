@@ -17,7 +17,7 @@ object CreateWalletModule {
     interface IView {
         fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>)
         fun setCreateButton(enabled: Boolean)
-        fun showError(exception: Exception)
+        fun showNotSupported(predefinedAccountType: PredefinedAccountType)
     }
 
     interface IRouter {
@@ -30,6 +30,7 @@ object CreateWalletModule {
         fun onLoad()
         fun onEnable(viewItem: CoinToggleViewItem)
         fun onDisable(viewItem: CoinToggleViewItem)
+        fun onSelect(viewItem: CoinToggleViewItem)
         fun onCreateButtonClick()
         fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin)
         fun onCancelSelectingCoinSettings()
