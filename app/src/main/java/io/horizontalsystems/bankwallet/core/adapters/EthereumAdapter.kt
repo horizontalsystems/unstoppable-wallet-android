@@ -21,6 +21,10 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
+    override fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
+        return ethereumKit.send(address, amount, gasPrice, gasLimit).map { Unit }
+    }
+
     override val stateUpdatedFlowable: Flowable<Unit>
         get() = ethereumKit.syncStateFlowable.map { Unit }
 

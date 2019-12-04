@@ -10,7 +10,8 @@ import java.math.RoundingMode
 
 abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
-        val decimal: Int) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+        val decimal: Int)
+    : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     // IAdapter
 
