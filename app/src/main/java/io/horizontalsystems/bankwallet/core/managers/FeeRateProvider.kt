@@ -10,7 +10,7 @@ import io.horizontalsystems.feeratekit.model.FeeProviderConfig
 import io.horizontalsystems.feeratekit.model.FeeRate
 import io.reactivex.Single
 
-class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRateKit.Listener {
+class FeeRateProvider(context: Context, appConfig: IAppConfigProvider){
 
     private val feeRateKit = FeeRateKit(
             FeeProviderConfig(infuraProjectId = appConfig.infuraProjectId,
@@ -18,8 +18,7 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRate
                               btcCoreRpcUrl = appConfig.btcCoreRpcUrl,
                               btcCoreRpcUSer =  appConfig.btcCoreRpcUser,
                               btcCoreRpcPassword = appConfig.btcCoreRpcPassword),
-            context = context,
-            listener = this
+            context = context
     )
 
     fun bitcoinFeeRates(): Single<List<FeeRateInfo>> {
@@ -45,10 +44,6 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRate
         feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
 
         return feeRatesInfoList
-    }
-
-    override fun onRefresh(rate: FeeRate) {
-        TODO("not implemented")
     }
 }
 
