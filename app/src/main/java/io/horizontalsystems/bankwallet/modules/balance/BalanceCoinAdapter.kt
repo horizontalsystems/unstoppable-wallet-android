@@ -104,20 +104,16 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
     }
 
     fun bind(item: BalanceViewItem) {
-        this.balanceViewItem = item
+        balanceViewItem = item
 
         item.apply {
-            if (xIconProgress == null) {
-                iconProgress.visibility = View.INVISIBLE
-            } else {
-                iconProgress.setProgress(xIconProgress.toFloat())
-                iconProgress.visibility = View.VISIBLE
-            }
+            iconProgress.showIf(xIconProgress != null)
+            xIconProgress?.let { iconProgress.setProgress(it.toFloat()) }
 
             coinIcon.bind(LayoutHelper.getCoinDrawableResource(coinIconCode), true)
-            coinIcon.visibility = if (xCoinIconVisible) View.VISIBLE else View.GONE
+            coinIcon.showIf(xCoinIconVisible)
 
-            imgSyncFailed.visibility = if (xImgSyncFailedVisible) View.VISIBLE else View.GONE
+            imgSyncFailed.showIf(xImgSyncFailedVisible)
 
             textCoinName.text = coinTitle
 
@@ -128,11 +124,11 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
                 txDiff.bind(it, containerView.context, false)
             }
 
-            chartViewWrapper.visibility = if (xChartWrapperVisible) View.VISIBLE else View.GONE
+            chartViewWrapper.showIf(xChartWrapperVisible)
 
-            chartLoading.visibility = if (xChartLoadingVisible) View.VISIBLE else View.GONE
-            textChartError.visibility = if (xChartErrorVisible) View.VISIBLE else View.GONE
-            chartView.visibility = if (xChartVisible) View.VISIBLE else View.GONE
+            chartLoading.showIf(xChartLoadingVisible)
+            textChartError.showIf(xChartErrorVisible)
+            chartView.showIf(xChartVisible)
 
             xChartInfo?.let { chartInfo ->
                 chartView.setData(chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }, ChartType.DAILY, chartInfo.startTimestamp, chartInfo.endTimestamp)
@@ -140,21 +136,21 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             coinAmount.visibility = if (coinValue.visible) View.VISIBLE else View.INVISIBLE
             coinAmount.text = coinValue.value
-            coinAmount.alpha = setDimmedAlpha(coinValue.dimmed, 0.3f)
+            coinAmount.dimIf(coinValue.dimmed, 0.3f)
 
             coinTypeLabel.text = coinLabel
-            coinTypeLabel.visibility = if (xCoinTypeLabelVisible) View.VISIBLE else View.GONE
+            coinTypeLabel.showIf(xCoinTypeLabelVisible)
 
             fiatAmount.text = currencyValue.value
-            fiatAmount.alpha = setDimmedAlpha(currencyValue.dimmed, 0.5f)
-            fiatAmount.visibility = if (currencyValue.visible) View.VISIBLE else View.GONE
+            fiatAmount.dimIf(currencyValue.dimmed)
+            fiatAmount.showIf(currencyValue.visible)
 
             coinAmountLocked.text = coinValueLocked.value
-            coinAmountLocked.visibility = if (coinValueLocked.visible) View.VISIBLE else View.GONE
+            coinAmountLocked.showIf(coinValueLocked.visible)
 
             fiatAmountLocked.text = currencyValueLocked.value
-            fiatAmountLocked.alpha = setDimmedAlpha(currencyValueLocked.dimmed, 0.5f)
-            fiatAmountLocked.visibility = if (currencyValueLocked.visible) View.VISIBLE else View.GONE
+            fiatAmountLocked.dimIf(currencyValueLocked.dimmed)
+            fiatAmountLocked.showIf(currencyValueLocked.visible)
 
             textProgress.text = if (xTextProgress.value != null) {
                 containerView.context.getString(R.string.Balance_Syncing_WithProgress, xTextProgress.value.toString())
@@ -163,12 +159,12 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
 
             textSyncedUntil.text = containerView.context.getString(R.string.Balance_SyncedUntil, xTextProgress.until)
-            syncingStateGroup.visibility = if (xTextProgress.visible) View.VISIBLE else View.GONE
+            syncingStateGroup.showIf(xTextProgress.visible)
 
             buttonReceive.isEnabled = xButtonReceiveEnabled
             buttonPay.isEnabled = xButtonPayEnabled
 
-            buttonsWrapper.visibility = if (xExpanded) View.VISIBLE else View.GONE
+            buttonsWrapper.showIf(xExpanded)
 
             containerView.isSelected = xExpanded
         }
@@ -188,12 +184,12 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun bindUpdateExpanded(item: BalanceViewItem) {
         item.apply {
-            coinAmount.visibility = if (coinValue.visible) View.VISIBLE else View.INVISIBLE
-            coinTypeLabel.visibility = if (xCoinTypeLabelVisible) View.VISIBLE else View.GONE
-            fiatAmount.visibility = if (currencyValue.visible) View.VISIBLE else View.GONE
-            syncingStateGroup.visibility = if (xTextProgress.visible) View.VISIBLE else View.GONE
-            chartViewWrapper.visibility = if (xChartWrapperVisible) View.VISIBLE else View.GONE
-            txDiff.visibility = if (xRateDiffVisible) View.VISIBLE else View.GONE
+            coinAmount.showIf(coinValue.visible, View.INVISIBLE)
+            coinTypeLabel.showIf(xCoinTypeLabelVisible)
+            fiatAmount.showIf(currencyValue.visible)
+            syncingStateGroup.showIf(xTextProgress.visible)
+            chartViewWrapper.showIf(xChartWrapperVisible)
+            txDiff.showIf(xRateDiffVisible)
 
             containerView.isSelected = xExpanded
 
@@ -219,12 +215,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun bindUpdateState(item: BalanceViewItem) {
         item.apply {
-            if (xIconProgress == null) {
-                iconProgress.visibility = View.INVISIBLE
-            } else {
-                iconProgress.setProgress(xIconProgress.toFloat())
-                iconProgress.visibility = View.VISIBLE
-            }
+            iconProgress.showIf(xIconProgress != null)
+            xIconProgress?.let { iconProgress.setProgress(it.toFloat()) }
 
             textProgress.text = if (xTextProgress.value != null) {
                 containerView.context.getString(R.string.Balance_Syncing_WithProgress, xTextProgress.value.toString())
@@ -233,21 +225,21 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
 
             textSyncedUntil.text = containerView.context.getString(R.string.Balance_SyncedUntil, xTextProgress.until)
-            syncingStateGroup.visibility = if (xTextProgress.visible) View.VISIBLE else View.GONE
+            syncingStateGroup.showIf(xTextProgress.visible)
 
-            coinAmount.alpha = setDimmedAlpha(coinValue.dimmed, 0.3f)
-            coinAmount.visibility = if (coinValue.visible) View.VISIBLE else View.INVISIBLE
-            coinTypeLabel.visibility = if (xCoinTypeLabelVisible) View.VISIBLE else View.GONE
-            fiatAmount.visibility = if (currencyValue.visible) View.VISIBLE else View.GONE
-            fiatAmount.alpha = setDimmedAlpha(currencyValue.dimmed, 0.5f)
+            coinAmount.dimIf(coinValue.dimmed, 0.3f)
+            coinAmount.showIf(coinValue.visible, View.INVISIBLE)
+            coinTypeLabel.showIf(xCoinTypeLabelVisible)
+            fiatAmount.showIf(currencyValue.visible)
+            fiatAmount.dimIf(currencyValue.dimmed)
 
             buttonReceive.isEnabled = xButtonReceiveEnabled
 
             buttonPay.isEnabled = xButtonPayEnabled
 
-            coinIcon.visibility = if (xCoinIconVisible) View.VISIBLE else View.GONE
+            coinIcon.showIf(xCoinIconVisible)
 
-            imgSyncFailed.visibility = if (xImgSyncFailedVisible) View.VISIBLE else View.GONE
+            imgSyncFailed.showIf(xImgSyncFailedVisible)
         }
     }
 
@@ -261,18 +253,18 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
 
             fiatAmount.text = currencyValue.value
-            fiatAmount.alpha = setDimmedAlpha(currencyValue.dimmed, 0.5f)
+            fiatAmount.dimIf(currencyValue.dimmed)
 
             fiatAmountLocked.text = currencyValueLocked.value
-            fiatAmountLocked.alpha = setDimmedAlpha(currencyValueLocked.dimmed, 0.5f)
+            fiatAmountLocked.dimIf(currencyValueLocked.dimmed)
         }
     }
 
     private fun bindUpdateChartInfo(item: BalanceViewItem) {
         item.apply {
-            chartLoading.visibility = if (xChartLoadingVisible) View.VISIBLE else View.GONE
-            textChartError.visibility = if (xChartErrorVisible) View.VISIBLE else View.GONE
-            chartView.visibility = if (xChartVisible) View.VISIBLE else View.GONE
+            chartLoading.showIf(xChartLoadingVisible)
+            textChartError.showIf(xChartErrorVisible)
+            chartView.showIf(xChartVisible)
 
             xChartInfo?.let { chartInfo ->
                 chartView.setData(chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }, ChartType.DAILY, chartInfo.startTimestamp, chartInfo.endTimestamp)
@@ -280,7 +272,11 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         }
     }
 
-    private fun setDimmedAlpha(dimmed: Boolean, alpha: Float): Float {
-        return if (dimmed) alpha else 1f
+    private fun View.showIf(condition: Boolean, hideType: Int = View.GONE) {
+        visibility = if (condition) View.VISIBLE else hideType
+    }
+
+    private fun View.dimIf(condition: Boolean, dimmedAlpha: Float = 0.5f) {
+        alpha = if (condition) dimmedAlpha else 1f
     }
 }
