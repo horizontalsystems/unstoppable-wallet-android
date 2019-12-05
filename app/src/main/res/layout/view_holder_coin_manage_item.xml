@@ -2,12 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cellView"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
     android:background="@drawable/clickable_background_color_lawrence"
-    android:clickable="true"
-    android:focusable="true">
+    android:layout_width="match_parent"
+    android:layout_height="72dp">
 
     <View
         android:id="@+id/topShade"
@@ -75,10 +72,12 @@
         android:layout_height="34dp"
         android:layout_marginEnd="8dp"
         android:theme="@style/SwitchTheme"
-        android:visibility="visible"
+        android:visibility="gone"
+        android:clickable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"/>
 
     <ImageView
         android:id="@+id/rightArrow"

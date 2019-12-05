@@ -4,24 +4,24 @@ import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.managecoins.views.ManageWalletsActivity
 
 object ManageWalletsModule {
 
     interface IView {
-        fun updateCoins()
         fun showNoAccountDialog(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun showSuccess()
         fun showError(e: Exception)
-        fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>)
+        fun setItems(coinViewItems: List<CoinManageViewItem>)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
 
-        fun onEnable(viewItem: CoinToggleViewItem)
-        fun onDisable(viewItem: CoinToggleViewItem)
-        fun onSelect(viewItem: CoinToggleViewItem)
+        fun onEnable(coin: Coin)
+        fun onDisable(coin: Coin)
+        fun onSelect(coin: Coin)
         fun onSelectNewAccount(predefinedAccountType: PredefinedAccountType)
         fun onSelectRestoreAccount(predefinedAccountType: PredefinedAccountType)
 
@@ -69,19 +69,4 @@ object ManageWalletsModule {
         val intent = Intent(context, ManageWalletsActivity::class.java)
         context.startActivity(intent)
     }
-}
-
-data class CoinToggleViewItem(val coin: Coin, val state: CoinToggleViewItemState)
-
-sealed class CoinToggleViewItemState {
-    object ToggleHidden : CoinToggleViewItemState()
-    class ToggleVisible(val enabled: Boolean) : CoinToggleViewItemState()
-
-    fun description(): String {
-        return when (this) {
-            is ToggleHidden -> "hidden"
-            is ToggleVisible -> "enabled_${this.enabled}"
-        }
-    }
-
 }

@@ -10,12 +10,12 @@ import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 
 object RestoreCoinsModule {
 
     interface IView {
-        fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>)
+        fun setItems(coinViewItems: List<CoinManageViewItem>)
         fun setProceedButton(enabled: Boolean)
         fun setTitle(predefinedAccountType: PredefinedAccountType)
     }
@@ -29,8 +29,8 @@ object RestoreCoinsModule {
 
     interface IViewDelegate {
         fun onLoad()
-        fun onEnable(viewItem: CoinToggleViewItem)
-        fun onDisable(viewItem: CoinToggleViewItem)
+        fun onEnable(coin: Coin)
+        fun onDisable(coin: Coin)
         fun onProceedButtonClick()
         fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin)
         fun onCancelSelectingCoinSettings()

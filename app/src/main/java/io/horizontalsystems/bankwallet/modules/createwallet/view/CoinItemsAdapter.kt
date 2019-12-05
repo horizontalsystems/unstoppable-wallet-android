@@ -2,131 +2,146 @@ package io.horizontalsystems.bankwallet.modules.createwallet.view
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.components.CellView
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItemState
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
 
 class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
-        fun enable(item: CoinToggleViewItem)
-        fun disable(item: CoinToggleViewItem)
-        fun onSelect(item: CoinToggleViewItem)
+        fun enable(coin: Coin)
+        fun disable(coin: Coin)
+        fun select(coin: Coin)
     }
 
-    private val typeFeatured = 0
-    private val typeAll = 1
-    private val typeDivider = 2
-    private val typeTopDescription = 3
+    private val coinWithSwitch = 0
+    private val coinWithArrow = 1
+    private val descriptionView = 2
+    private val dividerView = 3
+    var viewItems = listOf<CoinManageViewItem>()
 
-    private val showDivider
-        get() = featuredCoins.isNotEmpty()
-
-    var featuredCoins = listOf<CoinToggleViewItem>()
-    var coins = listOf<CoinToggleViewItem>()
-
-    override fun getItemViewType(position: Int): Int = when {
-        position == 0 -> typeTopDescription
-        position < featuredCoins.size + 1 -> typeFeatured
-        showDivider && position == featuredCoins.size + 1 -> typeDivider
-        else -> typeAll
+    override fun getItemCount(): Int {
+        return viewItems.size
     }
+
+    override fun getItemViewType(position: Int): Int =
+            when (viewItems[position].type) {
+                is CoinManageViewType.CoinWithArrow -> coinWithArrow
+                is CoinManageViewType.CoinWithSwitch -> coinWithSwitch
+                is CoinManageViewType.Description -> descriptionView
+                is CoinManageViewType.Divider -> dividerView
+            }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            typeFeatured, typeAll -> {
-                val cellView = CellView(parent.context)
-                cellView.layoutParams = getCellViewLayoutParams()
-                CoinViewHolder(cellView)
-            }
-            typeTopDescription -> ViewHolderTopDescription(inflate(parent, R.layout.view_holder_top_description, false))
-            else -> ViewHolderDivider(inflate(parent, R.layout.view_holder_coin_manager_divider, false))
+            coinWithArrow -> CoinItemWithArrowViewHolder(
+                    inflate(parent, R.layout.view_holder_coin_manage_item, false),
+                    onClick = { index ->
+                        viewItems[index].coinViewItem?.coin?.let {
+                            listener.select(it)
+                        }
+                    })
+            coinWithSwitch -> CoinItemWithSwitchViewHolder(
+                    inflate(parent, R.layout.view_holder_coin_manage_item, false),
+                    onSwitch = { isChecked, index ->
+                        onSwitchToggle(isChecked, index)
+                    })
+            descriptionView -> ViewHolderTopDescription(inflate(parent, R.layout.view_holder_top_description, false))
+            dividerView -> ViewHolderDivider(inflate(parent, R.layout.view_holder_coin_manager_divider, false))
+            else -> throw Exception("No such view type")
         }
-    }
-
-    private fun getCellViewLayoutParams() =
-            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-    override fun getItemCount(): Int {
-        return featuredCoins.size + coins.size + (if (showDivider) 1 else 0) + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is CoinViewHolder -> {
-                val item = getItemByPosition(position)
-                holder.bind(
-                        item,
-                        isLastItemInGroup(position),
-                        onClick = { index ->
-                            listener.onSelect(getItemByPosition(index))
-                        },
-                        onSwitch = { isChecked, index ->
-                            when {
-                                isChecked -> listener.enable(getItemByPosition(index))
-                                else -> listener.disable(getItemByPosition(index))
-                            }
-                        })
-            }
+            is CoinItemWithArrowViewHolder -> holder.bind(viewItems[position])
+            is CoinItemWithSwitchViewHolder -> holder.bind(viewItems[position])
         }
     }
 
-    private fun isLastItemInGroup(position: Int): Boolean {
-        return if (position == featuredCoins.size) {
-            true
-        } else {
-            val dividerCount = if (showDivider) 1 else 0
-            position == itemCount - dividerCount
+    private fun onSwitchToggle(isChecked: Boolean, index: Int) {
+        viewItems[index].let { viewItem ->
+            viewItem.coinViewItem?.coin?.let {
+                when {
+                    isChecked -> listener.enable(it)
+                    else -> listener.disable(it)
+                }
+            }
+
+            //update state in adapter item list: coins
+            (viewItem.type as? CoinManageViewType.CoinWithSwitch)?.enabled = isChecked
         }
     }
 
-    private fun getItemByPosition(position: Int): CoinToggleViewItem {
-        return if (position < featuredCoins.size + 1) {
-            featuredCoins[position - 1]
-        } else {
-            val index = when {
-                showDivider -> position - featuredCoins.size - 2
-                else -> position - 1
-            }
-            coins[index]
+}
+
+class CoinItemWithSwitchViewHolder(
+        override val containerView: View,
+        private val onSwitch: (isChecked: Boolean, position: Int) -> Unit
+) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    init {
+        containerView.setOnClickListener {
+            toggleSwitch.isChecked = !toggleSwitch.isChecked
+            onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
         }
+    }
+
+    fun bind(item: CoinManageViewItem) {
+        val viewItem = item.coinViewItem ?: return
+        val coin = viewItem.coin
+
+        coinIcon.bind(coin)
+        coinTitle.text = coin.title
+        coinCode.text = coin.code
+        bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
+
+        coinTypeLabel.text = coin.type.typeLabel()
+        coinTypeLabel.visibility = if (coin.type.typeLabel() != null) View.VISIBLE else View.GONE
+
+        val checked = (item.type as? CoinManageViewType.CoinWithSwitch)?.enabled ?: false
+        toggleSwitch.isChecked = checked
+        toggleSwitch.visibility = View.VISIBLE
     }
 }
 
-class CoinViewHolder(override val containerView: CellView) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class CoinItemWithArrowViewHolder(
+        override val containerView: View,
+        private val onClick: (position: Int) -> Unit
+) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(
-            coinViewItem: CoinToggleViewItem,
-            lastElement: Boolean,
-            onClick: (position: Int) -> Unit,
-            onSwitch: (isChecked: Boolean, position: Int) -> Unit
-    ) {
-        containerView.coinIcon = coinViewItem.coin.code
-        containerView.title = coinViewItem.coin.code
-        containerView.subtitle = coinViewItem.coin.title
-        containerView.subtitleLabel = coinViewItem.coin.type.typeLabel()
-        containerView.bottomBorder = lastElement
-
-        when (val state = coinViewItem.state) {
-            is CoinToggleViewItemState.ToggleVisible -> {
-                containerView.switchIsChecked = state.enabled
-                containerView.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    onSwitch.invoke(isChecked, adapterPosition)
-                }
-            }
-            is CoinToggleViewItemState.ToggleHidden -> {
-                containerView.setOnClickListener {
-                    onClick.invoke(adapterPosition)
-                }
-            }
+    init {
+        containerView.setOnClickListener {
+            onClick.invoke(adapterPosition)
         }
+    }
+
+    fun bind(item: CoinManageViewItem) {
+        val viewItem = item.coinViewItem ?: return
+        val coin = viewItem.coin
+
+        rightArrow.visibility = View.VISIBLE
+        coinIcon.bind(coin)
+        coinTitle.text = coin.title
+        coinCode.text = coin.code
+        coinTypeLabel.text = coin.type.typeLabel()
+        coinTypeLabel.visibility = if (coin.type.typeLabel() != null) View.VISIBLE else View.GONE
+        bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
     }
 }
 
-class ViewHolderDivider(val containerView: View) : RecyclerView.ViewHolder(containerView)
 class ViewHolderTopDescription(val containerView: View) : RecyclerView.ViewHolder(containerView)
+class ViewHolderDivider(val containerView: View) : RecyclerView.ViewHolder(containerView)
+
+data class CoinManageViewItem(val type: CoinManageViewType, val coinViewItem: CoinViewItem? = null)
+data class CoinViewItem(val coin: Coin, var showBottomShade: Boolean = false)
+
+sealed class CoinManageViewType{
+    object Divider: CoinManageViewType()
+    object Description: CoinManageViewType()
+    object CoinWithArrow: CoinManageViewType()
+    class CoinWithSwitch(var enabled: Boolean): CoinManageViewType()
+}

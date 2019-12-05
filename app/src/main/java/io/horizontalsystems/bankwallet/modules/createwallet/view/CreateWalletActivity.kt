@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletPresente
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
@@ -93,22 +92,23 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
         }
     }
 
-    override fun enable(item: CoinToggleViewItem) {
-        presenter.onEnable(item)
+    // CoinItemsAdapter.Listener
+
+    override fun enable(coin: Coin) {
+        presenter.onEnable(coin)
     }
 
-    override fun disable(item: CoinToggleViewItem) {
-        presenter.onDisable(item)
+    override fun disable(coin: Coin) {
+        presenter.onDisable(coin)
     }
 
-    override fun onSelect(item: CoinToggleViewItem) {
-        presenter.onSelect(item)
+    override fun select(coin: Coin) {
+        presenter.onSelect(coin)
     }
 
     private fun observeView(view: CreateWalletView) {
-        view.coinsLiveData.observe(this, Observer { (featured, coins) ->
-            coinItemsAdapter.featuredCoins = featured
-            coinItemsAdapter.coins = coins
+        view.coinsLiveData.observe(this, Observer { coins ->
+            coinItemsAdapter.viewItems = coins
             coinItemsAdapter.notifyDataSetChanged()
         })
 

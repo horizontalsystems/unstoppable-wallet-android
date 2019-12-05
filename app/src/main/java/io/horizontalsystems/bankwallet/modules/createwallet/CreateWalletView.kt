@@ -3,15 +3,15 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 
 class CreateWalletView : CreateWalletModule.IView {
-    val coinsLiveData = MutableLiveData<Pair<List<CoinToggleViewItem>, List<CoinToggleViewItem>>>()
+    val coinsLiveData = MutableLiveData<List<CoinManageViewItem>>()
     val createButtonEnabled = MutableLiveData<Boolean>()
     val showNotSupported = SingleLiveEvent<PredefinedAccountType>()
 
-    override fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>) {
-        coinsLiveData.postValue(Pair(featuredViewItems, viewItems))
+    override fun setItems(allCoinViewItems: List<CoinManageViewItem>) {
+        coinsLiveData.postValue(allCoinViewItems)
     }
 
     override fun setCreateButton(enabled: Boolean) {
@@ -21,4 +21,5 @@ class CreateWalletView : CreateWalletModule.IView {
     override fun showNotSupported(predefinedAccountType: PredefinedAccountType) {
         showNotSupported.postValue(predefinedAccountType)
     }
+
 }

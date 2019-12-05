@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
@@ -101,17 +100,17 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         }
     }
 
-    //ManageWalletsAdapter.Listener
+    //CoinItemsAdapter.Listener
 
-    override fun enable(item: CoinToggleViewItem) {
-        presenter.onEnable(item)
+    override fun enable(coin: Coin) {
+        presenter.onEnable(coin)
     }
 
-    override fun disable(item: CoinToggleViewItem) {
-        presenter.onDisable(item)
+    override fun disable(coin: Coin) {
+        presenter.onDisable(coin)
     }
 
-    override fun onSelect(item: CoinToggleViewItem) {
+    override fun select(coin: Coin) {
         //not used here
     }
 
@@ -121,9 +120,8 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
             collapsingToolbar.title = getString(R.string.Wallet, typeTitle)
         })
 
-        view.coinsLiveData.observe(this, Observer {(featuredItems, coinItems) ->
-            coinItemsAdapter.featuredCoins = featuredItems
-            coinItemsAdapter.coins = coinItems
+        view.coinsLiveData.observe(this, Observer {viewItems ->
+            coinItemsAdapter.viewItems = viewItems
             coinItemsAdapter.notifyDataSetChanged()
         })
 

@@ -2,8 +2,9 @@ package io.horizontalsystems.bankwallet.modules.restore.restorecoins
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItemState
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewType
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
 
 class RestoreCoinsPresenter(
         private val presentationMode: PresentationMode,
@@ -22,8 +23,7 @@ class RestoreCoinsPresenter(
         syncProceedButton()
     }
 
-    override fun onEnable(viewItem: CoinToggleViewItem) {
-        val coin = viewItem.coin
+    override fun onEnable(coin: Coin) {
         val coinSettingsToRequest = interactor.coinSettingsToRequest(coin, AccountOrigin.Restored)
         if (coinSettingsToRequest.isEmpty()) {
             enable(coin, mutableMapOf())
@@ -32,8 +32,8 @@ class RestoreCoinsPresenter(
         }
     }
 
-    override fun onDisable(viewItem: CoinToggleViewItem) {
-        enabledCoins.remove(viewItem.coin)
+    override fun onDisable(coin: Coin) {
+        enabledCoins.remove(coin)
         syncProceedButton()
     }
 
@@ -65,19 +65,27 @@ class RestoreCoinsPresenter(
         }
     }
 
-
-    private fun viewItem(coin: Coin): CoinToggleViewItem {
+    private fun viewItem(coin: Coin): CoinManageViewItem {
         val enabled = enabledCoins[coin] != null
-        val state: CoinToggleViewItemState = CoinToggleViewItemState.ToggleVisible(enabled)
-        return CoinToggleViewItem(coin, state)
+        val type = CoinManageViewType.CoinWithSwitch(enabled)
+        return CoinManageViewItem(type, CoinViewItem(coin))
     }
 
     private fun syncViewItems() {
         val featuredCoinIds = interactor.featuredCoins.map { it.coinId }
         val featured = filteredCoins(interactor.featuredCoins).map { viewItem(it) }
-        val coins = filteredCoins(interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }).map { viewItem(it) }
+        val others = filteredCoins(interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }).map { viewItem(it) }
 
-        view.setItems(featured, coins)
+        val viewItems = mutableListOf<CoinManageViewItem>()
+
+        viewItems.add(CoinManageViewItem(CoinManageViewType.Description))
+        if (featured.isNotEmpty()) {
+            viewItems.addAll(featured)
+            viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))
+        }
+        viewItems.addAll(others)
+
+        view.setItems(viewItems)
     }
 
     private fun filteredCoins(coins: List<Coin>): List<Coin> {

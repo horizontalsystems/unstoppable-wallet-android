@@ -29,6 +29,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
         tools:itemCount="5"
-        tools:listitem="@layout/view_holder_coin_manager" />
+        tools:listitem="@layout/view_holder_coin_manage_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

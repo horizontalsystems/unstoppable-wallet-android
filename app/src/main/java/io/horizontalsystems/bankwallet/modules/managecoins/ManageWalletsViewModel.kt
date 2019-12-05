@@ -7,14 +7,14 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinSettings
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
-    val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
     val showManageKeysDialog = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val openRestoreModule = SingleLiveEvent<PredefinedAccountType>()
-    val setViewItems = MutableLiveData<Pair<List<CoinToggleViewItem>, List<CoinToggleViewItem>>>()
+    val coinsLiveData = MutableLiveData<List<CoinManageViewItem>>()
     val showErrorEvent = SingleLiveEvent<Exception>()
     val closeLiveDate = SingleLiveEvent<Void>()
     val showCoinSettings = SingleLiveEvent<Pair<Coin, CoinSettings>>()
@@ -29,12 +29,8 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     // View
 
-    override fun setItems(featuredViewItems: List<CoinToggleViewItem>, viewItems: List<CoinToggleViewItem>) {
-        setViewItems.postValue(Pair(featuredViewItems, viewItems))
-    }
-
-    override fun updateCoins() {
-        coinsLoadedLiveEvent.call()
+    override fun setItems(coinViewItems: List<CoinManageViewItem>) {
+        coinsLiveData.postValue(coinViewItems)
     }
 
     override fun showNoAccountDialog(coin: Coin, predefinedAccountType: PredefinedAccountType) {

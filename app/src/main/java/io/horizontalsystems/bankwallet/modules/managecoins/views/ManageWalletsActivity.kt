@@ -14,14 +14,14 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
-import io.horizontalsystems.bankwallet.modules.managecoins.CoinToggleViewItem
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageWalletsDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 
-class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, ManageWalletsAdapter.Listener {
+class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, CoinItemsAdapter.Listener {
 
     private lateinit var viewModel: ManageWalletsViewModel
 
@@ -32,7 +32,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Mana
         viewModel = ViewModelProvider(this).get(ManageWalletsViewModel::class.java)
         viewModel.init()
 
-        val adapter = ManageWalletsAdapter(this)
+        val adapter = CoinItemsAdapter(this)
         recyclerView.adapter = adapter
 
         shadowlessToolbar.bind(
@@ -40,13 +40,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Mana
                 leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
         )
 
-        viewModel.setViewItems.observe(this, Observer { (featuredViewItems, coinViewItems) ->
-            adapter.featuredViewItems = featuredViewItems
-            adapter.coinsViewItems = coinViewItems
-            adapter.notifyDataSetChanged()
-        })
-
-        viewModel.coinsLoadedLiveEvent.observe(this, Observer {
+        viewModel.coinsLiveData.observe(this, Observer { viewItems ->
+            adapter.viewItems = viewItems
             adapter.notifyDataSetChanged()
         })
 
@@ -93,7 +88,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Mana
 
     }
 
-    //  ManageWalletsDialog listener
+    // ManageWalletsDialog.Listener
 
     override fun onClickCreateKey(predefinedAccountType: PredefinedAccountType) {
         viewModel.delegate.onSelectNewAccount(predefinedAccountType)
@@ -107,17 +102,17 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Mana
         viewModel.delegate.onClickCancel()
     }
 
-    //ManageWalletsAdapter listener
+    // CoinItemsAdapter listener
 
-    override fun enable(item: CoinToggleViewItem) {
-        viewModel.delegate.onEnable(item)
+    override fun enable(coin: Coin) {
+        viewModel.delegate.onEnable(coin)
     }
 
-    override fun disable(item: CoinToggleViewItem) {
-        viewModel.delegate.onDisable(item)
+    override fun disable(coin: Coin) {
+        viewModel.delegate.onDisable(coin)
     }
 
-    override fun select(item: CoinToggleViewItem) {
-        viewModel.delegate.onSelect(item)
+    override fun select(coin: Coin) {
+        viewModel.delegate.onSelect(coin)
     }
 }
