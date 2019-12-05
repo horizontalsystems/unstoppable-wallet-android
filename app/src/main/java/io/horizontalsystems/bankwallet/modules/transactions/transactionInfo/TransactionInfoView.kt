@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.info.InfoModule
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
@@ -66,9 +67,12 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         viewModel.transactionLiveData.observe(lifecycleOwner, Observer { txRecord ->
             txRecord?.let { txRec ->
 
+                val incoming = txRec.type == TransactionType.Incoming
+                val sentToSelf = txRec.type == TransactionType.SentToSelf
+
                 setTitle(context.getString(R.string.TransactionInfo_Title))
                 setSubtitle(txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) })
-                setHeaderIcon(if (txRec.incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
+                setHeaderIcon(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
 
                 itemId.apply {
                     bindHashId(context.getString(R.string.TransactionInfo_Id), txRec.transactionHash)
@@ -80,8 +84,8 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     fiatName.visibility = View.VISIBLE
 
                     val fiatValueText = App.numberFormatter.format(txRec.currencyValue, showNegativeSign = false, canUseLessSymbol = false)
-                    fiatValue.text = fiatValueText?.let { "$fiatValueText${if (txRec.sentToSelf) " *" else ""}" }
-                    fiatValue.setTextColor(resources.getColor(if (txRec.incoming) R.color.green_d else R.color.yellow_d, null))
+                    fiatValue.text = fiatValueText?.let { "$fiatValueText${if (sentToSelf) " *" else ""}" }
+                    fiatValue.setTextColor(resources.getColor(if (incoming) R.color.green_d else R.color.yellow_d, null))
                     fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (txRec.lockInfo != null) R.drawable.ic_lock else 0, 0)
                     fiatName.text = txRec.currencyValue.currency.code
                 } else {
@@ -117,7 +121,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 }
 
                 footNote.apply {
-                    if (txRec.sentToSelf && txRec.lockInfo == null) {
+                    if (sentToSelf && txRec.lockInfo == null) {
                         val footNoteText = "* ${context.getString(R.string.TransactionInfo_FootNote)}"
                         text = footNoteText
                         visibility = View.VISIBLE
@@ -127,7 +131,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 }
 
-                itemStatus.bindStatus(txRec.status, txRec.incoming)
+                itemStatus.bindStatus(txRec.status, incoming)
 
                 if (txRec.from.isNullOrEmpty() || !txRec.showFromAddress) {
                     itemFrom.visibility = View.GONE
@@ -145,7 +149,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemTo.bindAddress(context.getString(R.string.TransactionInfo_To), txRec.to)
                 }
 
-                if (txRec.incoming || txRec.lockInfo == null) {
+                if (incoming || txRec.lockInfo == null) {
                     itemRecipientHash.visibility = View.GONE
                 } else {
                     itemRecipientHash.visibility = View.VISIBLE

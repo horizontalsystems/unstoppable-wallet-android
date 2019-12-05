@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
 import io.reactivex.Flowable
@@ -72,22 +72,14 @@ class BinanceAdapter(
     }
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        val from = TransactionAddress(
-                transaction.from,
-                transaction.from == binanceKit.receiveAddress()
-        )
+        val myAddress = binanceKit.receiveAddress()
+        val fromMine = transaction.from == myAddress
+        val toMine = transaction.to == myAddress
 
-        val to = TransactionAddress(
-                transaction.to,
-                transaction.to == binanceKit.receiveAddress()
-        )
-
-        var amount = BigDecimal.ZERO
-        if (from.mine) {
-            amount -= transaction.amount.toBigDecimal()
-        }
-        if (to.mine) {
-            amount += transaction.amount.toBigDecimal()
+        val type = when {
+            fromMine && toMine -> TransactionType.SentToSelf
+            fromMine -> TransactionType.Outgoing
+            else -> TransactionType.Incoming
         }
 
         return TransactionRecord(
@@ -96,11 +88,12 @@ class BinanceAdapter(
                 transactionIndex = 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber.toLong(),
-                amount = amount,
+                amount = transaction.amount.toBigDecimal(),
                 fee = transferFee,
                 timestamp = transaction.date.time / 1000,
-                from = listOf(from),
-                to = listOf(to)
+                from = transaction.from,
+                to = transaction.to,
+                type = type
         )
     }
 

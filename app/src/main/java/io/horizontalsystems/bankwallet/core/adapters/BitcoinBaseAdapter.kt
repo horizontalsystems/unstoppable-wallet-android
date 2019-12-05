@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -124,12 +124,59 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     }
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        val hodlerOutputData = transaction.to.firstOrNull { it.pluginId == HodlerPlugin.id }?.pluginData as? HodlerOutputData
-        var transactionLockInfo: TransactionLockInfo? = null
+        var myInputsTotalValue = 0L
+        var allInputsMine = true
+        transaction.inputs.forEach { input ->
+            if (input.mine) {
+                myInputsTotalValue += input.value ?: 0
+            } else {
+                allInputsMine = false
+            }
+        }
 
-        hodlerOutputData?.approxUnlockTime?.let { approxUnlockTime ->
-            val lockedValueBTC = satoshiToBTC(hodlerOutputData.lockedValue)
-            transactionLockInfo = TransactionLockInfo(Date(approxUnlockTime * 1000), hodlerOutputData.addressString, lockedValueBTC)
+        var myOutputsTotalValue = 0L
+        var myChangeOutputsTotalValue = 0L
+        transaction.outputs.filter { it.value > 0 }.forEach { output ->
+            if (output.mine) {
+                myOutputsTotalValue += output.value
+
+                if (output.changeOutput) {
+                    myChangeOutputsTotalValue += output.value
+                }
+            }
+        }
+
+        var amount = myOutputsTotalValue - myInputsTotalValue
+
+        if (allInputsMine) {
+            amount += transaction.fee ?: 0
+        }
+
+        val type = when {
+            amount > 0 -> TransactionType.Incoming
+            amount < 0 -> TransactionType.Outgoing
+            else -> {
+                amount = myOutputsTotalValue - myChangeOutputsTotalValue
+                TransactionType.SentToSelf
+            }
+        }
+
+        var transactionLockInfo: TransactionLockInfo? = null
+        val lockedOutput = transaction.outputs.firstOrNull { it.pluginId == HodlerPlugin.id }
+        if (lockedOutput != null) {
+            val hodlerOutputData = lockedOutput.pluginData as? HodlerOutputData
+            hodlerOutputData?.approxUnlockTime?.let { approxUnlockTime ->
+                val lockedValueBTC = satoshiToBTC(lockedOutput.value)
+                transactionLockInfo = TransactionLockInfo(Date(approxUnlockTime * 1000), hodlerOutputData.addressString, lockedValueBTC)
+            }
+        }
+
+        var from: String? = null
+        var to: String? = null
+        if (type == TransactionType.Incoming) {
+            from = transaction.inputs.firstOrNull { !it.mine }?.address
+        } else {
+            to = transaction.outputs.firstOrNull { it.value > 0 && !it.mine }?.address
         }
 
         return TransactionRecord(
@@ -138,11 +185,12 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 transactionIndex = transaction.transactionIndex,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockHeight?.toLong(),
-                amount = satoshiToBTC(transaction.amount),
+                amount = satoshiToBTC(amount),
                 fee = satoshiToBTC(transaction.fee),
                 timestamp = transaction.timestamp,
-                from = transaction.from.map { TransactionAddress(it.address, it.mine) },
-                to = transaction.to.map { TransactionAddress(it.address, it.mine) },
+                from = from,
+                to = to,
+                type = type,
                 failed = transaction.status == TransactionStatus.INVALID,
                 lockInfo = transactionLockInfo
         )
