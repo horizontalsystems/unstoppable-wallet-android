@@ -103,7 +103,6 @@ class PoolTest {
         val unusedRecords = mock<List<TransactionRecord>>()
         val lastRecordHash = "hash"
         val lastRecord = mock(TransactionRecord::class.java)
-        val fromPair = (lastRecordHash to 0)
 
         whenever(unusedRecords.size).thenReturn(unusedRecordsSize)
         whenever(state.allLoaded).thenReturn(false)
@@ -112,7 +111,7 @@ class PoolTest {
         whenever(state.records).thenReturn(mutableListOf(mock(TransactionRecord::class.java), lastRecord))
         whenever(lastRecord.transactionHash).thenReturn(lastRecordHash)
 
-        val fetchData = TransactionsModule.FetchData(wallet, fromPair, limit - unusedRecordsSize + 1)
+        val fetchData = TransactionsModule.FetchData(wallet, lastRecord, limit - unusedRecordsSize + 1)
 
         Assert.assertEquals(fetchData, pool.getFetchData(limit))
     }
