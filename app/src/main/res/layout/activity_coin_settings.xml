@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -20,46 +20,178 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                tools:visibility="visible"
-                app:constraint_referenced_ids="bip44,bip49,bip84,bipDescriptionOne,bipDescriptionTwo"/>
+                app:constraint_referenced_ids="bip44,bip49,bip84,bipDescriptionOne,bipDescriptionTwo"
+                tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/speedGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                tools:visibility="visible"
-                app:constraint_referenced_ids="fastSync,slowSync,speedDescriptionOne,speedDescriptionTwo"/>
+                app:constraint_referenced_ids="fastSync,slowSync,speedDescriptionOne,speedDescriptionTwo"
+                tools:visibility="visible" />
 
-            <io.horizontalsystems.bankwallet.components.CellView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bip44"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:subtitle="@string/CoinOption_bip44_Subtitle"
-                app:title="@string/CoinOption_bip44"
-                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/clickable_background_color_lawrence"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent">
 
-            <io.horizontalsystems.bankwallet.components.CellView
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/bip44Title"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/CoinOption_bip44"
+                    android:textColor="?TextColorBarsToDark"
+                    app:layout_constraintBottom_toTopOf="@+id/bip44Subtitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/bip44Subtitle"
+                    style="@style/Subhead2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CoinOption_bip44_Subtitle"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/bip44Title"
+                    app:layout_constraintTop_toBottomOf="@+id/bip44Title" />
+
+                <ImageView
+                    android:id="@+id/bip44CheckMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_checkmark"
+                    android:tint="?ColorJacob"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bip49"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:subtitle="@string/CoinOption_bip49_Subtitle"
-                app:title="@string/CoinOption_bip49"
-                app:layout_constraintTop_toBottomOf="@+id/bip44"
-                app:layout_constraintStart_toStartOf="@+id/bip44"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:background="@drawable/clickable_background_color_lawrence"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bip44">
 
-            <io.horizontalsystems.bankwallet.components.CellView
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/bip49Title"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/CoinOption_bip49"
+                    android:textColor="?TextColorBarsToDark"
+                    app:layout_constraintBottom_toTopOf="@+id/bip49Subtitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/bip49Subtitle"
+                    style="@style/Subhead2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CoinOption_bip49_Subtitle"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/bip49Title"
+                    app:layout_constraintTop_toBottomOf="@+id/bip49Title" />
+
+                <ImageView
+                    android:id="@+id/bip49CheckMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_checkmark"
+                    android:tint="?ColorJacob"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bip84"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:subtitle="@string/CoinOption_bip84_Subtitle"
-                app:title="@string/CoinOption_bip84"
-                app:layout_constraintTop_toBottomOf="@+id/bip49"
-                app:layout_constraintStart_toStartOf="@+id/bip49"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:background="@drawable/clickable_background_color_lawrence"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bip49">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/bip84Title"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/CoinOption_bip84"
+                    android:textColor="?TextColorBarsToDark"
+                    app:layout_constraintBottom_toTopOf="@+id/bip84Subtitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/bip84Subtitle"
+                    style="@style/Subhead2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CoinOption_bip84_Subtitle"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/bip84Title"
+                    app:layout_constraintTop_toBottomOf="@+id/bip84Title" />
+
+                <ImageView
+                    android:id="@+id/bip84CheckMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_checkmark"
+                    android:tint="?ColorJacob"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/bipDescriptionOne"
@@ -71,9 +203,9 @@
                 android:layout_marginEnd="24dp"
                 android:text="@string/CoinOption_BipDescriptionOne"
                 android:textColor="@color/grey"
-                app:layout_constraintTop_toBottomOf="@+id/bip84"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/bip84"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/bip84" />
 
             <TextView
                 android:id="@+id/bipDescriptionTwo"
@@ -86,29 +218,117 @@
                 android:paddingBottom="48dp"
                 android:text="@string/CoinOption_BipDescriptionTWo"
                 android:textColor="@color/grey"
-                app:layout_constraintTop_toBottomOf="@+id/bipDescriptionOne"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/bipDescriptionOne"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/bipDescriptionOne" />
 
-            <io.horizontalsystems.bankwallet.components.CellView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fastSync"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:subtitle="@string/CoinOption_Recommended"
-                app:title="@string/CoinOption_Fast"
-                app:layout_constraintTop_toBottomOf="@+id/bipDescriptionTwo"
-                app:layout_constraintStart_toStartOf="@+id/bipDescriptionTwo"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:background="@drawable/clickable_background_color_lawrence"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bipDescriptionTwo">
 
-            <io.horizontalsystems.bankwallet.components.CellView
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/fastSyncTitle"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/CoinOption_Fast"
+                    android:textColor="?TextColorBarsToDark"
+                    app:layout_constraintBottom_toTopOf="@+id/fastSyncSubtitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/fastSyncSubtitle"
+                    style="@style/Subhead2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CoinOption_Recommended"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/fastSyncTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/fastSyncTitle" />
+
+                <ImageView
+                    android:id="@+id/fastSyncCheckMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_checkmark"
+                    android:tint="?ColorJacob"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/slowSync"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:subtitle="@string/CoinOption_MorePrivate"
-                app:title="@string/CoinOption_Slow"
-                app:layout_constraintTop_toBottomOf="@+id/fastSync"
-                app:layout_constraintStart_toStartOf="@+id/fastSync"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:background="@drawable/clickable_background_color_lawrence"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fastSync">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/slowSyncTitle"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/CoinOption_Slow"
+                    android:textColor="?TextColorBarsToDark"
+                    app:layout_constraintBottom_toTopOf="@+id/slowSyncSubtitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/slowSyncSubtitle"
+                    style="@style/Subhead2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CoinOption_MorePrivate"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/slowSyncTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/slowSyncTitle" />
+
+                <ImageView
+                    android:id="@+id/slowSyncCheckMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_checkmark"
+                    android:tint="?ColorJacob"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/speedDescriptionOne"

@@ -50,17 +50,17 @@ class CoinSettingsActivity : BaseActivity() {
         })
 
         view.syncModeLiveEvent.observe(this, Observer {(syncMode, coinTitle) ->
-            fastSync.checked = syncMode == SyncMode.Fast
-            slowSync.checked = syncMode == SyncMode.Slow
+            fastSyncCheckMark.visibility = if(syncMode == SyncMode.Fast) View.VISIBLE else View.GONE
+            slowSyncCheckMark.visibility = if(syncMode == SyncMode.Slow) View.VISIBLE else View.GONE
             speedDescriptionOne.text = getString(R.string.CoinOption_Fast_Text, coinTitle)
             speedDescriptionTwo.text = getString(R.string.CoinOption_Slow_Text, coinTitle)
             speedGroup.visibility = View.VISIBLE
         })
 
         view.derivationLiveEvent.observe(this, Observer {
-            bip44.checked = it == Derivation.bip44
-            bip49.checked = it == Derivation.bip49
-            bip84.checked = it == Derivation.bip84
+            bip44CheckMark.visibility = if(it == Derivation.bip44) View.VISIBLE else View.GONE
+            bip49CheckMark.visibility = if(it == Derivation.bip49) View.VISIBLE else View.GONE
+            bip84CheckMark.visibility = if(it == Derivation.bip84) View.VISIBLE else View.GONE
             bipsGroup.visibility = View.VISIBLE
         })
     }
