@@ -84,49 +84,59 @@ class TransactionRecordDataSourceTest {
     fun increasePage_inserted() {
         val dataSource = TransactionRecordDataSource(poolRepo, itemsDataSource, factory, 3)
 
-        val address = TransactionAddress("address", false)
+        val addressFrom = "addressFrom"
+        val addressTo = "addressTo"
+
         val btc1Rec = TransactionRecord(
+                uid = "uid1",
                 transactionHash = "btc_1_hash",
                 transactionIndex = 2,
                 interTransactionIndex = 3,
                 blockHeight = 0,
                 amount = 3.toBigDecimal(),
                 timestamp = 3,
-                from = listOf(address),
-                to = listOf(address)
+                from = addressFrom,
+                to = addressTo,
+                type = TransactionType.Outgoing
         )
 
         val btc2Rec = TransactionRecord(
+                uid = "uid2",
                 transactionHash = "btc_2_hash",
                 transactionIndex = 2,
                 interTransactionIndex = 3,
                 blockHeight = 0,
                 amount = 3.toBigDecimal(),
                 timestamp = 1,
-                from = listOf(address),
-                to = listOf(address)
+                from = addressFrom,
+                to = addressTo,
+                type = TransactionType.Outgoing
         )
 
         val eth1Rec = TransactionRecord(
+                uid = "uid3",
                 transactionHash = "eth_1_hash",
                 transactionIndex = 2,
                 interTransactionIndex = 2,
                 blockHeight = 0,
                 amount = 3.toBigDecimal(),
                 timestamp = 2,
-                from = listOf(address),
-                to = listOf(address)
+                from = addressFrom,
+                to = addressTo,
+                type = TransactionType.Outgoing
         )
 
         val eth2Rec = TransactionRecord(
+                uid = "uid4",
                 transactionHash = "eth_2_hash",
                 transactionIndex = 2,
                 interTransactionIndex = 3,
                 blockHeight = 0,
                 amount = 3.toBigDecimal(),
                 timestamp = 4,
-                from = listOf(address),
-                to = listOf(address)
+                from = addressFrom,
+                to = addressTo,
+                type = TransactionType.Outgoing
         )
 
         val itemBtc1 = TransactionItem(walletBtc, btc1Rec)
