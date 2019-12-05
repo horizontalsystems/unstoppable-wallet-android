@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.view.View
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
@@ -8,24 +7,41 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 
 data class BalanceViewItem(
         val wallet: Wallet,
-        val coin: Coin,
-        val coinValue: CoinValue,
-        val exchangeValue: CurrencyValue?,
+        val coinIconCode: String,
+        val coinTitle: String,
+        val coinLabel: String?,
+        val coinValue: DeemedValue,
+        val exchangeValue: DeemedValue,
         val diff: BigDecimal?,
-        val currencyValue: CurrencyValue?,
-        val state: AdapterState,
+        val currencyValue: DeemedValue,
         val marketInfoExpired: Boolean,
         val chartInfoState: ChartInfoState,
-        val coinValueLocked: CoinValue,
-        val currencyValueLocked: CurrencyValue?,
+        val coinValueLocked: DeemedValue,
+        val currencyValueLocked: DeemedValue,
         var updateType: UpdateType?,
-        var xExpanded: Boolean
+        var xExpanded: Boolean,
+        val xButtonPayEnabled: Boolean = false,
+        val xButtonReceiveEnabled: Boolean = false,
+        val xIconProgress: Int?,
+        val xTextProgress: ProgressInfo,
+        val xImgSyncFailedVisible: Boolean,
+        val xCoinIconVisible: Boolean
 ) {
+
+    val xChartWrapperVisible = !xExpanded
+    val xRateDiffVisible = !xExpanded
+    val xChartVisible = chartInfoState is ChartInfoState.Loaded
+    val xChartLoadingVisible = chartInfoState is ChartInfoState.Loading
+    val xChartErrorVisible = chartInfoState is ChartInfoState.Failed
+    val xChartInfo = (chartInfoState as? ChartInfoState.Loaded)?.chartInfo
+
+    val xCoinTypeLabelVisible = coinLabel != null && coinValue.visible
+
     enum class UpdateType {
         MARKET_INFO,
         CHART_INFO,
@@ -33,123 +49,10 @@ data class BalanceViewItem(
         STATE,
         EXPANDED
     }
-
-    var xButtonPayEnabled = false
-    var xButtonReceiveEnabled = true
-    var xImgSyncFailedVisibility = View.INVISIBLE
-    var xIconProgressVisibility = View.INVISIBLE
-    var xTextProgressText: String? = null
-    var xIconProgressValue: Float? = null
-    var xTextSyncedUntilText: String? = null
-    var xCoinIconVisibility = View.VISIBLE
-
-    val xCoinAmountText = App.numberFormatter.format(coinValue)
-    val xCoinAmountAlpha = if (state is AdapterState.Synced) 1f else 0.3f
-
-    var xCoinAmountLockedVisibility = View.GONE
-    var xFiatAmountLockedVisibility = View.GONE
-    var xCoinAmountLockedText: String? = null
-    var xFiatAmountLockedText: String? = null
-    var xFiatAmountLockedAlpha: Float? = null
-
-    val xIconDrawableResource = LayoutHelper.getCoinDrawableResource(coin.code)
-    val xTextCoinNameText = coin.title
-
-    val xExchangeRateTextColor = ContextCompat.getColor(App.instance, if (marketInfoExpired) R.color.grey_50 else R.color.grey)
-    val xExchangeRateText: CharSequence? = exchangeValue?.let { exchangeValue ->
-        val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
-        when {
-            chartInfoState is ChartInfoState.Loaded -> rateString
-            else -> App.instance.getString(R.string.Balance_RatePerCoin, rateString, coin.code)
-        }
-    }
-
-    var xFiatAmountText: String? = null
-    var xFiatAmountAlpha: Float? = null
-
-    val xTypeLabelText = coin.type.typeLabel()
-
-    val xButtonsWrapperVisibility = if (xExpanded) View.VISIBLE else View.GONE
-
-    val xFiatAmountVisibility: Int
-
-    val xSyncingStateGroupVisibility: Int
-    val xCoinAmountVisibility: Int
-    val xCoinTypeLabelVisibility: Int
-
-    init {
-        var xSyncing = false
-
-        state.let { adapterState ->
-            when (adapterState) {
-                is AdapterState.NotReady -> {
-                    xSyncing = true
-                    xIconProgressVisibility = View.VISIBLE
-                    xTextProgressText = App.instance.getString(R.string.Balance_Syncing)
-                    xButtonReceiveEnabled = false
-                }
-                is AdapterState.Syncing -> {
-                    xSyncing = true
-                    xIconProgressVisibility = View.VISIBLE
-                    xIconProgressValue = adapterState.progress.toFloat()
-                    xTextSyncedUntilText = adapterState.lastBlockDate?.let {
-                        App.instance.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(it, "MMM d.yyyy"))
-                    }
-
-                    xTextProgressText = App.instance.getString(R.string.Balance_Syncing_WithProgress, adapterState.progress.toString())
-                }
-                is AdapterState.Synced -> {
-                    if (coinValue.value > BigDecimal.ZERO) {
-                        xButtonPayEnabled = true
-                    }
-
-                    xCoinIconVisibility = View.VISIBLE
-                }
-                is AdapterState.NotSynced -> {
-                    xImgSyncFailedVisibility = View.VISIBLE
-                    xCoinIconVisibility = View.GONE
-                }
-            }
-        }
-
-
-        if (this.coinValueLocked.value > BigDecimal.ZERO) {
-            xCoinAmountLockedVisibility = View.VISIBLE
-            xCoinAmountLockedText = App.numberFormatter.format(this.coinValueLocked)
-
-            this.currencyValueLocked?.let {
-                xFiatAmountLockedVisibility = View.VISIBLE
-                xFiatAmountLockedText = App.numberFormatter.format(it, trimmable = true)
-                xFiatAmountLockedAlpha = if (!this.marketInfoExpired && this.state is AdapterState.Synced) 1f else 0.5f
-            }
-        }
-
-        currencyValue?.let {
-            xFiatAmountText = App.numberFormatter.format(it, trimmable = true)
-            xFiatAmountAlpha = if (!marketInfoExpired && state is AdapterState.Synced) 1f else 0.5f
-        }
-
-        xFiatAmountVisibility = when {
-            xSyncing && !xExpanded -> View.GONE
-            currencyValue == null -> View.GONE
-            currencyValue.value.compareTo(BigDecimal.ZERO) == 0 -> View.GONE
-            else -> View.VISIBLE
-        }
-
-        xSyncingStateGroupVisibility = if (xSyncing && !xExpanded) View.VISIBLE else View.GONE
-        xCoinAmountVisibility = if (xSyncing && !xExpanded) View.INVISIBLE else View.VISIBLE
-
-        xCoinTypeLabelVisibility = when {
-            xSyncing && !xExpanded -> View.GONE
-            else -> if (xTypeLabelText == null) View.GONE else View.VISIBLE
-        }
-    }
 }
 
-data class BalanceHeaderViewItem(
-        val currencyValue: CurrencyValue?,
-        val upToDate: Boolean
-) {
+data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate: Boolean) {
+
     val xBalanceText = currencyValue?.let {
         App.numberFormatter.format(it)
     }
@@ -157,36 +60,97 @@ data class BalanceHeaderViewItem(
     val xBalanceTextColor = ContextCompat.getColor(App.instance, if (upToDate) R.color.yellow_d else R.color.yellow_50)
 }
 
+class DeemedValue(val value: String?, val dimmed: Boolean = false, val visible: Boolean = true)
+class ProgressInfo(val value: Int?, val until: String?, val visible: Boolean = true)
+
 class BalanceViewItemFactory {
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
-        val balanceTotal = item.balanceTotal ?: BigDecimal.ZERO
-        val balanceLocked = item.balanceLocked ?: BigDecimal.ZERO
-
-        var exchangeValue: CurrencyValue? = null
-        var currencyValueTotal: CurrencyValue? = null
-        var currencyValueLocked: CurrencyValue? = null
-
-        item.marketInfo?.rate?.let { rate ->
-            exchangeValue = CurrencyValue(currency, rate)
-            currencyValueTotal = CurrencyValue(currency, rate * balanceTotal)
-            currencyValueLocked = CurrencyValue(currency, rate * balanceLocked)
+    private fun coinValue(state: AdapterState?, balance: BigDecimal?, coin: Coin, visible: Boolean): DeemedValue {
+        val dimmed = state !is AdapterState.Synced
+        val value = balance?.let {
+            App.numberFormatter.format(CoinValue(coin, balance))
         }
 
+        return DeemedValue(value, dimmed, visible)
+    }
+
+    private fun currencyValue(state: AdapterState?, balance: BigDecimal?, currency: Currency, marketInfo: MarketInfo?, visible: Boolean): DeemedValue {
+        val dimmed = state !is AdapterState.Synced || marketInfo?.isExpired() ?: false
+        val value = marketInfo?.rate?.let { rate ->
+            when (balance) {
+                null, BigDecimal.ZERO -> null
+                else -> App.numberFormatter.format(CurrencyValue(currency, balance * rate), trimmable = true)
+            }
+        }
+
+        return DeemedValue(value, dimmed, visible)
+    }
+
+    private fun rateValue(currency: Currency, marketInfo: MarketInfo?): DeemedValue {
+        var dimmed = false
+        val value = marketInfo?.let {
+            dimmed = marketInfo.isExpired()
+            App.numberFormatter.format(CurrencyValue(currency, marketInfo.rate), trimmable = true, canUseLessSymbol = false)
+        }
+
+        return DeemedValue(value, dimmed = dimmed)
+    }
+
+    private fun iconSyncing(state: AdapterState?): Int? {
+        return when (state) {
+            is AdapterState.Syncing -> state.progress
+            else -> null
+        }
+    }
+
+    private fun textSyncing(state: AdapterState?, visible: Boolean): ProgressInfo {
+        if (state !is AdapterState.Syncing) {
+            return ProgressInfo(null, null, false)
+        }
+
+        if (state.lastBlockDate == null) {
+            return ProgressInfo(null, null, visible)
+        }
+
+        val dateFormatted = DateHelper.formatDate(state.lastBlockDate, "MMM d.yyyy")
+
+        return ProgressInfo(state.progress, dateFormatted, visible)
+    }
+
+    private fun payButtonPayEnabled(state: AdapterState?, balance: BigDecimal?): Boolean {
+        return state is AdapterState.Synced && balance != null && balance > BigDecimal.ZERO
+    }
+
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
+        val wallet = item.wallet
+        val coin = wallet.coin
+        val state = item.state
+        val marketInfo = item.marketInfo
+
+        val balanceTotalVisibility = state !is AdapterState.Syncing || expanded
+        val balanceLockedVisibility = item.balanceLocked != null
+
         return BalanceViewItem(
-                item.wallet,
-                item.wallet.coin,
-                CoinValue(item.wallet.coin, balanceTotal),
-                exchangeValue,
-                item.marketInfo?.diff,
-                currencyValueTotal,
-                item.state ?: AdapterState.NotReady,
-                item.marketInfo?.isExpired() ?: false,
-                item.chartInfoState,
-                CoinValue(item.wallet.coin, balanceLocked),
-                currencyValueLocked,
-                updateType,
-                expanded
+                wallet = item.wallet,
+                coinIconCode = coin.code,
+                coinTitle = coin.title,
+                coinLabel = coin.type.typeLabel(),
+                coinValue = coinValue(state, item.balanceTotal, coin, balanceTotalVisibility),
+                coinValueLocked = coinValue(state, item.balanceLocked, coin, balanceLockedVisibility),
+                currencyValue = currencyValue(state, item.balanceTotal, currency, marketInfo, balanceTotalVisibility),
+                currencyValueLocked = currencyValue(state, item.balanceLocked, currency, marketInfo, balanceLockedVisibility),
+                exchangeValue = rateValue(currency, marketInfo),
+                diff = item.marketInfo?.diff,
+                marketInfoExpired = item.marketInfo?.isExpired() ?: false,
+                chartInfoState = item.chartInfoState,
+                updateType = updateType,
+                xExpanded = expanded,
+                xButtonPayEnabled = payButtonPayEnabled(state, item.balanceTotal),
+                xButtonReceiveEnabled = state != null,
+                xIconProgress = iconSyncing(state),
+                xTextProgress = textSyncing(state, !expanded),
+                xImgSyncFailedVisible = state is AdapterState.NotSynced,
+                xCoinIconVisible = state !is AdapterState.NotSynced
         )
     }
 

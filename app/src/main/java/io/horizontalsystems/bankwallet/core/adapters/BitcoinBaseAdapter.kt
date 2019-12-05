@@ -58,8 +58,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     override val balance: BigDecimal
         get() = satoshiToBTC(kit.balance.spendable)
 
-    override val balanceLocked: BigDecimal
-        get() = satoshiToBTC(kit.balance.unspendable)
+    override val balanceLocked: BigDecimal?
+        get() = if(kit.balance.unspendable > 0L) satoshiToBTC(kit.balance.unspendable) else null
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
