@@ -20,7 +20,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     val isSortOn = SingleLiveEvent<Boolean>()
     val setHeaderViewItem = SingleLiveEvent<BalanceHeaderViewItem>()
-    val setViewItems = SingleLiveEvent<List<BalanceViewItem>>()
+    val setViewItems = SingleLiveEvent<List<BalanceViewItem>>() // MuLiveData
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
 

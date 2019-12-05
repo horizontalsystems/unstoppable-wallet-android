@@ -64,7 +64,7 @@ object BalanceModule {
     interface IInteractorDelegate {
         fun didUpdateWallets(wallets: List<Wallet>)
         fun didPrepareAdapters()
-        fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal)
+        fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal?)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
 
         fun didUpdateCurrency(currency: Currency)

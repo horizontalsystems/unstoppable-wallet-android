@@ -98,13 +98,11 @@ class BalancePresenter(
         }
 
         if (indexToCollapse != -1) {
-            viewItems[indexToCollapse].xExpanded = false
-            viewItems[indexToCollapse].updateType = BalanceViewItem.UpdateType.EXPANDED
+            viewItems[indexToCollapse] = factory.viewItem(items[indexToCollapse], currency, BalanceViewItem.UpdateType.EXPANDED, false)
         }
 
         if (indexToExpand != -1) {
-            viewItems[indexToExpand].xExpanded = true
-            viewItems[indexToExpand].updateType = BalanceViewItem.UpdateType.EXPANDED
+            viewItems[indexToExpand] = factory.viewItem(items[indexToExpand], currency, BalanceViewItem.UpdateType.EXPANDED, true)
         }
 
         view?.set(viewItemsCopy)
@@ -159,7 +157,7 @@ class BalancePresenter(
         }
     }
 
-    override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal) {
+    override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal?) {
         executor.submit {
             updateItem(wallet, { item ->
                 item.balance = balance
@@ -197,7 +195,7 @@ class BalancePresenter(
             items.forEachIndexed { index, item ->
                 marketInfo[item.wallet.coin.code]?.let {
                     item.marketInfo = it
-                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, it.equals(expandedViewItem?.wallet))
+                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, viewItems[index].xExpanded)
                 }
             }
             view?.set(viewItemsCopy)
