@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewType
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
 
 class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
@@ -21,9 +24,7 @@ class ManageWalletsPresenter(
         syncViewItems()
     }
 
-    override fun onEnable(viewItem: CoinToggleViewItem) {
-        val coin = viewItem.coin
-
+    override fun onEnable(coin: Coin) {
         val account = account(coin) ?: return
 
         val coinSettingsToRequest = interactor.coinSettingsToRequest(coin, account.origin)
@@ -35,17 +36,15 @@ class ManageWalletsPresenter(
         }
     }
 
-    override fun onDisable(viewItem: CoinToggleViewItem) {
-        val coin = viewItem.coin
-
+    override fun onDisable(coin: Coin) {
         val wallet = wallets[coin] ?: return
 
         interactor.delete(wallet)
         wallets.remove(coin)
     }
 
-    override fun onSelect(viewItem: CoinToggleViewItem) {
-        view?.showNoAccountDialog(viewItem.coin, viewItem.coin.type.predefinedAccountType)
+    override fun onSelect(coin: Coin) {
+        view?.showNoAccountDialog(coin, coin.type.predefinedAccountType)
     }
 
     override fun onSelectNewAccount(predefinedAccountType: PredefinedAccountType) {
@@ -80,21 +79,33 @@ class ManageWalletsPresenter(
         return interactor.accounts.firstOrNull { coin.type.canSupport(it.type) }
     }
 
-    private fun viewItem(coin: Coin): CoinToggleViewItem {
-        val enabled = wallets[coin] != null
-        val hasAccount = account(coin) != null
-        val state: CoinToggleViewItemState = if (hasAccount) CoinToggleViewItemState.ToggleVisible(enabled) else CoinToggleViewItemState.ToggleHidden
-        return CoinToggleViewItem(coin, state)
+    private fun viewItem(coin: Coin): CoinManageViewItem {
+        val type: CoinManageViewType = when {
+            coin.type.predefinedAccountType.isCreationSupported() -> {
+                val enabled = wallets[coin] != null
+                CoinManageViewType.CoinWithSwitch(enabled)
+            }
+            else -> {
+                CoinManageViewType.CoinWithArrow
+            }
+        }
+
+        return CoinManageViewItem(type, CoinViewItem(coin))
     }
 
     private fun syncViewItems() {
-        val featuredCoins = interactor.featuredCoins
-        val coins = interactor.coins.filter { !featuredCoins.contains(it) }
+        val featuredCoinIds = interactor.featuredCoins.map { it.coinId }
+        val featured = interactor.featuredCoins.map { viewItem(it) }
+        val others = interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }.map { viewItem(it) }
+        val viewItems = mutableListOf<CoinManageViewItem>()
 
-        val featuredViewItems = featuredCoins.map { viewItem(it) }
-        val viewItems = coins.map { viewItem(it) }
+        if (featured.isNotEmpty()) {
+            viewItems.addAll(featured)
+            viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))
+        }
+        viewItems.addAll(others)
 
-        view?.setItems(featuredViewItems, viewItems)
+        view?.setItems(viewItems)
     }
 
     private fun createWallet(coin: Coin, account: Account, requestedCoinSettings: CoinSettings) {
@@ -113,5 +124,3 @@ class ManageWalletsPresenter(
         view?.showSuccess()
     }
 }
-
-data class ManageWalletViewItem(val coin: Coin, val enabled: Boolean)
