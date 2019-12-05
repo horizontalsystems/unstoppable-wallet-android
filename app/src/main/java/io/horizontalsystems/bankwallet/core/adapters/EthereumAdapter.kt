@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionInfo
 import io.reactivex.Flowable
@@ -53,24 +53,16 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        val mineAddress = ethereumKit.receiveAddress
-
-        val fromAddressHex = transaction.from
-        val from = TransactionAddress(fromAddressHex, fromAddressHex == mineAddress)
-
-        val toAddressHex = transaction.to
-        val to = TransactionAddress(toAddressHex, toAddressHex == mineAddress)
-
-        var amount = BigDecimal.ZERO
-
-        if (from.mine) {
-            amount -= transaction.value.toBigDecimal()
-        }
-        if (to.mine) {
-            amount += transaction.value.toBigDecimal()
-        }
-
+        val myAddress = ethereumKit.receiveAddress
+        val fromMine = transaction.from == myAddress
+        val toMine = transaction.to == myAddress
         val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.movePointLeft(decimal)
+
+        val type = when {
+            fromMine && toMine -> TransactionType.SentToSelf
+            fromMine -> TransactionType.Outgoing
+            else -> TransactionType.Incoming
+        }
 
         return TransactionRecord(
                 uid = transaction.hash,
@@ -78,11 +70,12 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber,
-                amount = amount.movePointLeft(decimal),
+                amount = transaction.value.toBigDecimal().movePointLeft(decimal),
                 fee = fee,
                 timestamp = transaction.timestamp,
-                from = listOf(from),
-                to = listOf(to)
+                from = transaction.from,
+                to = transaction.to,
+                type = type
         )
     }
 
@@ -92,7 +85,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         get() = balance
 
     override fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal {
-        if(gasLimit == null)
+        if (gasLimit == null)
             return balance
         return BigDecimal.ZERO.max(balance - fee(gasPrice, gasLimit))
     }

@@ -12,8 +12,9 @@ data class TransactionRecord(
         val amount: BigDecimal,
         val fee: BigDecimal? = null,
         val timestamp: Long,
-        val from: List<TransactionAddress>,
-        val to: List<TransactionAddress>,
+        val from: String?,
+        val to: String?,
+        val type: TransactionType,
         val lockInfo: TransactionLockInfo? = null,
         val failed: Boolean = false)
     : Comparable<TransactionRecord> {
@@ -55,6 +56,7 @@ data class TransactionItem(val wallet: Wallet, val record: TransactionRecord) : 
     }
 }
 
-class TransactionAddress(
-        val address: String,
-        val mine: Boolean)
+enum class TransactionType {
+    Incoming, Outgoing, SentToSelf
+}
+

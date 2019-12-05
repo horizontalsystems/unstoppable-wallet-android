@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.factories
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
-import java.math.BigDecimal
 import java.util.*
 
 class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
@@ -26,26 +25,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
             }
         }
 
-        val sentToSelf = isSentToSelf(record)
-        val lockInfo = record.lockInfo
-        val incoming = record.amount > BigDecimal.ZERO
-        var toAddress: String? = null
-        var fromAddress: String? = null
-
-        if (incoming) {
-            fromAddress = record.from.firstOrNull { !it.mine }?.address
-        } else {
-            toAddress = record.to.firstOrNull { !it.mine }?.address
-        }
-
-        var amount = record.amount
-
-        if (sentToSelf && lockInfo?.amount != null) {
-            amount = lockInfo.amount
-        }
-
         val currencyValue = rate?.let {
-            CurrencyValue(it.currency, amount * it.value)
+            CurrencyValue(it.currency, record.amount * it.value)
         }
 
         val coin = transactionItem.wallet.coin
@@ -59,26 +40,18 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
         return TransactionViewItem(
                 wallet,
                 record.transactionHash,
-                CoinValue(coin, amount),
+                CoinValue(coin, record.amount),
                 currencyValue,
                 feeCoinValue,
-                fromAddress,
-                toAddress,
-                sentToSelf,
+                record.from,
+                record.to,
+                record.type,
                 showFromAddress(wallet.coin.type),
-                incoming,
                 date,
                 status,
                 rate,
-                lockInfo
+                record.lockInfo
         )
-    }
-
-    private fun isSentToSelf(record: TransactionRecord): Boolean {
-        val allFromAddressesMine = record.from.all { it.mine }
-        val allToAddressesMine = record.to.all { it.mine }
-
-        return allFromAddressesMine && allToAddressesMine
     }
 
     private fun showFromAddress(coinType: CoinType): Boolean {
