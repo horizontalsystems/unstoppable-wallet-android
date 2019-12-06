@@ -61,9 +61,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     }
 
     override fun clear() {
-        cache.accountsSet.map { it.id }.forEach { accountId ->
-            storage.delete(accountId)
-        }
+        storage.clear()
         cache.set(listOf())
         accountsSubject.onNext(listOf())
     }

@@ -34,8 +34,12 @@ class DatabaseConverters {
 
     @TypeConverter
     fun decryptSecretString(value: String?): SecretString? {
-        return value?.let {
-            SecretString(App.encryptionManager.decrypt(it))
+        if (value == null) return null
+
+        return try {
+            SecretString(App.encryptionManager.decrypt(value))
+        } catch (e: Exception) {
+            null
         }
     }
 
@@ -48,8 +52,12 @@ class DatabaseConverters {
 
     @TypeConverter
     fun decryptSecretList(value: String?): SecretList? {
-        return value?.let {
-            SecretList(App.encryptionManager.decrypt(it).split(","))
+        if (value == null) return null
+
+        return try {
+            SecretList(App.encryptionManager.decrypt(value).split(","))
+        } catch (e: Exception) {
+            null
         }
     }
 
