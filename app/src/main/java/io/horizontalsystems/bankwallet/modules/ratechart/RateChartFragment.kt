@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -36,7 +36,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         chartView.listener = this
         chartView.setIndicator(chartViewIndicator)
 
-        presenter = ViewModelProviders.of(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
+        presenter = ViewModelProvider(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         observeData()
@@ -97,7 +97,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
                 ChartType.WEEKLY -> "MMM d, yyyy 'at' HH:mm a"
                 else -> "MMM d, yyyy"
             }
-            pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false)
+            pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false, maxFraction = 8)
             pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), outputFormat)
         })
 

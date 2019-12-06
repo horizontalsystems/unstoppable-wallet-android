@@ -10,7 +10,7 @@ import kotlin.math.min
 
 class ScaleHelper(private val config: ChartConfig) {
     private val gridLines = 5
-    private val maxScale = 4
+    private val maxScale = 8
     private val topBottomPadding = 0.05F
 
     fun scale(points: List<ChartPoint>) {
