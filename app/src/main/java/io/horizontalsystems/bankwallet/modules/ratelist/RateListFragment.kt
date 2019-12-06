@@ -96,7 +96,7 @@ class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHo
 
         val diff = viewItem.diff
         if (viewItem.rateExpired == false && diff != null){
-            txDiff.bind(diff, containerView.context, true)
+            txDiff.diff = diff
             txDiff.visibility = View.VISIBLE
             txDiffNa.visibility = View.GONE
         } else {

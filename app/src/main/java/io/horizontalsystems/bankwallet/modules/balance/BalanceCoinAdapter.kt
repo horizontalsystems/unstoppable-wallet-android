@@ -29,7 +29,7 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
     private val addCoinType = 2
 
     fun setItems(items: List<BalanceViewItem>) {
-        // Update with regular method for the initial load to avoid showing balance tab with empty list
+        //  Update with regular method for the initial load to avoid showing balance tab with empty list
         if (this.items.isEmpty()) {
             this.items = items
             notifyDataSetChanged()
@@ -122,11 +122,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             setTextSyncing(xSyncingData)
 
-            diff?.let {
-                rateDiff.bind(it, containerView.context, false)
-            } ?: run {
-                rateDiff.text = null
-            }
+            rateDiff.diff = diff
 
             bindUpdateChartInfo(item)
 
@@ -144,6 +140,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             iconNotSynced.showIf(xImgSyncFailedVisible)
             iconProgress.showIf(xSyncingData.progress != null)
 
+            rateDiff.showIf(xRateDiffVisible)
             chartWrapper.showIf(chartData.wrapperVisible)
 
             balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
@@ -232,9 +229,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             exchangeRate.text = exchangeValue.text
             exchangeRate.setTextColor(containerView.context.getColor(if (exchangeValue.dimmed) R.color.grey_50 else R.color.grey))
 
-            diff?.let {
-                rateDiff.bind(it, containerView.context, false)
-            }
+            rateDiff.diff = diff
 
             balanceFiat.text = fiatValue.text
             balanceFiat.dimIf(fiatValue.dimmed)

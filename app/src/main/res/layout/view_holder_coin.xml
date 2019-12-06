@@ -87,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@+id/coinName"
         tools:text="$6500 per BTC" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.RateDifferenceTextView
+    <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
         android:id="@+id/rateDiff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
