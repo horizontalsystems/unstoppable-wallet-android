@@ -47,18 +47,33 @@
         app:layout_constraintStart_toStartOf="@+id/txDate"
         app:layout_constraintTop_toBottomOf="@+id/txDate" />
 
-    <TextView
-        android:id="@+id/txValueInFiat"
-        style="@style/Title3"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:textColor="?ColorRemus"
-        android:drawableEnd="@drawable/ic_lock"
-        android:drawablePadding="4dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txDate"
-        tools:text="$400" />
+        app:layout_constraintTop_toTopOf="@+id/txDate">
+
+        <TextView
+            android:id="@+id/txValueInFiat"
+            style="@style/Title3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_lock"
+            android:drawablePadding="4dp"
+            android:textColor="?ColorRemus"
+            tools:text="$400" />
+
+        <ImageView
+            android:id="@+id/sentToSelfIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_incoming"
+            android:tint="?ColorRemus"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txValueInCoin"

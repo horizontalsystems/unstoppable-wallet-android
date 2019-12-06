@@ -59,7 +59,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
         viewModel.showLockInfo.observe(lifecycleOwner, Observer { lockDate ->
             val title = context.getString(R.string.Info_LockTime_Title)
-            val description = context.getString(R.string.Info_LockTime_Description, DateHelper.formatDate(lockDate, "MMM dd, yyyy"))
+            val description = context.getString(R.string.Info_LockTime_Description, DateHelper.formatDate(lockDate, "MMM dd, yyyy, h a"))
 
             InfoModule.start(context, InfoModule.InfoParameters(title, description))
         })
@@ -80,16 +80,17 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 }
 
                 if (txRec.currencyValue != null) {
-                    fiatValue.visibility = View.VISIBLE
+                    fiatValueWrapper.visibility = View.VISIBLE
                     fiatName.visibility = View.VISIBLE
 
                     val fiatValueText = App.numberFormatter.format(txRec.currencyValue, showNegativeSign = false, canUseLessSymbol = false)
-                    fiatValue.text = fiatValueText?.let { "$fiatValueText${if (sentToSelf) " *" else ""}" }
+                    fiatValue.text = fiatValueText
                     fiatValue.setTextColor(resources.getColor(if (incoming) R.color.green_d else R.color.yellow_d, null))
                     fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (txRec.lockInfo != null) R.drawable.ic_lock else 0, 0)
                     fiatName.text = txRec.currencyValue.currency.code
+                    sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
                 } else {
-                    fiatValue.visibility = View.GONE
+                    fiatValueWrapper.visibility = View.GONE
                     fiatName.visibility = View.GONE
                 }
 
@@ -98,7 +99,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 if (txRec.lockInfo != null) {
                     itemLockTime.visibility = View.VISIBLE
-                    itemLockTime.bindInfo(context.getString(R.string.TransactionInfo_LockedUntil), DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy, h a"))
+                    itemLockTime.bindLockInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy, h a")}")
                     itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
                 } else {
                     itemLockTime.visibility = View.GONE
@@ -118,17 +119,6 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                         itemFee.bind(context.getString(R.string.TransactionInfo_Fee), fee)
                         itemFee.visibility = View.VISIBLE
                     }
-                }
-
-                footNote.apply {
-                    if (sentToSelf && txRec.lockInfo == null) {
-                        val footNoteText = "* ${context.getString(R.string.TransactionInfo_FootNote)}"
-                        text = footNoteText
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-
                 }
 
                 itemStatus.bindStatus(txRec.status, incoming)
@@ -155,6 +145,13 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemRecipientHash.visibility = View.VISIBLE
                     itemRecipientHash.setOnClickListener { viewModel.onClickRecipientHash() }
                     itemRecipientHash.bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), txRec.lockInfo.originalAddress)
+                }
+
+                if (sentToSelf) {
+                    itemSentToSelf.bindSentToSelfNote()
+                    itemSentToSelf.visibility = View.VISIBLE
+                } else {
+                    itemSentToSelf.visibility = View.GONE
                 }
 
                 listener?.openTransactionInfo()

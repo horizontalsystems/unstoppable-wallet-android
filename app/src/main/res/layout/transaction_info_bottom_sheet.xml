@@ -28,18 +28,35 @@
         app:layout_constraintTop_toBottomOf="@+id/txInfoCoinName"
         tools:text="0.04071505 BNB" />
 
-    <TextView
-        android:id="@+id/fiatValue"
-        style="@style/Headline1"
+    <LinearLayout
+        android:id="@+id/fiatValueWrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:drawableEnd="@drawable/ic_lock"
-        android:drawablePadding="4dp"
-        android:textColor="?ColorJacob"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txInfoCoinName"
-        tools:text="$992" />
+        app:layout_constraintTop_toTopOf="@+id/txInfoCoinName">
+
+        <TextView
+            android:id="@+id/fiatValue"
+            style="@style/Headline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_lock"
+            android:drawablePadding="4dp"
+            android:textColor="?ColorJacob"
+            tools:text="$992" />
+
+        <ImageView
+            android:id="@+id/sentToSelfIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_incoming"
+            android:tint="?ColorRemus" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/fiatName"
@@ -48,8 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="@+id/fiatValue"
-        app:layout_constraintTop_toBottomOf="@+id/fiatValue"
+        app:layout_constraintEnd_toEndOf="@+id/fiatValueWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/fiatValueWrapper"
         tools:text="US Dollar" />
 
     <TextView
@@ -66,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/footNote" />
+        app:layout_constraintTop_toBottomOf="@+id/itemSentToSelf" />
 
     <View
         android:id="@+id/border2"
@@ -79,20 +96,12 @@
         app:layout_constraintTop_toBottomOf="@+id/coinValue" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemLockTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border2" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemRate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemLockTime" />
+        app:layout_constraintTop_toBottomOf="@+id/border2" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemFee"
@@ -144,20 +153,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemRecipientHash" />
 
-    <TextView
-        android:id="@+id/footNote"
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemLockTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?TransactionDetailBackground"
-        android:paddingStart="16dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="14dp"
-        android:singleLine="false"
-        android:text="@string/TransactionInfo_FootNote"
-        android:textColor="?ColorJacob"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemId" />
+
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemSentToSelf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemLockTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

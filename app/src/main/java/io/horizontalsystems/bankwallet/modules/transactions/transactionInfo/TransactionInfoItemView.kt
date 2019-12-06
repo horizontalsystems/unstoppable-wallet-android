@@ -61,12 +61,25 @@ class TransactionInfoItemView : ConstraintLayout {
         invalidate()
     }
 
-    fun bindInfo(title: String, info: String) {
-        txtTitle.text = title
-        valueText.text = info
+    fun bindLockInfo(info: String) {
+        txtTitle.text = info
+        txtTitle.visibility = View.VISIBLE
+        txtTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
+        txtTitle.compoundDrawablePadding = LayoutHelper.dp(11f, context)
+
+        valueText.text = null
         valueText.visibility = View.VISIBLE
         valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info, 0)
         valueText.compoundDrawablePadding = LayoutHelper.dp(16f, context)
+
+        invalidate()
+    }
+
+    fun bindSentToSelfNote() {
+        txtTitle.setText(R.string.TransactionInfo_SentToSelfNote)
+        txtTitle.visibility = View.VISIBLE
+        txtTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_incoming_16, 0, 0, 0)
+        txtTitle.compoundDrawablePadding = LayoutHelper.dp(11f, context)
 
         invalidate()
     }
