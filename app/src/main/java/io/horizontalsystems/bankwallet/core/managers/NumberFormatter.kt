@@ -55,7 +55,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return formatted
     }
 
-    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
+    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean, maxFraction: Int?): String? {
 
         val absValue = currencyValue.value.abs()
         var value = absValue
@@ -63,6 +63,9 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
+            maxFraction != null -> {
+                customFormatter.maximumFractionDigits = maxFraction
+            }
             value.compareTo(BigDecimal.ZERO) == 0 -> {
                 value = BigDecimal.ZERO
                 customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
