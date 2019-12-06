@@ -175,6 +175,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 
     fun bind(transactionRecord: TransactionViewItem, showBottomShade: Boolean) {
         val incoming = transactionRecord.type == TransactionType.Incoming
+        val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
+
         txValueInFiat.text = transactionRecord.currencyValue?.let {
             App.numberFormatter.formatForTransactions(it, incoming)
         }
@@ -185,6 +187,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, incoming, time)
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
+        sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
     }
 }
 
