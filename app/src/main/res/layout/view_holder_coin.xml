@@ -12,10 +12,10 @@
     android:paddingBottom="8dp">
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/syncingStateGroup"
+        android:id="@+id/textSyncingGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="textProgress,textSyncedUntil" />
+        app:constraint_referenced_ids="textSyncing,textSyncedUntil" />
 
     <!-- first line -->
 
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.IconView
-        android:id="@+id/coinIcon"
+        android:id="@+id/iconCoin"
         android:layout_width="24dp"
         android:layout_height="24dp"
         app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
 
     <ImageView
-        android:id="@+id/imgSyncFailed"
+        android:id="@+id/iconNotSynced"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/grey"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
 
     <TextView
-        android:id="@+id/textCoinName"
+        android:id="@+id/coinName"
         style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
         android:includeFontPadding="false"
         android:singleLine="true"
         android:textColor="?BallanceCoinNameColor"
-        app:layout_constraintEnd_toStartOf="@+id/chartViewWrapper"
+        app:layout_constraintEnd_toStartOf="@+id/chartWrapper"
         app:layout_constraintStart_toEndOf="@+id/coinBackgroundSquare"
         app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
         tools:text="Coin With Very Long Name" />
@@ -83,12 +83,12 @@
         android:layout_marginTop="3dp"
         android:includeFontPadding="false"
         android:textColor="@color/grey"
-        app:layout_constraintStart_toStartOf="@+id/textCoinName"
-        app:layout_constraintTop_toBottomOf="@+id/textCoinName"
+        app:layout_constraintStart_toStartOf="@+id/coinName"
+        app:layout_constraintTop_toBottomOf="@+id/coinName"
         tools:text="$6500 per BTC" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.RateDifferenceTextView
-        android:id="@+id/txDiff"
+        android:id="@+id/rateDiff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -97,7 +97,7 @@
         tools:text="+ 0.87%" />
 
     <FrameLayout
-        android:id="@+id/chartViewWrapper"
+        android:id="@+id/chartWrapper"
         android:layout_width="72dp"
         android:layout_height="40dp"
         android:layout_marginEnd="12dp"
@@ -122,7 +122,7 @@
             android:background="@color/steel_20" />
 
         <TextView
-            android:id="@+id/textChartError"
+            android:id="@+id/chartNotAvailable"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="end|top"
@@ -147,7 +147,7 @@
     <!-- Second Line-->
 
     <TextView
-        android:id="@+id/coinAmount"
+        android:id="@+id/balanceCoin"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -159,30 +159,30 @@
         tools:text="0.000078 BTC" />
 
     <TextView
-        android:id="@+id/coinTypeLabel"
+        android:id="@+id/coinLabel"
         style="@style/TextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/coinAmount"
-        app:layout_constraintStart_toEndOf="@+id/coinAmount"
-        app:layout_constraintTop_toTopOf="@+id/coinAmount"
+        app:layout_constraintBottom_toBottomOf="@+id/balanceCoin"
+        app:layout_constraintStart_toEndOf="@+id/balanceCoin"
+        app:layout_constraintTop_toTopOf="@+id/balanceCoin"
         tools:text="ERC20" />
 
     <TextView
-        android:id="@+id/fiatAmount"
+        android:id="@+id/balanceFiat"
         style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:includeFontPadding="false"
         android:textColor="?ColorJacob"
-        app:layout_constraintBottom_toBottomOf="@id/coinAmount"
+        app:layout_constraintBottom_toBottomOf="@id/balanceCoin"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="$52.50" />
 
     <TextView
-        android:id="@+id/textProgress"
+        android:id="@+id/textSyncing"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@id/textProgress"
+        app:layout_constraintBottom_toBottomOf="@id/textSyncing"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Until Dec 17. 2018" />
 
@@ -211,7 +211,7 @@
         android:layout_marginTop="12dp"
         android:background="@color/red_d"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coinAmount" />
+        app:layout_constraintTop_toBottomOf="@id/balanceCoin" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonsWrapper"
@@ -225,7 +225,7 @@
         app:layout_constraintTop_toBottomOf="@id/collapsedBottom">
 
         <TextView
-            android:id="@+id/coinAmountLocked"
+            android:id="@+id/balanceCoinLocked"
             style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
             tools:text="0.000078 BTC" />
 
         <TextView
-            android:id="@+id/fiatAmountLocked"
+            android:id="@+id/balanceFiatLocked"
             style="@style/Subhead1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -258,12 +258,12 @@
             android:layout_height="50dp"
             android:layout_marginEnd="4dp"
             android:text="@string/Balance_Deposit"
-            app:layout_constraintEnd_toStartOf="@+id/buttonPay"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSend"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coinAmountLocked" />
+            app:layout_constraintTop_toBottomOf="@+id/balanceCoinLocked" />
 
         <Button
-            android:id="@+id/buttonPay"
+            android:id="@+id/buttonSend"
             style="@style/ButtonPrimaryYellow"
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -271,7 +271,7 @@
             android:text="@string/Balance_Send"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/buttonReceive"
-            app:layout_constraintTop_toBottomOf="@+id/coinAmountLocked" />
+            app:layout_constraintTop_toBottomOf="@+id/balanceCoinLocked" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
