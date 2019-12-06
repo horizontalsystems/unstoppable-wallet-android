@@ -195,7 +195,7 @@ class BalancePresenter(
             items.forEachIndexed { index, item ->
                 marketInfo[item.wallet.coin.code]?.let {
                     item.marketInfo = it
-                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, viewItems[index].xExpanded)
+                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, viewItems[index].expanded)
                 }
             }
             view?.set(viewItemsCopy)
@@ -265,7 +265,7 @@ class BalancePresenter(
 
         val item = items[index]
         updateBlock(item)
-        viewItems[index] = factory.viewItem(item, currency, updateType, viewItems[index].xExpanded)
+        viewItems[index] = factory.viewItem(item, currency, updateType, viewItems[index].expanded)
 
         view?.set(viewItemsCopy)
     }
@@ -287,7 +287,7 @@ class BalancePresenter(
         items.forEachIndexed { index, item ->
             if (item.wallet.coin.code == coinCode) {
                 item.chartInfoState = chartInfoState
-                viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.CHART_INFO, viewItems[index].xExpanded)
+                viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.CHART_INFO, viewItems[index].expanded)
             }
         }
         view?.set(viewItemsCopy)
