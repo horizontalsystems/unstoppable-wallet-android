@@ -105,7 +105,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         balanceViewItem = item
 
         item.apply {
-            xSyncingData.progress?.let { iconProgress.setProgress(it.toFloat()) }
+            syncingData.progress?.let { iconProgress.setProgress(it.toFloat()) }
 
             iconCoin.bind(coinCode)
 
@@ -120,39 +120,39 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             exchangeRate.text = exchangeValue.text
             exchangeRate.setTextColor(containerView.context.getColor(if (exchangeValue.dimmed) R.color.grey_50 else R.color.grey))
 
-            setTextSyncing(xSyncingData)
+            setTextSyncing(syncingData)
 
             rateDiff.diff = diff
 
             bindUpdateChartInfo(item)
 
-            buttonReceive.isEnabled = xButtonReceiveEnabled
-            buttonSend.isEnabled = xButtonSendEnabled
+            buttonReceive.isEnabled = receiveEnabled
+            buttonSend.isEnabled = sendEnabled
 
-            containerView.isSelected = xExpanded
+            containerView.isSelected = expanded
 
             balanceCoin.dimIf(coinValue.dimmed, 0.3f)
             balanceFiat.dimIf(fiatValue.dimmed)
             balanceCoinLocked.dimIf(coinValueLocked.dimmed, 0.3f)
             balanceFiatLocked.dimIf(fiatValueLocked.dimmed)
 
-            iconCoin.showIf(xCoinIconVisible)
-            iconNotSynced.showIf(xImgSyncFailedVisible)
-            iconProgress.showIf(xSyncingData.progress != null)
+            iconCoin.showIf(coinIconVisible)
+            iconNotSynced.showIf(failedIconVisible)
+            iconProgress.showIf(syncingData.progress != null)
 
-            rateDiff.showIf(xRateDiffVisible)
+            rateDiff.showIf(rateDiffVisible)
             chartWrapper.showIf(chartData.wrapperVisible)
 
             balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
             balanceFiat.showIf(fiatValue.visible)
-            coinLabel.showIf(xCoinTypeLabelVisible)
+            coinLabel.showIf(coinTypeLabelVisible)
 
             balanceCoinLocked.showIf(coinValueLocked.visible)
             balanceFiatLocked.showIf(fiatValueLocked.visible)
 
-            textSyncingGroup.showIf(xSyncingData.syncingTextVisible)
+            textSyncingGroup.showIf(syncingData.syncingTextVisible)
 
-            buttonsWrapper.showIf(xExpanded)
+            buttonsWrapper.showIf(expanded)
         }
     }
 
@@ -170,17 +170,17 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun bindUpdateExpanded(item: BalanceViewItem) {
         item.apply {
-            rateDiff.showIf(xRateDiffVisible)
+            rateDiff.showIf(rateDiffVisible)
             balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
             balanceFiat.showIf(fiatValue.visible)
 
             chartWrapper.showIf(chartData.wrapperVisible)
-            coinLabel.showIf(xCoinTypeLabelVisible)
-            textSyncingGroup.showIf(xSyncingData.syncingTextVisible)
+            coinLabel.showIf(coinTypeLabelVisible)
+            textSyncingGroup.showIf(syncingData.syncingTextVisible)
 
-            containerView.isSelected = xExpanded
+            containerView.isSelected = expanded
 
-            if (xExpanded) {
+            if (expanded) {
                 AnimationHelper.expand(buttonsWrapper)
             } else {
                 AnimationHelper.collapse(buttonsWrapper)
@@ -200,16 +200,16 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun bindUpdateState(item: BalanceViewItem) {
         item.apply {
-            iconProgress.showIf(xSyncingData.progress != null)
-            xSyncingData.progress?.let { iconProgress.setProgress(it.toFloat()) }
+            iconProgress.showIf(syncingData.progress != null)
+            syncingData.progress?.let { iconProgress.setProgress(it.toFloat()) }
 
-            iconCoin.showIf(xCoinIconVisible)
-            iconNotSynced.showIf(xImgSyncFailedVisible)
-            textSyncingGroup.showIf(xSyncingData.syncingTextVisible)
-            setTextSyncing(xSyncingData)
+            iconCoin.showIf(coinIconVisible)
+            iconNotSynced.showIf(failedIconVisible)
+            textSyncingGroup.showIf(syncingData.syncingTextVisible)
+            setTextSyncing(syncingData)
 
             balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
-            coinLabel.showIf(xCoinTypeLabelVisible)
+            coinLabel.showIf(coinTypeLabelVisible)
             balanceFiat.showIf(fiatValue.visible)
 
             balanceCoin.dimIf(coinValue.dimmed, 0.3f)
@@ -217,8 +217,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             balanceCoinLocked.dimIf(coinValueLocked.dimmed, 0.3f)
             balanceFiatLocked.dimIf(fiatValueLocked.dimmed)
 
-            buttonReceive.isEnabled = xButtonReceiveEnabled
-            buttonSend.isEnabled = xButtonSendEnabled
+            buttonReceive.isEnabled = receiveEnabled
+            buttonSend.isEnabled = sendEnabled
         }
     }
 

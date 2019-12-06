@@ -20,22 +20,19 @@ data class BalanceViewItem(
         val exchangeValue: DeemedValue,
         val diff: BigDecimal?,
         val fiatValue: DeemedValue,
-        val marketInfoExpired: Boolean,
-        val chartInfoState: ChartInfoState,
         val chartData: ChartData,
         val coinValueLocked: DeemedValue,
         val fiatValueLocked: DeemedValue,
-        var updateType: UpdateType?,
-        var xExpanded: Boolean,
-        val xButtonSendEnabled: Boolean = false,
-        val xButtonReceiveEnabled: Boolean = false,
-        val xSyncingData: SyncingData,
-        val xImgSyncFailedVisible: Boolean,
-        val xCoinIconVisible: Boolean
+        val updateType: UpdateType?,
+        val expanded: Boolean,
+        val sendEnabled: Boolean = false,
+        val receiveEnabled: Boolean = false,
+        val syncingData: SyncingData,
+        val failedIconVisible: Boolean,
+        val coinIconVisible: Boolean,
+        val rateDiffVisible: Boolean,
+        val coinTypeLabelVisible: Boolean
 ) {
-
-    val xRateDiffVisible = !xExpanded
-    val xCoinTypeLabelVisible = coinType != null && coinValue.visible && coinValue.text != null
 
     enum class UpdateType {
         MARKET_INFO,
@@ -126,8 +123,8 @@ class BalanceViewItemFactory {
         return SyncingData(state.progress, dateFormatted, !expanded)
     }
 
-    private fun sendButtonEnabled(state: AdapterState?): Boolean {
-        return state is AdapterState.Synced
+    private fun coinTypeLabelVisible(coinType: CoinType, balanceVisible: Boolean): Boolean {
+        return coinType.typeLabel() != null && balanceVisible
     }
 
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
@@ -150,16 +147,16 @@ class BalanceViewItemFactory {
                 fiatValueLocked = currencyValue(state, item.balanceLocked, currency, marketInfo, balanceLockedVisibility),
                 exchangeValue = rateValue(currency, marketInfo),
                 diff = item.marketInfo?.diff,
-                marketInfoExpired = item.marketInfo?.isExpired() ?: false,
-                chartInfoState = item.chartInfoState,
                 chartData = chartData(item.chartInfoState, expanded),
                 updateType = updateType,
-                xExpanded = expanded,
-                xButtonSendEnabled = sendButtonEnabled(state),
-                xButtonReceiveEnabled = state != null,
-                xSyncingData = syncingData(state, expanded),
-                xImgSyncFailedVisible = state is AdapterState.NotSynced,
-                xCoinIconVisible = state !is AdapterState.NotSynced
+                expanded = expanded,
+                sendEnabled = state is AdapterState.Synced,
+                receiveEnabled = state != null,
+                syncingData = syncingData(state, expanded),
+                failedIconVisible = state is AdapterState.NotSynced,
+                coinIconVisible = state !is AdapterState.NotSynced,
+                rateDiffVisible = !expanded,
+                coinTypeLabelVisible = coinTypeLabelVisible(coin.type, balanceTotalVisibility)
         )
     }
 
