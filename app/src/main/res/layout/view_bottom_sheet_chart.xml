@@ -26,14 +26,15 @@
             android:textSize="16sp"
             tools:text="3,979.87" />
 
-        <io.horizontalsystems.bankwallet.ui.extensions.RateDifferenceTextView
+        <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
             android:id="@+id/coinRateDiff"
             style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:textColor="@color/red_d"
             android:textSize="12sp"
+            app:negativeColor="?ColorLucian"
+            app:positiveColor="?ColorRemus"
             tools:text="-18" />
 
     </LinearLayout>

@@ -45,4 +45,8 @@
         <attr name="imageDrawable" format="integer" />
         <attr name="imageTint" format="integer" />
     </declare-styleable>
+    <declare-styleable name="RateDiffView">
+        <attr name="negativeColor" format="color" />
+        <attr name="positiveColor" format="color" />
+    </declare-styleable>
 </resources>
