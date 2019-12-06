@@ -95,11 +95,8 @@ class BalanceViewItemFactory {
     private fun currencyValue(state: AdapterState?, balance: BigDecimal?, currency: Currency, marketInfo: MarketInfo?, visible: Boolean): DeemedValue {
         val dimmed = state !is AdapterState.Synced || marketInfo?.isExpired() ?: false
         val value = marketInfo?.rate?.let { rate ->
-            when {
-                balance != null && balance > BigDecimal.ZERO -> {
-                    App.numberFormatter.format(CurrencyValue(currency, balance * rate), trimmable = true)
-                }
-                else -> null
+            balance?.let {
+                App.numberFormatter.format(CurrencyValue(currency, it * rate), trimmable = true)
             }
         }
 
@@ -129,8 +126,8 @@ class BalanceViewItemFactory {
         return SyncingData(state.progress, dateFormatted, !expanded)
     }
 
-    private fun payButtonPayEnabled(state: AdapterState?, balance: BigDecimal?): Boolean {
-        return state is AdapterState.Synced && balance != null && balance > BigDecimal.ZERO
+    private fun sendButtonEnabled(state: AdapterState?): Boolean {
+        return state is AdapterState.Synced
     }
 
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
@@ -158,7 +155,7 @@ class BalanceViewItemFactory {
                 chartData = chartData(item.chartInfoState, expanded),
                 updateType = updateType,
                 xExpanded = expanded,
-                xButtonSendEnabled = payButtonPayEnabled(state, item.balanceTotal),
+                xButtonSendEnabled = sendButtonEnabled(state),
                 xButtonReceiveEnabled = state != null,
                 xSyncingData = syncingData(state, expanded),
                 xImgSyncFailedVisible = state is AdapterState.NotSynced,
