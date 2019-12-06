@@ -175,7 +175,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         var to: String? = null
         if (type == TransactionType.Incoming) {
             from = transaction.inputs.firstOrNull { !it.mine }?.address
-        } else {
+        } else if (type == TransactionType.Outgoing) {
             to = transaction.outputs.firstOrNull { it.value > 0 && !it.mine }?.address
         }
 
