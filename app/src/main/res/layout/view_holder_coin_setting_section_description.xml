@@ -9,5 +9,6 @@
     android:layout_marginTop="8dp"
     android:layout_marginEnd="24dp"
     android:paddingBottom="48dp"
+    android:autoLink="web"
     android:textColor="@color/grey"
     tools:text="@string/CoinOption_BipDescriptionCreate" />

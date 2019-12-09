@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinSettings
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
@@ -17,7 +18,7 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
     val coinsLiveData = MutableLiveData<List<CoinManageViewItem>>()
     val showErrorEvent = SingleLiveEvent<Exception>()
     val closeLiveDate = SingleLiveEvent<Void>()
-    val showCoinSettings = SingleLiveEvent<Pair<Coin, CoinSettings>>()
+    val showCoinSettings = SingleLiveEvent<Triple<Coin, CoinSettings, AccountOrigin>>()
 
     lateinit var delegate: ManageWalletsModule.IViewDelegate
 
@@ -47,8 +48,8 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     // Router
 
-    override fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings) {
-        showCoinSettings.postValue(Pair(coin, coinSettingsToRequest))
+    override fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings, origin: AccountOrigin) {
+        showCoinSettings.postValue(Triple(coin, coinSettingsToRequest, origin))
     }
 
     override fun openRestore(predefinedAccountType: PredefinedAccountType) {

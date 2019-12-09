@@ -65,7 +65,6 @@ sealed class SettingSection{
 
 @Parcelize
 enum class SettingsMode: Parcelable{
-    Create,
-    Restore,
-    Manage
+    Creating,
+    Restoring
 }

@@ -32,7 +32,7 @@ class ManageWalletsPresenter(
         if (coinSettingsToRequest.isEmpty()) {
             createWallet(coin, account, mutableMapOf())
         } else {
-            router.showCoinSettings(coin, coinSettingsToRequest)
+            router.showCoinSettings(coin, coinSettingsToRequest, account.origin)
         }
     }
 

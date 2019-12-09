@@ -46,6 +46,15 @@ sealed class CoinType : Serializable {
         }
     }
 
+    fun restoreUrl(): String {
+        return when (this) {
+            is Bitcoin -> "https://btc.horizontalsystems.xyz/apg"
+            is BitcoinCash -> "https://blockdozer.com"
+            is Dash -> "https://dash.horizontalsystems.xyz"
+            else -> ""
+        }
+    }
+
     val predefinedAccountType: PredefinedAccountType
         get() = when (this) {
             is Bitcoin,
