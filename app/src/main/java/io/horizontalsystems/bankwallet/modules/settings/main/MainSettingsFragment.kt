@@ -148,7 +148,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ManageWalletsModule.start(it) }
+            context?.let { ManageWalletsModule.start(it, false) }
         })
 
         router.showExperimentalFeaturesLiveEvent.observe(viewLifecycleOwner, Observer {
