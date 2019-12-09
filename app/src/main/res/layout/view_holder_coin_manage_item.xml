@@ -34,24 +34,27 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?TitleColor"
-        app:layout_constraintBottom_toTopOf="@+id/coinCode"
+        app:layout_constraintBottom_toTopOf="@+id/coinSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/toggleSwitch"
         app:layout_constraintStart_toEndOf="@+id/coinIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Bitcoin Cash with very long name" />
+        tools:text="BTC" />
 
     <TextView
-        android:id="@+id/coinCode"
+        android:id="@+id/coinSubtitle"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:maxWidth="200dp"
         android:textColor="@color/grey"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/coinTitle"
         app:layout_constraintTop_toBottomOf="@+id/coinTitle"
-        tools:text="BTC" />
+        tools:text="Bitcoin name which very long name" />
 
     <TextView
         android:id="@+id/coinTypeLabel"
@@ -60,9 +63,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/coinCode"
-        app:layout_constraintStart_toEndOf="@+id/coinCode"
-        app:layout_constraintTop_toTopOf="@+id/coinCode"
+        app:layout_constraintBottom_toBottomOf="@+id/coinSubtitle"
+        app:layout_constraintStart_toEndOf="@+id/coinSubtitle"
+        app:layout_constraintTop_toTopOf="@+id/coinSubtitle"
         tools:text="ERC20"
         tools:visibility="visible"/>
 

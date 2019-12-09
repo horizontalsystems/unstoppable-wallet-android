@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.PresentationMode
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
+import io.horizontalsystems.bankwallet.modules.coinsettings.SettingsMode
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
@@ -115,10 +116,6 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     }
 
     private fun observeView(view: RestoreCoinsView) {
-        view.setTitle.observe(this, Observer { predefinedAccountType ->
-            val typeTitle = getString(predefinedAccountType.title)
-            collapsingToolbar.title = getString(R.string.Wallet, typeTitle)
-        })
 
         view.coinsLiveData.observe(this, Observer {viewItems ->
             coinItemsAdapter.viewItems = viewItems
@@ -139,7 +136,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
             finish()
         })
         router.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
-            CoinSettingsModule.startForResult(coin, coinSettings, this)
+            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Restore, this)
         })
         router.showRestoreEvent.observe(this, Observer { predefinedAccountType ->
             RestoreModule.startForResult(this, predefinedAccountType)

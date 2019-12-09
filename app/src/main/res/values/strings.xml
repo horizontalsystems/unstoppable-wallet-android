@@ -35,16 +35,17 @@
     <string name="Welcome_Version" translatable="false">version %s</string>
 
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Title">Choose Crypto</string>
     <string name="Create_Description">Select cryptocurrencies for the wallet. You will be able to add or remove coins later as well.</string>
 
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>
+    <string name="Restore_ChooseCrypto">Choose Crypto</string>
     <string name="Restore_Enter_Key_Title">Enter Key</string>
     <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
+    <string name="Restore_Description">Choose a wallet you want to restore. You will need a private key for that wallet.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
@@ -395,7 +396,8 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
-    <string name="ManageCoins_Alert_CantCreateDescription">At this point, the wallet is not able to create new %s wallet accounts. You\'re only able to restore the existing one.</string>
+    <string name="ManageCoins_Alert_CantCreateTitle">%s Wallet</string>
+    <string name="ManageCoins_Alert_CantCreateDescription">At this point Unstoppable is not able to create new %s wallets. You\'re only able to restore the existing one.”</string>
 
     <!-- Experimental Feature -->
 
@@ -440,29 +442,30 @@
     <!-- Account Types -->
 
     <string name="AccountType_Unstoppable">Standard</string>
-    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20 tokens</string>
+    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC20 tokens</string>
     <string name="AccountType_Eos">EOS</string>
-    <string name="AccountType_Eos_Text" translatable="false">EOS, EOS tokens</string>
+    <string name="AccountType_Eos_Text" translatable="false">EOS, EOSIO tokens</string>
     <string name="AccountType_Binance">Binance</string>
-    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2 tokens</string>
+    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP2 tokens</string>
 
     <!--Coin Option-->
 
     <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Fast: Restores %s transaction history via secure third party server. Less private but fast.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores %s transaction history directly from the blockchain. More private but slow.</string>
-    <string name="CoinOption_BipDescriptionOne">If you\'re creating a new wallet and not sure about this setting than select BIP49.</string>
-    <string name="CoinOption_BipDescriptionTWo">If you\'re restoring an existing wallet with bitcoins on it then you should select the correct address type.</string>
-    <string name="CoinOption_bip44">BIP-44</string>
-    <string name="CoinOption_bip49">BIP-49</string>
-    <string name="CoinOption_bip84">BIP-84</string>
-    <string name="CoinOption_bip44_Subtitle">Legacy</string>
-    <string name="CoinOption_bip49_Subtitle">Segwit Compatible</string>
-    <string name="CoinOption_bip84_Subtitle">Native Segwit</string>
+    <string name="CoinOption_Fast">Horizontal Systems API</string>
+    <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
+    <string name="CoinOption_SyncModeDescription">Select the source the Unstoppable should use to download your %1s balance and transactions. \n\nHorizontal Systems %2s API:\n%3s</string>
+    <string name="CoinOption_Slow">%s Blockchain</string>
+    <string name="CoinOption_Slow_Subtitle">1–12 hours</string>
+    <string name="CoinOption_BipDescriptionCreate">This setting controls the address format for the Bitcoin in this wallet. We recommend using BIP49 if not sure.</string>
+    <string name="CoinOption_BipDescriptionRestore">Select the address format for the Bitcoin in the wallet you\'re trying to restore.</string>
+    <string name="CoinOption_AddressFormatTitle">Choose address format</string>
+    <string name="CoinOption_SyncModeTitle">Restore Parameters</string>
+    <string name="CoinOption_bip44" translatable="false">Legacy (BIP 44)</string>
+    <string name="CoinOption_bip49" translatable="false">SegWit (BIP 49)</string>
+    <string name="CoinOption_bip84" translatable="false">Native Segwit (BIP 84)</string>
+    <string name="CoinOption_bip44_Subtitle">addresses start with 1… / older</string>
+    <string name="CoinOption_bip49_Subtitle">addresses start with 3… / popular</string>
+    <string name="CoinOption_bip84_Subtitle">addresses start with bc1… / newest</string>
 
     <!--Charts-->
 

@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.PresentationMode
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
+import io.horizontalsystems.bankwallet.modules.coinsettings.SettingsMode
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletPresenter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter
@@ -119,7 +120,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
         view.showNotSupported.observe(this, Observer {predefinedAccountType ->
             AlertDialogFragment.newInstance(
-                    R.string.Alert_TitleWarning,
+                    getString(R.string.ManageCoins_Alert_CantCreateTitle, getString(predefinedAccountType.title)),
                     getString(R.string.ManageCoins_Alert_CantCreateDescription, getString(predefinedAccountType.title)),
                     R.string.Alert_Ok
             ).show(supportFragmentManager, "alert_dialog")
@@ -132,7 +133,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             finish()
         })
         router.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
-            CoinSettingsModule.startForResult(coin, coinSettings, this)
+            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Create, this)
         })
         router.close.observe(this, Observer {
             finish()

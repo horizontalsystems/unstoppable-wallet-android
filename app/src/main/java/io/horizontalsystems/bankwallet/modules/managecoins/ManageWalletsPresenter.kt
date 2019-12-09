@@ -80,14 +80,10 @@ class ManageWalletsPresenter(
     }
 
     private fun viewItem(coin: Coin): CoinManageViewItem {
+        val hasAccount = account(coin) != null
         val type: CoinManageViewType = when {
-            coin.type.predefinedAccountType.isCreationSupported() -> {
-                val enabled = wallets[coin] != null
-                CoinManageViewType.CoinWithSwitch(enabled)
-            }
-            else -> {
-                CoinManageViewType.CoinWithArrow
-            }
+            hasAccount -> CoinManageViewType.CoinWithSwitch(wallets[coin] != null)
+            else -> CoinManageViewType.CoinWithArrow
         }
 
         return CoinManageViewItem(type, CoinViewItem(coin))

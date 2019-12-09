@@ -94,7 +94,6 @@ class CreateWalletPresenter(
         val others = filteredCoins(interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }).map { viewItem(it) }
         val viewItems = mutableListOf<CoinManageViewItem>()
 
-        viewItems.add(CoinManageViewItem(CoinManageViewType.Description))
         if (featured.isNotEmpty()) {
             viewItems.addAll(featured)
             viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))

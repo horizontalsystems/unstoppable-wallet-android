@@ -88,17 +88,15 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         })
 
         sendView?.errorInDialog?.observe(viewLifecycleOwner, Observer { coinThrowable ->
-            fragmentManager?.let { fragManager ->
-                val errorText = coinThrowable.errorTextRes?.let { getString(it) } ?: coinThrowable.nonTranslatableText
-                AlertDialogFragment.newInstance(
-                        descriptionString = errorText,
-                        buttonText = R.string.Alert_Ok,
-                        listener = object : AlertDialogFragment.Listener {
-                            override fun onButtonClick() {
-                                activity?.onBackPressed()
-                            }
-                        }).show(fragManager, "alert_dialog")
-            }
+            val errorText = coinThrowable.errorTextRes?.let { getString(it) } ?: coinThrowable.nonTranslatableText
+            AlertDialogFragment.newInstance(
+                    descriptionString = errorText,
+                    buttonText = R.string.Alert_Ok,
+                    listener = object : AlertDialogFragment.Listener {
+                        override fun onButtonClick() {
+                            activity?.onBackPressed()
+                        }
+                    }).show(parentFragmentManager, "alert_dialog")
         })
 
         presenterView?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->
