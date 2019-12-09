@@ -26,7 +26,7 @@
     <color name="light_grey">#c8c7cc</color>
     <color name="dark">#13151a</color>
     <color name="steel_light">#ebebf0</color>
-    <color name="steel_dark">#262830</color>
-    <color name="steel_20">#3373798c</color>
+    <color name="steel_dark">#242731</color>
+    <color name="steel_20">#3367708F</color>
     <color name="steel_dark_pressed">#353842</color>
 </resources>
