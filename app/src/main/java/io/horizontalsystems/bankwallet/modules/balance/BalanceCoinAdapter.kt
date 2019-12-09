@@ -195,6 +195,9 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             balanceCoinLocked.text = coinValueLocked.text
             balanceFiatLocked.text = fiatValueLocked.text
+
+            balanceCoinLocked.showIf(coinValueLocked.visible)
+            balanceFiatLocked.showIf(fiatValueLocked.visible)
         }
     }
 
