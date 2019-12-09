@@ -136,7 +136,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
             finish()
         })
         router.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
-            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Restore, this)
+            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Restoring, this)
         })
         router.showRestoreEvent.observe(this, Observer { predefinedAccountType ->
             RestoreModule.startForResult(this, predefinedAccountType)

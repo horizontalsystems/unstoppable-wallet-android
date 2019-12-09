@@ -133,7 +133,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             finish()
         })
         router.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
-            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Create, this)
+            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Creating, this)
         })
         router.close.observe(this, Observer {
             finish()

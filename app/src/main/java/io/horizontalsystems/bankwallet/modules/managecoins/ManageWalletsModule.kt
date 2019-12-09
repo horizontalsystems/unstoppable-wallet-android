@@ -52,7 +52,7 @@ object ManageWalletsModule {
     }
 
     interface IRouter {
-        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings)
+        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings, origin: AccountOrigin)
         fun openRestore(predefinedAccountType: PredefinedAccountType)
         fun close()
     }

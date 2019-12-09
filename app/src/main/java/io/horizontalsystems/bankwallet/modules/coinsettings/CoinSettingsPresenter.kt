@@ -29,9 +29,8 @@ class CoinSettingsPresenter(
                     derivationList.addAll(getBips(derivation))
 
                     when (settingsMode) {
-                        SettingsMode.Create -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionCreate)))
-                        SettingsMode.Restore -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionRestore)))
-                        SettingsMode.Manage -> { }
+                        SettingsMode.Creating -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionCreate)))
+                        SettingsMode.Restoring -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionRestore)))
                     }
                 }
                 CoinSetting.SyncMode -> {
@@ -41,8 +40,8 @@ class CoinSettingsPresenter(
 
                     syncModeList.addAll(getSyncModes(syncMode))
 
-                    if (settingsMode == SettingsMode.Restore) {
-                        syncModeList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_SyncModeDescription, coin.title, coin.title, getApiLink())))
+                    if (settingsMode == SettingsMode.Restoring) {
+                        syncModeList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_SyncModeDescription, coin.title, coin.title, coin.type.restoreUrl())))
                     }
                 }
             }
@@ -114,12 +113,4 @@ class CoinSettingsPresenter(
         return listOf(fastMode, slowMode)
     }
 
-    private fun getApiLink(): String {
-        return when (coin.code) {
-            "DASH" -> "dash.horizontalsystems.xyz"
-            "BTC" -> "btc.horizontalsystems.xyz/apg"
-            "BCH" -> "blockdozer.com"
-            else -> ""
-        }
-    }
 }

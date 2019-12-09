@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
@@ -66,8 +67,9 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
             finish()
         })
 
-        viewModel.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
-            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Manage, this)
+        viewModel.showCoinSettings.observe(this, Observer { (coin, coinSettings, origin) ->
+            val settingMode = if(origin == AccountOrigin.Created) SettingsMode.Creating else SettingsMode.Restoring
+            CoinSettingsModule.startForResult(coin, coinSettings, settingMode, this)
         })
     }
 
