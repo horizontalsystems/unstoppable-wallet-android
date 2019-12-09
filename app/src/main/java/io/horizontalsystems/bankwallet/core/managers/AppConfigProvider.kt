@@ -118,7 +118,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("REP",       "Reputation (Augur)",      "REP",         18,      CoinType.Erc20("0x1985365e9f78359a9B6AD760e32412f4a445E862")),
             Coin("R",         "Revain",                  "R",            0,      CoinType.Erc20("0x48f775EFBE4F5EcE6e0DF2f7b5932dF56823B990")),
             Coin("XRP",       "Ripple BEP2",             "XRP",          8,      CoinType.Binance("XRP-BF2")),
-            Coin("EURS",      "STASIS EURO",             "EURS",         2,      CoinType.Erc20("0xdB25f211AB05b1c97D595516F45794528a807ad8", fee = BigDecimal("0.5"))),
+            Coin("EURS",      "STASIS EURO",             "EURS",         2,      CoinType.Erc20("0xdB25f211AB05b1c97D595516F45794528a807ad8")),
             Coin("SAI",       "Sai",                     "SAI",         18,      CoinType.Erc20("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")),
             Coin("SNT",       "Status",                  "SNT",         18,      CoinType.Erc20("0x744d70FDBE2Ba4CF95131626614a1763DF805B9E")),
             Coin("TUSD",      "TrueUSD",                 "TUSD",        18,      CoinType.Erc20("0x0000000000085d4780B73119b644AE5ecd22b376")),
