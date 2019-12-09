@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.managecoins.views.ManageWalletsActivity
@@ -65,8 +66,9 @@ object ManageWalletsModule {
         interactor.delegate = presenter
     }
 
-    fun start(context: Context) {
+    fun start(context: Context, showCloseButton: Boolean) {
         val intent = Intent(context, ManageWalletsActivity::class.java)
+        intent.putExtra(ModuleField.SHOW_CLOSE_BUTTON, showCloseButton)
         context.startActivity(intent)
     }
 }

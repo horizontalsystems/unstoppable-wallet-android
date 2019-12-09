@@ -129,7 +129,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ManageWalletsModule.start(it) }
+            context?.let { ManageWalletsModule.start(it, true) }
         })
 
         viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
