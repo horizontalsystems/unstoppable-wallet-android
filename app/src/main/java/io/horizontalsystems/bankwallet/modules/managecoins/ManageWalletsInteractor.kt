@@ -11,8 +11,6 @@ class ManageWalletsInteractor(
         private val coinSettingsManager: ICoinSettingsManager
 ) : ManageWalletsModule.IInteractor {
 
-    var delegate: ManageWalletsModule.IInteractorDelegate? = null
-
     override val coins: List<Coin>
         get() = appConfigProvider.coins
 
