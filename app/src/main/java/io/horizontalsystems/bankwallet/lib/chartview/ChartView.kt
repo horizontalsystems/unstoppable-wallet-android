@@ -96,12 +96,12 @@ class ChartView : View {
             MotionEvent.ACTION_DOWN -> {
                 chartCurve.onTouchActive()
                 eventListener.onTouchDown()
-                chartIndicator?.onMove(chartCurve.find(event.rawX), eventListener)
+                chartIndicator?.onMove(chartCurve.find(event.x), eventListener)
                 invalidate()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                chartIndicator?.onMove(chartCurve.find(event.rawX), eventListener)
+                chartIndicator?.onMove(chartCurve.find(event.x), eventListener)
             }
 
             MotionEvent.ACTION_UP,
