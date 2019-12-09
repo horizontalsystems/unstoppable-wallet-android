@@ -75,7 +75,8 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
                 timestamp = transaction.timestamp,
                 from = transaction.from,
                 to = transaction.to,
-                type = type
+                type = type,
+                failed = transaction.isError?.let { it != 0 }?: false
         )
     }
 

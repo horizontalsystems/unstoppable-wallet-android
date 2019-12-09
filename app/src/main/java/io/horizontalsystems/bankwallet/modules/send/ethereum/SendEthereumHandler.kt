@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
-import io.horizontalsystems.erc20kit.models.ValidationError
+import io.horizontalsystems.ethereumkit.models.ValidationError
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
