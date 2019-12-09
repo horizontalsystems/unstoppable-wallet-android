@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
@@ -48,27 +50,26 @@ object ManageWalletsModule {
         fun coinSettingsToRequest(coin: Coin, origin: AccountOrigin): CoinSettings
     }
 
-    interface IInteractorDelegate {
-    }
-
     interface IRouter {
         fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings, origin: AccountOrigin)
         fun openRestore(predefinedAccountType: PredefinedAccountType)
         fun close()
     }
 
-    fun init(view: ManageWalletsViewModel, router: IRouter) {
-        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.coinSettingsManager)
-        val presenter = ManageWalletsPresenter(interactor, router)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
-    }
-
     fun start(context: Context, showCloseButton: Boolean) {
         val intent = Intent(context, ManageWalletsActivity::class.java)
         intent.putExtra(ModuleField.SHOW_CLOSE_BUTTON, showCloseButton)
         context.startActivity(intent)
+    }
+
+    class Factory(private val showCloseButton: Boolean) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = ManageWalletsView()
+            val router = ManageWalletsRouter()
+            val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.coinSettingsManager)
+            val presenter = ManageWalletsPresenter(interactor, showCloseButton, router, view)
+
+            return presenter as T
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewType
@@ -7,10 +8,11 @@ import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
 
 class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
-        private val router: ManageWalletsModule.IRouter)
-    : ManageWalletsModule.IViewDelegate, ManageWalletsModule.IInteractorDelegate {
-
-    var view: ManageWalletsModule.IView? = null
+        val showCloseButton: Boolean,
+        val router: ManageWalletsModule.IRouter,
+        val view: ManageWalletsModule.IView
+        )
+    : ViewModel(), ManageWalletsModule.IViewDelegate {
 
     private val wallets = mutableMapOf<Coin, Wallet>()
 
@@ -44,7 +46,7 @@ class ManageWalletsPresenter(
     }
 
     override fun onSelect(coin: Coin) {
-        view?.showNoAccountDialog(coin, coin.type.predefinedAccountType)
+        view.showNoAccountDialog(coin, coin.type.predefinedAccountType)
     }
 
     override fun onSelectNewAccount(predefinedAccountType: PredefinedAccountType) {
@@ -53,7 +55,7 @@ class ManageWalletsPresenter(
             handleCreated(account)
         } catch (e: Exception) {
             syncViewItems()
-            view?.showError(e)
+            view.showError(e)
         }
     }
 
@@ -101,7 +103,7 @@ class ManageWalletsPresenter(
         }
         viewItems.addAll(others)
 
-        view?.setItems(viewItems)
+        view.setItems(viewItems)
     }
 
     private fun createWallet(coin: Coin, account: Account, requestedCoinSettings: CoinSettings) {
@@ -117,6 +119,6 @@ class ManageWalletsPresenter(
         interactor.save(account)
 
         syncViewItems()
-        view?.showSuccess()
+        view.showSuccess()
     }
 }
