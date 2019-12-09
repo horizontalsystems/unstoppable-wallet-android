@@ -17,8 +17,6 @@ class RestoreCoinsPresenter(
     private var enabledCoins = mutableMapOf<Coin, CoinSettings>()
 
     override fun onLoad() {
-        view.setTitle(predefinedAccountType)
-
         syncViewItems()
         syncProceedButton()
     }
@@ -78,7 +76,6 @@ class RestoreCoinsPresenter(
 
         val viewItems = mutableListOf<CoinManageViewItem>()
 
-        viewItems.add(CoinManageViewItem(CoinManageViewType.Description))
         if (featured.isNotEmpty()) {
             viewItems.addAll(featured)
             viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))

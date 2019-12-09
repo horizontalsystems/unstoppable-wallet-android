@@ -34,7 +34,7 @@ class ManageWalletsDialog(
         setContentView(R.layout.fragment_bottom_manage_keys)
 
         setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
-        setSubtitle(getString(R.string.AddCoin_Subtitle, coin.title))
+        setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
         setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
 
         btnYellow.isEnabled = predefinedAccountType.isCreationSupported()

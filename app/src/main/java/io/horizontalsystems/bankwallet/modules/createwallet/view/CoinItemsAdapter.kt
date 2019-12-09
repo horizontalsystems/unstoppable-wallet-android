@@ -95,8 +95,8 @@ class CoinItemWithSwitchViewHolder(
         val coin = viewItem.coin
 
         coinIcon.bind(coin)
-        coinTitle.text = coin.title
-        coinCode.text = coin.code
+        coinTitle.text = coin.code
+        coinSubtitle.text = coin.title
         bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
 
         coinTypeLabel.text = coin.type.typeLabel()
@@ -126,7 +126,7 @@ class CoinItemWithArrowViewHolder(
         rightArrow.visibility = View.VISIBLE
         coinIcon.bind(coin)
         coinTitle.text = coin.title
-        coinCode.text = coin.code
+        coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.typeLabel()
         coinTypeLabel.visibility = if (coin.type.typeLabel() != null) View.VISIBLE else View.GONE
         bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
