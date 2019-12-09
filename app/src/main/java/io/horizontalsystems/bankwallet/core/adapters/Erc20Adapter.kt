@@ -105,7 +105,8 @@ class Erc20Adapter(
                 timestamp = transaction.timestamp,
                 from = transaction.from,
                 to = transaction.to,
-                type = type
+                type = type,
+                failed = transaction.isError
         )
     }
 
