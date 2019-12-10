@@ -59,7 +59,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
         viewModel.showLockInfo.observe(lifecycleOwner, Observer { lockDate ->
             val title = context.getString(R.string.Info_LockTime_Title)
-            val description = context.getString(R.string.Info_LockTime_Description, DateHelper.formatDate(lockDate, "MMM dd, yyyy, h a"))
+            val description = context.getString(R.string.Info_LockTime_Description, DateHelper.getFullDate(lockDate))
 
             InfoModule.start(context, InfoModule.InfoParameters(title, description))
         })
@@ -71,7 +71,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 val sentToSelf = txRec.type == TransactionType.SentToSelf
 
                 setTitle(context.getString(R.string.TransactionInfo_Title))
-                setSubtitle(txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) })
+                setSubtitle(txRec.date?.let { DateHelper.getFullDate(it) })
                 setHeaderIcon(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
 
                 itemId.apply {
@@ -99,7 +99,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 if (txRec.lockInfo != null) {
                     itemLockTime.visibility = View.VISIBLE
-                    itemLockTime.bindLockInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.formatDate(txRec.lockInfo.lockedUntil, "MMM dd, yyyy, h a")}")
+                    itemLockTime.bindLockInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(txRec.lockInfo.lockedUntil)}")
                     itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
                 } else {
                     itemLockTime.visibility = View.GONE

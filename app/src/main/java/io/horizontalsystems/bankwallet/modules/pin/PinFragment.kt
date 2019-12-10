@@ -187,7 +187,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         pinView.showLockedView.observe(viewLifecycleOwner, Observer {
             pinUnlock.visibility = View.GONE
             pinUnlockBlocked.visibility = View.VISIBLE
-            val time = DateHelper.formatDate(it, "HH:mm:ss")
+            val time = DateHelper.getOnlyTime(it)
             blockedScreenMessage.text = getString(R.string.UnlockPin_WalletDisabledUntil, time)
         })
     }
