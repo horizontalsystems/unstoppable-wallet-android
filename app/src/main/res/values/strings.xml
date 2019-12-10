@@ -460,12 +460,12 @@
     <string name="CoinOption_BipDescriptionRestore">Select the address format for the Bitcoin in the wallet you\'re trying to restore.</string>
     <string name="CoinOption_AddressFormatTitle">Choose address format</string>
     <string name="CoinOption_SyncModeTitle">Restore Parameters</string>
-    <string name="CoinOption_bip44" translatable="false">Legacy (BIP 44)</string>
-    <string name="CoinOption_bip49" translatable="false">SegWit (BIP 49)</string>
-    <string name="CoinOption_bip84" translatable="false">Native Segwit (BIP 84)</string>
-    <string name="CoinOption_bip44_Subtitle">addresses start with 1… / older</string>
-    <string name="CoinOption_bip49_Subtitle">addresses start with 3… / popular</string>
-    <string name="CoinOption_bip84_Subtitle">addresses start with bc1… / newest</string>
+    <string name="CoinOption_bip44" translatable="false">Legacy - BIP 44</string>
+    <string name="CoinOption_bip49" translatable="false">SegWit - BIP 49 / recommended</string>
+    <string name="CoinOption_bip84" translatable="false">Native Segwit - BIP 84</string>
+    <string name="CoinOption_bip44_Subtitle">Older (start with 1...)</string>
+    <string name="CoinOption_bip49_Subtitle">Popular (start with 3...)</string>
+    <string name="CoinOption_bip84_Subtitle">Newest (start with bc1...)</string>
 
     <!--Charts-->
 
