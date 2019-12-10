@@ -117,7 +117,7 @@
         <item name="ColorLucian">@color/red_d</item>
         <item name="ColorLucianPressed">@color/red_l</item>
         <item name="ColorOz">@color/light</item>
-        <item name="ColorLeah">@color/steel_dark</item>
+        <item name="ColorLeah">@color/steel_light</item>
         <!-- New colors: for backgrounds -->
         <item name="ColorJeremy">@color/steel_20</item>
         <item name="ColorElena">@color/steel_20</item>
