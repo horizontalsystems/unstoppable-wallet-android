@@ -51,7 +51,7 @@ class RatesFragment : Fragment() {
         if (lastUpdateTimestamp == null)
             return
 
-        val time = DateHelper.formatDate(Date(lastUpdateTimestamp * 1000), "HH:mm")
+        val time = DateHelper.getOnlyTime(Date(lastUpdateTimestamp * 1000))
         timeAgoText.text = getString(R.string.RateList_updated, time)
     }
 }

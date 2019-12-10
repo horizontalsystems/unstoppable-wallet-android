@@ -15,7 +15,7 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         val sections = mutableListOf<FullTransactionSection>()
 
         val blockItems = mutableListOf(
-                FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(data.date), icon = FullTransactionIcon.TIME),
+                FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDate(data.date), icon = FullTransactionIcon.TIME),
                 FullTransactionItem(R.string.FullInfo_Block, value = data.height.toString(), icon = FullTransactionIcon.BLOCK)
         )
 
