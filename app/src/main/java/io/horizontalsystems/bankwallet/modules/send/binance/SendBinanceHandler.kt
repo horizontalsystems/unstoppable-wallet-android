@@ -40,7 +40,7 @@ class SendBinanceHandler(
 
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
-            SendModule.Input.Address,
+            SendModule.Input.Address(),
             SendModule.Input.Memo(120),
             SendModule.Input.Fee(false),
             SendModule.Input.ProceedButton)

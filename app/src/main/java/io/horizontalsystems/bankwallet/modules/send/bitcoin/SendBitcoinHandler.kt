@@ -92,7 +92,7 @@ class SendBitcoinHandler(
     override val inputItems: List<SendModule.Input> =
             mutableListOf<SendModule.Input>().apply {
                 add(SendModule.Input.Amount)
-                add(SendModule.Input.Address)
+                add(SendModule.Input.Address())
                 if (coinType is CoinType.Bitcoin && interactor.isLockTimeEnabled)
                     add(SendModule.Input.Hodler)
                 add(SendModule.Input.Fee(true))
