@@ -95,8 +95,8 @@ class CoinItemWithSwitchViewHolder(
         val coin = viewItem.coin
 
         coinIcon.bind(coin)
-        coinTitle.text = coin.code
-        coinSubtitle.text = coin.title
+        coinTitle.text = coin.title
+        coinSubtitle.text = coin.code
         bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
 
         coinTypeLabel.text = coin.type.typeLabel()
