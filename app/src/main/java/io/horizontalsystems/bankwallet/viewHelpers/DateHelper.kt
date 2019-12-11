@@ -64,12 +64,6 @@ object DateHelper {
         return formatDate(date, "EEE")
     }
 
-    fun formatDateInUTC(timestamp: Long, dateFormat: String): String {
-        val dateFormatter = SimpleDateFormat(dateFormat, Locale("EN"))
-        dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
-        return dateFormatter.format(Date(timestamp * 1000)) //timestamp in seconds
-    }
-
     fun formatDate(date: Date, outputFormat: String) =
             SimpleDateFormat(outputFormat, Locale.getDefault()).format(date) ?: ""
 
@@ -100,5 +94,4 @@ object DateHelper {
 
         return calendar.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
     }
-
 }
