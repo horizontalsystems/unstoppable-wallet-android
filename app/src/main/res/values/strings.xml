@@ -1,5 +1,5 @@
 <resources>
-    <string name="App_Name">Unstoppable</string>
+    <string name="App_Name" translatable="false">Unstoppable</string>
 
     <!--Common-->
 
@@ -49,8 +49,8 @@
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
-    <string name="Restore_EosAccountName">Account Name</string>
-    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountName" translatable="false">Account Name</string>
+    <string name="Restore_EosActivePrivateKey" translatable="false">Active Private Key</string>
 
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
@@ -76,8 +76,8 @@
 
     <!--Backup Eos-->
 
-    <string name="Backup_Eos_AccountName">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_AccountName" translatable="false">Account Name</string>
+    <string name="Backup_Eos_ActivePrivateKey" translatable="false">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
 
     <!--Balance-->
@@ -109,11 +109,11 @@
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_To">To: </string>
-    <string name="Send_Confirmation_HintMemo">Memo:</string>
-    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_HintMemo" translatable="false">Memo:</string>
+    <string name="Send_Confirmation_Eos_HintAccount" translatable="false">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_LockTime">TimeLock:</string>
+    <string name="Send_Confirmation_LockTime" translatable="false">TimeLock:</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
@@ -138,9 +138,9 @@
     <string name="Send_DialogDuration">Duration:</string>
     <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">Total:</string>
-    <string name="Send_DialogMemoHint">Memo</string>
+    <string name="Send_DialogMemoHint" translatable="false">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
-    <string name="Send_DialogLockTime">TimeLock</string>
+    <string name="Send_DialogLockTime" translatable="false">TimeLock</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
     <string name="Send_LockTime_Month">1 month</string>
@@ -218,13 +218,13 @@
     <string name="FullInfo_From">From</string>
     <string name="FullInfo_To">To</string>
     <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Memo">Memo</string>
-    <string name="FullInfo_CpuUsage">CPU Usage</string>
-    <string name="FullInfo_NetUsage">Net Usage</string>
+    <string name="FullInfo_Memo" translatable="false">Memo</string>
+    <string name="FullInfo_CpuUsage" translatable="false">CPU Usage</string>
+    <string name="FullInfo_NetUsage" translatable="false">Net Usage</string>
 
-    <string name="FullInfo_GasLimit">Gas Limit</string>
-    <string name="FullInfo_GasUsed">Gas Used</string>
-    <string name="FullInfo_GasPrice">Gas Price</string>
+    <string name="FullInfo_GasLimit" translatable="false">Gas Limit</string>
+    <string name="FullInfo_GasUsed" translatable="false">Gas Used</string>
+    <string name="FullInfo_GasPrice" translatable="false">Gas Price</string>
 
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">Online</string>
@@ -241,11 +241,11 @@
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
     <string name="FullInfo_NoAddress">Empty Address</string>
-    <string name="FullInfo_SatByte">sat/B</string>
-    <string name="FullInfo_Bytes">Bytes</string>
+    <string name="FullInfo_SatByte" translatable="false">sat/B</string>
+    <string name="FullInfo_Bytes" translatable="false">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Nonce" translatable="false">Nonce</string>
     <string name="FullInfoEth_Amount">Amount</string>
 
     <!--Settings-->
@@ -261,7 +261,7 @@
     <string name="Settings_LightMode">Light Mode</string>
     <string name="Settings_About">About</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
-    <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
+    <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_Report">Report a Problem</string>
 
@@ -408,7 +408,7 @@
     <!-- Bitcoin Hodling -->
 
     <string name="BitcoinHodling_Title">Lock Bitcoins</string>
-    <string name="BitcoinHodling_LockTime">TimeLock</string>
+    <string name="BitcoinHodling_LockTime" translatable="false">TimeLock</string>
     <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet app version 0.10 or newer with BIP44 address format for the Bitcoin.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!--Manage Keys-->
@@ -443,18 +443,18 @@
 
     <string name="AccountType_Unstoppable">Standard</string>
     <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC20 tokens</string>
-    <string name="AccountType_Eos">EOS</string>
+    <string name="AccountType_Eos" translatable="false">EOS</string>
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOSIO tokens</string>
-    <string name="AccountType_Binance">Binance</string>
+    <string name="AccountType_Binance" translatable="false">Binance</string>
     <string name="AccountType_Binance_Text" translatable="false">BNB, BEP2 tokens</string>
 
     <!--Coin Option-->
 
     <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Horizontal Systems API</string>
+    <string name="CoinOption_Fast" translatable="false">Horizontal Systems API</string>
     <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
     <string name="CoinOption_SyncModeDescription">Select the source the Unstoppable should use to download your %1s balance and transactions. \n\nHorizontal Systems %2s API:\n%3s</string>
-    <string name="CoinOption_Slow">%s Blockchain</string>
+    <string name="CoinOption_Slow" translatable="false">%s Blockchain</string>
     <string name="CoinOption_Slow_Subtitle">1–12 hours</string>
     <string name="CoinOption_BipDescriptionCreate">This setting controls the address format for the Bitcoin in this wallet. We recommend using BIP49 if not sure.</string>
     <string name="CoinOption_BipDescriptionRestore">Select the address format for the Bitcoin in the wallet you\'re trying to restore.</string>
