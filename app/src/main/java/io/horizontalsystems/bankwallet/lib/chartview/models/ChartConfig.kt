@@ -36,8 +36,8 @@ class ChartConfig(private val context: Context) {
     var gridEdgeOffset = dp2px(5f)
 
     //  grid dimens
-    var valueMin = 0f
-    var valueMax = 0f
+    var valueLow = 0f
+    var valueTop = 0f
     var valueScale = 0
 
     //  Animation
@@ -54,12 +54,12 @@ class ChartConfig(private val context: Context) {
         return x
     }
 
-    fun yAxisPrice(y: Float, maxY: Float): Float {
-        if (y + textPadding >= maxY - offsetBottom) {
+    fun yAxisPrice(y: Float, isTop: Boolean): Float {
+        if (isTop) {
             return y - (textPadding * 1.5f)
         }
 
-        return y + textPriceSize + textPadding
+        return y + textPriceSize + 4f
     }
 
     fun dp2px(dps: Float): Float {

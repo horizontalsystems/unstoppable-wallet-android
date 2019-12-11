@@ -10,7 +10,7 @@ import kotlin.math.min
 class ScaleHelper(private val config: ChartConfig) {
     private val maxScale = 8
     private val minDigitDiff = 5
-    private val topBottomPadding = 0.1F
+    private val verticalPadding = 0.18F
 
     fun scale(points: List<ChartPoint>) {
         var minValue = Float.MAX_VALUE
@@ -26,12 +26,9 @@ class ScaleHelper(private val config: ChartConfig) {
             valueDelta = maxValue
         }
 
-        val valueMax = (maxValue + valueDelta * topBottomPadding)
-        val valueMin = (minValue - valueDelta * topBottomPadding)
-
-        config.valueMin = valueMin
-        config.valueMax = valueMax
-        config.valueScale = max(getScale(valueMax.toBigDecimal(), valueMin.toBigDecimal()), 0)
+        config.valueTop = (maxValue + valueDelta * verticalPadding)
+        config.valueLow = (minValue - valueDelta * verticalPadding)
+        config.valueScale = max(getScale(maxValue.toBigDecimal(), minValue.toBigDecimal()), 0)
     }
 
     private fun getScale(maxValue: BigDecimal, minValue: BigDecimal): Int {
