@@ -65,7 +65,7 @@ class AppStatusActivity : BaseActivity() {
             val title = "$indentation$bullet$key"
             when (value) {
                 is Date -> {
-                    val date = DateHelper.formatDateInUTC(value.time / 1000, "MMM d, yyyy, HH:mm")
+                    val date = DateHelper.formatDate(value, "MMM d, yyyy, HH:mm")
                     sb.appendln("$title: $date")
                 }
                 is Map<*, *> -> {
