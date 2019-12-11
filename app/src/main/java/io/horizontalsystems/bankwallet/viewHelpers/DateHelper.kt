@@ -7,15 +7,17 @@ import io.horizontalsystems.bankwallet.core.App
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 object DateHelper {
+
+    private val timeFormat: String by lazy {
+        val is24HourFormat = DateFormat.is24HourFormat(App.instance)
+        if (is24HourFormat) "HH:mm" else "h:mm a"
+    }
 
     fun getOnlyTime(date: Date): String = formatDate(date, timeFormat)
     fun getFullDate(date: Date): String = formatDate(date, "MMM d, yyyy, $timeFormat")
     fun getDateWithYear(date: Date): String = formatDate(date, "MMM d, yyyy")
     fun getFullDate(timestamp: Long): String = formatDate(Date(timestamp), "MMM d, yyyy, $timeFormat")
-
-    private val timeFormat: String by lazy { getPreferredTimeFormat() }
 
     fun getTxDurationString(context: Context, durationInSec: Long): String {
         return when {
@@ -56,42 +58,26 @@ object DateHelper {
         formatDate(date, "MMM dd, yyyy")
     }
 
-    fun getShortMonth(date: Date): String {
-        return formatDate(date, "MMM")
+    fun formatDate(date: Date, pattern: String): String {
+        return SimpleDateFormat(pattern, Locale.getDefault()).format(date) ?: ""
     }
-
-    fun getShortDayOfWeek(date: Date): String {
-        return formatDate(date, "EEE")
-    }
-
-    fun formatDate(date: Date, outputFormat: String) =
-            SimpleDateFormat(outputFormat, Locale.getDefault()).format(date) ?: ""
 
     fun getSecondsAgo(dateInMillis: Long): Long {
         val differenceInMillis = Date().time - dateInMillis
         return differenceInMillis / 1000
     }
 
-    fun isSameDay(date: Date, date2: Date): Boolean {
-        val calendar = Calendar.getInstance()
-        calendar.time = date
+    fun isSameDay(date1: Date, date2: Date): Boolean {
+        val calendar1 = Calendar.getInstance().apply { time = date1 }
+        val calendar2 = Calendar.getInstance().apply { time = date2 }
 
-        val calendar2 = Calendar.getInstance()
-        calendar2.time = date2
-
-        return calendar.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR)
-    }
-
-    private fun getPreferredTimeFormat(): String {
-        val is24hour = DateFormat.is24HourFormat(App.instance)
-        return if (is24hour) "HH:mm" else "h:mm a"
+        return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) && calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR)
     }
 
     private fun isThisYear(date: Date): Boolean {
-        val calendar = Calendar.getInstance()
-        val calendar2 = Calendar.getInstance()
-        calendar2.time = date
+        val calendar1 = Calendar.getInstance()
+        val calendar2 = Calendar.getInstance().apply { time = date }
 
-        return calendar.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
+        return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
     }
 }

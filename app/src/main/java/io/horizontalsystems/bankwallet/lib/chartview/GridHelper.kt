@@ -62,10 +62,10 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
     private fun columnLabel(calendar: Calendar, type: ChartType): String {
         return when (type) {
             ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
-            ChartType.WEEKLY -> DateHelper.getShortDayOfWeek(calendar.time)
+            ChartType.WEEKLY -> DateHelper.formatDate(calendar.time, "EEE")
             ChartType.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
-            ChartType.MONTHLY6 -> DateHelper.getShortMonth(calendar.time)
-            ChartType.MONTHLY12 -> DateHelper.getShortMonth(calendar.time)
+            ChartType.MONTHLY6 -> DateHelper.formatDate(calendar.time, "MMM")
+            ChartType.MONTHLY12 -> DateHelper.formatDate(calendar.time, "MMM")
         }
     }
 }
