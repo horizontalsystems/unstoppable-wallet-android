@@ -26,7 +26,7 @@
                 android:background="@drawable/input_background_themed"
                 android:gravity="top"
                 android:maxLines="6"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textVisiblePassword"
                 android:paddingStart="12dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="12dp" />
