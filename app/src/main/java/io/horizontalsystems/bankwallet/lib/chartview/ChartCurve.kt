@@ -156,7 +156,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     }
 
     private fun format(value: Float): String {
-        return String.format("%.${config.valuePrecision}f", value)
+        return String.format("%.${config.valueScale}f", value)
     }
 
     class Coordinate(val x: Float, val y: Float, val point: ChartPoint)

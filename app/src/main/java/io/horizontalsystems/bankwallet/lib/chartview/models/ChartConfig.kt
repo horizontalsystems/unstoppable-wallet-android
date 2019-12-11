@@ -36,9 +36,9 @@ class ChartConfig(private val context: Context) {
     var gridEdgeOffset = dp2px(5f)
 
     //  grid dimens
-    var valueTop = 0f
-    var valueStep = 0f
-    var valuePrecision = 0
+    var valueMin = 0f
+    var valueMax = 0f
+    var valueScale = 0
 
     //  Animation
     var animatedFraction = 0f

@@ -10,16 +10,15 @@ class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
     fun setCoordinates(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long): List<Coordinate> {
         val width = shape.width()
         val height = shape.height()
-        val bottom = config.valueTop - (config.valueStep * 4)
 
         val deltaX = (endTimestamp - startTimestamp) / width
-        val deltaY = height / (config.valueStep * 4)
+        val deltaY = (config.valueMax - config.valueMin) / height
 
         return points.map { point ->
             val x = (point.timestamp - startTimestamp) / deltaX
-            val y = height - deltaY * (point.value - bottom)
+            val y = (point.value - config.valueMin) / deltaY
 
-            Coordinate(x, y, point)
+            Coordinate(x, height - y, point)
         }
     }
 
