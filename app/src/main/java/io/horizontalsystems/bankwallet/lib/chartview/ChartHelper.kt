@@ -12,11 +12,11 @@ class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
         val height = shape.height()
 
         val deltaX = (endTimestamp - startTimestamp) / width
-        val deltaY = (config.valueMax - config.valueMin) / height
+        val deltaY = (config.valueTop - config.valueLow) / height
 
         return points.map { point ->
             val x = (point.timestamp - startTimestamp) / deltaX
-            val y = (point.value - config.valueMin) / deltaY
+            val y = (point.value - config.valueLow) / deltaY
 
             Coordinate(x, height - y, point)
         }

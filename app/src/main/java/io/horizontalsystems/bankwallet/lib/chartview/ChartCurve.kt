@@ -138,8 +138,8 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         drawPath(path, gridPaint)
 
         if (!isTouchActive) {
-            drawText(format(top.point.value), shape.left + config.textPricePadding, config.yAxisPrice(top.y, shape.bottom), textPaint)
-            drawText(format(low.point.value), shape.left + config.textPricePadding, config.yAxisPrice(low.y, shape.bottom), textPaint)
+            drawText(format(top.point.value), shape.left + config.textPricePadding, config.yAxisPrice(top.y, isTop = true), textPaint)
+            drawText(format(low.point.value), shape.left + config.textPricePadding, config.yAxisPrice(low.y, isTop = false), textPaint)
         }
     }
 
