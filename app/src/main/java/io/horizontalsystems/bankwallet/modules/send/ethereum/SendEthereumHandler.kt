@@ -35,7 +35,7 @@ class SendEthereumHandler(
     override val inputItems: List<SendModule.Input>
         get() = listOf(
                 SendModule.Input.Amount,
-                SendModule.Input.Address,
+                SendModule.Input.Address(),
                 SendModule.Input.Fee(true),
                 SendModule.Input.ProceedButton)
 

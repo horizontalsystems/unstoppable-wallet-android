@@ -105,10 +105,10 @@ class SendActivity : BaseActivity() {
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
                     }
                 }
-                SendModule.Input.Address -> {
+                is SendModule.Input.Address -> {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
-                        val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
+                        val sendAddressFragment = SendAddressFragment(wallet.coin, input.editable, it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()

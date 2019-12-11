@@ -14,6 +14,7 @@ object SendAddressModule {
         fun setAddress(address: String?)
         fun setAddressError(error: Exception?)
         fun setPasteButtonState(enabled: Boolean)
+        fun setAddressInputAsEditable(editable: Boolean)
     }
 
     interface IViewDelegate {
@@ -21,6 +22,7 @@ object SendAddressModule {
         fun onAddressPasteClicked()
         fun onAddressDeleteClicked()
         fun onAddressScanClicked()
+        fun onManualAddressEnter(addressText: String)
     }
 
     interface IInteractor {
@@ -55,6 +57,7 @@ object SendAddressModule {
 
 
     class Factory(private val coin: Coin,
+                  private val editable: Boolean,
                   private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -62,7 +65,7 @@ object SendAddressModule {
             val view = SendAddressView()
             val addressParser = App.addressParserFactory.parser(coin)
             val interactor = SendAddressInteractor(TextHelper, addressParser)
-            val presenter = SendAddressPresenter(view, interactor)
+            val presenter = SendAddressPresenter(view, editable, interactor)
 
             interactor.delegate = presenter
             sendHandler.addressModule = presenter

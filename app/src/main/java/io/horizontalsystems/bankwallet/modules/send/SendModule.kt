@@ -261,7 +261,7 @@ object SendModule {
 
     sealed class Input {
         object Amount : Input()
-        object Address : Input()
+        class Address(val editable: Boolean = false) : Input()
         class Fee(val isAdjustable: Boolean) : Input()
         class Memo(val maxLength: Int) : Input()
         object ProceedButton : Input()
