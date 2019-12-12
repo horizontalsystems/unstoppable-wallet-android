@@ -41,7 +41,7 @@ class CoinSettingsPresenter(
                     syncModeList.addAll(getSyncModes(syncMode))
 
                     if (settingsMode == SettingsMode.Restoring) {
-                        syncModeList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_SyncModeDescription, coin.title, coin.title, coin.type.restoreUrl())))
+                        syncModeList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_SyncModeDescription, coin.title, coin.type.restoreUrl())))
                     }
                 }
             }

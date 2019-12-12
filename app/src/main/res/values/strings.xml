@@ -453,7 +453,7 @@
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast" translatable="false">Horizontal Systems API</string>
     <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
-    <string name="CoinOption_SyncModeDescription">Select the source the Unstoppable should use to download your %1s balance and transactions. \n\nHorizontal Systems %2s API:\n%3s</string>
+    <string name="CoinOption_SyncModeDescription">Select the source the Unstoppable app should use to download your balance and transactions. \n\nHorizontal Systems %1s API:\n%2s</string>
     <string name="CoinOption_Slow" translatable="false">%s Blockchain</string>
     <string name="CoinOption_Slow_Subtitle">1–12 hours</string>
     <string name="CoinOption_BipDescriptionCreate">This setting controls the address format for the Bitcoin in this wallet. We recommend using BIP49 if not sure.</string>
