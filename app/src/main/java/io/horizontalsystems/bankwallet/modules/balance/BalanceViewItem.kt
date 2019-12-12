@@ -30,10 +30,8 @@ data class BalanceViewItem(
         val syncingData: SyncingData,
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
-        val rateDiffVisible: Boolean,
         val coinTypeLabelVisible: Boolean
 ) {
-
     enum class UpdateType {
         MARKET_INFO,
         CHART_INFO,
@@ -55,7 +53,6 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true)
 class ChartData(
-        val wrapperVisible: Boolean,
         val loading: Boolean,
         val failed: Boolean,
         val loaded: Boolean,
@@ -75,9 +72,8 @@ class BalanceViewItemFactory {
         val points = chartInfo?.points?.map { ChartPoint(it.value.toFloat(), it.timestamp) } ?: listOf()
         val startTimestamp = chartInfo?.startTimestamp ?: 0
         val endTimestamp = chartInfo?.endTimestamp ?: 0
-        val wrapperVisible = !expanded
 
-        return ChartData(wrapperVisible, loading, failed, loaded, points, startTimestamp, endTimestamp)
+        return ChartData(loading, failed, loaded, points, startTimestamp, endTimestamp)
     }
 
     private fun coinValue(state: AdapterState?, balance: BigDecimal?, coin: Coin, visible: Boolean): DeemedValue {
@@ -155,7 +151,6 @@ class BalanceViewItemFactory {
                 syncingData = syncingData(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
-                rateDiffVisible = !expanded,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type, balanceTotalVisibility)
         )
     }
