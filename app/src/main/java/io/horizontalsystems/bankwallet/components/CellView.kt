@@ -6,9 +6,11 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.bankwallet.viewHelpers.showIf
 import kotlinx.android.synthetic.main.view_cell.view.*
 
 class CellView : ConstraintLayout {
@@ -19,94 +21,103 @@ class CellView : ConstraintLayout {
     var coinIcon: String? = null
         set(value) {
             field = value
-            field?.let { cellLeft.imageCoinCode = it }
+            field?.let { cellIcon.bind(it) }
+            cellIcon.showIf(value != null)
         }
 
     var imageDrawable: Drawable? = null
         set(value) {
             field = value
-            field?.let { cellLeft.imageDrawable = it }
+            field?.let { cellIcon.bind(it) }
+            cellIcon.showIf(value != null)
         }
 
     var imageTint: ColorStateList? = null
         set(value) {
             field = value
-            cellLeft.imageTint = value
+            field?.let { cellIcon.setTint(it) }
         }
 
     var title: String? = null
         set(value) {
             field = value
-            cellLeft.title = value
+            cellTitle.text = value
         }
 
     var subtitle: String? = null
         set(value) {
             field = value
-            cellLeft.subtitle = value
-            layoutParams?.height = LayoutHelper.dp(if(value == null) singleLineHeight else doubleLineHeight, context)
+            cellSubtitle.text = value
+            cellSubtitle.showIf(value != null)
+            layoutParams?.height = LayoutHelper.dp(if (value == null) singleLineHeight else doubleLineHeight, context)
         }
 
     var subtitleLabel: String? = null
         set(value) {
             field = value
-            cellLeft.subtitleLabel = value
+            coinTypeLabel.text = value
+            coinTypeLabel.showIf(value != null)
         }
 
     var rightTitle: String? = null
         set(value) {
             field = value
-            cellRight.title = value
+            cellLabel.text = value
+            cellLabel.showIf(value != null)
         }
 
     var dropDownText: String? = null
         set(value) {
             field = value
-            cellRight.dropdownText = value
+            dropdownValue.text = value
+            dropdownValue.showIf(value != null)
         }
 
     var checked: Boolean = false
         set(value) {
             field = value
-            cellRight.checked = value
+            enableIcon(if (value) checkIcon else null)
         }
 
     var bottomBorder: Boolean = false
         set(value) {
             field = value
-            bottomShade.visibility = if (value) View.VISIBLE else View.INVISIBLE
+            bottomShade.showIf(value, View.INVISIBLE)
         }
 
     var dropDownArrow: Boolean = false
         set(value) {
             field = value
-            cellRight.dropDownArrow = value
+            enableIcon(if (value) dropDownIcon else null)
         }
 
-    var badgeImage: Boolean = false
+    var badge: Boolean = false
         set(value) {
             field = value
-            cellRight.badge = value
+            badgeImage.showIf(value)
         }
 
     var rightArrow: Boolean = false
         set(value) {
             field = value
-            cellRight.rightArrow = value
+            enableIcon(if (value) arrowIcon else null)
         }
 
     var switchIsChecked: Boolean? = null
         set(value) {
             field = value
-            if (value != null) {
-                cellRight.switchIsChecked = value
+            field?.let { isChecked ->
+                switchView.setOnCheckedChangeListener(null)
+                switchView.isChecked = isChecked
+                switchView.visibility = View.VISIBLE
+                switchView.setOnCheckedChangeListener(switchOnCheckedChangeListener)
             }
         }
 
     var switchOnCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
         set(value) {
             field = value
-            cellRight.switchOnCheckedChangeListener = value
+            switchView.setOnCheckedChangeListener(value)
         }
 
     init {
@@ -122,8 +133,8 @@ class CellView : ConstraintLayout {
         initialize(attrs)
     }
 
-    fun switchToggle(){
-        cellRight.switchToggle()
+    fun switchToggle() {
+        switchView.toggle()
     }
 
     override fun onAttachedToWindow() {
@@ -146,5 +157,13 @@ class CellView : ConstraintLayout {
         } finally {
             ta.recycle()
         }
+    }
+
+    private fun enableIcon(icon: ImageView?) {
+        listOf(lightModeIcon, dropDownIcon, arrowIcon, checkIcon).forEach {
+            it.visibility = View.GONE
+        }
+
+        icon?.visibility = View.VISIBLE
     }
 }

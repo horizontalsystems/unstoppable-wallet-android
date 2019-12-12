@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
+import io.horizontalsystems.bankwallet.viewHelpers.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
@@ -257,10 +258,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         if (syncingData.until != null) {
             textSyncedUntil.text = containerView.context.getString(R.string.Balance_SyncedUntil, syncingData.until)
         }
-    }
-
-    private fun View.showIf(condition: Boolean, hideType: Int = View.GONE) {
-        visibility = if (condition) View.VISIBLE else hideType
     }
 
     private fun View.dimIf(condition: Boolean, dimmedAlpha: Float = 0.5f) {

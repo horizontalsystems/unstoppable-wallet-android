@@ -49,7 +49,7 @@ class SecuritySettingsActivity : BaseActivity() {
         //  Handling view model live events
 
         viewModel.backupAlertVisibleLiveData.observe(this, Observer { alert ->
-            manageKeys.badgeImage = alert
+            manageKeys.badge = alert
         })
 
         viewModel.openManageKeysLiveEvent.observe(this, Observer {
