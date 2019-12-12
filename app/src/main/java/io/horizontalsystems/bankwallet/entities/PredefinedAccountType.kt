@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.entities
 
+import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
+import kotlinx.android.parcel.Parcelize
 
-sealed class PredefinedAccountType {
-    object Standard : PredefinedAccountType()
-    object Eos : PredefinedAccountType()
-    object Binance : PredefinedAccountType()
+sealed class PredefinedAccountType: Parcelable {
+    @Parcelize object Standard : PredefinedAccountType()
+    @Parcelize object Eos : PredefinedAccountType()
+    @Parcelize object Binance : PredefinedAccountType()
 
     val title: Int
         get() = when (this) {

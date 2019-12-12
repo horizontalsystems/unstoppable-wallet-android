@@ -37,8 +37,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
         val presentationMode: PresentationMode = intent.getParcelableExtra(ModuleField.PRESENTATION_MODE)
                 ?: PresentationMode.Initial
-        val predefinedAccountTypeString = intent.extras?.getString(ModuleField.PREDEFINED_ACCOUNT_TYPE)
-        val predefinedAccountType = PredefinedAccountType.fromString(predefinedAccountTypeString)
+        val predefinedAccountType: PredefinedAccountType? = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE)
 
         predefinedAccountType?.let {
             presenter = ViewModelProvider(this, RestoreCoinsModule.Factory(presentationMode, it)).get(RestoreCoinsPresenter::class.java)

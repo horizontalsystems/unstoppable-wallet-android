@@ -39,8 +39,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
         val presentationMode: PresentationMode = intent.getParcelableExtra(ModuleField.PRESENTATION_MODE)
                 ?: PresentationMode.Initial
-        val predefinedAccountTypeString = intent.extras?.getString(ModuleField.PREDEFINED_ACCOUNT_TYPE)
-        val predefinedAccountType = PredefinedAccountType.fromString(predefinedAccountTypeString)
+        val predefinedAccountType: PredefinedAccountType? = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE)
 
         presenter = ViewModelProvider(this, CreateWalletModule.Factory(presentationMode, predefinedAccountType)).get(CreateWalletPresenter::class.java)
 

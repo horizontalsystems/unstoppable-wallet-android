@@ -1,17 +1,18 @@
 package io.horizontalsystems.bankwallet.entities
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
-sealed class CoinType : Serializable {
-    object BitcoinCash : CoinType()
-    object Bitcoin : CoinType()
-    object Dash : CoinType()
-    object Ethereum : CoinType()
+sealed class CoinType : Parcelable {
+    @Parcelize object BitcoinCash : CoinType()
+    @Parcelize object Bitcoin : CoinType()
+    @Parcelize object Dash : CoinType()
+    @Parcelize object Ethereum : CoinType()
 
-    class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val gasLimit: Long = 100_000, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
-    class Eos(val token: String, val symbol: String) : CoinType()
-    class Binance(val symbol: String) : CoinType()
+    @Parcelize class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val gasLimit: Long = 100_000, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
+    @Parcelize class Eos(val token: String, val symbol: String) : CoinType()
+    @Parcelize class Binance(val symbol: String) : CoinType()
 
     fun canSupport(accountType: AccountType): Boolean {
         when (this) {
@@ -76,7 +77,8 @@ sealed class CoinType : Serializable {
 
 }
 
-enum class CoinSetting {
+@Parcelize
+enum class CoinSetting: Parcelable {
     Derivation,
     SyncMode
 }

@@ -39,8 +39,7 @@ import java.util.concurrent.Executor
 class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
 
     private val interactionType: PinInteractionType by lazy {
-        arguments?.getSerializable(PinModule.keyInteractionType) as? PinInteractionType
-                ?: PinInteractionType.UNLOCK
+        arguments?.getParcelable(PinModule.keyInteractionType) ?: PinInteractionType.UNLOCK
     }
 
     private val showCancelButton: Boolean by lazy {
