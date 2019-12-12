@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.lib.chartview
 
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
@@ -17,6 +19,8 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private val gradient = Paint()
     private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var isTouchActive = false
+
+    private val baseCurrency = App.currencyManager.baseCurrency
 
     fun init(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long) {
         coordinates = chartHelper.setCoordinates(points, startTimestamp, endTimestamp)
@@ -156,7 +160,8 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     }
 
     private fun format(value: Float): String {
-        return String.format("%.${config.valueScale}f", value)
+        val currencyValue = CurrencyValue(baseCurrency, value.toBigDecimal())
+        return App.numberFormatter.format(currencyValue, canUseLessSymbol = false, maxFraction = 8) ?: ""
     }
 
     class Coordinate(val x: Float, val y: Float, val point: ChartPoint)
