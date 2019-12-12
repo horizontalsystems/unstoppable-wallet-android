@@ -82,7 +82,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            securityCenter.badgeImage = !wordListBackedUp
+            securityCenter.badge = !wordListBackedUp
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
