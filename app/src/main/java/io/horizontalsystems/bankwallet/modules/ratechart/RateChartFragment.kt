@@ -64,7 +64,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
         presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
+            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp, item.currency)
 
             coinRateDiff.diff = item.diffValue
         })

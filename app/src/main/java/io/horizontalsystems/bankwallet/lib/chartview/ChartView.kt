@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
@@ -120,9 +121,9 @@ class ChartView : View {
         chartIndicator?.init(config)
     }
 
-    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
+    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long, currency: Currency? = null) {
         setColour(points, endTimestamp)
-        setPoints(points, chartType, startTimestamp, endTimestamp)
+        setPoints(points, chartType, startTimestamp, endTimestamp, currency)
 
         if (config.animated) {
             animator.setFloatValues(0f)
@@ -145,7 +146,7 @@ class ChartView : View {
         }
     }
 
-    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
+    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long, currency: Currency?) {
         helper.scale(points)
 
         var shapeWidth = width.toFloat()
@@ -164,7 +165,7 @@ class ChartView : View {
 
         shape.set(0f, 0f, shapeWidth, shapeHeight - config.offsetBottom)
 
-        chartCurve.init(points, startTimestamp, endTimestamp)
+        chartCurve.init(points, startTimestamp, endTimestamp, currency)
 
         if (config.showGrid) {
             chartGrid.init(chartType, startTimestamp, endTimestamp)
