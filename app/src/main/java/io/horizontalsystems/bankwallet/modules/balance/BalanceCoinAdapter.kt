@@ -140,9 +140,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             iconNotSynced.showIf(failedIconVisible)
             iconProgress.showIf(syncingData.progress != null)
 
-            rateDiff.showIf(rateDiffVisible)
-            chartWrapper.showIf(chartData.wrapperVisible)
-
             balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
             balanceFiat.showIf(fiatValue.visible)
             coinLabel.showIf(coinTypeLabelVisible)
@@ -170,11 +167,9 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun bindUpdateExpanded(item: BalanceViewItem) {
         item.apply {
-            rateDiff.showIf(rateDiffVisible)
             balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
             balanceFiat.showIf(fiatValue.visible)
 
-            chartWrapper.showIf(chartData.wrapperVisible)
             coinLabel.showIf(coinTypeLabelVisible)
             textSyncingGroup.showIf(syncingData.syncingTextVisible)
 
