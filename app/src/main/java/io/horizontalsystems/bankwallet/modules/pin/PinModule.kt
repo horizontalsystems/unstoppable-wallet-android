@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 object PinModule {
@@ -72,7 +74,8 @@ sealed class TopText(open val text: Int){
     class SmallError(override val text: Int): TopText(text)
 }
 
-enum class PinInteractionType {
+@Parcelize
+enum class PinInteractionType: Parcelable {
     SET_PIN,
     UNLOCK,
     EDIT_PIN

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.putParcelableExtra
 
 
 class PinActivity : BaseActivity() {
@@ -33,7 +34,7 @@ class PinActivity : BaseActivity() {
 
         fun startForResult(context: AppCompatActivity, interactionType: PinInteractionType, requestCode: Int = 0, showCancel: Boolean = true) {
             val intent = Intent(context, PinActivity::class.java)
-            intent.putExtra(PinModule.keyInteractionType, interactionType)
+            intent.putParcelableExtra(PinModule.keyInteractionType, interactionType)
             intent.putExtra(PinModule.keyShowCancel, showCancel)
 
             context.startActivityForResult(intent, requestCode)

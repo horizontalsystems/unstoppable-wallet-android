@@ -64,7 +64,7 @@ object RestoreCoinsModule {
     fun start(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, mode: PresentationMode) {
         val intent = Intent(context, RestoreCoinsActivity::class.java)
         intent.putParcelableExtra(ModuleField.PRESENTATION_MODE, mode)
-        intent.putExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType.toString())
+        intent.putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
         context.startActivityForResult(intent, ModuleCode.RESTORE_COINS)
     }
 

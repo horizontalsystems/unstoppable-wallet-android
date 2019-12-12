@@ -63,7 +63,7 @@ object CreateWalletModule {
     fun startInApp(context: Context, predefinedAccountType: PredefinedAccountType) {
         val intent = Intent(context, CreateWalletActivity::class.java)
         intent.putParcelableExtra(ModuleField.PRESENTATION_MODE, PresentationMode.InApp)
-        intent.putExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType.toString())
+        intent.putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
         context.startActivity(intent)
     }
 

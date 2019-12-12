@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.modules.pin.PinFragment
 import io.horizontalsystems.bankwallet.modules.pin.PinInteractionType
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
@@ -37,7 +38,7 @@ class LockScreenActivity : BaseActivity() {
 
         fun startForResult(context: AppCompatActivity, requestCode: Int = 0) {
             val intent = Intent(context, LockScreenActivity::class.java)
-            intent.putExtra(PinModule.keyInteractionType, PinInteractionType.UNLOCK)
+            intent.putParcelableExtra(PinModule.keyInteractionType, PinInteractionType.UNLOCK)
             intent.putExtra(PinModule.keyShowCancel, false)
 
             context.startActivityForResult(intent, requestCode)
