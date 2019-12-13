@@ -102,6 +102,8 @@ dependencies {
     //     Support library depends on this lightweight import
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
     // Room
     def room_version = '2.2.0'
     implementation "androidx.room:room-runtime:$room_version"
