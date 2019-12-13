@@ -143,7 +143,7 @@
     <string name="TransactionInfo_From">로 부터</string>
     <string name="TransactionInfo_Time">시간</string>
     <string name="TransactionInfo_ButtonVerify">확인</string>
-    <string name="TransactionInfo_LockedUntil">시간 자물쇠</string>
+    <string name="TransactionInfo_LockedUntil">까지 잠그기</string>
     <string name="TransactionInfo_RecipientHash">수령인</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
     <string name="TransactionInfo_Fee">수수료</string>
