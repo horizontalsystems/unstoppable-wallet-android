@@ -145,8 +145,8 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         drawPath(path, gridPaint)
 
         if (!isTouchActive) {
-            drawText(format(top.point.value), shape.left + config.textPricePadding, config.yAxisPrice(top.y, isTop = true), textPaint)
-            drawText(format(low.point.value), shape.left + config.textPricePadding, config.yAxisPrice(low.y, isTop = false), textPaint)
+            drawText(format(top.point.value), shape.left + config.textPricePL, config.yAxisPrice(top.y, isTop = true), textPaint)
+            drawText(format(low.point.value), shape.left + config.textPricePL, config.yAxisPrice(low.y, isTop = false), textPaint)
         }
     }
 
@@ -165,7 +165,9 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private fun format(value: Float): String {
         val baseCurrency = currency ?: return ""
         val currencyValue = CurrencyValue(baseCurrency, value.toBigDecimal())
-        return App.numberFormatter.format(currencyValue, canUseLessSymbol = false, maxFraction = 8) ?: ""
+        val maxFraction = if (config.valueScale == 0) null else config.valueScale
+
+        return App.numberFormatter.format(currencyValue, canUseLessSymbol = false, maxFraction = maxFraction) ?: ""
     }
 
     class Coordinate(val x: Float, val y: Float, val point: ChartPoint)

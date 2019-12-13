@@ -44,7 +44,7 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
             }
 
             // Labels
-            canvas.drawText(it.value, config.xAxisPrice(it.x, shape.right, it.value), shape.bottom + config.textSize + config.textPadding, textPaint)
+            canvas.drawText(it.value, config.xAxisPrice(it.x, shape.right, it.value), shape.bottom + config.textSize + config.textPricePT, textPaint)
         }
     }
 
