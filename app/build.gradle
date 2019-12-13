@@ -33,6 +33,18 @@ android {
             }
         }
         vectorDrawables.useSupportLibrary = true
+        lintOptions {
+            checkReleaseBuilds false
+        }
+    }
+    signingConfigs {
+        hockeyApp {
+            storeFile file("./test.keystore")
+            storePassword "testKeystore123"
+
+            keyAlias "testKeystore"
+            keyPassword "testKeystore123"
+        }
     }
     buildTypes {
         debug {
@@ -50,6 +62,16 @@ android {
             resValue "string", "infuraProjectId", ""
             resValue "string", "infuraSecretKey", ""
             resValue "string", "etherscanKey", ""
+            resValue "string", "is_release", "true"
+        }
+        hockeyApp {
+            signingConfig signingConfigs.hockeyApp
+            debuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "infuraProjectId", "2a1306f1d12f4c109a4d4fb9be46b02e"
+            resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
+            resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "is_release", "true"
         }
     }
@@ -146,6 +168,7 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    hockeyAppImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:09cf43e'
