@@ -143,7 +143,7 @@
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonVerify">Проверить</string>
-    <string name="TransactionInfo_LockedUntil">TimeLock</string>
+    <string name="TransactionInfo_LockedUntil">Заблокировано до </string>
     <string name="TransactionInfo_RecipientHash">Получатель</string>
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <string name="TransactionInfo_Fee">Комиссия</string>
