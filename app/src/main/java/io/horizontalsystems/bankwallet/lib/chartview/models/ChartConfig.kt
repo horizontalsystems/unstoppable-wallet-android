@@ -23,9 +23,10 @@ class ChartConfig(private val context: Context) {
     var partialChartColor = context.getColor(R.color.grey_50)
 
     var textSize = dp2px(12f)
-    var textPadding = dp2px(4f)
+    var textPricePT = dp2px(4f)
+    var textPricePB = dp2px(8f)
+    var textPricePL = dp2px(16f)
     var textPriceSize = dp2px(14f)
-    var textPricePadding = dp2px(16f)
 
     //  dimens
     var width = 0f
@@ -48,18 +49,19 @@ class ChartConfig(private val context: Context) {
     fun xAxisPrice(x: Float, maxX: Float, text: String): Float {
         val width = measureTextWidth(text)
         if (width + x >= maxX) {
-            return maxX - (width + textPadding)
+            return maxX - (width + textPricePT)
         }
 
         return x
     }
 
     fun yAxisPrice(y: Float, isTop: Boolean): Float {
+        val textBoxOffset = 7
         if (isTop) {
-            return y - (textPadding * 1.5f)
+            return y - textPricePB + textBoxOffset
         }
 
-        return y + textPriceSize + 4f
+        return y + textPriceSize + textBoxOffset
     }
 
     fun dp2px(dps: Float): Float {
