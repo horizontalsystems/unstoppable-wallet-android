@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.coinsettings
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CoinSettingsPresenter(
         private val coin: Coin,
@@ -14,44 +17,46 @@ class CoinSettingsPresenter(
 ) : ViewModel(), CoinSettingsModule.IViewDelegate {
 
     override fun viewDidLoad() {
-        view.setTitle(coin.title)
+        viewModelScope.launch(Dispatchers.IO) {
+            view.setTitle(coin.title)
 
-        val derivationList = mutableListOf<SettingSection>()
-        val syncModeList = mutableListOf<SettingSection>()
+            val derivationList = mutableListOf<SettingSection>()
+            val syncModeList = mutableListOf<SettingSection>()
 
-        for ((key, value) in coinSettings) {
-            when (key) {
-                CoinSetting.Derivation -> {
-                    val derivation = AccountType.Derivation.valueOf(value)
+            for ((key, value) in coinSettings) {
+                when (key) {
+                    CoinSetting.Derivation -> {
+                        val derivation = AccountType.Derivation.valueOf(value)
 
-                    derivationList.add(SettingSection.Header(App.instance.getString(R.string.CoinOption_AddressFormatTitle)))
+                        derivationList.add(SettingSection.Header(App.instance.getString(R.string.CoinOption_AddressFormatTitle)))
 
-                    derivationList.addAll(getBips(derivation))
+                        derivationList.addAll(getBips(derivation))
 
-                    when (settingsMode) {
-                        SettingsMode.Creating -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionCreate)))
-                        SettingsMode.Restoring -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionRestore)))
+                        when (settingsMode) {
+                            SettingsMode.Creating -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionCreate)))
+                            SettingsMode.Restoring -> derivationList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_BipDescriptionRestore)))
+                        }
                     }
-                }
-                CoinSetting.SyncMode -> {
-                    val syncMode = SyncMode.valueOf(value)
+                    CoinSetting.SyncMode -> {
+                        val syncMode = SyncMode.valueOf(value)
 
-                    syncModeList.add(SettingSection.Header(App.instance.getString(R.string.CoinOption_SyncModeTitle)))
+                        syncModeList.add(SettingSection.Header(App.instance.getString(R.string.CoinOption_SyncModeTitle)))
 
-                    syncModeList.addAll(getSyncModes(syncMode))
+                        syncModeList.addAll(getSyncModes(syncMode))
 
-                    if (settingsMode == SettingsMode.Restoring) {
-                        syncModeList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_SyncModeDescription, coin.title, coin.type.restoreUrl())))
+                        if (settingsMode == SettingsMode.Restoring) {
+                            syncModeList.add(SettingSection.Description(App.instance.getString(R.string.CoinOption_SyncModeDescription, coin.title, coin.type.restoreUrl())))
+                        }
                     }
                 }
             }
+
+            val items = mutableListOf<SettingSection>()
+            items.addAll(derivationList)
+            items.addAll(syncModeList)
+
+            view.setItems(items.toList())
         }
-
-        val items = mutableListOf<SettingSection>()
-        items.addAll(derivationList)
-        items.addAll(syncModeList)
-
-        view.setItems(items.toList())
     }
 
     override fun onSelect(syncMode: SyncMode) {

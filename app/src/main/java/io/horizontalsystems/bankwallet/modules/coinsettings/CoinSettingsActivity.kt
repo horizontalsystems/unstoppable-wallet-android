@@ -110,7 +110,9 @@ class CoinSettingsActivity : BaseActivity(), CoinSettingsAdapter.Listener {
     }
 }
 
-class CoinSettingsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CoinSettingsAdapter(private var listener: Listener) :
+        RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+        ViewHolderDerivation.DerivationClickListener, ViewHolderSyncMode.SyncModeClickListener {
 
     private val viewTypeDerivation = 1
     private val viewTypeSyncMode = 2
@@ -123,6 +125,20 @@ class CoinSettingsAdapter(private var listener: Listener) : RecyclerView.Adapter
     }
 
     var items = listOf<SettingSection>()
+
+    override fun onDerivationClick(position: Int) {
+        (items[position] as? SettingSection.DerivationItem)?.derivation?.let {
+            updateItems(it)
+            listener.onDerivationSelect(it)
+        }
+    }
+
+    override fun onSyncModeClick(position: Int) {
+        (items[position] as? SettingSection.SyncModeItem)?.syncMode?.let {
+            updateItems(it)
+            listener.onSyncModeSelect(it)
+        }
+    }
 
     override fun getItemCount() = items.size
 
@@ -138,21 +154,9 @@ class CoinSettingsAdapter(private var listener: Listener) : RecyclerView.Adapter
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             viewTypeDerivation -> ViewHolderDerivation(inflater.inflate(
-                    R.layout.view_holder_coin_setting_item, parent, false),
-                    onDerivationClick = { index ->
-                        (items[index] as? SettingSection.DerivationItem)?.derivation?.let {
-                            updateItems(it)
-                            listener.onDerivationSelect(it)
-                        }
-                    })
+                    R.layout.view_holder_coin_setting_item, parent, false), this)
             viewTypeSyncMode -> ViewHolderSyncMode(inflater.inflate(
-                    R.layout.view_holder_coin_setting_item, parent, false),
-                    onSyncModeClick = { index ->
-                        (items[index] as? SettingSection.SyncModeItem)?.syncMode?.let {
-                            updateItems(it)
-                            listener.onSyncModeSelect(it)
-                        }
-                    })
+                    R.layout.view_holder_coin_setting_item, parent, false), this)
             viewTypeSectionHeader -> ViewHolderCoinSettingSectionHeader(inflater.inflate(
                     R.layout.view_holder_coin_setting_section_header, parent, false))
             viewTypeSectionDescription -> ViewHolderCoinSettingSectionDescription(inflater.inflate(
@@ -201,12 +205,16 @@ class CoinSettingsAdapter(private var listener: Listener) : RecyclerView.Adapter
     }
 }
 
-class ViewHolderDerivation(override val containerView: View, private val onDerivationClick: (position: Int) -> Unit)
+class ViewHolderDerivation(override val containerView: View, private val listener: DerivationClickListener)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    interface DerivationClickListener {
+        fun onDerivationClick(position: Int)
+    }
 
     init {
         containerView.setOnClickListener {
-            onDerivationClick.invoke(adapterPosition)
+            listener.onDerivationClick(adapterPosition)
         }
     }
 
@@ -217,12 +225,16 @@ class ViewHolderDerivation(override val containerView: View, private val onDeriv
     }
 }
 
-class ViewHolderSyncMode(override val containerView: View, private val onSyncModeClick: (position: Int) -> Unit)
+class ViewHolderSyncMode(override val containerView: View, private val listener: SyncModeClickListener)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    interface SyncModeClickListener {
+        fun onSyncModeClick(position: Int)
+    }
 
     init {
         containerView.setOnClickListener {
-            onSyncModeClick.invoke(adapterPosition)
+            listener.onSyncModeClick(adapterPosition)
         }
     }
 
