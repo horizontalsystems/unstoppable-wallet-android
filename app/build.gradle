@@ -177,7 +177,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:809e1a5'
     implementation 'com.github.horizontalsystems:xrates-kit-android:78aa010'
-    implementation('com.github.horizontalsystems:eos-kit-android:fdee6ab') {
+    implementation('com.github.horizontalsystems:eos-kit-android:b012eab') {
         exclude group: 'com.google.protobuf'
     }
 
