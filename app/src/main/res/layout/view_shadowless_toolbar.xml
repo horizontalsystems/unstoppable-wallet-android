@@ -60,7 +60,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="3dp"
         android:includeFontPadding="false"
-        android:textColor="@color/stateful_text_button_jacob_color"
+        android:textColor="?ColorJacob"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/toolbarTitle"
