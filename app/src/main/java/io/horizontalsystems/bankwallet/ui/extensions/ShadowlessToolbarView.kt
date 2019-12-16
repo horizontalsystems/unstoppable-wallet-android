@@ -59,10 +59,6 @@ class ShadowlessToolbarView : ConstraintLayout {
         }
     }
 
-    fun setRightTextButtonState(enabled: Boolean){
-        rightTextButton.isActivated = enabled
-    }
-
     fun bindTitle(title: String) {
         toolbarTitle.text = title
     }
