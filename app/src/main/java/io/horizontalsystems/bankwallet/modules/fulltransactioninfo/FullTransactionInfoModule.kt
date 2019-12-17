@@ -63,6 +63,7 @@ object FullTransactionInfoModule {
 
     interface Provider {
         val name: String
+        val pingUrl: String
 
         fun url(hash: String): String?
         fun apiRequest(hash: String): Request

@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.PostRequest
-import java.net.URL
 
 class DataProviderSettingsPresenter(val coin: Coin, val transactionHash: String, private val interactor: DataProviderSettingsModule.Interactor)
     : DataProviderSettingsModule.ViewDelegate, DataProviderSettingsModule.InteractorDelegate {
@@ -15,16 +13,7 @@ class DataProviderSettingsPresenter(val coin: Coin, val transactionHash: String,
         val allProviders = interactor.providers(coin)
 
         allProviders.forEach { provider ->
-            val request = provider.apiRequest(transactionHash)
-
-            val url = if (request is PostRequest) {
-                val uri = URL(request.url)
-                "${uri.protocol}://${uri.host}"
-            } else {
-                request.url
-            }
-
-            interactor.pingProvider(provider.name, url)
+            interactor.pingProvider(provider.name, provider.pingUrl)
         }
 
         items = allProviders.map {

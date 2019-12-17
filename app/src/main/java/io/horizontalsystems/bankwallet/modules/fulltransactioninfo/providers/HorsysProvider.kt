@@ -3,21 +3,22 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.core.utils.EthInputParser
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
-import java.math.BigInteger
 import java.util.*
 
 class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseUrl = "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz"
+
     override val name = "HorizontalSystems.xyz"
+    override val pingUrl = "$baseUrl/apg/block/0"
 
     override fun url(hash: String): String? {
         return null
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        val url = "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/apg/tx/$hash"
+        val url = "$baseUrl/apg/tx/$hash"
         return GetRequest(url)
     }
 
@@ -27,37 +28,21 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
 }
 
 class HorsysDashProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseUrl = "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz"
+
     override val name: String = "HorizontalSystems.xyz"
+    override val pingUrl = "$baseUrl/apg/block/0"
 
     override fun url(hash: String): String {
-        return "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz/insight/tx/$hash"
+        return "$baseUrl/insight/tx/$hash"
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        val url = "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz/apg/tx/$hash"
-        return GetRequest(url)
+        return GetRequest("$baseUrl/apg/tx/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
         return Gson().fromJson(json, InsightResponse::class.java)
-    }
-}
-
-class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.EthereumForksProvider {
-
-    private val url = if (testMode) "http://eth-ropsten.horizontalsystems.xyz/tx/" else "https://eth.horizontalsystems.xyz/tx/"
-    private val apiUrl = if (testMode) "http://eth-ropsten.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash=" else "https://eth.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash="
-
-    override val name: String = "HorizontalSystems.xyz"
-
-    override fun url(hash: String): String = "$url$hash"
-
-    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("$apiUrl$hash")
-    }
-
-    override fun convert(json: JsonObject): EthereumResponse {
-        return Gson().fromJson(json["result"], HorsysETHResponse::class.java)
     }
 }
 
@@ -89,52 +74,4 @@ class HorsysBTCResponse(
     }
 
     class BCoin(@SerializedName("value") val amount: Int, @SerializedName("address") val addr: String)
-}
-
-class HorsysETHResponse(
-        @SerializedName("timeStamp") val time: String?,
-        @SerializedName("nonce") val gNonce: String?,
-        @SerializedName("value") val valueString: String,
-        @SerializedName("blockNumber") val blockNumber: String,
-        @SerializedName("confirmations") val confirmationsString: String?,
-        @SerializedName("hash") override val hash: String,
-        @SerializedName("from") override val from: String,
-        @SerializedName("to") val receiver: String,
-        @SerializedName("fee") override val fee: String,
-        @SerializedName("input") val input: String,
-        @SerializedName("gasLimit") override val gasLimit: String,
-        @SerializedName("gasUsed") override val gasUsed: String) : EthereumResponse() {
-
-    override val contractAddress: String? get() = if (input != "0x") receiver else null
-    override val size: Int? get() = null
-    override val date: Date? get() = time?.let { Date(it.toLong() * 1000) }
-    override val confirmations: Int? get() = confirmationsString?.toIntOrNull()
-    override val height: String get() = Integer.parseInt(blockNumber, 16).toString()
-    override val gasPrice: String? get() = null
-
-    override val value: BigInteger
-        get() {
-            var amountData = valueString.substring(2)
-            if (input != "0x") {
-                EthInputParser.parse(input)?.let {
-                    amountData = it.value
-                }
-            }
-
-            return BigInteger(amountData, 16)
-        }
-
-    override val nonce: String?
-        get() = gNonce?.let { Integer.parseInt(it, 16).toString() }
-
-    override val to: String
-        get() {
-            if (input != "0x") {
-                EthInputParser.parse(input)?.let {
-                    return "0x${it.to}"
-                }
-            }
-
-            return receiver
-        }
 }

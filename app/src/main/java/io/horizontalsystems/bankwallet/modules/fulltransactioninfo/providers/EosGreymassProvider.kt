@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 
 class EosGreymassProvider : FullTransactionInfoModule.EosProvider {
 
-    override val name: String
-        get() = "Greymass.com"
+    override val name = "Greymass.com"
+    override val pingUrl = "https://eos.greymass.com/"
 
     override fun url(hash: String): String? {
         return null

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 
 class BlockdozerBitcoinCashProvider(testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
     override val name = "Blockdozer.com"
+    override val pingUrl = "https://bch.blockdozer.com" //TODO blockdozer is down, maybe we should remove blockdozer provider
 
     private val baseUrl = "https://${if (testMode) "tbch." else ""}blockdozer.com"
 

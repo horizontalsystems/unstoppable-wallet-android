@@ -7,16 +7,17 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import java.math.BigDecimal
 
 class BinanceChainProvider(val testMode: Boolean) : FullTransactionInfoModule.BinanceProvider {
+    private val baseApiUrl = "https://${if (testMode) "testnet-dex" else "dex"}.binance.org/api/v1"
 
-    private val url = if (testMode) "https://testnet-explorer.binance.org/tx/" else "https://explorer.binance.org/tx/"
-    private val apiUrl = if (testMode) "https://testnet-dex.binance.org/api/v1/tx/" else "https://dex.binance.org/api/v1/tx/"
+    override val name = "Binance.org"
+    override val pingUrl = "$baseApiUrl/node-info"
 
-    override val name: String = "Binance.org"
-
-    override fun url(hash: String): String = "$url$hash"
+    override fun url(hash: String): String {
+        return "https://${if (testMode) "testnet-explorer" else "explorer"}.binance.org/tx/$hash"
+    }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("$apiUrl$hash?format=json")
+        return GetRequest("$baseApiUrl/tx/$hash?format=json")
     }
 
     override fun convert(json: JsonObject): BinanceResponse {
