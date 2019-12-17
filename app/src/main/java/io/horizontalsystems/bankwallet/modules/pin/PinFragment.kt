@@ -208,14 +208,22 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                fingerprintCancelButton.visibility = View.GONE
-                viewDelegate.onFingerprintUnlock()
+                activity?.runOnUiThread {
+                    fingerprintCancelButton.visibility = View.GONE
+                    viewDelegate.onFingerprintUnlock()
+                }
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
-                if(errorCode == BiometricConstants.ERROR_USER_CANCELED){
-                    setFingerprintInputScreenVisible(false)
+
+                if (errorCode == BiometricConstants.ERROR_USER_CANCELED
+                        || errorCode == BiometricConstants.ERROR_NEGATIVE_BUTTON
+                        || errorCode == BiometricConstants.ERROR_CANCELED
+                ) {
+                    activity?.runOnUiThread {
+                        setFingerprintInputScreenVisible(false)
+                    }
                 }
             }
         })
@@ -224,8 +232,8 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
     }
 
     private fun setFingerprintInputScreenVisible(fingerprintVisible: Boolean) {
-        fingerprintInput.visibility = if (fingerprintVisible) View.VISIBLE else View.GONE
-        pinUnlock.visibility = if (fingerprintVisible) View.GONE else View.VISIBLE
+        fingerprintInput.visibility = if (fingerprintVisible) View.VISIBLE else View.INVISIBLE
+        pinUnlock.visibility = if (fingerprintVisible) View.INVISIBLE else View.VISIBLE
     }
 
 }
