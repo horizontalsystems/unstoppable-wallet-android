@@ -35,14 +35,7 @@ class AppConfigProvider : IAppConfigProvider {
             Currency(code = "USD", symbol = "\u0024"),
             Currency(code = "EUR", symbol = "\u20AC"),
             Currency(code = "GBP", symbol = "\u00A3"),
-            Currency(code = "JPY", symbol = "\u00A5"),
-            Currency(code = "AUD", symbol = "\u20B3"),
-            Currency(code = "CAD", symbol = "\u0024"),
-            Currency(code = "CHF", symbol = "\u20A3"),
-            Currency(code = "CNY", symbol = "\u00A5"),
-            Currency(code = "KRW", symbol = "\u20AE"),
-            Currency(code = "RUB", symbol = "\u20BD"),
-            Currency(code = "TRY", symbol = "\u20BA")
+            Currency(code = "JPY", symbol = "\u00A5")
     )
 
     override val localizations: List<String>
