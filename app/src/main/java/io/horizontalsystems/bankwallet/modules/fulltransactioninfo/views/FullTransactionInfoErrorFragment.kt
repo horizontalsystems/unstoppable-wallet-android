@@ -19,6 +19,10 @@ class FullTransactionInfoErrorFragment : Fragment() {
     }
 
     private var provider: String? = null
+    private var errorText: String? = null
+    private var errorImageRes: Int? = null
+    private var showRetry: Boolean = false
+
     private var listener: Listener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,14 +33,20 @@ class FullTransactionInfoErrorFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         providerName.text = provider
-        providerError.text = getString(R.string.FullInfo_Error_Subtitle)
+        providerError.text = errorText
+        errorImageRes?.let { errorImageView.setImageResource(it) }
 
         val changeProviderStyle = SpannableString(getString(R.string.FullInfo_Error_ChangeSource))
         changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
         changeProvider.text = changeProviderStyle
 
-        btnRetry.setOnClickListener {
-            listener?.onRetry()
+        if (showRetry) {
+            btnRetry.visibility = View.VISIBLE
+            btnRetry.setOnClickListener {
+                listener?.onRetry()
+            }
+        } else {
+            btnRetry.visibility = View.GONE
         }
 
         changeProvider.setOnClickListener {
@@ -58,9 +68,12 @@ class FullTransactionInfoErrorFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(provider: String): FullTransactionInfoErrorFragment {
+        fun newInstance(provider: String, error: String, errorImageRes: Int, showRetry: Boolean = true): FullTransactionInfoErrorFragment {
             val fragment = FullTransactionInfoErrorFragment()
             fragment.provider = provider
+            fragment.errorText = error
+            fragment.errorImageRes = errorImageRes
+            fragment.showRetry = showRetry
             return fragment
         }
     }

@@ -230,7 +230,8 @@
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
 
-    <string name="FullInfo_Error_Subtitle">Offline</string>
+    <string name="FullInfo_Error_ProviderOffline">Offline</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transaction was not found</string>
     <string name="FullInfo_Error_Retry">Retry</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
 

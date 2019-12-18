@@ -116,11 +116,19 @@ class FullTransactionInfoPresenterTest {
     }
 
     @Test
-    fun onError() {
-        presenter.onError("abc")
+    fun onErrorProviderOfflie() {
+        presenter.onProviderOffline("abc")
 
         verify(view).hideLoading()
-        verify(view).showError("abc")
+        verify(view).showErrorProviderOffline("abc")
+    }
+
+    @Test
+    fun onErrorTransactionNotFound() {
+        presenter.onTransactionNotFound("abc")
+
+        verify(view).hideLoading()
+        verify(view).showErrorTransactionNotFound("abc")
     }
 
     @Test

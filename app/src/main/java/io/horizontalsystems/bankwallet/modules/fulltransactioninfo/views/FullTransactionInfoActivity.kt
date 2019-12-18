@@ -93,20 +93,29 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             }
         })
 
-        viewModel.showErrorLiveEvent.observe(this, Observer { error ->
-            error?.let { (show, providerName) ->
-                if (show && providerName != null) {
-                    errorContainer.visibility = View.VISIBLE
 
-                    val fragment = FullTransactionInfoErrorFragment.newInstance(providerName)
-                    val transaction = supportFragmentManager.beginTransaction()
+        viewModel.hideError.observe(this, Observer {
+            errorContainer.visibility = View.GONE
+        })
 
-                    transaction.replace(R.id.errorContainer, fragment)
-                    transaction.commit()
-                } else {
-                    errorContainer.visibility = View.INVISIBLE
-                }
-            }
+        viewModel.showErrorProviderOffline.observe(this, Observer { providerName ->
+            val errorMessage = getString(R.string.FullInfo_Error_ProviderOffline)
+            val fragment = FullTransactionInfoErrorFragment.newInstance(providerName, errorMessage, R.drawable.dragon_icon)
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.errorContainer, fragment)
+            transaction.commit()
+
+            errorContainer.visibility = View.VISIBLE
+        })
+
+        viewModel.showErrorTransactionNotFound.observe(this, Observer { providerName ->
+            val errorMessage = getString(R.string.FullInfo_Error_TransactionNotFound)
+            val fragment = FullTransactionInfoErrorFragment.newInstance(providerName, errorMessage, R.drawable.ic_attention, showRetry = false)
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.errorContainer, fragment)
+            transaction.commit()
+
+            errorContainer.visibility = View.VISIBLE
         })
 
         viewModel.showShareLiveEvent.observe(this, Observer { url ->
