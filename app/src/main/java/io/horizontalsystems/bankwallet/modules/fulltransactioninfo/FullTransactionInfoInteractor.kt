@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class FullTransactionInfoInteractor(
         private val transactionInfoFactory: FullTransactionInfoFactory,
@@ -46,6 +47,7 @@ class FullTransactionInfoInteractor(
                         delegate?.onReceiveTransactionInfo(fullTransactionRecord)
                     }, { error ->
                         when (error) {
+                            is UnknownHostException,
                             is SocketTimeoutException -> delegate?.onProviderOffline(provider.providerName)
                             else -> delegate?.onTransactionNotFound(provider.providerName)
                         }
