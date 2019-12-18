@@ -13,7 +13,9 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val loadingLiveData = MutableLiveData<Boolean>()
     val reloadLiveEvent = SingleLiveEvent<Void>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
-    val showErrorLiveEvent = SingleLiveEvent<Pair<Boolean, String?>>()
+    val showErrorProviderOffline = SingleLiveEvent<String>()
+    val showErrorTransactionNotFound = SingleLiveEvent<String>()
+    val hideError = SingleLiveEvent<Unit>()
     val showShareLiveEvent = SingleLiveEvent<String>()
     val openLinkLiveEvent = SingleLiveEvent<String>()
     val openProviderSettingsEvent = SingleLiveEvent<Pair<Coin, String>>()
@@ -52,12 +54,16 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         loadingLiveData.value = false
     }
 
-    override fun showError(providerName: String?) {
-        showErrorLiveEvent.value = Pair(true, providerName)
+    override fun showErrorProviderOffline(providerName: String) {
+        showErrorProviderOffline.value = providerName
+    }
+
+    override fun showErrorTransactionNotFound(providerName: String) {
+        showErrorTransactionNotFound.value = providerName
     }
 
     override fun hideError() {
-        showErrorLiveEvent.value = Pair(false, null)
+        hideError.call()
     }
 
     override fun reload() {

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.net.SocketTimeoutException
 
 class FullTransactionInfoInteractor(
         private val transactionInfoFactory: FullTransactionInfoFactory,
@@ -37,14 +38,17 @@ class FullTransactionInfoInteractor(
     }
 
     override fun retrieveTransactionInfo(transactionHash: String) {
-        provider?.let {
-            disposables.add(it.retrieveTransactionInfo(transactionHash)
+        provider?.let { provider ->
+            disposables.add(provider.retrieveTransactionInfo(transactionHash)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        delegate?.onReceiveTransactionInfo(it)
-                    }, {
-                        delegate?.onError(provider?.providerName)
+                    .subscribe({ fullTransactionRecord ->
+                        delegate?.onReceiveTransactionInfo(fullTransactionRecord)
+                    }, { error ->
+                        when (error) {
+                            is SocketTimeoutException -> delegate?.onProviderOffline(provider.providerName)
+                            else -> delegate?.onTransactionNotFound(provider.providerName)
+                        }
                     })
             )
         }
