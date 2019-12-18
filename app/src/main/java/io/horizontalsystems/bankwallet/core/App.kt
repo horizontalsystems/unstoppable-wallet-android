@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.BuildConfig
@@ -16,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.localehelper.LocaleHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
+import io.reactivex.plugins.RxJavaPlugins
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -98,6 +100,10 @@ class App : Application() {
         if (!BuildConfig.DEBUG) {
             //Disable logging for lower levels in Release build
             Logger.getLogger("").level = Level.SEVERE
+        }
+
+        RxJavaPlugins.setErrorHandler { e: Throwable? ->
+            Log.w("RxJava ErrorHandler", e)
         }
 
         instance = this
