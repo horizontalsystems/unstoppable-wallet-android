@@ -169,7 +169,8 @@
     <string name="FullInfo_Source_Title">Источник</string>
     <string name="FullInfo_Source_Online">Доступен</string>
     <string name="FullInfo_Source_Offline">Недоступен</string>
-    <string name="FullInfo_Error_Subtitle">Недоступен</string>
+    <string name="FullInfo_Error_ProviderOffline">Недоступен</string>
+    <string name="FullInfo_Error_TransactionNotFound">Транзакция не найдена</string>
     <string name="FullInfo_Error_Retry">Повторить</string>
     <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
