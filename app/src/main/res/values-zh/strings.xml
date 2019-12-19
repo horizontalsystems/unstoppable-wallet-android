@@ -169,7 +169,8 @@
     <string name="FullInfo_Source_Title">源</string>
     <string name="FullInfo_Source_Online">在线</string>
     <string name="FullInfo_Source_Offline">离线</string>
-    <string name="FullInfo_Error_Subtitle">离线</string>
+    <string name="FullInfo_Error_ProviderOffline">离线</string>
+    <string name="FullInfo_Error_TransactionNotFound">找不到交易</string>
     <string name="FullInfo_Error_Retry">重试</string>
     <string name="FullInfo_Error_ChangeSource">更改源</string>
     <!--no used-->
