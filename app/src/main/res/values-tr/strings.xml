@@ -169,7 +169,8 @@
     <string name="FullInfo_Source_Title">Kaynak</string>
     <string name="FullInfo_Source_Online">Çevrimiçi</string>
     <string name="FullInfo_Source_Offline">Çevrimdışı</string>
-    <string name="FullInfo_Error_Subtitle">Çevrimdışı</string>
+    <string name="FullInfo_Error_ProviderOffline">Çevrimdışı</string>
+    <string name="FullInfo_Error_TransactionNotFound">İşlem bulunamadı</string>
     <string name="FullInfo_Error_Retry">Yeniden Dene</string>
     <string name="FullInfo_Error_ChangeSource">Kaynağı Değiştir</string>
     <!--no used-->
