@@ -169,7 +169,8 @@
     <string name="FullInfo_Source_Title">원천, 자료</string>
     <string name="FullInfo_Source_Online">온라인</string>
     <string name="FullInfo_Source_Offline">오프라인</string>
-    <string name="FullInfo_Error_Subtitle">오프라인</string>
+    <string name="FullInfo_Error_ProviderOffline">오프라인</string>
+    <string name="FullInfo_Error_TransactionNotFound">거래를 찾을 수 없습니다</string>
     <string name="FullInfo_Error_Retry">재시도</string>
     <string name="FullInfo_Error_ChangeSource">출처를 변경하다</string>
     <!--no used-->
