@@ -74,7 +74,11 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
     }
 
     override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        return kit.historicalRate(converted(coinCode), currencyCode, timestamp)
+        kit.historicalRate(converted(coinCode), currencyCode, timestamp)?.let {
+            return Single.just(it)
+        }
+
+        return kit.historicalRateFromApi(converted(coinCode), currencyCode, timestamp)
     }
 
     override fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
