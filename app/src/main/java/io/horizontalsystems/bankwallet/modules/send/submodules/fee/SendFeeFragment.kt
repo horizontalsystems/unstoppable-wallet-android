@@ -43,6 +43,7 @@ class SendFeeFragment(
         txSpeedLayout.setOnClickListener {
             presenter?.onClickFeeRatePriority()
         }
+        txFeeLoading.visibility = View.GONE
         txFeeLoading.text = getString(R.string.Alert_Loading)
         presenterView.primaryFee.observe(viewLifecycleOwner, Observer { txFeePrimary.text = " $it" })
 
