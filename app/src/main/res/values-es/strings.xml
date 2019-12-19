@@ -169,7 +169,8 @@
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">En Línea</string>
     <string name="FullInfo_Source_Offline">Desconectado</string>
-    <string name="FullInfo_Error_Subtitle">Desconectado</string>
+    <string name="FullInfo_Error_ProviderOffline">Desconectado</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transacción no encontrada</string>
     <string name="FullInfo_Error_Retry">Reintentar</string>
     <string name="FullInfo_Error_ChangeSource">Cambiar Origen</string>
     <!--no used-->

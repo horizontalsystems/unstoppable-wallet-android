@@ -170,7 +170,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">En ligne</string>
     <string name="FullInfo_Source_Offline">Déconnecté</string>
-    <string name="FullInfo_Error_Subtitle">Déconnecté</string>
+    <string name="FullInfo_Error_ProviderOffline">Déconnecté</string>
+    <string name="FullInfo_Error_TransactionNotFound">La transaction est introuvable</string>
     <string name="FullInfo_Error_Retry">Réessayer</string>
     <string name="FullInfo_Error_ChangeSource">Changer la Source</string>
     <!--no used-->

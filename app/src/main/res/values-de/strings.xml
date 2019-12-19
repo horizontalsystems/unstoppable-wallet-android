@@ -169,7 +169,8 @@
     <string name="FullInfo_Source_Title">Quelle</string>
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
+    <string name="FullInfo_Error_ProviderOffline">Offline</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transaktion wurde nicht gefunden</string>
     <string name="FullInfo_Error_Retry">Wiederholen</string>
     <string name="FullInfo_Error_ChangeSource">Quelle ändern</string>
     <!--no used-->
