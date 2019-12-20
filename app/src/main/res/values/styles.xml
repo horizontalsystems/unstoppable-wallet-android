@@ -304,6 +304,11 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="CaptionSB">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Micro">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">10sp</item>

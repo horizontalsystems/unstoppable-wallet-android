@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import io.horizontalsystems.bankwallet.viewHelpers.showIf
 import kotlinx.android.extensions.LayoutContainer
@@ -236,9 +237,17 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun setRateDiff(rDiff: RateDiff) {
         rateDiff.text = rDiff.deemedValue.text ?: containerView.context.getString(R.string.NotAvailable)
-        rateDiff.setTextColor(containerView.context.getColor(if (rDiff.deemedValue.dimmed) R.color.grey_50 else R.color.grey))
+        rateDiff.setTextColor(getRateDiffTextColor(rDiff.deemedValue.dimmed))
         rateDiffIcon.setImageResource(if (rDiff.positive) R.drawable.ic_up_green else R.drawable.ic_down_red)
         rateDiffIcon.imageTintList = getRateDiffTintList(rDiff.deemedValue.dimmed)
+    }
+
+    private fun getRateDiffTextColor(dimmed: Boolean): Int {
+        return if (dimmed) {
+            containerView.context.getColor(R.color.grey_50)
+        } else {
+            LayoutHelper.getAttr(R.attr.ColorLeah, containerView.context.theme) ?: containerView.context.getColor(R.color.grey)
+        }
     }
 
     private fun getRateDiffTintList(dimmed: Boolean): ColorStateList? {

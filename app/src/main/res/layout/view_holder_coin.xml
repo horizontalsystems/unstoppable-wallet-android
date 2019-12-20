@@ -124,19 +124,18 @@
 
         <View
             android:layout_width="0.5dp"
-            android:layout_height="34dp"
+            android:layout_height="26dp"
             android:background="@color/steel_20"
             android:layout_marginStart="20dp"
             android:layout_gravity="center_vertical"/>
 
         <TextView
             android:id="@+id/rateDiff"
-            style="@style/Caption"
+            style="@style/CaptionSB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textAlignment="center"
-            android:textColor="@color/grey"
             android:layout_marginStart="20.5dp"
             android:layout_marginEnd="0dp"
             tools:text="20.87%" />
@@ -177,7 +176,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:layout_marginTop="8.5dp"
-        android:includeFontPadding="false"
         android:textColor="?ColorJacob"
         app:layout_constraintTop_toBottomOf="@+id/border"
         app:layout_constraintEnd_toEndOf="parent"
@@ -201,8 +199,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
+        android:layout_marginTop="11.5dp"
         android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@id/textSyncing"
+        app:layout_constraintTop_toBottomOf="@id/border"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Until Dec 17. 2018" />
 
