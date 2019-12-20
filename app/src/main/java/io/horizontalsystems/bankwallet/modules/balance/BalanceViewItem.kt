@@ -102,8 +102,8 @@ class BalanceViewItemFactory {
         return SyncingData(state.progress, dateFormatted, !expanded)
     }
 
-    private fun coinTypeLabelVisible(coinType: CoinType, balanceVisible: Boolean): Boolean {
-        return coinType.typeLabel() != null && balanceVisible
+    private fun coinTypeLabelVisible(coinType: CoinType): Boolean {
+        return coinType.typeLabel() != null
     }
 
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
@@ -135,7 +135,7 @@ class BalanceViewItemFactory {
                 syncingData = syncingData(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
-                coinTypeLabelVisible = coinTypeLabelVisible(coin.type, balanceTotalVisibility)
+                coinTypeLabelVisible = coinTypeLabelVisible(coin.type)
         )
     }
 
