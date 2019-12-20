@@ -86,7 +86,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("GNT",       "Golem",                   "GNT",         18,      CoinType.Erc20("0xa74476443119A942dE498590Fe1f2454d7D4aC0d")),
             Coin("GTO",       "Gifto",                   "GTO",          8,      CoinType.Binance("GTO-908")),
             Coin("HOT",       "Holo",                    "HOT",         18,      CoinType.Erc20("0x6c6EE5e31d828De241282B9606C8e98Ea48526E2")),
-            Coin("HT",        "Huobi",                   "HT",          18,      CoinType.Erc20("0x6f259637dcD74C767781E37Bc6133cd6A68aa161")),
+            Coin("HT",        "Huobi Token",             "HT",          18,      CoinType.Erc20("0x6f259637dcD74C767781E37Bc6133cd6A68aa161")),
             Coin("IDEX",      "IDEX",                    "IDEX",        18,      CoinType.Erc20("0xB705268213D593B8FD88d3FDEFF93AFF5CbDcfAE")),
             Coin("IDXM",      "IDEX Membership",         "IDXM",         8,      CoinType.Erc20("0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea")),
             Coin("KCS",       "KuCoin Shares",           "KCS",          6,      CoinType.Erc20("0x039B5649A59967e3e936D7471f9c3700100Ee1ab", minimumRequiredBalance = BigDecimal("0.001"))),
