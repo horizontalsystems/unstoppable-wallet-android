@@ -25,7 +25,6 @@ class BalanceInteractor(
     private var disposables = CompositeDisposable()
     private var adapterDisposables = CompositeDisposable()
     private var marketInfoDisposables = CompositeDisposable()
-    private var chartInfoDisposables = CompositeDisposable()
 
     override val wallets: List<Wallet>
         get() = walletManager.wallets
@@ -123,23 +122,6 @@ class BalanceInteractor(
                 }
     }
 
-    override fun subscribeToChartInfo(coinCodes: List<String>, currencyCode: String) {
-        chartInfoDisposables.clear()
-
-        coinCodes.forEach { coinCode ->
-            rateManager.chartInfoObservable(coinCode, currencyCode, ChartType.DAILY)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe({
-                        delegate?.didUpdateChartInfo(it, coinCode)
-                    }, {
-                        delegate?.didFailChartInfo(coinCode)
-                    }).let {
-                        chartInfoDisposables.add(it)
-                    }
-        }
-    }
-
     override fun refresh() {
         adapterManager.refresh()
         rateManager.refresh()
@@ -159,7 +141,6 @@ class BalanceInteractor(
         disposables.clear()
         adapterDisposables.clear()
         marketInfoDisposables.clear()
-        chartInfoDisposables.clear()
     }
 
     private fun onUpdateCurrency() {

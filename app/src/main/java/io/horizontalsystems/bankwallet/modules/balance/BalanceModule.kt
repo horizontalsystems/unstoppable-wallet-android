@@ -51,7 +51,6 @@ object BalanceModule {
         fun subscribeToAdapters(wallets: List<Wallet>)
 
         fun subscribeToMarketInfo(currencyCode: String)
-        fun subscribeToChartInfo(coinCodes: List<String>, currencyCode: String)
 
         fun refresh()
         fun predefinedAccountType(wallet: Wallet): PredefinedAccountType?
@@ -69,9 +68,6 @@ object BalanceModule {
 
         fun didUpdateCurrency(currency: Currency)
         fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>)
-
-        fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String)
-        fun didFailChartInfo(coinCode: String)
 
         fun didRefresh()
     }
@@ -105,16 +101,9 @@ object BalanceModule {
 
         var state: AdapterState? = null
         var marketInfo: MarketInfo? = null
-        var chartInfoState: ChartInfoState = ChartInfoState.Loading
 
         val fiatValue: BigDecimal?
             get() = marketInfo?.rate?.let { balance?.times(it) }
-    }
-
-    sealed class ChartInfoState {
-        object Loading : ChartInfoState()
-        class Loaded(val chartInfo: ChartInfo) : ChartInfoState()
-        object Failed : ChartInfoState()
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {

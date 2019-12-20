@@ -6,8 +6,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
-import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.util.concurrent.Executors
@@ -183,7 +181,6 @@ class BalancePresenter(
             this.currency = currency
 
             handleRates()
-            handleStats()
 
             updateViewItems()
             updateHeaderViewItem()
@@ -203,18 +200,6 @@ class BalancePresenter(
         }
     }
 
-    override fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String) {
-        executor.submit {
-            updateChartInfo(ChartInfoState.Loaded(chartInfo), coinCode)
-        }
-    }
-
-    override fun didFailChartInfo(coinCode: String) {
-        executor.submit {
-            updateChartInfo(ChartInfoState.Failed, coinCode)
-        }
-    }
-
     override fun didRefresh() {
         view?.didRefresh()
     }
@@ -224,7 +209,6 @@ class BalancePresenter(
 
         handleAdaptersReady()
         handleRates()
-        handleStats()
 
         view?.set(sortIsOn = items.size >= sortingOnThreshold)
     }
@@ -244,17 +228,6 @@ class BalancePresenter(
 
         items.forEach { item ->
             item.marketInfo = interactor.marketInfo(item.wallet.coin.code, currency.code)
-        }
-    }
-
-    private fun handleStats() {
-        interactor.subscribeToChartInfo(items.map { it.wallet.coin.code }, currency.code)
-
-        items.forEach { item ->
-            item.chartInfoState =
-                    interactor.chartInfo(item.wallet.coin.code, currency.code)?.let {
-                        ChartInfoState.Loaded(it)
-                    } ?: ChartInfoState.Loading
         }
     }
 
@@ -282,16 +255,5 @@ class BalancePresenter(
         val headerViewItem = factory.headerViewItem(items, currency)
         view?.set(headerViewItem)
     }
-
-    private fun updateChartInfo(chartInfoState: ChartInfoState, coinCode: String) {
-        items.forEachIndexed { index, item ->
-            if (item.wallet.coin.code == coinCode) {
-                item.chartInfoState = chartInfoState
-                viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.CHART_INFO, viewItems[index].expanded)
-            }
-        }
-        view?.set(viewItemsCopy)
-    }
-
 
 }

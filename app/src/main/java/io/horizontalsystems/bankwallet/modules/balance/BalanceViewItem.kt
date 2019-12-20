@@ -5,11 +5,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 data class BalanceViewItem(
         val wallet: Wallet,
@@ -18,9 +17,8 @@ data class BalanceViewItem(
         val coinType: String?,
         val coinValue: DeemedValue,
         val exchangeValue: DeemedValue,
-        val diff: BigDecimal?,
+        val diff: RateDiff,
         val fiatValue: DeemedValue,
-        val chartData: ChartData,
         val coinValueLocked: DeemedValue,
         val fiatValueLocked: DeemedValue,
         val updateType: UpdateType?,
@@ -34,12 +32,16 @@ data class BalanceViewItem(
 ) {
     enum class UpdateType {
         MARKET_INFO,
-        CHART_INFO,
         BALANCE,
         STATE,
         EXPANDED
     }
 }
+
+data class RateDiff(
+        val deemedValue:DeemedValue,
+        val positive: Boolean
+)
 
 data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate: Boolean) {
 
@@ -52,29 +54,10 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 
 class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true)
-class ChartData(
-        val loading: Boolean,
-        val failed: Boolean,
-        val loaded: Boolean,
-        val points: List<ChartPoint>,
-        val startTimestamp: Long,
-        val endTimestamp: Long
-)
 
 class BalanceViewItemFactory {
 
-    private fun chartData(chartInfoState: ChartInfoState, expanded: Boolean): ChartData {
-        val loading = chartInfoState is ChartInfoState.Loading
-        val failed = chartInfoState is ChartInfoState.Failed
-        val loaded = chartInfoState is ChartInfoState.Loaded
-        val chartInfo = (chartInfoState as? ChartInfoState.Loaded)?.chartInfo
-
-        val points = chartInfo?.points?.map { ChartPoint(it.value.toFloat(), it.timestamp) } ?: listOf()
-        val startTimestamp = chartInfo?.startTimestamp ?: 0
-        val endTimestamp = chartInfo?.endTimestamp ?: 0
-
-        return ChartData(loading, failed, loaded, points, startTimestamp, endTimestamp)
-    }
+    private val diffScale = 2
 
     private fun coinValue(state: AdapterState?, balance: BigDecimal?, coin: Coin, visible: Boolean): DeemedValue {
         val dimmed = state !is AdapterState.Synced
@@ -132,6 +115,8 @@ class BalanceViewItemFactory {
         val balanceTotalVisibility = item.balanceTotal != null && (state !is AdapterState.Syncing || expanded)
         val balanceLockedVisibility = item.balanceLocked != null
 
+        val rateDiff = getRateDiff(item)
+
         return BalanceViewItem(
                 wallet = item.wallet,
                 coinCode = coin.code,
@@ -142,8 +127,7 @@ class BalanceViewItemFactory {
                 fiatValue = currencyValue(state, item.balanceTotal, currency, marketInfo, balanceTotalVisibility),
                 fiatValueLocked = currencyValue(state, item.balanceLocked, currency, marketInfo, balanceLockedVisibility),
                 exchangeValue = rateValue(currency, marketInfo),
-                diff = item.marketInfo?.diff,
-                chartData = chartData(item.chartInfoState, expanded),
+                diff = rateDiff,
                 updateType = updateType,
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,
@@ -153,6 +137,14 @@ class BalanceViewItemFactory {
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type, balanceTotalVisibility)
         )
+    }
+
+    private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {
+        val scaledValue = item.marketInfo?.diff?.setScale(diffScale, RoundingMode.HALF_EVEN)?.stripTrailingZeros()
+        val isPositive = (scaledValue ?: BigDecimal.ZERO) >= BigDecimal.ZERO
+        val rateDiffText = scaledValue?.let { App.numberFormatter.format(scaledValue.abs(), diffScale) + "%" }
+        val dimmed = item.marketInfo?.isExpired() ?: true
+        return RateDiff(DeemedValue(rateDiffText, dimmed, true), isPositive)
     }
 
     fun headerViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency): BalanceHeaderViewItem {
