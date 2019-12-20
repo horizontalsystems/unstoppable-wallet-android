@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import io.horizontalsystems.bankwallet.viewHelpers.showIf
@@ -83,7 +84,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
         }
 
-        chartWrapper.setOnClickListener {
+        rateDiffWrapper.setOnClickListener {
             balanceViewItem?.let {
                 listener.onChartClicked(it)
             }
@@ -123,9 +124,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             setTextSyncing(syncingData)
 
-            rateDiff.diff = diff
-
-            bindUpdateChartInfo(item)
+            setRateDiff(item.diff)
 
             buttonReceive.isEnabled = receiveEnabled
             buttonSend.isEnabled = sendEnabled
@@ -161,7 +160,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
                 BalanceViewItem.UpdateType.STATE -> bindUpdateState(balanceViewItem)
                 BalanceViewItem.UpdateType.BALANCE -> bindUpdateBalance(balanceViewItem)
                 BalanceViewItem.UpdateType.MARKET_INFO -> bindUpdateMarketInfo(balanceViewItem)
-                BalanceViewItem.UpdateType.CHART_INFO -> bindUpdateChartInfo(balanceViewItem)
             }
         }
     }
@@ -226,7 +224,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             exchangeRate.text = exchangeValue.text
             exchangeRate.setTextColor(containerView.context.getColor(if (exchangeValue.dimmed) R.color.grey_50 else R.color.grey))
 
-            rateDiff.diff = diff
+            setRateDiff(item.diff)
 
             balanceFiat.text = fiatValue.text
             balanceFiat.dimIf(fiatValue.dimmed)
@@ -236,16 +234,19 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         }
     }
 
-    private fun bindUpdateChartInfo(item: BalanceViewItem) {
-        item.apply {
-            chartLoading.showIf(chartData.loading)
-            chartNotAvailable.showIf(chartData.failed)
-            chartView.showIf(chartData.loaded)
+    private fun setRateDiff(rDiff: RateDiff) {
+        rateDiff.text = rDiff.deemedValue.text ?: containerView.context.getString(R.string.NotAvailable)
+        rateDiff.setTextColor(containerView.context.getColor(if (rDiff.deemedValue.dimmed) R.color.grey_50 else R.color.grey))
+        rateDiffIcon.setImageResource(if (rDiff.positive) R.drawable.ic_up_green else R.drawable.ic_down_red)
+        rateDiffIcon.imageTintList = getRateDiffTintList(rDiff.deemedValue.dimmed)
+    }
 
-            if (chartData.loaded) {
-                chartView.setData(chartData.points, ChartType.DAILY, chartData.startTimestamp, chartData.endTimestamp)
-            }
+    private fun getRateDiffTintList(dimmed: Boolean): ColorStateList? {
+        if (dimmed) {
+            val greyColor = ContextCompat.getColor(containerView.context, R.color.grey_50)
+            return ColorStateList.valueOf(greyColor)
         }
+        return null
     }
 
     private fun setTextSyncing(syncingData: SyncingData) {

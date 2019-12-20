@@ -21,8 +21,8 @@
 
     <ImageView
         android:id="@+id/coinBackgroundSquare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/coin_icon_square"
@@ -31,8 +31,8 @@
 
     <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
         android:id="@+id/iconProgress"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
         app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
         app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
@@ -64,16 +64,33 @@
         android:id="@+id/coinName"
         style="@style/Headline2"
         android:layout_width="0dp"
+        app:layout_constraintWidth_default="wrap"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:singleLine="true"
         android:textColor="?BallanceCoinNameColor"
-        app:layout_constraintEnd_toStartOf="@+id/chartWrapper"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@+id/coinLabel"
         app:layout_constraintStart_toEndOf="@+id/coinBackgroundSquare"
         app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
-        tools:text="Coin With Very Long Name" />
+        tools:text="Coin rgre" />
+
+    <TextView
+        android:id="@+id/coinLabel"
+        style="@style/TextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/coinName"
+        app:layout_constraintEnd_toStartOf="@+id/rateDiffWrapper"
+        app:layout_constraintStart_toEndOf="@+id/coinName"
+        app:layout_constraintTop_toTopOf="@+id/coinName"
+        tools:text="ERC20" />
 
     <TextView
         android:id="@+id/exchangeRate"
@@ -87,47 +104,42 @@
         app:layout_constraintTop_toBottomOf="@+id/coinName"
         tools:text="$6500 per BTC" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
-        android:id="@+id/rateDiff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/exchangeRate"
-        app:layout_constraintStart_toEndOf="@+id/exchangeRate"
-        tools:text="+ 0.87%" />
-
     <FrameLayout
-        android:id="@+id/chartWrapper"
-        android:layout_width="72dp"
-        android:layout_height="40dp"
+        android:id="@+id/rateDiffWrapper"
+        android:layout_width="80dp"
+        android:layout_height="42dp"
         android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/stateful_rate_diff_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <io.horizontalsystems.bankwallet.lib.chartview.ChartView
-            android:id="@+id/chartView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:animated="false"
-            app:height="36dp"
-            app:partialChartColor="@color/grey_50"
-            app:showGrid="false"
-            app:width="72dp" />
+        <ImageView
+            android:id="@+id/rateDiffIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_down_red"/>
 
         <View
-            android:id="@+id/chartLoading"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="24dp"
-            android:background="@color/steel_20" />
+            android:layout_width="0.5dp"
+            android:layout_height="34dp"
+            android:background="@color/steel_20"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:id="@+id/chartNotAvailable"
+            android:id="@+id/rateDiff"
+            style="@style/Caption"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="end|top"
-            android:text="@string/NotAvailable"
-            android:textColor="@color/grey_50" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:layout_marginStart="20.5dp"
+            android:layout_marginEnd="0dp"
+            tools:text="20.87%" />
 
     </FrameLayout>
 
@@ -136,7 +148,7 @@
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
@@ -152,22 +164,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="11.5dp"
         android:textColor="?BallanceCoinAmountColor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coinBackgroundSquare"
+        app:layout_constraintTop_toBottomOf="@+id/border"
         tools:text="0.000078 BTC" />
-
-    <TextView
-        android:id="@+id/coinLabel"
-        style="@style/TextLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/balanceCoin"
-        app:layout_constraintStart_toEndOf="@+id/balanceCoin"
-        app:layout_constraintTop_toTopOf="@+id/balanceCoin"
-        tools:text="ERC20" />
 
     <TextView
         android:id="@+id/balanceFiat"
@@ -175,9 +176,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
+        android:layout_marginTop="8.5dp"
         android:includeFontPadding="false"
         android:textColor="?ColorJacob"
-        app:layout_constraintBottom_toBottomOf="@id/balanceCoin"
+        app:layout_constraintTop_toBottomOf="@+id/border"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="$52.50" />
 
@@ -187,10 +189,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="11.5dp"
         android:textColor="@color/grey"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coinBackgroundSquare"
+        app:layout_constraintTop_toBottomOf="@id/border"
         tools:text="Syncing... 45%" />
 
     <TextView
@@ -233,6 +235,7 @@
             android:drawableStart="@drawable/ic_lock"
             android:drawablePadding="4dp"
             android:paddingBottom="12dp"
+            android:includeFontPadding="false"
             android:textColor="@color/grey"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
