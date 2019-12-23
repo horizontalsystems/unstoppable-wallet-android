@@ -25,7 +25,8 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
 
     override fun ethereumKit(wallet: Wallet): EthereumKit {
         val account = wallet.account
-        if (account.type is AccountType.Mnemonic) {
+        val accountType = account.type
+        if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
             useCount += 1
 
             kit?.let { return it }
@@ -33,7 +34,7 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
             val infuraCredentials = EthereumKit.InfuraCredentials(infuraProjectId, infuraSecretKey)
             val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
 
-            kit = EthereumKit.getInstance(App.instance, account.type.words, syncMode, networkType, infuraCredentials, etherscanKey, account.id)
+            kit = EthereumKit.getInstance(App.instance, accountType.words, syncMode, networkType, infuraCredentials, etherscanKey, account.id)
             kit?.start()
 
             return kit!!

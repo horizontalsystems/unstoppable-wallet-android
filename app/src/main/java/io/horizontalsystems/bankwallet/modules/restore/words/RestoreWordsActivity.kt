@@ -8,16 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.putParcelableExtra
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsModule
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_words.*
 import java.util.*
@@ -41,7 +37,7 @@ class RestoreWordsActivity : BaseActivity() {
             description.text = getString(R.string.Restore_Enter_Key_Description_Mnemonic, getString(accountTypeTitleRes), wordsCount.toString())
         }
 
-        viewModel = ViewModelProviders.of(this).get(RestoreWordsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RestoreWordsViewModel::class.java)
         viewModel.init(wordsCount)
 
         viewModel.errorLiveData.observe(this, Observer {
@@ -50,13 +46,9 @@ class RestoreWordsActivity : BaseActivity() {
 
         viewModel.notifyRestored.observe(this, Observer {
             setResult(RESULT_OK, Intent().apply {
-                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, salt = null))
+                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Mnemonic(viewModel.delegate.words, salt = null))
             })
             finish()
-        })
-
-        viewModel.startSyncModeModule.observe(this, Observer {
-            RestoreOptionsModule.start(this, ModuleCode.RESTORE_OPTIONS)
         })
 
         wordsInput.addTextChangedListener(object: TextWatcher {
@@ -92,30 +84,13 @@ class RestoreWordsActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
-            R.id.menuOk ->  {
+            R.id.menuRestore ->  {
                 val cleanedString = wordsInput.text?.toString()?.trim()?.toLowerCase(Locale.ENGLISH)?.replace(Regex("(\\s)+"), " ")
                 viewModel.delegate.onDone(cleanedString)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == ModuleCode.RESTORE_OPTIONS && data != null && resultCode == RESULT_OK) {
-            val syncMode = data.getParcelableExtra<SyncMode>(ModuleField.SYNCMODE)
-            val derivation = data.getParcelableExtra<AccountType.Derivation>(ModuleField.DERIVATION)
-
-            val intent = Intent().apply {
-                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Mnemonic(viewModel.delegate.words, derivation, salt = null))
-                putParcelableExtra(ModuleField.SYNCMODE, syncMode)
-            }
-
-            setResult(RESULT_OK, intent)
-            finish()
-        }
     }
 
     //  Private

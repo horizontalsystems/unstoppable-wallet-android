@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -24,7 +25,6 @@ class BalanceInteractor(
     private var disposables = CompositeDisposable()
     private var adapterDisposables = CompositeDisposable()
     private var marketInfoDisposables = CompositeDisposable()
-    private var chartInfoDisposables = CompositeDisposable()
 
     override val wallets: List<Wallet>
         get() = walletManager.wallets
@@ -122,23 +122,6 @@ class BalanceInteractor(
                 }
     }
 
-    override fun subscribeToChartInfo(coinCodes: List<String>, currencyCode: String) {
-        chartInfoDisposables.clear()
-
-        coinCodes.forEach { coinCode ->
-            rateManager.chartInfoObservable(coinCode, currencyCode, ChartType.DAILY)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe({
-                        delegate?.didUpdateChartInfo(it, coinCode)
-                    }, {
-                        delegate?.didFailChartInfo(coinCode)
-                    }).let {
-                        chartInfoDisposables.add(it)
-                    }
-        }
-    }
-
     override fun refresh() {
         adapterManager.refresh()
         rateManager.refresh()
@@ -146,7 +129,7 @@ class BalanceInteractor(
         delegate?.didRefresh()
     }
 
-    override fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType? {
+    override fun predefinedAccountType(wallet: Wallet): PredefinedAccountType? {
         return predefinedAccountTypeManager.predefinedAccountType(wallet.account.type)
     }
 
@@ -158,7 +141,6 @@ class BalanceInteractor(
         disposables.clear()
         adapterDisposables.clear()
         marketInfoDisposables.clear()
-        chartInfoDisposables.clear()
     }
 
     private fun onUpdateCurrency() {

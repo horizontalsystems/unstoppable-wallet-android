@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 class SendFeeView : SendFeeModule.IView {
 
@@ -12,29 +13,41 @@ class SendFeeView : SendFeeModule.IView {
     val feePriority = MutableLiveData<FeeRatePriority>()
     val showFeePriorityOptions = MutableLiveData<List<SendFeeModule.FeeRateInfoViewItem>>()
     val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
+    val setLoading = MutableLiveData<Boolean>()
+    val setError = MutableLiveData<Exception>()
 
     override fun setPrimaryFee(feeAmount: String?) {
-        primaryFee.value = feeAmount
+        primaryFee.postValue(feeAmount)
     }
 
     override fun setSecondaryFee(feeAmount: String?) {
-        secondaryFee.value = feeAmount
+        secondaryFee.postValue(feeAmount)
     }
 
     override fun setFeePriority(priority: FeeRatePriority) {
-        feePriority.value = priority
+        feePriority.postValue(priority)
     }
 
     override fun setDuration(duration: Long) {
-        this.duration.value = duration
+        this.duration.postValue(duration)
     }
 
     override fun showFeeRatePrioritySelector(feeRates: List<SendFeeModule.FeeRateInfoViewItem>) {
         showFeePriorityOptions.value = feeRates
     }
 
-    override fun setInsufficientFeeBalanceError(insufficientFeeBalance: SendFeeModule.InsufficientFeeBalance?) {
-        insufficientFeeBalanceError.value = insufficientFeeBalance
+    override fun setLoading(loading: Boolean) {
+        this.setLoading.postValue(loading)
     }
 
+    override fun setFee(fee: SendModule.AmountInfo, convertedFee: SendModule.AmountInfo?) {
+    }
+
+    override fun setError(error: Exception?) {
+        this.setError.postValue(error)
+    }
+
+    override fun setInsufficientFeeBalanceError(insufficientFeeBalance: SendFeeModule.InsufficientFeeBalance?) {
+        insufficientFeeBalanceError.postValue(insufficientFeeBalance)
+    }
 }

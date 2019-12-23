@@ -6,57 +6,69 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.core.putParcelableExtra
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
+import io.horizontalsystems.bankwallet.modules.createwallet.view.CreateWalletActivity
 
 object CreateWalletModule {
 
     interface IView {
-        fun setItems(items: List<CoinViewItem>)
-        fun showError(exception: Exception)
+        fun setItems(allCoinViewItems: List<CoinManageViewItem>)
+        fun setCreateButton(enabled: Boolean)
+        fun showNotSupported(predefinedAccountType: PredefinedAccountType)
     }
 
     interface IRouter {
         fun startMainModule()
+        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings)
+        fun close()
     }
 
     interface IViewDelegate {
-        fun viewDidLoad()
-        fun didTapItem(position: Int)
-        fun didClickCreate()
+        fun onLoad()
+        fun onEnable(coin: Coin)
+        fun onDisable(coin: Coin)
+        fun onSelect(coin: Coin)
+        fun onCreateButtonClick()
+        fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin)
+        fun onCancelSelectingCoinSettings()
     }
 
     interface IInteractor {
+        val coins: List<Coin>
         val featuredCoins: List<Coin>
 
         @Throws(EosUnsupportedException::class)
-        fun createWallet(coin: Coin)
+        fun createAccounts(accounts: List<Account>)
+        @Throws
+        fun account(predefinedAccountType: PredefinedAccountType) : Account
+        fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin): CoinSettings
+        fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings): CoinSettings
+        fun saveWallets(wallets: List<Wallet>)
     }
 
-    class State {
-        var selectedPosition: Int = 0
-        var coins = listOf<Coin>()
-    }
-
-    data class CoinViewItem(val title: String, val code: String) {
-        var selected = false
-
-        constructor(title: String, code: String, selected: Boolean) : this(title, code) {
-            this.selected = selected
-        }
-    }
-
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType?) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = CreateWalletView()
             val router = CreateWalletRouter()
-            val interactor = CreateWalletInteractor(App.appConfigProvider, App.accountCreator)
-            val presenter = CreateWalletPresenter(view, router, interactor, CoinViewItemFactory(), State())
+            val interactor = CreateWalletInteractor(App.appConfigProvider, App.accountCreator, App.accountManager, App.walletManager, App.coinSettingsManager)
+            val presenter = CreateWalletPresenter(presentationMode, predefinedAccountType, view, router, interactor)
 
             return presenter as T
         }
     }
 
+    fun startInApp(context: Context, predefinedAccountType: PredefinedAccountType) {
+        val intent = Intent(context, CreateWalletActivity::class.java)
+        intent.putParcelableExtra(ModuleField.PRESENTATION_MODE, PresentationMode.InApp)
+        intent.putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
+        context.startActivity(intent)
+    }
+
     fun start(context: Context) {
         context.startActivity(Intent(context, CreateWalletActivity::class.java))
     }
+
 }

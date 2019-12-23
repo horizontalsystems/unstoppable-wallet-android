@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import java.math.BigDecimal
 
 class DatabaseConverters {
@@ -20,18 +18,6 @@ class DatabaseConverters {
         return bigDecimal?.toPlainString()
     }
 
-    // SyncMode
-
-    @TypeConverter
-    fun toString(syncMode: SyncMode?): String? {
-        return syncMode?.value
-    }
-
-    @TypeConverter
-    fun toSyncMode(string: String?): SyncMode? {
-        return SyncMode.fromString(string)
-    }
-
     // List<String>
 
     @TypeConverter
@@ -44,24 +30,16 @@ class DatabaseConverters {
         return value?.joinToString(separator = ",")
     }
 
-    // Derivation
-
-    @TypeConverter
-    fun toDerivation(value: String?): AccountType.Derivation? {
-        return value?.let { AccountType.Derivation.valueOf(it) }
-    }
-
-    @TypeConverter
-    fun toString(derivation: AccountType.Derivation?): String? {
-        return derivation?.toString()
-    }
-
     // SecretString
 
     @TypeConverter
     fun decryptSecretString(value: String?): SecretString? {
-        return value?.let {
-            SecretString(App.encryptionManager.decrypt(it))
+        if (value == null) return null
+
+        return try {
+            SecretString(App.encryptionManager.decrypt(value))
+        } catch (e: Exception) {
+            null
         }
     }
 
@@ -74,8 +52,12 @@ class DatabaseConverters {
 
     @TypeConverter
     fun decryptSecretList(value: String?): SecretList? {
-        return value?.let {
-            SecretList(App.encryptionManager.decrypt(it).split(","))
+        if (value == null) return null
+
+        return try {
+            SecretList(App.encryptionManager.decrypt(value).split(","))
+        } catch (e: Exception) {
+            null
         }
     }
 

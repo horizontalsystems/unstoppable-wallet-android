@@ -70,14 +70,10 @@ class AppStatusManager(
         when (val accountType = account.type) {
             is AccountType.Mnemonic -> {
                 accountDetails["Mnemonic"] = accountType.words.count()
-                accountDetails["Derivation"] = accountType.derivation
             }
             is AccountType.Eos -> {
                 accountDetails["Account Name"] = accountType.account
             }
-        }
-        account.defaultSyncMode?.let {
-            accountDetails["Sync Mode"] = it
         }
         return accountDetails
     }

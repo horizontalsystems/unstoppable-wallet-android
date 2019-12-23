@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 class ChartIndicator : View {
 
     private val touchPoint = TouchPoint(0f, 0f, 0f)
-    private val indicatorPaint = Paint()
+    private val indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var config: ChartConfig? = null
 
     constructor(context: Context) : super(context)

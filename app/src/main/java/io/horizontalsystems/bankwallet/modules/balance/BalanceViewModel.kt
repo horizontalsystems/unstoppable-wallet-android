@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 
 class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {
@@ -20,8 +20,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     val isSortOn = SingleLiveEvent<Boolean>()
     val setHeaderViewItem = SingleLiveEvent<BalanceHeaderViewItem>()
-    val setViewItems = SingleLiveEvent<List<BalanceViewItem>>()
-    val showBackupAlert = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
+    val setViewItems = SingleLiveEvent<List<BalanceViewItem>>() // MuLiveData
+    val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
@@ -70,7 +70,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         setViewItems.postValue(viewItems)
     }
 
-    override fun showBackupRequired(coin: Coin, predefinedAccountType: IPredefinedAccountType) {
+    override fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType) {
         showBackupAlert.postValue(Pair(coin, predefinedAccountType))
     }
 

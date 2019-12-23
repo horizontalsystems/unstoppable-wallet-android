@@ -55,13 +55,15 @@
         app:layout_constraintTop_toTopOf="@+id/txCoinCode"
         tools:text="$400" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.RateDifferenceTextView
+    <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
         android:id="@+id/txDiff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/txCoinName"
         app:layout_constraintEnd_toEndOf="@+id/txValueInFiat"
+        app:negativeColor="?ColorLucian"
+        app:positiveColor="?ColorRemus"
         tools:text="+ 0.87%" />
 
     <TextView

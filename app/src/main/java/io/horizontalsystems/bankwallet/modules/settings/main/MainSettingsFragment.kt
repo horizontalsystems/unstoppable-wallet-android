@@ -82,7 +82,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            securityCenter.badgeImage = !wordListBackedUp
+            securityCenter.badge = !wordListBackedUp
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
@@ -148,7 +148,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ManageWalletsModule.start(it) }
+            context?.let { ManageWalletsModule.start(it, false) }
         })
 
         router.showExperimentalFeaturesLiveEvent.observe(viewLifecycleOwner, Observer {

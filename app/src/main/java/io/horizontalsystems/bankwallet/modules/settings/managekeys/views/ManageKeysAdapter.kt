@@ -44,16 +44,18 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             accountName.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
             accountCoins.text = containerView.resources.getString(predefinedAccount.coinCodes)
 
+            buttonNew.isEnabled = predefinedAccount.isCreationSupported()
+
             if (item.account == null) {
                 changeStates(isEnabled = false)
 
                 buttonNew.visibility = View.VISIBLE
                 buttonNew.setOnClickListener {
-                    viewModel.delegate.onClickNew(item)
+                    viewModel.delegate.onClickCreate(item)
                 }
 
                 buttonImport.visibility = View.VISIBLE
-                buttonImport.setOnClickListener { viewModel.delegate.onClickRestore(predefinedAccount) }
+                buttonImport.setOnClickListener { viewModel.delegate.onClickRestore(item) }
 
                 return
             }
@@ -61,7 +63,7 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             val account = item.account
             if (account.isBackedUp) {
                 buttonShow.visibility = View.VISIBLE
-                buttonShow.setOnClickListener { viewModel.delegate.onClickShow(item) }
+                buttonShow.setOnClickListener { viewModel.delegate.onClickBackup(item) }
             } else {
                 buttonBackup.visibility = View.VISIBLE
             }

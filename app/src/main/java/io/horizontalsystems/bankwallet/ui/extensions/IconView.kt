@@ -37,8 +37,11 @@ class IconView : ConstraintLayout {
         tintWithGreyColor()
     }
 
-    fun bind(icon: Int) {
+    fun bind(icon: Int, tintWithGrey: Boolean = false) {
         dynamicIcon.setImageResource(icon)
+        if (tintWithGrey) {
+            tintWithGreyColor()
+        }
     }
 
     fun setTint(tintColor: ColorStateList) {

@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
@@ -24,19 +25,12 @@ class ChartView : View {
         WEEKLY,
         MONTHLY,
         MONTHLY6,
-        MONTHLY18;
-
-        companion object {
-            val annualPoints = 53
-            val map = values().associateBy(ChartType::name)
-            fun fromString(type: String?): ChartType? = map[type]
-        }
+        MONTHLY12;
     }
 
     var listener: Listener? = null
 
-    private val viewHelper = ViewHelper(context)
-    private val config = ChartConfig(context, viewHelper)
+    private val config = ChartConfig(context)
     private val helper = ScaleHelper(config)
 
     private val shape = RectF()
@@ -74,9 +68,11 @@ class ChartView : View {
             ta.getInt(R.styleable.ChartView_growColor, context.getColor(R.color.green_d)).let { config.growColor = it }
             ta.getInt(R.styleable.ChartView_fallColor, context.getColor(R.color.red_d)).let { config.fallColor = it }
             ta.getInt(R.styleable.ChartView_textColor, context.getColor(R.color.grey)).let { config.textColor = it }
+            ta.getInt(R.styleable.ChartView_textPriceColor, context.getColor(R.color.light_grey)).let { config.textPriceColor = it }
             ta.getInt(R.styleable.ChartView_gridColor, context.getColor(R.color.steel_20)).let { config.gridColor = it }
             ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.light)).let { config.touchColor = it }
             ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.light)).let { config.indicatorColor = it }
+            ta.getInt(R.styleable.ChartView_gridDottedColor, context.getColor(R.color.white_50)).let { config.gridDottedColor = it }
             ta.getInt(R.styleable.ChartView_partialChartColor, context.getColor(R.color.light)).let { config.partialChartColor = it }
         } finally {
             ta.recycle()
@@ -101,12 +97,12 @@ class ChartView : View {
             MotionEvent.ACTION_DOWN -> {
                 chartCurve.onTouchActive()
                 eventListener.onTouchDown()
-                chartIndicator?.onMove(chartCurve.find(event.rawX), eventListener)
+                chartIndicator?.onMove(chartCurve.find(event.x), eventListener)
                 invalidate()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                chartIndicator?.onMove(chartCurve.find(event.rawX), eventListener)
+                chartIndicator?.onMove(chartCurve.find(event.x), eventListener)
             }
 
             MotionEvent.ACTION_UP,
@@ -125,9 +121,9 @@ class ChartView : View {
         chartIndicator?.init(config)
     }
 
-    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
+    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long, currency: Currency? = null) {
         setColour(points, endTimestamp)
-        setPoints(points, chartType, startTimestamp, endTimestamp)
+        setPoints(points, chartType, startTimestamp, endTimestamp, currency)
 
         if (config.animated) {
             animator.setFloatValues(0f)
@@ -150,7 +146,7 @@ class ChartView : View {
         }
     }
 
-    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
+    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long, currency: Currency?) {
         helper.scale(points)
 
         var shapeWidth = width.toFloat()
@@ -164,13 +160,12 @@ class ChartView : View {
         }
 
         if (config.showGrid) {
-            config.offsetRight = viewHelper.measureWidth(config.valueTop, config.valuePrecision) + viewHelper.dp2px(20f)
-            config.offsetBottom = viewHelper.dp2px(20f)
+            config.offsetBottom = config.dp2px(20f)
         }
 
-        shape.set(0f, 0f, shapeWidth - config.offsetRight, shapeHeight - config.offsetBottom)
+        shape.set(0f, 0f, shapeWidth, shapeHeight - config.offsetBottom)
 
-        chartCurve.init(points, startTimestamp, endTimestamp)
+        chartCurve.init(points, startTimestamp, endTimestamp, currency)
 
         if (config.showGrid) {
             chartGrid.init(chartType, startTimestamp, endTimestamp)

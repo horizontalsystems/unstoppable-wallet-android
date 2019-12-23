@@ -14,6 +14,8 @@ import kotlin.math.min
 object SendAmountModule {
 
     interface IView {
+
+        fun setLoading(loading: Boolean)
         fun setAmountType(prefix: String?)
         fun setAmount(amount: String)
         fun setAvailableBalance(availableBalance: String)
@@ -42,6 +44,7 @@ object SendAmountModule {
     }
 
     interface IAmountModule {
+
         val currentAmount: BigDecimal
         val inputType: SendModule.InputType
         val coinAmount: CoinValue
@@ -56,6 +59,7 @@ object SendAmountModule {
         @Throws
         fun validAmount(): BigDecimal
 
+        fun setLoading(loading: Boolean)
         fun setAmount(amount: BigDecimal)
         fun setAvailableBalance(availableBalance: BigDecimal)
         fun setMinimumAmount(minimumAmount: BigDecimal)
@@ -75,7 +79,6 @@ object SendAmountModule {
         class TooFewAmount(val minimumAmount: AmountInfo?) : ValidationError()
         class MaxAmountLimit(val maximumAmount: AmountInfo?) : ValidationError()
     }
-
 
     class Factory(private val wallet: Wallet,
                   private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {

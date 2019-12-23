@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -36,7 +36,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         chartView.listener = this
         chartView.setIndicator(chartViewIndicator)
 
-        presenter = ViewModelProviders.of(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
+        presenter = ViewModelProvider(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         observeData()
@@ -64,20 +64,13 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
         presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
+            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp, item.currency)
 
-            context?.let { coinRateDiff.bind(item.diffValue, it, true) }
-
-            coinRateHighTitle.text = getString(R.string.Charts_Rate_High, actionTitle(item.chartType))
-            coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false, trimmable = true)
-
-            coinRateLowTitle.text = getString(R.string.Charts_Rate_Low, actionTitle(item.chartType))
-            coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false, trimmable = true)
-            setViewVisibility(highLowWrap, isVisible = true)
+            coinRateDiff.diff = item.diffValue
         })
 
         presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
-            setSubtitle(DateHelper.getFullDateWithShortMonth(item.timestamp * 1000))
+            setSubtitle(DateHelper.getFullDate(item.timestamp * 1000))
 
             coinRateLast.text = formatter.format(item.rateValue, canUseLessSymbol = false)
 
@@ -96,18 +89,16 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
             } ?: run {
                 getString(R.string.NotAvailable)
             }
-
-            setViewVisibility(highLowWrap, isVisible = true)
         })
 
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
-            val outputFormat = when (type) {
+            val dateText = when (type) {
                 ChartType.DAILY,
-                ChartType.WEEKLY -> "MMM d, yyyy 'at' HH:mm a"
-                else -> "MMM d, yyyy"
+                ChartType.WEEKLY -> DateHelper.getFullDate(Date(time * 1000))
+                else -> DateHelper.getDateWithYear(Date(time * 1000))
             }
-            pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false)
-            pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), outputFormat)
+            pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false, maxFraction = 8)
+            pointInfoDate.text = dateText
         })
 
         presenterView.showError.observe(viewLifecycleOwner, Observer {
@@ -154,19 +145,8 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         }
     }
 
-    private fun actionTitle(chartType: ChartView.ChartType): String {
-        return when (chartType) {
-            ChartView.ChartType.DAILY -> getString(R.string.Charts_TimeDuration_Day)
-            ChartView.ChartType.WEEKLY -> getString(R.string.Charts_TimeDuration_Week)
-            ChartView.ChartType.MONTHLY -> getString(R.string.Charts_TimeDuration_Month)
-            ChartView.ChartType.MONTHLY6 -> getString(R.string.Charts_TimeDuration_HalfYear)
-            ChartView.ChartType.MONTHLY18 -> getString(R.string.Charts_TimeDuration_Year)
-        }
-    }
-
     private fun resetActions(current: View) {
         actions.values.forEach { it.isActivated = false }
-        setViewVisibility(highLowWrap, isVisible = false)
         current.isActivated = true
     }
 

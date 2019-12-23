@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.BuildConfig
@@ -11,8 +14,11 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
+import io.horizontalsystems.bankwallet.localehelper.LocaleHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
+import io.reactivex.plugins.RxJavaPlugins
+import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -47,7 +53,6 @@ class App : Application() {
         lateinit var backupManager: IBackupManager
         lateinit var accountCreator: IAccountCreator
         lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
-        lateinit var defaultWalletCreator: DefaultWalletCreator
         lateinit var walletRemover: WalletRemover
 
         lateinit var xRateManager: IRateManager
@@ -74,6 +79,7 @@ class App : Application() {
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
         lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
+        lateinit var coinSettingsManager: ICoinSettingsManager
 
         lateinit var instance: App
             private set
@@ -94,6 +100,10 @@ class App : Application() {
         if (!BuildConfig.DEBUG) {
             //Disable logging for lower levels in Release build
             Logger.getLogger("").level = Level.SEVERE
+        }
+
+        RxJavaPlugins.setErrorHandler { e: Throwable? ->
+            Log.w("RxJava ErrorHandler", e)
         }
 
         instance = this
@@ -126,9 +136,8 @@ class App : Application() {
         accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
-        defaultWalletCreator = DefaultWalletCreator(walletManager, appConfigProvider, walletFactory)
-        accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager, defaultWalletCreator)
-        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager, accountCreator)
+        accountCreator = AccountCreator(AccountFactory(), wordsManager)
+        predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
         walletRemover = WalletRemover(accountManager, walletManager)
 
         randomManager = RandomProvider()
@@ -140,7 +149,7 @@ class App : Application() {
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
-        languageManager = LanguageManager(localStorage, appConfigProvider, "en")
+        languageManager = LanguageManager(appConfigProvider, "en")
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
@@ -171,7 +180,31 @@ class App : Application() {
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
-
+        coinSettingsManager = CoinSettingsManager()
     }
 
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(localeAwareContext(base))
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        localeAwareContext(this)
+    }
+
+    fun localeAwareContext(base: Context): Context {
+        return LocaleHelper.onAttach(base)
+    }
+
+    fun getLocale(): Locale {
+        return LocaleHelper.getLocale(this)
+    }
+
+    fun setLocale(currentLocale: Locale) {
+        LocaleHelper.setLocale(this, currentLocale)
+    }
+
+    fun isLocaleRTL(): Boolean {
+        return LocaleHelper.isRTL(Locale.getDefault())
+    }
 }

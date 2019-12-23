@@ -4,9 +4,11 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IKeyProvider
 import io.horizontalsystems.bankwallet.core.IKeyStoreManager
 import org.jetbrains.anko.getStackTraceString
+import java.security.InvalidKeyException
 import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.UnrecoverableKeyException
@@ -60,6 +62,7 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
         }
     }
 
+    @Synchronized
     private fun createKey(): SecretKey {
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
 
@@ -75,7 +78,13 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
     }
 
     private fun validateKey() {
-        CipherWrapper().encrypt("abc", getKey())
+        App.localStorage.encryptedSampleText?.let{ encryptedText ->
+            val key = keyStore.getKey(keyAlias, null) ?: throw InvalidKeyException()
+            CipherWrapper().decrypt(encryptedText, key)
+        } ?: run {
+            val text = CipherWrapper().encrypt("abc", getKey())
+            App.localStorage.encryptedSampleText = text
+        }
     }
 
 }

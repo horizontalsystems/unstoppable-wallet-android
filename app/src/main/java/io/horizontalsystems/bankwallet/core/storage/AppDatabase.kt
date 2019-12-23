@@ -8,11 +8,9 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.EnabledWallet
-import io.horizontalsystems.bankwallet.entities.PriceAlertRecord
-import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 11, exportSchema = false, entities = [
+@Database(version = 13, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     PriceAlertRecord::class,
@@ -52,7 +50,9 @@ abstract class AppDatabase : RoomDatabase() {
                             migrateToAccountStructure,
                             MIGRATION_8_9,
                             MIGRATION_9_10,
-                            MIGRATION_10_11
+                            MIGRATION_10_11,
+                            renameCoinDaiToSai,
+                            moveCoinSettingsFromAccountToWallet
                     )
                     .build()
         }
@@ -148,6 +148,124 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWallet` (`coinId` TEXT NOT NULL, `accountId` TEXT NOT NULL, `walletOrder` INTEGER, `syncMode` TEXT, PRIMARY KEY(`coinId`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
                 database.execSQL("INSERT INTO EnabledWallet (`coinId`,`accountId`,`walletOrder`,`syncMode`) SELECT `coinCode`,`accountId`,`walletOrder`,`syncMode` FROM TempEnabledWallet")
                 database.execSQL("DROP TABLE TempEnabledWallet")
+            }
+        }
+
+        private val renameCoinDaiToSai: Migration = object : Migration(11, 12) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("INSERT INTO EnabledWallet (`coinId`,`accountId`,`walletOrder`,`syncMode`) SELECT 'SAI',`accountId`,`walletOrder`,`syncMode` FROM EnabledWallet WHERE `coinId` = 'DAI'")
+                database.execSQL("DELETE FROM EnabledWallet WHERE `coinId` = 'DAI'")
+            }
+        }
+
+        private val moveCoinSettingsFromAccountToWallet: Migration = object : Migration(12, 13) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                //create new tables
+                database.execSQL("""
+                CREATE TABLE new_AccountRecord (
+                    `deleted` INTEGER NOT NULL, 
+                    `id` TEXT NOT NULL, 
+                    `name` TEXT NOT NULL, 
+                    `type` TEXT NOT NULL, 
+                    `origin` TEXT NOT NULL DEFAULT '',
+                    `isBackedUp` INTEGER NOT NULL,
+                    `words` TEXT, 
+                    `salt` TEXT, 
+                    `key` TEXT, 
+                    `eosAccount` TEXT, 
+                    PRIMARY KEY(`id`)
+                    )
+                """.trimIndent())
+                database.execSQL("""
+                    INSERT INTO new_AccountRecord (`deleted`,`id`,`name`,`type`,`isBackedUp`,`words`,`salt`,`key`,`eosAccount`)
+                    SELECT `deleted`,`id`,`name`,`type`,`isBackedUp`,`words`,`salt`,`key`,`eosAccount` FROM AccountRecord
+                """.trimIndent())
+
+                database.execSQL("""
+                CREATE TABLE new_EnabledWallet (
+                    `coinId` TEXT NOT NULL, 
+                    `accountId` TEXT NOT NULL, 
+                    `walletOrder` INTEGER, 
+                    `syncMode` TEXT,
+                    `derivation` TEXT, 
+                    PRIMARY KEY(`coinId`, `accountId`), 
+                    FOREIGN KEY(`accountId`) 
+                    REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)
+                """.trimIndent())
+
+                database.execSQL("""
+                    INSERT INTO new_EnabledWallet (`coinId`,`accountId`,`walletOrder`) 
+                    SELECT `coinId`,`accountId`,`walletOrder` FROM EnabledWallet
+                """.trimIndent())
+
+                //update fields
+                var oldSyncMode: String? = null
+                var oldDerivation: String? = null
+
+                val accountsCursor = database.query("SELECT * FROM AccountRecord")
+                while (accountsCursor.moveToNext()) {
+                    val id = accountsCursor.getColumnIndex("id")
+                    val syncMode = accountsCursor.getColumnIndex("syncMode")
+                    val derivationColumnId = accountsCursor.getColumnIndex("derivation")
+                    if (id >= 0 && syncMode >= 0 && derivationColumnId >= 0) {
+                        val itemId = accountsCursor.getString(id)
+                        oldSyncMode = accountsCursor.getString(syncMode)
+
+                        val origin = when {
+                            oldSyncMode?.decapitalize() == SyncMode.New.value.decapitalize() -> AccountOrigin.Created.value
+                            else -> AccountOrigin.Restored.value
+                        }
+
+                        oldDerivation = accountsCursor.getString(derivationColumnId)
+
+                        database.execSQL("""
+                            UPDATE new_AccountRecord
+                            SET origin = '$origin'
+                            WHERE `id` = '$itemId';
+                            """.trimIndent()
+                        )
+                    }
+                }
+
+                val walletsCursor = database.query("SELECT * FROM EnabledWallet")
+                var walletSyncMode: String? = null
+                while (walletsCursor.moveToNext()) {
+                    val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
+                    if (coinIdColumnIndex >= 0) {
+                        val coinId = walletsCursor.getString(coinIdColumnIndex)
+
+                        val syncModeColumnIndex = walletsCursor.getColumnIndex("syncMode")
+                        if (syncModeColumnIndex >= 0){
+                            walletSyncMode = walletsCursor.getString(syncModeColumnIndex)
+                        }
+
+                        if (oldDerivation != null && coinId == "BTC") {
+                            database.execSQL("""
+                            UPDATE new_EnabledWallet
+                            SET derivation = '$oldDerivation'
+                            WHERE coinId = '$coinId';
+                            """.trimIndent()
+                            )
+                        }
+
+                        if (coinId == "BTC" || coinId == "BCH" || coinId == "DASH") {
+                            val newSyncMode = walletSyncMode?.toLowerCase()?.capitalize()?.let { SyncMode.valueOf(it) }
+                                    ?: SyncMode.Fast
+                            database.execSQL("""
+                                UPDATE new_EnabledWallet
+                                SET syncMode = '${newSyncMode.value}'
+                                WHERE coinId = '$coinId';
+                                """.trimIndent()
+                            )
+                        }
+                    }
+                }
+
+                //rename tables and drop old ones
+                database.execSQL("DROP TABLE AccountRecord")
+                database.execSQL("DROP TABLE EnabledWallet")
+                database.execSQL("ALTER TABLE new_AccountRecord RENAME TO AccountRecord")
+                database.execSQL("ALTER TABLE new_EnabledWallet RENAME TO EnabledWallet")
             }
         }
     }

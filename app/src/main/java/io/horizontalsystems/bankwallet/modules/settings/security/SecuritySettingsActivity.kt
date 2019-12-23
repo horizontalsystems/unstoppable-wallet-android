@@ -24,7 +24,7 @@ class SecuritySettingsActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this).get(SecuritySettingsViewModel::class.java)
         viewModel.init()
 
-        shadowlessToolbar.bind(getString(R.string.Settings_SecurityCenter), TopMenuItem(R.drawable.back, onClick = { onBackPressed() }))
+        shadowlessToolbar.bind(getString(R.string.Settings_SecurityCenter), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
 
         changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
 
@@ -49,7 +49,7 @@ class SecuritySettingsActivity : BaseActivity() {
         //  Handling view model live events
 
         viewModel.backupAlertVisibleLiveData.observe(this, Observer { alert ->
-            manageKeys.badgeImage = alert
+            manageKeys.badge = alert
         })
 
         viewModel.openManageKeysLiveEvent.observe(this, Observer {

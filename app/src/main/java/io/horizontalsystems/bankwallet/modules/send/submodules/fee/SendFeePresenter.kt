@@ -17,7 +17,7 @@ class SendFeePresenter(
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
         private val feeCoinData: Pair<Coin, String>?)
-    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule {
+    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule, SendFeeModule.IInteractorDelegate {
 
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
@@ -26,14 +26,29 @@ class SendFeePresenter(
 
     private var fee: BigDecimal = BigDecimal.ZERO
     private var availableFeeBalance: BigDecimal? = null
+    private var feeRateInfo = FeeRateInfo(FeeRatePriority.MEDIUM, 0, 0)
+    private var error: Exception? = null
 
     private var feeRates: List<FeeRateInfo>? = null
-    private var feeRateInfo = FeeRateInfo(FeeRatePriority.MEDIUM, 0, 0)
+        set(value) {
+            field = value
+            value?.let {
+                getFeeRateInfoByPriority(it, FeeRatePriority.MEDIUM)?.let { feeInfo ->
+                    feeRateInfo = feeInfo
+                }
+            }
+        }
 
     private val coin: Coin
         get() = feeCoinData?.first ?: baseCoin
 
     private fun syncError() {
+
+        if(error != null) {
+            view.setError( error )
+            return
+        }
+
         try {
             validate()
             view.setInsufficientFeeBalanceError(null)
@@ -71,8 +86,18 @@ class SendFeePresenter(
             false
         }
 
-    override val feeRate
-        get() = feeRateInfo.feeRate
+    override val feeRateState: FeeState
+        get() {
+            if (error != null) {
+                return FeeState.Error(error as Exception)
+            }
+            if (feeRates != null) {
+                return FeeState.Value(feeRateInfo.feeRate)
+            }
+
+            return FeeState.Loading
+        }
+
 
     override val primaryAmountInfo: AmountInfo
         get() {
@@ -98,13 +123,32 @@ class SendFeePresenter(
             }
         }
 
+    override val feeRate: Long
+        get() = feeRateInfo.feeRate
+
     override val duration: Long?
         get() = feeRateInfo.duration
+
+    override fun setLoading(loading: Boolean) {
+        view.setLoading(loading)
+    }
 
     override fun setFee(fee: BigDecimal) {
         this.fee = fee
         syncFeeLabels()
         syncError()
+    }
+
+    override fun setError(externalError: Exception?) {
+        this.error = externalError
+        syncError()
+    }
+
+    override fun fetchFeeRate() {
+        feeRates = null
+        error = null
+
+        interactor.syncFeeRate()
     }
 
     override fun setAvailableFeeBalance(availableFeeBalance: BigDecimal) {
@@ -121,12 +165,6 @@ class SendFeePresenter(
     override fun onViewDidLoad() {
         xRate = interactor.getRate(coin.code)
 
-        feeRates = interactor.getFeeRates()
-
-        feeRates?.find { it.priority == FeeRatePriority.MEDIUM }?.let {
-            feeRateInfo = it
-        }
-
         syncFeeRateLabels()
         syncFeeLabels()
         syncError()
@@ -140,6 +178,10 @@ class SendFeePresenter(
         }
     }
 
+    private fun getFeeRateInfoByPriority( searchList: List<FeeRateInfo>, priority: FeeRatePriority): FeeRateInfo?{
+        return searchList?.find { it.priority == priority }
+    }
+
     private fun feeRateInfoViewItem(rateInfo: FeeRateInfo): SendFeeModule.FeeRateInfoViewItem {
         return SendFeeModule.FeeRateInfoViewItem(feeRateInfo = rateInfo,
                 selected = rateInfo.priority == feeRateInfo.priority)
@@ -150,6 +192,23 @@ class SendFeePresenter(
 
         syncFeeRateLabels()
 
-        moduleDelegate?.onUpdateFeeRate(feeRate)
+        moduleDelegate?.onUpdateFeeRate()
+    }
+
+    override fun didUpdate(feeRates: List<FeeRateInfo>) {
+
+        this.feeRates = feeRates
+        moduleDelegate?.onUpdateFeeRate()
+    }
+
+    override fun didReceiveError(error: Exception) {
+        this.error = error
+        moduleDelegate?.onUpdateFeeRate()
+    }
+
+    // ViewModel
+
+    override fun onCleared() {
+        interactor.onClear()
     }
 }

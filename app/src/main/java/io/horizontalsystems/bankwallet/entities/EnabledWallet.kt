@@ -18,5 +18,6 @@ data class EnabledWallet(
         val coinId: String,
         val accountId: String,
         val walletOrder: Int? = null,
-        val syncMode: SyncMode? = null
+        val syncMode: String? = null,
+        val derivation: String? = null
 )

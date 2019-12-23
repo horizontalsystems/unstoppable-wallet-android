@@ -9,9 +9,11 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModu
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteractor,
-                         private val router: SendModule.IRouter)
-    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
+class SendBinanceHandler(
+        private val interactor: SendModule.ISendBinanceInteractor,
+        private val router: SendModule.IRouter)
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate,
+      SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -34,10 +36,11 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     override var hodlerModule: SendHodlerModule.IHodlerModule? = null
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
+    override fun sync() {}
 
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
-            SendModule.Input.Address,
+            SendModule.Input.Address(),
             SendModule.Input.Memo(120),
             SendModule.Input.Fee(false),
             SendModule.Input.ProceedButton)
@@ -58,7 +61,6 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
 
     override fun onModulesDidLoad() {
         amountModule.setAvailableBalance(interactor.availableBalance)
-
         feeModule.setFee(interactor.fee)
         feeModule.setAvailableFeeBalance(interactor.availableBinanceBalance)
     }
@@ -97,6 +99,7 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
 
     // SendFeeModule.IFeeModuleDelegate
 
-    override fun onUpdateFeeRate(feeRate: Long) {}
+    override fun onUpdateFeeRate() {
+    }
 
 }

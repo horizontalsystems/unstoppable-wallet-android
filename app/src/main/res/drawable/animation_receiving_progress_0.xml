@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+
+    <item
+        android:drawable="@drawable/ic_status_proccessing_0"
+        android:duration="@integer/animation_duration" />
+
+    <item
+        android:drawable="@drawable/ic_status_receiving_1"
+        android:duration="@integer/animation_duration" />
+
+    <item
+        android:drawable="@drawable/ic_status_receiving_2"
+        android:duration="@integer/animation_duration" />
+
+    <item
+        android:drawable="@drawable/ic_status_receiving_3"
+        android:duration="@integer/animation_duration" />
+
+</animation-list>

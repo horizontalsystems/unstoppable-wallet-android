@@ -5,9 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_transaction_info_status.view.*
 
 
@@ -29,37 +27,39 @@ open class TransactionInfoStatusView : ConstraintLayout {
         inflate(context, R.layout.view_transaction_info_status, this)
     }
 
-    fun bind(transactionStatus: TransactionStatus) {
+    fun bind(transactionStatus: TransactionStatus, incoming: Boolean) {
         progressBarWrapper.visibility = View.GONE
-        statusIcon.visibility = View.GONE
-        statusPendingText.visibility = View.GONE
+        confirmedText.visibility = View.GONE
+        progressText.visibility = View.GONE
+        failedText.visibility = View.GONE
 
         when (transactionStatus) {
+            is TransactionStatus.Failed -> {
+                failedText.visibility = View.VISIBLE
+            }
             is TransactionStatus.Completed -> {
-                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.ic_checkmark_green, App.instance))
-                statusIcon.visibility = View.VISIBLE
-                statusPendingText.visibility = View.VISIBLE
-                statusPendingText.text = context.getString(R.string.TransactionInfo_Status_Confirmed)
+                confirmedText.visibility = View.VISIBLE
             }
             is TransactionStatus.Processing -> {
-                progressBarWrapper.visibility = View.VISIBLE
-                fillProgress(transactionStatus)
+                fillProgress(transactionStatus.progress, incoming)
             }
             else -> {
-                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.ic_pending_grey, App.instance))
-                statusIcon.visibility = View.VISIBLE
-                statusPendingText.visibility = View.VISIBLE
-                statusPendingText.text = context.getString(R.string.TransactionInfo_Status_Pending)
+                fillProgress(incoming = incoming)
             }
         }
         invalidate()
     }
 
-    private fun fillProgress(transactionStatus: TransactionStatus.Processing) {
-        val progress = transactionStatus.progress
-        progressBar1.setImageResource(if(progress >= 0.33) R.drawable.status_progress_bar_green else R.drawable.status_progress_bar_grey)
-        progressBar2.setImageResource(if(progress >= 0.66) R.drawable.status_progress_bar_green else R.drawable.status_progress_bar_grey)
-        progressBar3.setImageResource(if(progress > 1.0) R.drawable.status_progress_bar_green else R.drawable.status_progress_bar_grey)
+    private fun fillProgress(progress: Double = 0.0, incoming: Boolean) {
+        progressBar1.setImageResource(if (progress >= 0.33) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
+        progressBar2.setImageResource(if (progress >= 0.66) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
+        progressBar3.setImageResource(if (progress > 1.0) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
+        progressBarWrapper.visibility = View.VISIBLE
+
+        progressText.setText(if (incoming) R.string.Transactions_Receiving else R.string.Transactions_Sending)
+        progressText.visibility = View.VISIBLE
     }
+
+    private fun getColoredBar(incoming: Boolean) = if (incoming) R.drawable.status_progress_bar_green else R.drawable.status_progress_bar_yellow
 
 }

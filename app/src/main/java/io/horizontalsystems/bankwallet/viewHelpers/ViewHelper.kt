@@ -26,3 +26,9 @@ fun bottomDialog(activity: FragmentActivity?, view: View): Dialog {
 
     return dialog as Dialog
 }
+
+//  Extensions
+
+fun View.showIf(condition: Boolean, hideType: Int = View.GONE) {
+    visibility = if (condition) View.VISIBLE else hideType
+}

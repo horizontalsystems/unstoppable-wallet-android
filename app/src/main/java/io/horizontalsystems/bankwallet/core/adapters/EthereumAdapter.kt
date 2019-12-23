@@ -2,20 +2,15 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionInfo
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EthereumAdapter(kit: EthereumKit)
-    : EthereumBaseAdapter(kit, decimal) {
-
-    override fun sendSingle(address: String, amount: String, gasPrice: Long): Single<Unit> {
-        return ethereumKit.send(address, amount, gasPrice).map { Unit }
-    }
+class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
     // IBalanceAdapter
 
@@ -26,6 +21,10 @@ class EthereumAdapter(kit: EthereumKit)
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
+    override fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
+        return ethereumKit.send(address, amount, gasPrice, gasLimit).map { Unit }
+    }
+
     override val stateUpdatedFlowable: Flowable<Unit>
         get() = ethereumKit.syncStateFlowable.map { Unit }
 
@@ -35,13 +34,16 @@ class EthereumAdapter(kit: EthereumKit)
     override val minimumRequiredBalance: BigDecimal
         get() = BigDecimal.ZERO
 
+    override val minimumSendAmount: BigDecimal
+        get() = BigDecimal.ZERO
+
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = ethereumKit.balanceFlowable.map { Unit }
 
     // ITransactionsAdapter
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return ethereumKit.transactions(from?.first, limit).map {
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return ethereumKit.transactions(from?.transactionHash, limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
@@ -51,35 +53,30 @@ class EthereumAdapter(kit: EthereumKit)
 
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        val mineAddress = ethereumKit.receiveAddress
-
-        val fromAddressHex = transaction.from
-        val from = TransactionAddress(fromAddressHex, fromAddressHex == mineAddress)
-
-        val toAddressHex = transaction.to
-        val to = TransactionAddress(toAddressHex, toAddressHex == mineAddress)
-
-        var amount = BigDecimal.ZERO
-
-        if (from.mine) {
-            amount -= transaction.value.toBigDecimal()
-        }
-        if (to.mine) {
-            amount += transaction.value.toBigDecimal()
-        }
-
+        val myAddress = ethereumKit.receiveAddress
+        val fromMine = transaction.from == myAddress
+        val toMine = transaction.to == myAddress
         val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.movePointLeft(decimal)
 
+        val type = when {
+            fromMine && toMine -> TransactionType.SentToSelf
+            fromMine -> TransactionType.Outgoing
+            else -> TransactionType.Incoming
+        }
+
         return TransactionRecord(
+                uid = transaction.hash,
                 transactionHash = transaction.hash,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber,
-                amount = amount.movePointLeft(decimal),
+                amount = transaction.value.toBigDecimal().movePointLeft(decimal),
                 fee = fee,
                 timestamp = transaction.timestamp,
-                from = listOf(from),
-                to = listOf(to)
+                from = transaction.from,
+                to = transaction.to,
+                type = type,
+                failed = transaction.isError?.let { it != 0 }?: false
         )
     }
 
@@ -88,11 +85,13 @@ class EthereumAdapter(kit: EthereumKit)
     override val ethereumBalance: BigDecimal
         get() = balance
 
-    override fun availableBalance(gasPrice: Long): BigDecimal {
-        return BigDecimal.ZERO.max(balance - fee(gasPrice))
+    override fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal {
+        if (gasLimit == null)
+            return balance
+        return BigDecimal.ZERO.max(balance - fee(gasPrice, gasLimit))
     }
 
-    override fun fee(gasPrice: Long): BigDecimal {
+    override fun fee(gasPrice: Long, gasLimit: Long): BigDecimal {
         return ethereumKit.fee(gasPrice).movePointLeft(decimal)
     }
 

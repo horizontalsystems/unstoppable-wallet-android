@@ -96,9 +96,14 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         view?.reload()
     }
 
-    override fun onError(providerName: String?) {
+    override fun onProviderOffline(providerName: String) {
         view?.hideLoading()
-        view?.showError(providerName)
+        view?.showErrorProviderOffline(providerName)
+    }
+
+    override fun onTransactionNotFound(providerName: String) {
+        view?.hideLoading()
+        view?.showErrorTransactionNotFound(providerName)
     }
 
     override fun retryLoadInfo() {

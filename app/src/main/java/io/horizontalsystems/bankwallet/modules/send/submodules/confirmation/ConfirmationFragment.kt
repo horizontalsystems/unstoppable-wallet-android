@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.CoinException
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
@@ -36,11 +37,11 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }
+                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() }
                 ))
 
         sendView = sendPresenter?.view as SendView
-        presenter = ViewModelProviders.of(this, SendConfirmationModule.Factory())
+        presenter = ViewModelProvider(this, SendConfirmationModule.Factory())
                 .get(SendConfirmationPresenter::class.java)
 
         sendView?.confirmationViewItems?.observe(viewLifecycleOwner, Observer {
@@ -88,17 +89,15 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         })
 
         sendView?.errorInDialog?.observe(viewLifecycleOwner, Observer { coinThrowable ->
-            fragmentManager?.let { fragManager ->
-                val errorText = coinThrowable.errorTextRes?.let { getString(it) } ?: coinThrowable.nonTranslatableText
-                AlertDialogFragment.newInstance(
-                        descriptionString = errorText,
-                        buttonText = R.string.Alert_Ok,
-                        listener = object : AlertDialogFragment.Listener {
-                            override fun onButtonClick() {
-                                activity?.onBackPressed()
-                            }
-                        }).show(fragManager, "alert_dialog")
-            }
+            val errorText = coinThrowable.errorTextRes?.let { getString(it) } ?: coinThrowable.nonTranslatableText
+            AlertDialogFragment.newInstance(
+                    descriptionString = errorText,
+                    buttonText = R.string.Alert_Ok,
+                    listener = object : AlertDialogFragment.Listener {
+                        override fun onButtonClick() {
+                            activity?.onBackPressed()
+                        }
+                    }).show(parentFragmentManager, "alert_dialog")
         })
 
         presenterView?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->
@@ -111,6 +110,13 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
     private fun getErrorText(error: Throwable): String {
         return when (error) {
             is UnknownHostException -> getString(R.string.Hud_Text_NoInternet)
+            is CoinException -> {
+                error.errorTextRes?.let {
+                    return getString(it)
+                }
+
+                return error.nonTranslatableText ?: getString(R.string.Hud_UnknownError, error)
+            }
             else -> getString(R.string.Hud_UnknownError, error)
         }
     }

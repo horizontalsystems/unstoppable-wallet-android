@@ -17,7 +17,6 @@ class ManageKeysDialog(
     : BaseBottomSheetDialogFragment() {
 
     interface Listener {
-        fun onClickCreateKey() {}
         fun onClickBackupKey() {}
     }
 
@@ -46,14 +45,6 @@ class ManageKeysDialog(
     private fun bindActions() {
         btnGrey.visibility = View.GONE
         btnYellow.visibility = View.VISIBLE
-
-        if (action == ManageAction.CREATE) {
-            btnYellow.text = getString(R.string.ManageKeys_Create)
-            btnYellow.setOnClickListener {
-                listener.onClickCreateKey()
-                dismiss()
-            }
-        }
 
         if (action == ManageAction.BACKUP) {
             btnYellow.text = getString(R.string.ManageKeys_Backup)

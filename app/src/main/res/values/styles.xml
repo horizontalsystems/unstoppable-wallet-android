@@ -55,6 +55,7 @@
     <attr name="ColorLawrencePressed" format="reference|color" />
     <attr name="ColorClaude" format="reference|color" />
     <attr name="ColorGwen" format="reference" />
+    <attr name="ColorNina" format="reference" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -66,10 +67,10 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="actionMenuTextAppearance">@style/Headline2</item>
-        <item name="actionMenuTextColor">?ColorJacob</item>
+        <item name="actionMenuTextColor">@color/stateful_button_yellow_color</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_d</item>
-        <item name="android:homeAsUpIndicator">@drawable/back</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
 
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
@@ -116,7 +117,7 @@
         <item name="ColorLucian">@color/red_d</item>
         <item name="ColorLucianPressed">@color/red_l</item>
         <item name="ColorOz">@color/light</item>
-        <item name="ColorLeah">@color/light_grey</item>
+        <item name="ColorLeah">@color/steel_light</item>
         <!-- New colors: for backgrounds -->
         <item name="ColorJeremy">@color/steel_20</item>
         <item name="ColorElena">@color/steel_20</item>
@@ -124,6 +125,7 @@
         <item name="ColorLawrencePressed">@color/steel_dark_pressed</item>
         <item name="ColorClaude">@color/dark</item>
         <item name="ColorGwen">@color/dark</item>
+        <item name="ColorNina">@color/white_50</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -135,10 +137,10 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:actionMenuTextAppearance">@style/Headline2</item>
-        <item name="actionMenuTextColor">?ColorJacob</item>
+        <item name="actionMenuTextColor">@color/stateful_button_yellow_color</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_l</item>
-        <item name="android:homeAsUpIndicator">@drawable/back</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
 
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
@@ -192,6 +194,7 @@
         <item name="ColorLawrencePressed">@color/white_pressed</item>
         <item name="ColorClaude">@color/white</item>
         <item name="ColorGwen">@drawable/light_gradient_background</item>
+        <item name="ColorNina">@color/black_50</item>
     </style>
 
     <style name="ToolbarStyle">
@@ -301,11 +304,29 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="CaptionSB">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Micro">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="MicroSB">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextLabel">
+        <item name="android:background">@drawable/label_background</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
 
     <!--Button Styles-->
 

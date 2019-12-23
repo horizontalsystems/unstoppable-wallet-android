@@ -2,11 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
@@ -17,7 +13,7 @@ object BalanceModule {
         fun set(viewItems: List<BalanceViewItem>)
         fun set(headerViewItem: BalanceHeaderViewItem)
         fun set(sortIsOn: Boolean)
-        fun showBackupRequired(coin: Coin, predefinedAccountType: IPredefinedAccountType)
+        fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun didRefresh()
     }
 
@@ -28,6 +24,7 @@ object BalanceModule {
         fun onReceive(viewItem: BalanceViewItem)
         fun onPay(viewItem: BalanceViewItem)
         fun onChart(viewItem: BalanceViewItem)
+        fun onItem(viewItem: BalanceViewItem)
 
         fun onAddCoinClick()
 
@@ -54,10 +51,9 @@ object BalanceModule {
         fun subscribeToAdapters(wallets: List<Wallet>)
 
         fun subscribeToMarketInfo(currencyCode: String)
-        fun subscribeToChartInfo(coinCodes: List<String>, currencyCode: String)
 
         fun refresh()
-        fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType?
+        fun predefinedAccountType(wallet: Wallet): PredefinedAccountType?
 
         fun saveSortType(sortType: BalanceSortType)
 
@@ -67,14 +63,11 @@ object BalanceModule {
     interface IInteractorDelegate {
         fun didUpdateWallets(wallets: List<Wallet>)
         fun didPrepareAdapters()
-        fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal)
+        fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal?)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
 
         fun didUpdateCurrency(currency: Currency)
         fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>)
-
-        fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String)
-        fun didFailChartInfo(coinCode: String)
 
         fun didRefresh()
     }
@@ -108,16 +101,9 @@ object BalanceModule {
 
         var state: AdapterState? = null
         var marketInfo: MarketInfo? = null
-        var chartInfoState: ChartInfoState = ChartInfoState.Loading
 
         val fiatValue: BigDecimal?
             get() = marketInfo?.rate?.let { balance?.times(it) }
-    }
-
-    sealed class ChartInfoState {
-        object Loading : ChartInfoState()
-        class Loaded(val chartInfo: ChartInfo) : ChartInfoState()
-        object Failed : ChartInfoState()
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {

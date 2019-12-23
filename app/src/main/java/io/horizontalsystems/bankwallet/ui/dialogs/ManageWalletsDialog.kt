@@ -7,20 +7,21 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import kotlinx.android.synthetic.main.fragment_bottom_manage_keys.*
 
 class ManageWalletsDialog(
         private val listener: Listener,
         private val coin: Coin,
-        private val predefinedAccountType: IPredefinedAccountType)
+        private val predefinedAccountType: PredefinedAccountType)
     : BaseBottomSheetDialogFragment() {
 
     interface Listener {
-        fun onClickCreateKey()
-        fun onClickRestoreKey() {}
+        fun onClickCreateKey(predefinedAccountType: PredefinedAccountType)
+        fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {}
         fun onCancel() {}
     }
 
@@ -32,18 +33,23 @@ class ManageWalletsDialog(
         super.onViewCreated(view, savedInstanceState)
         setContentView(R.layout.fragment_bottom_manage_keys)
 
-        setTitle(activity?.getString(R.string.Deposit_Title, coin.code))
-        setSubtitle(coin.title)
+        setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
+        setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
         setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
+
+        btnYellow.isEnabled = predefinedAccountType.isCreationSupported()
 
         addKeyInfo = view.findViewById(R.id.addKeyInfo)
         btnCreateKey = view.findViewById(R.id.btnYellow)
         btnRestoreKey = view.findViewById(R.id.btnGrey)
 
+        val walletName = getString(predefinedAccountType.title)
         addKeyInfo.text = getString(
-                R.string.AddCoin_Description, "${coin.title} (${coin.code})",
-                getString(predefinedAccountType.coinCodes),
-                getString(predefinedAccountType.title)
+                R.string.AddCoin_Description,
+                walletName,
+                coin.title,
+                walletName,
+                getString(predefinedAccountType.coinCodes)
         )
 
         bindActions()
@@ -61,18 +67,18 @@ class ManageWalletsDialog(
 
     private fun bindActions() {
         btnCreateKey.setOnClickListener {
-            listener.onClickCreateKey()
+            listener.onClickCreateKey(predefinedAccountType)
             dismiss()
         }
 
         btnRestoreKey.setOnClickListener {
-            listener.onClickRestoreKey()
+            listener.onClickRestoreKey(predefinedAccountType)
             dismiss()
         }
     }
 
     companion object {
-        fun show(activity: FragmentActivity, listener: Listener, coin: Coin, predefinedAccountType: IPredefinedAccountType) {
+        fun show(activity: FragmentActivity, listener: Listener, coin: Coin, predefinedAccountType: PredefinedAccountType) {
             val fragment = ManageWalletsDialog(listener, coin, predefinedAccountType)
             val transaction = activity.supportFragmentManager.beginTransaction()
 

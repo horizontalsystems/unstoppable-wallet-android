@@ -1,61 +1,38 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.EosUnsupportedException
+import io.horizontalsystems.bankwallet.core.IAccountCreator
+import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
 class AccountCreator(
-        private val accountManager: IAccountManager,
         private val accountFactory: IAccountFactory,
-        private val wordsManager: IWordsManager,
-        private val defaultWalletCreator: DefaultWalletCreator)
+        private val wordsManager: IWordsManager)
     : IAccountCreator {
 
-    override fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account {
-        val account = createAccount(accountType, isBackedUp = true, defaultSyncMode = syncMode)
-        if (createDefaultWallets) {
-            defaultWalletCreator.handleCreate(account)
-        }
-        return account
+    override fun newAccount(predefinedAccountType: PredefinedAccountType): Account {
+        val accountType = accountType(predefinedAccountType)
+        return accountFactory.account(accountType, AccountOrigin.Created, false)
     }
 
-    override fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account {
-        val account = createAccount(defaultAccountType)
-        if (createDefaultWallets) {
-            defaultWalletCreator.handleCreate(account)
-        }
-        return account
+    override fun restoredAccount(accountType: AccountType): Account {
+        return accountFactory.account(accountType, AccountOrigin.Restored, true)
     }
 
-    override fun createNewAccount(coin: Coin) {
-        val account = createAccount(coin.type.defaultAccountType)
-        defaultWalletCreator.createWallet(account, coin)
-    }
-
-    private fun createAccount(defaultAccountType: DefaultAccountType): Account {
-        return createAccount(createAccountType(defaultAccountType), isBackedUp = false, defaultSyncMode = SyncMode.NEW)
-    }
-
-    private fun createAccount(accountType: AccountType, isBackedUp: Boolean, defaultSyncMode: SyncMode?): Account {
-        val account = accountFactory.account(accountType, isBackedUp, defaultSyncMode)
-
-        accountManager.create(account)
-
-        return account
-    }
-
-    private fun createAccountType(defaultAccountType: DefaultAccountType): AccountType {
-        return when (defaultAccountType) {
-            is DefaultAccountType.Mnemonic -> createMnemonicAccountType(defaultAccountType.wordsCount)
-            is DefaultAccountType.Eos -> throw EosUnsupportedException()
+    private fun accountType(predefinedAccountType: PredefinedAccountType): AccountType {
+        return when (predefinedAccountType) {
+            is PredefinedAccountType.Standard -> createMnemonicAccountType(12)
+            is PredefinedAccountType.Binance -> createMnemonicAccountType(24)
+            is PredefinedAccountType.Eos -> throw EosUnsupportedException()
         }
     }
 
     private fun createMnemonicAccountType(wordsCount: Int): AccountType {
         val words = wordsManager.generateWords(wordsCount)
-        val derivation = if (wordsCount == 12) AccountType.Derivation.bip49 else AccountType.Derivation.bip44
-        return AccountType.Mnemonic(words, derivation, salt = null)
+        return AccountType.Mnemonic(words, salt = null)
     }
 }

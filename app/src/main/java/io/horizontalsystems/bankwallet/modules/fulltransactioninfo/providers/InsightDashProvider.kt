@@ -6,14 +6,17 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
 
 class InsightDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseApiUrl = "https://insight.dash.org/insight-api"
+
     override val name = "Insight.dash.org"
+    override val pingUrl = "$baseApiUrl/block/0"
 
     override fun url(hash: String): String {
         return "https://insight.dash.org/insight/tx/$hash"
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("https://insight.dash.org/insight-api/tx/$hash")
+        return GetRequest("$baseApiUrl/tx/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {

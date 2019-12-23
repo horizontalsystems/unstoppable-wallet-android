@@ -14,11 +14,10 @@ import java.math.BigDecimal
 data class ChartInfoViewItem(
         val chartType: ChartView.ChartType,
         val chartPoints: List<ChartPoint>,
-        val lowValue: CurrencyValue,
-        val highValue: CurrencyValue,
         val diffValue: BigDecimal,
         val startTimestamp: Long,
-        val endTimestamp: Long
+        val endTimestamp: Long,
+        val currency: Currency
 )
 
 data class MarketInfoViewItem(
@@ -37,18 +36,12 @@ class RateChartViewFactory {
         val startValue = chartPoints.firstOrNull()?.value ?: 0f
         val endValue = chartPoints.lastOrNull()?.value ?: 0f
 
-        val minValue = chartPoints.minBy { it.value }?.value ?: 0f
-        val maxValue = chartPoints.maxBy { it.value }?.value ?: 0f
-
-        val lowValue = CurrencyValue(currency, minValue.toBigDecimal())
-        val highValue = CurrencyValue(currency, maxValue.toBigDecimal())
-
         val chartType = when (type) {
             ChartType.DAILY -> ChartView.ChartType.DAILY
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
             ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
             ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
-            ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY18
+            ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12
         }
 
         val diffValue = ((endValue - startValue) / startValue * 100).toBigDecimal()
@@ -56,11 +49,10 @@ class RateChartViewFactory {
         return ChartInfoViewItem(
                 chartType,
                 chartPoints,
-                lowValue,
-                highValue,
                 diffValue,
                 chartInfo.startTimestamp,
-                chartInfo.endTimestamp
+                chartInfo.endTimestamp,
+                currency
         )
     }
 

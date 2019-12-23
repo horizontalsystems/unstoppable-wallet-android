@@ -4,10 +4,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
@@ -95,8 +92,8 @@ class DashAdapter(override val kit: DashKit) :
         // ignored for now
     }
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return kit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
     // ISendDashAdapter
@@ -126,13 +123,15 @@ class DashAdapter(override val kit: DashKit) :
 
         private fun createKit(wallet: Wallet, testMode: Boolean): DashKit {
             val account = wallet.account
-            if (account.type is AccountType.Mnemonic) {
+            val accountType = account.type
+            val syncMode = wallet.settings[CoinSetting.SyncMode]?.let { SyncMode.valueOf(it) }
+            if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return DashKit(context = App.instance,
-                        words = account.type.words,
-                        walletId = account.id,
-                        syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
-                        networkType = getNetworkType(testMode),
-                        confirmationsThreshold = defaultConfirmationsThreshold)
+                            words = accountType.words,
+                            walletId = account.id,
+                            syncMode = getSyncMode(syncMode),
+                            networkType = getNetworkType(testMode),
+                            confirmationsThreshold = defaultConfirmationsThreshold)
             }
 
             throw UnsupportedAccountException()

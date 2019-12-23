@@ -5,9 +5,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bitcoincore.core.IPluginOutputData
-import io.horizontalsystems.hodler.HodlerOutputData
-import io.horizontalsystems.hodler.HodlerPlugin
 import java.math.BigDecimal
 import java.util.*
 
@@ -21,37 +18,26 @@ data class TransactionViewItem(
         val feeCoinValue: CoinValue?,
         val from: String?,
         val to: String?,
-        val sentToSelf: Boolean,
+        val type: TransactionType,
         val showFromAddress: Boolean,
-        val incoming: Boolean,
         val date: Date?,
         val status: TransactionStatus,
         val rate: CurrencyValue?,
         val lockInfo: TransactionLockInfo?)
 
 
-data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String) {
-
-    companion object {
-        fun from(pluginData: Map<Byte, IPluginOutputData>?): TransactionLockInfo? {
-            val hodlerPluginData = pluginData?.get(HodlerPlugin.id) ?: return null
-            val hodlerOutputData = hodlerPluginData as? HodlerOutputData ?: return null
-            val lockedUntil = hodlerOutputData.approxUnlockTime ?: return null
-
-            return TransactionLockInfo(Date(lockedUntil * 1000), hodlerOutputData.addressString)
-        }
-    }
-}
+data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?)
 
 sealed class TransactionStatus {
     object Pending : TransactionStatus()
     class Processing(val progress: Double) : TransactionStatus() //progress in 0.0 .. 1.0
     object Completed : TransactionStatus()
+    object Failed : TransactionStatus()
 }
 
 object TransactionsModule {
 
-    data class FetchData(val wallet: Wallet, val from: Pair<String, Int>?, val limit: Int)
+    data class FetchData(val wallet: Wallet, val from: TransactionRecord?, val limit: Int)
 
     interface IView {
         fun showFilters(filters: List<Wallet?>)

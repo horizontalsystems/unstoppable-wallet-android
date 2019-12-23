@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.eoskit.core.exceptions.BackendError
 import io.horizontalsystems.eoskit.models.Transaction
@@ -47,38 +47,34 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = token.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return eosKit.transactions(token, from?.second, limit).map { list ->
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return eosKit.transactions(token, from?.interTransactionIndex, limit).map { list ->
             list.map { transactionRecord(it) }
         }
     }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
-        val fromAddressHex = transaction.from
-        val from = TransactionAddress(fromAddressHex!!, fromAddressHex == eosKit.account)
+        val myAddress = eosKit.account
+        val fromMine = transaction.from == myAddress
+        val toMine = transaction.to == myAddress
 
-        val toAddressHex = transaction.to
-        val to = TransactionAddress(toAddressHex!!, toAddressHex == eosKit.account)
-
-        var amount = BigDecimal(0)
-
-        transaction.amount?.toBigDecimal()?.let {
-            amount = it
-
-            if (from.mine) {
-                amount = -amount
-            }
+        val type = when {
+            fromMine && toMine -> TransactionType.SentToSelf
+            fromMine -> TransactionType.Outgoing
+            else -> TransactionType.Incoming
         }
 
         return TransactionRecord(
+                uid = transaction.id,
                 transactionHash = transaction.id,
                 transactionIndex = 0,
                 interTransactionIndex = transaction.actionSequence,
                 blockHeight = transaction.blockNumber.toLong(),
-                amount = amount,
+                amount = transaction.amount?.toBigDecimal() ?: BigDecimal.ZERO,
                 timestamp = transaction.date / 1000,
-                from = listOf(from),
-                to = listOf(to)
+                from = transaction.from,
+                to = transaction.to,
+                type = type
         )
     }
 

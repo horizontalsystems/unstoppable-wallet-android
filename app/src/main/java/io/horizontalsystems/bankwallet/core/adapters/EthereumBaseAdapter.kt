@@ -10,7 +10,8 @@ import java.math.RoundingMode
 
 abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
-        val decimal: Int) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+        val decimal: Int)
+    : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     // IAdapter
 
@@ -39,11 +40,11 @@ abstract class EthereumBaseAdapter(
 
     // ISendEthereumAdapter
 
-    override fun send(amount: BigDecimal, address: String, gasPrice: Long): Single<Unit> {
+    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
         val poweredDecimal = amount.scaleByPowerOfTen(decimal)
         val noScaleDecimal = poweredDecimal.setScale(0, RoundingMode.HALF_DOWN)
 
-        return sendSingle(address, noScaleDecimal.toPlainString(), gasPrice)
+        return sendSingle(address, noScaleDecimal.toPlainString(), gasPrice, gasLimit)
     }
 
     override fun validate(address: String) {
@@ -61,8 +62,12 @@ abstract class EthereumBaseAdapter(
         } ?: return BigDecimal.ZERO
     }
 
-    open fun sendSingle(address: String, amount: String, gasPrice: Long): Single<Unit> {
+    open fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
         return Single.just(Unit)
+    }
+
+    override fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>{
+        return Single.just(ethereumKit.gasLimit)
     }
 
 }

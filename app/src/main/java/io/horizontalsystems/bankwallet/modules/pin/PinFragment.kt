@@ -39,8 +39,7 @@ import java.util.concurrent.Executor
 class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
 
     private val interactionType: PinInteractionType by lazy {
-        arguments?.getSerializable(PinModule.keyInteractionType) as? PinInteractionType
-                ?: PinInteractionType.UNLOCK
+        arguments?.getParcelable(PinModule.keyInteractionType) ?: PinInteractionType.UNLOCK
     }
 
     private val showCancelButton: Boolean by lazy {
@@ -124,7 +123,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         })
 
         pinView.showBackButton.observe(viewLifecycleOwner, Observer {
-            shadowlessToolbar.bind(null, TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }))
+            shadowlessToolbar.bind(null, TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() }))
         })
 
         pinView.title.observe(viewLifecycleOwner, Observer {
@@ -187,7 +186,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         pinView.showLockedView.observe(viewLifecycleOwner, Observer {
             pinUnlock.visibility = View.GONE
             pinUnlockBlocked.visibility = View.VISIBLE
-            val time = DateHelper.formatDate(it, "HH:mm:ss")
+            val time = DateHelper.getOnlyTime(it)
             blockedScreenMessage.text = getString(R.string.UnlockPin_WalletDisabledUntil, time)
         })
     }
@@ -209,14 +208,22 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                fingerprintCancelButton.visibility = View.GONE
-                viewDelegate.onFingerprintUnlock()
+                activity?.runOnUiThread {
+                    fingerprintCancelButton.visibility = View.GONE
+                    viewDelegate.onFingerprintUnlock()
+                }
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
-                if(errorCode == BiometricConstants.ERROR_USER_CANCELED){
-                    setFingerprintInputScreenVisible(false)
+
+                if (errorCode == BiometricConstants.ERROR_USER_CANCELED
+                        || errorCode == BiometricConstants.ERROR_NEGATIVE_BUTTON
+                        || errorCode == BiometricConstants.ERROR_CANCELED
+                ) {
+                    activity?.runOnUiThread {
+                        setFingerprintInputScreenVisible(false)
+                    }
                 }
             }
         })
@@ -225,8 +232,8 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
     }
 
     private fun setFingerprintInputScreenVisible(fingerprintVisible: Boolean) {
-        fingerprintInput.visibility = if (fingerprintVisible) View.VISIBLE else View.GONE
-        pinUnlock.visibility = if (fingerprintVisible) View.GONE else View.VISIBLE
+        fingerprintInput.visibility = if (fingerprintVisible) View.VISIBLE else View.INVISIBLE
+        pinUnlock.visibility = if (fingerprintVisible) View.INVISIBLE else View.VISIBLE
     }
 
 }

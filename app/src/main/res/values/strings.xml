@@ -1,5 +1,7 @@
 <resources>
-    <string name="App_Name">Unstoppable</string>
+    <string name="App_Name" translatable="false">Unstoppable</string>
+
+    <!--Common-->
 
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Cancel</string>
@@ -8,13 +10,18 @@
     <string name="Alert_Close">Close</string>
     <string name="Alert_Success">Success</string>
     <string name="Alert_Copied">Copied</string>
+    <string name="Alert_Loading">Loading...</string>
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
+    <string name="Button_Next">Next</string>
+    <string name="Button_Restore">Restore</string>
+    <string name="Button_Enable">Enable</string>
     <string name="Button_Back">Back</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Share</string>
+    <string name="Button_Done">Done</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
@@ -29,21 +36,22 @@
     <string name="Welcome_Version" translatable="false">version %s</string>
 
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
-    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
+    <string name="Create_Title">Choose Crypto</string>
+    <string name="Create_Description">Select cryptocurrencies for the wallet. You will be able to add or remove coins later as well.</string>
 
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>
+    <string name="Restore_ChooseCrypto">Choose Crypto</string>
     <string name="Restore_Enter_Key_Title">Enter Key</string>
     <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
+    <string name="Restore_Description">Choose a wallet you want to restore. You will need a private key for that wallet.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
-    <string name="Restore_EosAccountName">Account Name</string>
-    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountName" translatable="false">Account Name</string>
+    <string name="Restore_EosActivePrivateKey" translatable="false">Active Private Key</string>
 
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
@@ -69,8 +77,8 @@
 
     <!--Backup Eos-->
 
-    <string name="Backup_Eos_AccountName">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_AccountName" translatable="false">Account Name</string>
+    <string name="Backup_Eos_ActivePrivateKey" translatable="false">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
 
     <!--Balance-->
@@ -102,11 +110,11 @@
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_To">To: </string>
-    <string name="Send_Confirmation_HintMemo">Memo:</string>
-    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_HintMemo" translatable="false">Memo:</string>
+    <string name="Send_Confirmation_Eos_HintAccount" translatable="false">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_LockTime">TimeLock:</string>
+    <string name="Send_Confirmation_LockTime" translatable="false">TimeLock:</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
@@ -120,6 +128,7 @@
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
+    <string name="Send_Error_WrongParameters">Wrong parameters</string>
 
     <string name="Send_DialogTitle">Confirm</string>
     <string name="Send_DialogAvailableBalance">Available Balance</string>
@@ -130,9 +139,9 @@
     <string name="Send_DialogDuration">Duration:</string>
     <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">Total:</string>
-    <string name="Send_DialogMemoHint">Memo</string>
+    <string name="Send_DialogMemoHint" translatable="false">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
-    <string name="Send_DialogLockTime">TimeLock</string>
+    <string name="Send_DialogLockTime" translatable="false">TimeLock</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
     <string name="Send_LockTime_Month">1 month</string>
@@ -171,7 +180,7 @@
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
     <string name="Transactions_Receiving">Receiving</string>
     <string name="Transactions_Sending">Sending</string>
-    <string name="Transactions_Pending">Pending</string>
+    <string name="Transactions_Failed">Failed</string>
 
     <!--Transaction Info-->
 
@@ -183,12 +192,11 @@
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
-    <string name="TransactionInfo_LockTime">TimeLock</string>
+    <string name="TransactionInfo_LockedUntil">Locked until</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
 
     <!-- Info -->
 
@@ -211,19 +219,20 @@
     <string name="FullInfo_From">From</string>
     <string name="FullInfo_To">To</string>
     <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Memo">Memo</string>
-    <string name="FullInfo_CpuUsage">CPU Usage</string>
-    <string name="FullInfo_NetUsage">Net Usage</string>
+    <string name="FullInfo_Memo" translatable="false">Memo</string>
+    <string name="FullInfo_CpuUsage" translatable="false">CPU Usage</string>
+    <string name="FullInfo_NetUsage" translatable="false">Net Usage</string>
 
-    <string name="FullInfo_GasLimit">Gas Limit</string>
-    <string name="FullInfo_GasUsed">Gas Used</string>
-    <string name="FullInfo_GasPrice">Gas Price</string>
+    <string name="FullInfo_GasLimit" translatable="false">Gas Limit</string>
+    <string name="FullInfo_GasUsed" translatable="false">Gas Used</string>
+    <string name="FullInfo_GasPrice" translatable="false">Gas Price</string>
 
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
 
-    <string name="FullInfo_Error_Subtitle">Offline</string>
+    <string name="FullInfo_Error_ProviderOffline">Offline</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transaction was not found</string>
     <string name="FullInfo_Error_Retry">Retry</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
 
@@ -234,11 +243,11 @@
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
     <string name="FullInfo_NoAddress">Empty Address</string>
-    <string name="FullInfo_SatByte">sat/B</string>
-    <string name="FullInfo_Bytes">Bytes</string>
+    <string name="FullInfo_SatByte" translatable="false">sat/B</string>
+    <string name="FullInfo_Bytes" translatable="false">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Nonce" translatable="false">Nonce</string>
     <string name="FullInfoEth_Amount">Amount</string>
 
     <!--Settings-->
@@ -254,7 +263,7 @@
     <string name="Settings_LightMode">Light Mode</string>
     <string name="Settings_About">About</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
-    <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
+    <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_Report">Report a Problem</string>
 
@@ -389,26 +398,25 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
-    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
-    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
+    <string name="ManageCoins_Alert_CantCreateTitle">%s Wallet</string>
+    <string name="ManageCoins_Alert_CantCreateDescription">At this point Unstoppable is not able to create new %s wallets. You\'re only able to restore the existing one.</string>
 
     <!-- Experimental Feature -->
 
     <string name="ExperimentalFeatures_Title">Experimental</string>
-    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have throughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
 
     <!-- Bitcoin Hodling -->
 
     <string name="BitcoinHodling_Title">Lock Bitcoins</string>
-    <string name="BitcoinHodling_LockTime">TimeLock</string>
-    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
+    <string name="BitcoinHodling_LockTime" translatable="false">TimeLock</string>
+    <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet app version 0.10 or newer with BIP44 address format for the Bitcoin.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet controls a set of cryptocurrencies.\n\nYou must backup each highlighted wallet by backing up the private key for it. This key is the only way to restore and access your funds if your phone is ever lost, stolen or the app malfunctions.</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
@@ -428,33 +436,38 @@
     <!-- Manage Keys Alert -->
 
     <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Subtitle">%s Wallet</string>
+    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
     <!-- Account Types -->
 
-    <string name="AccountType_Unstoppable">Unstoppable</string>
-    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20 tokens</string>
-    <string name="AccountType_Eos">EOS</string>
-    <string name="AccountType_Eos_Text" translatable="false">EOS, EOS tokens</string>
-    <string name="AccountType_Binance">Binance</string>
-    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2 tokens</string>
+    <string name="AccountType_Unstoppable">Standard</string>
+    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC20 tokens</string>
+    <string name="AccountType_Eos" translatable="false">EOS</string>
+    <string name="AccountType_Eos_Text" translatable="false">EOS, EOSIO tokens</string>
+    <string name="AccountType_Binance" translatable="false">Binance</string>
+    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP2 tokens</string>
 
     <!--Coin Option-->
 
     <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
-    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
-    <string name="CoinOption_BeforeNovember">Before November 2019</string>
-    <string name="CoinOption_AfterNovember">After November 2019</string>
-    <string name="CoinOption_bip44">BIP-44</string>
-    <string name="CoinOption_bip49">BIP-49</string>
+    <string name="CoinOption_Fast" translatable="false">Horizontal Systems API</string>
+    <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
+    <string name="CoinOption_SyncModeDescription">Select the source the Unstoppable app should use to download your balance and transactions. \n\nHorizontal Systems %1s API:\n%2s</string>
+    <string name="CoinOption_Slow" translatable="false">%s Blockchain</string>
+    <string name="CoinOption_Slow_Subtitle">1–12 hours</string>
+    <string name="CoinOption_BipDescriptionCreate">This setting controls the address format for the Bitcoin in this wallet. We recommend using BIP49 if not sure.</string>
+    <string name="CoinOption_BipDescriptionRestore">Select the address format for the Bitcoin in the wallet you\'re trying to restore.</string>
+    <string name="CoinOption_AddressFormatTitle">Choose address format</string>
+    <string name="CoinOption_SyncModeTitle">Restore Parameters</string>
+    <string name="CoinOption_bip44" translatable="false">Legacy - BIP 44</string>
+    <string name="CoinOption_bip49" translatable="false">SegWit - BIP 49</string>
+    <string name="CoinOption_bip84" translatable="false">Native Segwit - BIP 84</string>
+    <string name="CoinOption_bip44_Subtitle">Older (start with 1...)</string>
+    <string name="CoinOption_bip49_Subtitle">Popular (start with 3...)</string>
+    <string name="CoinOption_bip84_Subtitle">Newest (start with bc1...)</string>
 
     <!--Charts-->
 
@@ -465,7 +478,7 @@
     <string name="Charts_TimeDuration_HalfYear">6M</string>
     <string name="Charts_TimeDuration_Year">1Y</string>
 
-    <string name="Charts_Title">%s Rate</string>
+    <string name="Charts_Title">%s Price</string>
     <string name="Charts_Rate_High">%s High</string>
     <string name="Charts_Rate_Low">%s Low</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>

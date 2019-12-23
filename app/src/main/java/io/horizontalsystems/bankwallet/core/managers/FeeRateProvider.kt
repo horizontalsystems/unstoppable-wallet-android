@@ -5,68 +5,68 @@ import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
-import io.horizontalsystems.feeratekit.FeeRate
 import io.horizontalsystems.feeratekit.FeeRateKit
+import io.horizontalsystems.feeratekit.model.FeeProviderConfig
+import io.horizontalsystems.feeratekit.model.FeeRate
+import io.reactivex.Single
 
-class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRateKit.Listener {
+class FeeRateProvider(context: Context, appConfig: IAppConfigProvider){
 
     private val feeRateKit = FeeRateKit(
-            infuraProjectId = appConfig.infuraProjectId,
-            infuraProjectSecret = appConfig.infuraProjectSecret,
-            context = context,
-            listener = this
+            FeeProviderConfig(infuraProjectId = appConfig.infuraProjectId,
+                              infuraProjectSecret = appConfig.infuraProjectSecret,
+                              btcCoreRpcUrl = appConfig.btcCoreRpcUrl,
+                              btcCoreRpcUSer =  appConfig.btcCoreRpcUser,
+                              btcCoreRpcPassword = appConfig.btcCoreRpcPassword),
+            context = context
     )
 
-    override fun onRefresh(rates: List<FeeRate>) {
-
+    fun bitcoinFeeRates(): Single<List<FeeRateInfo>> {
+        return feeRateKit.bitcoin().map { feeRates(it) }
     }
 
-    fun bitcoinFeeRates(): List<FeeRateInfo> {
-        return feeRates(feeRateKit.bitcoin())
+    fun bitcoinCashFeeRates(): Single<List<FeeRateInfo>> {
+        return feeRateKit.bitcoinCash().map { feeRates(it) }
     }
 
-    fun bitcoinCashFeeRates(): List<FeeRateInfo> {
-        return feeRates(feeRateKit.bitcoinCash())
+    fun ethereumGasPrice(): Single<List<FeeRateInfo>> {
+        return feeRateKit.ethereum().map { feeRates(it) }
     }
 
-    fun ethereumFeeRates(): List<FeeRateInfo> {
-        return feeRates(feeRateKit.ethereum())
-    }
-
-    fun dashFeeRates(): List<FeeRateInfo> {
-        return feeRates(feeRateKit.dash())
+    fun dashFeeRates(): Single<List<FeeRateInfo>> {
+        return feeRateKit.dash().map { feeRates(it) }
     }
 
     private fun feeRates(feeRate: FeeRate): List<FeeRateInfo> {
         val feeRatesInfoList = mutableListOf<FeeRateInfo>()
         feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
         feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, feeRate.mediumPriorityDuration))
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.mediumPriority, feeRate.highPriorityDuration))
+        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
 
         return feeRatesInfoList
     }
 }
 
 class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): List<FeeRateInfo> {
+    override fun feeRates(): Single<List<FeeRateInfo>> {
         return feeRateProvider.bitcoinFeeRates()
     }
 }
 
 class BitcoinCashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): List<FeeRateInfo> {
+    override fun feeRates(): Single<List<FeeRateInfo>> {
         return feeRateProvider.bitcoinCashFeeRates()
     }
 }
 
 class EthereumFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): List<FeeRateInfo> {
-        return feeRateProvider.ethereumFeeRates()
+    override fun feeRates(): Single<List<FeeRateInfo>> {
+        return feeRateProvider.ethereumGasPrice()
     }
 }
 
 class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): List<FeeRateInfo> {
+    override fun feeRates(): Single<List<FeeRateInfo>> {
         return feeRateProvider.dashFeeRates()
     }
 

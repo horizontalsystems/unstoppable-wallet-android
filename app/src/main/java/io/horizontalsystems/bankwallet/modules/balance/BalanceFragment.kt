@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
@@ -28,18 +26,21 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDialogFragment.Listener, ReceiveFragment.Listener {
 
     private lateinit var viewModel: BalanceViewModel
-    private lateinit var coinAdapter: BalanceCoinAdapter
+    private val coinAdapter = BalanceCoinAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(BalanceViewModel::class.java)
         viewModel.init()
-        coinAdapter = BalanceCoinAdapter(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
@@ -57,11 +58,6 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
         observeLiveData()
         setSwipeBackground()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        coinAdapter.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {
@@ -106,7 +102,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     }
 
     override fun onItemClicked(viewItem: BalanceViewItem) {
-        coinAdapter.toggleViewHolder(viewItem)
+        viewModel.delegate.onItem(viewItem)
     }
 
     override fun onChartClicked(viewItem: BalanceViewItem) {
@@ -133,7 +129,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ManageWalletsModule.start(it) }
+            context?.let { ManageWalletsModule.start(it, true) }
         })
 
         viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
@@ -176,13 +172,9 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     }
 
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
-        context?.let {
-            val color = if (headerViewItem.upToDate) R.color.yellow_d else R.color.yellow_50
-            balanceText.setTextColor(ContextCompat.getColor(it, color))
-        }
-
-        balanceText.text = headerViewItem.currencyValue?.let {
-            App.numberFormatter.format(it)
+        headerViewItem.apply {
+            balanceText.text = xBalanceText
+            balanceText.setTextColor(xBalanceTextColor)
         }
     }
 }

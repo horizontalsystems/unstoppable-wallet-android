@@ -9,8 +9,9 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModu
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
-                      private val router: SendModule.IRouter)
+class SendDashHandler(
+        private val interactor: SendModule.ISendDashInteractor,
+        private val router: SendModule.IRouter)
     : SendModule.ISendHandler, SendModule.ISendDashInteractorDelegate, SendAmountModule.IAmountModuleDelegate,
       SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
@@ -48,10 +49,11 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
     override var hodlerModule: SendHodlerModule.IHodlerModule? = null
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
+    override fun sync() {}
 
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
-            SendModule.Input.Address,
+            SendModule.Input.Address(),
             SendModule.Input.Fee(false),
             SendModule.Input.ProceedButton)
 
@@ -120,6 +122,6 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
 
     // SendFeeModule.IFeeModuleDelegate
 
-    override fun onUpdateFeeRate(feeRate: Long) {}
-
+    override fun onUpdateFeeRate() {
+    }
 }

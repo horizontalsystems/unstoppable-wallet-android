@@ -46,7 +46,7 @@
             >
 
             <TextView
-                android:id="@+id/txtAddress"
+                android:id="@+id/txtAddressText"
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -55,6 +55,21 @@
                 android:singleLine="true"
                 android:textColor="?TextColorBarsToDark"
                 android:textColorHint="@color/grey_50" />
+
+            <EditText
+                android:id="@+id/txtAddressInput"
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:hint="@string/Send_Hint_Address"
+                android:inputType="textMultiLine"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:singleLine="false"
+                android:textColor="?attr/TextColorBarsToDark"
+                android:textColorHint="@color/grey_50"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txtAddressError"

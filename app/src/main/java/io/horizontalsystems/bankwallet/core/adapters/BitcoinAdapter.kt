@@ -4,11 +4,8 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.Bip
@@ -96,8 +93,8 @@ class BitcoinAdapter(override val kit: BitcoinKit)
         // ignored for now
     }
 
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return kit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
     companion object {
@@ -105,23 +102,25 @@ class BitcoinAdapter(override val kit: BitcoinKit)
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun getBip(derivation: Derivation): Bip = when (derivation) {
-            Derivation.bip44 -> Bip.BIP44
+        private fun getBip(derivation: Derivation?): Bip = when (derivation) {
             Derivation.bip49 -> Bip.BIP49
             Derivation.bip84 -> Bip.BIP84
+            else -> Bip.BIP44
         }
 
         private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
             val account = wallet.account
             val accountType = account.type
-            if (accountType is AccountType.Mnemonic) {
+            val walletDerivation = wallet.settings[CoinSetting.Derivation]?.let { Derivation.valueOf(it) }
+            val syncMode = wallet.settings[CoinSetting.SyncMode]?.let { SyncMode.valueOf(it) }
+            if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return BitcoinKit(context = App.instance,
                         words = accountType.words,
                         walletId = account.id,
-                        syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
+                        syncMode = getSyncMode(syncMode),
                         networkType = getNetworkType(testMode),
                         confirmationsThreshold = defaultConfirmationsThreshold,
-                        bip = getBip(accountType.derivation))
+                        bip = getBip(walletDerivation))
             }
 
             throw UnsupportedAccountException()

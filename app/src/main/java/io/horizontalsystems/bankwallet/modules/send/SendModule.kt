@@ -84,11 +84,14 @@ object SendModule {
     interface ISendEthereumInteractor {
         val ethereumBalance: BigDecimal
         val minimumRequiredBalance: BigDecimal
+        val minimumAmount: BigDecimal
 
-        fun availableBalance(gasPrice: Long): BigDecimal
+        fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal
         fun validate(address: String)
-        fun fee(gasPrice: Long): BigDecimal
-        fun send(amount: BigDecimal, address: String, gasPrice: Long): Single<Unit>
+        fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
+        fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit>
+        fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>
+
     }
 
     interface ISendBinanceInteractor {
@@ -120,6 +123,7 @@ object SendModule {
     }
 
     interface ISendInteractorDelegate {
+        fun sync()
         fun didSend()
         fun didFailToSend(error: Throwable)
     }
@@ -134,8 +138,11 @@ object SendModule {
         val inputItems: List<Input>
         var delegate: ISendHandlerDelegate
 
+        fun sync()
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
+        fun onClear() {}
+
         @Throws
         fun confirmationViewItems(): List<SendConfirmationViewItem>
         fun sendSingle(): Single<Unit>
@@ -254,7 +261,7 @@ object SendModule {
 
     sealed class Input {
         object Amount : Input()
-        object Address : Input()
+        class Address(val editable: Boolean = false) : Input()
         class Fee(val isAdjustable: Boolean) : Input()
         class Memo(val maxLength: Int) : Input()
         object ProceedButton : Input()

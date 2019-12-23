@@ -10,7 +10,6 @@ class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWords
 
     val errorLiveData = MutableLiveData<Int>()
     val notifyRestored = SingleLiveEvent<Unit>()
-    val startSyncModeModule = SingleLiveEvent<Unit>()
 
     fun init(wordsCount: Int) {
         RestoreWordsModule.init(this, this, wordsCount)
@@ -28,7 +27,4 @@ class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWords
         notifyRestored.call()
     }
 
-    override fun startSyncModeModule() {
-        startSyncModeModule.call()
-    }
 }

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
@@ -42,7 +42,7 @@ class SendActivity : BaseActivity() {
                 rightBtnItem = TopMenuItem(R.drawable.close, onClick = { onBackPressed() })
         )
 
-        mainPresenter = ViewModelProviders.of(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
+        mainPresenter = ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
 
         subscribeToViewEvents(mainPresenter.view as SendView, wallet)
         subscribeToRouterEvents(mainPresenter.router as SendRouter)
@@ -105,10 +105,10 @@ class SendActivity : BaseActivity() {
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
                     }
                 }
-                SendModule.Input.Address -> {
+                is SendModule.Input.Address -> {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
-                        val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
+                        val sendAddressFragment = SendAddressFragment(wallet.coin, input.editable, it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()

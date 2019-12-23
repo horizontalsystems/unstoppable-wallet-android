@@ -6,8 +6,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.ChartInfoState
-import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.util.concurrent.Executors
@@ -27,6 +25,8 @@ class BalancePresenter(
 
     private var items = listOf<BalanceItem>()
     private var viewItems = mutableListOf<BalanceViewItem>()
+    private val viewItemsCopy: List<BalanceViewItem>
+        get() = viewItems.map { it.copy() }
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
     private var accountToBackup: Account? = null
@@ -70,6 +70,40 @@ class BalancePresenter(
 
     override fun onChart(viewItem: BalanceViewItem) {
         router.openChart(viewItem.wallet.coin)
+    }
+
+    private var expandedViewItem: BalanceViewItem? = null
+
+    override fun onItem(viewItem: BalanceViewItem) {
+        val itemIndex = viewItems.indexOfFirst { it.wallet == viewItem.wallet }
+        if (itemIndex == -1) return
+
+        var indexToCollapse: Int = -1
+        var indexToExpand: Int = -1
+
+        if (viewItem.wallet == expandedViewItem?.wallet) {
+            indexToCollapse = itemIndex
+
+            expandedViewItem = null
+        } else {
+            expandedViewItem?.let { expandedViewItem ->
+                indexToCollapse = viewItems.indexOfFirst { it.wallet == expandedViewItem.wallet }
+            }
+
+            indexToExpand = itemIndex
+
+            expandedViewItem = viewItem
+        }
+
+        if (indexToCollapse != -1) {
+            viewItems[indexToCollapse] = factory.viewItem(items[indexToCollapse], currency, BalanceViewItem.UpdateType.EXPANDED, false)
+        }
+
+        if (indexToExpand != -1) {
+            viewItems[indexToExpand] = factory.viewItem(items[indexToExpand], currency, BalanceViewItem.UpdateType.EXPANDED, true)
+        }
+
+        view?.set(viewItemsCopy)
     }
 
     override fun onAddCoinClick() {
@@ -121,12 +155,12 @@ class BalancePresenter(
         }
     }
 
-    override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal) {
+    override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal, balanceLocked: BigDecimal?) {
         executor.submit {
-            updateItem(wallet) { item ->
+            updateItem(wallet, { item ->
                 item.balance = balance
                 item.balanceLocked = balanceLocked
-            }
+            }, BalanceViewItem.UpdateType.BALANCE)
 
             updateHeaderViewItem()
         }
@@ -134,9 +168,9 @@ class BalancePresenter(
 
     override fun didUpdateState(wallet: Wallet, state: AdapterState) {
         executor.submit {
-            updateItem(wallet) { item ->
+            updateItem(wallet, { item ->
                 item.state = state
-            }
+            }, BalanceViewItem.UpdateType.STATE)
 
             updateHeaderViewItem()
         }
@@ -147,7 +181,6 @@ class BalancePresenter(
             this.currency = currency
 
             handleRates()
-            handleStats()
 
             updateViewItems()
             updateHeaderViewItem()
@@ -159,23 +192,11 @@ class BalancePresenter(
             items.forEachIndexed { index, item ->
                 marketInfo[item.wallet.coin.code]?.let {
                     item.marketInfo = it
-                    viewItems[index] = factory.viewItem(item, currency)
+                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, viewItems[index].expanded)
                 }
             }
-            view?.set(viewItems)
+            view?.set(viewItemsCopy)
             updateHeaderViewItem()
-        }
-    }
-
-    override fun didUpdateChartInfo(chartInfo: ChartInfo, coinCode: String) {
-        executor.submit {
-            updateChartInfo(ChartInfoState.Loaded(chartInfo), coinCode)
-        }
-    }
-
-    override fun didFailChartInfo(coinCode: String) {
-        executor.submit {
-            updateChartInfo(ChartInfoState.Failed, coinCode)
         }
     }
 
@@ -188,7 +209,6 @@ class BalancePresenter(
 
         handleAdaptersReady()
         handleRates()
-        handleStats()
 
         view?.set(sortIsOn = items.size >= sortingOnThreshold)
     }
@@ -211,51 +231,29 @@ class BalancePresenter(
         }
     }
 
-    private fun handleStats() {
-        interactor.subscribeToChartInfo(items.map { it.wallet.coin.code }, currency.code)
-
-        items.forEach { item ->
-            item.chartInfoState =
-                    interactor.chartInfo(item.wallet.coin.code, currency.code)?.let {
-                        ChartInfoState.Loaded(it)
-                    } ?: ChartInfoState.Loading
-        }
-    }
-
-    private fun updateItem(wallet: Wallet, updateBlock: (BalanceItem) -> Unit) {
+    private fun updateItem(wallet: Wallet, updateBlock: (BalanceItem) -> Unit, updateType: BalanceViewItem.UpdateType?) {
         val index = items.indexOfFirst { it.wallet == wallet }
         if (index == -1)
             return
 
         val item = items[index]
         updateBlock(item)
-        viewItems[index] = factory.viewItem(item, currency)
+        viewItems[index] = factory.viewItem(item, currency, updateType, viewItems[index].expanded)
 
-        view?.set(viewItems)
+        view?.set(viewItemsCopy)
     }
 
     private fun updateViewItems() {
         items = sorter.sort(items, sortType)
 
-        viewItems = items.map { factory.viewItem(it, currency) }.toMutableList()
+        viewItems = items.map { factory.viewItem(it, currency, null, it.wallet == expandedViewItem?.wallet) }.toMutableList()
 
-        view?.set(viewItems)
+        view?.set(viewItemsCopy)
     }
 
     private fun updateHeaderViewItem() {
         val headerViewItem = factory.headerViewItem(items, currency)
         view?.set(headerViewItem)
     }
-
-    private fun updateChartInfo(chartInfoState: ChartInfoState, coinCode: String) {
-        items.forEachIndexed { index, item ->
-            if (item.wallet.coin.code == coinCode) {
-                item.chartInfoState = chartInfoState
-                viewItems[index] = factory.viewItem(item, currency)
-            }
-        }
-        view?.set(viewItems)
-    }
-
 
 }

@@ -18,11 +18,14 @@ import java.math.BigDecimal
 class RateManager(context: Context, walletManager: IWalletManager, private val currencyManager: ICurrencyManager) : IRateManager {
 
     private val disposables = CompositeDisposable()
-    private val kit: XRatesKit = XRatesKit.create(context, currencyManager.baseCurrency.code, 60 * 10)
+    private val kit: XRatesKit by lazy {
+        XRatesKit.create(context, currencyManager.baseCurrency.code, 60 * 10)
+    }
 
     init {
         walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe { wallets ->
                     onWalletsUpdated(wallets)
                 }.let {
@@ -31,6 +34,7 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
 
         currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe {
                     onBaseCurrencyUpdated()
                 }.let {
@@ -70,7 +74,11 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
     }
 
     override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        return kit.historicalRate(converted(coinCode), currencyCode, timestamp)
+        kit.historicalRate(converted(coinCode), currencyCode, timestamp)?.let {
+            return Single.just(it)
+        }
+
+        return kit.historicalRateFromApi(converted(coinCode), currencyCode, timestamp)
     }
 
     override fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
@@ -93,20 +101,22 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
         kit.set(currencyManager.baseCurrency.code)
     }
 
-    private fun converted(coinCode: String) : String {
+    private fun converted(coinCode: String): String {
         return when (coinCode) {
             "HOT" -> "HOLO"
+            "SAI",
+            "DAI" -> "SAI-DAI" // invalid code excludes xrates for this coin
             else -> coinCode
         }
 
     }
 
-    private fun unconverted(coinCode: String) : String {
+    private fun unconverted(coinCode: String): String {
         return when (coinCode) {
             "HOLO" -> "HOT"
+            "DAI",
+            "SAI" -> "DAI-SAI" // invalid code excludes xrates for this coin
             else -> coinCode
         }
-
     }
-
 }

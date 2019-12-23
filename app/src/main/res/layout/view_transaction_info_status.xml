@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/statusIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_checkmark_green"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
-        android:id="@+id/statusPendingText"
+        android:id="@+id/confirmedText"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/TransactionInfo_Status_Pending"
+        android:drawableTint="?ColorRemus"
+        android:drawableEnd="@drawable/ic_checkmark"
+        android:drawablePadding="8dp"
+        android:text="@string/TransactionInfo_Status_Confirmed"
         android:textColor="?TextColorBarsToDark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/failedText"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ic_attention_red"
+        android:drawablePadding="8dp"
+        android:text="@string/Transactions_Failed"
+        android:textColor="?TextColorBarsToDark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/progressText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:textColor="@color/grey"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/statusIcon"
-        app:layout_constraintEnd_toStartOf="@+id/statusIcon"
-        app:layout_constraintTop_toTopOf="@+id/statusIcon" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/progressBarWrapper"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/Transactions_Sending" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progressBarWrapper"

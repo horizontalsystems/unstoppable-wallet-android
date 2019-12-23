@@ -10,20 +10,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="12dp"
         android:background="?selectableItemBackgroundBorderless"
         android:padding="3dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/back" />
+        tools:src="@drawable/ic_back"
+        tools:visibility="visible"/>
 
     <ImageView
         android:id="@+id/rightImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:layout_marginEnd="13dp"
+        android:layout_marginEnd="12dp"
         android:background="?selectableItemBackgroundBorderless"
         android:padding="3dp"
         android:visibility="gone"
@@ -36,7 +37,7 @@
         style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="3dp"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -53,7 +54,7 @@
         style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="3dp"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -63,7 +64,8 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/toolbarTitle"
-        tools:text="Close" />
+        tools:text="Close"
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/toolbarTitle"

@@ -11,14 +11,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class BlockChairBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseApiUrl = "https://api.blockchair.com/bitcoin"
+
     override val name = "BlockChair.com"
+    override val pingUrl = "$baseApiUrl/stats"
 
     override fun url(hash: String): String {
         return "https://blockchair.com/bitcoin/transaction/$hash"
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("https://api.blockchair.com/bitcoin/dashboards/transaction/$hash")
+        return GetRequest("$baseApiUrl/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -31,14 +34,17 @@ class BlockChairBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider
 }
 
 class BlockChairBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseApiUrl = "https://api.blockchair.com/bitcoin-cash"
+
     override val name = "BlockChair.com"
+    override val pingUrl = "$baseApiUrl/stats"
 
     override fun url(hash: String): String {
         return "https://blockchair.com/bitcoin-cash/transaction/$hash"
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("https://api.blockchair.com/bitcoin-cash/dashboards/transaction/$hash")
+        return GetRequest("$baseApiUrl/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -51,14 +57,17 @@ class BlockChairBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProv
 }
 
 class BlockChairDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseApiUrl = "https://api.blockchair.com/dash"
+
     override val name = "BlockChair.com"
+    override val pingUrl = "$baseApiUrl/stats"
 
     override fun url(hash: String): String {
         return "https://blockchair.com/dash/transaction/$hash"
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("https://api.blockchair.com/dash/dashboards/transaction/$hash")
+        return GetRequest("$baseApiUrl/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -71,14 +80,17 @@ class BlockChairDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
 }
 
 class BlockChairEthereumProvider : FullTransactionInfoModule.EthereumForksProvider {
+    private val baseApiUrl = "https://api.blockchair.com/ethereum"
+
     override val name = "BlockChair.com"
+    override val pingUrl = "$baseApiUrl/stats"
 
     override fun url(hash: String): String {
         return "https://blockchair.com/ethereum/transaction/$hash"
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("https://api.blockchair.com/ethereum/dashboards/transaction/$hash")
+        return GetRequest("$baseApiUrl/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): EthereumResponse {

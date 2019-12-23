@@ -22,7 +22,7 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
 
     override val savedPin: String?
         get() {
-            val string = App.preferences.getString(LOCK_PIN, null)
+            val string = App.preferences.getString(LOCK_PIN, null) ?: return null
             return if (TextUtils.isEmpty(string)) {
                 null
             } else {

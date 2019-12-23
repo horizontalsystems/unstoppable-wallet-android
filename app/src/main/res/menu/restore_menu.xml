@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuOk"
-        android:icon="@drawable/checkmark_orange"
-        android:title="@string/Button_Ok"
+        android:id="@+id/menuRestore"
+        android:title="@string/Button_Restore"
         app:showAsAction="always" />
 
 </menu>

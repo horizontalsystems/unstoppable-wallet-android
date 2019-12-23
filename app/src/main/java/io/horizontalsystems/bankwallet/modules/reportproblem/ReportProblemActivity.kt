@@ -52,7 +52,7 @@ class ReportProblemActivity : BaseActivity() {
 
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsReport_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() }
+                leftBtnItem = TopMenuItem(R.drawable.ic_back) { onBackPressed() }
         )
 
         mail.setOnSingleClickListener {

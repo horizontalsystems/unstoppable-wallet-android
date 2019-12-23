@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsActivity"
+            android:name=".modules.coinsettings.CoinSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.BackupActivity"
@@ -39,7 +39,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".modules.createwallet.CreateWalletActivity"
+            android:name=".modules.createwallet.view.CreateWalletActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.main.MainActivity"
@@ -117,6 +117,9 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.info.InfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.restore.restorecoins.RestoreCoinsActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

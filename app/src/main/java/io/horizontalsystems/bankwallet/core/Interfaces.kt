@@ -37,7 +37,6 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
-    var currentLanguage: String?
     var isBackedUp: Boolean
     var isFingerprintEnabled: Boolean
     var sendInputType: SendModule.InputType?
@@ -57,6 +56,7 @@ interface ILocalStorage {
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
     var isLockTimeEnabled: Boolean
+    var encryptedSampleText: String?
 
     fun clear()
 }
@@ -81,7 +81,7 @@ interface IAccountManager {
 
     fun account(coinType: CoinType): Account?
     fun preloadAccounts()
-    fun create(account: Account)
+    fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
     fun clear()
@@ -95,55 +95,29 @@ interface IBackupManager {
 }
 
 interface IAccountCreator {
-    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account
-    fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account
-    fun createNewAccount(coin: Coin)
+    fun newAccount(predefinedAccountType: PredefinedAccountType): Account
+    fun restoredAccount(accountType: AccountType): Account
 }
 
 interface IAccountFactory {
-    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode?): Account
+    fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
 }
 
 interface IWalletFactory {
-    fun wallet(coin: Coin, account: Account, syncMode: SyncMode?): Wallet
+    fun wallet(coin: Coin, account: Account, settings: CoinSettings): Wallet
 }
 
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
     fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
+    fun delete(wallets: List<Wallet>)
 }
 
 interface IPredefinedAccountTypeManager {
-    val allTypes: List<IPredefinedAccountType>
-    fun account(predefinedAccountType: IPredefinedAccountType): Account?
-    fun createAccount(predefinedAccountType: IPredefinedAccountType): Account?
-    fun predefinedAccountType(type: AccountType): IPredefinedAccountType?
-}
-
-interface IPredefinedAccountType {
-    val title: Int // resource id
-    val coinCodes: Int // resource id
-    val defaultAccountType: DefaultAccountType
-    fun supports(accountType: AccountType): Boolean
-}
-
-sealed class DefaultAccountType {
-    class Mnemonic(val wordsCount: Int) : DefaultAccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Mnemonic && other.wordsCount == wordsCount
-        }
-
-        override fun hashCode(): Int {
-            return wordsCount
-        }
-    }
-
-    class Eos : DefaultAccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Eos
-        }
-    }
+    val allTypes: List<PredefinedAccountType>
+    fun account(predefinedAccountType: PredefinedAccountType): Account?
+    fun predefinedAccountType(type: AccountType): PredefinedAccountType?
 }
 
 interface IRandomProvider {
@@ -253,7 +227,7 @@ interface ITransactionsAdapter {
     val lastBlockHeight: Int?
     val lastBlockHeightUpdatedFlowable: Flowable<Unit>
 
-    fun getTransactions(from: Pair<String, Int>? = null, limit: Int): Single<List<TransactionRecord>>
+    fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>>
     val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
 }
 
@@ -262,7 +236,7 @@ interface IBalanceAdapter {
     val stateUpdatedFlowable: Flowable<Unit>
 
     val balance: BigDecimal
-    val balanceLocked: BigDecimal get() = BigDecimal.ZERO
+    val balanceLocked: BigDecimal? get() = null
     val balanceUpdatedFlowable: Flowable<Unit>
 
 }
@@ -291,11 +265,14 @@ interface ISendDashAdapter {
 interface ISendEthereumAdapter {
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
+    val minimumSendAmount: BigDecimal
 
-    fun availableBalance(gasPrice: Long): BigDecimal
-    fun fee(gasPrice: Long): BigDecimal
+    fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal
+    fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, gasPrice: Long): Single<Unit>
+    fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit>
+    fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>
+
 }
 
 interface ISendBinanceAdapter {
@@ -344,7 +321,6 @@ interface IPinManager {
 }
 
 interface ILockManager {
-    val lockStateUpdatedSignal: PublishSubject<Unit>
     var isLocked: Boolean
     fun onUnlock()
 }
@@ -359,15 +335,16 @@ interface IAppConfigProvider {
     val ipfsFallbackGateway: String
     val infuraProjectId: String?
     val infuraProjectSecret: String?
+    val btcCoreRpcUrl: String?
+    val btcCoreRpcUser: String?
+    val btcCoreRpcPassword: String?
     val fiatDecimal: Int
     val maxDecimal: Int
     val testMode: Boolean
     val localizations: List<String>
     val currencies: List<Currency>
-    val defaultCoinCodes: List<String>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
-    val predefinedAccountTypes: List<IPredefinedAccountType>
 }
 
 interface OneTimerDelegate {
@@ -443,7 +420,8 @@ interface INotificationManager {
 
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
-    fun save(coins: List<EnabledWallet>)
+    fun save(enabledWallets: List<EnabledWallet>)
+    fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
 }
 
@@ -473,19 +451,22 @@ interface IWalletManager {
 
     fun loadWallets()
     fun enable(wallets: List<Wallet>)
+    fun save(wallets: List<Wallet>)
+    fun delete(wallets: List<Wallet>)
     fun clear()
 }
 
 interface IAppNumberFormatter {
     fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false, trimmable: Boolean = false): String?
-    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
+    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true, maxFraction: Int? = null): String?
     fun formatForTransactions(coinValue: CoinValue): String?
     fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
     fun format(value: Double, showSign: Boolean = false, precision: Int = 8): String
+    fun format(value: BigDecimal, precision: Int): String?
 }
 
 interface IFeeRateProvider {
-    fun feeRates(): List<FeeRateInfo>
+    fun feeRates(): Single<List<FeeRateInfo>>
 }
 
 interface IAddressParser {
@@ -495,6 +476,11 @@ interface IAddressParser {
 interface IBackgroundRateAlertScheduler {
     fun startPeriodicWorker()
     fun stopPeriodicWorker()
+}
+
+interface ICoinSettingsManager{
+    fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin) : CoinSettings
+    fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings) : CoinSettings
 }
 
 enum class FeeRatePriority(val value: Int) {

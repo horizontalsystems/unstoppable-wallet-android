@@ -1,11 +1,7 @@
 package io.horizontalsystems.bankwallet
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
@@ -15,8 +11,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
-import java.util.*
 import java.util.logging.Logger
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -30,12 +27,11 @@ abstract class BaseActivity : AppCompatActivity() {
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.decorView.layoutDirection = if (App.instance.isLocaleRTL()) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-        newBase?.let {
-            super.attachBaseContext(updateBaseContextLocale(it))
-        } ?: super.attachBaseContext(newBase)
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(App.instance.localeAwareContext(newBase))
     }
 
     override fun setContentView(layoutResID: Int) {
@@ -55,6 +51,13 @@ abstract class BaseActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (this !is LockScreenActivity && App.lockManager.isLocked) {
+            LockScreenModule.startForUnlock(this, 1)
+        }
+    }
+
     protected fun hideSoftKeyboard() {
         getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
@@ -65,7 +68,11 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun showCustomKeyboardAlert() {
-        AlertDialogFragment.newInstance(R.string.Alert_TitleWarning, R.string.Alert_CustomKeyboardIsUsed, R.string.Alert_Ok, false,
+        AlertDialogFragment.newInstance(
+                getString(R.string.Alert_TitleWarning),
+                getString(R.string.Alert_CustomKeyboardIsUsed),
+                R.string.Alert_Ok,
+                false,
                 object : AlertDialogFragment.Listener {
                     override fun onButtonClick() {
                         val imeManager = App.instance.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -113,31 +120,6 @@ abstract class BaseActivity : AppCompatActivity() {
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL
         testLabelTv.layoutParams = layoutParams
         rootView.addView(testLabelTv)
-    }
-
-    private fun updateBaseContextLocale(context: Context): Context {
-        val locale = App.languageManager.currentLocale
-        Locale.setDefault(locale)
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            updateResourcesLocale(context, locale)
-        } else updateResourcesLocaleLegacy(context, locale)
-    }
-
-    @TargetApi(Build.VERSION_CODES.N)
-    private fun updateResourcesLocale(context: Context, locale: Locale): Context {
-        val configuration: Configuration = context.resources.configuration
-        configuration.setLocale(locale)
-        return context.createConfigurationContext(configuration)
-    }
-
-    @SuppressWarnings("deprecation")
-    private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
-        val resources: Resources = context.resources
-        val configuration: Configuration = resources.configuration
-        configuration.locale = locale
-        resources.updateConfiguration(configuration, resources.displayMetrics)
-        return context
     }
 
 }

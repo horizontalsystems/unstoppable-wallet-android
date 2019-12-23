@@ -34,10 +34,11 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     }
 
     override fun preloadAccounts() {
-        cache.set(storage.allAccounts())
+        val accounts = storage.allAccounts()
+        cache.set(accounts)
     }
 
-    override fun create(account: Account) {
+    override fun save(account: Account) {
         storage.save(account)
 
         cache.insert(account)
@@ -60,9 +61,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     }
 
     override fun clear() {
-        cache.accountsSet.map { it.id }.forEach { accountId ->
-            storage.delete(accountId)
-        }
+        storage.clear()
         cache.set(listOf())
         accountsSubject.onNext(listOf())
     }

@@ -33,6 +33,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:background="@color/transparent"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:singleLine="false"
                 android:textColor="?attr/TextColorBarsToDark"
                 android:textColorHint="@color/grey_50" />

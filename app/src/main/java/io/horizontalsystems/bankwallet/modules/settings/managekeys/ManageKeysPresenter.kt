@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.*
-
-class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, private val router: ManageKeysModule.Router)
+class ManageKeysPresenter(
+        private val interactor: ManageKeysModule.Interactor,
+        private val router: ManageKeysModule.Router)
     : ManageKeysModule.ViewDelegate, ManageKeysModule.InteractorDelegate {
 
     var view: ManageKeysModule.View? = null
@@ -18,27 +17,18 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         interactor.loadAccounts()
     }
 
-    override fun onClickNew(accountItem: ManageAccountItem) {
+    override fun onClickCreate(accountItem: ManageAccountItem) {
         currentItem = accountItem
-        view?.showCreateConfirmation(accountItem)
+        router.showCreateWallet(accountItem.predefinedAccountType)
     }
 
     override fun onClickBackup(accountItem: ManageAccountItem) {
-        router.startBackupModule(accountItem)
+        val account = accountItem.account ?: return
+        router.showBackup(account, accountItem.predefinedAccountType)
     }
 
-    override fun onClickRestore(accountType: IPredefinedAccountType) {
-        when (accountType) {
-            is UnstoppableAccountType -> {
-                router.startRestoreWords(12, accountType.title)
-            }
-            is BinanceAccountType -> {
-                router.startRestoreWords(24, accountType.title)
-            }
-            is EosAccountType -> {
-                router.startRestoreEos(accountType.title)
-            }
-        }
+    override fun onClickRestore(accountItem: ManageAccountItem) {
+        router.showCoinRestore(accountItem.predefinedAccountType)
     }
 
     override fun onClickUnlink(accountItem: ManageAccountItem) {
@@ -51,29 +41,15 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         }
     }
 
-    override fun onClickShow(accountItem: ManageAccountItem) {
-        router.startBackupModule(accountItem)
-    }
-
-    override fun onConfirmCreate() {
-        try {
-            currentItem?.let { interactor.createAccount(it.predefinedAccountType) }
-            view?.showSuccess()
-        } catch (e: Exception) {
-            view?.showError(e)
-        }
-    }
-
     override fun onConfirmBackup() {
-        currentItem?.let { router.startBackupModule(it) }
+        currentItem?.let {
+            val account = it.account ?: return
+            router.showBackup(account, it.predefinedAccountType)
+        }
     }
 
     override fun onConfirmUnlink(accountId: String) {
         interactor.deleteAccount(accountId)
-    }
-
-    override fun onConfirmRestore(accountType: AccountType, syncMode: SyncMode?) {
-        interactor.restoreAccount(accountType, syncMode)
     }
 
     override fun onClear() {

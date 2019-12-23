@@ -8,13 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
-import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.PresentationMode
+import io.horizontalsystems.bankwallet.modules.restore.restorecoins.RestoreCoinsModule
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
@@ -45,17 +42,8 @@ class RestoreActivity : BaseActivity() {
             HudHelper.showErrorMessage(R.string.Restore_RestoreFailed)
         })
 
-        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { (wordsCount, titleRes) ->
-            RestoreWordsModule.startForResult(this, wordsCount, titleRes, ModuleCode.RESTORE_WORDS)
-        })
-
-        viewModel.startRestoreEosLiveEvent.observe(this, Observer {titleRes ->
-            RestoreEosModule.startForResult(this, titleRes, ModuleCode.RESTORE_EOS)
-        })
-
-        viewModel.startMainModuleLiveEvent.observe(this, Observer {
-            MainModule.startAsNewTask(this)
-            finish()
+        viewModel.startRestoreCoins.observe(this, Observer { predefinedAccountType ->
+            RestoreCoinsModule.start(this, predefinedAccountType, PresentationMode.Initial)
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {
@@ -70,7 +58,7 @@ class RestoreActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menuCopy -> {
+            R.id.menuCancel -> {
                 viewModel.delegate.onClickClose()
                 return true
             }
@@ -81,18 +69,8 @@ class RestoreActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (data == null || resultCode != RESULT_OK)
-            return
-
-        val accountType = data.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
-
-        when (requestCode) {
-            ModuleCode.RESTORE_WORDS -> {
-                viewModel.delegate.onRestore(accountType, data.getParcelableExtra(ModuleField.SYNCMODE))
-            }
-            ModuleCode.RESTORE_EOS -> {
-                viewModel.delegate.onRestore(accountType)
-            }
+        if(resultCode == RESULT_OK && requestCode == ModuleCode.RESTORE_COINS) {
+            viewModel.delegate.onRestore()
         }
     }
 }
@@ -100,7 +78,7 @@ class RestoreActivity : BaseActivity() {
 class RestoreNavigationAdapter(private val viewModel: RestoreViewModel)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items = listOf<IPredefinedAccountType>()
+    var items = listOf<PredefinedAccountType>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return KeysViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account_restore, parent, false))
@@ -109,11 +87,11 @@ class RestoreNavigationAdapter(private val viewModel: RestoreViewModel)
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val accountType = items[position]
+        val predefinedAccountType = items[position]
         if (holder is KeysViewHolder) {
-            holder.bind(accountType)
+            holder.bind(predefinedAccountType)
             holder.viewHolderRoot.setOnClickListener {
-                viewModel.delegate.onSelect(accountType)
+                viewModel.delegate.onSelect(predefinedAccountType)
             }
         }
     }
@@ -122,7 +100,7 @@ class RestoreNavigationAdapter(private val viewModel: RestoreViewModel)
 class KeysViewHolder(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(accountType: IPredefinedAccountType) {
+    fun bind(accountType: PredefinedAccountType) {
         val accountTypeTitle = containerView.resources.getString(accountType.title)
         accountName.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
         accountCoin.text = containerView.resources.getString(accountType.coinCodes)

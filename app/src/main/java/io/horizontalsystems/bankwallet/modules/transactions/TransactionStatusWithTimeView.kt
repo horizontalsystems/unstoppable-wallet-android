@@ -30,9 +30,12 @@ class TransactionStatusWithTimeView : ConstraintLayout {
         txTime.visibility = View.GONE
         completedIcon.visibility = View.GONE
         transactionProgressView.visibility = View.GONE
-        transactionPendingStatusView.visibility = View.GONE
+        failedText.visibility = View.GONE
 
         when (transactionStatus) {
+            is TransactionStatus.Failed -> {
+                failedText.visibility = View.VISIBLE
+            }
             is TransactionStatus.Completed -> {
                 txTime.text = time
                 txTime.visibility = View.VISIBLE
@@ -43,8 +46,8 @@ class TransactionStatusWithTimeView : ConstraintLayout {
                 transactionProgressView.visibility = View.VISIBLE
             }
             else -> {
-                transactionPendingStatusView.visibility = View.VISIBLE
-                transactionPendingStatusView.startAnimation()
+                transactionProgressView.bind(incoming = incoming)
+                transactionProgressView.visibility = View.VISIBLE
             }
         }
         invalidate()

@@ -13,7 +13,6 @@ import io.horizontalsystems.xrateskit.entities.ChartType
 
 class LocalStorageManager : ILocalStorage, IChartTypeStorage {
 
-    private val CURRENT_LANGUAGE = "current_language"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -34,14 +33,9 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
+    private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
 
-    private val gson = Gson()
-
-    override var currentLanguage: String?
-        get() = App.preferences.getString(CURRENT_LANGUAGE, null)
-        set(language) {
-            App.preferences.edit().putString(CURRENT_LANGUAGE, language).apply()
-        }
+    val gson by lazy { Gson() }
 
     override var isBackedUp: Boolean
         get() = App.preferences.getBoolean(WORDLIST_BACKUP, false)
@@ -162,8 +156,8 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
 
     override var syncMode: SyncMode
         get() {
-            val syncString = App.preferences.getString(SYNC_MODE, SyncMode.FAST.value)
-            return syncString?.let { SyncMode.fromString(syncString) } ?: SyncMode.FAST
+            val syncString = App.preferences.getString(SYNC_MODE, SyncMode.Fast.value)
+            return syncString?.let { SyncMode.valueOf(syncString) } ?: SyncMode.Fast
         }
         set(syncMode) {
             App.preferences.edit().putString(SYNC_MODE, syncMode.value).apply()
@@ -200,6 +194,12 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
         get() = App.preferences.getBoolean(LOCK_TIME_ENABLED, false)
         set(enabled) {
             App.preferences.edit().putBoolean(LOCK_TIME_ENABLED, enabled).apply()
+        }
+
+    override var encryptedSampleText: String?
+        get() = App.preferences.getString(ENCRYPTION_CHECKER_TEXT, null)
+        set(encryptedText) {
+            App.preferences.edit().putString(ENCRYPTION_CHECKER_TEXT, encryptedText).apply()
         }
 
     override fun clear() {
