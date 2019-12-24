@@ -26,7 +26,7 @@ class SendFeePresenter(
 
     private var fee: BigDecimal = BigDecimal.ZERO
     private var availableFeeBalance: BigDecimal? = null
-    private var feeRateInfo = FeeRateInfo(FeeRatePriority.MEDIUM, 0, 0)
+    private var feeRateInfo = FeeRateInfo(FeeRatePriority.MEDIUM, 1, 2 * 60 * 60)
     private var error: Exception? = null
 
     private var feeRates: List<FeeRateInfo>? = null
@@ -35,6 +35,7 @@ class SendFeePresenter(
             value?.let {
                 getFeeRateInfoByPriority(it, FeeRatePriority.MEDIUM)?.let { feeInfo ->
                     feeRateInfo = feeInfo
+                    syncFeeRateLabels()
                 }
             }
         }
