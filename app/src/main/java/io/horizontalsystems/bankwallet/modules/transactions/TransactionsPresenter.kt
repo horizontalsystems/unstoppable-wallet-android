@@ -73,7 +73,7 @@ class TransactionsPresenter(
 
         val filters = when {
             wallets.size < 2 -> listOf()
-            else -> listOf(null).plus(wallets)
+            else -> listOf(null).plus(getOrderedList(wallets))
         }
 
         view?.showFilters(filters)
@@ -148,6 +148,12 @@ class TransactionsPresenter(
 
     override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
         interactor.fetchRecords(fetchDataList)
+    }
+
+    private fun getOrderedList(wallets: List<Wallet>): MutableList<Wallet> {
+        val walletList = wallets.toMutableList()
+        walletList.sortBy { it.coin.code }
+        return walletList
     }
 
 }
