@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
@@ -34,7 +34,7 @@ class MainSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val presenter = ViewModelProviders.of(this, MainSettingsModule.Factory()).get(MainSettingsPresenter::class.java)
+        val presenter = ViewModelProvider(this, MainSettingsModule.Factory()).get(MainSettingsPresenter::class.java)
         val presenterView = presenter.view as MainSettingsView
         val router = presenter.router as MainSettingsRouter
 
