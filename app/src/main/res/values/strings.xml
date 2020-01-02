@@ -431,7 +431,7 @@
     <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
     <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the %s Wallet before you may receive %s.</string>
 
     <!-- Manage Keys Alert -->
 
@@ -482,7 +482,7 @@
     <string name="Charts_Rate_High">%s High</string>
     <string name="Charts_Rate_Low">%s Low</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_Volume24">Volume (24h)</string>
     <string name="Charts_inCirculation">in Circulation</string>
     <string name="Charts_TotalSupply">Total Supply</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
