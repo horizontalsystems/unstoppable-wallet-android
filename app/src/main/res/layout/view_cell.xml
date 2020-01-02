@@ -117,6 +117,7 @@
         android:layout_height="match_parent"
         android:src="@drawable/ic_attention"
         android:tint="?ColorLucian"
+        android:layout_marginEnd="16dp"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/arrowIcon" />
 
