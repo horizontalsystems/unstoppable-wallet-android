@@ -3,10 +3,12 @@ package io.horizontalsystems.bankwallet.modules.info
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_app_status.toolbar
 import kotlinx.android.synthetic.main.activity_info.*
 
@@ -34,6 +36,24 @@ class InfoActivity : BaseActivity() {
 
         view.descriptionLiveEvent.observe(this, Observer { description ->
             textDescription.text = description
+        })
+
+        view.txHashLiveEvent.observe(this, Observer { txHash ->
+            itemTxHash.bindHashId(getString(R.string.Info_DoubleSpend_ThisTx), txHash)
+            itemTxHash.visibility = View.VISIBLE
+
+            itemTxHash.setOnClickListener { presenter.onClickTxHash(txHash) }
+        })
+
+        view.conflictingTxHashLiveEvent.observe(this, Observer { conflictingTxHash ->
+            itemConflictingTxHash.bindHashId(getString(R.string.Info_DoubleSpend_ConflictingTx), conflictingTxHash)
+            itemConflictingTxHash.visibility = View.VISIBLE
+
+            itemConflictingTxHash.setOnClickListener { presenter.onClickTxHash(conflictingTxHash) }
+        })
+
+        view.showCopiedLiveEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
         })
 
         router.goBackLiveEvent.observe(this, Observer {

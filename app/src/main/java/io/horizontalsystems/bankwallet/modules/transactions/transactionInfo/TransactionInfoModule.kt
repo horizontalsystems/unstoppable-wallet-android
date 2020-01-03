@@ -13,6 +13,7 @@ object TransactionInfoModule {
         fun onCopy(value: String)
         fun openFullInfo(transactionHash: String, coin: Wallet)
         fun onClickLockInfo(lockDate: Date)
+        fun onClickDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
     }
 
     interface Interactor {
@@ -24,6 +25,7 @@ object TransactionInfoModule {
     interface Router {
         fun openFullInfo(transactionHash: String, wallet: Wallet)
         fun openLockInfo(lockDate: Date)
+        fun openDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
     }
 
     fun init(view: TransactionInfoViewModel, router: Router) {
