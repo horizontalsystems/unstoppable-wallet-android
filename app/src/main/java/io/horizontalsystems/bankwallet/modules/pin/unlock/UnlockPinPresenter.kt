@@ -32,7 +32,7 @@ class UnlockPinPresenter(
     }
 
     override fun onEnter(pin: String, pageIndex: Int) {
-        if (enteredPin.length < PinModule.PIN_COUNT) {
+        if (pageIndex >= 0 && enteredPin.length < PinModule.PIN_COUNT) {
             enteredPin += pin
             removeErrorMessage()
             view.fillCircles(enteredPin.length, pageIndex)
