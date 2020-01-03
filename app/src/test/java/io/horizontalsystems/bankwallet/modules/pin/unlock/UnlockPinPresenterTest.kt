@@ -65,6 +65,14 @@ class UnlockPinPresenterTest {
     }
 
     @Test
+    fun onUnlockEnter_wrongPageIndex() {
+        val pin = "0000"
+        presenter.onEnter(pin, -1)
+
+        verify(view, never()).fillCircles(any(), any())
+    }
+
+    @Test
     fun onDelete() {
         val pin = "12345"
         presenter.onEnter(pin, 0)
