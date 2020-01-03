@@ -50,7 +50,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 date,
                 status,
                 rate,
-                record.lockInfo
+                record.lockInfo,
+                record.conflictingTxHash
         )
     }
 
