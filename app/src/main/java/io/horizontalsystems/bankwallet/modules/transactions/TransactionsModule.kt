@@ -23,7 +23,8 @@ data class TransactionViewItem(
         val date: Date?,
         val status: TransactionStatus,
         val rate: CurrencyValue?,
-        val lockInfo: TransactionLockInfo?)
+        val lockInfo: TransactionLockInfo?,
+        val conflictingTxHash: String?)
 
 
 data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?)

@@ -47,7 +47,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
                     layoutManager.scrollToPosition(0)
                 }
             }
-        });
+        })
 
         recyclerTags.adapter = filterAdapter
         recyclerTransactions.setHasFixedSize(true)
@@ -188,6 +188,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txStatusWithTimeView.bind(transactionRecord.status, incoming, time)
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
         sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
+        doubleSpendIcon.visibility = if (transactionRecord.conflictingTxHash == null) View.GONE else View.VISIBLE
     }
 }
 
@@ -237,7 +238,8 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
     }
 
     fun bind(wallet: Wallet?, active: Boolean) {
-        filter_text.text = wallet?.coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
+        filter_text.text = wallet?.coin?.code
+                ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
         filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
     }
