@@ -76,11 +76,11 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
             val shortCapValue = shortenValue(item.marketCap.value)
             val marketCap = CurrencyValue(item.marketCap.currency, shortCapValue.first)
-            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + shortCapValue.second
+            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + " " + shortCapValue.second
 
             val shortVolumeValue = shortenValue(item.volume.value)
             val volume = CurrencyValue(item.volume.currency, shortVolumeValue.first)
-            volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + shortVolumeValue.second
+            volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + " " + shortVolumeValue.second
 
             circulationValue.text = formatter.format(item.supply, trimmable = true)
 
