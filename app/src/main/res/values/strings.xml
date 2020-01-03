@@ -197,11 +197,17 @@
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
 
     <!-- Info -->
 
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
+
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
 
     <!--Full Info-->
 

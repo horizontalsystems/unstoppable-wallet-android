@@ -64,6 +64,13 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             InfoModule.start(context, InfoModule.InfoParameters(title, description))
         })
 
+        viewModel.showDoubleSpendInfo.observe(lifecycleOwner, Observer { (txHash, conflictingTxHash) ->
+            val title = context.getString(R.string.Info_DoubleSpend_Title)
+            val description = context.getString(R.string.Info_DoubleSpend_Description)
+
+            InfoModule.start(context, InfoModule.InfoParameters(title, description, txHash, conflictingTxHash))
+        })
+
         viewModel.transactionLiveData.observe(lifecycleOwner, Observer { txRecord ->
             txRecord?.let { txRec ->
 
@@ -99,10 +106,18 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 if (txRec.lockInfo != null) {
                     itemLockTime.visibility = View.VISIBLE
-                    itemLockTime.bindLockInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(txRec.lockInfo.lockedUntil)}")
+                    itemLockTime.bindInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(txRec.lockInfo.lockedUntil)}", R.drawable.ic_lock)
                     itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
                 } else {
                     itemLockTime.visibility = View.GONE
+                }
+
+                if (txRec.conflictingTxHash != null) {
+                    itemDoubleSpend.visibility = View.VISIBLE
+                    itemDoubleSpend.bindInfo(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_doublespend)
+                    itemDoubleSpend.setOnClickListener { viewModel.onClickDoubleSpendInfo() }
+                } else {
+                    itemDoubleSpend.visibility = View.GONE
                 }
 
                 if (txRec.rate == null) {

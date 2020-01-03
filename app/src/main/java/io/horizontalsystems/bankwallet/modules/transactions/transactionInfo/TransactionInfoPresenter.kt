@@ -25,4 +25,8 @@ class TransactionInfoPresenter(
         router.openLockInfo(lockDate)
     }
 
+    override fun onClickDoubleSpendInfo(transactionHash: String, conflictingTxHash: String) {
+        router.openDoubleSpendInfo(transactionHash, conflictingTxHash)
+    }
+
 }
