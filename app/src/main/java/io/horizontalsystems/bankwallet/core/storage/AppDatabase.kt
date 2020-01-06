@@ -249,8 +249,16 @@ abstract class AppDatabase : RoomDatabase() {
                         }
 
                         if (coinId == "BTC" || coinId == "BCH" || coinId == "DASH") {
-                            val newSyncMode = walletSyncMode?.toLowerCase()?.capitalize()?.let { SyncMode.valueOf(it) }
-                                    ?: SyncMode.Fast
+                            var newSyncMode = SyncMode.Fast
+
+                            try{
+                                walletSyncMode?.toLowerCase()?.capitalize()?.let {
+                                    newSyncMode = SyncMode.valueOf(it)
+                                }
+                            } catch (e: Exception){
+                                //invalid value for Enum, use default value
+                            }
+
                             database.execSQL("""
                                 UPDATE new_EnabledWallet
                                 SET syncMode = '${newSyncMode.value}'
