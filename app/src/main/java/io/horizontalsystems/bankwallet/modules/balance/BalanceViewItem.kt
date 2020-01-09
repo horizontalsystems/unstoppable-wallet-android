@@ -96,7 +96,7 @@ class BalanceViewItemFactory {
         }
 
         val dateFormatted = state.lastBlockDate?.let { until ->
-            DateHelper.formatDate(until, "MMM d.yyyy")
+            DateHelper.formatDate(until, "MMM d, yyyy")
         }
 
         return SyncingData(state.progress, dateFormatted, !expanded)
