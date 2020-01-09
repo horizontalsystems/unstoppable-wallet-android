@@ -59,7 +59,8 @@ object DateHelper {
     }
 
     fun formatDate(date: Date, pattern: String): String {
-        return SimpleDateFormat(pattern, Locale.getDefault()).format(date) ?: ""
+        return SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), pattern),
+                                Locale.getDefault()).format(date)
     }
 
     fun getSecondsAgo(dateInMillis: Long): Long {
