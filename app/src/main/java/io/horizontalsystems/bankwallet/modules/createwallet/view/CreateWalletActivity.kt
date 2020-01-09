@@ -74,24 +74,6 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            ModuleCode.COIN_SETTINGS -> {
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    presenter.onCancelSelectingCoinSettings()
-                } else if (resultCode == Activity.RESULT_OK && data != null) {
-                    val coin = data.getParcelableExtra<Coin>(ModuleField.COIN) ?: return
-                    val coinSettings = data.getParcelableExtra<CoinSettingsWrapped>(ModuleField.COIN_SETTINGS)
-                            ?: return
-
-                    presenter.onSelectCoinSettings(coinSettings.settings, coin)
-                }
-            }
-        }
-    }
-
     // CoinItemsAdapter.Listener
 
     override fun enable(coin: Coin) {
@@ -130,9 +112,6 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
         router.startMainModuleLiveEvent.observe(this, Observer {
             MainModule.startAsNewTask(this)
             finish()
-        })
-        router.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
-            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Creating, this)
         })
         router.close.observe(this, Observer {
             finish()

@@ -22,7 +22,6 @@ object CreateWalletModule {
 
     interface IRouter {
         fun startMainModule()
-        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings)
         fun close()
     }
 
@@ -32,8 +31,6 @@ object CreateWalletModule {
         fun onDisable(coin: Coin)
         fun onSelect(coin: Coin)
         fun onCreateButtonClick()
-        fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin)
-        fun onCancelSelectingCoinSettings()
     }
 
     interface IInteractor {
