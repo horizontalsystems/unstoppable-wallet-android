@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.receive
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 
@@ -20,13 +21,27 @@ class ReceivePresenter(
     override fun didReceiveAddress(address: AddressItem) {
         this.receiveAddress = address
         view.showAddress(address)
-        view.setHint(getHint(address.coin.type))
+        val (hintId, hintDetails) = getHint(address.coin.type, address.address)
+        view.setHint(hintId, hintDetails)
     }
 
-    private fun getHint(type: CoinType): Int {
+    private fun getHint(type: CoinType, address: String ): Pair<Int,String> {
         return when (type) {
-            is CoinType.Eos -> R.string.Deposit_Your_Account
-            else -> R.string.Deposit_Your_Address
+            is CoinType.Eos -> Pair(R.string.Deposit_Your_Account, "")
+            is CoinType.Bitcoin -> {
+                Pair(R.string.Deposit_Your_Account,
+                     address.let {
+                         if (it.startsWith("1"))
+                             "(${AccountType.Derivation.bip44.value.toUpperCase()})"
+                         else if (it.startsWith("3"))
+                             "(${AccountType.Derivation.bip49.value.toUpperCase()})"
+                         else if (it.startsWith("bc1"))
+                             "(${AccountType.Derivation.bip84.value.toUpperCase()})"
+                         else ""
+                     }
+                )
+            }
+            else -> Pair(R.string.Deposit_Your_Address, "")
         }
     }
 
