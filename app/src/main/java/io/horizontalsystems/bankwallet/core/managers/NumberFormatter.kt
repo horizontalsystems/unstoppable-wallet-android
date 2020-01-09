@@ -55,7 +55,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return formatted
     }
 
-    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean, maxFraction: Int?): String? {
+    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
 
         val absValue = currencyValue.value.abs()
         var value = absValue
@@ -63,15 +63,9 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
-            maxFraction != null -> {
-                customFormatter.maximumFractionDigits = maxFraction
-            }
             value.compareTo(BigDecimal.ZERO) == 0 -> {
                 value = BigDecimal.ZERO
                 customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
-            }
-            value < FIAT_TEN_CENT_EDGE && !canUseLessSymbol -> {
-                customFormatter.maximumFractionDigits = 4
             }
             value < FIAT_SMALL_NUMBER_EDGE -> {
                 value = BigDecimal("0.01")
@@ -100,8 +94,26 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return result
     }
 
-    override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
-        val spannable = SpannableString(format(currencyValue, showNegativeSign = false, trimmable = true, canUseLessSymbol = true))
+    override fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean, maxFraction: Int?): String? {
+        val value = currencyValue.value.abs()
+
+        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
+
+        when {
+            maxFraction != null -> customFormatter.maximumFractionDigits = maxFraction
+            value.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
+            value < FIAT_TEN_CENT_EDGE -> customFormatter.maximumFractionDigits = 4
+            value >= FIAT_BIG_NUMBER_EDGE && trimmable -> customFormatter.maximumFractionDigits = 0
+            else -> customFormatter.maximumFractionDigits = 2
+        }
+
+        val formatted = customFormatter.format(value)
+
+        return "${currencyValue.currency.symbol}$formatted"
+    }
+
+    override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean, canUseLessSymbol: Boolean, trimmable: Boolean): SpannableString {
+        val spannable = SpannableString(format(currencyValue, showNegativeSign = false, trimmable = trimmable, canUseLessSymbol = canUseLessSymbol))
 
         //  set color
         val amountTextColor = if (isIncoming) R.color.green_d else R.color.yellow_d

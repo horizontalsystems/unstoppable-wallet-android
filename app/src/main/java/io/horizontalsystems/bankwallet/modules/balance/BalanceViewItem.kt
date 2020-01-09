@@ -83,7 +83,7 @@ class BalanceViewItemFactory {
         var dimmed = false
         val value = marketInfo?.let {
             dimmed = marketInfo.isExpired()
-            App.numberFormatter.format(CurrencyValue(currency, marketInfo.rate), trimmable = true, canUseLessSymbol = false)
+            App.numberFormatter.formatForRates(CurrencyValue(currency, marketInfo.rate), trimmable = true)
         }
 
         return DeemedValue(value, dimmed = dimmed)

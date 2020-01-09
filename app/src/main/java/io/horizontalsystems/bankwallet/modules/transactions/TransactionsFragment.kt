@@ -178,7 +178,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
 
         txValueInFiat.text = transactionRecord.currencyValue?.let {
-            App.numberFormatter.formatForTransactions(it, incoming)
+            App.numberFormatter.formatForTransactions(it, incoming, canUseLessSymbol = true, trimmable = true)
         }
         txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (transactionRecord.lockInfo != null) R.drawable.ic_lock else 0, 0)
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)

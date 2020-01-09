@@ -87,8 +87,7 @@ class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHo
             txValueInFiat.setTextColor(color)
         }
         viewItem.rate?.let { rate ->
-            val rateString = App.numberFormatter.format(rate, trimmable = true, canUseLessSymbol = false)
-            txValueInFiat.text = rateString
+            txValueInFiat.text = App.numberFormatter.formatForRates(rate, trimmable = true)
             if (viewItem.rateExpired == true){
                 txValueInFiat.setTextColor(ContextCompat.getColor(containerView.context, R.color.grey_50))
             }
