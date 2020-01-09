@@ -72,7 +72,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
             setSubtitle(DateHelper.getFullDate(item.timestamp * 1000))
 
-            coinRateLast.text = formatter.format(item.rateValue, canUseLessSymbol = false)
+            coinRateLast.text = formatter.formatForRates(item.rateValue)
 
             val shortCapValue = shortenValue(item.marketCap.value)
             val marketCap = CurrencyValue(item.marketCap.currency, shortCapValue.first)
@@ -97,7 +97,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
                 ChartType.WEEKLY -> DateHelper.getFullDate(Date(time * 1000))
                 else -> DateHelper.getDateWithYear(Date(time * 1000))
             }
-            pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false, maxFraction = 8)
+            pointInfoPrice.text = formatter.formatForRates(value, maxFraction = 8)
             pointInfoDate.text = dateText
         })
 

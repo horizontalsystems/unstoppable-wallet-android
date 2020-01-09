@@ -90,9 +90,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     fiatValueWrapper.visibility = View.VISIBLE
                     fiatName.visibility = View.VISIBLE
 
-                    val fiatValueText = App.numberFormatter.format(txRec.currencyValue, showNegativeSign = false, canUseLessSymbol = false)
-                    fiatValue.text = fiatValueText
-                    fiatValue.setTextColor(resources.getColor(if (incoming) R.color.green_d else R.color.yellow_d, null))
+                    fiatValue.text =  App.numberFormatter.formatForTransactions(txRec.currencyValue, incoming, canUseLessSymbol = false, trimmable = false)
                     fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (txRec.lockInfo != null) R.drawable.ic_lock else 0, 0)
                     fiatName.text = txRec.currencyValue.currency.code
                     sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
@@ -124,7 +122,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemRate.visibility = View.GONE
                 } else {
                     itemRate.visibility = View.VISIBLE
-                    val rate = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(txRec.rate, canUseLessSymbol = false), txRec.wallet.coin.code)
+                    val rate = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.formatForRates(txRec.rate), txRec.wallet.coin.code)
                     itemRate.bind(context.getString(R.string.TransactionInfo_HistoricalRate), rate)
                 }
 

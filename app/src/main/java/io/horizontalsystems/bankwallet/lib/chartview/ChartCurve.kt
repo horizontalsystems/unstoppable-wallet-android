@@ -167,7 +167,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         val currencyValue = CurrencyValue(baseCurrency, value.toBigDecimal())
         val maxFraction = if (config.valueScale == 0) null else config.valueScale
 
-        return App.numberFormatter.format(currencyValue, canUseLessSymbol = false, maxFraction = maxFraction) ?: ""
+        return App.numberFormatter.formatForRates(currencyValue, maxFraction = maxFraction) ?: ""
     }
 
     class Coordinate(val x: Float, val y: Float, val point: ChartPoint)
