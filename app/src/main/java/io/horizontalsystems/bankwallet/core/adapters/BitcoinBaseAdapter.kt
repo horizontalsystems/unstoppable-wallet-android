@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -35,6 +36,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
 
     override val receiveAddress: String
         get() = kit.receiveAddress()
+
+    override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val lastBlockHeightUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()

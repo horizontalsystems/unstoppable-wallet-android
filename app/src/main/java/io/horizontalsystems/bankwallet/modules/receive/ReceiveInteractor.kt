@@ -15,7 +15,8 @@ class ReceiveInteractor(
 
     override fun getReceiveAddress() {
         adapterManager.getReceiveAdapterForWallet(wallet)?.let { adapter ->
-            val addressItem = AddressItem(adapter.receiveAddress, wallet.coin)
+            val addressItem = AddressItem(adapter.receiveAddress,
+                                          adapter.getReceiveAddressType(wallet), wallet.coin)
             delegate?.didReceiveAddress(addressItem)
         }
     }

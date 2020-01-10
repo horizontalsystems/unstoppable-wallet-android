@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
 import io.reactivex.Flowable
@@ -29,6 +30,8 @@ class BinanceAdapter(
     override fun refresh() {
         // handled by BinanceKitManager
     }
+
+    override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     override val debugInfo: String
         get() = ""

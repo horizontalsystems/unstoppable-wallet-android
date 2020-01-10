@@ -13,7 +13,7 @@ object ReceiveModule {
         fun showAddress(address: AddressItem)
         fun showError(error: Int)
         fun showCopied()
-        fun setHint(hint: Int)
+        fun setHint(hint: Int, hintDetails: String?)
     }
 
     interface IViewDelegate {

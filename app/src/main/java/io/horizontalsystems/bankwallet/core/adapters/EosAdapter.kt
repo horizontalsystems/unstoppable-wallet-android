@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.eoskit.core.exceptions.BackendError
 import io.horizontalsystems.eoskit.models.Transaction
@@ -33,6 +34,8 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
     }
 
     override val debugInfo: String = ""
+
+    override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     // ITransactionsAdapter
 

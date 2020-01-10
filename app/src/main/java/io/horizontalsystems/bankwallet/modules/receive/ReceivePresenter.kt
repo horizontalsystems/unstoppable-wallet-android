@@ -20,7 +20,7 @@ class ReceivePresenter(
     override fun didReceiveAddress(address: AddressItem) {
         this.receiveAddress = address
         view.showAddress(address)
-        view.setHint(getHint(address.coin.type))
+        view.setHint(getHint(address.coin.type),address.addressType)
     }
 
     private fun getHint(type: CoinType): Int {
