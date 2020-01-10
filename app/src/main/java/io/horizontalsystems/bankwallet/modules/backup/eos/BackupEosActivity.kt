@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.activity_backup_eos.*
-import kotlinx.android.synthetic.main.activity_manage_keys.shadowlessToolbar
 
 class BackupEosActivity : BaseActivity() {
 

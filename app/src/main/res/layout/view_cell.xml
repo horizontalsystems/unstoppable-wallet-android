@@ -63,8 +63,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/cellSubtitle"
         app:layout_constraintStart_toEndOf="@+id/cellSubtitle"
         app:layout_constraintTop_toTopOf="@+id/cellSubtitle"
-        tools:text="ERC20"
-        tools:visibility="visible"/>
+        tools:text="ERC20"/>
 
     <!-- Cell Right -->
 

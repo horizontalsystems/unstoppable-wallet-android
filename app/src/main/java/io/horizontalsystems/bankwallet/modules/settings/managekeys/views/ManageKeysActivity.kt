@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysVie
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDeleteAlert
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog.ManageAction
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_keys.*
 
 class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
@@ -27,7 +26,8 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         viewModel.init()
 
         setContentView(R.layout.activity_manage_keys)
-        shadowlessToolbar.bind(getString(R.string.ManageKeys_Title), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val adapter = ManageKeysAdapter(viewModel)
         recyclerView.adapter = adapter

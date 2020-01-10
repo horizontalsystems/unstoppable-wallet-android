@@ -5,158 +5,81 @@
     android:id="@+id/viewHolderRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
-    android:background="?ManageKeyBackground"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical">
 
-    <!-- First line-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/steel_20" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp">
+        android:background="@drawable/clickable_background_color_lawrence"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <ImageView
-            android:id="@+id/keyIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/grey"
-            android:indeterminateTintMode="src_atop"
-            android:src="@drawable/ic_manage_keys"
-            android:tint="@color/dimmable_color_jacob"
+            android:id="@+id/headerIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_wallet"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/accountName"
+            android:id="@+id/titleText"
             style="@style/Headline2"
+            android:layout_width="0dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
+            android:textColor="?TransactionDetailValueTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/headerIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/subtitleText"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textColor="?TextDimmable"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/keyIcon"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Bitcoin" />
-
-
+            android:layout_marginTop="3dp"
+            android:textColor="@color/grey"
+            app:layout_constraintLeft_toLeftOf="@id/titleText"
+            app:layout_constraintTop_toBottomOf="@id/titleText"
+            tools:text="BTC, BCH, DASH, ETH, ERC-20" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Second line-->
-
-    <TextView
-        android:id="@+id/accountCoins"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:includeFontPadding="false"
-        android:textColor="@color/dimmable_grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="BTC, BCH, DASH, ETH, ERC-20" />
-
-    <!-- Actions -->
-
-    <LinearLayout
-        android:id="@+id/buttonsWrapper"
+    <io.horizontalsystems.bankwallet.ui.extensions.ManageAccountButton
+        android:id="@+id/backupButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        android:visibility="visible">
+        android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/buttonNew"
-            style="@style/ButtonSecondary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="32dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/ManageKeys_Create" />
+    <io.horizontalsystems.bankwallet.ui.extensions.ManageAccountButton
+        android:id="@+id/createButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/buttonImport"
-            style="@style/ButtonSecondary"
-            android:layout_width="0dp"
-            android:minHeight="32dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/ManageKeys_Restore"
-            android:visibility="gone" />
+    <io.horizontalsystems.bankwallet.ui.extensions.ManageAccountButton
+        android:id="@+id/restoreButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/buttonUnlink"
-            style="@style/ButtonSecondary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:minHeight="32dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/ManageKeys_Delete"
-            android:visibility="gone" />
+    <io.horizontalsystems.bankwallet.ui.extensions.ManageAccountButton
+        android:id="@+id/unlinkButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/buttonShow"
-            style="@style/ButtonSecondary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="32dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/ManageKeys_Show"
-            android:visibility="gone" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/buttonBackup"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="32dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="@drawable/button_secondary_background"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="17dp"
-                android:paddingEnd="4dp"
-                android:paddingStart="4dp"
-                android:src="@drawable/ic_attention"
-                android:tint="?ColorLucian"
-                app:layout_constraintEnd_toStartOf="@+id/imageButtonText"
-                app:layout_constraintTop_toTopOf="@+id/imageButtonText"
-                app:layout_constraintBottom_toBottomOf="@+id/imageButtonText"/>
-
-            <TextView
-                android:id="@+id/imageButtonText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans_medium"
-                android:includeFontPadding="false"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="@string/ManageKeys_Backup"
-                android:textColor="@color/button_secondary_text_color_selector"
-                android:textSize="14sp" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/steel_20" />
 
 </LinearLayout>
