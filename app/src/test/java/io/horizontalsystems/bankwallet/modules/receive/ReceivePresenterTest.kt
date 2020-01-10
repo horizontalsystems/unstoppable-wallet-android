@@ -16,7 +16,7 @@ class ReceivePresenterTest {
 
     private var coin = Mockito.mock(Coin::class.java)
     private val coinAddress = "[coin_address]"
-    private val addressItem = AddressItem(address = coinAddress, coin = coin)
+    private val addressItem = AddressItem(address = coinAddress, addressType = null, coin = coin)
 
     private lateinit var presenter: ReceivePresenter
 
