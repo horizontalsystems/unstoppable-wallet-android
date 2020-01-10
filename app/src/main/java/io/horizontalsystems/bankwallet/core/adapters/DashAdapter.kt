@@ -41,7 +41,7 @@ class DashAdapter(override val kit: DashKit) :
     }
 
     override fun onLastBlockInfoUpdate(blockInfo: BlockInfo) {
-        lastBlockHeightUpdatedSubject.onNext(Unit)
+        lastBlockUpdatedSubject.onNext(Unit)
     }
 
     override fun onKitStateUpdate(state: BitcoinCore.KitState) {

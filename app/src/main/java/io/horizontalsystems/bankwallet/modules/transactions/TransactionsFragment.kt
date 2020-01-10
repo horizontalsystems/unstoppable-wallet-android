@@ -180,7 +180,13 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txValueInFiat.text = transactionRecord.currencyValue?.let {
             App.numberFormatter.formatForTransactions(it, incoming, canUseLessSymbol = true, trimmable = true)
         }
-        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (transactionRecord.lockInfo != null) R.drawable.ic_lock else 0, 0)
+
+        val lockIcon = when {
+            transactionRecord.lockInfo == null -> 0
+            transactionRecord.unlocked -> R.drawable.ic_unlock
+            else -> R.drawable.ic_lock
+        }
+        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
         directionIcon.setImageResource(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }

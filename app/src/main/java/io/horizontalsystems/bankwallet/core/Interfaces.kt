@@ -224,8 +224,8 @@ interface IBinanceKitManager {
 
 interface ITransactionsAdapter {
     val confirmationsThreshold: Int
-    val lastBlockHeight: Int?
-    val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+    val lastBlockInfo: LastBlockInfo?
+    val lastBlockUpdatedFlowable: Flowable<Unit>
 
     fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>>
     val transactionRecordsFlowable: Flowable<List<TransactionRecord>>

@@ -24,7 +24,8 @@ data class TransactionViewItem(
         val status: TransactionStatus,
         val rate: CurrencyValue?,
         val lockInfo: TransactionLockInfo?,
-        val conflictingTxHash: String?)
+        val conflictingTxHash: String?,
+        val unlocked: Boolean = true)
 
 
 data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?)
@@ -70,10 +71,10 @@ object TransactionsModule {
     }
 
     interface IInteractorDelegate {
-        fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, Int?>>)
+        fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>)
         fun onUpdateSelectedWallets(selectedWallets: List<Wallet>)
         fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>)
-        fun onUpdateLastBlockHeight(wallet: Wallet, lastBlockHeight: Int)
+        fun onUpdateLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo)
         fun onUpdateBaseCurrency()
         fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long)
         fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet)

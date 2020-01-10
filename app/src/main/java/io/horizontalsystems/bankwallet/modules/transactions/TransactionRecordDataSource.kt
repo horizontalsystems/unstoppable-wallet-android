@@ -113,5 +113,9 @@ class TransactionRecordDataSource(
         setWallets(wallets)
     }
 
+    fun itemIndexesForLocked(wallet: Wallet, unlockingBefore: Long, oldBlockTimestamp: Long?): List<Int> {
+        return itemsDataSource.itemIndexesForLocked(wallet, unlockingBefore, oldBlockTimestamp)
+    }
+
 }
 

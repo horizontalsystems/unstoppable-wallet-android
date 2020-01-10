@@ -7,16 +7,16 @@ import java.util.*
 
 class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
-    fun item(wallet: Wallet, transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
+    fun item(wallet: Wallet, transactionItem: TransactionItem, lastBlockInfo: LastBlockInfo?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
         val record = transactionItem.record
 
         var status: TransactionStatus = TransactionStatus.Pending
 
         if (record.failed) {
             status = TransactionStatus.Failed
-        } else if (record.blockHeight != null && lastBlockHeight != null) {
+        } else if (record.blockHeight != null && lastBlockInfo != null) {
 
-            val confirmations = lastBlockHeight - record.blockHeight.toInt() + 1
+            val confirmations = lastBlockInfo.height - record.blockHeight.toInt() + 1
             if (confirmations >= 0) {
                 status = when {
                     confirmations >= threshold -> TransactionStatus.Completed
@@ -37,6 +37,10 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
             CoinValue(feeCoin, transactionItem.record.fee)
         }
 
+        val unlocked = record.lockInfo?.let { lockInfo ->
+            lastBlockInfo?.timestamp != null && lastBlockInfo.timestamp > lockInfo.lockedUntil.time / 1000
+        } ?: true
+
         return TransactionViewItem(
                 wallet,
                 record.transactionHash,
@@ -51,7 +55,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 status,
                 rate,
                 record.lockInfo,
-                record.conflictingTxHash
+                record.conflictingTxHash,
+                unlocked
         )
     }
 

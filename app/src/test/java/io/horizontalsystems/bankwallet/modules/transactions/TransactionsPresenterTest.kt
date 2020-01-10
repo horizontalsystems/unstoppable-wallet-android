@@ -51,6 +51,7 @@ class TransactionsPresenterTest {
     fun itemForIndex() {
         val index = 42
         val lastBlockHeight = 123
+        val lastBlockInfo = LastBlockInfo(lastBlockHeight)
         val threshold = 6
         val viewItem = mock(TransactionViewItem::class.java)
         val transactionItem = mock(TransactionItem::class.java)
@@ -62,14 +63,14 @@ class TransactionsPresenterTest {
         whenever(transactionItem.record).thenReturn(transactionRecord)
         whenever(transactionItem.wallet).thenReturn(wallet1)
         whenever(loader.itemForIndex(index)).thenReturn(transactionItem)
-        whenever(metadataDataSource.getLastBlockHeight(wallet1)).thenReturn(lastBlockHeight)
+        whenever(metadataDataSource.getLastBlockInfo(wallet1)).thenReturn(lastBlockInfo)
         whenever(metadataDataSource.getConfirmationThreshold(wallet1)).thenReturn(threshold)
         whenever(metadataDataSource.getRate(coin1, timestamp)).thenReturn(rateCurrencyValue)
-        whenever(factory.item(wallet1, transactionItem, lastBlockHeight, threshold, rateCurrencyValue)).thenReturn(viewItem)
+        whenever(factory.item(wallet1, transactionItem, lastBlockInfo, threshold, rateCurrencyValue)).thenReturn(viewItem)
 
         val result = presenter.itemForIndex(index)
 
-        verify(factory).item(wallet1, transactionItem, lastBlockHeight, threshold, rateCurrencyValue)
+        verify(factory).item(wallet1, transactionItem, lastBlockInfo, threshold, rateCurrencyValue)
         verify(interactor, never()).fetchRate(coin1, timestamp)
 
         Assert.assertEquals(viewItem, result)
@@ -94,7 +95,7 @@ class TransactionsPresenterTest {
     }
 
     @Test
-    fun onVisible(){
+    fun onVisible() {
         presenter.onVisible()
         verify(view).reload()
     }
@@ -123,19 +124,19 @@ class TransactionsPresenterTest {
     @Test
     fun onUpdateCoinsData() {
         val confirmationThreshold1 = 6
-        val lastBlockHeight1 = 123
+        val lastBlockInfo1 = LastBlockInfo(123)
+        val lastBlockInfo2 = null
         val confirmationThreshold2 = 12
-        val lastBlockHeight2 = null
         val allWalletsData = listOf(
-                Triple(wallet1, confirmationThreshold1, lastBlockHeight1),
-                Triple(wallet2, confirmationThreshold2, lastBlockHeight2)
+                Triple(wallet1, confirmationThreshold1, lastBlockInfo1),
+                Triple(wallet2, confirmationThreshold2, lastBlockInfo2)
         )
 
         presenter.onUpdateWalletsData(allWalletsData)
 
         verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold1, wallet1)
         verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold2, wallet2)
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight1, wallet1)
+        verify(metadataDataSource).setLastBlockInfo(lastBlockInfo1, wallet1)
         verify(loader).loadNext(true)
         verify(view).showFilters(listOf(null, wallet1, wallet2))
         verify(interactor).fetchLastBlockHeights()
@@ -144,8 +145,8 @@ class TransactionsPresenterTest {
     @Test
     fun onUpdateCoinsData_lessThen2Coins() {
         val confirmationThreshold1 = 6
-        val lastBlockHeight1 = 123
-        val allCoinsData = listOf(Triple(wallet1, confirmationThreshold1, lastBlockHeight1))
+        val lastBlockInfo = LastBlockInfo(123)
+        val allCoinsData = listOf(Triple(wallet1, confirmationThreshold1, lastBlockInfo))
 
         presenter.onUpdateWalletsData(allCoinsData)
 
@@ -200,28 +201,28 @@ class TransactionsPresenterTest {
 
     @Test
     fun onUpdateLastBlockHeight() {
-        val lastBlockHeight = 123123
+        val lastBlockInfo = LastBlockInfo(123123)
 
-        whenever(metadataDataSource.getLastBlockHeight(wallet1)).thenReturn(null)
-        presenter.onUpdateLastBlockHeight(wallet1, lastBlockHeight)
+        whenever(metadataDataSource.getLastBlockInfo(wallet1)).thenReturn(null)
+        presenter.onUpdateLastBlock(wallet1, lastBlockInfo)
 
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, wallet1)
+        verify(metadataDataSource).setLastBlockInfo(lastBlockInfo, wallet1)
         verify(view).reload()
     }
 
     @Test
     fun onUpdateLastBlockHeight_threshold() {
-        val lastBlockHeight = 123123
-        val oldBlockHeight = 123122
+        val lastBlockInfo = LastBlockInfo(123123)
+        val oldBlockInfo = LastBlockInfo(123122)
         val threshold = 1
 
         whenever(metadataDataSource.getConfirmationThreshold(wallet1)).thenReturn(threshold)
-        whenever(metadataDataSource.getLastBlockHeight(wallet1)).thenReturn(oldBlockHeight)
-        whenever(loader.itemIndexesForPending(wallet1, oldBlockHeight - threshold)).thenReturn(listOf(1))
+        whenever(metadataDataSource.getLastBlockInfo(wallet1)).thenReturn(oldBlockInfo)
+        whenever(loader.itemIndexesForPending(wallet1, oldBlockInfo.height - threshold)).thenReturn(listOf(1))
 
-        presenter.onUpdateLastBlockHeight(wallet1, lastBlockHeight)
+        presenter.onUpdateLastBlock(wallet1, lastBlockInfo)
 
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, wallet1)
+        verify(metadataDataSource).setLastBlockInfo(lastBlockInfo, wallet1)
         verify(view).reloadItems(listOf(1))
     }
 

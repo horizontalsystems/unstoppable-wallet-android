@@ -91,7 +91,13 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     fiatName.visibility = View.VISIBLE
 
                     fiatValue.text =  App.numberFormatter.formatForTransactions(txRec.currencyValue, incoming, canUseLessSymbol = false, trimmable = false)
-                    fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (txRec.lockInfo != null) R.drawable.ic_lock else 0, 0)
+
+                    val lockIcon = when {
+                        txRec.lockInfo == null -> 0
+                        txRec.unlocked -> R.drawable.ic_unlock
+                        else -> R.drawable.ic_lock
+                    }
+                    fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
                     fiatName.text = txRec.currencyValue.currency.code
                     sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
                 } else {
