@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -41,10 +42,10 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
 
     override val confirmationsThreshold: Int = irreversibleThreshold
 
-    override val lastBlockHeight: Int?
-        get() = eosKit.irreversibleBlockHeight?.let { it + confirmationsThreshold }
+    override val lastBlockInfo: LastBlockInfo?
+        get() = eosKit.irreversibleBlockHeight?.let { LastBlockInfo(it + confirmationsThreshold) }
 
-    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+    override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = eosKit.irreversibleBlockFlowable.map { Unit }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>

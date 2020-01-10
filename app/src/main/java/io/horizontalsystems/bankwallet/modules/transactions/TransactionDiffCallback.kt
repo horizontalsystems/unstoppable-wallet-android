@@ -22,6 +22,10 @@ class TransactionDiffCallback(private val oldTxList: List<TransactionItem>, priv
         val old = oldTxList[oldItemPosition].record
         val new = newTxList[newItemPosition].record
 
-        return old.blockHeight == new.blockHeight && old.timestamp == new.timestamp && old.interTransactionIndex == new.interTransactionIndex
+        return old.blockHeight == new.blockHeight &&
+                old.timestamp == new.timestamp &&
+                old.interTransactionIndex == new.interTransactionIndex &&
+                old.failed == new.failed &&
+                old.conflictingTxHash == new.conflictingTxHash
     }
 }

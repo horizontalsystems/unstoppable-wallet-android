@@ -41,7 +41,7 @@ class BitcoinCashAdapter(override val kit: BitcoinCashKit)
     }
 
     override fun onLastBlockInfoUpdate(blockInfo: BlockInfo) {
-        lastBlockHeightUpdatedSubject.onNext(Unit)
+        lastBlockUpdatedSubject.onNext(Unit)
     }
 
     override fun onKitStateUpdate(state: BitcoinCore.KitState) {

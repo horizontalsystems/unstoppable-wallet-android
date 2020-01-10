@@ -83,4 +83,8 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         }
     }
 
+    fun itemIndexesForLocked(wallet: Wallet, unlockingBefore: Long, oldBlockTimestamp: Long?): List<Int> {
+        return dataSource.itemIndexesForLocked(wallet, unlockingBefore, oldBlockTimestamp)
+    }
+
 }

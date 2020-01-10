@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -59,10 +60,10 @@ class BinanceAdapter(
     override val confirmationsThreshold: Int
         get() = 1
 
-    override val lastBlockHeight: Int?
-        get() = binanceKit.latestBlock?.height
+    override val lastBlockInfo: LastBlockInfo?
+        get() = binanceKit.latestBlock?.height?.let { LastBlockInfo(it) }
 
-    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+    override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { Unit }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>

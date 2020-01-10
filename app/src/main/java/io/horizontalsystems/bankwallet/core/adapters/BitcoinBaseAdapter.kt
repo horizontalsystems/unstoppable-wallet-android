@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
@@ -31,8 +32,9 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     //
 
     override val confirmationsThreshold: Int = defaultConfirmationsThreshold
-    override val lastBlockHeight: Int?
-        get() = kit.lastBlockInfo?.height
+
+    override val lastBlockInfo: LastBlockInfo?
+        get() = kit.lastBlockInfo?.let { LastBlockInfo(it.height, it.timestamp) }
 
     override val receiveAddress: String
         get() = kit.receiveAddress()
@@ -40,15 +42,15 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    protected val lastBlockHeightUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
-        get() = lastBlockHeightUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val lastBlockUpdatedFlowable: Flowable<Unit>
+        get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val stateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
