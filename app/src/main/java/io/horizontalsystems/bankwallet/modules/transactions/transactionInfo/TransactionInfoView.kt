@@ -103,9 +103,12 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 txInfoCoinName.text = txRec.wallet.coin.title
 
                 if (txRec.lockInfo != null) {
+                    val roundedDate = DateHelper.roundDateHour(txRec.lockInfo.lockedUntil, true)
+
                     itemLockTime.visibility = View.VISIBLE
-                    itemLockTime.bindInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(txRec.lockInfo.lockedUntil)}", R.drawable.ic_lock)
+                    itemLockTime.bindInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(roundedDate)}", R.drawable.ic_lock)
                     itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
+
                 } else {
                     itemLockTime.visibility = View.GONE
                 }

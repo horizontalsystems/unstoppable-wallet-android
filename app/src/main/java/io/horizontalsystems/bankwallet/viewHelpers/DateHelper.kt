@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.format.DateFormat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import org.apache.commons.lang3.time.DateUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,6 +19,17 @@ object DateHelper {
     fun getFullDate(date: Date): String = formatDate(date, "MMM d, yyyy, $timeFormat")
     fun getDateWithYear(date: Date): String = formatDate(date, "MMM d, yyyy")
     fun getFullDate(timestamp: Long): String = formatDate(Date(timestamp), "MMM d, yyyy, $timeFormat")
+
+    fun roundDateHour(date: Date, ceiling: Boolean): Date {
+        return roundDate(date, Calendar.HOUR, ceiling)
+    }
+
+    fun roundDate(date: Date, roundField: Int, ceiling: Boolean): Date {
+        if(ceiling)
+            return DateUtils.ceiling(date, roundField)
+        else
+            return DateUtils.round(date, roundField)
+    }
 
     fun getTxDurationString(context: Context, durationInSec: Long): String {
         return when {
