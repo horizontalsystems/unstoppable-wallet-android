@@ -33,6 +33,13 @@ class BitcoinAdapter(override val kit: BitcoinKit)
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
+    override fun getReceiveAddressType(wallet: Wallet): String? {
+        val walletDerivation = wallet.settings[CoinSetting.Derivation]?.let {
+            Derivation.valueOf(it)
+        }
+        return getBip(walletDerivation).toString()
+    }
+
     //
     // BitcoinKit Listener
     //

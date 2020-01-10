@@ -243,6 +243,7 @@ interface IBalanceAdapter {
 
 interface IReceiveAdapter {
     val receiveAddress: String
+    fun getReceiveAddressType(wallet: Wallet): String?
 }
 
 interface ISendBitcoinAdapter {

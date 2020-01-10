@@ -47,6 +47,10 @@ class ReceiveFragment(
     private fun observeView(view: ReceiveView) {
         view.setHintText.observe(viewLifecycleOwner, Observer {
             receiverHint.setText(it)
+
+            view.hintDetails?.let {
+                receiverHint.text = "${receiverHint.text} (${it})"
+            }
         })
 
         view.showAddress.observe(viewLifecycleOwner, Observer {

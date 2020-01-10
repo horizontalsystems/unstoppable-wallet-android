@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -26,6 +27,8 @@ abstract class EthereumBaseAdapter(
     override fun refresh() {
         // refreshed via EthereumKitManager
     }
+
+    override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     override val debugInfo: String = ethereumKit.debugInfo()
 
