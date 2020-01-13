@@ -56,7 +56,12 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
 
     override fun removeKey() {
         try {
-            keyStore.deleteEntry(keyAlias)
+            if (keyStore.containsAlias(keyAlias)) {
+                if (isKeyInvalidated) {
+                    createKey()
+                }
+                keyStore.deleteEntry(keyAlias)
+            }
         } catch (ex: KeyStoreException) {
             logger.warning("removeKey: \n ${ex.getStackTraceString()}")
         }
