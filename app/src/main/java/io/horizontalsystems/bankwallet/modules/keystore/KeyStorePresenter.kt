@@ -24,15 +24,6 @@ class KeyStorePresenter(private val interactor: KeyStoreModule.IInteractor,
         }
     }
 
-    override fun onResume() {
-        if (mode != ModeType.UserAuthentication &&
-                !interactor.isSystemLockOff &&
-                !interactor.isKeyInvalidated) {
-            interactor.removeKey()
-            router.openLaunchModule()
-        }
-    }
-
     override fun onCloseInvalidKeyWarning() {
         interactor.removeKey()
         router.openLaunchModule()

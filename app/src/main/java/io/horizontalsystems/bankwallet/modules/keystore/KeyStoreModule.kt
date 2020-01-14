@@ -20,7 +20,6 @@ object KeyStoreModule {
     interface IViewDelegate {
         fun viewDidLoad()
         fun onCloseInvalidKeyWarning()
-        fun onResume()
         fun onAuthenticationCanceled()
         fun onAuthenticationSuccess()
     }

@@ -50,8 +50,14 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
         }
 
     override fun getKey(): SecretKey {
-        val key = keyStore.getKey(keyAlias, null) ?: createKey()
-        return key as SecretKey
+        try {
+            keyStore.getKey(keyAlias, null)?.let{
+                return it as SecretKey
+            }
+        } catch (ex: UnrecoverableKeyException) {
+            //couldn't get key due to exception
+        }
+        return createKey()
     }
 
     override fun removeKey() {
