@@ -63,12 +63,6 @@ class KeyStoreActivity : AppCompatActivity() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        viewModel.delegate.onResume()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
