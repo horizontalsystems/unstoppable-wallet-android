@@ -174,7 +174,7 @@ dependencies {
     hockeyAppImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:6dc70a3'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:f940727'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:c12eab7'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:169917d'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
