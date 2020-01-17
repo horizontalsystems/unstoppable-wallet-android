@@ -44,7 +44,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
-                app:title="@string/Restore_ChooseCrypto"
+                app:title="@string/Restore_ChooseWallet"
                 app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

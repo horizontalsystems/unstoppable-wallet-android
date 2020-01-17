@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="title" format="string" />
-    <attr name="subtitle" format="string" />
-
+    <declare-styleable name="GlobalAttrDeclare">
+        <attr name="title" format="string" />
+        <attr name="subtitle" format="string" />
+        <attr name="bottomBorder" format="boolean" />
+    </declare-styleable>
     <declare-styleable name="TransactionInfoItemView">
         <attr name="title" />
         <attr name="value" format="string" />
@@ -40,7 +42,7 @@
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="rightTitle" format="string" />
-        <attr name="bottomBorder" format="boolean" />
+        <attr name="bottomBorder" />
         <attr name="rightArrow" format="boolean" />
         <attr name="imageDrawable" format="integer" />
         <attr name="imageTint" format="integer" />
@@ -48,5 +50,10 @@
     <declare-styleable name="RateDiffView">
         <attr name="negativeColor" format="color" />
         <attr name="positiveColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="SettingItemWithCheckmark">
+        <attr name="title" />
+        <attr name="subtitle" />
+        <attr name="bottomBorder" />
     </declare-styleable>
 </resources>

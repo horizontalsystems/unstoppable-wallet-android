@@ -12,22 +12,6 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         view?.toggleBiometricEnabled(interactor.isBiometricEnabled)
     }
 
-    override fun didTapManageKeys() {
-        router.showManageKeys()
-    }
-
-    override fun didSwitchPinSet(enable: Boolean) {
-        if (enable) {
-            router.showSetPin()
-        } else {
-            router.showUnlockPin()
-        }
-    }
-
-    override fun didTapEditPin() {
-        router.showEditPin()
-    }
-
     override fun didSwitchBiometricEnabled(enable: Boolean) {
         interactor.isBiometricEnabled = enable
     }
@@ -66,4 +50,25 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         view?.setBackupAlertVisible(!allBackedUp)
     }
 
+    // ISecuritySettingsRouter
+
+    override fun didTapManageKeys() {
+        router.showManageKeys()
+    }
+
+    override fun didSwitchPinSet(enable: Boolean) {
+        if (enable) {
+            router.showSetPin()
+        } else {
+            router.showUnlockPin()
+        }
+    }
+
+    override fun didTapEditPin() {
+        router.showEditPin()
+    }
+
+    override fun didTapBlockchainSettings() {
+        router.showBlockchainSettings()
+    }
 }

@@ -7,13 +7,19 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.AccountButtonItemType
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_account.*
 
-class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerView.Adapter<ManageKeysAdapter.KeysViewHolder>() {
+class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<ManageKeysAdapter.KeysViewHolder>() {
+
+    interface Listener{
+        fun onClickCreate(item: ManageAccountItem)
+        fun onClickRestore(item: ManageAccountItem)
+        fun onClickBackup(item: ManageAccountItem)
+        fun onClickUnlink(item: ManageAccountItem)
+    }
 
     var items = listOf<ManageAccountItem>()
 
@@ -45,13 +51,13 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
                 if (predefinedAccount.isCreationSupported()) {
                     createButton.visibility = View.VISIBLE
                     createButton.bind(containerView.resources.getString(R.string.ManageKeys_Create), AccountButtonItemType.SimpleButton, false) {
-                        viewModel.delegate.onClickCreate(item)
+                        listener.onClickCreate(item)
                     }
                 }
 
                 restoreButton.visibility = View.VISIBLE
                 restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.SimpleButton, false) {
-                    viewModel.delegate.onClickRestore(item)
+                    listener.onClickRestore(item)
                 }
 
                 headerIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.grey))
@@ -71,14 +77,14 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
                     type = AccountButtonItemType.SimpleButton,
                     showAttentionIcon = !account.isBackedUp,
                     onClick = {
-                        viewModel.delegate.onClickBackup(item)
+                        listener.onClickBackup(item)
                     })
 
             unlinkButton.bind(
                     title = containerView.resources.getString(R.string.ManageKeys_Unlink),
                     type = AccountButtonItemType.RedButton,
                     onClick = {
-                        viewModel.delegate.onClickUnlink(item)
+                        listener.onClickUnlink(item)
                     })
         }
 

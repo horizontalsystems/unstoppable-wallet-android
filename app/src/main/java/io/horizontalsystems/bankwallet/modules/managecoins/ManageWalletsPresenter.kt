@@ -11,14 +11,13 @@ class ManageWalletsPresenter(
         val showCloseButton: Boolean,
         val router: ManageWalletsModule.IRouter,
         val view: ManageWalletsModule.IView
-        )
-    : ViewModel(), ManageWalletsModule.IViewDelegate {
+) : ViewModel(), ManageWalletsModule.IViewDelegate {
 
     private val wallets = mutableMapOf<Coin, Wallet>()
 
     //  ViewDelegate
 
-    override fun viewDidLoad() {
+    override fun onLoad() {
         interactor.wallets.forEach { wallet ->
             wallets[wallet.coin] = wallet
         }
@@ -28,14 +27,7 @@ class ManageWalletsPresenter(
 
     override fun onEnable(coin: Coin) {
         val account = account(coin) ?: return
-
-        val coinSettingsToRequest = interactor.coinSettingsToRequest(coin, account.origin)
-
-        if (coinSettingsToRequest.isEmpty()) {
-            createWallet(coin, account, mutableMapOf())
-        } else {
-            router.showCoinSettings(coin, coinSettingsToRequest, account.origin)
-        }
+        createWallet(coin, account)
     }
 
     override fun onDisable(coin: Coin) {
@@ -66,15 +58,14 @@ class ManageWalletsPresenter(
     override fun didRestore(accountType: AccountType) {
         val account = interactor.createRestoredAccount(accountType)
         handleCreated(account)
+
+        if (accountType is AccountType.Mnemonic) {
+            router.showCoinSettings()
+        }
     }
 
     override fun onClickCancel() {
         syncViewItems()
-    }
-
-    override fun onSelect(coinSettings: MutableMap<CoinSetting, String>, coin: Coin) {
-        val account = account(coin) ?: return
-        createWallet(coin, account, coinSettings)
     }
 
     private fun account(coin: Coin): Account? {
@@ -106,8 +97,8 @@ class ManageWalletsPresenter(
         view.setItems(viewItems)
     }
 
-    private fun createWallet(coin: Coin, account: Account, requestedCoinSettings: CoinSettings) {
-        val coinSettings = interactor.coinSettingsToSave(coin, account.origin, requestedCoinSettings)
+    private fun createWallet(coin: Coin, account: Account) {
+        val coinSettings = interactor.getCoinSettings(coin.type)
 
         val wallet = Wallet(coin, account, coinSettings)
 

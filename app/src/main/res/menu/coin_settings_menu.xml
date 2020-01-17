@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuEnable"
-        android:title="@string/Button_Enable"
+        android:id="@+id/menuDone"
+        android:title="@string/Button_Done"
         app:showAsAction="always" />
 
 </menu>

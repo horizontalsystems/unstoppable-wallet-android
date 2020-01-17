@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.managecoins.views
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -11,12 +10,10 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
-import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
 import io.horizontalsystems.bankwallet.modules.coinsettings.SettingsMode
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
@@ -42,7 +39,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         presenter = ViewModelProvider(this, ManageWalletsModule.Factory(showCloseButton))
                 .get(ManageWalletsPresenter::class.java)
 
-        presenter.viewDidLoad()
+        presenter.onLoad()
 
         setSupportActionBar(toolbar)
         if (!presenter.showCloseButton) {
@@ -78,16 +75,15 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
 
     private fun observe(router: ManageWalletsRouter) {
         router.openRestoreModule.observe(this, Observer { predefinedAccountType ->
-            RestoreModule.startForResult(this, predefinedAccountType)
+            RestoreModule.startForResult(this, predefinedAccountType, ModuleCode.RESTORE_KEY_INPUT)
         })
 
         router.closeLiveDate.observe(this, Observer {
             finish()
         })
 
-        router.showCoinSettings.observe(this, Observer { (coin, coinSettings, origin) ->
-            val settingMode = if(origin == AccountOrigin.Created) SettingsMode.Creating else SettingsMode.Restoring
-            CoinSettingsModule.startForResult(coin, coinSettings, settingMode, this)
+        router.showCoinSettings.observe(this, Observer {
+            CoinSettingsModule.startForResult(this, SettingsMode.Restore)
         })
     }
 
@@ -118,16 +114,9 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
 
         when (requestCode) {
             ModuleCode.COIN_SETTINGS -> {
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    presenter.onClickCancel()
-                } else if (resultCode == Activity.RESULT_OK) {
-                    val coin = data?.getParcelableExtra<Coin>(ModuleField.COIN) ?: return
-                    val coinSettings = data.getParcelableExtra<CoinSettingsWrapped>(ModuleField.COIN_SETTINGS) ?: return
-
-                    presenter.onSelect(coinSettings.settings, coin)
-                }
+                //do nothing
             }
-            ModuleCode.RESTORE-> {
+            ModuleCode.RESTORE_KEY_INPUT-> {
                 val accountType = data?.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE) ?: return
                 presenter.didRestore(accountType)
             }

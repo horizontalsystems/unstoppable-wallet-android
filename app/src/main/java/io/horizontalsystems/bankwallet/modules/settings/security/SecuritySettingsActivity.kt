@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -21,7 +22,7 @@ class SecuritySettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_security)
 
-        viewModel = ViewModelProviders.of(this).get(SecuritySettingsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SecuritySettingsViewModel::class.java)
         viewModel.init()
 
         shadowlessToolbar.bind(getString(R.string.Settings_SecurityCenter), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
@@ -29,6 +30,8 @@ class SecuritySettingsActivity : BaseActivity() {
         changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
 
         manageKeys.setOnClickListener { viewModel.delegate.didTapManageKeys() }
+
+        blockchainSettings.setOnClickListener { viewModel.delegate.didTapBlockchainSettings() }
 
         fingerprint.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchBiometricEnabled(isChecked)
@@ -52,10 +55,6 @@ class SecuritySettingsActivity : BaseActivity() {
             manageKeys.badge = alert
         })
 
-        viewModel.openManageKeysLiveEvent.observe(this, Observer {
-            ManageKeysModule.start(this)
-        })
-
         viewModel.pinSetLiveData.observe(this, Observer { pinEnabled ->
             enablePin.switchIsChecked = pinEnabled
         })
@@ -63,6 +62,20 @@ class SecuritySettingsActivity : BaseActivity() {
         viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->
             changePin.visibility = if (pinEnabled) View.VISIBLE else View.GONE
             enablePin.bottomBorder = !pinEnabled
+        })
+
+        viewModel.biometricSettingsVisibleLiveData.observe(this, Observer { enabled ->
+            fingerprint.visibility = if (enabled) View.VISIBLE else View.GONE
+        })
+
+        viewModel.biometricEnabledLiveData.observe(this, Observer {
+            fingerprint.switchIsChecked = it
+        })
+
+        //router
+
+        viewModel.openManageKeysLiveEvent.observe(this, Observer {
+            ManageKeysModule.start(this)
         })
 
         viewModel.openEditPinLiveEvent.observe(this, Observer {
@@ -77,12 +90,8 @@ class SecuritySettingsActivity : BaseActivity() {
             PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN)
         })
 
-        viewModel.biometricSettingsVisibleLiveData.observe(this, Observer { enabled ->
-            fingerprint.visibility = if (enabled) View.VISIBLE else View.GONE
-        })
-
-        viewModel.biometricEnabledLiveData.observe(this, Observer {
-            fingerprint.switchIsChecked = it
+        viewModel.openBlockchainSettings.observe(this, Observer {
+            CoinSettingsModule.start(this)
         })
     }
 

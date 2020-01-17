@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -34,6 +35,7 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
+    private val BITCOIN_DERIVATION = "bitcoin_derivation"
 
     val gson by lazy { Gson() }
 
@@ -154,13 +156,13 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
             App.preferences.edit().putString(BASE_EOS_PROVIDER, value).apply()
         }
 
-    override var syncMode: SyncMode
+    override var syncMode: SyncMode?
         get() {
-            val syncString = App.preferences.getString(SYNC_MODE, SyncMode.Fast.value)
-            return syncString?.let { SyncMode.valueOf(syncString) } ?: SyncMode.Fast
+            val syncString = App.preferences.getString(SYNC_MODE, null)
+            return syncString?.let { SyncMode.valueOf(it) }
         }
         set(syncMode) {
-            App.preferences.edit().putString(SYNC_MODE, syncMode.value).apply()
+            App.preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
         }
 
     override var sortType: BalanceSortType
@@ -200,6 +202,15 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
         get() = App.preferences.getString(ENCRYPTION_CHECKER_TEXT, null)
         set(encryptedText) {
             App.preferences.edit().putString(ENCRYPTION_CHECKER_TEXT, encryptedText).apply()
+        }
+
+    override var bitcoinDerivation: AccountType.Derivation?
+        get() {
+            val derivationString = App.preferences.getString(BITCOIN_DERIVATION, null)
+            return derivationString?.let { AccountType.Derivation.valueOf(it) }
+        }
+        set(derivation) {
+            App.preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()
         }
 
     override fun clear() {

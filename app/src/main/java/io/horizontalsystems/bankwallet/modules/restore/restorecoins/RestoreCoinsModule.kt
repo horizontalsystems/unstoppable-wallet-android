@@ -21,8 +21,6 @@ object RestoreCoinsModule {
 
     interface IRouter {
         fun startMainModule()
-        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings)
-        fun showRestore(predefinedAccountType: PredefinedAccountType)
         fun close()
     }
 
@@ -31,9 +29,6 @@ object RestoreCoinsModule {
         fun onEnable(coin: Coin)
         fun onDisable(coin: Coin)
         fun onProceedButtonClick()
-        fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin)
-        fun onCancelSelectingCoinSettings()
-        fun didRestore(accountType: AccountType)
     }
 
     interface IInteractor {
@@ -44,27 +39,27 @@ object RestoreCoinsModule {
         fun createAccounts(accounts: List<Account>)
         @Throws
         fun account(accountType: AccountType) : Account
-        fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin): CoinSettings
-        fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings): CoinSettings
         fun saveWallets(wallets: List<Wallet>)
         fun create(account: Account)
+        fun getCoinSettings(coinType: CoinType): CoinSettings
     }
 
-    class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType) : ViewModelProvider.Factory {
+    class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType, private val accountType: AccountType) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RestoreCoinsView()
             val router = RestoreCoinsRouter()
             val interactor = RestoreCoinsInteractor(App.appConfigProvider, App.accountCreator, App.accountManager, App.walletManager, App.coinSettingsManager)
-            val presenter = RestoreCoinsPresenter(presentationMode, predefinedAccountType, view, router, interactor)
+            val presenter = RestoreCoinsPresenter(presentationMode, predefinedAccountType, accountType, view, router, interactor)
 
             return presenter as T
         }
     }
 
-    fun start(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, mode: PresentationMode) {
+    fun start(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, accountType: AccountType, mode: PresentationMode) {
         val intent = Intent(context, RestoreCoinsActivity::class.java)
         intent.putParcelableExtra(ModuleField.PRESENTATION_MODE, mode)
         intent.putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
+        intent.putParcelableExtra(ModuleField.ACCOUNT_TYPE, accountType)
         context.startActivityForResult(intent, ModuleCode.RESTORE_COINS)
     }
 

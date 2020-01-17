@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.createwallet.view
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,14 +7,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.PresentationMode
-import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
-import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
-import io.horizontalsystems.bankwallet.modules.coinsettings.SettingsMode
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletPresenter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter

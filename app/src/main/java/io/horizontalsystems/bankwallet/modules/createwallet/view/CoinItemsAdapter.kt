@@ -19,8 +19,7 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
 
     private val coinWithSwitch = 0
     private val coinWithArrow = 1
-    private val descriptionView = 2
-    private val dividerView = 3
+    private val dividerView = 2
     var viewItems = listOf<CoinManageViewItem>()
 
     override fun getItemCount(): Int {
@@ -31,7 +30,6 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
             when (viewItems[position].type) {
                 is CoinManageViewType.CoinWithArrow -> coinWithArrow
                 is CoinManageViewType.CoinWithSwitch -> coinWithSwitch
-                is CoinManageViewType.Description -> descriptionView
                 is CoinManageViewType.Divider -> dividerView
             }
 
@@ -49,7 +47,6 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
                     onSwitch = { isChecked, index ->
                         onSwitchToggle(isChecked, index)
                     })
-            descriptionView -> ViewHolderTopDescription(inflate(parent, R.layout.view_holder_top_description, false))
             dividerView -> ViewHolderDivider(inflate(parent, R.layout.view_holder_coin_manager_divider, false))
             else -> throw Exception("No such view type")
         }
@@ -133,7 +130,6 @@ class CoinItemWithArrowViewHolder(
     }
 }
 
-class ViewHolderTopDescription(val containerView: View) : RecyclerView.ViewHolder(containerView)
 class ViewHolderDivider(val containerView: View) : RecyclerView.ViewHolder(containerView)
 
 data class CoinManageViewItem(val type: CoinManageViewType, val coinViewItem: CoinViewItem? = null)
@@ -141,7 +137,6 @@ data class CoinViewItem(val coin: Coin, var showBottomShade: Boolean = false)
 
 sealed class CoinManageViewType{
     object Divider: CoinManageViewType()
-    object Description: CoinManageViewType()
     object CoinWithArrow: CoinManageViewType()
     class CoinWithSwitch(var enabled: Boolean): CoinManageViewType()
 }
