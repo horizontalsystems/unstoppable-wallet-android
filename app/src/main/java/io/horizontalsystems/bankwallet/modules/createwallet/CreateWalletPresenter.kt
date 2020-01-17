@@ -29,8 +29,7 @@ class CreateWalletPresenter(
     override fun onEnable(coin: Coin) {
         try {
             val account = resolveAccount(coin.type.predefinedAccountType)
-            val coinSettingsToRequest = interactor.coinSettingsToRequest(coin, AccountOrigin.Created)
-            createWallet(coin, account, coinSettingsToRequest)
+            createWallet(coin, account)
         } catch (e: Exception) {
             syncViewItems()
         }
@@ -104,8 +103,8 @@ class CreateWalletPresenter(
         return account
     }
 
-    private fun createWallet(coin: Coin, account: Account, requestedCoinSettings: CoinSettings) {
-        val coinSettings = interactor.coinSettingsToSave(coin, AccountOrigin.Created, requestedCoinSettings)
+    private fun createWallet(coin: Coin, account: Account) {
+        val coinSettings = interactor.coinSettings(coin.type)
 
         wallets[coin] = Wallet(coin, account, coinSettings)
 

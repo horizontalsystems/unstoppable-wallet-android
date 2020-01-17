@@ -5,48 +5,57 @@ import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinSettings
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import kotlinx.android.parcel.Parcelize
 
 object CoinSettingsModule {
 
     interface IView {
-        fun setTitle(title: String)
-        fun setItems(items: List<SettingSection>)
+        fun setSelection(derivation: Derivation, syncMode: SyncMode)
     }
 
     interface IViewDelegate {
-        fun viewDidLoad()
+        fun onLoad()
         fun onSelect(syncMode: SyncMode)
         fun onSelect(derivation: Derivation)
         fun onDone()
-        fun onCancel()
+    }
+
+    interface IInteractor {
+        fun bitcoinDerivation(): Derivation
+        fun syncMode(): SyncMode
+        fun updateBitcoinDerivation(derivation: Derivation)
+        fun updateSyncMode(source: SyncMode)
     }
 
     interface IRouter {
-        fun notifyOptions(coinSettings: CoinSettings, coin: Coin)
-        fun onCancelClick()
+        fun closeWithResultOk()
+        fun close()
     }
 
-    fun startForResult(coin: Coin, coinSettings: CoinSettings, restoreMode: SettingsMode, context: AppCompatActivity) {
+    fun startForResult(context: AppCompatActivity, mode: SettingsMode = SettingsMode.Settings) {
         val intent = Intent(context, CoinSettingsActivity::class.java)
-        intent.putParcelableExtra(ModuleField.COIN, coin)
-        intent.putParcelableExtra(ModuleField.COIN_SETTINGS, CoinSettingsWrapped(coinSettings))
-        intent.putParcelableExtra(ModuleField.COIN_SETTINGS_MODE, restoreMode)
+        intent.putParcelableExtra(ModuleField.COIN_SETTINGS_MODE, mode)
         context.startActivityForResult(intent, ModuleCode.COIN_SETTINGS)
     }
 
-    class Factory(private val coin: Coin, private val coinSettings: CoinSettings, private val settingsMode: SettingsMode) : ViewModelProvider.Factory {
+    fun start(context: AppCompatActivity, mode: SettingsMode = SettingsMode.Settings) {
+        val intent = Intent(context, CoinSettingsActivity::class.java)
+        intent.putParcelableExtra(ModuleField.COIN_SETTINGS_MODE, mode)
+        context.startActivity(intent)
+    }
+
+    class Factory(private val mode: SettingsMode) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = CoinSettingsView()
             val router = CoinSettingsRouter()
-            val presenter = CoinSettingsPresenter(coin, coinSettings, settingsMode, view, router)
+            val interactor = CoinSettingsInteractor(App.coinSettingsManager)
+            val presenter = CoinSettingsPresenter(mode, view, router, interactor)
 
             return presenter as T
         }
@@ -54,17 +63,7 @@ object CoinSettingsModule {
 }
 
 @Parcelize
-class CoinSettingsWrapped(var settings: CoinSettings) : Parcelable
-
-sealed class SettingSection{
-    class Header(val text: String): SettingSection()
-    class Description(val text: String): SettingSection()
-    class DerivationItem(val title: Int, val subtitle: Int, val derivation: Derivation, var selected: Boolean): SettingSection()
-    class SyncModeItem(val title: String, val subtitle: Int, val syncMode: SyncMode, var selected: Boolean): SettingSection()
-}
-
-@Parcelize
-enum class SettingsMode: Parcelable{
-    Creating,
-    Restoring
+enum class SettingsMode: Parcelable {
+    Settings,
+    Restore
 }

@@ -20,7 +20,7 @@ object ManageWalletsModule {
     }
 
     interface IViewDelegate {
-        fun viewDidLoad()
+        fun onLoad()
 
         fun onEnable(coin: Coin)
         fun onDisable(coin: Coin)
@@ -30,7 +30,6 @@ object ManageWalletsModule {
 
         fun didRestore(accountType: AccountType)
         fun onClickCancel()
-        fun onSelect(coinSettings: MutableMap<CoinSetting, String>, coin: Coin)
     }
 
     interface IInteractor {
@@ -46,12 +45,11 @@ object ManageWalletsModule {
         fun createRestoredAccount(accountType: AccountType): Account
         fun save(account: Account)
 
-        fun coinSettingsToSave(coin: Coin, origin: AccountOrigin, requestedCoinSettings: MutableMap<CoinSetting, String>): CoinSettings
-        fun coinSettingsToRequest(coin: Coin, origin: AccountOrigin): CoinSettings
+        fun getCoinSettings(coinType: CoinType): CoinSettings
     }
 
     interface IRouter {
-        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings, origin: AccountOrigin)
+        fun showCoinSettings()
         fun openRestore(predefinedAccountType: PredefinedAccountType)
         fun close()
     }

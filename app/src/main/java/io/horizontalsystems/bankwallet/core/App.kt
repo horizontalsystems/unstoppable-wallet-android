@@ -180,7 +180,7 @@ class App : Application() {
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
-        coinSettingsManager = CoinSettingsManager()
+        coinSettingsManager = CoinSettingsManager(localStorage)
     }
 
     override fun attachBaseContext(base: Context) {

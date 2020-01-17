@@ -51,12 +51,13 @@ interface ILocalStorage {
     var baseDashProvider: String?
     var baseBinanceProvider: String?
     var baseEosProvider: String?
-    var syncMode: SyncMode
+    var syncMode: SyncMode?
     var sortType: BalanceSortType
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
     var isLockTimeEnabled: Boolean
     var encryptedSampleText: String?
+    var bitcoinDerivation: AccountType.Derivation?
 
     fun clear()
 }
@@ -481,8 +482,10 @@ interface IBackgroundRateAlertScheduler {
 }
 
 interface ICoinSettingsManager{
-    fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin) : CoinSettings
-    fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings) : CoinSettings
+    var syncMode: SyncMode
+    var bitcoinDerivation: AccountType.Derivation
+    fun coinSettingsForCreate(coinType: CoinType) : CoinSettings
+    fun coinSettings(coinType: CoinType) : CoinSettings
 }
 
 enum class FeeRatePriority(val value: Int) {

@@ -1,22 +1,40 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ICoinSettingsManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.*
 
-class CoinSettingsManager: ICoinSettingsManager {
+class CoinSettingsManager(private val localStorage: ILocalStorage): ICoinSettingsManager {
 
-    override fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin): CoinSettings {
+    private val defaultDerivation = AccountType.Derivation.bip49
+    private val defaultSyncMode = SyncMode.Fast
+
+    override var bitcoinDerivation: AccountType.Derivation
+        get() {
+            return localStorage.bitcoinDerivation ?: defaultDerivation
+        }
+        set(derivation) {
+            localStorage.bitcoinDerivation = derivation
+        }
+
+    override var syncMode: SyncMode
+        get() {
+            return localStorage.syncMode ?: defaultSyncMode
+        }
+        set(syncMode) {
+            localStorage.syncMode = syncMode
+        }
+
+    override fun coinSettingsForCreate(coinType: CoinType): CoinSettings {
         val coinSettings = mutableMapOf<CoinSetting, String>()
 
-        coin.type.settings.forEach { setting ->
+        coinType.settings.forEach { setting ->
             when(setting) {
                 CoinSetting.Derivation -> {
-                    coinSettings[CoinSetting.Derivation] = AccountType.Derivation.bip49.value
+                    coinSettings[CoinSetting.Derivation] = defaultDerivation.value
                 }
                 CoinSetting.SyncMode -> {
-                    if (accountOrigin == AccountOrigin.Restored) {
-                        coinSettings[CoinSetting.SyncMode] = SyncMode.Fast.value
-                    }
+                    coinSettings[CoinSetting.SyncMode] = SyncMode.New.value
                 }
             }
         }
@@ -24,20 +42,21 @@ class CoinSettingsManager: ICoinSettingsManager {
         return coinSettings
     }
 
-    override fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings): CoinSettings {
-        coin.type.settings.forEach { setting ->
-            when (setting) {
-                CoinSetting.SyncMode -> {
-                    if (accountOrigin == AccountOrigin.Created) {
-                        requestedCoinSettings[CoinSetting.SyncMode] = SyncMode.New.value
-                    }
-                }
-                else -> {
+    override fun coinSettings(coinType: CoinType): CoinSettings {
+        val coinSettings = mutableMapOf<CoinSetting, String>()
 
+        coinType.settings.forEach { setting ->
+            when(setting) {
+                CoinSetting.Derivation -> {
+                    coinSettings[CoinSetting.Derivation] = bitcoinDerivation.value
+                }
+                CoinSetting.SyncMode -> {
+                    coinSettings[CoinSetting.SyncMode] = syncMode.value
                 }
             }
         }
 
-        return requestedCoinSettings
+        return coinSettings
     }
+
 }

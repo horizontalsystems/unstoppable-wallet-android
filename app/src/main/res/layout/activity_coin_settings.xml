@@ -1,21 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:itemCount="3"
-        tools:listitem="@layout/view_holder_coin_setting_item" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/bitcoinAddressFormatHeader"
+            style="@style/Subhead1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="18dp"
+            android:paddingBottom="5dp"
+            android:text="@string/CoinOption_AddressFormatTitle"
+            android:textAllCaps="true"
+            android:textColor="@color/grey" />
+
+        <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+            android:id="@+id/bip44"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/CoinOption_bip44"
+            app:subtitle="@string/CoinOption_bip44_Subtitle"
+            app:bottomBorder="false"/>
+
+        <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+            android:id="@+id/bip49"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/CoinOption_bip49"
+            app:subtitle="@string/CoinOption_bip49_Subtitle"
+            app:bottomBorder="false"/>
+
+        <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+            android:id="@+id/bip84"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/CoinOption_bip84"
+            app:subtitle="@string/CoinOption_bip84_Subtitle"
+            app:bottomBorder="true"/>
+
+        <TextView
+            android:id="@+id/restoreSourceHeader"
+            style="@style/Subhead1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:paddingBottom="5dp"
+            android:text="@string/CoinOption_SyncModeTitle"
+            android:textAllCaps="true"
+            android:textColor="@color/grey" />
+
+        <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+            android:id="@+id/apiSource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/CoinOption_Fast"
+            app:subtitle="@string/CoinOption_Fast_Subtitle"
+            app:bottomBorder="false"/>
+
+        <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+            android:id="@+id/blockchainSource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/CoinOption_Slow"
+            app:subtitle="@string/CoinOption_Slow_Subtitle"
+            app:bottomBorder="true"/>
+
+        <TextView
+            android:id="@+id/sourceDescription"
+            style="@style/Subhead2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:paddingBottom="48dp"
+            android:textColor="@color/grey"
+            android:text="@string/CoinOption_RestoreSourceDescription" />
+
+    </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -39,9 +119,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:paddingStart="0dp"
-                android:paddingEnd="4dp"
+                android:paddingEnd="1dp"
                 app:layout_collapseMode="pin"
-                tools:title="Bitcoin" />
+                app:title="@string/BlockchainSettings_Title" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

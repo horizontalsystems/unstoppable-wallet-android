@@ -42,7 +42,7 @@
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>
-    <string name="Restore_ChooseCrypto">Choose Crypto</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">Enter Key</string>
     <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
@@ -285,6 +285,7 @@
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
 
     <!--Setting_Currency-->
 
@@ -447,6 +448,10 @@
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
+    <!-- Blockchain Settings -->
+
+    <string name="BlockchainSettings_Title">Settings</string>
+
     <!-- Account Types -->
 
     <string name="AccountType_Unstoppable">Standard</string>
@@ -459,15 +464,13 @@
     <!--Coin Option-->
 
     <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast" translatable="false">Horizontal Systems API</string>
+    <string name="CoinOption_Fast" translatable="false">API</string>
     <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
-    <string name="CoinOption_SyncModeDescription">Select the source the Unstoppable app should use to download your balance and transactions. \n\nHorizontal Systems %1s API:\n%2s</string>
-    <string name="CoinOption_Slow" translatable="false">%s Blockchain</string>
-    <string name="CoinOption_Slow_Subtitle">1–12 hours</string>
-    <string name="CoinOption_BipDescriptionCreate">This setting controls the address format for the Bitcoin in this wallet. We recommend using BIP49 if not sure.</string>
-    <string name="CoinOption_BipDescriptionRestore">Select the address format for the Bitcoin in the wallet you\'re trying to restore.</string>
-    <string name="CoinOption_AddressFormatTitle">Choose address format</string>
-    <string name="CoinOption_SyncModeTitle">Restore Parameters</string>
+    <string name="CoinOption_RestoreSourceDescription" >API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_Slow" translatable="false">Blockchain</string>
+    <string name="CoinOption_Slow_Subtitle">1–24 hours</string>
+    <string name="CoinOption_AddressFormatTitle">Bitcoin address format</string>
+    <string name="CoinOption_SyncModeTitle">Restore Source</string>
     <string name="CoinOption_bip44" translatable="false">Legacy - BIP 44</string>
     <string name="CoinOption_bip49" translatable="false">SegWit - BIP 49</string>
     <string name="CoinOption_bip84" translatable="false">Native SegWit - BIP 84</string>

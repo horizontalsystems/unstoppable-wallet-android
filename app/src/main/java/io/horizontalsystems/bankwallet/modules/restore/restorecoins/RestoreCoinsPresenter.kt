@@ -9,12 +9,13 @@ import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
 class RestoreCoinsPresenter(
         private val presentationMode: PresentationMode,
         private val predefinedAccountType: PredefinedAccountType,
+        private val accountType: AccountType,
         val view: RestoreCoinsModule.IView,
         val router: RestoreCoinsModule.IRouter,
         private val interactor: RestoreCoinsModule.IInteractor
 ) : ViewModel(), RestoreCoinsModule.IViewDelegate {
 
-    private var enabledCoins = mutableMapOf<Coin, CoinSettings>()
+    private var enabledCoins = mutableListOf<Coin>()
 
     override fun onLoad() {
         syncViewItems()
@@ -22,12 +23,8 @@ class RestoreCoinsPresenter(
     }
 
     override fun onEnable(coin: Coin) {
-        val coinSettingsToRequest = interactor.coinSettingsToRequest(coin, AccountOrigin.Restored)
-        if (coinSettingsToRequest.isEmpty()) {
-            enable(coin, mutableMapOf())
-        } else {
-            router.showCoinSettings(coin, coinSettingsToRequest)
-        }
+        enabledCoins.add(coin)
+        syncProceedButton()
     }
 
     override fun onDisable(coin: Coin) {
@@ -37,34 +34,25 @@ class RestoreCoinsPresenter(
 
     override fun onProceedButtonClick() {
         if (enabledCoins.isNotEmpty()) {
-            router.showRestore(predefinedAccountType)
-        }
-    }
+            val account = interactor.account(accountType)
+            interactor.create(account)
 
-    override fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin) {
-        enable(coin, coinSettings)
-    }
+            val wallets = enabledCoins.map {
+                val coinSettings = interactor.getCoinSettings(it.type)
+                Wallet(it, account, coinSettings)
+            }
 
-    override fun onCancelSelectingCoinSettings() {
-        syncViewItems()
-    }
+            interactor.saveWallets(wallets)
 
-    override fun didRestore(accountType: AccountType) {
-        val account = interactor.account(accountType)
-        interactor.create(account)
-
-        val wallets = enabledCoins.map { Wallet(it.key, account, it.value) }
-
-        interactor.saveWallets(wallets)
-
-        when (presentationMode) {
-            PresentationMode.Initial -> router.startMainModule()
-            PresentationMode.InApp -> router.close()
+            when (presentationMode) {
+                PresentationMode.Initial -> router.startMainModule()
+                PresentationMode.InApp -> router.close()
+            }
         }
     }
 
     private fun viewItem(coin: Coin): CoinManageViewItem {
-        val enabled = enabledCoins[coin] != null
+        val enabled = enabledCoins.contains(coin)
         val type = CoinManageViewType.CoinWithSwitch(enabled)
         return CoinManageViewItem(type, CoinViewItem(coin))
     }
@@ -91,11 +79,6 @@ class RestoreCoinsPresenter(
 
     private fun syncProceedButton() {
         view.setProceedButton(enabledCoins.isNotEmpty())
-    }
-
-    private fun enable(coin: Coin, requestedCoinSettings: CoinSettings) {
-        enabledCoins[coin] = interactor.coinSettingsToSave(coin, AccountOrigin.Restored, requestedCoinSettings)
-        syncProceedButton()
     }
 
 }

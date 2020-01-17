@@ -18,6 +18,7 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openSetPinLiveEvent = SingleLiveEvent<Unit>()
     val openUnlockPinLiveEvent = SingleLiveEvent<Unit>()
+    val openBlockchainSettings = SingleLiveEvent<Unit>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
@@ -68,5 +69,9 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun showUnlockPin() {
         openUnlockPinLiveEvent.call()
+    }
+
+    override fun showBlockchainSettings() {
+        openBlockchainSettings.call()
     }
 }

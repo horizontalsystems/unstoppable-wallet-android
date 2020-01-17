@@ -32,11 +32,7 @@ class CreateWalletInteractor(
         return accountCreator.newAccount(predefinedAccountType)
     }
 
-    override fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin): CoinSettings {
-        return coinSettingsManager.coinSettingsToRequest(coin, accountOrigin)
-    }
-
-    override fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings): CoinSettings {
-        return coinSettingsManager.coinSettingsToSave(coin, accountOrigin, requestedCoinSettings)
+    override fun coinSettings(coinType: CoinType): CoinSettings {
+        return coinSettingsManager.coinSettingsForCreate(coinType)
     }
 }

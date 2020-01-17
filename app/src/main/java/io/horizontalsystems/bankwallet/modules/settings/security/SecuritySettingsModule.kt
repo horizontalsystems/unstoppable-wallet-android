@@ -25,6 +25,7 @@ object SecuritySettingsModule {
         fun didUnlockPinToDisablePin()
         fun didCancelUnlockPinToDisablePin()
         fun onClear()
+        fun didTapBlockchainSettings()
     }
 
     interface ISecuritySettingsInteractor {
@@ -46,6 +47,7 @@ object SecuritySettingsModule {
         fun showEditPin()
         fun showSetPin()
         fun showUnlockPin()
+        fun showBlockchainSettings()
     }
 
     fun start(context: Context) {
