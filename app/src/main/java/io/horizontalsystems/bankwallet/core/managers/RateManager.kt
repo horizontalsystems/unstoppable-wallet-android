@@ -104,8 +104,8 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
     private fun converted(coinCode: String): String {
         return when (coinCode) {
             "HOT" -> "HOLO"
-            "SAI",
-            "DAI" -> "SAI-DAI" // invalid code excludes xrates for this coin
+            "PGL",
+            "PPT" -> "SAI-DAI" // invalid code excludes xrates for this coin
             else -> coinCode
         }
 
@@ -114,8 +114,8 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
     private fun unconverted(coinCode: String): String {
         return when (coinCode) {
             "HOLO" -> "HOT"
-            "DAI",
-            "SAI" -> "DAI-SAI" // invalid code excludes xrates for this coin
+            "PGL",
+            "PPT" -> "DAI-SAI" // invalid code excludes xrates for this coin
             else -> coinCode
         }
     }
