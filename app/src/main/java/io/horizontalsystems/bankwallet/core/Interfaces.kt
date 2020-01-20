@@ -113,6 +113,7 @@ interface IWalletStorage {
     fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun wallet(account: Account, coin: Coin): Wallet?
 }
 
 interface IPredefinedAccountTypeManager {
@@ -486,6 +487,11 @@ interface ICoinSettingsManager{
     var bitcoinDerivation: AccountType.Derivation
     fun coinSettingsForCreate(coinType: CoinType) : CoinSettings
     fun coinSettings(coinType: CoinType) : CoinSettings
+}
+
+interface IAccountCleaner{
+    fun clearAccounts(accountIds: List<String>)
+    fun clearAccount(coinType: CoinType, accountId: String)
 }
 
 enum class FeeRatePriority(val value: Int) {

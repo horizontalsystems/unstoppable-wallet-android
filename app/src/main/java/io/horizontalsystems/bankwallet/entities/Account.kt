@@ -60,6 +60,17 @@ open class AccountType : Parcelable {
                 bip84 -> "Native SegWit"
             }
     }
+
+    companion object{
+
+        fun getDerivationTitle(derivation: Derivation): String {
+            return when(derivation) {
+                Derivation.bip44 -> "BIP 44"
+                Derivation.bip49 -> "BIP 49"
+                Derivation.bip84 -> "BIP 84"
+            }
+        }
+    }
 }
 
 @Parcelize

@@ -65,7 +65,7 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
         })
 
         router.showCoinSettingsEvent.observe(this, Observer {
-            CoinSettingsModule.startForResult(this, SettingsMode.Restore)
+            CoinSettingsModule.startForResult(this, SettingsMode.InsideRestore)
         })
 
         router.closeEvent.observe(this, Observer {

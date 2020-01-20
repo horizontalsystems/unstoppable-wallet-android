@@ -451,6 +451,13 @@
     <!-- Blockchain Settings -->
 
     <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
 
     <!-- Account Types -->
 

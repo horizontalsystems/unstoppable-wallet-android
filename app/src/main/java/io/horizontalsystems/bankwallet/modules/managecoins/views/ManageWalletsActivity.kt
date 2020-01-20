@@ -83,7 +83,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         })
 
         router.showCoinSettings.observe(this, Observer {
-            CoinSettingsModule.startForResult(this, SettingsMode.Restore)
+            CoinSettingsModule.startForResult(this, SettingsMode.InsideRestore)
         })
     }
 
