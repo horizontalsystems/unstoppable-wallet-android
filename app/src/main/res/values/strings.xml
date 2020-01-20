@@ -470,7 +470,7 @@
     <string name="CoinOption_SyncModeTitle">Restore Parameters</string>
     <string name="CoinOption_bip44" translatable="false">Legacy - BIP 44</string>
     <string name="CoinOption_bip49" translatable="false">SegWit - BIP 49</string>
-    <string name="CoinOption_bip84" translatable="false">Native Segwit - BIP 84</string>
+    <string name="CoinOption_bip84" translatable="false">Native SegWit - BIP 84</string>
     <string name="CoinOption_bip44_Subtitle">Older (start with 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Popular (start with 3...)</string>
     <string name="CoinOption_bip84_Subtitle">Newest (start with bc1...)</string>
