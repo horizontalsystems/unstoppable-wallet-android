@@ -24,8 +24,7 @@ class WalletManager(private val accountManager: IAccountManager, private val wal
 
     override fun wallet(coin: Coin): Wallet? {
         val account = accountManager.account(coin.type) ?: return null
-
-        return walletFactory.wallet(coin, account, mutableMapOf())
+        return storage.wallet(account, coin)
     }
 
     override fun loadWallets() {

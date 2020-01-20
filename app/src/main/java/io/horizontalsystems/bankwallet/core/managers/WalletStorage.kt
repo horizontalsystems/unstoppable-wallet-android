@@ -17,22 +17,29 @@ class WalletStorage(
 
         val enabledWallets = storage.enabledWallets
         return enabledWallets.map { enabledWallet ->
-            val coin = coins.find { it.coinId == enabledWallet.coinId }
-            val account = accounts.find { it.id == enabledWallet.accountId }
-
-            if (coin != null && account != null) {
-                val coinSetting = mutableMapOf<CoinSetting, String>()
-                enabledWallet.derivation?.let {
-                    coinSetting[CoinSetting.Derivation] = it
-                }
-                enabledWallet.syncMode?.let {
-                    coinSetting[CoinSetting.SyncMode] = it
-                }
-                walletFactory.wallet(coin, account, coinSetting)
-            } else {
-                null
-            }
+            val coin = coins.find { it.coinId == enabledWallet.coinId } ?: return@map null
+            val account = accounts.find { it.id == enabledWallet.accountId } ?: return@map null
+            walletFromEnabledWallet(enabledWallet, coin, account)
         }.mapNotNull { it }
+    }
+
+    override fun wallet(account: Account, coin: Coin): Wallet? {
+        val enabledWallets = storage.enabledWallets
+        enabledWallets.firstOrNull { it.coinId == coin.coinId && it.accountId == account.id }?.let { enabledWallet ->
+            return walletFromEnabledWallet(enabledWallet, coin, account)
+        }
+        return null
+    }
+
+    private fun walletFromEnabledWallet(enabledWallet: EnabledWallet, coin: Coin, account: Account): Wallet {
+        val coinSetting = mutableMapOf<CoinSetting, String>()
+        enabledWallet.derivation?.let {
+            coinSetting[CoinSetting.Derivation] = it
+        }
+        enabledWallet.syncMode?.let {
+            coinSetting[CoinSetting.SyncMode] = it
+        }
+        return walletFactory.wallet(coin, account, coinSetting)
     }
 
     override fun enabledCoins(): List<Coin> {

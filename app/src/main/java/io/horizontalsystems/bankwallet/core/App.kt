@@ -80,6 +80,7 @@ class App : Application() {
         lateinit var appVersionManager: AppVersionManager
         lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
         lateinit var coinSettingsManager: ICoinSettingsManager
+        lateinit var accountCleaner: IAccountCleaner
 
         lateinit var instance: App
             private set
@@ -133,7 +134,8 @@ class App : Application() {
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()
-        accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
+        accountCleaner = AccountCleaner(appConfigProvider.testMode)
+        accountManager = AccountManager(accountsStorage, accountCleaner)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
         accountCreator = AccountCreator(AccountFactory(), wordsManager)
