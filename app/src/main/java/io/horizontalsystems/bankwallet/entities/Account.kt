@@ -51,7 +51,14 @@ open class AccountType : Parcelable {
     enum class Derivation(val value: String) : Parcelable {
         bip44("bip44"),
         bip49("bip49"),
-        bip84("bip84")
+        bip84("bip84");
+
+        val addressType: String
+            get() = when (this) {
+                bip44 -> "Legacy"
+                bip49 -> "SegWit"
+                bip84 -> "Native SegWit"
+            }
     }
 }
 

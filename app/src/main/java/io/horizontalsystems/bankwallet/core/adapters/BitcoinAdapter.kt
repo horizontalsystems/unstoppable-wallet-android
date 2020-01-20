@@ -37,7 +37,7 @@ class BitcoinAdapter(override val kit: BitcoinKit)
         val walletDerivation = wallet.settings[CoinSetting.Derivation]?.let {
             Derivation.valueOf(it)
         }
-        return getBip(walletDerivation).toString()
+        return walletDerivation?.addressType
     }
 
     //
