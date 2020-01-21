@@ -99,7 +99,7 @@ class CoinSettingsActivity : BaseActivity() {
             CoinSettingsAlertDialog.show(
                     title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
                     subtitle = syncModeText,
-                    contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content),
+                    contentText = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content),
                     actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, syncModeText),
                     activity = this,
                     listener = object : CoinSettingsAlertDialog.Listener {
