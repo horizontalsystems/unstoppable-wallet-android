@@ -267,6 +267,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
         if (syncingData.until != null) {
             textSyncedUntil.text = containerView.context.getString(R.string.Balance_SyncedUntil, syncingData.until)
+        } else {
+            textSyncedUntil.text = ""
         }
     }
 
