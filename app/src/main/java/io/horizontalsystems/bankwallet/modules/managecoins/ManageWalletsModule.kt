@@ -30,6 +30,7 @@ object ManageWalletsModule {
 
         fun didRestore(accountType: AccountType)
         fun onClickCancel()
+        fun onCoinSettingsClose()
     }
 
     interface IInteractor {

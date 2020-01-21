@@ -59,9 +59,15 @@ class ManageWalletsPresenter(
         val account = interactor.createRestoredAccount(accountType)
         handleCreated(account)
 
-        if (accountType is AccountType.Mnemonic) {
+        if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
             router.showCoinSettings()
+        } else {
+            view.showSuccess()
         }
+    }
+
+    override fun onCoinSettingsClose() {
+        view.showSuccess()
     }
 
     override fun onClickCancel() {
@@ -110,6 +116,5 @@ class ManageWalletsPresenter(
         interactor.save(account)
 
         syncViewItems()
-        view.showSuccess()
     }
 }

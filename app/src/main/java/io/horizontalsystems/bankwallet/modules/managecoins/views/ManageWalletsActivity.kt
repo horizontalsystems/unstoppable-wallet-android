@@ -114,7 +114,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
 
         when (requestCode) {
             ModuleCode.COIN_SETTINGS -> {
-                //do nothing
+                presenter.onCoinSettingsClose()
             }
             ModuleCode.RESTORE_KEY_INPUT-> {
                 val accountType = data?.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE) ?: return
