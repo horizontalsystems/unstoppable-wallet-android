@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
+import androidx.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.*
@@ -14,9 +14,9 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
+import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
 import io.horizontalsystems.bankwallet.localehelper.LocaleHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
-import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.*
 import java.util.logging.Level
@@ -81,6 +81,7 @@ class App : Application() {
         lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
         lateinit var coinSettingsManager: ICoinSettingsManager
         lateinit var accountCleaner: IAccountCleaner
+        lateinit var rateCoinMapper: RateCoinMapper
 
         lateinit var instance: App
             private set
@@ -159,7 +160,8 @@ class App : Application() {
 
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
-        xRateManager = RateManager(this, walletManager, currencyManager)
+        rateCoinMapper = RateCoinMapper()
+        xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)

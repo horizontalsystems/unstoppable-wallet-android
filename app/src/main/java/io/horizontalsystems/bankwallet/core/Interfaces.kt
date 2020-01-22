@@ -4,6 +4,7 @@ import android.text.SpannableString
 import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
+import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -492,6 +493,17 @@ interface ICoinSettingsManager{
 interface IAccountCleaner{
     fun clearAccounts(accountIds: List<String>)
     fun clearAccount(coinType: CoinType, accountId: String)
+}
+
+interface IRateCoinMapper{
+    var convertedCoinMap: MutableMap<String, String>
+    var unconvertedCoinMap: MutableMap<String, String>
+
+    fun addCoin(direction: RateDirectionMap, from: String, to: String?)
+}
+
+interface IBlockedChartCoins{
+    var blockedCoins: MutableList<String>
 }
 
 enum class FeeRatePriority(val value: Int) {
