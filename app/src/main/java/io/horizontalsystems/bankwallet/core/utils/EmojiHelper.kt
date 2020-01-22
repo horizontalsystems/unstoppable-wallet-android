@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwalval.core.utils
+package io.horizontalsystems.bankwallet.core.utils
 
 import io.horizontalsystems.bankwallet.core.IEmojiHelper
 
