@@ -25,7 +25,7 @@
             android:id="@+id/headerIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
             android:src="@drawable/ic_wallet"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
