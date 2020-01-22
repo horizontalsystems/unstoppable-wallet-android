@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -28,7 +28,7 @@ class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Lis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = ViewModelProviders.of(this, BaseCurrencySettingsModule.Factory()).get(BaseCurrencySettingsPresenter::class.java)
+        presenter = ViewModelProvider(this, BaseCurrencySettingsModule.Factory()).get(BaseCurrencySettingsPresenter::class.java)
         presenterView = presenter.view as BaseCurrencySettingsView
         presenterRouter = presenter.router as BaseCurrencySettingsRouter
 
