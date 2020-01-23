@@ -11,7 +11,7 @@ object TransactionInfoModule {
 
     interface ViewDelegate {
         fun onCopy(value: String)
-        fun openFullInfo(transactionHash: String, coin: Wallet)
+        fun openFullInfo(transactionHash: String, wallet: Wallet)
         fun onClickLockInfo(lockDate: Date)
         fun onClickDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
     }

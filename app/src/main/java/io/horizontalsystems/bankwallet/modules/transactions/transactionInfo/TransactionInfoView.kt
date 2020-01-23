@@ -7,9 +7,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.info.InfoModule
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -134,9 +137,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 }
 
                 itemFee.visibility = View.GONE
-                txRec.feeCoinValue?.let {
-                    App.numberFormatter.format(txRec.feeCoinValue, explicitSign = false, realNumber = true)?.let { fee ->
-                        itemFee.bind(context.getString(R.string.TransactionInfo_Fee), fee)
+                txRec.feeCoinValue?.let {feeCoinValue ->
+                    getFeeText(feeCoinValue, txRec)?.let{ fee->
+                        itemFee.bind(title = context.getString(R.string.TransactionInfo_Fee), value = fee)
                         itemFee.visibility = View.VISIBLE
                     }
                 }
@@ -177,6 +180,13 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 listener?.openTransactionInfo()
             }
         })
+    }
+
+    private fun getFeeText(feeCoinValue: CoinValue, txRec: TransactionViewItem): String? {
+        val coinFee = App.numberFormatter.format(feeCoinValue, explicitSign = false, realNumber = true) ?: return null
+        val rate = txRec.rate ?: return coinFee
+        val fiatFee = App.numberFormatter.format(CurrencyValue(rate.currency, value = rate.value.times(feeCoinValue.value))) ?: return coinFee
+        return "$coinFee | $fiatFee"
     }
 
 }
