@@ -197,6 +197,8 @@ dependencies {
     testImplementation "org.spekframework.spek2:spek-dsl-jvm:2.0.6"
     testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:2.0.6"
     testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    implementation project(':uikit')
 }
 
 configurations.all {
