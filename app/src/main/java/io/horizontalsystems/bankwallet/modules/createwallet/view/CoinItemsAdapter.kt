@@ -91,7 +91,7 @@ class CoinItemWithSwitchViewHolder(
         val viewItem = item.coinViewItem ?: return
         val coin = viewItem.coin
 
-        coinIcon.bind(coin)
+        coinIcon.bind(coin.code)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
@@ -121,7 +121,7 @@ class CoinItemWithArrowViewHolder(
         val coin = viewItem.coin
 
         rightArrow.visibility = View.VISIBLE
-        coinIcon.bind(coin)
+        coinIcon.bind(coin.code)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.typeLabel()

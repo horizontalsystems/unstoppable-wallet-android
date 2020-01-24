@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.uikit.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import io.horizontalsystems.bankwallet.viewHelpers.showIf
 import kotlinx.android.extensions.LayoutContainer

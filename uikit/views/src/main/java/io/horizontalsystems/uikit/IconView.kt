@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.uikit
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -6,9 +6,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_icon.view.*
 
 class IconView : ConstraintLayout {
@@ -27,13 +24,8 @@ class IconView : ConstraintLayout {
         dynamicIcon.setImageDrawable(drawable)
     }
 
-    fun bind(coin: Coin) {
-        dynamicIcon.setImageResource(LayoutHelper.getCoinDrawableResource(coin.code))
-        tintWithGreyColor()
-    }
-
     fun bind(coinCode: String) {
-        dynamicIcon.setImageResource(LayoutHelper.getCoinDrawableResource(coinCode))
+        dynamicIcon.setImageResource(LayoutHelper.getCoinDrawableResource(context, coinCode))
         tintWithGreyColor()
     }
 

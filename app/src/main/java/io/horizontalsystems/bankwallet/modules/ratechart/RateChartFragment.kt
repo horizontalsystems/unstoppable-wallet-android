@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.uikit.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal
@@ -31,7 +31,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         setContentView(R.layout.view_bottom_sheet_chart)
 
         setTitle(getString(R.string.Charts_Title, coin.title))
-        setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
+        context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, coin.code)) }
 
         chartView.listener = this
         chartView.setIndicator(chartViewIndicator)

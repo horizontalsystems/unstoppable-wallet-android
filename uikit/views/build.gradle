@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+androidExtensions { experimental = true }
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -14,9 +16,11 @@ android {
 
         consumerProguardFiles 'consumer-rules.pro'
     }
+
     signingConfigs {
         hockeyApp {}
     }
+
     buildTypes {
         debug {
             debuggable true
@@ -38,6 +42,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0-alpha01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.core:core-ktx:1.1.0'
 }

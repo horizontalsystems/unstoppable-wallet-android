@@ -38,15 +38,6 @@
         <attr name="partialChartColor" format="color" />
         <attr name="indicatorColor" format="color" />
     </declare-styleable>
-    <declare-styleable name="CellView">
-        <attr name="title" />
-        <attr name="subtitle" />
-        <attr name="rightTitle" format="string" />
-        <attr name="bottomBorder" />
-        <attr name="rightArrow" format="boolean" />
-        <attr name="imageDrawable" format="integer" />
-        <attr name="imageTint" format="integer" />
-    </declare-styleable>
     <declare-styleable name="RateDiffView">
         <attr name="negativeColor" format="color" />
         <attr name="positiveColor" format="color" />

@@ -1,16 +1,15 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.uikit
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_manage_account_button.view.*
+import kotlinx.android.synthetic.main.view_manage_account_view.view.*
 
-class ManageAccountButton: LinearLayout {
+class ManageAccountView: LinearLayout {
 
     init {
-        inflate(context, R.layout.view_manage_account_button, this)
+        inflate(context, R.layout.view_manage_account_view, this)
     }
 
     constructor(context: Context) : super(context)
@@ -20,8 +19,8 @@ class ManageAccountButton: LinearLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 
-    fun bind(title: String, type: AccountButtonItemType, showAttentionIcon: Boolean = false, onClick: () -> Unit){
-        when(type){
+    fun bind(title: String, type: AccountButtonItemType, showAttentionIcon: Boolean = false, onClick: () -> Unit) {
+        when (type) {
             AccountButtonItemType.SimpleButton -> {
                 rightArrow.visibility = View.VISIBLE
                 redTitle.visibility = View.GONE
