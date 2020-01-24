@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="app_bar_height_tall">100dp</dimen>
+</resources>
+
