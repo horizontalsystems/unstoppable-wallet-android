@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
 import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
@@ -102,7 +102,7 @@ class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHo
     fun bind(item: CurrencyViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-        image.setImageResource(LayoutHelper.getCurrencyDrawableResource(item.code.toLowerCase()))
+        image.setImageResource(LayoutHelper.getCurrencyDrawableResource(containerView.context, item.code.toLowerCase()))
         title.text = item.code
         subtitle.text = item.symbol
         checkmarkIcon.visibility = if (item.selected) View.VISIBLE else View.GONE

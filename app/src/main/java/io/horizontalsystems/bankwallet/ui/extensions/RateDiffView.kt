@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.uikit.LayoutHelper
 import java.math.BigDecimal
 import java.math.RoundingMode
 

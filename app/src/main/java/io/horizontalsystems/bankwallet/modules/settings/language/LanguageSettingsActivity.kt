@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_language_settings.*
 import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
@@ -37,7 +37,7 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsLanguage_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
-                )
+        )
 
         adapter = LanguageSettingsAdapter(this)
         recyclerView.adapter = adapter
@@ -105,7 +105,7 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
     fun bind(item: LanguageViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-        image.setImageResource(LayoutHelper.getLangDrawableResource(item.language))
+        image.setImageResource(LayoutHelper.getLangDrawableResource(containerView.context, item.language))
         title.text = item.nativeName
         subtitle.text = item.name
         checkmarkIcon.visibility = if (item.current) View.VISIBLE else View.GONE

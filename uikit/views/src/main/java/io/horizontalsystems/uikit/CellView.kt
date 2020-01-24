@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.components
+package io.horizontalsystems.uikit
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -8,9 +8,6 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import io.horizontalsystems.bankwallet.viewHelpers.showIf
 import kotlinx.android.synthetic.main.view_cell.view.*
 
 class CellView : ConstraintLayout {

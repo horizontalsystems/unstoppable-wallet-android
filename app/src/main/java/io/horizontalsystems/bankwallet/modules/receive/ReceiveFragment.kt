@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_receive.*
 
 class ReceiveFragment(
@@ -27,7 +27,7 @@ class ReceiveFragment(
 
         setTitle(activity?.getString(R.string.Deposit_Title, wallet.coin.code))
         setSubtitle(wallet.coin.title)
-        setHeaderIcon(LayoutHelper.getCoinDrawableResource(wallet.coin.code))
+        context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, wallet.coin.code)) }
 
         val presenter = ViewModelProviders.of(this, ReceiveModule.Factory(wallet)).get(ReceivePresenter::class.java)
         observeView(presenter.view as ReceiveView)

@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IClipboardManager
+import io.horizontalsystems.uikit.LayoutHelper
 
 
 object TextHelper : IClipboardManager {

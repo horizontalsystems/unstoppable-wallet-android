@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CellView">
+        <attr name="title" />
+        <attr name="subtitle" />
+        <attr name="rightTitle" format="string" />
+        <attr name="bottomBorder" />
+        <attr name="rightArrow" format="boolean" />
+        <attr name="imageDrawable" format="integer" />
+        <attr name="imageTint" format="integer" />
+    </declare-styleable>
+</resources>

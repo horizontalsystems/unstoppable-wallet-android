@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
-import io.horizontalsystems.bankwallet.ui.extensions.AccountButtonItemType
+import io.horizontalsystems.uikit.AccountButtonItemType
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_account.*

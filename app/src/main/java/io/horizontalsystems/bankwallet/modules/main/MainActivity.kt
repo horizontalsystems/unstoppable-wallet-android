@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.uikit.LayoutHelper
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.main_activity_view_pager_layout.*

@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.bankwallet.components.CellView
+            <io.horizontalsystems.uikit.CellView
                 android:id="@+id/manageKeys"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 app:rightArrow="true"
                 app:title="@string/SettingsSecurity_ManageKeys" />
 
-            <io.horizontalsystems.bankwallet.components.CellView
+            <io.horizontalsystems.uikit.CellView
                 android:id="@+id/blockchainSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 app:rightArrow="true"
                 app:title="@string/SettingsSecurity_BlockchainSettings" />
 
-            <io.horizontalsystems.bankwallet.components.CellView
+            <io.horizontalsystems.uikit.CellView
                 android:id="@+id/enablePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/blockchainSettings"
                 app:title="@string/SettingsSecurity_EnablePin" />
 
-            <io.horizontalsystems.bankwallet.components.CellView
+            <io.horizontalsystems.uikit.CellView
                 android:id="@+id/changePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 app:rightArrow="true"
                 app:title="@string/SettingsSecurity_EditPin" />
 
-            <io.horizontalsystems.bankwallet.components.CellView
+            <io.horizontalsystems.uikit.CellView
                 android:id="@+id/fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
