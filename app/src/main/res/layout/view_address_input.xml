@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,27 +13,25 @@
         android:layout_height="0dp"
         android:background="@drawable/input_background_themed"
         android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/addressInputWrapper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:paddingEnd="6dp"
-        android:paddingStart="12dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/background"
-        >
+        app:layout_constraintTop_toTopOf="@+id/background">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -42,19 +39,7 @@
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            >
-
-            <TextView
-                android:id="@+id/txtAddressText"
-                style="@style/Body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:hint="@string/Send_Hint_Address"
-                android:singleLine="true"
-                android:textColor="?TextColorBarsToDark"
-                android:textColorHint="@color/grey_50" />
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/txtAddressInput"
@@ -68,8 +53,7 @@
                 android:paddingBottom="4dp"
                 android:singleLine="false"
                 android:textColor="?attr/TextColorBarsToDark"
-                android:textColorHint="@color/grey_50"
-                android:visibility="gone" />
+                android:textColorHint="@color/grey_50" />
 
             <TextView
                 android:id="@+id/txtAddressError"
@@ -89,8 +73,7 @@
             android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_scan_qr_copy"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btnPaste"
@@ -98,8 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:text="@string/Send_Button_Paste"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/btnDeleteAddress"
@@ -107,8 +89,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_delete"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
