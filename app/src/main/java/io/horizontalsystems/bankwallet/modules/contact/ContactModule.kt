@@ -10,20 +10,23 @@ import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 object ContactModule {
     interface IView {
         fun setEmail(email: String)
-        fun setTelegramGroup(group: String)
+        fun setWalletHelpTelegramGroup(group: String)
+        fun setDevelopersTelegramGroup(group: String)
         fun showCopied()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun didTapEmail()
-        fun didTapTelegram()
+        fun didTapWalletHelpTelegram()
+        fun didTapDevelopersTelegram()
         fun didTapAppStatus()
     }
 
     interface IInteractor {
         val email: String
-        val telegramGroup: String
+        val walletHelpTelegramGroup: String
+        val developersTelegramGroup: String
         fun copyToClipboard(value: String)
     }
 

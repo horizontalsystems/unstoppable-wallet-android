@@ -9,7 +9,8 @@ class ContactInteractor(
 ) : ContactModule.IInteractor {
 
     override val email get() = appConfigProvider.reportEmail
-    override val telegramGroup get() = appConfigProvider.telegramGroupForWalletHelp
+    override val walletHelpTelegramGroup get() = appConfigProvider.walletHelpTelegramGroup
+    override val developersTelegramGroup get() = appConfigProvider.developersTelegramGroup
 
     override fun copyToClipboard(value: String) {
         clipboardManager.copyText(value)

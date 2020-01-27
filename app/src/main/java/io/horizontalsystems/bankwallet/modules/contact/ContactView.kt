@@ -5,15 +5,20 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 
 class ContactView : ContactModule.IView {
     val emailLiveData = MutableLiveData<String>()
-    val telegramGroupLiveData = MutableLiveData<String>()
+    val walletHelpTelegramGroupLiveData = MutableLiveData<String>()
+    val developersTelegramGroupLiveData = MutableLiveData<String>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
 
     override fun setEmail(email: String) {
         emailLiveData.postValue(email)
     }
 
-    override fun setTelegramGroup(group: String) {
-        telegramGroupLiveData.postValue(group)
+    override fun setWalletHelpTelegramGroup(group: String) {
+        walletHelpTelegramGroupLiveData.postValue(group)
+    }
+
+    override fun setDevelopersTelegramGroup(group: String) {
+        developersTelegramGroupLiveData.postValue(group)
     }
 
     override fun showCopied() {
