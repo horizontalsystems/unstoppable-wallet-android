@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.reportproblem
+package io.horizontalsystems.bankwallet.modules.contact
 
 import android.content.Intent
 import android.net.Uri
@@ -8,23 +8,23 @@ import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.reportproblem.appstatus.AppStatusModule
+import io.horizontalsystems.bankwallet.modules.contact.appstatus.AppStatusModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
-import kotlinx.android.synthetic.main.activity_report_problem.*
+import kotlinx.android.synthetic.main.activity_contact.*
 
-class ReportProblemActivity : BaseActivity() {
+class ContactActivity : BaseActivity() {
 
-    lateinit var presenter: ReportProblemPresenter
+    lateinit var presenter: ContactPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_report_problem)
+        setContentView(R.layout.activity_contact)
 
-        presenter = ViewModelProviders.of(this, ReportProblemModule.Factory()).get(ReportProblemPresenter::class.java)
-        val presenterView = presenter.view as ReportProblemView
-        val router = presenter.router as ReportProblemRouter
+        presenter = ViewModelProviders.of(this, ContactModule.Factory()).get(ContactPresenter::class.java)
+        val presenterView = presenter.view as ContactView
+        val router = presenter.router as ContactRouter
 
         presenterView.emailLiveData.observe(this, Observer {
             mail.subtitle = it

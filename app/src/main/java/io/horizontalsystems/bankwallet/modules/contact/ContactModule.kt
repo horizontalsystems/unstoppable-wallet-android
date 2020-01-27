@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.reportproblem
+package io.horizontalsystems.bankwallet.modules.contact
 
 import android.app.Activity
 import android.content.Intent
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
-object ReportProblemModule {
+object ContactModule {
     interface IView {
         fun setEmail(email: String)
         fun setTelegramGroup(group: String)
@@ -39,17 +39,17 @@ object ReportProblemModule {
 
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = ReportProblemView()
-            val router = ReportProblemRouter()
-            val interactor = ReportProblemInteractor(App.appConfigProvider, TextHelper)
-            val presenter = ReportProblemPresenter(view, router, interactor)
+            val view = ContactView()
+            val router = ContactRouter()
+            val interactor = ContactInteractor(App.appConfigProvider, TextHelper)
+            val presenter = ContactPresenter(view, router, interactor)
 
             return presenter as T
         }
     }
 
     fun start(context: Activity) {
-        val intent = Intent(context, ReportProblemActivity::class.java)
+        val intent = Intent(context, ContactActivity::class.java)
         context.startActivity(intent)
     }
 }

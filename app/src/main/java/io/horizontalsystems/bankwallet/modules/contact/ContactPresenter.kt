@@ -1,12 +1,12 @@
-package io.horizontalsystems.bankwallet.modules.reportproblem
+package io.horizontalsystems.bankwallet.modules.contact
 
 import androidx.lifecycle.ViewModel
 
-class ReportProblemPresenter(
-        val view: ReportProblemModule.IView,
-        val router: ReportProblemModule.IRouter,
-        private val interactor: ReportProblemModule.IInteractor
-) : ViewModel(), ReportProblemModule.IViewDelegate, ReportProblemModule.IRouterDelegate {
+class ContactPresenter(
+        val view: ContactModule.IView,
+        val router: ContactModule.IRouter,
+        private val interactor: ContactModule.IInteractor
+) : ViewModel(), ContactModule.IViewDelegate, ContactModule.IRouterDelegate {
 
     override fun viewDidLoad() {
         view.setEmail(interactor.email)

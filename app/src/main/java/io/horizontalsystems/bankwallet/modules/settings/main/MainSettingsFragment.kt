@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
-import io.horizontalsystems.bankwallet.modules.reportproblem.ReportProblemModule
+import io.horizontalsystems.bankwallet.modules.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
@@ -137,7 +137,7 @@ class MainSettingsFragment : Fragment() {
 
         router.showReportProblemLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
-                ReportProblemModule.start(it)
+                ContactModule.start(it)
             }
         })
 

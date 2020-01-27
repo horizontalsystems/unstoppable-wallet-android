@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.reportproblem
+package io.horizontalsystems.bankwallet.modules.contact
 
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class ReportProblemRouter : ReportProblemModule.IRouter {
+class ContactRouter : ContactModule.IRouter {
     val sendEmailLiveEvent = SingleLiveEvent<String>()
     val openTelegramGroupEvent = SingleLiveEvent<String>()
     val openAppStatusLiveEvent = SingleLiveEvent<Unit>()

@@ -74,7 +74,7 @@
             android:name=".modules.notifications.NotificationsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.reportproblem.ReportProblemActivity"
+            android:name=".modules.contact.ContactActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.lockscreen.LockScreenActivity"
@@ -107,7 +107,7 @@
             android:name=".modules.backup.eos.BackupEosActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.reportproblem.appstatus.AppStatusActivity"
+            android:name=".modules.contact.appstatus.AppStatusActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.settings.experimental.ExperimentalFeaturesActivity"
