@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.reportproblem
+package io.horizontalsystems.bankwallet.modules.contact
 
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class ReportProblemView : ReportProblemModule.IView {
+class ContactView : ContactModule.IView {
     val emailLiveData = MutableLiveData<String>()
     val telegramGroupLiveData = MutableLiveData<String>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()

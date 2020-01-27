@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.reportproblem.appstatus
+package io.horizontalsystems.bankwallet.modules.contact.appstatus
 
 import androidx.lifecycle.ViewModel
 
