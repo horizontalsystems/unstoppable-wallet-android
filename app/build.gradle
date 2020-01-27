@@ -199,6 +199,7 @@ dependencies {
     testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     implementation project(':uikit:views')
+    implementation project(':uikit:translations')
 }
 
 configurations.all {
