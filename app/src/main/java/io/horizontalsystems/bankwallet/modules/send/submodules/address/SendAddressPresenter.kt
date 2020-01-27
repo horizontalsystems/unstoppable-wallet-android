@@ -11,6 +11,10 @@ class SendAddressPresenter(
     var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
 
     private var enteredAddress: String? = null
+        set(value) {
+            field = value
+            view.setAddress(field)
+        }
 
     override val currentAddress: String?
         get() = try {
@@ -25,10 +29,8 @@ class SendAddressPresenter(
         try {
             moduleDelegate?.validate(address)
 
-            view.setAddress(address)
             view.setAddressError(null)
         } catch (e: Exception) {
-            view.setAddress(address)
             view.setAddressError(e)
             throw e
         }
@@ -43,7 +45,6 @@ class SendAddressPresenter(
     // SendAddressModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        updatePasteButtonState()
         view.setAddressInputAsEditable(editable)
     }
 
@@ -63,7 +64,6 @@ class SendAddressPresenter(
 
         enteredAddress = null
         moduleDelegate?.onUpdateAddress()
-        updatePasteButtonState()
     }
 
     private fun onAddressEnter(address: String) {
@@ -87,17 +87,11 @@ class SendAddressPresenter(
         enteredAddress = addressText
 
         try {
-            moduleDelegate?.validate(addressText)
-            view.setAddressError(null)
+            validAddress()
         } catch (e: Exception) {
-            view.setAddressError(e)
         }
 
         moduleDelegate?.onUpdateAddress()
-    }
-
-    private fun updatePasteButtonState() {
-        view.setPasteButtonState(interactor.clipboardHasPrimaryClip)
     }
 
 }

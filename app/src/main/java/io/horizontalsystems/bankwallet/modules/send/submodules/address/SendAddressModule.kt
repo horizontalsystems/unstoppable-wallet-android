@@ -13,7 +13,6 @@ object SendAddressModule {
     interface IView {
         fun setAddress(address: String?)
         fun setAddressError(error: Exception?)
-        fun setPasteButtonState(enabled: Boolean)
         fun setAddressInputAsEditable(editable: Boolean)
     }
 
@@ -27,7 +26,6 @@ object SendAddressModule {
 
     interface IInteractor {
         val addressFromClipboard: String?
-        val clipboardHasPrimaryClip: Boolean
 
         fun parseAddress(address: String): Pair<String, BigDecimal?>
     }

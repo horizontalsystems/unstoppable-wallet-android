@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.hodler.HodlerPlugin
 import kotlinx.android.synthetic.main.view_address_input.*
+import java.util.*
 
 class SendAddressFragment(
         private val coin: Coin,
@@ -23,6 +24,27 @@ class SendAddressFragment(
 ) : SendSubmoduleFragment() {
 
     private lateinit var presenter: SendAddressPresenter
+
+    private val addressChangeListener = object : TextWatcher {
+        private var timer = Timer()
+        private val DELAY: Long = 500 // milliseconds
+
+        override fun afterTextChanged(s: Editable?) {
+            timer.cancel()
+            timer = Timer()
+            timer.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            presenter.onManualAddressEnter(s?.toString() ?: "")
+                        }
+                    },
+                    DELAY
+            )
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.view_address_input, container, false)
@@ -45,21 +67,13 @@ class SendAddressFragment(
         btnPaste?.setOnClickListener { presenter.onAddressPasteClicked() }
         btnDeleteAddress?.setOnClickListener { presenter.onAddressDeleteClicked() }
 
-        txtAddressInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                presenter.onManualAddressEnter(s?.toString() ?: "")
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
-        })
+        addAddressChangeListener()
 
         presenterView.addressText.observe(viewLifecycleOwner, Observer { address ->
-            if (editable) {
-                txtAddressInput.setText(address)
-            } else {
-                txtAddressText.text = address
-            }
+            removeAddressChangeListener()
+            txtAddressInput.setText(address)
+            txtAddressInput.setSelection(txtAddressInput.text.count())
+            addAddressChangeListener()
 
             val empty = address?.isEmpty() ?: true
             btnBarcodeScan.visibility = if (empty) View.VISIBLE else View.GONE
@@ -80,21 +94,21 @@ class SendAddressFragment(
             }
         })
 
-        presenterView.pasteButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            btnPaste.isEnabled = enabled
-        })
-
         presenterView.addressInputEditable.observe(viewLifecycleOwner, Observer { editable ->
-            txtAddressInput.showIf(editable)
-            txtAddressText.showIf(!editable)
+            txtAddressInput.focusable = if (editable) View.FOCUSABLE else View.NOT_FOCUSABLE
         })
+    }
+
+    private fun addAddressChangeListener() {
+        txtAddressInput.addTextChangedListener(addressChangeListener)
+    }
+
+    private fun removeAddressChangeListener() {
+        txtAddressInput.removeTextChangedListener(addressChangeListener)
     }
 
     override fun init() {
         presenter.onViewDidLoad()
     }
 
-    private fun View.showIf(condition: Boolean, hideType: Int = View.GONE) {
-        visibility = if (condition) View.VISIBLE else hideType
-    }
 }
