@@ -4,5 +4,4 @@
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:src="@drawable/coin_btc"
-    android:tint="?ColorJacob"
-    android:contentDescription="@string/SettingsReport_Telegram" />
+    android:tint="?ColorJacob" />

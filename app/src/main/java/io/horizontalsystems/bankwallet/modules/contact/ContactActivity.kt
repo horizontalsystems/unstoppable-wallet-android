@@ -30,8 +30,12 @@ class ContactActivity : BaseActivity() {
             mail.subtitle = it
         })
 
-        presenterView.telegramGroupLiveData.observe(this, Observer {
-            telegram.subtitle = it
+        presenterView.walletHelpTelegramGroupLiveData.observe(this, Observer {
+            walletHelpTelegramGroup.subtitle = it
+        })
+
+        presenterView.developersTelegramGroupLiveData.observe(this, Observer {
+            developersTelegramGroup.subtitle = it
         })
 
         presenterView.showCopiedLiveEvent.observe(this, Observer {
@@ -51,7 +55,7 @@ class ContactActivity : BaseActivity() {
         })
 
         shadowlessToolbar.bind(
-                title = getString(R.string.SettingsReport_Title),
+                title = getString(R.string.SettingsContact_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back) { onBackPressed() }
         )
 
@@ -59,8 +63,12 @@ class ContactActivity : BaseActivity() {
             presenter.didTapEmail()
         }
 
-        telegram.setOnSingleClickListener {
-            presenter.didTapTelegram()
+        walletHelpTelegramGroup.setOnSingleClickListener {
+            presenter.didTapWalletHelpTelegram()
+        }
+
+        developersTelegramGroup.setOnSingleClickListener {
+            presenter.didTapDevelopersTelegram()
         }
 
         appStatus.setOnSingleClickListener {

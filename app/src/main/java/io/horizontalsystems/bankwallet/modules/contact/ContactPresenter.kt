@@ -10,15 +10,20 @@ class ContactPresenter(
 
     override fun viewDidLoad() {
         view.setEmail(interactor.email)
-        view.setTelegramGroup("@" + interactor.telegramGroup)
+        view.setWalletHelpTelegramGroup("@${interactor.walletHelpTelegramGroup}")
+        view.setDevelopersTelegramGroup("@${interactor.developersTelegramGroup}")
     }
 
     override fun didTapEmail() {
         router.openSendMail(interactor.email)
     }
 
-    override fun didTapTelegram() {
-        router.openTelegram(interactor.telegramGroup)
+    override fun didTapWalletHelpTelegram() {
+        router.openTelegram(interactor.walletHelpTelegramGroup)
+    }
+
+    override fun didTapDevelopersTelegram() {
+        router.openTelegram(interactor.developersTelegramGroup)
     }
 
     override fun didTapAppStatus() {
