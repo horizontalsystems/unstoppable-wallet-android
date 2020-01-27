@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.dialogs
+package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
 import android.os.Bundle
 import android.view.View
@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.view_holder_confirmation.*
 class ManageKeysDeleteAlert(
         private val listener: Listener,
         private val checkboxItems: List<CheckBoxItem>,
-        private val subtitle: String
-) : BaseBottomSheetDialogFragment(), ConfirmationsAdapter.Listener {
+        private val subtitle: String)
+    : BaseBottomSheetDialogFragment(), ConfirmationsAdapter.Listener {
 
     interface Listener {
         fun onConfirmationSuccess()

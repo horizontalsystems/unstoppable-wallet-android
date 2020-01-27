@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
+            <io.horizontalsystems.uikit.MultipleInputEditTextView
                 android:id="@+id/eosAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
                 app:inputHint="@string/Restore_EosAccountName"
                 app:inputMaxLines="2" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
+            <io.horizontalsystems.uikit.MultipleInputEditTextView
                 android:id="@+id/eosActivePrivateKey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

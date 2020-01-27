@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.dialogs
+package io.horizontalsystems.bankwallet.modules.coinsettings
 
 import android.os.Bundle
 import android.view.View

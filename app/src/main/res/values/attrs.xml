@@ -17,12 +17,6 @@
         <attr name="infoValue" format="string" />
         <attr name="infoValueIcon" format="integer" />
     </declare-styleable>
-    <declare-styleable name="MultipleInputEditTextView">
-        <attr name="inputFromQRCode" format="boolean" />
-        <attr name="inputFromClipboard" format="boolean" />
-        <attr name="inputHint" format="string" />
-        <attr name="inputMaxLines" format="integer" />
-    </declare-styleable>
     <declare-styleable name="ChartView">
         <attr name="showGrid" format="boolean" />
         <attr name="width" format="dimension" />

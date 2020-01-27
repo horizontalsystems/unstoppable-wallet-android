@@ -11,9 +11,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.ui.dialogs.CoinSettingsAlertDialog
 import kotlinx.android.synthetic.main.activity_coin_settings.*
-
 
 class CoinSettingsActivity : BaseActivity() {
 

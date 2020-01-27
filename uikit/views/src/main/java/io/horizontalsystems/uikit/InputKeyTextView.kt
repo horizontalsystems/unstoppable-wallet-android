@@ -1,9 +1,8 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.uikit
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_key_input.view.*
 
 class InputKeyTextView : ConstraintLayout {
@@ -13,9 +12,7 @@ class InputKeyTextView : ConstraintLayout {
     }
 
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     var text: String

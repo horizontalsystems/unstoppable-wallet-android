@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinRouter
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.uikit.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_pin.*
 import java.util.concurrent.Executor
 

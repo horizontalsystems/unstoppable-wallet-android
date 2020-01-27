@@ -6,7 +6,7 @@
                                                    app:layout_constraintStart_toStartOf="parent"
                                                    app:layout_constraintTop_toTopOf="parent">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+    <io.horizontalsystems.uikit.ShadowlessToolbarView
         android:id="@+id/shadowlessToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

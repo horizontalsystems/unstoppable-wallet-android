@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsPresente
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsRouter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsView
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.ui.dialogs.ManageWalletsDialog
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 

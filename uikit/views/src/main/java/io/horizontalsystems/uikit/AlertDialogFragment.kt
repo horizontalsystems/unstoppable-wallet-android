@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.dialogs
+package io.horizontalsystems.uikit
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,15 +7,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import io.horizontalsystems.bankwallet.R
 
 class AlertDialogFragment(
         private var title: String? = null,
         private var description: String? = null,
         private var buttonText: Int,
         private var canCancel: Boolean,
-        private var listener: Listener? = null
-) : DialogFragment() {
+        private var listener: Listener? = null)
+    : DialogFragment() {
 
     interface Listener {
         fun onButtonClick()

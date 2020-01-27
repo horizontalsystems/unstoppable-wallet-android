@@ -10,10 +10,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.uikit.CellView
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.bankwallet.ui.dialogs.PriceAlertStateSelectorDialog
+import io.horizontalsystems.uikit.CellView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_alerts.*
 

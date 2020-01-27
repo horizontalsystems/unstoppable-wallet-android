@@ -18,9 +18,7 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.modules.restore.restorecoins.RestoreCoinsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
-import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDeleteAlert
-import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
-import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog.ManageAction
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog.ManageAction
 import kotlinx.android.synthetic.main.activity_manage_keys.*
 
 class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeysAdapter.Listener {
