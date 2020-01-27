@@ -200,6 +200,7 @@ dependencies {
 
     implementation project(':uikit:views')
     implementation project(':uikit:translations')
+    implementation project(':uikit:icons')
 }
 
 configurations.all {
