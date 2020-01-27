@@ -1,4 +1,5 @@
 include ':app'
 
 include ':uikit:views'
+include ':uikit:icons'
 include ':uikit:translations'
