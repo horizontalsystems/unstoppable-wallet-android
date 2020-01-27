@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+    <io.horizontalsystems.uikit.ShadowlessToolbarView
         android:id="@+id/shadowlessToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.InputKeyTextView
+            <io.horizontalsystems.uikit.InputKeyTextView
                 android:id="@+id/eosAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eosAccount" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.InputKeyTextView
+            <io.horizontalsystems.uikit.InputKeyTextView
                 android:id="@+id/eosActivePrivateKey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

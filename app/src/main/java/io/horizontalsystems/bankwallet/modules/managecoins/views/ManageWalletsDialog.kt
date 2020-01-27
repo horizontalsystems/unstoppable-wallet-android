@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.dialogs
+package io.horizontalsystems.bankwallet.modules.managecoins.views
 
 import android.content.DialogInterface
 import android.os.Bundle

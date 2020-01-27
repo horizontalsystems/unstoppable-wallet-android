@@ -1,1 +1,5 @@
-<manifest package="io.horizontalsystems.uikit" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.horizontalsystems.uikit">
+
+    <application android:theme="@style/DarkModeAppTheme" />
+</manifest>

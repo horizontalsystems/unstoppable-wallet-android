@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.uikit
 
 import android.content.Context
 import android.text.Editable
@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_multiple_input_edit_text.view.*
 
 class MultipleInputEditTextView : ConstraintLayout {
@@ -26,7 +25,6 @@ class MultipleInputEditTextView : ConstraintLayout {
     private var listener: Listener? = null
 
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         loadAttributes(attrs)
     }
@@ -102,5 +100,4 @@ class MultipleInputEditTextView : ConstraintLayout {
 
         txtInput.maxLines = attrInputMaxLines
     }
-
 }

@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
+import io.horizontalsystems.uikit.AlertDialogFragment
 import java.util.logging.Logger
 
 abstract class BaseActivity : AppCompatActivity() {

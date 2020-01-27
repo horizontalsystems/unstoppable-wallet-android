@@ -9,4 +9,10 @@
         <attr name="imageDrawable" format="integer" />
         <attr name="imageTint" format="integer" />
     </declare-styleable>
+    <declare-styleable name="MultipleInputEditTextView">
+        <attr name="inputFromQRCode" format="boolean" />
+        <attr name="inputFromClipboard" format="boolean" />
+        <attr name="inputHint" format="string" />
+        <attr name="inputMaxLines" format="integer" />
+    </declare-styleable>
 </resources>

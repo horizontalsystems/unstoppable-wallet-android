@@ -1,10 +1,9 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.uikit
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_shadowless_toolbar.view.*
 
 class ShadowlessToolbarView : ConstraintLayout {
@@ -14,11 +13,8 @@ class ShadowlessToolbarView : ConstraintLayout {
     }
 
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     fun bind(title: String?, leftBtnItem: TopMenuItem? = null, rightBtnItem: TopMenuItem? = null) {
         title?.let { toolbarTitle.text = it }
@@ -30,7 +26,7 @@ class ShadowlessToolbarView : ConstraintLayout {
                 rightImageButton.setImageResource(imageRes)
                 rightImageButton.visibility = View.VISIBLE
                 rightItem.onClick?.let { click -> rightImageButton?.setOnClickListener { click.invoke() } }
-            } ?:run {
+            } ?: run {
                 rightItem.text?.let { textRes ->
                     rightTextButton.visibility = View.VISIBLE
                     rightTextButton.setText(textRes)
@@ -49,7 +45,7 @@ class ShadowlessToolbarView : ConstraintLayout {
                 leftImageButton.setImageResource(it)
                 leftImageButton.visibility = View.VISIBLE
                 leftItem.onClick?.let { click -> leftImageButton?.setOnClickListener { click.invoke() } }
-            } ?:run {
+            } ?: run {
                 leftItem.text?.let {
                     leftTextButton.visibility = View.VISIBLE
                     leftTextButton.setText(it)

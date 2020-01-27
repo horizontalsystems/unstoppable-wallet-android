@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.uikit.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
 import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer

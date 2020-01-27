@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.uikit.TopMenuItem
 import kotlinx.android.synthetic.main.activity_about_settings.*
 
 class AboutSettingsActivity: BaseActivity() {

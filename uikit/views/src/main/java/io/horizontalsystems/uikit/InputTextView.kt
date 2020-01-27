@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.uikit
 
 import android.content.Context
 import android.text.Editable
@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_text_input.view.*
 
 class InputTextView : ConstraintLayout {
@@ -16,11 +15,8 @@ class InputTextView : ConstraintLayout {
     }
 
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     fun bindPrefix(prefix: String) {
         txtPrefix.text = prefix
@@ -63,5 +59,4 @@ class InputTextView : ConstraintLayout {
     private fun goToNext() {
         inputEditText.onEditorAction(EditorInfo.IME_ACTION_NEXT)
     }
-
 }
