@@ -22,7 +22,7 @@ class SendAmountView : SendAmountModule.IView {
     }
 
     override fun setAmount(amount: String) {
-        this.amount.value = amount
+        this.amount.postValue(amount)
     }
 
     override fun setAvailableBalance(availableBalance: String) {
@@ -30,7 +30,7 @@ class SendAmountView : SendAmountModule.IView {
     }
 
     override fun setHint(hint: String?) {
-        this.hint.value = hint
+        this.hint.postValue(hint)
     }
 
     override fun setMaxButtonVisible(visible: Boolean) {
@@ -54,7 +54,7 @@ class SendAmountView : SendAmountModule.IView {
     }
 
     override fun setSwitchButtonEnabled(enabled: Boolean) {
-        switchButtonEnabled.value = enabled
+        switchButtonEnabled.postValue(enabled)
     }
 
     override fun setLoading(loading: Boolean) {
