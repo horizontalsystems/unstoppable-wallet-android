@@ -20,7 +20,7 @@ class SendAmountPresenter(
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
         private val baseCurrency: Currency)
-    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IAmountModule {
+    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
     var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
 
@@ -188,6 +188,43 @@ class SendAmountPresenter(
 
         moduleDelegate?.onChangeAmount()
         view.addTextChangeListener()
+    }
+
+    // IInteractorDelegate
+
+    override fun didUpdateRate(rate: BigDecimal) {
+        syncXRate(rate)
+    }
+
+    override fun willEnterForeground() {
+        syncXRate(interactor.getRate())
+    }
+
+    // ViewModel
+
+    override fun onCleared() {
+        super.onCleared()
+        interactor.onCleared()
+    }
+
+    // Internal methods
+
+    private fun syncXRate(rate: BigDecimal?) {
+        if (rate == xRate) {
+            return
+        }
+
+        xRate = rate
+        inputType = when (xRate) {
+            null -> SendModule.InputType.COIN
+            else -> interactor.defaultInputType
+        }
+
+        syncAmount()
+        syncAvailableBalance()
+        syncAmountType()
+        syncHint()
+        syncSwitchButton()
     }
 
     private fun syncAmount() {

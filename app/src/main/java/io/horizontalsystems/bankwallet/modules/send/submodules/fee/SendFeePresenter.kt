@@ -196,8 +196,9 @@ class SendFeePresenter(
         moduleDelegate?.onUpdateFeeRate()
     }
 
-    override fun didUpdate(feeRates: List<FeeRateInfo>) {
+    // IInteractorDelegate
 
+    override fun didUpdate(feeRates: List<FeeRateInfo>) {
         this.feeRates = feeRates
         moduleDelegate?.onUpdateFeeRate()
     }
@@ -205,6 +206,11 @@ class SendFeePresenter(
     override fun didReceiveError(error: Exception) {
         this.error = error
         moduleDelegate?.onUpdateFeeRate()
+    }
+
+    override fun didUpdateExchangeRate(rate: BigDecimal) {
+        xRate = rate
+        syncFeeLabels()
     }
 
     // ViewModel

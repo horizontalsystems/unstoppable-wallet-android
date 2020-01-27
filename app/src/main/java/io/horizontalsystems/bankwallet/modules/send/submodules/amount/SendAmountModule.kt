@@ -41,6 +41,12 @@ object SendAmountModule {
     interface IInteractor {
         var defaultInputType: SendModule.InputType
         fun getRate(): BigDecimal?
+        fun onCleared()
+    }
+
+    interface IInteractorDelegate {
+        fun didUpdateRate(rate: BigDecimal)
+        fun willEnterForeground()
     }
 
     interface IAmountModule {
@@ -90,13 +96,14 @@ object SendAmountModule {
             val currencyDecimal = App.appConfigProvider.fiatDecimal
             val baseCurrency = App.currencyManager.baseCurrency
 
-            val interactor = SendAmountInteractor(baseCurrency, App.xRateManager, App.localStorage, wallet.coin)
+            val interactor = SendAmountInteractor(baseCurrency, App.xRateManager, App.localStorage, wallet.coin, App.backgroundManager)
             val sendAmountPresenterHelper =
                     SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal,
-                                              currencyDecimal)
+                            currencyDecimal)
             val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
 
             sendHandler.amountModule = presenter
+            interactor.delegate = presenter
 
             return presenter as T
         }
