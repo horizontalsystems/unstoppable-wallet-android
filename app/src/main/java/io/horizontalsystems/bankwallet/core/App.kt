@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
-import io.horizontalsystems.bankwallet.localehelper.LocaleHelper
+import io.horizontalsystems.bankwallet.core.utils.LocaleHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.*

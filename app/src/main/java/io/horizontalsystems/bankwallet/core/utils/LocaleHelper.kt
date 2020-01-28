@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.localehelper
+package io.horizontalsystems.bankwallet.core.utils
 
 import android.annotation.TargetApi
 import android.content.Context
