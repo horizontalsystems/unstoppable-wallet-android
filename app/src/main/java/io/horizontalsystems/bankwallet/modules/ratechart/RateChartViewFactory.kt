@@ -16,8 +16,7 @@ data class ChartInfoViewItem(
         val chartPoints: List<ChartPoint>,
         val diffValue: BigDecimal,
         val startTimestamp: Long,
-        val endTimestamp: Long,
-        val currency: Currency
+        val endTimestamp: Long
 )
 
 data class MarketInfoViewItem(
@@ -30,7 +29,7 @@ data class MarketInfoViewItem(
 )
 
 class RateChartViewFactory {
-    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, currency: Currency): ChartInfoViewItem {
+    fun createChartInfo(type: ChartType, chartInfo: ChartInfo): ChartInfoViewItem {
         val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }
 
         val startValue = chartPoints.firstOrNull()?.value ?: 0f
@@ -51,8 +50,7 @@ class RateChartViewFactory {
                 chartPoints,
                 diffValue,
                 chartInfo.startTimestamp,
-                chartInfo.endTimestamp,
-                currency
+                chartInfo.endTimestamp
         )
     }
 

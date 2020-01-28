@@ -9,15 +9,19 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import java.math.BigDecimal
 
 class ChartView : View {
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
         fun onTouchSelect(point: ChartPoint)
+    }
+
+    interface RateFormatter {
+        fun format(value: BigDecimal, maxFraction: Int?): String?
     }
 
     enum class ChartType {
@@ -116,14 +120,18 @@ class ChartView : View {
         return true
     }
 
+    fun setFormatter(formatter: RateFormatter) {
+        chartCurve.formatter = formatter
+    }
+
     fun setIndicator(indicator: ChartIndicator) {
         chartIndicator = indicator
         chartIndicator?.init(config)
     }
 
-    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long, currency: Currency? = null) {
+    fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
         setColour(points, endTimestamp)
-        setPoints(points, chartType, startTimestamp, endTimestamp, currency)
+        setPoints(points, chartType, startTimestamp, endTimestamp)
 
         if (config.animated) {
             animator.setFloatValues(0f)
@@ -146,7 +154,7 @@ class ChartView : View {
         }
     }
 
-    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long, currency: Currency?) {
+    private fun setPoints(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
         helper.scale(points)
 
         var shapeWidth = width.toFloat()
@@ -165,7 +173,7 @@ class ChartView : View {
 
         shape.set(0f, 0f, shapeWidth, shapeHeight - config.offsetBottom)
 
-        chartCurve.init(points, startTimestamp, endTimestamp, currency)
+        chartCurve.init(points, startTimestamp, endTimestamp)
 
         if (config.showGrid) {
             chartGrid.init(chartType, startTimestamp, endTimestamp)
