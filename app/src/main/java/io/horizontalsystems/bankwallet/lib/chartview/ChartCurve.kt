@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.lib.chartview
 
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
 class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
+
+    var formatter: ChartView.RateFormatter? = null
 
     private val chartHelper = ChartHelper(shape, config)
     private var coordinates = listOf<Coordinate>()
@@ -21,10 +20,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var isTouchActive = false
 
-    private var currency: Currency? = null
-
-    fun init(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long, baseCurrency: Currency?) {
-        currency = baseCurrency
+    fun init(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long) {
         coordinates = chartHelper.setCoordinates(points, startTimestamp, endTimestamp)
 
         val (top, low) = chartHelper.getTopAndLow(coordinates)
@@ -145,8 +141,9 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         drawPath(path, gridPaint)
 
         if (!isTouchActive) {
-            drawText(format(top.point.value), shape.left + config.textPricePL, config.yAxisPrice(top.y, isTop = true), textPaint)
-            drawText(format(low.point.value), shape.left + config.textPricePL, config.yAxisPrice(low.y, isTop = false), textPaint)
+            val maxFraction = if (config.valueScale == 0) null else config.valueScale
+            drawText(format(top.point.value, maxFraction), shape.left + config.textPricePL, config.yAxisPrice(top.y, isTop = true), textPaint)
+            drawText(format(low.point.value, maxFraction), shape.left + config.textPricePL, config.yAxisPrice(low.y, isTop = false), textPaint)
         }
     }
 
@@ -162,12 +159,8 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         gradient.shader = LinearGradient(0f, 0f, 0f, shape.bottom + 2, colorStart, colorEnd, Shader.TileMode.REPEAT)
     }
 
-    private fun format(value: Float): String {
-        val baseCurrency = currency ?: return ""
-        val currencyValue = CurrencyValue(baseCurrency, value.toBigDecimal())
-        val maxFraction = if (config.valueScale == 0) null else config.valueScale
-
-        return App.numberFormatter.formatForRates(currencyValue, maxFraction = maxFraction) ?: ""
+    private fun format(value: Float, maxFraction: Int?): String {
+        return formatter?.format(value.toBigDecimal(), maxFraction) ?: ""
     }
 
     class Coordinate(val x: Float, val y: Float, val point: ChartPoint)

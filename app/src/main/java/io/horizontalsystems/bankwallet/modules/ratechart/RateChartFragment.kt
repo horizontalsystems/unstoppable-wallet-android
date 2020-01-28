@@ -33,11 +33,12 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         setTitle(getString(R.string.Charts_Title, coin.title))
         context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, coin.code)) }
 
-        chartView.listener = this
-        chartView.setIndicator(chartViewIndicator)
-
         presenter = ViewModelProvider(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
+
+        chartView.listener = this
+        chartView.setFormatter(presenter.rateFormatter)
+        chartView.setIndicator(chartViewIndicator)
 
         observeData()
         bindActions()
@@ -64,7 +65,7 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
         presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp, item.currency)
+            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
             coinRateDiff.diff = item.diffValue
         })

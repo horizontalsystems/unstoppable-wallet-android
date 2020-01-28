@@ -15,6 +15,7 @@ import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateChartPresenter(
         val view: View,
+        val rateFormatter: RateFormatter,
         private val interactor: Interactor,
         private val coin: Coin,
         private val currency: Currency,
@@ -81,7 +82,7 @@ class RateChartPresenter(
         view.hideSpinner()
 
         try {
-            val viewItem = factory.createChartInfo(chartType, info, currency)
+            val viewItem = factory.createChartInfo(chartType, info)
             view.showChartInfo(viewItem)
         } catch (e: Exception) {
             view.showError(e)
