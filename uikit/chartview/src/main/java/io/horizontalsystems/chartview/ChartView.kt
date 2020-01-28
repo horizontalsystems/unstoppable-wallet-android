@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.lib.chartview
+package io.horizontalsystems.chartview
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -8,12 +8,12 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartPoint
 import java.math.BigDecimal
 
 class ChartView : View {
+
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()

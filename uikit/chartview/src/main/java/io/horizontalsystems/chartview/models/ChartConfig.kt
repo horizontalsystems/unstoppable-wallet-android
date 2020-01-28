@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.lib.chartview.models
+package io.horizontalsystems.chartview.models
 
 import android.content.Context
 import android.graphics.Paint
 import androidx.core.content.res.ResourcesCompat
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.chartview.R
 
 class ChartConfig(private val context: Context) {
     var showGrid = true

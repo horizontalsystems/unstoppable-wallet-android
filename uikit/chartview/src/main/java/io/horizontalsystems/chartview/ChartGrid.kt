@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.lib.chartview
+package io.horizontalsystems.chartview
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
+import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.GridColumn
 
 class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private val gridHelper = GridHelper(shape, config)

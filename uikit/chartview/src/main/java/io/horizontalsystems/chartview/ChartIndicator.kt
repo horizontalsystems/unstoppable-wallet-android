@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.lib.chartview
+package io.horizontalsystems.chartview
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartConfig
 
 class ChartIndicator : View {
 

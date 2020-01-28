@@ -1,7 +1,7 @@
-package io.horizontalsystems.bankwallet.lib.chartview
+package io.horizontalsystems.chartview
 
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartPoint
 import java.math.BigDecimal
 import java.math.BigDecimal.TEN
 import kotlin.math.max

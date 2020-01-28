@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.lib.chartview
+package io.horizontalsystems.chartview
 
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartPoint
 
 class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 

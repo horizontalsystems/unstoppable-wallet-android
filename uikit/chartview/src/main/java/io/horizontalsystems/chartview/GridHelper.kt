@@ -1,10 +1,11 @@
-package io.horizontalsystems.bankwallet.lib.chartview
+package io.horizontalsystems.chartview
 
 import android.graphics.RectF
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import android.text.format.DateFormat.getBestDateTimePattern
+import io.horizontalsystems.chartview.ChartView.ChartType
+import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.GridColumn
+import java.text.SimpleDateFormat
 import java.util.*
 
 class GridHelper(private val shape: RectF, private val config: ChartConfig) {
@@ -62,10 +63,14 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
     private fun columnLabel(calendar: Calendar, type: ChartType): String {
         return when (type) {
             ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
-            ChartType.WEEKLY -> DateHelper.formatDate(calendar.time, "EEE")
+            ChartType.WEEKLY -> formatDate(calendar.time, "EEE")
             ChartType.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
-            ChartType.MONTHLY6 -> DateHelper.formatDate(calendar.time, "MMM")
-            ChartType.MONTHLY12 -> DateHelper.formatDate(calendar.time, "MMM")
+            ChartType.MONTHLY6 -> formatDate(calendar.time, "MMM")
+            ChartType.MONTHLY12 -> formatDate(calendar.time, "MMM")
         }
+    }
+
+    private fun formatDate(date: Date, pattern: String): String {
+        return SimpleDateFormat(getBestDateTimePattern(Locale.getDefault(), pattern), Locale.getDefault()).format(date)
     }
 }
