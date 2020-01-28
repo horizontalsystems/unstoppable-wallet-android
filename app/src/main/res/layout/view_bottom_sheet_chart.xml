@@ -184,13 +184,13 @@
             android:gravity="center"
             android:textColor="@color/red_d" />
 
-        <io.horizontalsystems.bankwallet.lib.chartview.ChartIndicator
+        <io.horizontalsystems.chartview.ChartIndicator
             android:id="@+id/chartViewIndicator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
-        <io.horizontalsystems.bankwallet.lib.chartview.ChartView
+        <io.horizontalsystems.chartview.ChartView
             android:id="@+id/chartView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

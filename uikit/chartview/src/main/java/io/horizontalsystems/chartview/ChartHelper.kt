@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.lib.chartview
+package io.horizontalsystems.chartview
 
 import android.graphics.RectF
-import io.horizontalsystems.bankwallet.lib.chartview.ChartCurve.Coordinate
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.ChartCurve.Coordinate
+import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartPoint
 
 class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
 

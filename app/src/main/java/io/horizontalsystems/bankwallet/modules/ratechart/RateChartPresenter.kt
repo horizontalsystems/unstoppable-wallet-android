@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
