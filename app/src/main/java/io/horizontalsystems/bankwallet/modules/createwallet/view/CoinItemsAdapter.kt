@@ -85,6 +85,10 @@ class CoinItemWithSwitchViewHolder(
             toggleSwitch.isChecked = !toggleSwitch.isChecked
             onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
         }
+
+        toggleSwitch.setOnClickListener {
+            onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
+        }
     }
 
     fun bind(item: CoinManageViewItem) {
