@@ -29,6 +29,7 @@ class BackupPresenter(
 
     override fun didBackup() {
         interactor.setBackedUp(account.id)
+        router.showSuccessAndFinish()
     }
 
     override fun didUnlock() {

@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletPresente
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.uikit.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
@@ -59,8 +60,8 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
-            R.id.menuCreate ->  {
+        when (item?.itemId) {
+            R.id.menuCreate -> {
                 presenter.onCreateButtonClick()
                 return true
             }
@@ -93,7 +94,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             invalidateOptionsMenu()
         })
 
-        view.showNotSupported.observe(this, Observer {predefinedAccountType ->
+        view.showNotSupported.observe(this, Observer { predefinedAccountType ->
             AlertDialogFragment.newInstance(
                     getString(R.string.ManageCoins_Alert_CantCreateTitle, getString(predefinedAccountType.title)),
                     getString(R.string.ManageCoins_Alert_CantCreateDescription, getString(predefinedAccountType.title)),
@@ -107,7 +108,8 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             MainModule.startAsNewTask(this)
             finish()
         })
-        router.close.observe(this, Observer {
+        router.showSuccessAndClose.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Done, HudHelper.ToastDuration.LONG)
             finish()
         })
     }

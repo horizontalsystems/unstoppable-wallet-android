@@ -29,6 +29,7 @@ object BackupModule {
         fun startBackupWordsModule(words: List<String>)
         fun startBackupEosModule(account: String, activePrivateKey: String)
         fun close()
+        fun showSuccessAndFinish()
     }
 
     //  helpers
