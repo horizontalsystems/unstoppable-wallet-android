@@ -30,7 +30,7 @@ data class MarketInfoViewItem(
 
 class RateChartViewFactory {
     fun createChartInfo(type: ChartType, chartInfo: ChartInfo): ChartInfoViewItem {
-        val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }
+        val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }
 
         val startValue = chartPoints.firstOrNull()?.value ?: 0f
         val endValue = chartPoints.lastOrNull()?.value ?: 0f
