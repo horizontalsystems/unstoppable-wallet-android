@@ -4,13 +4,13 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 
 class CreateWalletRouter : CreateWalletModule.IRouter {
     val startMainModuleLiveEvent = SingleLiveEvent<Unit>()
-    val close = SingleLiveEvent<Unit>()
+    val showSuccessAndClose = SingleLiveEvent<Unit>()
 
     override fun startMainModule() {
         startMainModuleLiveEvent.call()
     }
 
-    override fun close() {
-        close.call()
+    override fun showSuccessAndClose() {
+        showSuccessAndClose.call()
     }
 }

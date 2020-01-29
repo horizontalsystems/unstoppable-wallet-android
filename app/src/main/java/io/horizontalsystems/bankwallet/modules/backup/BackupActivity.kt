@@ -14,6 +14,8 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper.ToastDuration
 import kotlinx.android.synthetic.main.activity_backup.*
 import kotlinx.android.synthetic.main.activity_backup_words.buttonBack
 import kotlinx.android.synthetic.main.activity_backup_words.buttonNext
@@ -51,6 +53,11 @@ class BackupActivity : BaseActivity() {
             finish()
         })
 
+        viewModel.showSuccessAndFinishEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Done, ToastDuration.LONG)
+            finish()
+        })
+
         backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
 
         if (account.isBackedUp) {
@@ -70,7 +77,6 @@ class BackupActivity : BaseActivity() {
                         viewModel.delegate.didBackup()
                     }
                 }
-                finish()
             }
             ModuleCode.BACKUP_EOS -> {
                 finish()

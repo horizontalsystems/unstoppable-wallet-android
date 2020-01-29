@@ -45,6 +45,7 @@ class ManageWalletsPresenter(
         try {
             val account = interactor.createAccount(predefinedAccountType)
             handleCreated(account)
+            view.showSuccess()
         } catch (e: Exception) {
             syncViewItems()
             view.showError(e)

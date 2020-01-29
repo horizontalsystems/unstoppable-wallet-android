@@ -52,7 +52,7 @@ class CreateWalletPresenter(
             if (presentationMode == PresentationMode.Initial) {
                 router.startMainModule()
             } else {
-                router.close()
+                router.showSuccessAndClose()
             }
         }
     }

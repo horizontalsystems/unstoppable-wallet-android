@@ -22,7 +22,7 @@ object CreateWalletModule {
 
     interface IRouter {
         fun startMainModule()
-        fun close()
+        fun showSuccessAndClose()
     }
 
     interface IViewDelegate {
