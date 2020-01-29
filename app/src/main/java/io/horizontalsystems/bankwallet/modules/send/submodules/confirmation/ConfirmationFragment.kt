@@ -14,9 +14,9 @@ import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.uikit.AlertDialogFragment
 import io.horizontalsystems.uikit.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
 
@@ -60,7 +60,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         })
 
         presenterView?.showCopied?.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         presenterView?.addSecondaryDataViewItem?.observe(viewLifecycleOwner, Observer { secondaryData ->

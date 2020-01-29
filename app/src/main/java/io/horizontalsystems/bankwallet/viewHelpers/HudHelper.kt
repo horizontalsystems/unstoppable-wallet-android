@@ -14,16 +14,20 @@ object HudHelper {
 
     private var toast: Toast? = null
 
-    fun showSuccessMessage(text: Int, durationInMillis: Long = 2000) {
-        showHudNotification(App.instance.getString(text), R.color.green_d, durationInMillis)
+    enum class ToastDuration(val milliseconds: Long) {
+        SHORT(800), LONG(2000)
+    }
+
+    fun showSuccessMessage(text: Int, duration: ToastDuration = ToastDuration.SHORT) {
+        showHudNotification(App.instance.getString(text), R.color.green_d, duration.milliseconds)
     }
 
     fun showErrorMessage(textRes: Int) {
         showErrorMessage(App.instance.getString(textRes))
     }
 
-    fun showErrorMessage(text: String) {
-        showHudNotification(text, R.color.red_d, 2000)
+    fun showErrorMessage(text: String, duration: ToastDuration = ToastDuration.LONG) {
+        showHudNotification(text, R.color.red_d, duration.milliseconds)
     }
 
     private fun showHudNotification(text: String, backgroundColor: Int, durationInMillis: Long) {
