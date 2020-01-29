@@ -52,7 +52,7 @@ class AppStatusActivity : BaseActivity() {
         })
 
         view.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
     }
 

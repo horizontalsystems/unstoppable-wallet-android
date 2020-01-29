@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.contact.appstatus.AppStatusModule
-import io.horizontalsystems.uikit.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.uikit.TopMenuItem
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_contact.*
 
@@ -39,7 +39,7 @@ class ContactActivity : BaseActivity() {
         })
 
         presenterView.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         router.sendEmailLiveEvent.observe(this, Observer {

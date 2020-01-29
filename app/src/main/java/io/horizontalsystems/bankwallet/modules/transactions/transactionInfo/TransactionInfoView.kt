@@ -51,7 +51,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         txtFullInfo.setOnClickListener { viewModel.onClickOpenFullInfo() }
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, Observer { pair ->

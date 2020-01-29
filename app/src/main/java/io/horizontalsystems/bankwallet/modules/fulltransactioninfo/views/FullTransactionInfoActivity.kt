@@ -19,8 +19,8 @@ import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
-import io.horizontalsystems.uikit.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.uikit.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
@@ -76,7 +76,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         viewModel.openLinkLiveEvent.observe(this, Observer { url ->

@@ -64,7 +64,7 @@ class ReceiveFragment(
         })
 
         view.showCopied.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
     }
 
