@@ -21,6 +21,7 @@ class ChartConfig(private val context: Context) {
     var fallColor = context.getColor(R.color.red_d)
     var indicatorColor = context.getColor(R.color.light)
     var partialChartColor = context.getColor(R.color.grey_50)
+    var volumeRectangleColor = context.getColor(R.color.steel_20)
 
     var textSize = dp2px(12f)
     var textPricePT = dp2px(4f)
@@ -35,6 +36,8 @@ class ChartConfig(private val context: Context) {
     var strokeWidthDotted = 1F
     var offsetBottom = 0f
     var gridEdgeOffset = dp2px(5f)
+    var volumeMaximumHeightRatio = 0.4f // 40% of height
+    var volumeBarMargin = 2f
 
     //  grid dimens
     var valueLow = 0f
@@ -69,6 +72,14 @@ class ChartConfig(private val context: Context) {
         val scale = context.resources.displayMetrics.density
         //  Convert the dps to pixels, based on density scale
         return dps * scale + 0.5f
+    }
+
+    fun getAnimatedY(y: Float, yMax: Float): Float {
+        if (!animated) return y
+
+        // Figure out top of column based on INVERSE of percentage. Bigger the percentage,
+        // the smaller top is, since 100% goes to 0.
+        return yMax - (yMax - y) * animatedFraction
     }
 
     private fun measureTextWidth(text: String): Float {
