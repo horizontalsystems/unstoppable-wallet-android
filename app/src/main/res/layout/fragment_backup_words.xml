@@ -4,29 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:paddingLeft="32dp"
-    android:paddingRight="32dp">
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/backupTitle"
-        style="@style/Title3"
-        android:layout_width="wrap_content"
+        style="@style/Title2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textColor="?ColorJacob"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="49dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/Backup_DisplayTitle"
+        android:textColor="?TitleColor"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/Backup_DisplayTitle" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerWords"
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/backupTitle"
-        tools:itemCount="12"
-        tools:listitem="@layout/view_holder_word" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:stretchColumns="*"
+        app:layout_constraintTop_toBottomOf="@+id/backupTitle">
+
+        <TableRow>
+            <TextView
+                android:id="@+id/topLeft"
+                style="@style/Headline2"
+                android:layout_width="0dp"
+                tools:text="table\nopen\nsome\nmarket" />
+
+            <TextView
+                android:id="@+id/topRight"
+                style="@style/Headline2"
+                android:layout_width="0dp"
+                android:gravity="start"
+                tools:text="table\nopen\nsome\nmarket" />
+        </TableRow>
+        <TableRow android:layout_marginTop="0dp">
+            <TextView
+                android:id="@+id/bottomLeft"
+                style="@style/Headline2"
+                android:layout_width="0dp"
+                tools:text="table\nopen\nsome\nmarket" />
+
+            <TextView
+                android:id="@+id/bottomRight"
+                style="@style/Headline2"
+                android:layout_width="0dp"
+                android:gravity="start"
+                tools:text="table\nopen\nsome\nmarket" />
+        </TableRow>
+
+    </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

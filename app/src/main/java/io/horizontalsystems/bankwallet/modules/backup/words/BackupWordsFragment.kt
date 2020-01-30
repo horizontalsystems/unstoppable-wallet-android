@@ -1,17 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.viewHelpers.inflate
+import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
 class BackupWordsFragment : Fragment() {
@@ -25,31 +27,61 @@ class BackupWordsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let { viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java) }
-
-        val wordsAdapter = BackupWordsAdapter()
-        recyclerWords.adapter = wordsAdapter
-        recyclerWords.layoutManager = LinearLayoutManager(context)
+        activity?.let {
+            //deprecated method keeps working "viewModel.wordsLiveData" that's is shared with activity
+            viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
+        }
 
         viewModel.wordsLiveData.observe(viewLifecycleOwner, Observer {
-            wordsAdapter.items = it
-            wordsAdapter.notifyDataSetChanged()
+            populateWords(it)
         })
+
     }
 
-    class BackupWordsAdapter : RecyclerView.Adapter<ViewHolderWord>() {
-        var items: Array<String> = arrayOf()
+    private fun populateWords(words: Array<String>) {
+        context?.let { ctx ->
+            val numberColor = ContextCompat.getColor(ctx, R.color.grey)
+            val wordColor = LayoutHelper.getAttr(R.attr.ColorOz, ctx.theme)
+                    ?: ContextCompat.getColor(ctx, R.color.grey)
+            val sb = SpannableStringBuilder()
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderWord {
-            return ViewHolderWord(inflate(parent, R.layout.view_holder_word) as TextView)
-        }
+            words.forEachIndexed { index, word ->
+                val normalizedIndex = index + 1
+                val wordString = "$word\n"
+                var numberString = "$normalizedIndex. "
+                if (normalizedIndex < 10) {
+                    numberString += "  " //add two spaces to to make equal alignment for all words
+                }
 
-        override fun getItemCount() = items.size
+                val numberSpan = SpannableString(numberString)
+                numberSpan.setSpan(ForegroundColorSpan(numberColor), 0, numberString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        override fun onBindViewHolder(holder: ViewHolderWord, position: Int) {
-            holder.textView.text = "${position + 1}. ${items[position]}"
+                val wordSpan = SpannableString(wordString)
+                wordSpan.setSpan(ForegroundColorSpan(wordColor), 0, wordString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                sb.append(numberSpan)
+                sb.append(wordSpan)
+
+                when (normalizedIndex) {
+                    6 -> {
+                        topLeft.text = sb
+                        sb.clear()
+                    }
+                    12 -> {
+                        topRight.text = sb
+                        sb.clear()
+                    }
+                    18 -> {
+                        bottomLeft.text = sb
+                        sb.clear()
+                    }
+                    24 -> {
+                        bottomRight.text = sb
+                        sb.clear()
+                    }
+                }
+            }
         }
     }
 
-    class ViewHolderWord(val textView: TextView) : RecyclerView.ViewHolder(textView)
 }

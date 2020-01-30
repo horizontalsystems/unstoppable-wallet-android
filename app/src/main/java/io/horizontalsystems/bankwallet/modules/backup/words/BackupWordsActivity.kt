@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -21,9 +21,9 @@ class BackupWordsActivity : BaseActivity() {
         setContentView(R.layout.activity_backup_words)
 
         val backedUp = intent.getBooleanExtra(ACCOUNT_BACKEDUP, false)
-        val backupWords = intent.getStringArrayExtra(WORDS_KEY)
+        val backupWords = intent.getStringArrayExtra(WORDS_KEY) ?: arrayOf()
 
-        viewModel = ViewModelProviders.of(this).get(BackupWordsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BackupWordsViewModel::class.java)
         viewModel.init(backupWords, backedUp)
 
         if (savedInstanceState == null) {
