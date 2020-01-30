@@ -6,7 +6,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <io.horizontalsystems.uikit.ShadowlessToolbarView
+    <io.horizontalsystems.views.ShadowlessToolbarView
         android:id="@+id/shadowlessToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <io.horizontalsystems.uikit.CellView
+    <io.horizontalsystems.views.CellView
         android:id="@+id/mail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         app:rightArrow="true"
         app:title="@string/SettingsContact_Email" />
 
-    <io.horizontalsystems.uikit.CellView
+    <io.horizontalsystems.views.CellView
         android:id="@+id/walletHelpTelegramGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         app:rightArrow="true"
         app:title="@string/SettingsContact_WalletHelpTelegram" />
 
-    <io.horizontalsystems.uikit.CellView
+    <io.horizontalsystems.views.CellView
         android:id="@+id/developersTelegramGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
         app:rightArrow="true"
         app:title="@string/SettingsContact_DevelopersTelegram" />
 
-    <io.horizontalsystems.uikit.CellView
+    <io.horizontalsystems.views.CellView
         android:id="@+id/appStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

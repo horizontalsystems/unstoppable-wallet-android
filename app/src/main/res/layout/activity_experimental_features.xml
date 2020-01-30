@@ -27,7 +27,7 @@
                 android:text="@string/ExperimentalFeatures_Description"
                 android:textColor="@color/grey" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/bitcoinHodling"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

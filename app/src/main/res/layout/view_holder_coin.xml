@@ -38,7 +38,7 @@
         app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
         app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
 
-    <io.horizontalsystems.uikit.IconView
+    <io.horizontalsystems.views.IconView
         android:id="@+id/iconCoin"
         android:layout_width="24dp"
         android:layout_height="24dp"

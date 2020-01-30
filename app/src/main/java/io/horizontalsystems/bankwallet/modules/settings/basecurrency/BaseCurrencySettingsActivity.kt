@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.uikit.TopMenuItem
+import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.extensions.ViewHolderProgressbar
-import io.horizontalsystems.uikit.LayoutHelper
+import io.horizontalsystems.views.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
 import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*

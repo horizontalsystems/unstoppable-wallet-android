@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/switchLockTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
-import io.horizontalsystems.uikit.AlertDialogFragment
+import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_keystore.*
 
 class KeyStoreActivity : AppCompatActivity() {

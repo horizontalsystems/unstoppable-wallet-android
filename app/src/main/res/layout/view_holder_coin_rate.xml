@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true">
 
-    <io.horizontalsystems.uikit.IconView
+    <io.horizontalsystems.views.IconView
         android:id="@+id/coinIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"

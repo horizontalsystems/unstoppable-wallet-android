@@ -57,22 +57,22 @@
             tools:text="BTC, BCH, DASH, ETH, ERC-20" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <io.horizontalsystems.uikit.ManageAccountView
+    <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/backupButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <io.horizontalsystems.uikit.ManageAccountView
+    <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/createButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <io.horizontalsystems.uikit.ManageAccountView
+    <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/restoreButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <io.horizontalsystems.uikit.ManageAccountView
+    <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/unlinkButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

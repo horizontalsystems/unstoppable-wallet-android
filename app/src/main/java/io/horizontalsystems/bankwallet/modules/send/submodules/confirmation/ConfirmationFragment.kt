@@ -15,8 +15,8 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subv
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
 import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
-import io.horizontalsystems.uikit.AlertDialogFragment
-import io.horizontalsystems.uikit.TopMenuItem
+import io.horizontalsystems.views.AlertDialogFragment
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
 

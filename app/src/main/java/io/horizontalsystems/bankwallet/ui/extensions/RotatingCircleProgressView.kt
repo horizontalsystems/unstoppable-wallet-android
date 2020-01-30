@@ -10,7 +10,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.uikit.LayoutHelper
+import io.horizontalsystems.views.LayoutHelper
 import kotlin.math.max
 
 
