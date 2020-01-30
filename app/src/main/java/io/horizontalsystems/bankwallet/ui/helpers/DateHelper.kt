@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.viewHelpers
+package io.horizontalsystems.bankwallet.ui.helpers
 
 import android.content.Context
 import android.text.format.DateFormat

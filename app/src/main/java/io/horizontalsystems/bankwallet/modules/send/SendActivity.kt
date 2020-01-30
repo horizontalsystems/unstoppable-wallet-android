@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragme
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
 import io.horizontalsystems.uikit.LayoutHelper
 import io.horizontalsystems.uikit.TopMenuItem
 import kotlinx.android.synthetic.main.activity_send.*

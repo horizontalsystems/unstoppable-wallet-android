@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.Bit
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EosResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoActivity
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.reactivex.Flowable
 
 object FullTransactionInfoModule {

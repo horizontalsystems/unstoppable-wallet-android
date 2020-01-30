@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_words.*
 import java.util.*
 

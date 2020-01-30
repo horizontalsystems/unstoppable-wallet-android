@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_app_status.toolbar
 import kotlinx.android.synthetic.main.activity_info.*
 

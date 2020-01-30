@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_receive.*
 

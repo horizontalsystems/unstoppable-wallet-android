@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
 
 class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coin: Coin, val unitName: String)
     : FullTransactionInfoModule.Adapter {

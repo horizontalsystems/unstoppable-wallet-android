@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
 object ReceiveModule {
 

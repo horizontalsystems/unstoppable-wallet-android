@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.uikit.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import kotlinx.android.synthetic.main.activity_backup_eos.*
 
 class BackupEosActivity : BaseActivity() {

@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
 import io.horizontalsystems.bitcoincash.BitcoinCashKit.NetworkType
 import io.horizontalsystems.bitcoincore.BitcoinCore

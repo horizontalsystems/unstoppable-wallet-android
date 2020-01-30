@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
+import io.horizontalsystems.bankwallet.ui.helpers.AnimationHelper
 import io.horizontalsystems.uikit.LayoutHelper
-import io.horizontalsystems.bankwallet.viewHelpers.inflate
-import io.horizontalsystems.bankwallet.viewHelpers.showIf
+import io.horizontalsystems.uikit.inflate
+import io.horizontalsystems.uikit.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
@@ -87,7 +87,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
         rateDiffWrapper.setOnClickListener {
             balanceViewItem?.let {
-                if(!it.blockChart) {
+                if (!it.blockChart) {
                     listener.onChartClicked(it)
                 }
             }

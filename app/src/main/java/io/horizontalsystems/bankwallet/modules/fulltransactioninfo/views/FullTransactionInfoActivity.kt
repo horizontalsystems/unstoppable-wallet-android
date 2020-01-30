@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
 import io.horizontalsystems.uikit.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*

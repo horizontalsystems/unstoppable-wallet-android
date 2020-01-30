@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.Bip
 import io.horizontalsystems.bitcoincore.models.BalanceInfo

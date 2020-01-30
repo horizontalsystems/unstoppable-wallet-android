@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.hodler.LockTimeInterval
 
 object SendConfirmationModule {

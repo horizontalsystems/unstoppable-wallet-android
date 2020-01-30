@@ -12,8 +12,8 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.ethereumkit.api.models.ApiError
 import kotlinx.android.synthetic.main.view_send_fee.*
 
