@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.uikit.TopMenuItem
-import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
+import io.horizontalsystems.bankwallet.ui.extensions.ViewHolderProgressbar
 import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_language_settings.*

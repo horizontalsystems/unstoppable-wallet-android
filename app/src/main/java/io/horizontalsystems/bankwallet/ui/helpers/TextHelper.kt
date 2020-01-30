@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.viewHelpers
+package io.horizontalsystems.bankwallet.ui.helpers
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.uikit.LayoutHelper
-
 
 object TextHelper : IClipboardManager {
 

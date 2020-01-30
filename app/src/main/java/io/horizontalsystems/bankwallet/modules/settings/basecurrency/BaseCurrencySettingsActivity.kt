@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.uikit.TopMenuItem
-import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
+import io.horizontalsystems.bankwallet.ui.extensions.ViewHolderProgressbar
 import io.horizontalsystems.uikit.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*

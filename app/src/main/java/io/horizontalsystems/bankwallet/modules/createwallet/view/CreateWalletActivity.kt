@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletPresente
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
 import io.horizontalsystems.uikit.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 

@@ -4,7 +4,7 @@ import android.app.Activity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILockManager
 import io.horizontalsystems.bankwallet.core.IPinManager
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
 import java.util.*
 
 class LockManager(private val pinManager: IPinManager) : ILockManager, BackgroundManager.Listener {

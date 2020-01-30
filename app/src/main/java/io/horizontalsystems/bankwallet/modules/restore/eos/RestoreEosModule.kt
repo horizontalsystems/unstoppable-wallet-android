@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restore.eos
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
 object RestoreEosModule {
 

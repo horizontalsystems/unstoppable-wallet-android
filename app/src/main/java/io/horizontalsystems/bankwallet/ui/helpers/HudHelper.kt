@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.viewHelpers
+package io.horizontalsystems.bankwallet.ui.helpers
 
 import android.graphics.PorterDuff
 import android.os.Handler
@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-
 
 object HudHelper {
 

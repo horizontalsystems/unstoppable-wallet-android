@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
 import io.horizontalsystems.uikit.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*

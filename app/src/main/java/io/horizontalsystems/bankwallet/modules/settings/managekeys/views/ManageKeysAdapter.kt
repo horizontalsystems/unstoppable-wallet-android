@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
 import io.horizontalsystems.uikit.AccountButtonItemType
-import io.horizontalsystems.bankwallet.viewHelpers.inflate
+import io.horizontalsystems.uikit.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_account.*
 
 class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<ManageKeysAdapter.KeysViewHolder>() {
 
-    interface Listener{
+    interface Listener {
         fun onClickCreate(item: ManageAccountItem)
         fun onClickRestore(item: ManageAccountItem)
         fun onClickBackup(item: ManageAccountItem)

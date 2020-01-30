@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.viewHelpers.inflate
+import io.horizontalsystems.uikit.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
 
@@ -139,8 +139,8 @@ class ViewHolderDivider(val containerView: View) : RecyclerView.ViewHolder(conta
 data class CoinManageViewItem(val type: CoinManageViewType, val coinViewItem: CoinViewItem? = null)
 data class CoinViewItem(val coin: Coin, var showBottomShade: Boolean = false)
 
-sealed class CoinManageViewType{
-    object Divider: CoinManageViewType()
-    object CoinWithArrow: CoinManageViewType()
-    class CoinWithSwitch(var enabled: Boolean): CoinManageViewType()
+sealed class CoinManageViewType {
+    object Divider : CoinManageViewType()
+    object CoinWithArrow : CoinManageViewType()
+    class CoinWithSwitch(var enabled: Boolean) : CoinManageViewType()
 }

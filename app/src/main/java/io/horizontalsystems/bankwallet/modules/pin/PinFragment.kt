@@ -30,12 +30,11 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinPresenter
 import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinRouter
 import io.horizontalsystems.bankwallet.ui.extensions.*
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
 import io.horizontalsystems.uikit.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_pin.*
 import java.util.concurrent.Executor
-
 
 class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
 
