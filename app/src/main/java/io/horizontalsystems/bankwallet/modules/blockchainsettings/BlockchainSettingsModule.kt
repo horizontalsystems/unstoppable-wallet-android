@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coinsettings
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import android.content.Intent
 import android.os.Parcelable
@@ -47,23 +47,23 @@ object CoinSettingsModule {
     }
 
     fun startForResult(context: AppCompatActivity, mode: SettingsMode = SettingsMode.StandAlone) {
-        val intent = Intent(context, CoinSettingsActivity::class.java)
+        val intent = Intent(context, BlockchainSettingsActivity::class.java)
         intent.putParcelableExtra(ModuleField.COIN_SETTINGS_CLOSE_MODE, mode)
         context.startActivityForResult(intent, ModuleCode.COIN_SETTINGS)
     }
 
     fun start(context: AppCompatActivity, mode: SettingsMode = SettingsMode.StandAlone) {
-        val intent = Intent(context, CoinSettingsActivity::class.java)
+        val intent = Intent(context, BlockchainSettingsActivity::class.java)
         intent.putParcelableExtra(ModuleField.COIN_SETTINGS_CLOSE_MODE, mode)
         context.startActivity(intent)
     }
 
     class Factory(private val mode: SettingsMode) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = CoinSettingsView()
-            val router = CoinSettingsRouter()
-            val interactor = CoinSettingsInteractor(App.coinSettingsManager, App.walletManager, App.accountCleaner, App.appConfigProvider)
-            val presenter = CoinSettingsPresenter(view, router, mode, interactor)
+            val view = BlockchainSettingsView()
+            val router = BlockchainSettingsRouter()
+            val interactor = BlockchainSettingsInteractor(App.coinSettingsManager, App.walletManager, App.accountCleaner, App.appConfigProvider)
+            val presenter = BlockchainSettingsPresenter(view, router, mode, interactor)
 
             return presenter as T
         }

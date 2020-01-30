@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coinsettings
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import android.os.Bundle
 import android.view.Menu
@@ -13,9 +13,9 @@ import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import kotlinx.android.synthetic.main.activity_coin_settings.*
 
-class CoinSettingsActivity : BaseActivity() {
+class BlockchainSettingsActivity : BaseActivity() {
 
-    private lateinit var presenter: CoinSettingsPresenter
+    private lateinit var presenter: BlockchainSettingsPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +28,12 @@ class CoinSettingsActivity : BaseActivity() {
                 ?: SettingsMode.StandAlone
 
         presenter = ViewModelProvider(this, CoinSettingsModule.Factory(settingsMode))
-                .get(CoinSettingsPresenter::class.java)
+                .get(BlockchainSettingsPresenter::class.java)
 
         presenter.onLoad()
 
-        observeView(presenter.view as CoinSettingsView)
-        observeRouter(presenter.router as CoinSettingsRouter)
+        observeView(presenter.view as BlockchainSettingsView)
+        observeRouter(presenter.router as BlockchainSettingsRouter)
 
         bip44.setClick { presenter.onSelect(Derivation.bip44) }
         bip49.setClick { presenter.onSelect(Derivation.bip49) }
@@ -65,7 +65,7 @@ class CoinSettingsActivity : BaseActivity() {
         return true
     }
 
-    private fun observeView(view: CoinSettingsView) {
+    private fun observeView(view: BlockchainSettingsView) {
         view.selection.observe(this, Observer { (derivation, syncMode) ->
             bip44.bindSelection(derivation == Derivation.bip44)
             bip49.bindSelection(derivation == Derivation.bip49)
@@ -77,13 +77,13 @@ class CoinSettingsActivity : BaseActivity() {
 
         view.showDerivationChangeAlert.observe(this, Observer { bip ->
             val bipVersion = AccountType.getDerivationTitle(bip)
-            CoinSettingsAlertDialog.show(
+            BlockchainSettingsAlertDialog.show(
                     title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
                     subtitle = bipVersion,
                     contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content),
                     actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, bipVersion),
                     activity = this,
-                    listener = object : CoinSettingsAlertDialog.Listener {
+                    listener = object : BlockchainSettingsAlertDialog.Listener {
                         override fun onActionButtonClick() {
                             presenter.proceedWithDerivationChange(bip)
                         }
@@ -94,13 +94,13 @@ class CoinSettingsActivity : BaseActivity() {
         view.showSyncModeChangeAlert.observe(this, Observer { syncMode ->
             val syncModeText = getSyncModeText(syncMode)
 
-            CoinSettingsAlertDialog.show(
-                    title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
+            BlockchainSettingsAlertDialog.show(
+                    title = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
                     subtitle = syncModeText,
                     contentText = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content),
                     actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, syncModeText),
                     activity = this,
-                    listener = object : CoinSettingsAlertDialog.Listener {
+                    listener = object : BlockchainSettingsAlertDialog.Listener {
                         override fun onActionButtonClick() {
                             presenter.proceedWithSyncModeChange(syncMode)
                         }
@@ -113,7 +113,7 @@ class CoinSettingsActivity : BaseActivity() {
         return getString(if (syncMode == SyncMode.Slow) R.string.BlockchainSettings_SyncMode_Blockchain else R.string.BlockchainSettings_SyncMode_Api)
     }
 
-    private fun observeRouter(router: CoinSettingsRouter) {
+    private fun observeRouter(router: BlockchainSettingsRouter) {
         router.closeWithResultOk.observe(this, Observer {
             setResult(RESULT_OK)
             finish()

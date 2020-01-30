@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.coinsettings
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
-class CoinSettingsView : CoinSettingsModule.IView {
+class BlockchainSettingsView : CoinSettingsModule.IView {
 
     val selection = MutableLiveData<Pair<AccountType.Derivation, SyncMode>>()
     val showDerivationChangeAlert = SingleLiveEvent<AccountType.Derivation>()

@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.coinsettings
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinSetting
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
-class CoinSettingsPresenter(
+class BlockchainSettingsPresenter(
         val view: CoinSettingsModule.IView,
         val router: CoinSettingsModule.IRouter,
         private val mode: SettingsMode,
