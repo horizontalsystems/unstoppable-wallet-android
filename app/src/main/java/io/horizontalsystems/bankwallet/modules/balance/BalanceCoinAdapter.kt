@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.helpers.AnimationHelper
-import io.horizontalsystems.uikit.LayoutHelper
-import io.horizontalsystems.uikit.inflate
-import io.horizontalsystems.uikit.showIf
+import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.inflate
+import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*

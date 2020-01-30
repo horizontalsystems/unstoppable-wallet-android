@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <io.horizontalsystems.uikit.IconView
+    <io.horizontalsystems.views.IconView
         android:id="@+id/coinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

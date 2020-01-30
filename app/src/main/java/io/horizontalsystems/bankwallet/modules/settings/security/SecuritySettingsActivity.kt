@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
-import io.horizontalsystems.uikit.TopMenuItem
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity() {

@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <io.horizontalsystems.uikit.InputTextView
+    <io.horizontalsystems.views.InputTextView
         android:id="@+id/wordOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
 
-    <io.horizontalsystems.uikit.InputTextView
+    <io.horizontalsystems.views.InputTextView
         android:id="@+id/wordTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

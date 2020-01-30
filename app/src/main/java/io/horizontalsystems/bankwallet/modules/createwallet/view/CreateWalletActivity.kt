@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
-import io.horizontalsystems.uikit.AlertDialogFragment
+import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
 class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {

@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/securityCenter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                 app:imageDrawable="@drawable/ic_security"
                 app:title="@string/Settings_SecurityCenter" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/manageCoins"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                 app:imageDrawable="@drawable/ic_manage_coins"
                 app:title="@string/Settings_ManageCoins"/>
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/experimentalFeatures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 app:title="@string/Settings_ExperimentalFeatures"
                 app:bottomBorder="true"/>
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                 app:imageDrawable="@drawable/ic_notification"
                 app:title="@string/Settings_Notifications" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/baseCurrency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 app:imageDrawable="@drawable/ic_currency"
                 app:title="@string/Settings_BaseCurrency" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/language"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                 app:imageDrawable="@drawable/ic_language"
                 app:title="@string/Settings_Language" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/lightMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                 app:title="@string/Settings_LightMode"
                 app:bottomBorder="true"/>
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                 app:imageDrawable="@drawable/ic_attention"
                 app:title="@string/Settings_About" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/shareApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                 app:imageDrawable="@drawable/ic_share"
                 app:title="@string/Settings_ShareThisWallet" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/report"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

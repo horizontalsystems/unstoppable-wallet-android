@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.uikit.TopMenuItem
+import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import kotlinx.android.synthetic.main.activity_backup_eos.*

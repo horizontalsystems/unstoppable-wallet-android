@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/switchNotification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                 tools:itemCount="1"
                 tools:listitem="@layout/view_cell" />
 
-            <io.horizontalsystems.uikit.CellView
+            <io.horizontalsystems.views.CellView
                 android:id="@+id/deactivateAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

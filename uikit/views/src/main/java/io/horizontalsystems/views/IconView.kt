@@ -1,4 +1,4 @@
-package io.horizontalsystems.uikit
+package io.horizontalsystems.views
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -15,9 +15,7 @@ class IconView : ConstraintLayout {
     }
 
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(drawable: Drawable) {

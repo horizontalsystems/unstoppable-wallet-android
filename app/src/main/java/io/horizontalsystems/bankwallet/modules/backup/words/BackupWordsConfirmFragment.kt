@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
-import io.horizontalsystems.uikit.InputTextView
+import io.horizontalsystems.views.InputTextView
 
 class BackupWordsConfirmFragment : Fragment() {
     private lateinit var viewModel: BackupWordsViewModel

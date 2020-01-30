@@ -5,7 +5,7 @@ import android.os.Parcelable
 import android.view.View
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.uikit.SingleClickListener
+import io.horizontalsystems.views.SingleClickListener
 
 //View
 

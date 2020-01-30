@@ -1,4 +1,4 @@
-package io.horizontalsystems.uikit
+package io.horizontalsystems.views
 
 import android.content.Context
 import android.content.res.Resources
