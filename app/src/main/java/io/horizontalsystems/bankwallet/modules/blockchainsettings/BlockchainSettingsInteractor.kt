@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coinsettings
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.Wallet
 
-class CoinSettingsInteractor(
+class BlockchainSettingsInteractor(
         private val coinSettingsManager: ICoinSettingsManager,
         private val walletManager: IWalletManager,
         private val accountCleaner: IAccountCleaner,

@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.coinsettings.CoinSettingsActivity"
+            android:name=".modules.blockchainsettings.BlockchainSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.BackupActivity"

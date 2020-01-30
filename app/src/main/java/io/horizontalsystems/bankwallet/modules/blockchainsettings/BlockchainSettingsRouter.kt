@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.coinsettings
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class CoinSettingsRouter: CoinSettingsModule.IRouter {
+class BlockchainSettingsRouter: CoinSettingsModule.IRouter {
 
     val closeWithResultOk = SingleLiveEvent<Unit>()
     val close = SingleLiveEvent<Unit>()
