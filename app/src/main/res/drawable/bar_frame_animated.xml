@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
-    android:oneshot="true">
-
-    <item android:drawable="@drawable/status_progress_bar_grey_20_small" android:duration="5"/>
-    <item android:drawable="@drawable/status_progress_bar_grey_50_small" android:duration="50"/>
-
-</animation-list>
