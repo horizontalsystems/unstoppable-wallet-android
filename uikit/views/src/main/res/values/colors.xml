@@ -4,7 +4,6 @@
     <color name="ripple_white">#b2ffffff</color>
     <color name="ripple_black">#1f000000</color>
     <color name="transparent">#00000000</color>
-    <color name="grey_donut">#717175</color>
 
     <!-- new colors -->
     <color name="yellow_d">#ffa800</color>
