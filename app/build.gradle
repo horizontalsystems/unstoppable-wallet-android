@@ -11,7 +11,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 21
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 22
     return "$buildNumber".toInteger()
 }
 
@@ -59,9 +59,9 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "infuraProjectId", ""
-            resValue "string", "infuraSecretKey", ""
-            resValue "string", "etherscanKey", ""
+            resValue "string", "infuraProjectId", "5bf760228fcd47bb8d277dba49b7b369"
+            resValue "string", "infuraSecretKey", "7b81c992c98d4e60aaa8a0ef9acff2be"
+            resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "is_release", "true"
         }
         hockeyApp {
