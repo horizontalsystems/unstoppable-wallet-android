@@ -141,22 +141,17 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         drawPath(path, gridPaint)
 
         if (!isTouchActive) {
-            drawText(format(top.point.value, getMaxFraction(top.point.value)), shape.left + config.textPricePL, config.yAxisPrice(top.y, isTop = true), textPaint)
-            drawText(format(low.point.value, getMaxFraction(top.point.value)), shape.left + config.textPricePL, config.yAxisPrice(low.y, isTop = false), textPaint)
+            drawText(format(top.point.value), shape.left + config.textPricePL, config.yAxisPrice(top.y, isTop = true), textPaint)
+            drawText(format(low.point.value), shape.left + config.textPricePL, config.yAxisPrice(low.y, isTop = false), textPaint)
         }
-    }
-
-    private fun getMaxFraction(value: Float): Int?{
-        val fiatBigNumber = 1000f
-        return if (config.valueScale == 0 || value > fiatBigNumber) null else config.valueScale
     }
 
     private fun setGradient(colorStart: Int, colorEnd: Int) {
         gradient.shader = LinearGradient(0f, 0f, 0f, shape.bottom + 2, colorStart, colorEnd, Shader.TileMode.REPEAT)
     }
 
-    private fun format(value: Float, maxFraction: Int?): String {
-        return formatter?.format(value.toBigDecimal(), maxFraction) ?: ""
+    private fun format(value: Float): String {
+        return formatter?.format(value.toBigDecimal()) ?: ""
     }
 
     class Coordinate(val x: Float, val y: Float, val point: ChartPoint)

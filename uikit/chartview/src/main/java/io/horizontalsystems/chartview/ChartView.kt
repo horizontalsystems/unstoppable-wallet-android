@@ -21,7 +21,7 @@ class ChartView : View {
     }
 
     interface RateFormatter {
-        fun format(value: BigDecimal, maxFraction: Int?): String?
+        fun format(value: BigDecimal): String?
     }
 
     enum class ChartType {

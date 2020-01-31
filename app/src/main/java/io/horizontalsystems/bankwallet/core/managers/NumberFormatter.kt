@@ -102,9 +102,10 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         when {
             maxFraction != null -> customFormatter.maximumFractionDigits = maxFraction
             value.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
-            value < FIAT_TEN_CENT_EDGE -> customFormatter.maximumFractionDigits = 4
-            value >= FIAT_BIG_NUMBER_EDGE && trimmable -> customFormatter.maximumFractionDigits = 0
-            else -> customFormatter.maximumFractionDigits = 2
+            else -> {
+                val significantDecimalCount: Int = getSignificantDecimal(value, maxDecimal = 8)
+                customFormatter.maximumFractionDigits = significantDecimalCount
+            }
         }
 
         val formatted = customFormatter.format(value)
@@ -149,6 +150,19 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
 
         return numberFormat?.format(value)
+    }
+
+    private fun getSignificantDecimal(value: BigDecimal, maxDecimal: Int): Int {
+        //Here 4 numbers is significant value
+        val ten = 10.toBigDecimal()
+        val threshold = 1000.toBigDecimal()
+
+        for(decimalCount in 0 until maxDecimal) {
+            if (value * ten.pow(decimalCount) >= threshold){
+                return decimalCount
+            }
+        }
+        return maxDecimal
     }
 
     private fun getFormatter(locale: Locale): NumberFormat? {
