@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.utils
 
-import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
 import junit.framework.Assert.assertEquals
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe

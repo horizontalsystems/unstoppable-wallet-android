@@ -50,14 +50,18 @@ class NumberFormatterTest {
     fun format_Currency_ForRates() {
         assertRatesCurrencyFormatter(12.03903, false, null, "$12.04")
         assertRatesCurrencyFormatter(12.03203,false, null, "$12.03")
-        assertRatesCurrencyFormatter(1203.903,false, null, "$1,203.9")
+        assertRatesCurrencyFormatter(21203.903,false, null, "$21,204")
         assertRatesCurrencyFormatter(1203.903,true, null, "$1,204")
-        assertRatesCurrencyFormatter(0.0003903,false, null, "$0.0004")
-        assertRatesCurrencyFormatter(0.0003903,false, 6, "$0.00039")
-        assertRatesCurrencyFormatter(0.0003903,false, 4, "$0.0004")
+        assertRatesCurrencyFormatter(0.00039,false, null, "$0.00039")
+        assertRatesCurrencyFormatter(0.0003900,false, null, "$0.00039")
+        assertRatesCurrencyFormatter(0.0003903,false, null, "$0.0003903")
         assertRatesCurrencyFormatter(0.0100,false, null, "$0.01")
         assertRatesCurrencyFormatter(0.0,false, null, "$0.00")
         assertRatesCurrencyFormatter(0.0,true, null, "$0")
+        assertRatesCurrencyFormatter(0.00000041234,false, null, "$0.00000041")
+        assertRatesCurrencyFormatter(0.00039,false, 4, "$0.0004")
+        assertRatesCurrencyFormatter(0.00039124,false, 8, "$0.00039124")
+        assertRatesCurrencyFormatter(0.000391241234,false, 18, "$0.000391241234")
     }
 
     @Test
