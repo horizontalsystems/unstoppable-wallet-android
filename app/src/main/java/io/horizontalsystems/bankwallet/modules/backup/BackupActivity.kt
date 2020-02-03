@@ -13,8 +13,8 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.pin.PinModule
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_backup.*
 import kotlinx.android.synthetic.main.activity_backup_words.buttonBack
 import kotlinx.android.synthetic.main.activity_backup_words.buttonNext

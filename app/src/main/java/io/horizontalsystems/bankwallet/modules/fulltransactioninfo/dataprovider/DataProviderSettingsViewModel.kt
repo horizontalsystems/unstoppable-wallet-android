@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
 
 class DataProviderSettingsViewModel : ViewModel(), DataProviderSettingsModule.View {

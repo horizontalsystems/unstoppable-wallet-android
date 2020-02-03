@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IPinManager
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
+import io.horizontalsystems.core.IPinManager
+import io.horizontalsystems.core.ISystemInfoManager
 import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsInteractor(

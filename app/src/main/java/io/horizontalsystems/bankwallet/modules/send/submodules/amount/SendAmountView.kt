@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class SendAmountView : SendAmountModule.IView {
 

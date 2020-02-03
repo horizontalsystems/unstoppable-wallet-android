@@ -10,9 +10,11 @@ import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.core.IPinStorage
+import io.horizontalsystems.core.IThemeStorage
 import io.horizontalsystems.xrateskit.entities.ChartType
 
-class LocalStorageManager : ILocalStorage, IChartTypeStorage {
+class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
@@ -67,12 +69,6 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
             }
         }
 
-    override var isLightModeOn: Boolean
-        get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
-        set(enabled) {
-            App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
-        }
-
     override var iUnderstand: Boolean
         get() = App.preferences.getBoolean(I_UNDERSTAND, false)
         set(value) {
@@ -96,34 +92,6 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
             } ?: run {
                 App.preferences.edit().remove(BLOCK_TILL_DATE).apply()
             }
-        }
-
-    override var failedAttempts: Int?
-        get() {
-            val attempts = App.preferences.getInt(FAILED_ATTEMPTS, 0)
-            return when (attempts) {
-                0 -> null
-                else -> attempts
-            }
-        }
-        set(value) {
-            value?.let {
-                App.preferences.edit().putInt(FAILED_ATTEMPTS, it).apply()
-            } ?: App.preferences.edit().remove(FAILED_ATTEMPTS).apply()
-        }
-
-    override var lockoutUptime: Long?
-        get() {
-            val timestamp = App.preferences.getLong(LOCKOUT_TIMESTAMP, 0L)
-            return when (timestamp) {
-                0L -> null
-                else -> timestamp
-            }
-        }
-        set(value) {
-            value?.let {
-                App.preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
-            } ?: App.preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
         }
 
     override var baseBitcoinProvider: String?
@@ -216,6 +184,44 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     override fun clear() {
         App.preferences.edit().clear().apply()
     }
+
+    //  IThemeStorage
+
+    override var isLightModeOn: Boolean
+        get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
+        set(enabled) {
+            App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
+        }
+
+    //  IPinStorage
+
+    override var failedAttempts: Int?
+        get() {
+            val attempts = App.preferences.getInt(FAILED_ATTEMPTS, 0)
+            return when (attempts) {
+                0 -> null
+                else -> attempts
+            }
+        }
+        set(value) {
+            value?.let {
+                App.preferences.edit().putInt(FAILED_ATTEMPTS, it).apply()
+            } ?: App.preferences.edit().remove(FAILED_ATTEMPTS).apply()
+        }
+
+    override var lockoutUptime: Long?
+        get() {
+            val timestamp = App.preferences.getLong(LOCKOUT_TIMESTAMP, 0L)
+            return when (timestamp) {
+                0L -> null
+                else -> timestamp
+            }
+        }
+        set(value) {
+            value?.let {
+                App.preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
+            } ?: App.preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
+        }
 
     //  IChartTypeStorage
 

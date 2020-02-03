@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.core.ISystemInfoManager
 import java.util.*
 import kotlin.collections.LinkedHashMap
 

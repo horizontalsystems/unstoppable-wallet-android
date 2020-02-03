@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
@@ -15,34 +13,29 @@ import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
-import io.horizontalsystems.bankwallet.core.utils.LocaleHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
+import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.ICoreApp
 import io.reactivex.plugins.RxJavaPlugins
-import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class App : Application() {
+class App : CoreApp() {
 
-    companion object {
-
-        lateinit var preferences: SharedPreferences
+    companion object: ICoreApp by CoreApp {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var secureStorage: ISecuredStorage
-        lateinit var localStorage: LocalStorageManager
+        lateinit var localStorage: ILocalStorage
+        lateinit var chartTypeStorage: IChartTypeStorage
         lateinit var keyStoreManager: IKeyStoreManager
         lateinit var keyProvider: IKeyProvider
-        lateinit var encryptionManager: IEncryptionManager
         lateinit var wordsManager: WordsManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
         lateinit var backgroundManager: BackgroundManager
         lateinit var languageManager: ILanguageManager
-        lateinit var systemInfoManager: ISystemInfoManager
-        lateinit var pinManager: IPinManager
-        lateinit var lockManager: ILockManager
         lateinit var keyStoreChangeListener: KeyStoreChangeListener
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
@@ -83,9 +76,6 @@ class App : Application() {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
 
-        lateinit var instance: App
-            private set
-
         var lastExitDate: Long = 0
     }
 
@@ -111,7 +101,10 @@ class App : Application() {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        appConfigProvider = AppConfigProvider()
+        val appConfig = AppConfigProvider()
+        appConfigProvider = appConfig
+        appConfigTestMode = appConfig
+
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
         KeyStoreManager("MASTER_KEY").apply {
@@ -120,9 +113,9 @@ class App : Application() {
         }
         encryptionManager = EncryptionManager(keyProvider)
         secureStorage = SecuredStorageManager(encryptionManager)
-        ethereumKitManager = EthereumKitManager(appConfigProvider)
-        eosKitManager = EosKitManager(appConfigProvider)
-        binanceKitManager = BinanceKitManager(appConfigProvider)
+        ethereumKitManager = EthereumKitManager(appConfigTestMode)
+        eosKitManager = EosKitManager(appConfigTestMode)
+        binanceKitManager = BinanceKitManager(appConfigTestMode)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
@@ -131,11 +124,17 @@ class App : Application() {
         walletFactory = WalletFactory()
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(appConfigProvider, walletFactory, enabledWalletsStorage)
-        localStorage = LocalStorageManager()
+
+        val localStorageManager = LocalStorageManager()
+
+        localStorage = localStorageManager
+        chartTypeStorage = localStorageManager
+        pinStorage = localStorageManager
+        themeStorage = localStorageManager
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()
-        accountCleaner = AccountCleaner(appConfigProvider.testMode)
+        accountCleaner = AccountCleaner(appConfigTestMode.testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
@@ -158,12 +157,12 @@ class App : Application() {
 
         connectivityManager = ConnectivityManager()
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
         rateCoinMapper = RateCoinMapper()
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
 
-        transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
+        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
@@ -194,21 +193,5 @@ class App : Application() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         localeAwareContext(this)
-    }
-
-    fun localeAwareContext(base: Context): Context {
-        return LocaleHelper.onAttach(base)
-    }
-
-    fun getLocale(): Locale {
-        return LocaleHelper.getLocale(this)
-    }
-
-    fun setLocale(currentLocale: Locale) {
-        LocaleHelper.setLocale(this, currentLocale)
-    }
-
-    fun isLocaleRTL(): Boolean {
-        return LocaleHelper.isRTL(Locale.getDefault())
     }
 }

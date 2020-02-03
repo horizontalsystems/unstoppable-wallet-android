@@ -7,11 +7,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
-import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_app_status.*
 import java.util.*
-
 
 class AppStatusActivity : BaseActivity() {
 

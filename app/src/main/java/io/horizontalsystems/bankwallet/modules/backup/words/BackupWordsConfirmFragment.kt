@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.InputTextView
 
 class BackupWordsConfirmFragment : Fragment() {

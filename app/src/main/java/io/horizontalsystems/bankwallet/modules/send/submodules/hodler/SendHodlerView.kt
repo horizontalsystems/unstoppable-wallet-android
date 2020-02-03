@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.hodler
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.hodler.LockTimeInterval
 
 class SendHodlerView : SendHodlerModule.IView {

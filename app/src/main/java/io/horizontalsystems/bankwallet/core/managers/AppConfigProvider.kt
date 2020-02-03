@@ -7,9 +7,10 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.IAppConfigTestMode
 import java.math.BigDecimal
 
-class AppConfigProvider : IAppConfigProvider {
+class AppConfigProvider : IAppConfigProvider, IAppConfigTestMode {
     override val companyWebPageLink: String = "https://horizontalsystems.io"
     override val appWebPageLink: String = "https://unstoppable.money"
     override val reportEmail = "hsdao@protonmail.ch"
@@ -29,8 +30,6 @@ class AppConfigProvider : IAppConfigProvider {
 
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
-
-    override val testMode: Boolean = BuildConfig.testMode
 
     override val currencies: List<Currency> = listOf(
             Currency(code = "USD", symbol = "\u0024"),
@@ -120,5 +119,9 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("USDC",      "USD Coin",                "USDC",         6,      CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
             Coin("WTC",       "Waltonchain",             "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74"))
     )
+
+    //  IAppConfigTestMode
+
+    override val testMode: Boolean = BuildConfig.testMode
 
 }

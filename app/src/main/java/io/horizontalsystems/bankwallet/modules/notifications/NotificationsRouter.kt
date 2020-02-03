@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.notifications
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class NotificationsRouter : NotificationsModule.IRouter {
     val openNotificationSettingsLiveEvent = SingleLiveEvent<Unit>()

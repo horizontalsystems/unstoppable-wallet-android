@@ -153,6 +153,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "androidx.biometric:biometric:1.0.1"
+
     //ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.4'
 

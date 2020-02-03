@@ -67,7 +67,7 @@ object MainSettingsModule {
             val view = MainSettingsView()
             val router = MainSettingsRouter()
             val interactor = MainSettingsInteractor(
-                    localStorage = App.localStorage,
+                    themeStorage = App.themeStorage,
                     backupManager = App.backupManager,
                     languageManager = App.languageManager,
                     systemInfoManager = App.systemInfoManager,

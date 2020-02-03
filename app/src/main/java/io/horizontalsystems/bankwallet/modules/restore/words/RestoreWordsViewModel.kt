@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWordsModule.Router {
 

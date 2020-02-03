@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
 class ManageWalletsRouter: ManageWalletsModule.IRouter {

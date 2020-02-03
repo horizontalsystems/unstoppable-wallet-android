@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.contact
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class ContactView : ContactModule.IView {
     val emailLiveData = MutableLiveData<String>()

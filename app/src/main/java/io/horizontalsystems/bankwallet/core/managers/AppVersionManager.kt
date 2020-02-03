@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.entities.AppVersion
+import io.horizontalsystems.core.ISystemInfoManager
 import java.util.*
 
 class AppVersionManager(

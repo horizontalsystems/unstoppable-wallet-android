@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
-import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
+import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*

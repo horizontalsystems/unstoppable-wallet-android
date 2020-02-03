@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
-import io.horizontalsystems.bankwallet.core.ICurrentDateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.core.ICurrentDateProvider
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateListFactory(private val currentDateProvider: ICurrentDateProvider) : RateListModule.IRateListFactory {
 
-    override fun rateListViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>) : RateListViewItem {
+    override fun rateListViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>): RateListViewItem {
         val items = coins.map { viewItem(it, currency, marketInfos[it.code]) }
         return RateListViewItem(currentDateProvider.currentDate, lastUpdateTimestamp(marketInfos), items)
     }

@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.keystore
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class KeyStoreViewModel : ViewModel(), KeyStoreModule.IView, KeyStoreModule.IRouter {
 

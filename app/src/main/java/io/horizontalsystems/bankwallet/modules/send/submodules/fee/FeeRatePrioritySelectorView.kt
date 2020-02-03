@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule.FeeRateInfoViewItem
-import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
+import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_item_selector.*

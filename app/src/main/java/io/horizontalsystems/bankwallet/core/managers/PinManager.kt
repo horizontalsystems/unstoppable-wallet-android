@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.security.keystore.UserNotAuthenticatedException
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IPinManager
 import io.horizontalsystems.bankwallet.core.ISecuredStorage
+import io.horizontalsystems.core.IPinManager
 
 class PinManager(private val securedStorage: ISecuredStorage, val localStorage: ILocalStorage) : IPinManager {
 

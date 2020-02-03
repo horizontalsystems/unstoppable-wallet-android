@@ -53,7 +53,7 @@ object RateChartModule {
             val rateFormatter = RateFormatter(currency)
 
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.xRateManager, App.localStorage)
+            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage)
             val presenter = RateChartPresenter(view, rateFormatter, interactor, coin, currency, RateChartViewFactory())
 
             interactor.delegate = presenter
