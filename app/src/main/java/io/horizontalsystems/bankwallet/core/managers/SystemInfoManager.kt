@@ -7,7 +7,7 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
+import io.horizontalsystems.core.ISystemInfoManager
 
 class SystemInfoManager : ISystemInfoManager {
 

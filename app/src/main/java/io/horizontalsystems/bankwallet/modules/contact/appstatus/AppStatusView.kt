@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.contact.appstatus
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class AppStatusView : AppStatusModule.IView {
 

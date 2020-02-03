@@ -2,10 +2,9 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.text.TextUtils
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IEncryptionManager
 import io.horizontalsystems.bankwallet.core.ISecuredStorage
 import io.horizontalsystems.bankwallet.entities.AuthData
-
+import io.horizontalsystems.core.IEncryptionManager
 
 class SecuredStorageManager(private val encryptionManager: IEncryptionManager) : ISecuredStorage {
 

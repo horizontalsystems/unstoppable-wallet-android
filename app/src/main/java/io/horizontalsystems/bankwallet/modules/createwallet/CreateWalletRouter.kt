@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.createwallet
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class CreateWalletRouter : CreateWalletModule.IRouter {
     val startMainModuleLiveEvent = SingleLiveEvent<Unit>()

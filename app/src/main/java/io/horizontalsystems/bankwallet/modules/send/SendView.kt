@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.CoinException
-import java.time.Instant
-import kotlin.math.log
 
 class SendView : SendModule.IView {
 

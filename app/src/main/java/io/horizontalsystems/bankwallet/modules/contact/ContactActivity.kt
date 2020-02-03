@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.contact.appstatus.AppStatusModule
-import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_contact.*

@@ -1,16 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.IBackupManager
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.core.IThemeStorage
 import io.reactivex.disposables.CompositeDisposable
 
 class MainSettingsInteractor(
-        private val localStorage: ILocalStorage,
+        private val themeStorage: IThemeStorage,
         private val backupManager: IBackupManager,
         private val languageManager: ILanguageManager,
         private val systemInfoManager: ISystemInfoManager,
         private val currencyManager: ICurrencyManager,
-        private val appConfigProvider: IAppConfigProvider) : MainSettingsModule.IMainSettingsInteractor {
+        private val appConfigProvider: IAppConfigProvider)
+    : MainSettingsModule.IMainSettingsInteractor {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
@@ -42,9 +48,9 @@ class MainSettingsInteractor(
         get() = currencyManager.baseCurrency
 
     override var lightMode: Boolean
-        get() = localStorage.isLightModeOn
+        get() = themeStorage.isLightModeOn
         set(value) {
-            localStorage.isLightModeOn = value
+            themeStorage.isLightModeOn = value
         }
 
     override val appVersion: String

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType

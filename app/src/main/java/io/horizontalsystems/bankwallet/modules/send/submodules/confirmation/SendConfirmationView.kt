@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class SendConfirmationView: SendConfirmationModule.IView {
 

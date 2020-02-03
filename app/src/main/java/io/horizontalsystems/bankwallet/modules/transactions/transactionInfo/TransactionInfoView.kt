@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.info.InfoModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
-import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
-import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.view.*
 
 class TransactionInfoView : ConstraintLayoutWithHeader {

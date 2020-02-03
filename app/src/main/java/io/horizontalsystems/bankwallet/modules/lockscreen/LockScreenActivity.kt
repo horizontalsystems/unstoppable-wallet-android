@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
-import io.horizontalsystems.bankwallet.modules.pin.PinFragment
-import io.horizontalsystems.bankwallet.modules.pin.PinInteractionType
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.pin.PinFragment
+import io.horizontalsystems.pin.PinInteractionType
+import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.ratelist.RatesFragment
 import kotlinx.android.synthetic.main.activity_lockscreen.*
 

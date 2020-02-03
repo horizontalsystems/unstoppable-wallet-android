@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class BlockchainSettingsRouter: CoinSettingsModule.IRouter {
 

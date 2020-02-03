@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
 

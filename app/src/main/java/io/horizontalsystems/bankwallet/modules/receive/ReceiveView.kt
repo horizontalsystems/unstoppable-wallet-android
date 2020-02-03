@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 
 class ReceiveView: ReceiveModule.IView {

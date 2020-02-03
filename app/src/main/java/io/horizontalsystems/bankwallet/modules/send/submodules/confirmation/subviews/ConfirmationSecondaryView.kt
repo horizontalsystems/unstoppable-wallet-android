@@ -7,7 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
-import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
+import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.android.synthetic.main.view_confirmation_secondary_item_view.view.*
 
 class ConfirmationSecondaryView : ConstraintLayout {

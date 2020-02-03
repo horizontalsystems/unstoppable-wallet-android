@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.info
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class InfoView : InfoModule.IView {
     val titleLiveEvent = SingleLiveEvent<String>()

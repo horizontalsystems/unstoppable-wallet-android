@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.entities.PresentationMode
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.SettingsMode
 import io.horizontalsystems.bankwallet.modules.restore.restorecoins.RestoreCoinsModule
-import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
 import kotlinx.android.synthetic.main.view_holder_account_restore.*

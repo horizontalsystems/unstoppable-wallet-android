@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITransactionDataProviderManager
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -10,9 +9,10 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.EthereumForksProvider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Provider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.*
+import io.horizontalsystems.core.IAppConfigTestMode
 import io.reactivex.subjects.PublishSubject
 
-class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val localStorage: ILocalStorage)
+class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val localStorage: ILocalStorage)
     : ITransactionDataProviderManager {
 
     private val bitcoinProviders = when {

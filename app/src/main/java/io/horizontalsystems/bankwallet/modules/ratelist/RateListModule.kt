@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.CurrentDateProvider
+import io.horizontalsystems.core.CurrentDateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue

@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.util.*

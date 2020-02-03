@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.app.Activity
 import io.horizontalsystems.bankwallet.core.IKeyStoreManager
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreModule
+import io.horizontalsystems.core.ISystemInfoManager
 
 class KeyStoreChangeListener(private val systemInfoManager: ISystemInfoManager,
                              private val keyStoreManager: IKeyStoreManager) : BackgroundManager.Listener {

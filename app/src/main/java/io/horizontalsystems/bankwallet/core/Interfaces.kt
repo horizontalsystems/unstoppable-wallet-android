@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.text.SpannableString
-import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
@@ -41,12 +40,10 @@ interface ILocalStorage {
     var isBackedUp: Boolean
     var isFingerprintEnabled: Boolean
     var sendInputType: SendModule.InputType?
-    var isLightModeOn: Boolean
     var iUnderstand: Boolean
     var baseCurrencyCode: String?
     var blockTillDate: Long?
-    var failedAttempts: Int?
-    var lockoutUptime: Long?
+
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
@@ -131,12 +128,6 @@ interface INetworkManager {
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
-}
-
-interface IEncryptionManager {
-    fun encrypt(data: String): String
-    fun decrypt(data: String): String
-    fun getCryptoObject(): BiometricPrompt.CryptoObject?
 }
 
 interface IKeyStoreManager {
@@ -303,30 +294,8 @@ interface IAdapter {
     val debugInfo: String
 }
 
-interface ISystemInfoManager {
-    val appVersion: String
-    val isSystemLockOff: Boolean
-    val biometricAuthSupported: Boolean
-    val deviceModel: String
-    val osVersion: String
-}
-
 interface IAppStatusManager {
     val status: Map<String, Any>
-}
-
-interface IPinManager {
-    var isFingerprintEnabled: Boolean
-    val isPinSet: Boolean
-
-    fun store(pin: String)
-    fun validate(pin: String): Boolean
-    fun clear()
-}
-
-interface ILockManager {
-    var isLocked: Boolean
-    fun onUnlock()
 }
 
 interface IAppConfigProvider {
@@ -345,15 +314,10 @@ interface IAppConfigProvider {
     val btcCoreRpcPassword: String?
     val fiatDecimal: Int
     val maxDecimal: Int
-    val testMode: Boolean
     val localizations: List<String>
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
-}
-
-interface OneTimerDelegate {
-    fun onFire()
 }
 
 interface IRateStorage {
@@ -430,25 +394,6 @@ interface IEnabledWalletStorage {
     fun deleteAll()
 }
 
-interface ILockoutManager {
-    fun didFailUnlock()
-    fun dropFailedAttempts()
-
-    val currentState: LockoutState
-}
-
-interface IUptimeProvider {
-    val uptime: Long
-}
-
-interface ILockoutUntilDateFactory {
-    fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date?
-}
-
-interface ICurrentDateProvider {
-    val currentDate: Date
-}
-
 interface IWalletManager {
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
@@ -484,26 +429,26 @@ interface IBackgroundRateAlertScheduler {
     fun stopPeriodicWorker()
 }
 
-interface ICoinSettingsManager{
+interface ICoinSettingsManager {
     var syncMode: SyncMode
     var bitcoinDerivation: AccountType.Derivation
-    fun coinSettingsForCreate(coinType: CoinType) : CoinSettings
-    fun coinSettings(coinType: CoinType) : CoinSettings
+    fun coinSettingsForCreate(coinType: CoinType): CoinSettings
+    fun coinSettings(coinType: CoinType): CoinSettings
 }
 
-interface IAccountCleaner{
+interface IAccountCleaner {
     fun clearAccounts(accountIds: List<String>)
     fun clearAccount(coinType: CoinType, accountId: String)
 }
 
-interface IRateCoinMapper{
+interface IRateCoinMapper {
     var convertedCoinMap: MutableMap<String, String>
     var unconvertedCoinMap: MutableMap<String, String>
 
     fun addCoin(direction: RateDirectionMap, from: String, to: String?)
 }
 
-interface IBlockedChartCoins{
+interface IBlockedChartCoins {
     var blockedCoins: MutableList<String>
 }
 

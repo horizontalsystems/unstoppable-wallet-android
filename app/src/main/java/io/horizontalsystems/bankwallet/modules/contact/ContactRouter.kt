@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.contact
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class ContactRouter : ContactModule.IRouter {
     val sendEmailLiveEvent = SingleLiveEvent<String>()

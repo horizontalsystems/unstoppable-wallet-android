@@ -80,7 +80,7 @@
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.pin.PinActivity"
+            android:name="io.horizontalsystems.pin.PinActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.settings.basecurrency.BaseCurrencySettingsActivity"

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreModule
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
 
 class LauncherActivity : AppCompatActivity() {

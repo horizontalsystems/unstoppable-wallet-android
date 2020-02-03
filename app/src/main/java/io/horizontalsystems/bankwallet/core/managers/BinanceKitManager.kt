@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBinanceKitManager
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
+import io.horizontalsystems.core.IAppConfigTestMode
 
-class BinanceKitManager(appConfig: IAppConfigProvider) : IBinanceKitManager {
+class BinanceKitManager(appConfig: IAppConfigTestMode) : IBinanceKitManager {
     private var kit: BinanceChainKit? = null
     private var useCount = 0
     private val testMode = appConfig.testMode

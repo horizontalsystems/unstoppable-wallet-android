@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.info
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class InfoRouter : InfoModule.IRouter {
     val goBackLiveEvent = SingleLiveEvent<Unit>()

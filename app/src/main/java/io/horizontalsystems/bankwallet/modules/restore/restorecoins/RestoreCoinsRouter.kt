@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.restore.restorecoins
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class RestoreCoinsRouter : RestoreCoinsModule.IRouter {
     val startMainModuleLiveEvent = SingleLiveEvent<Unit>()

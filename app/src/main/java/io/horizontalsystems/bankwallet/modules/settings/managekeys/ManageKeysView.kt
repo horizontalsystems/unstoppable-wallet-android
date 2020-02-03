@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class ManageKeysView : ManageKeysModule.IView {
 
