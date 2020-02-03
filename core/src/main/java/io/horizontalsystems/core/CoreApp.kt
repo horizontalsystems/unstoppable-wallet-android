@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import io.horizontalsystems.core.helpers.LocaleHelper
 import java.util.*
 
-open class CoreApp : Application() {
+abstract class CoreApp : Application() {
     companion object : ICoreApp {
         override lateinit var preferences: SharedPreferences
         override lateinit var appConfigTestMode: IAppConfigTestMode
