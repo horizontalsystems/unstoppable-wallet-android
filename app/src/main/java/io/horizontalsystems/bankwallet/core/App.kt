@@ -152,7 +152,7 @@ class App : Application() {
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
-        languageManager = LanguageManager(appConfigProvider, "en")
+        languageManager = LanguageManager()
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 

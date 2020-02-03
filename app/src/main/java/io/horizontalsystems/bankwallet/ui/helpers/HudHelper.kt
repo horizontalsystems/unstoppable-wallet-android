@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.ui.helpers
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Handler
 import android.view.Gravity
 import android.widget.TextView
@@ -36,7 +39,11 @@ object HudHelper {
 
         val toastText = toast.view.findViewById(android.R.id.message) as TextView
         toastText.setTextColor(ContextCompat.getColor(toast.view.context, R.color.white))
-        toast.view.background.setColorFilter(ContextCompat.getColor(toast.view.context, backgroundColor), PorterDuff.Mode.SRC_IN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            toast.view.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.SRC_ATOP)
+        } else {
+            toast.view.background.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
+        }
         toast.setGravity(Gravity.TOP, 0, 120)
         toast.show()
 

@@ -60,7 +60,7 @@ class FullTransactionInfoItemView : ConstraintLayout {
         }
 
         if (dimmed) {
-            valueText.setTextColor(valueText.resources.getColor(R.color.grey))
+            valueText.setTextColor(ContextCompat.getColor(valueText.context, R.color.grey))
         }
 
         border.visibility = if (bottomBorder) View.VISIBLE else View.GONE

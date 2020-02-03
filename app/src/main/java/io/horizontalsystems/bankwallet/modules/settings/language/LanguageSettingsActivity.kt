@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -13,9 +13,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.extensions.ViewHolderProgressbar
 import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_language_settings.*
 import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
@@ -27,7 +27,7 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = ViewModelProviders.of(this, LanguageSettingsModule.Factory()).get(LanguageSettingsPresenter::class.java)
+        presenter = ViewModelProvider(this, LanguageSettingsModule.Factory()).get(LanguageSettingsPresenter::class.java)
 
         val presenterView = presenter.view as LanguageSettingsView
         val presenterRouter = presenter.router as LanguageSettingsRouter

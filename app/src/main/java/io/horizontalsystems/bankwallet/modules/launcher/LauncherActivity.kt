@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreModule
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
@@ -18,7 +18,7 @@ class LauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(LaunchViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(LaunchViewModel::class.java)
         viewModel.init()
 
         viewModel.openWelcomeModule.observe(this, Observer {

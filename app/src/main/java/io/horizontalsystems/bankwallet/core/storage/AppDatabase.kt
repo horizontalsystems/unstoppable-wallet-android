@@ -199,7 +199,7 @@ abstract class AppDatabase : RoomDatabase() {
                 """.trimIndent())
 
                 //update fields
-                var oldSyncMode: String? = null
+                var oldSyncMode: String
                 var oldDerivation: String? = null
 
                 val accountsCursor = database.query("SELECT * FROM AccountRecord")
@@ -212,7 +212,7 @@ abstract class AppDatabase : RoomDatabase() {
                         oldSyncMode = accountsCursor.getString(syncMode)
 
                         val origin = when {
-                            oldSyncMode?.decapitalize() == SyncMode.New.value.decapitalize() -> AccountOrigin.Created.value
+                            oldSyncMode.decapitalize() == SyncMode.New.value.decapitalize() -> AccountOrigin.Created.value
                             else -> AccountOrigin.Restored.value
                         }
 

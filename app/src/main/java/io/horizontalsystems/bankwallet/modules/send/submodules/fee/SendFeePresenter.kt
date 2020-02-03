@@ -180,7 +180,7 @@ class SendFeePresenter(
     }
 
     private fun getFeeRateInfoByPriority( searchList: List<FeeRateInfo>, priority: FeeRatePriority): FeeRateInfo?{
-        return searchList?.find { it.priority == priority }
+        return searchList.find { it.priority == priority }
     }
 
     private fun feeRateInfoViewItem(rateInfo: FeeRateInfo): SendFeeModule.FeeRateInfoViewItem {

@@ -36,8 +36,8 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val transactionHash = intent.getStringExtra(transactionHashKey)
-        val wallet = intent.getParcelableExtra<Wallet>(walletKey)
+        val transactionHash = intent.getStringExtra(transactionHashKey) ?: run { finish(); return }
+        val wallet = intent.getParcelableExtra<Wallet>(walletKey) ?: run { finish(); return }
 
         viewModel = ViewModelProvider(this).get(FullTransactionInfoViewModel::class.java)
         viewModel.init(transactionHash, wallet)

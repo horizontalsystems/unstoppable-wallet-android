@@ -162,7 +162,7 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
                     null
                 }
             }
-        override val date: Date
+        override val date: Date?
             get() {
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 return dateFormat.parse(transaction.time)

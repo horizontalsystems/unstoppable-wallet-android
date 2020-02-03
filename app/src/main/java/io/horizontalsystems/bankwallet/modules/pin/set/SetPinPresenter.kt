@@ -19,6 +19,7 @@ class SetPinPresenter(
             when (page) {
                 Page.ENTER -> pinPages.add(PinPage(TopText.Description(R.string.SetPin_Info)))
                 Page.CONFIRM -> pinPages.add(PinPage(TopText.Description(R.string.SetPin_ConfirmInfo)))
+                Page.UNLOCK -> {}
             }
         }
         view.addPages(pinPages)

@@ -98,8 +98,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
             R.id.menuClose ->  {
                 onBackPressed()
                 return true

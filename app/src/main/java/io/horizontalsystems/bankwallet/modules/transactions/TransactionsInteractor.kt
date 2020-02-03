@@ -86,7 +86,7 @@ class TransactionsInteractor(
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe { records, t2 ->
+                .subscribe { records, _ ->
                     delegate?.didFetchRecords(records)
                 }
                 .let { disposables.add(it) }

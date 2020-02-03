@@ -23,7 +23,7 @@ class KeyStoreActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_keystore)
 
-        val mode = intent.getParcelableExtra<KeyStoreModule.ModeType>(KeyStoreModule.MODE)
+        val mode = intent.getParcelableExtra<KeyStoreModule.ModeType>(KeyStoreModule.MODE) ?: run { finish(); return }
 
         viewModel = ViewModelProvider(this).get(KeyStoreViewModel::class.java)
         viewModel.init(mode)

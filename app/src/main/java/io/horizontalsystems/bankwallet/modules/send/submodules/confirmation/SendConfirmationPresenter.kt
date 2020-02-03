@@ -65,8 +65,8 @@ class SendConfirmationPresenter(
         view.loadPrimaryItems(primaryViewItem)
 
         val secondaryViewItem = SendConfirmationModule.SecondaryItemData(
-                feeAmount = primaryFeeAmount?.let { primaryFeeAmount ->
-                    "$primaryFeeAmount${secondaryFeeAmount?.let { secondaryFeeAmount -> " | $secondaryFeeAmount" }
+                feeAmount = primaryFeeAmount?.let { primFeeAmount ->
+                    "$primFeeAmount${secondaryFeeAmount?.let { secondaryFeeAmount -> " | $secondaryFeeAmount" }
                             ?: ""}"
                 },
                 estimatedTime = duration,

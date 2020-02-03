@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
-import io.horizontalsystems.views.MultipleInputEditTextView
 import io.horizontalsystems.bankwallet.ui.helpers.HudHelper
+import io.horizontalsystems.views.MultipleInputEditTextView
 import kotlinx.android.synthetic.main.activity_restore_eos.*
 import java.util.*
 
@@ -72,8 +72,8 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
             R.id.menuRestore ->  {
                 viewModel.delegate.onClickDone(
                         eosAccount.text.trim().toLowerCase(Locale.ENGLISH),
