@@ -13,7 +13,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -72,7 +72,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
 
         when (interactionType) {
             PinInteractionType.UNLOCK -> {
-                val unlockPresenter = ViewModelProviders.of(this, UnlockPinModule.Factory(showCancelButton)).get(UnlockPinPresenter::class.java)
+                val unlockPresenter = ViewModelProvider(this, UnlockPinModule.Factory(showCancelButton)).get(UnlockPinPresenter::class.java)
                 val unlockRouter = unlockPresenter.router as UnlockPinRouter
                 pinView = unlockPresenter.view as PinView
                 viewDelegate = unlockPresenter
@@ -80,7 +80,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
                 unlockRouter.dismissWithSuccess.observe(viewLifecycleOwner, Observer { dismissWithSuccess() })
             }
             PinInteractionType.EDIT_PIN -> {
-                val editPresenter = ViewModelProviders.of(this, EditPinModule.Factory()).get(EditPinPresenter::class.java)
+                val editPresenter = ViewModelProvider(this, EditPinModule.Factory()).get(EditPinPresenter::class.java)
                 val editRouter = editPresenter.router as EditPinRouter
                 pinView = editPresenter.view as PinView
                 viewDelegate = editPresenter
@@ -88,7 +88,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
                 editRouter.dismissWithSuccess.observe(viewLifecycleOwner, Observer { dismissWithSuccess() })
             }
             PinInteractionType.SET_PIN -> {
-                val setPresenter = ViewModelProviders.of(this, SetPinModule.Factory()).get(SetPinPresenter::class.java)
+                val setPresenter = ViewModelProvider(this, SetPinModule.Factory()).get(SetPinPresenter::class.java)
                 val setRouter = setPresenter.router as SetPinRouter
                 pinView = setPresenter.view as PinView
                 viewDelegate = setPresenter

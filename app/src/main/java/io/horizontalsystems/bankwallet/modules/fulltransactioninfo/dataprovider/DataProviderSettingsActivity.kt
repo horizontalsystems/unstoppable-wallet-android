@@ -5,16 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.extensions.ViewHolderProgressbar
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_explorer_switcher.*
 import kotlinx.android.synthetic.main.view_holder_explorer_item.*
@@ -28,9 +29,9 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val coin = intent.getParcelableExtra<Coin>(DataProviderSettingsModule.COIN_STRING)
-        val txHash = intent.getStringExtra(DataProviderSettingsModule.TRANSACTION_HASH)
-        viewModel = ViewModelProviders.of(this).get(DataProviderSettingsViewModel::class.java)
+        val coin = intent.getParcelableExtra<Coin>(DataProviderSettingsModule.COIN_STRING) ?: run { finish(); return }
+        val txHash = intent.getStringExtra(DataProviderSettingsModule.TRANSACTION_HASH) ?: run { finish(); return }
+        viewModel = ViewModelProvider(this).get(DataProviderSettingsViewModel::class.java)
         viewModel.init(coin, txHash)
 
         setContentView(R.layout.activity_explorer_switcher)
@@ -108,9 +109,9 @@ class ViewHolderDataProviderSettings(private val context: Context, override val 
         subtitle.text = context.getString(if (item.online) R.string.FullInfo_Source_Online else R.string.FullInfo_Source_Offline)
 
         if (item.online) {
-            subtitle.setTextColor(subtitle.resources.getColor(R.color.green_d))
+            subtitle.setTextColor(ContextCompat.getColor(subtitle.context, R.color.green_d))
         } else {
-            subtitle.setTextColor(subtitle.resources.getColor(R.color.red_d))
+            subtitle.setTextColor(ContextCompat.getColor(subtitle.context, R.color.red_d))
         }
 
         if (item.checking) {

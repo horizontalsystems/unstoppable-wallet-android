@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.welcome
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
@@ -22,7 +22,7 @@ class WelcomeActivity : BaseActivity() {
 
         setContentView(R.layout.activity_welcome)
 
-        viewModel = ViewModelProviders.of(this).get(WelcomeViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(WelcomeViewModel::class.java)
         viewModel.init()
 
         viewModel.openRestoreModule.observe(this, Observer {

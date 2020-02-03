@@ -27,7 +27,7 @@ class BackupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
 
-        val account = intent.getParcelableExtra<Account>(ModuleField.ACCOUNT)
+        val account = intent.getParcelableExtra<Account>(ModuleField.ACCOUNT) ?: run { finish(); return }
         val accountCoins = intent.getStringExtra(ModuleField.ACCOUNT_COINS)
 
         viewModel = ViewModelProvider(this).get(BackupViewModel::class.java)

@@ -60,8 +60,8 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menuNext -> {
                 presenter.onProceedButtonClick()
                 return true

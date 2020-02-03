@@ -67,7 +67,7 @@ class SendFeeFragment(
         presenterView.showFeePriorityOptions.observe(viewLifecycleOwner, Observer { feeRates ->
             FeeRatePrioritySelector
                     .newInstance(this, feeRates)
-                    .show(this.requireFragmentManager(), "fee_rate_priority_selector")
+                    .show(this.parentFragmentManager, "fee_rate_priority_selector")
         })
 
 

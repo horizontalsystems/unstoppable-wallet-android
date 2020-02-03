@@ -8,7 +8,7 @@ import android.view.ViewStub
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
@@ -41,7 +41,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
         setContentView(R.layout.activity_dashboard)
         setTransparentStatusBar()
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.init()
 
         adapter = MainTabsAdapter(supportFragmentManager)
@@ -153,7 +153,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
             txInfoBottomSheetBehavior = BottomSheetBehavior.from(transactionInfoNestedScrollView)
             setBottomSheet(txInfoBottomSheetBehavior)
 
-            transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
+            transInfoViewModel = ViewModelProvider(this).get(TransactionInfoViewModel::class.java)
 
             transInfoViewModel?.let {
                 it.init()
@@ -177,7 +177,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
     }
 
     private fun setBottomSheet(bottomSheetBehavior: BottomSheetBehavior<View>?) {
-        bottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                     bottomSheetBehavior.isFitToContents = true

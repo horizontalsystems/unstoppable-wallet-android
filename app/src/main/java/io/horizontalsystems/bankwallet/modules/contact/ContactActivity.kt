@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -22,7 +22,7 @@ class ContactActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
 
-        presenter = ViewModelProviders.of(this, ContactModule.Factory()).get(ContactPresenter::class.java)
+        presenter = ViewModelProvider(this, ContactModule.Factory()).get(ContactPresenter::class.java)
         val presenterView = presenter.view as ContactView
         val router = presenter.router as ContactRouter
 

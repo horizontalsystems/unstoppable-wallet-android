@@ -68,8 +68,8 @@ object LocaleHelper {
 
     private fun load(context: Context): Locale {
         val preferences = getPreferences(context)
-        val language = preferences.getString(SELECTED_LANGUAGE, Locale.getDefault().language)
-        val country = preferences.getString(SELECTED_COUNTRY, Locale.getDefault().country)
+        val language = preferences.getString(SELECTED_LANGUAGE, null) ?: Locale.getDefault().language
+        val country = preferences.getString(SELECTED_COUNTRY, null) ?: Locale.getDefault().country
         return Locale(language, country)
     }
 
@@ -96,9 +96,7 @@ object LocaleHelper {
 
         val configuration = resources.configuration
         configuration.locale = locale
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLayoutDirection(locale)
-        }
+        configuration.setLayoutDirection(locale)
 
         resources.updateConfiguration(configuration, resources.displayMetrics)
 

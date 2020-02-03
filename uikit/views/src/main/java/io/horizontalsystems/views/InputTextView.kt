@@ -45,7 +45,7 @@ class InputTextView : ConstraintLayout {
 
     fun setImeActionDone(onDone: () -> Unit) {
         inputEditText.imeOptions = EditorInfo.IME_ACTION_DONE
-        inputEditText.setOnEditorActionListener { v, actionId, event ->
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
                     onDone.invoke()

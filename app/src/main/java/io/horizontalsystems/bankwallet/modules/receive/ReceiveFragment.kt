@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
@@ -29,7 +29,7 @@ class ReceiveFragment(
         setSubtitle(wallet.coin.title)
         context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, wallet.coin.code)) }
 
-        val presenter = ViewModelProviders.of(this, ReceiveModule.Factory(wallet)).get(ReceivePresenter::class.java)
+        val presenter = ViewModelProvider(this, ReceiveModule.Factory(wallet)).get(ReceivePresenter::class.java)
         observeView(presenter.view as ReceiveView)
         observeRouter(presenter.router as ReceiveRouter)
         presenter.viewDidLoad()

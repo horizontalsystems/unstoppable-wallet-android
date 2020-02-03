@@ -34,7 +34,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { unit -> reloadWithBuffer() }
+                .doOnNext { _ -> reloadWithBuffer() }
                 .subscribe()?.let { disposables.add(it) }
     }
 

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.DateHelper
@@ -24,7 +24,7 @@ class AppStatusActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        presenter = ViewModelProviders.of(this, AppStatusModule.Factory()).get(AppStatusPresenter::class.java)
+        presenter = ViewModelProvider(this, AppStatusModule.Factory()).get(AppStatusPresenter::class.java)
 
         observeView(presenter.view as AppStatusView)
 
@@ -36,8 +36,8 @@ class AppStatusActivity : BaseActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
             R.id.menuCopy ->  {
                 presenter.didTapCopy(textAppStatus.text.toString())
                 return true
