@@ -38,17 +38,6 @@
                 app:inputHint="@string/Restore_EosActivePrivateKey"
                 app:inputMaxLines="5" />
 
-            <TextView
-                android:id="@+id/description"
-                style="@style/Subhead2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:textColor="@color/grey"
-                tools:text="@string/Restore_Enter_Key_Description_Eos" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
