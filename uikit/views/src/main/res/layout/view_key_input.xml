@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/input_background_themed"
     android:paddingStart="12dp"
     android:paddingEnd="8dp">
@@ -30,11 +31,11 @@
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/Send_Hint_Address"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:textColor="?TextColorBarsToDark"
-                android:textColorHint="@color/grey_50" />
+                android:textColorHint="@color/grey_50"
+                tools:hint="Address" />
 
         </LinearLayout>
 

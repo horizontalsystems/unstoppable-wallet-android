@@ -55,6 +55,12 @@ class MultipleInputEditTextView : ConstraintLayout {
             txtInput.setText(value)
         }
 
+    var btnText: String
+        get() = btnPaste.text.toString()
+        set(value) {
+            btnPaste.setText(value)
+        }
+
     fun bind(onPaste: () -> Unit, onScan: (() -> Unit)? = null) {
         btnQRCodeScan.setOnClickListener {
             onScan?.invoke()
