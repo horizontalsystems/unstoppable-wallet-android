@@ -61,10 +61,11 @@
             android:fontFamily="@font/noto_sans_bold"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:text="@string/Alert_Ok"
             android:textAlignment="center"
             android:textColor="?ColorJacob"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            tools:text="OK" />
+
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtPrefix"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/Send_Hint_Address" />
+        tools:text="Address" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

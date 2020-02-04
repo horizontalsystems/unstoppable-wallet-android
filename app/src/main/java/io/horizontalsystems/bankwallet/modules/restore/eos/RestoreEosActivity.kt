@@ -38,6 +38,9 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         viewModel = ViewModelProvider(this).get(RestoreEosViewModel::class.java)
         viewModel.init()
 
+        eosAccount.btnText = getString(R.string.Send_Button_Paste)
+        eosActivePrivateKey.btnText = getString(R.string.Send_Button_Paste)
+
         viewModel.setAccount.observe(this, Observer {
             eosAccount.text = it
         })

@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.core.CoreActivity
-import io.horizontalsystems.core.R
 import io.horizontalsystems.views.AlertDialogFragment
 import java.util.logging.Logger
 

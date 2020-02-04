@@ -187,7 +187,6 @@ dependencies {
 
     implementation project(':core')
     implementation project(':uikit:views')
-    implementation project(':uikit:translations')
     implementation project(':uikit:icons')
     implementation project(':uikit:chartview')
     implementation project(':uikit:pin')
