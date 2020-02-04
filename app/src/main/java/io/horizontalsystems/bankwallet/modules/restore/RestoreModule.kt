@@ -53,7 +53,7 @@ object RestoreModule {
         when(predefinedAccountType){
             PredefinedAccountType.Standard -> RestoreWordsModule.startForResult(context, 12, predefinedAccountType.title, requestCode)
             PredefinedAccountType.Binance -> RestoreWordsModule.startForResult(context, 24, predefinedAccountType.title, requestCode)
-            PredefinedAccountType.Eos -> RestoreEosModule.startForResult(context, predefinedAccountType.title, requestCode)
+            PredefinedAccountType.Eos -> RestoreEosModule.startForResult(context, requestCode)
         }
     }
 

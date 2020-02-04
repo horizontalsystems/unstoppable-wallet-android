@@ -30,11 +30,6 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val accountTypeTitleRes = intent.getIntExtra(ModuleField.ACCOUNT_TYPE_TITLE, 0)
-        if (accountTypeTitleRes > 0) {
-            description.text = getString(R.string.Restore_Enter_Key_Description_Eos, getString(accountTypeTitleRes))
-        }
-
         viewModel = ViewModelProvider(this).get(RestoreEosViewModel::class.java)
         viewModel.init()
 
