@@ -57,7 +57,7 @@ class BtcComResponse(
 
     override val fee get() = fees.toDouble() / btcRate
     override val feePerByte: Double? get() = null
-    override val date: Date get() = Date(time * 1000)
+    override val date get() = Date(time * 1000)
     override val inputs get() = vin as ArrayList<Input>
     override val outputs get() = vout as ArrayList<Output>
 

@@ -8,7 +8,7 @@ interface FullTransactionResponse
 
 abstract class BitcoinResponse : FullTransactionResponse {
     abstract val hash: String
-    abstract val date: Date
+    abstract val date: Date?
     abstract val height: Int
     abstract val fee: Double
     abstract val size: Int?
@@ -73,7 +73,7 @@ abstract class EosResponse : FullTransactionResponse {
     abstract val status: String
 
     abstract val blockNumber: String
-    abstract val blockTimeStamp: Long
+    abstract val blockTimeStamp: Long?
 
     abstract val actions: List<EosAction>
 
