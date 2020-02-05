@@ -12,7 +12,7 @@ class EosProviderResponse(json: JsonObject, eosAccount: String) : EosResponse() 
 
     override val blockNumber: String
 
-    override val blockTimeStamp: Long
+    override val blockTimeStamp: Long?
 
     override val actions: List<EosAction>
 
@@ -27,7 +27,7 @@ class EosProviderResponse(json: JsonObject, eosAccount: String) : EosResponse() 
     init {
         txId = json["id"].asString
         blockNumber = json["block_num"].asLong.toString()
-        blockTimeStamp = dateFormat.parse(json["block_time"].asString).time
+        blockTimeStamp = dateFormat.parse(json["block_time"].asString)?.time
 
         val txReceipt = json["trx"].asJsonObject["receipt"].asJsonObject
         status = txReceipt["status"].asString

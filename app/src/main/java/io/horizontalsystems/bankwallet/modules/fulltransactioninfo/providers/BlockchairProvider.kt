@@ -113,9 +113,9 @@ class BlockchairBTCResponse(@SerializedName("data") val data: Map<String, Data>)
         override val confirmations: String? = null
         override val inputs get() = vin as ArrayList<Input>
         override val outputs get() = vout as ArrayList<Output>
-        override val date: Date
+        override val date: Date?
             get() {
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                 return dateFormat.parse(transaction.time)
             }
     }
@@ -164,7 +164,7 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
             }
         override val date: Date?
             get() {
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                 return dateFormat.parse(transaction.time)
             }
     }

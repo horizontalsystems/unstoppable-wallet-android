@@ -18,7 +18,7 @@ class FullTransactionEosAdapter(val provider: FullTransactionInfoModule.EosProvi
         val sections = mutableListOf<FullTransactionSection>()
 
         mutableListOf<FullTransactionItem>().let { section ->
-            section.add(FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDate(Date(data.blockTimeStamp)), icon = FullTransactionIcon.TIME))
+            section.add(FullTransactionItem(R.string.FullInfo_Time, value = data.blockTimeStamp?.let{ DateHelper.getFullDate(Date(it))}, icon = FullTransactionIcon.TIME))
             section.add(FullTransactionItem(R.string.FullInfo_Block, value = data.blockNumber, icon = FullTransactionIcon.BLOCK))
             section.add(FullTransactionItem(R.string.FullInfo_Status, value = data.status, icon = FullTransactionIcon.CHECK))
 

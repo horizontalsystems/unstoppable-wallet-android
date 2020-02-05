@@ -14,7 +14,7 @@ class InsightResponse(
         @SerializedName("vout") val vout: ArrayList<Vout>)
     : BitcoinResponse() {
 
-    override val date: Date get() = Date(time * 1000)
+    override val date get() = Date(time * 1000)
     override val inputs: ArrayList<Input> get() = vin as ArrayList<Input>
     override val outputs: ArrayList<Output> get() = vout as ArrayList<Output>
     override val feePerByte: Double? get() = size?.let { fee * btcRate / size.toDouble() }
