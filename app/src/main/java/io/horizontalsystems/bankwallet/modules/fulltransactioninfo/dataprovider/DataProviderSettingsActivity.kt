@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.ui.extensions.ViewHolderProgressbar
 import io.horizontalsystems.views.TopMenuItem
+import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_explorer_switcher.*
 import kotlinx.android.synthetic.main.view_holder_explorer_item.*
@@ -127,7 +127,7 @@ class ViewHolderDataProviderSettings(private val context: Context, override val 
     }
 
     companion object {
-        val layoutResourceId= R.layout.view_holder_explorer_item
+        val layoutResourceId = R.layout.view_holder_explorer_item
     }
 
 }
