@@ -1,5 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.horizontalsystems.views">
-
-    <application android:theme="@style/DarkModeAppTheme" />
-</manifest>
+    package="io.horizontalsystems.views"/>
