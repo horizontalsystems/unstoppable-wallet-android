@@ -151,7 +151,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             activity?.let { activity ->
                 val title = getString(R.string.ManageKeys_Delete_Alert_Title)
                 val subtitle = getString(predefinedAccount.title)
-                val description = getString(R.string.ManageKeys_Delete_Alert, getString(predefinedAccount.title), coin.title)
+                val description = getString(R.string.Balance_Backup_Alert, getString(predefinedAccount.title), coin.title)
                 ManageKeysDialog.show(title, subtitle, description, activity, object : ManageKeysDialog.Listener {
                     override fun onClickBackupKey() {
                         viewModel.delegate.onBackupClick()
