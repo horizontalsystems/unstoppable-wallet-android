@@ -45,6 +45,7 @@ object RestoreCoinsModule {
     }
 
     class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType, private val accountType: AccountType) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RestoreCoinsView()
             val router = RestoreCoinsRouter()

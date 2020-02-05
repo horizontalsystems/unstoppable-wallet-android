@@ -57,7 +57,7 @@ object SendAddressModule {
     class Factory(private val coin: Coin,
                   private val editable: Boolean,
                   private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendAddressView()

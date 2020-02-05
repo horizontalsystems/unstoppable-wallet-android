@@ -59,6 +59,7 @@ object CoinSettingsModule {
     }
 
     class Factory(private val mode: SettingsMode) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = BlockchainSettingsView()
             val router = BlockchainSettingsRouter()

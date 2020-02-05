@@ -88,7 +88,7 @@ object SendAmountModule {
 
     class Factory(private val wallet: Wallet,
                   private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendAmountView()

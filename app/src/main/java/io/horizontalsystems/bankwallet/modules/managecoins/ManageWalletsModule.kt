@@ -62,6 +62,7 @@ object ManageWalletsModule {
     }
 
     class Factory(private val showCloseButton: Boolean) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageWalletsView()
             val router = ManageWalletsRouter()
