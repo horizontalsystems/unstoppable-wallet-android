@@ -1,8 +1,7 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.views
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
 
 class ViewHolderProgressbar(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
