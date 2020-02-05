@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.backup.words
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_backup_words.*
 
 class BackupWordsActivity : BaseActivity() {
 
-    private lateinit var viewModel: BackupWordsViewModel
+    val viewModel by viewModels<BackupWordsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,6 @@ class BackupWordsActivity : BaseActivity() {
         val backedUp = intent.getBooleanExtra(ACCOUNT_BACKEDUP, false)
         val backupWords = intent.getStringArrayExtra(WORDS_KEY) ?: arrayOf()
 
-        viewModel = ViewModelProvider(this).get(BackupWordsViewModel::class.java)
         viewModel.init(backupWords, backedUp)
 
         if (savedInstanceState == null) {

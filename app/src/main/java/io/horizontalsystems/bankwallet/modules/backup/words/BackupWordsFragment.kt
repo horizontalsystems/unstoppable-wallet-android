@@ -10,15 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
 class BackupWordsFragment : Fragment() {
 
-    private lateinit var viewModel: BackupWordsViewModel
+    val viewModel by activityViewModels<BackupWordsViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_backup_words, container, false)
@@ -27,15 +27,9 @@ class BackupWordsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let {
-            //deprecated method keeps working "viewModel.wordsLiveData" that's is shared with activity
-            viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
-        }
-
         viewModel.wordsLiveData.observe(viewLifecycleOwner, Observer {
             populateWords(it)
         })
-
     }
 
     private fun populateWords(words: Array<String>) {
