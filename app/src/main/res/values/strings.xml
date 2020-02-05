@@ -92,6 +92,7 @@
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
 
     <!--Send-->
 
@@ -386,7 +387,7 @@
     <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
     <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the %s Wallet before you may receive %s.</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
 
     <!-- Manage Keys Alert -->
 
