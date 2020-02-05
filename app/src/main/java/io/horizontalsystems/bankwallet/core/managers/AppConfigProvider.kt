@@ -8,9 +8,11 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.core.IAppConfigTestMode
+import io.horizontalsystems.core.ILanguageConfigProvider
 import java.math.BigDecimal
 
-class AppConfigProvider : IAppConfigProvider, IAppConfigTestMode {
+class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfigTestMode {
+
     override val companyWebPageLink: String = "https://horizontalsystems.io"
     override val appWebPageLink: String = "https://unstoppable.money"
     override val reportEmail = "hsdao@protonmail.ch"
@@ -37,12 +39,6 @@ class AppConfigProvider : IAppConfigProvider, IAppConfigTestMode {
             Currency(code = "GBP", symbol = "\u00A3"),
             Currency(code = "JPY", symbol = "\u00A5")
     )
-
-    override val localizations: List<String>
-        get() {
-            val coinsString = App.instance.getString(R.string.localizations)
-            return coinsString.split(",")
-        }
 
     override val featuredCoins: List<Coin>
         get() = listOf(
@@ -119,6 +115,14 @@ class AppConfigProvider : IAppConfigProvider, IAppConfigTestMode {
             Coin("USDC",      "USD Coin",                "USDC",         6,      CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
             Coin("WTC",       "Waltonchain",             "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74"))
     )
+
+    //  ILanguageConfigProvider
+
+    override val localizations: List<String>
+        get() {
+            val coinsString = App.instance.getString(R.string.localizations)
+            return coinsString.split(",")
+        }
 
     //  IAppConfigTestMode
 

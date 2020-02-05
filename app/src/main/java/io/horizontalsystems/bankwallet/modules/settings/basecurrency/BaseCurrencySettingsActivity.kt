@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +18,6 @@ import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
-import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
 
 class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Listener {
 
@@ -44,10 +45,8 @@ class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Lis
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         presenterView.currencyItems.observe(this, Observer { items ->
-            items?.let {
-                adapter?.items = it
-                adapter?.notifyDataSetChanged()
-            }
+            adapter?.items = items
+            adapter?.notifyDataSetChanged()
         })
 
         presenterRouter.closeLiveEvent.observe(this, Observer {
@@ -88,18 +87,20 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
         }
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderCurrency -> holder.bind(items[position]) { listener.onItemClick(position) }
         }
     }
-
 }
 
 class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: CurrencyViewItem, onClick: () -> (Unit)) {
+        val image = containerView.findViewById<ImageView>(R.id.image)
+        val title = containerView.findViewById<TextView>(R.id.title)
+        val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
+        val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         image.setImageResource(LayoutHelper.getCurrencyDrawableResource(containerView.context, item.code.toLowerCase()))
@@ -112,5 +113,4 @@ class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHo
         val layoutResourceId: Int
             get() = R.layout.view_holder_item_with_checkmark
     }
-
 }

@@ -6,9 +6,9 @@ import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
@@ -157,8 +157,8 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val ten = 10.toBigDecimal()
         val threshold = 1000.toBigDecimal()
 
-        for(decimalCount in 0 until maxDecimal) {
-            if (value * ten.pow(decimalCount) >= threshold){
+        for (decimalCount in 0 until maxDecimal) {
+            if (value * ten.pow(decimalCount) >= threshold) {
                 return decimalCount
             }
         }

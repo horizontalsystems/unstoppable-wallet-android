@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.IThemeStorage
 import io.reactivex.disposables.CompositeDisposable

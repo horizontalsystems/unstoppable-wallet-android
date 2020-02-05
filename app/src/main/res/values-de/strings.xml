@@ -207,8 +207,6 @@
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Währung</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Sprache</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

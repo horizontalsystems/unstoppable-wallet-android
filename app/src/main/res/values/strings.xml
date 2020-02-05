@@ -275,10 +275,6 @@
     <string name="SettingsCurrency_Title">Base Currency</string>
     <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
 
-    <!--Setting_Language-->
-
-    <string name="SettingsLanguage_Title">Language</string>
-
     <!--Setting_About-->
 
     <string name="SettingsAbout_Title">About</string>

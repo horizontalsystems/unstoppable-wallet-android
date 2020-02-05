@@ -13,16 +13,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.modules.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
-import io.horizontalsystems.bankwallet.modules.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
-import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
+import io.horizontalsystems.languageswitcher.LanguageSwitcherModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class MainSettingsFragment : Fragment() {
@@ -48,6 +49,14 @@ class MainSettingsFragment : Fragment() {
 
         //currently language setting is not working on API 23, 24, 25
         language.visibility = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) View.VISIBLE else View.GONE
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ModuleCode.LANGUAGE_SWITCH && resultCode == LanguageSwitcherModule.LANGUAGE_CHANGED) {
+            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
+        }
     }
 
     private fun bindViewListeners(presenter: MainSettingsPresenter) {
@@ -120,7 +129,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> LanguageSettingsModule.start(context) }
+            LanguageSwitcherModule.start(this, ModuleCode.LANGUAGE_SWITCH)
         })
 
         router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {

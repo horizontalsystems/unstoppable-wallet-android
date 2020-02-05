@@ -7,8 +7,10 @@ import java.util.*
 interface ICoreApp {
     var preferences: SharedPreferences
     var appConfigTestMode: IAppConfigTestMode
+    var languageConfigProvider: ILanguageConfigProvider
     var encryptionManager: IEncryptionManager
     var systemInfoManager: ISystemInfoManager
+    var languageManager: ILanguageManager
     var lockManager: ILockManager
     var pinManager: IPinManager
     var pinStorage: IPinStorage
@@ -27,6 +29,10 @@ interface IAppConfigTestMode {
     val testMode: Boolean
 }
 
+interface ILanguageConfigProvider {
+    val localizations: List<String>
+}
+
 interface ISystemInfoManager {
     val appVersion: String
     val isSystemLockOff: Boolean
@@ -42,6 +48,15 @@ interface IPinManager {
     fun store(pin: String)
     fun validate(pin: String): Boolean
     fun clear()
+}
+
+interface ILanguageManager {
+    var currentLocale: Locale
+    var currentLanguage: String
+    val currentLanguageName: String
+
+    fun getName(language: String): String
+    fun getNativeName(language: String): String
 }
 
 interface IPinStorage {

@@ -207,8 +207,6 @@
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Moneda principal</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Idioma</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

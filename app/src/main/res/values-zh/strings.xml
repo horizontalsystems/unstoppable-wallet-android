@@ -207,8 +207,6 @@
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基础货币</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">语言</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

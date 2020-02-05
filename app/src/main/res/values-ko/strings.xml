@@ -207,8 +207,6 @@
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">기초 통화</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">언어</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

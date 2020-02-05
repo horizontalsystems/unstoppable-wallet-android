@@ -189,6 +189,7 @@ dependencies {
     implementation project(':uikit:views')
     implementation project(':uikit:icons')
     implementation project(':uikit:chartview')
+    implementation project(':uikit:languageswitcher')
     implementation project(':uikit:pin')
 
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha03'

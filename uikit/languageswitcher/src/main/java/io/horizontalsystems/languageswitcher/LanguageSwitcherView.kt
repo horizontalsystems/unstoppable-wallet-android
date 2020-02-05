@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.settings.language
+package io.horizontalsystems.languageswitcher
 
 import androidx.lifecycle.MutableLiveData
 
-class LanguageSettingsView: LanguageSettingsModule.ILanguageSettingsView {
+class LanguageSwitcherView : LanguageSwitcherModule.IView {
     val languageItems = MutableLiveData<List<LanguageViewItem>>()
 
     override fun show(items: List<LanguageViewItem>) {

@@ -176,15 +176,6 @@ interface IWordsManager {
     fun generateWords(count: Int = 12): List<String>
 }
 
-interface ILanguageManager {
-    var currentLocale: Locale
-    var currentLanguage: String
-    val currentLanguageName: String
-
-    fun getName(language: String): String
-    fun getNativeName(language: String): String
-}
-
 sealed class AdapterState {
     object Synced : AdapterState()
     class Syncing(val progress: Int, val lastBlockDate: Date?) : AdapterState()
@@ -314,7 +305,6 @@ interface IAppConfigProvider {
     val btcCoreRpcPassword: String?
     val fiatDecimal: Int
     val maxDecimal: Int
-    val localizations: List<String>
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val coins: List<Coin>

@@ -1,12 +1,12 @@
-package io.horizontalsystems.bankwallet.modules.settings.language
+package io.horizontalsystems.languageswitcher
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.ILanguageManager
+import io.horizontalsystems.core.ILanguageConfigProvider
+import io.horizontalsystems.core.ILanguageManager
 
-class LanguageSettingsInteractor(
+class LanguageSwitcherInteractor(
         private val languageManager: ILanguageManager,
-        private val appConfigProvider: IAppConfigProvider
-) : LanguageSettingsModule.ILanguageSettingsInteractor {
+        private val appConfigProvider: ILanguageConfigProvider)
+    : LanguageSwitcherModule.IInteractor {
 
     override var currentLanguage: String
         get() = languageManager.currentLanguage
