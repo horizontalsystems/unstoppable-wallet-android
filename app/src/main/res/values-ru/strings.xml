@@ -207,8 +207,6 @@
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая Валюта</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Язык</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

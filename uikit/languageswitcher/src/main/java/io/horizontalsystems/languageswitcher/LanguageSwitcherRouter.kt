@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.settings.language
+package io.horizontalsystems.languageswitcher
 
 import io.horizontalsystems.core.SingleLiveEvent
 
-class LanguageSettingsRouter: LanguageSettingsModule.ILanguageSettingsRouter {
+class LanguageSwitcherRouter : LanguageSwitcherModule.IRouter {
     val reloadAppLiveEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 

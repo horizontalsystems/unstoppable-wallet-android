@@ -7,12 +7,15 @@ import io.horizontalsystems.core.helpers.LocaleHelper
 import java.util.*
 
 abstract class CoreApp : Application() {
+
     companion object : ICoreApp {
         override lateinit var preferences: SharedPreferences
         override lateinit var appConfigTestMode: IAppConfigTestMode
+        override lateinit var languageConfigProvider: ILanguageConfigProvider
         override lateinit var encryptionManager: IEncryptionManager
         override lateinit var systemInfoManager: ISystemInfoManager
         override lateinit var lockManager: ILockManager
+        override lateinit var languageManager: ILanguageManager
         override lateinit var pinManager: IPinManager
         override lateinit var pinStorage: IPinStorage
         override lateinit var themeStorage: IThemeStorage

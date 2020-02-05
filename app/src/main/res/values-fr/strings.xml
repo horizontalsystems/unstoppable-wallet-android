@@ -208,8 +208,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Langue</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

@@ -1,12 +1,12 @@
-package io.horizontalsystems.bankwallet.modules.settings.language
+package io.horizontalsystems.languageswitcher
 
 import androidx.lifecycle.ViewModel
 
-class LanguageSettingsPresenter(
-        val view: LanguageSettingsModule.ILanguageSettingsView,
-        val router: LanguageSettingsModule.ILanguageSettingsRouter,
-        private val interactor: LanguageSettingsModule.ILanguageSettingsInteractor
-) : ViewModel(), LanguageSettingsModule.ILanguageSettingsViewDelegate {
+class LanguageSwitcherPresenter(
+        val view: LanguageSwitcherModule.IView,
+        val router: LanguageSwitcherModule.IRouter,
+        private val interactor: LanguageSwitcherModule.IInteractor)
+    : ViewModel(), LanguageSwitcherModule.IViewDelegate {
 
     private val languages = interactor.availableLanguages
 

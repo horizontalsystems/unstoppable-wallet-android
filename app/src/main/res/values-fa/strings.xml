@@ -207,8 +207,6 @@
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">زبان</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>

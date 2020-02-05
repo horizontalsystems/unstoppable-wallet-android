@@ -22,7 +22,7 @@ import java.util.logging.Logger
 
 class App : CoreApp() {
 
-    companion object: ICoreApp by CoreApp {
+    companion object : ICoreApp by CoreApp {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var secureStorage: ISecuredStorage
@@ -35,7 +35,6 @@ class App : CoreApp() {
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
         lateinit var backgroundManager: BackgroundManager
-        lateinit var languageManager: ILanguageManager
         lateinit var keyStoreChangeListener: KeyStoreChangeListener
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
@@ -104,6 +103,7 @@ class App : CoreApp() {
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
         appConfigTestMode = appConfig
+        languageConfigProvider = appConfig
 
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)

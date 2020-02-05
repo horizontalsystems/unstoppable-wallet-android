@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ILanguageManager
+import io.horizontalsystems.core.ILanguageManager
 import java.util.*
 
 class LanguageManager : ILanguageManager {

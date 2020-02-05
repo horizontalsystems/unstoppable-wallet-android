@@ -7,6 +7,7 @@ object ModuleCode {
     const val UNLOCK_PIN = 6
     const val COIN_SETTINGS = 7
     const val RESTORE_COINS = 8
+    const val LANGUAGE_SWITCH = 9
 }
 
 object ModuleField {

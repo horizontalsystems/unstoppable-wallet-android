@@ -207,8 +207,6 @@
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Para birimi</string>
-    <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Dil</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>

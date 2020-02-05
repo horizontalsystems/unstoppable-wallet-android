@@ -1,36 +1,34 @@
-package io.horizontalsystems.bankwallet.modules.settings.language
+package io.horizontalsystems.languageswitcher
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.BaseActivity
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.core.CoreActivity
+import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.LayoutHelper
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_language_settings.*
-import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
 
-class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listener {
+class LanguageSettingsActivity : CoreActivity(), LanguageSwitcherAdapter.Listener {
 
-    private lateinit var presenter: LanguageSettingsPresenter
-    private var adapter: LanguageSettingsAdapter? = null
+    private lateinit var presenter: LanguageSwitcherPresenter
+    private var adapter: LanguageSwitcherAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = ViewModelProvider(this, LanguageSettingsModule.Factory()).get(LanguageSettingsPresenter::class.java)
+        presenter = ViewModelProvider(this, LanguageSwitcherModule.Factory()).get(LanguageSwitcherPresenter::class.java)
 
-        val presenterView = presenter.view as LanguageSettingsView
-        val presenterRouter = presenter.router as LanguageSettingsRouter
+        val presenterView = presenter.view as LanguageSwitcherView
+        val presenterRouter = presenter.router as LanguageSwitcherRouter
 
         setContentView(R.layout.activity_language_settings)
 
@@ -39,7 +37,7 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
                 leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
         )
 
-        adapter = LanguageSettingsAdapter(this)
+        adapter = LanguageSwitcherAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -51,7 +49,9 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
         })
 
         presenterRouter.reloadAppLiveEvent.observe(this, Observer {
-            MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
+            // MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
+            setResult(LanguageSwitcherModule.LANGUAGE_CHANGED)
+            finish()
         })
 
         presenterRouter.closeLiveEvent.observe(this, Observer {
@@ -66,7 +66,7 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
     }
 }
 
-class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LanguageSwitcherAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_ITEM = 1
     private val VIEW_TYPE_LOADING = 2
 
@@ -103,6 +103,10 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
 class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: LanguageViewItem, onClick: () -> (Unit)) {
+        val image = containerView.findViewById<ImageView>(R.id.image)
+        val title = containerView.findViewById<TextView>(R.id.title)
+        val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
+        val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         image.setImageResource(LayoutHelper.getLangDrawableResource(containerView.context, item.language))
