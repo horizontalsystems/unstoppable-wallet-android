@@ -1,9 +1,6 @@
 package io.horizontalsystems.core.helpers
 
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
-import android.graphics.PorterDuff
-import android.os.Build
+import android.content.Context
 import android.os.Handler
 import android.view.Gravity
 import android.widget.TextView
@@ -38,15 +35,14 @@ object HudHelper {
         val toast = Toast.makeText(CoreApp.instance, text, Toast.LENGTH_SHORT)
 
         val toastText = toast.view.findViewById(android.R.id.message) as TextView
-        toastText.setTextColor(ContextCompat.getColor(toast.view.context, R.color.white))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            toast.view.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.SRC_ATOP)
-        } else {
-            toast.view.background.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
-        }
+        toastText.setTextColor(getColor(toast.view.context, R.color.white))
+        toast.view.background.setTint(getColor(toast.view.context, backgroundColor))
         toast.setGravity(Gravity.TOP, 0, 120)
         toast.show()
 
         Handler().postDelayed({ toast.cancel() }, durationInMillis)
     }
+
+    private fun getColor(context: Context, colorId: Int) =
+            ContextCompat.getColor(context, colorId)
 }
