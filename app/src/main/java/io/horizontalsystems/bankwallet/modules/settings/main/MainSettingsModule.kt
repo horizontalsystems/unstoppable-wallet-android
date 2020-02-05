@@ -62,7 +62,7 @@ object MainSettingsModule {
     }
 
     class Factory : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = MainSettingsView()
             val router = MainSettingsRouter()

@@ -46,6 +46,7 @@ object CreateWalletModule {
     }
 
     class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType?) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = CreateWalletView()
             val router = CreateWalletRouter()

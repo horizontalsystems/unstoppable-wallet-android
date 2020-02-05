@@ -40,6 +40,7 @@ object RestoreModule {
     }
 
     class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RestoreView()
             val router = RestoreRouter()

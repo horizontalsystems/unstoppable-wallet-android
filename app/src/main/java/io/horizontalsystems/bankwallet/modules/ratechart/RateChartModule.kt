@@ -47,7 +47,7 @@ object RateChartModule {
     interface Router
 
     class Factory(private val coin: Coin) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
             val rateFormatter = RateFormatter(currency)

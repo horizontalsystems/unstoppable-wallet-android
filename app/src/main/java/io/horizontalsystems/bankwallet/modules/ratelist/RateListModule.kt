@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.ratelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.core.CurrentDateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.core.CurrentDateProvider
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.util.*
@@ -42,6 +42,7 @@ object RateListModule {
     }
 
     class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateListView()
             val interactor = RatesInteractor(

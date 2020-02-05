@@ -33,7 +33,7 @@ object SendHodlerModule {
     data class LockTimeIntervalViewItem(val lockTimeInterval: LockTimeInterval?, val selected: Boolean)
 
     class Factory(private val sendHandler: SendModule.ISendHandler, private val hodlerModuleDelegate: IHodlerModuleDelegate) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendHodlerView()
