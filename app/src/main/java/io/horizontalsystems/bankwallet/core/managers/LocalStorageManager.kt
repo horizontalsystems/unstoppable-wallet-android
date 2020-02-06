@@ -37,6 +37,7 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
     private val BITCOIN_DERIVATION = "bitcoin_derivation"
+    private val TOR_ENABLED = "tor_enabled"
 
     val gson by lazy { Gson() }
 
@@ -224,5 +225,11 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         }
         set(mode) {
             App.preferences.edit().putString(CHART_TYPE, mode?.name).apply()
+        }
+
+    override var torEnabled: Boolean
+        get() = App.preferences.getBoolean(TOR_ENABLED, false)
+        set(enabled) {
+            App.preferences.edit().putBoolean(TOR_ENABLED, enabled).apply()
         }
 }

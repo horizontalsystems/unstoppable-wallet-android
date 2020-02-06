@@ -34,6 +34,12 @@ class SecuritySettingsInteractor(
             pinManager.isFingerprintEnabled = value
         }
 
+    override var isTorEnabled: Boolean
+        get() = localStorage.torEnabled
+        set(value) {
+            localStorage.torEnabled = value
+        }
+
     override val isPinSet: Boolean
         get() = pinManager.isPinSet
 

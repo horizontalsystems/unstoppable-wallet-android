@@ -12,6 +12,7 @@ object SecuritySettingsModule {
         fun setEditPinVisible(visible: Boolean)
         fun setBiometricSettingsVisible(visible: Boolean)
         fun toggleBiometricEnabled(enabled: Boolean)
+        fun toggleTorEnabled(enabled: Boolean)
     }
 
     interface ISecuritySettingsViewDelegate {
@@ -20,6 +21,7 @@ object SecuritySettingsModule {
         fun didTapEditPin()
         fun didSwitchPinSet(enable: Boolean)
         fun didSwitchBiometricEnabled(enable: Boolean)
+        fun didSwitchTorEnabled(enable: Boolean)
         fun didSetPin()
         fun didCancelSetPin()
         fun didUnlockPinToDisablePin()
@@ -33,6 +35,7 @@ object SecuritySettingsModule {
         val biometricAuthSupported: Boolean
         val isPinSet: Boolean
         var isBiometricEnabled: Boolean
+        var isTorEnabled: Boolean
 
         fun disablePin()
         fun clear()

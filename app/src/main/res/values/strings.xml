@@ -270,6 +270,8 @@
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
     <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
+    <string name="SettingsSecurity_EnableTor">Enable Tor</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
 
     <!--Setting_Currency-->
 
