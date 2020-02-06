@@ -8,9 +8,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(), ChartView.Listener {
+class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
 
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
@@ -28,6 +28,14 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (savedInstanceState != null) {
+            //close fragment in case it's restoring
+            dismiss()
+        }
+
+        val coin = arguments?.getParcelable<Coin>(keyCoin) ?: run { dismiss(); return }
+
         setContentView(R.layout.view_bottom_sheet_chart)
 
         setTitle(getString(R.string.Charts_Title, coin.title))
@@ -180,5 +188,14 @@ class RateChartFragment(private val coin: Coin) : BaseBottomSheetDialogFragment(
         }
 
         return Pair(valueDecimal, returnSuffix)
+    }
+
+    companion object {
+        private const val keyCoin = "coin_key"
+        fun newInstance(coin: Coin) = RateChartFragment().apply {
+            arguments = Bundle(1).apply {
+                putParcelable(keyCoin, coin)
+            }
+        }
     }
 }
