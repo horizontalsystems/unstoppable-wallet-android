@@ -112,11 +112,17 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         viewModel.delegate.onAddCoinClick()
     }
 
+    override fun onAttachFragment(childFragment: Fragment) {
+        if (childFragment is ReceiveFragment) {
+            childFragment.setListener(this)
+        }
+    }
+
     // LiveData
 
     private fun observeLiveData() {
         viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { wallet ->
-            ReceiveFragment(wallet, this).also { it.show(childFragmentManager, it.tag) }
+            ReceiveFragment.newInstance(wallet).show(childFragmentManager, "ReceiveFragment")
         })
 
         viewModel.openSendDialog.observe(viewLifecycleOwner, Observer {
@@ -165,7 +171,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            RateChartFragment(coin).also { it.show(childFragmentManager, it.tag) }
+            RateChartFragment.newInstance(coin).show(childFragmentManager, "RateChartFragment")
         })
 
     }
