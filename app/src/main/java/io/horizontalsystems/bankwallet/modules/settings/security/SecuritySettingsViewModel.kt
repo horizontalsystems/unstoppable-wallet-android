@@ -13,6 +13,7 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val editPinVisibleLiveData = MutableLiveData<Boolean>()
     val biometricSettingsVisibleLiveData = MutableLiveData<Boolean>()
     val biometricEnabledLiveData = MutableLiveData<Boolean>()
+    val torEnabledLiveData = MutableLiveData<Boolean>()
 
     val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
@@ -51,6 +52,10 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun toggleBiometricEnabled(enabled: Boolean) {
         biometricEnabledLiveData.postValue(enabled)
+    }
+
+    override fun toggleTorEnabled(enabled: Boolean) {
+        torEnabledLiveData.postValue(enabled)
     }
 
     //  ISecuritySettingsRouter

@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
-import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
+import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
@@ -35,6 +35,10 @@ class SecuritySettingsActivity : BaseActivity() {
 
         fingerprint.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchBiometricEnabled(isChecked)
+        }
+
+        torConnectionSwitch.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            viewModel.delegate.didSwitchTorEnabled(isChecked)
         }
 
         fingerprint.setOnClickListener {
@@ -70,6 +74,10 @@ class SecuritySettingsActivity : BaseActivity() {
 
         viewModel.biometricEnabledLiveData.observe(this, Observer {
             fingerprint.switchIsChecked = it
+        })
+
+        viewModel.torEnabledLiveData.observe(this, Observer {
+            torConnectionSwitch.switchIsChecked = it
         })
 
         //router

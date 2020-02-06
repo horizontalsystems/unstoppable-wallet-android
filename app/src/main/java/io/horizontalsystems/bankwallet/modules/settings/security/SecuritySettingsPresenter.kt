@@ -10,10 +10,15 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
 
         syncPinSet(interactor.isPinSet)
         view?.toggleBiometricEnabled(interactor.isBiometricEnabled)
+        view?.toggleTorEnabled(interactor.isTorEnabled)
     }
 
     override fun didSwitchBiometricEnabled(enable: Boolean) {
         interactor.isBiometricEnabled = enable
+    }
+
+    override fun didSwitchTorEnabled(enable: Boolean) {
+        interactor.isTorEnabled = enable
     }
 
     override fun didSetPin() {
