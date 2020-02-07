@@ -13,18 +13,16 @@ class ConnectivityManager {
 
     private val connectivityManager = App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    var isConnected = connectivityManager.activeNetworkInfo?.isConnected ?: false
+    var isConnected = false
     val networkAvailabilitySignal = PublishSubject.create<Unit>()
 
     init {
         listenNetworkViaConnectivityManager()
     }
 
-    private fun onUpdateStatus() {
-        val newIsConnected = connectivityManager.activeNetworkInfo?.isConnected ?: false
-
-        if (isConnected != newIsConnected) {
-            isConnected = newIsConnected
+    private fun onUpdateStatus(stateIsConnected: Boolean) {
+        if (isConnected != stateIsConnected) {
+            isConnected = stateIsConnected
             networkAvailabilitySignal.onNext(Unit)
         }
     }
@@ -37,12 +35,13 @@ class ConnectivityManager {
 
         connectivityManager.registerNetworkCallback(request, object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                onUpdateStatus()
+                onUpdateStatus(true)
             }
 
             override fun onLost(network: Network?) {
-                onUpdateStatus()
+                onUpdateStatus(false)
             }
+
         })
 
     }
