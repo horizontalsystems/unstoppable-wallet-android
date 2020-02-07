@@ -19,6 +19,7 @@
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
