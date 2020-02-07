@@ -246,7 +246,7 @@
     <string name="Settings_SecurityCenter">Security Center</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">Manage Coins</string>
-    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
@@ -361,12 +361,12 @@
 
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
 
     <!-- Bitcoin Hodling -->
 
-    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
-    <string name="BitcoinHodling_LockTime" translatable="false">TimeLock</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
+    <string name="BitcoinHodling_LockTime" translatable="false">Activate</string>
     <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet app version 0.10 or newer with BIP44 address format for the Bitcoin.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!--Manage Keys-->
