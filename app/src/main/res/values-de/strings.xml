@@ -19,6 +19,7 @@
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Teilen</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s wallet</string>
