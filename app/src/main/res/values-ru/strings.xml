@@ -19,6 +19,7 @@
     <string name="Button_Close">Закрыть</string>
     <string name="Button_Ok">Хорошо</string>
     <string name="Button_Share">Поделиться</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Wallet">%s Кошелек</string>
