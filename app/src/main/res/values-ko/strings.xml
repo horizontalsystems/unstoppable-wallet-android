@@ -19,6 +19,7 @@
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
