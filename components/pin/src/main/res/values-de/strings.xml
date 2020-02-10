@@ -3,21 +3,17 @@
 <resources>
     <!--Common-->
     <string name="Button_Cancel">Abbrechen</string>
-
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Code</string>
-
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Anmeldung per Fingerabdruck</string>
     <string name="Fingerprint_Hint">Touchsensor</string>
     <string name="Fingerprint_EnterPin">Code</string>
     <string name="Fingerprint_NotRecognized">Fingerabdruck nicht erkannt. Bitte wiederholen.</string>
     <string name="Fingerprint_Success">Erfolgreich!</string>
-
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <string name="UnlockPin_Error_PinIncorrect">Falsch</string>
-
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Dein Code wird verwendet werden, um deinen Wallet zu entsperren und Geld schicken</string>
@@ -26,7 +22,6 @@
     <string name="SetPin_Success">Lock code wurde erfolgreich gesetzt!</string>
     <string name="SetPin_ErrorPinsDontMatch">Code stimmt nicht überein. Bitte noch einmal versuchen.</string>
     <string name="SetPin_ErrorFailedToSavePin">Beim Speichern Ihren Code ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
-
     <!--Edit Pin-->
     <string name="EditPin_Title">Code bearbeiten</string>
     <string name="EditPin_UnlockInfo">Aktuelle Code </string>
