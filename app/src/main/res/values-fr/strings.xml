@@ -19,6 +19,7 @@
     <string name="Button_Close">Fermer</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Partager</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Wallet">%s portefeuille</string>
@@ -30,13 +31,10 @@
     <string name="Create_Title">Nouveau portefeuille</string>
     <string name="Create_Description">Sélectionnez une cryptomonnaie pour commencer. Vous pourrez ajouter d\'autres cryptomonnaies plus tard.</string>
     <!--Restore-->
-    <string name="Restore_Title">Restaurer</string>
-    <string name="Restore_ChooseCrypto">Choix de la Crypto</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">Entrez la clé</string>
-    <string name="Restore_Enter_Key_Description_Eos">Entrez votre clé privée pour le portefeuille %s.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Entrez votre clé privée pour le Portefeuille %1s 
 qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact et séparés par des espaces.</string>
-    <string name="Restore_Description">Pour restaurer un portefeuille existant, vous devez entrer une clé privée pour ce portefeuille. \n\nUne fois que vous aurez restauré un portefeuille, vous pourrez restaurer d\'autres portefeuilles via la section Gérer les portefeuilles dans les paramètres de Sécurité de l\'application.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountIncorrect">Compte incorrect</string>
@@ -70,6 +68,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Balance_Sort_PopupTitle">Trier par</string>
     <string name="Balance_Sort_Az">Nom</string>
     <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse</string>
@@ -117,17 +116,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Deposit_Share">Partager</string>
     <string name="Deposit_Your_Address">Votre address</string>
     <string name="Deposit_Your_Account">Votre compte</string>
-    <!--Timestamp-->
-    <string name="Timestamp_JustNow">à l\'instant</string>
-    <string name="Timestamp_MinAgo">Il y a %d minute</string>
-    <string name="Timestamp_HoursAgo">Il y a %d heures</string>
-    <string name="Timestamp_Today">Aujourd\'hui</string>
-    <string name="Timestamp_Yesterday">Hier</string>
-    <string name="Duration_instant">Instantané</string>
-    <string name="Duration_Within">Dans la limite de %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
@@ -149,9 +137,14 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_HistoricalRate">Taux historique</string>
     <string name="TransactionInfo_Fee">Frais</string>
     <string name="TransactionInfo_SentToSelfNote">Cette transaction a été envoyée à votre propre adresse</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un délai prédéfini qui se terminera %s.\n\nPas de soucis, les Bitcoins reçues sont déjà à vous mais vous devez attendre l\'expiration de la période de verrouillage pour les dépenser sur le réseau Bitcoin.</string>
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Heure</string>
@@ -189,7 +182,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">Gérer les coins</string>
-    <string name="Settings_ExperimentalFeatures">Fonctionnalités expérimentales</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">Restaurer le porte-monnaie</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
@@ -206,8 +199,10 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
+    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -222,11 +217,12 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
-    <!--Setting_Report-->
-    <string name="SettingsReport_Title">Signaler un problème</string>
-    <string name="SettingsReport_Email">E-mail</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
-    <string name="SettingsReport_AppStatus">Statut de l\'appli</string>
+    <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
+    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Notifications</string>
     <string name="SettingsNotifications_Description">Définissez des alertes de changement de prix pour les pièces que vous voulez surveiller. \n\nVous serez averti lorsque le changement de prix pour les dernières 24 heures dépasse le seuil sélectionné.</string>
@@ -244,8 +240,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Alert_TitleWarning">Attention</string>
     <string name="Alert_NoDeviceLockDescription">Paramétrez un écran de verrouillage sur cet appareil pour continuer. Allez dans « Paramètres » &gt; « Sécurité » &gt; « Écran de verrouillage » et activez le paramètre d’écran de verrouillage.</string>
     <string name="Alert_CustomKeyboardIsUsed">Vous utilisez un clavier tiers. Vous devez utiliser le clavier par défaut.</string>
-    <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
     <string name="Eos_Backend_Error_SelfTransfer">Impossible de transférer des tokens sur votre propre compte</string>
@@ -261,31 +255,10 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Hud_Text_InvalidPinError">Le code incorrect</string>
     <string name="Hud_Network_Issue">Problèmes réseau. Réessayez</string>
     <string name="Hud_UnknownError">Erreur inconnue %s</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Prise d\'empreintes digitales</string>
-    <string name="Fingerprint_Hint">Détecteur tactile</string>
-    <string name="Fingerprint_EnterPin">Code</string>
-    <string name="Fingerprint_NotRecognized">Empreinte digitale non reconnue. Réessayez</string>
-    <string name="Fingerprint_Success">Effectué!</string>
-    <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN de téléphone</string>
     <string name="OSPin_Confirm_Desciption">Cette application nécessite qu\'un code secret soit activé sur le téléphone (verrouillage de l\'écran). \n\nVous pouvez activer cette fonction dans les paramètres Android. \n\nVeuillez noter que lorsque vous avez désactivé le code PIN au niveau du système d\'exploitation, les mesures de sécurité stockées sur votre téléphone ont rendu invalide les données précédemment stockées. Vous devrez Restaurer vos clés de porte-monnaie pour revenir à votre porte-monnaie.</string>
     <string name="OSPin_Prompt_Desciption">Cette application nécessite le code PIN de votre téléphone afin de conserver les données confidentielles de votre porte-monnaie dans le stockage sécurisé d\'Android et non dans l\'application elle-même.</string>
-    <!--Set Pin-->
-    <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Votre code secret sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
-    <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
-    <string name="SetPin_ConfirmInfo">Confirmer</string>
-    <string name="SetPin_Success">Votre code a été défini avec succès!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
-    <!--Edit Pin-->
-    <string name="EditPin_Title">Modifier le code </string>
-    <string name="EditPin_UnlockInfo">Le code actuel</string>
-    <string name="EditPin_NewPinInfo">Le code nouveu</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Portefeuilles</string>
     <string name="ManageCoins_save">Sauvegarder</string>
@@ -294,18 +267,18 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">Verrouiller les Bitcoins</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">Verrouiller les Bitcoins</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Permet d\'envoyer des Bitcoins qui ne peuvent pas être dépensées avant la date spécifiée.\n\nLe destinataire d\'une telle transaction devrait utiliser un portefeuille Unstoppable.\n\nSeul un portefeuille Unstoppable peut identifier correctement de telles transactions sur le réseau Bitcoin ainsi que permettre au destinataire de dépenser ces Bitcoins après l\'expiration de la période de verrouillage.\n\nSi vous êtes un HODLer, vous pouvez utiliser cette fonction pour vous obliger à garder vos Bitcoins en vous envoyant une telle transaction à vous-même.\n\nPuisqu\'il s\'agit d\'une fonctionnalité expérimentale, le montant maximum par transaction est limité à 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gérer les portefeuilles</string>
-    <string name="ManageKeys_Description">Ci-dessous vous trouverez vos portefeuilles actifs où chaque portefeuille contient un ensemble différent de cryptomonnaies. \n\nVous devriez sauvegarder chaque portefeuille surligné en sauvegardant la clé privée du portefeuille en question. Cette clé est le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.</string>
     <string name="ManageKeys_Create">Créer</string>
     <string name="ManageKeys_Restore">Restaurer</string>
     <string name="ManageKeys_Delete">Supprimer</string>
     <string name="ManageKeys_Backup">Sauvegarde</string>
     <string name="ManageKeys_Show">Afficher</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Supprimer le portefeuille</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Cette action supprimera le portefeuille %s de cet appareil.</string>
@@ -320,15 +293,22 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddCoin_Description">Vous n\'avez pas de portefeuille pouvant stocker %1$s. Vous pouvez générer un nouveau portefeuille avec l\'application. Utilisez le bouton Créer ci-dessous pour générer un nouveau portefeuille.\n\nVous pourrez utiliser le nouveau portefeuille pour les pièces suivantes : %2$s. \n\nVous pouvez également utiliser la clé %3$s existante si vous en avez une. Pour cela, utilisez le bouton de restauration.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
+    <!-- Blockchain Settings -->
+    <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast_Subtitle">0-2 heures (Recommandé)</string>
-    <string name="CoinOption_SyncModeDescription">Sélectionnez la source que Unstoppable doit utiliser pour télécharger votre solde et vos transactions.\n\nHorizontal Systems %1s API :\n %2s</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
     <string name="CoinOption_Slow_Subtitle">1 - 12 heures</string>
-    <string name="CoinOption_BipDescriptionCreate">Ce paramètre contrôle le format de l\'adresse du Bitcoin dans ce portefeuille. Nous recommandons d\'utiliser BIP49 en cas de doute.</string>
-    <string name="CoinOption_BipDescriptionRestore">Sélectionnez le format de l\'adresse du Bitcoin dans le portefeuille que vous essayez de restaurer.</string>
     <string name="CoinOption_AddressFormatTitle">Choisir le format de l\'adresse</string>
     <string name="CoinOption_SyncModeTitle">Restaurer les paramètres</string>
     <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par 1...)</string>
