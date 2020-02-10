@@ -19,6 +19,7 @@
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -30,12 +31,9 @@
     <string name="Create_Title">새 지갑</string>
     <string name="Create_Description">시작하려면 한가지의 가상화폐를 선택하십시오. 귀하께서는 나중에 다른 가상화폐를 추가하실 수 있습니다.</string>
     <!--Restore-->
-    <string name="Restore_Title">복구</string>
-    <string name="Restore_ChooseCrypto">새 지갑</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">암호를 입력하세요</string>
-    <string name="Restore_Enter_Key_Description_Eos">개인 암호를 %s지갑에 입력해 주십시오.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s 의 단어로 이루어진 개인 암호를 %1s 지갑에 입력해 주십시오. 단어들은 올바르게 입력 되어야 하고 또 스페이스를 통해 분리되어야 합니다.</string>
-    <string name="Restore_Description">기존으 지갑을 복원시키려면 귀하께서는 개인 암호를 입력 하셔야 합니다.\n\n하나의 지갑을 복원 시키시면 다른 지갑들도 앱의 보안 설정에서 지갑 관리 섹션을 통해 복원 하실 수 있습니다.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountIncorrect">계정이 존재하지 않습니다</string>
@@ -69,6 +67,7 @@
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
     <string name="Balance_Sort_Az">이름</string>
     <string name="Balance_Sort_24hPriceChange">24시간 가격 (%)</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소</string>
@@ -116,17 +115,6 @@
     <string name="Deposit_Share">공유</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
     <string name="Deposit_Your_Account">내 계정</string>
-    <!--Timestamp-->
-    <string name="Timestamp_JustNow">지금 막</string>
-    <string name="Timestamp_MinAgo">%d분 전</string>
-    <string name="Timestamp_HoursAgo">%d시간 전</string>
-    <string name="Timestamp_Today">오늘</string>
-    <string name="Timestamp_Yesterday">어제</string>
-    <string name="Duration_instant">즉시</string>
-    <string name="Duration_Within">%s 안에</string>
-    <string name="Duration_Hours">%d 시</string>
-    <string name="Duration_Minutes">%d 분</string>
-    <string name="Duration_Seconds">%d 초</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
@@ -148,9 +136,14 @@
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
     <string name="TransactionInfo_Fee">수수료</string>
     <string name="TransactionInfo_SentToSelfNote">이 거래는 귀하의 주소로 전송이 되었습니다</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자는 이러한 자금들을 %s 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다. \n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -188,7 +181,7 @@
     <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
     <string name="Settings_ManageCoins">코인 관리</string>
-    <string name="Settings_ExperimentalFeatures">실험적 기능</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
@@ -205,8 +198,10 @@
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">기초 통화</string>
+    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -227,11 +222,12 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
-    <!--Setting_Report-->
-    <string name="SettingsReport_Title">문제점 보고</string>
-    <string name="SettingsReport_Email">E-mail</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
-    <string name="SettingsReport_AppStatus">앱 상태</string>
+    <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
+    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">알림</string>
     <string name="SettingsNotifications_Description">귀하께서 보고싶으신 코인들의 가격 변동 설정 알람 설정을 하십시오.\n\n귀하께서는 24시간 전의 가격 변동이 선택하신 기대치에 도달할 경우에 알림을 받을 것 입니다.</string>
@@ -249,8 +245,6 @@
     <string name="Alert_TitleWarning">경고</string>
     <string name="Alert_NoDeviceLockDescription">이 장치에서 계속하기위해서 스크린 장금을 설정하세요. \"설정\",\"보안\",\"스크린 장금\"으로가서 장금화면 가면 화면장금 설정을 할 수 있습니다.</string>
     <string name="Alert_CustomKeyboardIsUsed">당신은 제3자의 키보드를 사용하고 있습니다. 기본 키보드를 사용해야만 합니다.</string>
-    <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">비밀번호</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">지원되지 않는 통화</string>
     <string name="Eos_Backend_Error_SelfTransfer">토큰을 개인계정으로 옮길 수 없습니다</string>
@@ -266,31 +260,10 @@
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
     <string name="Hud_Network_Issue">네트워크에 문제가 있습니다. 잠시 후 다시 시도해 주세요</string>
     <string name="Hud_UnknownError">알수없는 오류 %s</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">지문인식 로그인</string>
-    <string name="Fingerprint_Hint">터치 센서</string>
-    <string name="Fingerprint_EnterPin">비밀번호</string>
-    <string name="Fingerprint_NotRecognized">지문을 인식할 수 없습니다. 다시 시도하세요.</string>
-    <string name="Fingerprint_Success">성공!</string>
-    <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">틀림</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">핸드폰 핀넘버</string>
     <string name="OSPin_Confirm_Desciption">이 앱을 사용하려면 휴대전화에 암호(화면 잠금) 가 활성화되어 있어야 합니다. \n\n Android 설정에서 활성화할 수 있습니다. \n\nOS 수준에서 PIN을 비활성화하면 휴대기기의 안전한 저장에 대한 보안조치로 인해 이전에 저장된 데이터가 유효하지 않게 됩니다. 지갑으로 돌아가려면 지갑 암호를 복원하십시오.</string>
     <string name="OSPin_Prompt_Desciption">앱 자체가 아닌 안드로이드의 안전한 저장소에 지갑의 중요한 데이터를 저장하려면 이 앱은 휴대전화의 PIN이 필요합니다.</string>
-    <!--Set Pin-->
-    <string name="SetPin_Title">비밀번호</string>
-    <string name="SetPin_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>
-    <string name="SetPin_ErrorShortPin">모든 숫자를 입력하세요.</string>
-    <string name="SetPin_ConfirmInfo">확인</string>
-    <string name="SetPin_Success">비밀번호 장금이 성공적으로 설정되었습니다!</string>
-    <string name="SetPin_ErrorPinsDontMatch">비밀번호가 일치하지 않습니다. 다시 시도하세요.</string>
-    <string name="SetPin_ErrorFailedToSavePin">당신의 비밀번호를 저장하는 동안 오류가 발생했습니다. 다시 시도하세요.</string>
-    <!--Edit Pin-->
-    <string name="EditPin_Title">비밀번호 변경</string>
-    <string name="EditPin_UnlockInfo">현재 비밀번호</string>
-    <string name="EditPin_NewPinInfo">새로운 비밀번호</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
@@ -299,19 +272,19 @@
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">실험적인</string>
     <string name="ExperimentalFeatures_Description">아래의 특징들은 실험적인 것이므로 주의해서 사용해 주십시오. 저희는 자체 암호화 자금을 쓰면서 이러한 특징들을 실험해보고 있기때문에 모든 경우들이 다 예상대로 작동 한다는 보장을 할 수 없습니다.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">비트코인 잠그기</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">비트코인 잠그기</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">지정일 까지 사용할 수 없는 비트코인을 보낼 수 있게 해드립니다.\n\n이러한 거래의 수령자는 언스토퍼블 지갑을 사용해야 합니다.\n\n언스토퍼블 지갑만이 비트코인 네트워크에서 이러한 거래들을 올바르게 확인 할 수 있고 잠금 기간이 만료된 후에 수령자들이 비트코인을 사용할 수 있게 할 수 있습니다.
 \n\n귀하께서 호들러 이시면, 이 기능을 쓸 수 있고 이러한 거래를 귀하께 보냄으로써 귀하의 비트코인을 강제적으로 호들링 하게 할 수 있습니다.\n\n실험적인 기능의 한번의 최대 거래 양은 0.5 비트코인으로 제한되있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
-    <string name="ManageKeys_Description">아래 강조표시가 된부분은 각각의 지갑이 다른 세트의 가상화폐에 책임이 있는 귀하께서 사용중인 지갑입니다. \n\n귀하께서는 개인 암호를 백업 시킴으로써 각각의 강조표시된 지갑들도 백업을 하셔야 합니다. 이 암호는 귀하께서 휴대폰 분실, 도난, 파손 등을 당하셨을때 복원 할 수 있는 유일한 암호 입니다.</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
     <string name="ManageKeys_Backup">백업</string>
     <string name="ManageKeys_Show">표시</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">지갑 삭제하기</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">이 행동은 %s 지갑을 장치에서 삭제합니다.</string>
@@ -326,15 +299,22 @@
     <string name="AddCoin_Description">귀하께서는 %1$s를 저장할 수 있는 지갑을 가지고 계시지 않습니다. 이 앱은 귀하를 위해 새로운 지갑을 만들어 드릴 수 있습니다. 새로운 지갑을 만들기 위해 밑에있는 생성하기 버튼을 사용하십시오.\n\n귀하께서는 다음 %2$s에 대한 새로운 지갑을 사용 하실 수 있을 것 입니다.\n\n귀하께서는 또한 기존에 가지고 계셨던%3$s 지갑 암호를 사용하실 수 있습니다. 복원하기 버튼을 누르십시오.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
+    <!-- Blockchain Settings -->
+    <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">옵션 복구</string>
     <string name="CoinOption_Fast_Subtitle">0-2 시간 (권장)</string>
-    <string name="CoinOption_SyncModeDescription">언스탑퍼블이 귀하의 잔액 및 거래 내역을 다운로드 하는데 사용하는 소스를 선택해 주세요.\n\n 수평 시스템 %1s API: \n%2s</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
     <string name="CoinOption_Slow_Subtitle">1-12 시간</string>
-    <string name="CoinOption_BipDescriptionCreate">이 설정은 지갑에서 비트코인 주소 형식을 통제 합니다. 확실하지 않는 경우에는 BIP49를 사용하시는 것을 추천해드립니다.</string>
-    <string name="CoinOption_BipDescriptionRestore">복원을 하려는 지갑에서 비트코인의 주소 형식을 선택해 주세요.</string>
     <string name="CoinOption_AddressFormatTitle">주소 형식을 선택해 주세요</string>
     <string name="CoinOption_SyncModeTitle">매개 변수 복원</string>
     <string name="CoinOption_bip44_Subtitle">더 오래된 (1부터 시작)</string>
