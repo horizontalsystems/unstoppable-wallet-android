@@ -19,6 +19,7 @@
     <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">Aceptar</string>
     <string name="Button_Share">Compartir</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s monedero</string>
@@ -30,12 +31,9 @@
     <string name="Create_Title">Nueva cartera</string>
     <string name="Create_Description">Seleccione una criptomoneda para comenzar. Podrá añadir otras criptomonedas posteriormente.</string>
     <!--Restore-->
-    <string name="Restore_Title">Restaurar</string>
-    <string name="Restore_ChooseCrypto">Nueva cartera</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">Introduzca la clave</string>
-    <string name="Restore_Enter_Key_Description_Eos">Introduzca su clave privada para el monedero %s.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Introduzca su clave privada para la cartera %1s que consta de %2s palabras. Las palabras deben ser introducidas en orden correcto y separadas por espacios.</string>
-    <string name="Restore_Description">Para restaurar el monedero existente, usted necesita ingresar la clave privada para ese monedero.\n\nUna vez que restaure un monedero usted podrá restaurar otros monederos al acceder a la sección Gestionar Monederos en los ajustes de Seguridad de la aplicación.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountIncorrect">Cuenta incorrecta</string>
@@ -69,6 +67,7 @@
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
     <string name="Balance_Sort_Az">Nombre</string>
     <string name="Balance_Sort_24hPriceChange">Precio 24h (%)</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dirección</string>
@@ -116,17 +115,6 @@
     <string name="Deposit_Share">Compartir</string>
     <string name="Deposit_Your_Address">Su dirección</string>
     <string name="Deposit_Your_Account">Su cuenta</string>
-    <!--Timestamp-->
-    <string name="Timestamp_JustNow">reciente</string>
-    <string name="Timestamp_MinAgo">Hace %d minutos</string>
-    <string name="Timestamp_HoursAgo">Hace %d hora</string>
-    <string name="Timestamp_Today">Hoy</string>
-    <string name="Timestamp_Yesterday">Ayer</string>
-    <string name="Duration_instant">Inmediato</string>
-    <string name="Duration_Within">Dentro de %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d seg.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
@@ -148,9 +136,14 @@
     <string name="TransactionInfo_HistoricalRate">Estado histórico</string>
     <string name="TransactionInfo_Fee">Comisión</string>
     <string name="TransactionInfo_SentToSelfNote">Esta transacción fue enviada a su propia dirección</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">El remitente envió estos fondos con un bloqueo del gasto que expirará %s.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
@@ -188,7 +181,7 @@
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
     <string name="Settings_ManageCoins">Gestionar monedas</string>
-    <string name="Settings_ExperimentalFeatures">Características experimentales</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">Restaurar cartera</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
@@ -205,8 +198,10 @@
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Moneda principal</string>
+    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -227,11 +222,12 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
-    <!--Setting_Report-->
-    <string name="SettingsReport_Title">Reportar un problema</string>
-    <string name="SettingsReport_Email">Correo electrónico</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
-    <string name="SettingsReport_AppStatus">Estado de la aplicación</string>
+    <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
+    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Notificaciones</string>
     <string name="SettingsNotifications_Description">Establecer alertas de cambio de precio para las monedas que desea ver.\n\nSe le avisará cuando el cambio de precio, durante las últimas 24 horas, supere el umbral seleccionado.</string>
@@ -249,8 +245,6 @@
     <string name="Alert_TitleWarning">Aviso</string>
     <string name="Alert_NoDeviceLockDescription">Configurar bloqueo de pantalla de este dispositivo para continuar. Ir a \"Ajustes\" &amp;gt; &amp;gt;  \"Seguridad\" \"Bloqueo de pantalla\" y establezca la configuración de la pantalla de bloqueo.</string>
     <string name="Alert_CustomKeyboardIsUsed">Usted está utilizando un teclado de terceros. Tiene que usar el teclado por defecto.</string>
-    <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Código</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
     <string name="Eos_Backend_Error_SelfTransfer">No se puede transferir el token a su propia cuenta</string>
@@ -266,31 +260,10 @@
     <string name="Hud_Text_InvalidPinError">Codigo incorrecto</string>
     <string name="Hud_Network_Issue">Problemas de red. Inténtelo de nuevo</string>
     <string name="Hud_UnknownError">Error desconocido %s</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Inicio de sesión de huella digital</string>
-    <string name="Fingerprint_Hint">Sensor táctil</string>
-    <string name="Fingerprint_EnterPin">Código</string>
-    <string name="Fingerprint_NotRecognized">Huella digital no reconocida. Por favor inténtelo de nuevo.</string>
-    <string name="Fingerprint_Success">Completado!</string>
-    <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrecto</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN de teléfono</string>
     <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar las claves de sus monederos para poder volver a su monedero.</string>
     <string name="OSPin_Prompt_Desciption">Esta aplicación requiere el PIN de tu teléfono para mantener datos sensibles de tu monedero en el almacenamiento seguro de Android y no en la propia aplicación.</string>
-    <!--Set Pin-->
-    <string name="SetPin_Title">Código</string>
-    <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
-    <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
-    <string name="SetPin_ConfirmInfo">Confirmar</string>
-    <string name="SetPin_Success">¡Tu contraseña se ha establecido correctamente!</string>
-    <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
-    <!--Edit Pin-->
-    <string name="EditPin_Title">Editar el código </string>
-    <string name="EditPin_UnlockInfo">Código Actual</string>
-    <string name="EditPin_NewPinInfo">Código Nuevo</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gestor de monedas</string>
     <string name="ManageCoins_save">Guardar</string>
@@ -299,18 +272,18 @@
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Las siguientes características son experimentales y deben utilizarse con precaución. Aunque hemos probado a fondo estas características usando nuestros propios fondos criptográficos, no podemos garantizar que funcionen como se espera en todos los casos posibles.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">Bloquear Bitcoins</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">Bloquear Bitcoins</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gestionar Monederos</string>
-    <string name="ManageKeys_Description">A continuación se destacan sus monederos activos donde cada monedero es responsable de diferentes tipos de criptomonedas.\n\nDebería hacer copias de seguridad de cada monedero resaltado, respaldando la clave privada de esa cartera. Esta clave es la única manera de restaurar sus fondos si su teléfono se pierde, lo roban, se avería, etc.</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
     <string name="ManageKeys_Backup">Copia de seguridad</string>
     <string name="ManageKeys_Show">Mostrar</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Eliminar Monedero</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Esta acción eliminará los monederos %s de este dispositivo.</string>
@@ -325,15 +298,22 @@
     <string name="AddCoin_Description">Usted no tiene un monedero que pueda restaurar %1$s. La aplicación puede generar un nuevo monedero para usted. Use el botón de crear, que se encuentra abajo, para generar un nuevo monedero.\n\nPodrá usar el nuevo monedero para las siguientes monedas: %2$s.\n\nUsted también piede utilizar el la clave existente del monedero%3$s si ya tiene uno. Use el botón restaurar para hacerlo.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
+    <!-- Blockchain Settings -->
+    <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Ustoppable</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
     <string name="CoinOption_Fast_Subtitle">0-2 horas (Recomendado)</string>
-    <string name="CoinOption_SyncModeDescription">Selecciones la fuente que Unstoppable debe usar para descargar su saldo y transacciones.\n\nSistemas horizontales %1s API: \n%2s</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
     <string name="CoinOption_Slow_Subtitle">1-12 horas</string>
-    <string name="CoinOption_BipDescriptionCreate">Esta configuración controla el formato de la dirección para este monedero de Bitcoin. Recomendamos usar BIP49 si no está seguro.</string>
-    <string name="CoinOption_BipDescriptionRestore">Seleccione el formato de dirección para el Bitcoin en el monedero que intenta restaurar.</string>
     <string name="CoinOption_AddressFormatTitle">Elija un formato de dirección</string>
     <string name="CoinOption_SyncModeTitle">Restaurar los parámetros</string>
     <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con 1...)</string>
