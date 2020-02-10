@@ -19,6 +19,7 @@
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
@@ -30,12 +31,9 @@
     <string name="Create_Title">新的钱包</string>
     <string name="Create_Description">选择一种加密货币开始使用。您可以在以后添加其他加密货币。</string>
     <!--Restore-->
-    <string name="Restore_Title">恢复</string>
-    <string name="Restore_ChooseCrypto">选择加密货币</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">输入密钥</string>
-    <string name="Restore_Enter_Key_Description_Eos">输入 %s 钱包的私钥。</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">为%1s钱包输入私钥，其中应包含%2s个单词。这些单词必须以正确的顺序输入并用空格分隔。</string>
-    <string name="Restore_Description">要恢复现有钱包，您必须输入该钱包的私钥。\n\n恢复钱包后，您可以通过应用的“安全”设置中的“管理钱包”恢复其他钱包。</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
     <string name="Restore_EosAccountIncorrect">无效账户</string>
@@ -69,6 +67,7 @@
     <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">名称</string>
     <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址</string>
@@ -116,17 +115,6 @@
     <string name="Deposit_Share">分享</string>
     <string name="Deposit_Your_Address">您的地址</string>
     <string name="Deposit_Your_Account">您的账户</string>
-    <!--Timestamp-->
-    <string name="Timestamp_JustNow">刚才</string>
-    <string name="Timestamp_MinAgo">%d分钟前</string>
-    <string name="Timestamp_HoursAgo">%d小时前</string>
-    <string name="Timestamp_Today">今天</string>
-    <string name="Timestamp_Yesterday">昨天</string>
-    <string name="Duration_instant">即时</string>
-    <string name="Duration_Within">在%s内</string>
-    <string name="Duration_Hours">%d小时。</string>
-    <string name="Duration_Minutes">%d分钟。</string>
-    <string name="Duration_Seconds">%d秒</string>
     <!--Transactions-->
     <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">全部</string>
@@ -148,9 +136,14 @@
     <string name="TransactionInfo_HistoricalRate">历史价格</string>
     <string name="TransactionInfo_Fee">费用</string>
     <string name="TransactionInfo_SentToSelfNote">交易已发送至自有地址</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">时间锁定</string>
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
@@ -188,7 +181,7 @@
     <string name="Settings_SecurityCenter">安全中心</string>
     <string name="Settings_Notifications">通知</string>
     <string name="Settings_ManageCoins">管理代币</string>
-    <string name="Settings_ExperimentalFeatures">实验性功能</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">恢复钱包</string>
     <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
@@ -205,8 +198,10 @@
     <string name="SettingsSecurity_EditPin">编辑密码</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基础货币</string>
+    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -221,11 +216,12 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
-    <!--Setting_Report-->
-    <string name="SettingsReport_Title">报告问题</string>
-    <string name="SettingsReport_Email">邮件</string>
-    <string name="SettingsReport_Telegram">电报</string>
-    <string name="SettingsReport_AppStatus">应用状态</string>
+    <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
+    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">通知</string>
     <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格的变化在24小时内超出选定的临界值时，您将收到警报。</string>
@@ -243,8 +239,6 @@
     <string name="Alert_TitleWarning">警告</string>
     <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。前往“设置” &gt; “安全” &gt; “屏幕锁定”并启用锁定屏幕设置。</string>
     <string name="Alert_CustomKeyboardIsUsed">您使用的是第三方键盘。您必须使用默认键盘。</string>
-    <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">密码</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">不获支持货币</string>
     <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
@@ -260,31 +254,10 @@
     <string name="Hud_Text_InvalidPinError">错误密码</string>
     <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <string name="Hud_UnknownError">未知错误 %s</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">指纹登录</string>
-    <string name="Fingerprint_Hint">触控传感器</string>
-    <string name="Fingerprint_EnterPin">密码</string>
-    <string name="Fingerprint_NotRecognized">指纹无法识别。请重试</string>
-    <string name="Fingerprint_Success">成功！</string>
-    <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">禁用至：%s</string>
-    <string name="UnlockPin_Error_PinIncorrect">错误</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN码</string>
     <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
     <string name="OSPin_Prompt_Desciption">此应用要求使用您电话的PIN码，以便将钱包的敏感数据保存在Android的安全存储区而不是应用本身。</string>
-    <!--Set Pin-->
-    <string name="SetPin_Title">密码</string>
-    <string name="SetPin_Info">您的密码将用于解锁钱包和发送资金</string>
-    <string name="SetPin_ErrorShortPin">请输入全部数字。</string>
-    <string name="SetPin_ConfirmInfo">确认</string>
-    <string name="SetPin_Success">锁定密码设置成功！</string>
-    <string name="SetPin_ErrorPinsDontMatch">密码不匹配。请重试。</string>
-    <string name="SetPin_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
-    <!--Edit Pin-->
-    <string name="EditPin_Title">编辑密码</string>
-    <string name="EditPin_UnlockInfo">当前密码</string>
-    <string name="EditPin_NewPinInfo">新密码</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理器</string>
     <string name="ManageCoins_save">保存</string>
@@ -293,18 +266,18 @@
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">实验性</string>
     <string name="ExperimentalFeatures_Description">以下功能为实验性，应谨慎使用。虽然我们已使用自己的加密货币资金对这些功能进行了彻底测试，但是我们不保证它们在所有情况下都能如常工作。</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">锁定比特币</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">锁定比特币</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用Unstoppable钱包。\n\n只有Unstoppable钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理钱包</string>
-    <string name="ManageKeys_Description">在下方突出显示的就是您的活跃钱包，每一个钱包负责不同的加密货币集合。\n\n您应该通过备份每一个突出显示的钱包的私钥对其进行备份。如果您的手机出现丢失、被盗、损坏等情况，该密钥是恢复您资金的唯一方法。</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
     <string name="ManageKeys_Backup">备份</string>
     <string name="ManageKeys_Show">显示</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">删除钱包</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">该操作将从此设备删除%s 钱包。</string>
@@ -319,15 +292,22 @@
     <string name="AddCoin_Description">您没有可恢复 %1$s 的钱包。应用可以为您生成新的钱包。使用下方的“创建”按钮生成新钱包。\n\n您将可以为以下代币使用新钱包：%2$s。\n\n如果您已有钱包，那么您也可以使用现有的%3$s钱包。为此使用“恢复”按钮。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
+    <!-- Blockchain Settings -->
+    <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast_Subtitle">0 - 2小时（推荐）</string>
-    <string name="CoinOption_SyncModeDescription">选择Unstoppable应用于下载您的 余额和交易的源。\n\n水平系统%1s API：\n%2s</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
     <string name="CoinOption_Slow_Subtitle">1- 12 小时</string>
-    <string name="CoinOption_BipDescriptionCreate">此设置控制着此钱包中比特币的地址格式。如果不确定，我们建议使用BIP49。</string>
-    <string name="CoinOption_BipDescriptionRestore">选择您尝试恢复的钱包中的比特币的地址格式。</string>
     <string name="CoinOption_AddressFormatTitle">选择地址格式</string>
     <string name="CoinOption_SyncModeTitle">恢复参数</string>
     <string name="CoinOption_bip44_Subtitle">更旧（以1开头...）</string>
