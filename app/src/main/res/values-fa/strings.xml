@@ -19,6 +19,7 @@
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
@@ -30,12 +31,9 @@
     <string name="Create_Title">کیف پول جدید</string>
     <string name="Create_Description">برای شروع ، یک ارز رمزگذاری شده انتخاب کنید. بعداً می توانید ارزهای رمزنگاری شده دیگری را اضافه کنید.</string>
     <!--Restore-->
-    <string name="Restore_Title">بازگرداني</string>
-    <string name="Restore_ChooseCrypto">انتخاب ارز رمزنگاری شده</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
-    <string name="Restore_Enter_Key_Description_Eos">کلید خصوصی خود را برای کیف پول %s وارد کنید.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">کلید خصوصی خود را برای کیف پول %1s که از کلمات %2s تشکیل شده است وارد کنید. کلمات باید به ترتیب صحیح وارد شوند و با فاصله از هم جدا شوند.</string>
-    <string name="Restore_Description">برای بازیابی کیف پول موجود، باید یک کلید خصوصی برای آن کیف پول وارد کنید.\n\nپس از بازیابی یک کیف پول، می توانید با رفتن به بخش مدیریت کلیدها در تنظیمات برنامه، کیف پول های بیشتری را بازیابی کنید.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountIncorrect">حساب نادرست</string>
@@ -69,6 +67,7 @@
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس</string>
@@ -116,17 +115,6 @@
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
     <string name="Deposit_Your_Address">آدرس شما</string>
     <string name="Deposit_Your_Account">حساب کاربری شما</string>
-    <!--Timestamp-->
-    <string name="Timestamp_JustNow">همين الان</string>
-    <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
-    <string name="Timestamp_HoursAgo">%dساعت پيش</string>
-    <string name="Timestamp_Today">امروز</string>
-    <string name="Timestamp_Yesterday">ديروز</string>
-    <string name="Duration_instant">فوری</string>
-    <string name="Duration_Within">در %s</string>
-    <string name="Duration_Hours">%d ساعت.</string>
-    <string name="Duration_Minutes">%d دقیقه.</string>
-    <string name="Duration_Seconds">%d ثانیه.</string>
     <!--Transactions-->
     <string name="Transactions_Title">تراکنش ها</string>
     <string name="Transactions_FilterAll">همه</string>
@@ -148,9 +136,14 @@
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">قفل زمان</string>
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
     <!--Full Info-->
     <string name="FullInfo_Title">تراکنش</string>
     <string name="FullInfo_Time">زمان</string>
@@ -188,7 +181,7 @@
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
     <string name="Settings_ManageCoins">مدیریت سکه ها</string>
-    <string name="Settings_ExperimentalFeatures">ویژگی های تجربی</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">بازیابی كيف پول</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
@@ -205,8 +198,10 @@
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
+    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
@@ -221,11 +216,12 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
-    <!--Setting_Report-->
-    <string name="SettingsReport_Title">گزارش مشکل</string>
-    <string name="SettingsReport_Email">ايميل</string>
-    <string name="SettingsReport_Telegram">تلگرام</string>
-    <string name="SettingsReport_AppStatus">وضعیت برنامه</string>
+    <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
+    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">اطلاعیه ها</string>
     <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت را برای سکه هایی که می خواهید تماشا کنید تنظیم کنید.\n\nوقتی تغییر قیمت برای ۲۴ ساعت گذشته بیش از آستانه انتخاب شده باشد ، به شما هشدار داده می شود.</string>
@@ -243,8 +239,6 @@
     <string name="Alert_TitleWarning">هشدار</string>
     <string name="Alert_NoDeviceLockDescription">برای ادامه یک صفحه قفل در این دستگاه تنظیم کنید. رفتن به \"تنظیمات\"؛ \"امنیت\" &gt;؛ \"قفل صفحه\" &gt; را فعال کرده و تنظیم صفحه قفل را فعال کنید.</string>
     <string name="Alert_CustomKeyboardIsUsed">شما از یک صفحه کلید شخص ثالث استفاده می کنید. شما باید از صفحه کلید پیش فرض استفاده کنید.</string>
-    <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">رمز عبور</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">ارز پشتیبانی نشده</string>
     <string name="Eos_Backend_Error_SelfTransfer">مبلغ نمی تواند به حساب خودتان منتقل شود</string>
@@ -260,31 +254,10 @@
     <string name="Hud_Text_InvalidPinError">رمز عبور اشتباه</string>
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
     <string name="Hud_UnknownError">خطای ناشناخته %s</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
-    <string name="Fingerprint_Hint">حسگر لمسي</string>
-    <string name="Fingerprint_EnterPin">رمز عبور</string>
-    <string name="Fingerprint_NotRecognized">اثر انگشت شناخته نشد. دوباره تلاش كنيد</string>
-    <string name="Fingerprint_Success">موفقيت!</string>
-    <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:٪؜s</string>
-    <string name="UnlockPin_Error_PinIncorrect">نادرست</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">كد تلفن</string>
     <string name="OSPin_Confirm_Desciption">این برنامه نیاز دارد که تلفن دارای رمز عبور (قفل صفحه) باشد.\n\n شما می توانید آن را در تنظیمات اندروید فعال کنید.\n\nلطفاً توجه داشته باشید که هنگامی که PIN یا کد را در سطح OS یا سیستم عامل غیرفعال کردید ، اقدامات امنیتی در ذخیره ایمن ایجاد شده در تلفن شما ، اطلاعاتی که قبلا ذخیره شده است را نامعتبر می کند. برای بازگشت به کیف پول خود، باید کلیدهای کیف پول خود را بازیابی کنید.</string>
     <string name="OSPin_Prompt_Desciption">این برنامه برای حفظ اطلاعات حساس از کیف پول شما در حافظه امن اندروید و نه در خود برنامه به PIN یا رمز تلفن شما نیاز دارد.</string>
-    <!--Set Pin-->
-    <string name="SetPin_Title">رمز عبور</string>
-    <string name="SetPin_Info">از کد عبور شما برای باز کردن کیف پول و ارسال پول استفاده می شود</string>
-    <string name="SetPin_ErrorShortPin">لطفا تمام ارقام را وارد كنيد.</string>
-    <string name="SetPin_ConfirmInfo">تاييد</string>
-    <string name="SetPin_Success">رمز عبور قفل با موفقیت تنظیم شد!</string>
-    <string name="SetPin_ErrorPinsDontMatch">کد عبور مطابقت نداشت. دوباره امتحان کنید.</string>
-    <string name="SetPin_ErrorFailedToSavePin">هنگام ذخیره کد عبور شما خطایی روی داد. لطفا دوباره تلاش کنید.</string>
-    <!--Edit Pin-->
-    <string name="EditPin_Title">تغییر رمزعبور</string>
-    <string name="EditPin_UnlockInfo">رمز عبور فعلي</string>
-    <string name="EditPin_NewPinInfo">رمز عبور جديد</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
     <string name="ManageCoins_save">ذخیره</string>
@@ -293,18 +266,18 @@
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">تجربی</string>
     <string name="ExperimentalFeatures_Description">ویژگی های زیر تجربی است و باید با احتیاط استفاده شود. در حالی که ما این ویژگی ها را با استفاده از وجوه رمزنگاری شده خودمان به طور آزمایشی آزمایش کرده ایم ، اما نمی توانیم تضمین کنیم که آنها مطابق آنچه انتظار می رود عمل کنند.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">قفل بیت کوین</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">قفل بیت کوین</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
-    <string name="ManageKeys_Description">موارد هایلایت شده زیر کیف های پول فعال شما هستند که در آن هر کیف پول مسئول مجموعه های مختلف ارزهای رمزگذاری شده است.\n\nبا تهیه نسخه پشتیبان از کلید خصوصی آن کیف پول باید از هر کیف پول هایلایت شده نسخه پشتیبان تهیه کنید. در صورت گم شدن ، دزدیده شدن ، خراب شدن و غیره ، این کلید تنها راه برای بازگرداندن وجه شما است.</string>
     <string name="ManageKeys_Create">به وجود آوردن</string>
     <string name="ManageKeys_Restore">بازیابی</string>
     <string name="ManageKeys_Delete">پاک کردن</string>
     <string name="ManageKeys_Backup">پيشتيباني</string>
     <string name="ManageKeys_Show">نشان دادن</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">پاک کردن کیف پول</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
@@ -319,15 +292,22 @@
     <string name="AddCoin_Description">شما کیف پولی ندارید که بتواند ذخیره کند%1$s. این برنامه می تواند یک کیف پول جدید برای شما ایجاد کند. برای ایجاد کیف پول جدید از دکمه به وجود آوردن زیر استفاده کنید. \n\n شما می توانید از کیف پول جدید برای سکه های زیر استفاده کنید:%2$s. \n\n همچنین می توانید از کلید کیف پول %3$s موجود استفاده کنید اگر دارید. برای این کار از دکمه بازیابی استفاده کنید.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
+    <!-- Blockchain Settings -->
+    <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">غیرقابل توقف</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast_Subtitle">۰-۲ ساعت (توصیه شده)</string>
-    <string name="CoinOption_SyncModeDescription">منبعی را انتخاب کنید که برنامه غیرقابل توقف باید برای دانلود مانده حساب و تراکنش های خود استفاده کند. \n\n سیستم های افقی %1s API:\n%2s</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
-    <string name="CoinOption_BipDescriptionCreate">این تنظیم قالب آدرس بیت کوین را در این کیف پول کنترل می کند. اگر مطمئن نیستید توصیه می کنیم از BIP49 استفاده کنید.</string>
-    <string name="CoinOption_BipDescriptionRestore">قالب مورد نظر برای بیت کوین را در کیف پول مورد نظر برای بازیابی انتخاب کنید.</string>
     <string name="CoinOption_AddressFormatTitle">فرمت آدرس را انتخاب کنید</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
     <string name="CoinOption_bip44_Subtitle">قدیمی تر (شروع با ۱...)</string>
