@@ -4,9 +4,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.fragment_alert_dialog.*
 
 class AlertDialogFragment(
         private var title: String? = null,
@@ -23,15 +23,17 @@ class AlertDialogFragment(
     override fun onCreateDialog(bundle: Bundle?): Dialog {
         val rootView = View.inflate(context, R.layout.fragment_alert_dialog, null) as ViewGroup
 
-        txtTitle.text = title
-        txtTitle.visibility = if (title == null) View.GONE else View.VISIBLE
-
-        txtDescription.text = description
-
-        buttonTextView.setText(buttonText)
-        buttonTextView.setOnClickListener {
-            listener?.onButtonClick()
-            dismiss()
+        rootView.findViewById<TextView>(R.id.txtTitle)?.apply {
+            text = title
+            visibility = if (title == null) View.GONE else View.VISIBLE
+        }
+        rootView.findViewById<TextView>(R.id.txtDescription)?.text = description
+        rootView.findViewById<TextView>(R.id.buttonTextView)?.let { btn ->
+            btn.setText(buttonText)
+            btn.setOnClickListener {
+                listener?.onButtonClick()
+                dismiss()
+            }
         }
 
         val builder = activity?.let { AlertDialog.Builder(it, R.style.AlertDialog) }
