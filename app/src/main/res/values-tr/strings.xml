@@ -19,6 +19,7 @@
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Share">Paylaş</string>
+    <string name="Button_Done">Done</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
@@ -30,12 +31,9 @@
     <string name="Create_Title">Yeni Cüzdan</string>
     <string name="Create_Description">Başlamak için bir kripto para birimi seçin. Daha sonra başka kripto para birimleri ekleyebileceksiniz.</string>
     <!--Restore-->
-    <string name="Restore_Title">Geri Yükle</string>
-    <string name="Restore_ChooseCrypto">Yeni Cüzdan</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">Anahtarı girin</string>
-    <string name="Restore_Enter_Key_Description_Eos">%s cüzdanı için kişisel anahtarınızı girin.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s kelimelerinden oluşan %1s Cüzdanı için özel anahtarınızı girin. Kelimelerin doğru sırayla girilmesi ve boşluklarla ayrılması gerekir.</string>
-    <string name="Restore_Description">Cüzdanı geri yüklemek için o cüzdanın gizli anahtarını girmelisiniz.\n\nDaha fazla cüzdanı geri yüklemek için bir cüzdanı geri yükledikten sonra Ayarlardaki Anahtarları Yönet bölümüne gidin.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
@@ -69,6 +67,7 @@
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
     <string name="Balance_Sort_24hPriceChange">24 saat Değişiklik</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres</string>
@@ -116,17 +115,6 @@
     <string name="Deposit_Share">Paylaş</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
     <string name="Deposit_Your_Account">Hesabınız</string>
-    <!--Timestamp-->
-    <string name="Timestamp_JustNow">şimdi</string>
-    <string name="Timestamp_MinAgo">%d dk önce</string>
-    <string name="Timestamp_HoursAgo">%d saat önce</string>
-    <string name="Timestamp_Today">Bugün</string>
-    <string name="Timestamp_Yesterday">Dün</string>
-    <string name="Duration_instant">Anlık</string>
-    <string name="Duration_Within">%s Içinde</string>
-    <string name="Duration_Hours">%d sa.</string>
-    <string name="Duration_Minutes">%d dk.</string>
-    <string name="Duration_Seconds">%d sn.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
@@ -148,9 +136,14 @@
     <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
     <string name="TransactionInfo_Fee">Masraf</string>
     <string name="TransactionInfo_SentToSelfNote">Bu işlem kendi adresine gönderildi</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Hesap işlemi</string>
     <string name="FullInfo_Time">Tarih</string>
@@ -188,7 +181,7 @@
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
     <string name="Settings_Notifications">Bildirimler</string>
     <string name="Settings_ManageCoins">Kredileri Yönet</string>
-    <string name="Settings_ExperimentalFeatures">Deneysel Özellikler</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">Cüzdanı Geri Yükle</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
@@ -205,8 +198,10 @@
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Para birimi</string>
+    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
@@ -221,11 +216,12 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
-    <!--Setting_Report-->
-    <string name="SettingsReport_Title">Sorunu Bildir</string>
-    <string name="SettingsReport_Email">E-posta</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
-    <string name="SettingsReport_AppStatus">Uygulama Durumu</string>
+    <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
+    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_AppStatus">App Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Bildirimler</string>
     <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın.\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarılırsınız.</string>
@@ -243,8 +239,6 @@
     <string name="Alert_TitleWarning">Uyarı</string>
     <string name="Alert_NoDeviceLockDescription">Devam edebilmek için cihaz kilidi oluşturmalısınız. Ekran kilidi oluşturmak için, Ayarlarlarda ki Güvenlik &gt; Ekran Kilidi bölümene gidin.</string>
     <string name="Alert_CustomKeyboardIsUsed">Cihaz harici klavye kullanıyorsunuz. Asıl klavyeyi kullanmanız gerekiyor.</string>
-    <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Kod</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
     <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
@@ -260,31 +254,10 @@
     <string name="Hud_Text_InvalidPinError">Şimdiki Kod</string>
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">Bilinmeyen Hata %s</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Parmak iziyle giriş</string>
-    <string name="Fingerprint_Hint">Dokunmatik sensör</string>
-    <string name="Fingerprint_EnterPin">Kod</string>
-    <string name="Fingerprint_NotRecognized">Parmak izi tanınmadı. Tekrar deneyin</string>
-    <string name="Fingerprint_Success">Başarılı!</string>
-    <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Yanlış</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Telefon PİN\'i</string>
     <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
     <string name="OSPin_Prompt_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
-    <!--Set Pin-->
-    <string name="SetPin_Title">Kod</string>
-    <string name="SetPin_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
-    <string name="SetPin_ErrorShortPin">Lütfen bütün rakamları giriniz.</string>
-    <string name="SetPin_ConfirmInfo">Onayla</string>
-    <string name="SetPin_Success">Kilit şifresi başarıyla oluşturuldu!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Kod uyuşmadı. Tekrar deneyin.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Şifre kaydedilirken hata oluştu. Tekrar deneyin.</string>
-    <!--Edit Pin-->
-    <string name="EditPin_Title">Kod Değiştir</string>
-    <string name="EditPin_UnlockInfo">Şimdiki Kod</string>
-    <string name="EditPin_NewPinInfo">Yeni Kod</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>
@@ -293,18 +266,18 @@
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
     <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">Kilitli Bitcoins</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">Kilitli Bitcoins</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Belirtilen tarihe kadar harcanmamış Bitcoin\'leri göndermenize olanak verir.\n\nBu tür bir işlemin alıcısı Unstoppable cüzdan kullanmalıdır.\n\nSadece Unstoppable cüzdan, Bitcoin ağındaki bu tür işlemleri doğru bir şekilde tanımlayabilir ve kilitleme süresi dolduktan sonra da alıcının bu Bitcoin\'leri harcamasını sağlayabilir.\n\nEğer bir HODLer iseniz, kendinize böyle bir işlem göndererek, bu özelliği Bitcoin\'lerinizi zarar etmeden uzun süre elinizde tutmaya zorlamak için kullanabilirsiniz.\n\nDeneysel bir özellik olduğundan, işlem başına maksimum tutar 0.5 BTC ile sınırlandırılmıştır.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Cüzdanları yönet</string>
-    <string name="ManageKeys_Description">Aşağıda vurgulanan, her cüzdanın farklı kripto para birimlerinden sorumlu olduğu aktif cüzdanlarınızdır.\n\nVurgulanan her cüzdanı, o cüzdanın özel anahtarını kesinlikte yedeklemelisiniz. Bu anahtar, telefonunuz kaybolur, çalınır yada kırılırsa, Kripto paranızı geri kazanmanın tek yoludur.</string>
     <string name="ManageKeys_Create">Oluştur</string>
     <string name="ManageKeys_Restore">Geri Yükle</string>
     <string name="ManageKeys_Delete">Sil</string>
     <string name="ManageKeys_Backup">Yedekle</string>
     <string name="ManageKeys_Show">Göster</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Cüzdanı Sil</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Bu işlem %s Cüzdanını bu cihazdan kaldıracak.</string>
@@ -319,15 +292,22 @@
     <string name="AddCoin_Description">%1$s saklayabilen bir cüzdanınız yok. Uygulamanın sizin için yeni bir cüzdan oluşturabilir. Yeni bir cüzdan oluşturmak için aşağıdaki Oluştur düğmesini kullanın.\n\nYeni cüzdanı aşağıdaki paralar için kullanabileceksiniz: %2$s.\n\nVarsa, mevcut %3$s Cüzdan anahtarını da kullanabilirsiniz. Bunun için Geri Yükle düğmesini kullanın.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
+    <!-- Blockchain Settings -->
+    <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
     <string name="CoinOption_Fast_Subtitle">0-2 saat (Tavsiye edilen)</string>
-    <string name="CoinOption_SyncModeDescription">Unstoppablenin bakiyenizi ve işlemlerinizi indirmek için kullanması gereken kaynağı seçin.\n\nHorizontal Systems %1s API: \n%2s</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
     <string name="CoinOption_Slow_Subtitle">1-12 saat</string>
-    <string name="CoinOption_BipDescriptionCreate">Bu ayar, bu cüzdandaki Bitcoin adres formatını kontrol eder. Emin değilseniz BIP49 kullanmanızı öneririz.</string>
-    <string name="CoinOption_BipDescriptionRestore">Geri yüklemeye çalıştığınız cüzdandaki Bitcoin için adres formatını seçin.</string>
     <string name="CoinOption_AddressFormatTitle">Adres formatını seçin</string>
     <string name="CoinOption_SyncModeTitle">Geri Yükleme Ayarları</string>
     <string name="CoinOption_bip44_Subtitle">Eski (1... ile başlar)</string>
