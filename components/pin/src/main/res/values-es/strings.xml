@@ -3,21 +3,17 @@
 <resources>
     <!--Common-->
     <string name="Button_Cancel">Cancelar</string>
-
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Código</string>
-
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Inicio de sesión de huella digital</string>
     <string name="Fingerprint_Hint">Sensor táctil</string>
     <string name="Fingerprint_EnterPin">Código</string>
     <string name="Fingerprint_NotRecognized">Huella digital no reconocida. Por favor inténtelo de nuevo.</string>
     <string name="Fingerprint_Success">Completado!</string>
-
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <string name="UnlockPin_Error_PinIncorrect">Incorrecto</string>
-
     <!--Set Pin-->
     <string name="SetPin_Title">Código</string>
     <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
@@ -26,10 +22,8 @@
     <string name="SetPin_Success">¡Tu contraseña se ha establecido correctamente!</string>
     <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo.</string>
     <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
-
     <!--Edit Pin-->
     <string name="EditPin_Title">Editar el código </string>
     <string name="EditPin_UnlockInfo">Código Actual</string>
     <string name="EditPin_NewPinInfo">Código Nuevo</string>
-
 </resources>
