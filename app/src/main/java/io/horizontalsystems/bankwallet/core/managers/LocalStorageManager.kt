@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.annotation.SuppressLint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
@@ -229,7 +230,9 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
 
     override var torEnabled: Boolean
         get() = App.preferences.getBoolean(TOR_ENABLED, false)
+        @SuppressLint("ApplySharedPref")
         set(enabled) {
-            App.preferences.edit().putBoolean(TOR_ENABLED, enabled).apply()
+            //keep using commit() for synchronous storing
+            App.preferences.edit().putBoolean(TOR_ENABLED, enabled).commit()
         }
 }

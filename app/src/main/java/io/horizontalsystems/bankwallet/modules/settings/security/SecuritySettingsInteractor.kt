@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INetManager
 import io.horizontalsystems.core.IPinManager
 import io.horizontalsystems.core.ISystemInfoManager
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsInteractor(
@@ -39,11 +40,6 @@ class SecuritySettingsInteractor(
     override var isTorEnabled: Boolean
         get() = localStorage.torEnabled
         set(value) {
-            if (value) {
-                netManager.start()
-            } else {
-                netManager.stop()
-            }
             localStorage.torEnabled = value
         }
 
@@ -58,4 +54,13 @@ class SecuritySettingsInteractor(
         disposables.clear()
     }
 
+    override fun stopTor() {
+        disposables.add(netManager.stop()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.didStopTor()
+                }, {
+
+                }))
+    }
 }

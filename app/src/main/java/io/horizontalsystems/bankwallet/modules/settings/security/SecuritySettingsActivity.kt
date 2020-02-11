@@ -9,10 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
+import io.horizontalsystems.bankwallet.modules.main.MainActivity
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
+import kotlin.system.exitProcess
 
 class SecuritySettingsActivity : BaseActivity() {
 
@@ -100,6 +103,13 @@ class SecuritySettingsActivity : BaseActivity() {
 
         viewModel.openBlockchainSettings.observe(this, Observer {
             CoinSettingsModule.start(this)
+        })
+
+        viewModel.restartApp.observe(this, Observer {
+            finishAffinity()
+            MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
+            SecuritySettingsModule.start(this)
+            exitProcess(0)
         })
     }
 
