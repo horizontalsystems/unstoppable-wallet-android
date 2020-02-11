@@ -39,10 +39,12 @@ object SecuritySettingsModule {
 
         fun disablePin()
         fun clear()
+        fun stopTor()
     }
 
     interface ISecuritySettingsInteractorDelegate {
         fun didAllBackedUp(allBackedUp: Boolean)
+        fun didStopTor()
     }
 
     interface ISecuritySettingsRouter {
@@ -51,6 +53,7 @@ object SecuritySettingsModule {
         fun showSetPin()
         fun showUnlockPin()
         fun showBlockchainSettings()
+        fun restartApp()
     }
 
     fun start(context: Context) {

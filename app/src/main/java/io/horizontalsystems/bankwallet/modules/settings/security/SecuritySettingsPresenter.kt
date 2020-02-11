@@ -19,6 +19,15 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
 
     override fun didSwitchTorEnabled(enable: Boolean) {
         interactor.isTorEnabled = enable
+        if (enable) {
+            router.restartApp()
+        } else {
+            interactor.stopTor()
+        }
+    }
+
+    override fun didStopTor() {
+        router.restartApp()
     }
 
     override fun didSetPin() {
