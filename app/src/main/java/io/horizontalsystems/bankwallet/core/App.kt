@@ -29,6 +29,7 @@ class App : CoreApp() {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
+        lateinit var netKitManager: INetManager
         lateinit var chartTypeStorage: IChartTypeStorage
 
         lateinit var wordsManager: WordsManager
@@ -120,6 +121,8 @@ class App : CoreApp() {
             pinStorage = this
             themeStorage = this
         }
+
+        netKitManager = NetManager(instance, localStorage)
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()
