@@ -423,6 +423,11 @@ interface IBlockedChartCoins {
     var blockedCoins: MutableList<String>
 }
 
+interface INetManager{
+    fun start()
+    fun stop()
+}
+
 enum class FeeRatePriority(val value: Int) {
     LOW(1),
     MEDIUM(2),

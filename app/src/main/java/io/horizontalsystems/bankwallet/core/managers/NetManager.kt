@@ -1,19 +1,28 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
+import android.content.Context
+import android.util.Log
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.INetManager
 import io.horizontalsystems.netkit.NetKit
 import io.horizontalsystems.tor.Tor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class NetManager : Tor.Listener {
+class NetManager(context: Context, localStorage: ILocalStorage) : INetManager, Tor.Listener {
 
     private val disposables = CompositeDisposable()
     private val kit: NetKit by lazy {
-        NetKit(App.instance, this)
+        NetKit(context, this)
     }
 
-    fun start() {
+    init {
+        if (localStorage.torEnabled){
+            start()
+        }
+    }
+
+    override fun start() {
         disposables.add(kit.startTor(false)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -23,7 +32,7 @@ class NetManager : Tor.Listener {
                 }))
     }
 
-    fun stop() {
+    override fun stop() {
         disposables.add(kit.stopTor()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -33,9 +42,13 @@ class NetManager : Tor.Listener {
                 }))
     }
 
+    //Tor.Listener
+
     override fun onConnStatusUpdate(torConnInfo: Tor.ConnectionInfo?, message: String) {
+        Log.e("NetKitManager", "onConnStatusUpdate: ${torConnInfo?.connectionState}, $message")
     }
 
     override fun onProcessStatusUpdate(torInfo: Tor.Info?, message: String) {
+        Log.e("NetKitManager", "onProcessStatusUpdate: ${torInfo?.state}, $message")
     }
 }

@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.managers.NetManager
+import io.horizontalsystems.bankwallet.core.INetManager
 import io.horizontalsystems.core.IPinManager
 import io.horizontalsystems.core.ISystemInfoManager
 import io.reactivex.disposables.CompositeDisposable
@@ -12,7 +12,7 @@ class SecuritySettingsInteractor(
         private val localStorage: ILocalStorage,
         private val systemInfoManager: ISystemInfoManager,
         private val pinManager: IPinManager,
-        private val netManager: NetManager)
+        private val netManager: INetManager)
     : SecuritySettingsModule.ISecuritySettingsInteractor {
 
     var delegate: SecuritySettingsModule.ISecuritySettingsInteractorDelegate? = null

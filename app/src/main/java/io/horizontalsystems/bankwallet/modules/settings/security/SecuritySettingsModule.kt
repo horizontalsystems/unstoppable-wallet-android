@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.NetManager
 
 object SecuritySettingsModule {
 
@@ -59,7 +58,7 @@ object SecuritySettingsModule {
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.backupManager, App.localStorage, App.systemInfoManager, App.pinManager, NetManager())
+        val interactor = SecuritySettingsInteractor(App.backupManager, App.localStorage, App.systemInfoManager, App.pinManager, App.netKitManager)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter
