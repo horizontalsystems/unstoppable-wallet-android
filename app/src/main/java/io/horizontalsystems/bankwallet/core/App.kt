@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
@@ -184,6 +185,14 @@ class App : CoreApp() {
             backgroundManager.registerListener(this)
         }
         coinSettingsManager = CoinSettingsManager(localStorage)
+
+        val nightMode = if (CoreApp.themeStorage.isLightModeOn)
+            AppCompatDelegate.MODE_NIGHT_NO else
+            AppCompatDelegate.MODE_NIGHT_YES
+
+        if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+            AppCompatDelegate.setDefaultNightMode(nightMode)
+        }
     }
 
     override fun attachBaseContext(base: Context) {

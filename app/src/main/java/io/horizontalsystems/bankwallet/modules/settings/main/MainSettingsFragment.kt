@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
+import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.languageswitcher.LanguageSwitcherModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -175,7 +177,11 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
+            val nightMode = if (CoreApp.themeStorage.isLightModeOn)
+                AppCompatDelegate.MODE_NIGHT_NO else
+                AppCompatDelegate.MODE_NIGHT_YES
+
+            AppCompatDelegate.setDefaultNightMode(nightMode)
         })
     }
 }
