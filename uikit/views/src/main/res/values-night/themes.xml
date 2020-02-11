@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!--Final, top-level theme-->
+    <style name="Theme.AppTheme.DayNight" parent="Theme.AppTheme.DarkModeAppTheme"/>
+
+    <style name="Theme.AppTheme.DarkModeAppTheme" parent="Theme.AppTheme">
+        <item name="colorAccent">@color/yellow_d</item>
+        <item name="buttonStyle">@style/Button</item>
+        <item name="android:windowBackground">@color/dark</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="actionMenuTextAppearance">@style/Headline2</item>
+        <item name="actionMenuTextColor">@color/stateful_button_yellow_color</item>
+        <item name="colorControlNormal">@color/grey</item>
+        <item name="colorControlActivated">@color/yellow_d</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
+
+        <item name="BallanceCoinNameColor">@color/white</item>
+        <item name="BallanceCoinAmountColor">@color/white</item>
+        <item name="TitleColor">@color/white</item>
+        <item name="TextDimmable">@color/dimmable_white</item>
+        <item name="TextColorGreyLightToDark">@color/light_grey</item>
+        <item name="TextColorBarsToDark">@color/light</item>
+        <item name="AboutBackgroundColor">@color/transparent</item>
+        <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
+        <item name="CoinItemBackground">@drawable/coinholder_bg</item>
+        <item name="PredefinedAccountBackground">@drawable/predefined_account_background_dark</item>
+        <item name="FilterButtonBackgroundColor">@color/steel_20</item>
+        <item name="AddWalletIcon">@drawable/stateful_balance_add_icon_dark</item>
+        <item name="BottomNavigationBackgroundColor">@color/dark</item>
+        <item name="RippleColor">@color/ripple_white</item>
+        <item name="RoundRippleColor">@color/white_50</item>
+        <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
+        <item name="BlockScreenLockIcon">@drawable/ic_blocked_dark</item>
+        <item name="HudTextColor">@color/white</item>
+        <item name="TransactionDetailBackground">@color/steel_dark</item>
+        <item name="TransactionDetailValueTextColor">@color/light</item>
+        <item name="TransactionDetailBottomBarBackground">@color/dark</item>
+        <item name="LightBackground">@color/steel_20</item>
+        <item name="BottomSendButtonColor">@color/steel_20</item>
+        <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
+        <item name="BottomSendImageButtonTint">@color/white</item>
+        <item name="BottomDialogTextColor">@color/white</item>
+        <item name="ConfirmationDialogBackground">@color/steel_dark</item>
+        <item name="AddressBackground">@color/address_background_dark</item>
+        <item name="TransactionTagColor">@color/stateful_tag_filter_text_color_dark</item>
+        <item name="ProgressbarSpinnerColor">@color/dark</item>
+        <item name="SwipeRefreshBackgroundColor">@color/dark</item>
+        <item name="InputBackground">@color/steel_20</item>
+        <item name="ConfirmationTextColor">@color/steel_light</item>
+        <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
+        <item name="ShadingBottomGradient">@drawable/rates_gradient_dark</item>
+        <item name="SecondaryButtonStartGradient">#33ffffff</item>
+
+        <!-- New colors: for icons & text -->
+        <item name="ColorJacob">@color/yellow_d</item>
+        <item name="ColorJacobPressed">@color/yellow_l</item>
+        <item name="ColorRemus">@color/green_d</item>
+        <item name="ColorLucian">@color/red_d</item>
+        <item name="ColorLucianPressed">@color/red_l</item>
+        <item name="ColorOz">@color/light</item>
+        <item name="ColorLeah">@color/steel_light</item>
+
+        <!-- New colors: for backgrounds -->
+        <item name="ColorJeremy">@color/steel_20</item>
+        <item name="ColorElena">@color/steel_20</item>
+        <item name="ColorLawrence">@color/steel_dark</item>
+        <item name="ColorLawrencePressed">@color/steel_dark_pressed</item>
+        <item name="ColorClaude">@color/dark</item>
+        <item name="ColorGwen">@color/dark</item>
+        <item name="ColorNina">@color/white_50</item>
+    </style>
+</resources>

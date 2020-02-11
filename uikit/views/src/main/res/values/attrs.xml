@@ -15,4 +15,60 @@
         <attr name="inputHint" format="string" />
         <attr name="inputMaxLines" format="integer" />
     </declare-styleable>
+
+    <!--  Custom view themes/styles -->
+    <attr name="BallanceCoinNameColor" format="reference|color" />
+    <attr name="BallanceCoinAmountColor" format="reference|color" />
+    <attr name="TitleColor" format="reference|color" />
+    <attr name="TextDimmable" format="reference|color" />
+    <attr name="TextColorGreyLightToDark" format="reference|color" />
+    <attr name="TextColorBarsToDark" format="reference|color" />
+    <attr name="AboutBackgroundColor" format="reference|color" />
+    <attr name="TransactionItemBackgroundColor" format="reference|color" />
+    <attr name="AddWalletIcon" format="reference" />
+    <attr name="CoinItemBackground" format="reference" />
+    <attr name="PredefinedAccountBackground" format="reference" />
+    <attr name="FilterButtonBackgroundColor" format="reference|color" />
+    <attr name="BottomNavigationBackgroundColor" format="reference|color" />
+    <attr name="RippleColor" format="reference|color" />
+    <attr name="RoundRippleColor" format="reference|color" />
+    <attr name="BottomNavBackground" format="reference" />
+    <attr name="BlockScreenLockIcon" format="reference" />
+    <attr name="HudTextColor" format="reference|color" />
+    <attr name="TransactionDetailBackground" format="reference|color" />
+    <attr name="TransactionDetailValueTextColor" format="reference|color" />
+    <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
+    <attr name="LightBackground" format="color" />
+    <attr name="BottomSendButtonColor" format="reference|color" />
+    <attr name="BottomSendButtonHighlightedColor" format="reference|color" />
+    <attr name="BottomSendImageButtonTint" format="reference|color" />
+    <attr name="BottomDialogTextColor" format="reference|color" />
+    <attr name="ConfirmationDialogBackground" format="reference|color" />
+    <attr name="AddressBackground" format="reference|color" />
+    <attr name="TransactionTagColor" format="reference|color" />
+    <attr name="ProgressbarSpinnerColor" format="reference|color" />
+    <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
+    <attr name="InputBackground" format="reference|color" />
+    <attr name="ConfirmationTextColor" format="reference|color" />
+    <attr name="AddCoinButtonPlaceholder" format="reference|color" />
+    <attr name="ShadingBottomGradient" format="reference" />
+    <attr name="SecondaryButtonStartGradient" format="reference|color" />
+
+    <!--  New themed colors for text and icons -->
+    <attr name="ColorJacob" format="reference|color" />
+    <attr name="ColorJacobPressed" format="reference|color" />
+    <attr name="ColorRemus" format="reference|color" />
+    <attr name="ColorLucian" format="reference|color" />
+    <attr name="ColorLucianPressed" format="reference|color" />
+    <attr name="ColorOz" format="reference|color" />
+    <attr name="ColorLeah" format="reference|color" />
+
+    <!--  New themed colors for backgrounds -->
+    <attr name="ColorJeremy" format="reference|color" />
+    <attr name="ColorElena" format="reference|color" />
+    <attr name="ColorLawrence" format="reference|color" />
+    <attr name="ColorLawrencePressed" format="reference|color" />
+    <attr name="ColorClaude" format="reference|color" />
+    <attr name="ColorGwen" format="reference" />
+    <attr name="ColorNina" format="reference" />
 </resources>

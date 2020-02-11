@@ -13,10 +13,6 @@ abstract class CoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val lightMode = CoreApp.themeStorage.isLightModeOn
-        val appTheme = if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme
-        setTheme(appTheme)
-
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         window.decorView.layoutDirection = if (CoreApp.instance.isLocaleRTL()) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
     }
