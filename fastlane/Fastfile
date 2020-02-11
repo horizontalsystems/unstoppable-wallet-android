@@ -31,7 +31,8 @@ platform :android do
         app_name: options[:app_name],
         owner_name: "Horizontal-Systems",
         owner_type: "organization",
-        release_notes: options[:notes]
+        release_notes: options[:notes],
+        notify_testers: true
       )
   end
 
