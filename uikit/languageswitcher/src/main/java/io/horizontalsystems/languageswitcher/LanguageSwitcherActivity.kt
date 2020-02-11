@@ -1,5 +1,6 @@
 package io.horizontalsystems.languageswitcher
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.core.CoreActivity
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.views.LayoutHelper
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
@@ -109,10 +109,15 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
         val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-        image.setImageResource(LayoutHelper.getLangDrawableResource(containerView.context, item.language))
+        image.setImageResource(getLangDrawableResource(containerView.context, item.language))
+
         title.text = item.nativeName
         subtitle.text = item.name
         checkmarkIcon.visibility = if (item.current) View.VISIBLE else View.GONE
+    }
+
+    private fun getLangDrawableResource(context: Context, langCode: String): Int {
+        return context.resources.getIdentifier("lang_$langCode", "drawable", context.packageName)
     }
 
     companion object {

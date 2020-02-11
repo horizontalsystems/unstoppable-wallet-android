@@ -30,10 +30,6 @@ object LayoutHelper {
         return context.resources.getIdentifier(coinResourceName, "drawable", context.packageName)
     }
 
-    fun getLangDrawableResource(context: Context, languageCode: String): Int {
-        return context.resources.getIdentifier("lang_$languageCode", "drawable", context.packageName)
-    }
-
     fun getCurrencyDrawableResource(context: Context, currencyCode: String): Int {
         return context.resources.getIdentifier("currency_$currencyCode", "drawable", context.packageName)
     }
