@@ -65,7 +65,6 @@ interface IChartTypeStorage {
 }
 
 interface ISecuredStorage {
-    val authData: AuthData?
     val savedPin: String?
     fun savePin(pin: String)
     fun removePin()
