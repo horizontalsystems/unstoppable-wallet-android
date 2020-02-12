@@ -1,19 +1,18 @@
-package io.horizontalsystems.bankwallet.core.managers
+package io.horizontalsystems.pin.core
 
 import android.security.keystore.UserNotAuthenticatedException
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.ISecuredStorage
 import io.horizontalsystems.core.IPinManager
+import io.horizontalsystems.core.ISecuredStorage
 
-class PinManager(private val securedStorage: ISecuredStorage, val localStorage: ILocalStorage) : IPinManager {
+class PinManager(private val securedStorage: ISecuredStorage) : IPinManager {
 
     override val isPinSet: Boolean
         get() = !securedStorage.pinIsEmpty()
 
     override var isFingerprintEnabled: Boolean
-        get() = localStorage.isFingerprintEnabled
+        get() = securedStorage.isFingerprintEnabled
         set(value) {
-            localStorage.isFingerprintEnabled = value
+            securedStorage.isFingerprintEnabled = value
         }
 
     @Throws(UserNotAuthenticatedException::class)
@@ -27,7 +26,6 @@ class PinManager(private val securedStorage: ISecuredStorage, val localStorage: 
 
     override fun clear() {
         securedStorage.removePin()
-        localStorage.isFingerprintEnabled = false
+        securedStorage.isFingerprintEnabled = false
     }
-
 }
