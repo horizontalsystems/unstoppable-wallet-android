@@ -17,7 +17,6 @@ import io.horizontalsystems.xrateskit.entities.ChartType
 class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
-    private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val SEND_INPUT_TYPE = "send_input_type"
     private val WORDLIST_BACKUP = "wordlist_backup"
     private val I_UNDERSTAND = "i_understand"
@@ -45,12 +44,6 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         get() = App.preferences.getBoolean(WORDLIST_BACKUP, false)
         set(backedUp) {
             App.preferences.edit().putBoolean(WORDLIST_BACKUP, backedUp).apply()
-        }
-
-    override var isFingerprintEnabled: Boolean
-        get() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
-        set(enabled) {
-            App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, enabled).apply()
         }
 
     override var sendInputType: SendModule.InputType?

@@ -38,7 +38,6 @@ interface IAdapterManager {
 
 interface ILocalStorage {
     var isBackedUp: Boolean
-    var isFingerprintEnabled: Boolean
     var sendInputType: SendModule.InputType?
     var iUnderstand: Boolean
     var baseCurrencyCode: String?
@@ -62,13 +61,6 @@ interface ILocalStorage {
 
 interface IChartTypeStorage {
     var chartType: ChartType?
-}
-
-interface ISecuredStorage {
-    val savedPin: String?
-    fun savePin(pin: String)
-    fun removePin()
-    fun pinIsEmpty(): Boolean
 }
 
 interface IAccountManager {

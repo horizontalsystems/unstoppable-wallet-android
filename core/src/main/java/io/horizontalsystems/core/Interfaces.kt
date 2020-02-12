@@ -12,6 +12,7 @@ interface ICoreApp {
     var systemInfoManager: ISystemInfoManager
     var languageManager: ILanguageManager
     var lockManager: ILockManager
+    var secureStorage: ISecuredStorage
     var pinManager: IPinManager
     var pinStorage: IPinStorage
     var themeStorage: IThemeStorage
@@ -39,6 +40,14 @@ interface ISystemInfoManager {
     val biometricAuthSupported: Boolean
     val deviceModel: String
     val osVersion: String
+}
+
+interface ISecuredStorage {
+    var isFingerprintEnabled: Boolean
+    val savedPin: String?
+    fun savePin(pin: String)
+    fun removePin()
+    fun pinIsEmpty(): Boolean
 }
 
 interface IPinManager {
