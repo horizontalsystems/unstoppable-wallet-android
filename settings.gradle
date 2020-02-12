@@ -1,8 +1,8 @@
 include ':app'
 
 include ':core'
-include ':uikit:views'
-include ':uikit:icons'
-include ':uikit:languageswitcher'
-include ':uikit:chartview'
-include ':uikit:pin'
+include ':components:views'
+include ':components:icons'
+include ':components:languageswitcher'
+include ':components:chartview'
+include ':components:pin'

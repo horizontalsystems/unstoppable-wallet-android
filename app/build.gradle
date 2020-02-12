@@ -187,11 +187,11 @@ dependencies {
     // UI modules
 
     implementation project(':core')
-    implementation project(':uikit:views')
-    implementation project(':uikit:icons')
-    implementation project(':uikit:chartview')
-    implementation project(':uikit:languageswitcher')
-    implementation project(':uikit:pin')
+    implementation project(':components:views')
+    implementation project(':components:icons')
+    implementation project(':components:chartview')
+    implementation project(':components:languageswitcher')
+    implementation project(':components:pin')
 
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha03'

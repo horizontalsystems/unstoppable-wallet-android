@@ -46,7 +46,7 @@ dependencies {
 
     implementation "androidx.biometric:biometric:1.0.1"
 
-    implementation project(':uikit:views')
+    implementation project(':components:views')
 
     testImplementation 'junit:junit:4.12'
 }
