@@ -15,6 +15,8 @@ import android.app.NotificationManager as SystemNotificationManager
 
 class NotificationManager(private val androidNotificationManager: NotificationManagerCompat) : INotificationManager {
 
+    private val maxNumberOfNotifications = 2
+
     override val isEnabled: Boolean
         get() = when {
             !androidNotificationManager.areNotificationsEnabled() -> false
@@ -36,7 +38,9 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
     }
 
     override fun clear() {
-        androidNotificationManager.cancelAll()
+        for(i in 0 until maxNumberOfNotifications){
+            androidNotificationManager.cancel(i)
+        }
     }
 
     private fun showNotification(notificationId: Int, notification: AlertNotification) {
