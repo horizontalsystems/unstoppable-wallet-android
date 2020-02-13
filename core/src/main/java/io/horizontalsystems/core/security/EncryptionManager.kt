@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.core.security
+package io.horizontalsystems.core.security
 
 import androidx.biometric.BiometricPrompt
-import io.horizontalsystems.bankwallet.core.IKeyProvider
 import io.horizontalsystems.core.IEncryptionManager
+import io.horizontalsystems.core.IKeyProvider
 import javax.crypto.Cipher
 
 class EncryptionManager(private val keyProvider: IKeyProvider) : IEncryptionManager {

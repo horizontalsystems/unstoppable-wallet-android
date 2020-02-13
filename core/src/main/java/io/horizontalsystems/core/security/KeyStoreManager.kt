@@ -1,13 +1,13 @@
-package io.horizontalsystems.bankwallet.core.security
+package io.horizontalsystems.core.security
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IKeyProvider
-import io.horizontalsystems.bankwallet.core.IKeyStoreManager
-import org.jetbrains.anko.getStackTraceString
+import android.util.Log
+import io.horizontalsystems.core.IKeyProvider
+import io.horizontalsystems.core.IKeyStoreCleaner
+import io.horizontalsystems.core.IKeyStoreManager
 import java.security.InvalidKeyException
 import java.security.KeyStore
 import java.security.KeyStoreException
@@ -16,11 +16,13 @@ import java.util.logging.Logger
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProvider {
+class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner: IKeyStoreCleaner)
+    : IKeyStoreManager, IKeyProvider {
+
     private val ANDROID_KEY_STORE = "AndroidKeyStore"
     private val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
     private val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
-    private val AUTH_DURATION_SEC = 86400 //24 hours in seconds (24x60x60)
+    private val AUTH_DURATION_SEC = 86400 // 24 hours in seconds (24x60x60)
 
     private val keyStore: KeyStore
 
@@ -36,7 +38,7 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
             validateKey()
             false
         } catch (ex: Exception) {
-            logger.warning("isKeyInvalidated: \n ${ex.getStackTraceString()}")
+            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
             ex is KeyPermanentlyInvalidatedException || ex is UnrecoverableKeyException
         }
 
@@ -45,13 +47,13 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
             validateKey()
             false
         } catch (ex: Exception) {
-            logger.warning("isUserNotAuthenticated: \n ${ex.getStackTraceString()}")
+            logger.warning("isUserNotAuthenticated: \n ${Log.getStackTraceString(ex)}")
             ex is UserNotAuthenticatedException
         }
 
     override fun getKey(): SecretKey {
         try {
-            keyStore.getKey(keyAlias, null)?.let{
+            keyStore.getKey(keyAlias, null)?.let {
                 return it as SecretKey
             }
         } catch (ex: UnrecoverableKeyException) {
@@ -64,8 +66,12 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
         try {
             keyStore.deleteEntry(keyAlias)
         } catch (ex: KeyStoreException) {
-            logger.warning("removeKey: \n ${ex.getStackTraceString()}")
+            logger.warning("removeKey: \n ${Log.getStackTraceString(ex)}")
         }
+    }
+
+    override fun resetApp() {
+        keyStoreCleaner.cleanApp()
     }
 
     @Synchronized
@@ -84,12 +90,12 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
     }
 
     private fun validateKey() {
-        App.localStorage.encryptedSampleText?.let{ encryptedText ->
+        keyStoreCleaner.encryptedSampleText?.let { encryptedText ->
             val key = keyStore.getKey(keyAlias, null) ?: throw InvalidKeyException()
             CipherWrapper().decrypt(encryptedText, key)
         } ?: run {
             val text = CipherWrapper().encrypt("abc", getKey())
-            App.localStorage.encryptedSampleText = text
+            keyStoreCleaner.encryptedSampleText = text
         }
     }
 

@@ -16,6 +16,8 @@ abstract class CoreApp : Application() {
         override lateinit var systemInfoManager: ISystemInfoManager
         override lateinit var lockManager: ILockManager
         override lateinit var languageManager: ILanguageManager
+        override lateinit var keyStoreManager: IKeyStoreManager
+        override lateinit var keyProvider: IKeyProvider
         override lateinit var secureStorage: ISecuredStorage
         override lateinit var pinManager: IPinManager
         override lateinit var pinStorage: IPinStorage
