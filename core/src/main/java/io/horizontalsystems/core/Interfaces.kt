@@ -3,6 +3,7 @@ package io.horizontalsystems.core
 import android.content.SharedPreferences
 import androidx.biometric.BiometricPrompt
 import java.util.*
+import javax.crypto.SecretKey
 
 interface ICoreApp {
     var preferences: SharedPreferences
@@ -12,6 +13,8 @@ interface ICoreApp {
     var systemInfoManager: ISystemInfoManager
     var languageManager: ILanguageManager
     var lockManager: ILockManager
+    var keyStoreManager: IKeyStoreManager
+    var keyProvider: IKeyProvider
     var secureStorage: ISecuredStorage
     var pinManager: IPinManager
     var pinStorage: IPinStorage
@@ -75,6 +78,23 @@ interface IPinStorage {
 
 interface IThemeStorage {
     var isLightModeOn: Boolean
+}
+
+interface IKeyStoreManager {
+    val isKeyInvalidated: Boolean
+    val isUserNotAuthenticated: Boolean
+
+    fun removeKey()
+    fun resetApp()
+}
+
+interface IKeyStoreCleaner {
+    var encryptedSampleText: String?
+    fun cleanApp()
+}
+
+interface IKeyProvider {
+    fun getKey(): SecretKey
 }
 
 interface ILockManager {

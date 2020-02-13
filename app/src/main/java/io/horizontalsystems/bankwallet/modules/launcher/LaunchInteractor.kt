@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IKeyStoreManager
+import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinManager
 import io.horizontalsystems.core.ISystemInfoManager
 

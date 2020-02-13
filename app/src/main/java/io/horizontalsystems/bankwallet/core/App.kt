@@ -9,13 +9,16 @@ import androidx.preference.PreferenceManager
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.security.EncryptionManager
-import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
+import io.horizontalsystems.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.managers.KeyStoreCleaner
+import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
+import io.horizontalsystems.pin.core.PinManager
+import io.horizontalsystems.pin.core.SecureStorage
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -25,11 +28,9 @@ class App : CoreApp() {
     companion object : ICoreApp by CoreApp {
 
         lateinit var feeRateProvider: FeeRateProvider
-        lateinit var secureStorage: ISecuredStorage
         lateinit var localStorage: ILocalStorage
         lateinit var chartTypeStorage: IChartTypeStorage
-        lateinit var keyStoreManager: IKeyStoreManager
-        lateinit var keyProvider: IKeyProvider
+
         lateinit var wordsManager: WordsManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
@@ -100,12 +101,7 @@ class App : CoreApp() {
 
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
-        KeyStoreManager("MASTER_KEY").apply {
-            keyStoreManager = this
-            keyProvider = this
-        }
-        encryptionManager = EncryptionManager(keyProvider)
-        secureStorage = SecuredStorageManager(encryptionManager)
+
         ethereumKitManager = EthereumKitManager(appConfigTestMode)
         eosKitManager = EosKitManager(appConfigTestMode)
         binanceKitManager = BinanceKitManager(appConfigTestMode)
@@ -118,12 +114,12 @@ class App : CoreApp() {
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(appConfigProvider, walletFactory, enabledWalletsStorage)
 
-        val localStorageManager = LocalStorageManager()
-
-        localStorage = localStorageManager
-        chartTypeStorage = localStorageManager
-        pinStorage = localStorageManager
-        themeStorage = localStorageManager
+        LocalStorageManager().apply {
+            localStorage = this
+            chartTypeStorage = this
+            pinStorage = this
+            themeStorage = this
+        }
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()
@@ -135,9 +131,17 @@ class App : CoreApp() {
         predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
         walletRemover = WalletRemover(accountManager, walletManager)
 
+        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
+            keyStoreManager = this
+            keyProvider = this
+        }
+
+        encryptionManager = EncryptionManager(keyProvider)
+        secureStorage = SecureStorage(encryptionManager)
+
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
-        pinManager = PinManager(secureStorage, localStorage)
+        pinManager = PinManager(secureStorage)
         lockManager = LockManager(pinManager).apply {
             backgroundManager.registerListener(this)
         }

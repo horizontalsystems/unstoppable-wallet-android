@@ -41,7 +41,7 @@ object KeyStoreModule {
     }
 
     fun init(view: KeyStoreViewModel, router: IRouter, mode: ModeType) {
-        val interactor = KeyStoreInteractor(App.accountManager, App.walletManager, App.localStorage, App.systemInfoManager, App.keyStoreManager)
+        val interactor = KeyStoreInteractor(App.systemInfoManager, App.keyStoreManager)
         val presenter = KeyStorePresenter(interactor, router, mode)
 
         view.delegate = presenter

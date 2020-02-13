@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.security
+package io.horizontalsystems.core.security
 
 import android.util.Base64
 import java.security.Key

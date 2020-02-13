@@ -121,17 +121,6 @@ interface INetworkManager {
     fun ping(host: String, url: String): Flowable<Any>
 }
 
-interface IKeyStoreManager {
-    val isKeyInvalidated: Boolean
-    val isUserNotAuthenticated: Boolean
-
-    fun removeKey()
-}
-
-interface IKeyProvider {
-    fun getKey(): SecretKey
-}
-
 interface IClipboardManager {
     fun copyText(text: String)
     fun getCopiedText(): String
