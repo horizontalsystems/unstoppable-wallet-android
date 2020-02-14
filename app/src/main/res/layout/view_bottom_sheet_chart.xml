@@ -69,8 +69,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Day"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            android:text="@string/Charts_TimeDuration_Day" />
 
         <TextView
             android:id="@+id/button1W"
@@ -80,8 +79,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Week"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            android:text="@string/Charts_TimeDuration_Week" />
 
         <TextView
             android:id="@+id/button1M"
@@ -91,8 +89,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Month"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            android:text="@string/Charts_TimeDuration_Month" />
 
         <TextView
             android:id="@+id/button6M"
@@ -102,8 +99,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_HalfYear"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            android:text="@string/Charts_TimeDuration_HalfYear" />
 
         <TextView
             android:id="@+id/button1Y"
@@ -113,8 +109,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Year"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            android:text="@string/Charts_TimeDuration_Year" />
 
     </LinearLayout>
 
