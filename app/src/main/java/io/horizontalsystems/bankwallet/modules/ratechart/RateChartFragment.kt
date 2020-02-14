@@ -68,7 +68,7 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
         })
 
         presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
-            actions[type]?.let { it.isActivated = true }
+            actions[type]?.let { resetActions(it, setDefault = true) }
         })
 
         presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
@@ -142,21 +142,37 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
                 Pair(ChartType.DAILY, button1D),
                 Pair(ChartType.WEEKLY, button1W),
                 Pair(ChartType.MONTHLY, button1M),
+                Pair(ChartType.MONTHLY3, button3M),
                 Pair(ChartType.MONTHLY6, button6M),
-                Pair(ChartType.MONTHLY12, button1Y)
+                Pair(ChartType.MONTHLY12, button1Y),
+                Pair(ChartType.MONTHLY24, button2Y)
         )
 
         actions.forEach { (type, action) ->
-            action.setOnClickListener {
+            action.setOnClickListener { view ->
                 presenter.onSelect(type)
-                resetActions(it)
+                resetActions(view)
             }
         }
     }
 
-    private fun resetActions(current: View) {
+    private fun resetActions(current: View, setDefault: Boolean = false) {
         actions.values.forEach { it.isActivated = false }
         current.isActivated = true
+
+        val inLeftSide = chartView.width / 2 < current.left
+        if (setDefault) {
+            chartWrap.scrollTo(if (inLeftSide) chartView.width else 0, 0)
+            return
+        }
+
+        val by = if (inLeftSide) {
+            chartView.scrollX + current.width
+        } else {
+            chartView.scrollX - current.width
+        }
+
+        chartWrap.smoothScrollBy(by, 0)
     }
 
     private fun setViewVisibility(vararg views: View, isVisible: Boolean) {

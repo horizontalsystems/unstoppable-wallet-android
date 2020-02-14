@@ -28,8 +28,10 @@ class ChartView : View {
         DAILY,
         WEEKLY,
         MONTHLY,
+        MONTHLY3,
         MONTHLY6,
-        MONTHLY12;
+        MONTHLY12,
+        MONTHLY24;
     }
 
     var listener: Listener? = null

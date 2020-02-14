@@ -448,9 +448,11 @@
     <string name="Charts_TimeDuration_Day">1D</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Month3">3M</string>
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>
     <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_TimeDuration_Year2">2Y</string>
 
     <string name="Charts_Title">%s Price</string>
     <string name="Charts_Rate_High">%s High</string>
