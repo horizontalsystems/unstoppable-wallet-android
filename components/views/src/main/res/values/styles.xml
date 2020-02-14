@@ -128,5 +128,7 @@
         <item name="android:gravity">center</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/stateful_button_lightgrey_color</item>
+        <item name="android:background">@drawable/stateful_button_jeremy_color</item>
     </style>
 </resources>
