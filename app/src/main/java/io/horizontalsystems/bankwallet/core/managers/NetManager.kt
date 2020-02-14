@@ -39,8 +39,8 @@ class NetManager(context: Context, localStorage: ILocalStorage) : INetManager, T
 
     //Tor.Listener
 
-    override fun onConnStatusUpdate(torConnInfo: Tor.ConnectionInfo?, message: String) {
-        Log.e("NetKitManager", "onConnStatusUpdate: ${torConnInfo?.connectionState}, $message")
+    override fun onConnStatusUpdate(torConnInfo: Tor.Connection?, message: String) {
+        Log.e("NetKitManager", "onConnStatusUpdate: ${torConnInfo?.status}, $message")
     }
 
     override fun onProcessStatusUpdate(torInfo: Tor.Info?, message: String) {

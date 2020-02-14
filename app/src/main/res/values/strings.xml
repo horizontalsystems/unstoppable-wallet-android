@@ -30,7 +30,9 @@
 
     <!--Welcome-->
 
-    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_Title">Unstoppable \nWallet</string>
+    <string name="Welcome_Subtitle">Be Free, Be Unstoppable</string>
+    <string name="Welcome_SecurityCenter">Security Center</string>
     <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
@@ -409,6 +411,11 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
+
+    <!-- Tor Connection -->
+
+    <string name="TorPage_Title">Tor Connection</string>
+    <string name="TorPage_Description">Before creating or restoring enable Tor for secure connection with network.\n\nTor can safeguard your browsing activities on wallet. Allow permission for using Tor browser in settings.</string>
 
     <!-- Account Types -->
 
