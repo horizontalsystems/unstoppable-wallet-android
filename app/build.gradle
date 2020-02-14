@@ -180,7 +180,7 @@ dependencies {
     implementation('com.github.horizontalsystems:eos-kit-android:70897ea') {
         exclude group: 'com.google.protobuf'
     }
-    implementation 'com.github.horizontalsystems:net-kit-android:f55a8f4'
+    implementation 'com.github.horizontalsystems:net-kit-android:30d2461'
 
     // UI modules
 

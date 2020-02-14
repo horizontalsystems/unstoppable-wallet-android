@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
+import io.horizontalsystems.bankwallet.modules.torpage.TorPageModule
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
@@ -43,12 +44,20 @@ class WelcomeActivity : BaseActivity() {
             }
         })
 
+        viewModel.openTorPage.observe(this, Observer {
+            TorPageModule.start(this)
+        })
+
         buttonCreate.setOnSingleClickListener {
             viewModel.delegate.createWalletDidClick()
         }
 
         buttonRestore.setOnSingleClickListener {
             viewModel.delegate.restoreWalletDidClick()
+        }
+
+        securityCenter.setOnSingleClickListener {
+            viewModel.delegate.openTorPage()
         }
     }
 

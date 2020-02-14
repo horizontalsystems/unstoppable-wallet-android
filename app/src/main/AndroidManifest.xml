@@ -122,6 +122,9 @@
             android:name=".modules.restore.restorecoins.RestoreCoinsActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".modules.torpage.TorPageActivity"
+            android:screenOrientation="portrait"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
