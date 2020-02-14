@@ -26,9 +26,9 @@ class NetManager(context: Context, localStorage: ILocalStorage) : INetManager {
         disposables.add(kit.startTor(false)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Log.i("NetKitManager", "onConnStatusUpdate: ${it.connection.status.name}, ${it.state}")
+                    Log.i("NetManager", "Tor connection: ${it.connection.getState()}, Tor state: ${it.state}")
                 }, {
-
+                    Log.e("NetManager", "Tor exception", it)
                 }))
     }
 

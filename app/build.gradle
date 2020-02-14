@@ -180,7 +180,8 @@ dependencies {
     implementation('com.github.horizontalsystems:eos-kit-android:70897ea') {
         exclude group: 'com.google.protobuf'
     }
-    api 'com.github.horizontalsystems:net-kit-android:b5e8657'
+    //in case native file tor.so not loading, switch to 'api' or 'implementation'
+    implementation 'com.github.horizontalsystems:net-kit-android:116cb31'
 
     // UI modules
 
