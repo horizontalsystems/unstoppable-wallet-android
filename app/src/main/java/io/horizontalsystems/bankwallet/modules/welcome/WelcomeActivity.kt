@@ -56,9 +56,9 @@ class WelcomeActivity : BaseActivity() {
             viewModel.delegate.restoreWalletDidClick()
         }
 
-        securityCenter.setOnSingleClickListener {
-            viewModel.delegate.openTorPage()
-        }
+//        securityCenter.setOnSingleClickListener {
+//            viewModel.delegate.openTorPage()
+//        }
     }
 
 }
