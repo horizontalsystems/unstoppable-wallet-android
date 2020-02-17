@@ -86,6 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/fingerprint"
                 app:title="@string/SettingsSecurity_EnableTor" />
 
@@ -100,6 +101,7 @@
                 android:textColor="?ColorJacob"
                 android:background="@drawable/background_yellow_for_alert_text"
                 android:paddingStart="12dp"
+                android:visibility="gone"
                 android:paddingTop="8dp"
                 android:paddingEnd="12dp"
                 android:paddingBottom="8dp"

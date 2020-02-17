@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
         android:padding="5dp"
+        android:visibility="gone"
         android:text="@string/Welcome_SecurityCenter"
         android:textColor="@color/stateful_text_color_leah"
         app:layout_constraintBottom_toTopOf="@+id/textVersion"
