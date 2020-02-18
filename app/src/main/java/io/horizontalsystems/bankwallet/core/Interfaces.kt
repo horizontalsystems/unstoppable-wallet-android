@@ -23,7 +23,6 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
-import javax.crypto.SecretKey
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Unit>
@@ -281,9 +280,6 @@ interface IAppConfigProvider {
     val ipfsFallbackGateway: String
     val infuraProjectId: String?
     val infuraProjectSecret: String?
-    val btcCoreRpcUrl: String?
-    val btcCoreRpcUser: String?
-    val btcCoreRpcPassword: String?
     val fiatDecimal: Int
     val maxDecimal: Int
     val currencies: List<Currency>
