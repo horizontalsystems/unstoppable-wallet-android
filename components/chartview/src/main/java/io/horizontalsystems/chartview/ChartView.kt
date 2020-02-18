@@ -42,7 +42,7 @@ class ChartView : View {
     private val shape = RectF()
     private val chartCurve = ChartCurve(shape, config)
     private val chartGrid = ChartGrid(shape, config)
-    private val chartVolume = ChartVolume(config)
+    private val chartVolume = ChartVolume(config, shape)
     private var chartIndicator: ChartIndicator? = null
 
     // Animator
@@ -179,7 +179,7 @@ class ChartView : View {
 
         chartCurve.init(points, startTimestamp, endTimestamp)
 
-        chartVolume.init(points, startTimestamp, endTimestamp, shape)
+        chartVolume.init(points, startTimestamp, endTimestamp)
 
         if (config.showGrid) {
             chartGrid.init(chartType, startTimestamp, endTimestamp)
