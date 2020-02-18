@@ -19,6 +19,13 @@ data class ChartInfoViewItem(
         val endTimestamp: Long
 )
 
+data class ChartPointViewItem(
+        val date: Long,
+        val currencyValue: CurrencyValue,
+        val volume: CurrencyValue?,
+        val chartType: ChartType
+)
+
 data class MarketInfoViewItem(
         val rateValue: CurrencyValue,
         val marketCap: CurrencyValue,
@@ -66,4 +73,5 @@ class RateChartViewFactory {
                 marketInfo.timestamp
         )
     }
+
 }

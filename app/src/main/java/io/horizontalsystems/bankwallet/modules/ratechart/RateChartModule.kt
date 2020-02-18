@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -18,7 +17,7 @@ object RateChartModule {
         fun setChartType(type: ChartType)
         fun showChartInfo(viewItem: ChartInfoViewItem)
         fun showMarketInfo(viewItem: MarketInfoViewItem)
-        fun showSelectedPoint(data: Triple<Long, CurrencyValue, ChartType>)
+        fun showSelectedPoint(item: ChartPointViewItem)
         fun showError(ex: Throwable)
     }
 
