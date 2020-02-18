@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
+import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.TopMenuItem
@@ -117,6 +118,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
 
                 return error.nonTranslatableText ?: getString(R.string.Hud_UnknownError, error)
             }
+            is BinanceError -> getString(R.string.Hud_UnknownError, error.message)
             else -> getString(R.string.Hud_UnknownError, error)
         }
     }

@@ -346,7 +346,7 @@
     <string name="Hud_Text_Copied">Copied</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
-    <string name="Hud_UnknownError">Unknown Error %s</string>
+    <string name="Hud_UnknownError">%s</string>
 
     <!--OS Pin-->
 
