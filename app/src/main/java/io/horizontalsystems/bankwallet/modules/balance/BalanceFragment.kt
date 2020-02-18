@@ -83,11 +83,13 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     // ReceiveFragment listener
     override fun shareReceiveAddress(address: String) {
-        ShareCompat.IntentBuilder
-                .from(activity)
+        activity?.let {
+            ShareCompat.IntentBuilder
+                .from(it)
                 .setType("text/plain")
                 .setText(address)
                 .startChooser()
+        }
     }
 
     // BalanceAdapter listener
