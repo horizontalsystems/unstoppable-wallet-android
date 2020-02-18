@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -59,7 +59,11 @@ class RateChartPresenter(
 
     override fun onTouchSelect(point: ChartPoint) {
         val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
-        view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
+        val volumeValue = point.volume?.let { volume ->
+            CurrencyValue(currency, volume.toBigDecimal())
+        }
+
+        view.showSelectedPoint(ChartPointViewItem(point.timestamp, currencyValue, volumeValue, chartType))
     }
 
     private fun fetchChartInfo() {

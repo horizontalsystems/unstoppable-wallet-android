@@ -16,8 +16,6 @@ object DateHelper {
 
     fun getOnlyTime(date: Date): String = formatDate(date, timeFormat)
     fun getFullDate(date: Date): String = formatDate(date, "MMM d, yyyy, $timeFormat")
-    fun getDateWithYear(date: Date): String = formatDate(date, "MMM d, yyyy")
-    fun getFullDate(timestamp: Long): String = formatDate(Date(timestamp), "MMM d, yyyy, $timeFormat")
 
     fun getTxDurationString(context: Context, durationInSec: Long): String {
         return when {
@@ -52,10 +50,10 @@ object DateHelper {
         }
     }
 
-    fun getShortDateForTransaction(date: Date): String = if (isThisYear(date)) {
-        formatDate(date, "MMM d")
+    fun shortDate(date: Date, near: String = "MMM d", far: String = "MMM dd, yyyy"): String = if (isThisYear(date)) {
+        formatDate(date, near)
     } else {
-        formatDate(date, "MMM dd, yyyy")
+        formatDate(date, far)
     }
 
     fun formatDate(date: Date, pattern: String): String {

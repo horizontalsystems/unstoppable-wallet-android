@@ -189,7 +189,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
         directionIcon.setImageResource(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
-        txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
+        txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, incoming, time)
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE

@@ -79,7 +79,7 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
         })
 
         presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
-            setSubtitle(DateHelper.getFullDate(item.timestamp * 1000))
+            setSubtitle(DateHelper.getFullDate(Date(item.timestamp * 1000)))
 
             coinRateLast.text = formatter.formatForRates(item.rateValue)
 
@@ -100,14 +100,25 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
             }
         })
 
-        presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
-            val dateText = when (type) {
-                ChartType.DAILY,
-                ChartType.WEEKLY -> DateHelper.getFullDate(Date(time * 1000))
-                else -> DateHelper.getDateWithYear(Date(time * 1000))
+        presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
+            pointInfoVolume.visibility = View.INVISIBLE
+            pointInfoVolumeTitle.visibility = View.INVISIBLE
+            pointInfoTime.visibility = View.INVISIBLE
+
+            val date = Date(item.date * 1000)
+            if (item.chartType == ChartType.DAILY || item.chartType == ChartType.WEEKLY) {
+                pointInfoTime.visibility = View.VISIBLE
+                pointInfoTime.text = DateHelper.getOnlyTime(date)
             }
-            pointInfoPrice.text = formatter.formatForRates(value, maxFraction = 8)
-            pointInfoDate.text = dateText
+
+            pointInfoDate.text = DateHelper.shortDate(date, far = "MM/dd/yy")
+            pointInfoPrice.text = formatter.formatForRates(item.currencyValue, maxFraction = 8)
+
+            item.volume?.let {
+                pointInfoVolumeTitle.visibility = View.VISIBLE
+                pointInfoVolume.visibility = View.VISIBLE
+                pointInfoVolume.text = formatter.format(item.volume, trimmable = true)
+            }
         })
 
         presenterView.showError.observe(viewLifecycleOwner, Observer {
