@@ -37,7 +37,7 @@ class ChartConfig(private val context: Context) {
     var offsetBottom = 0f
     var gridEdgeOffset = dp2px(5f)
     var volumeMaximumHeightRatio = 0.4f // 40% of height
-    var volumeBarMargin = 2f
+    var volumeBarWidth = dp2px(2f)
 
     //  grid dimens
     var valueLow = 0f
