@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.ratelist
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -15,8 +15,8 @@ class RatesInteractor(
         private val currencyManager: ICurrencyManager,
         private val walletStorage: IWalletStorage,
         private val appConfigProvider: IAppConfigProvider,
-        private val rateListSorter: RateListSorter
-) : RateListModule.IInteractor {
+        private val rateListSorter: RateListSorter)
+    : RateListModule.IInteractor {
 
     var delegate: RateListModule.IInteractorDelegate? = null
     private var disposables = CompositeDisposable()

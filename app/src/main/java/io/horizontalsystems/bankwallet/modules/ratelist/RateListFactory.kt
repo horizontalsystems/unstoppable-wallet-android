@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.ICurrentDateProvider
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateListFactory(private val currentDateProvider: ICurrentDateProvider) : RateListModule.IRateListFactory {

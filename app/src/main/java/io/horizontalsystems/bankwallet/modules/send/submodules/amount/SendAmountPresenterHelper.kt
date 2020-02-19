@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -37,7 +37,9 @@ class SendAmountPresenterHelper(
                 numberFormatter.format(CoinValue(coin, coinAmount ?: BigDecimal.ZERO), realNumber = true)
             }
             SendModule.InputType.COIN -> {
-                rate?.let { numberFormatter.format(CurrencyValue(baseCurrency, coinAmount?.times(it) ?: BigDecimal.ZERO)) }
+                rate?.let {
+                    numberFormatter.format(CurrencyValue(baseCurrency, coinAmount?.times(it) ?: BigDecimal.ZERO))
+                }
             }
         }
     }
@@ -45,7 +47,9 @@ class SendAmountPresenterHelper(
     fun getAvailableBalance(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: BigDecimal?): String? {
         return when (inputType) {
             SendModule.InputType.CURRENCY -> {
-                rate?.let { numberFormatter.format(CurrencyValue(baseCurrency, coinAmount?.times(it) ?: BigDecimal.ZERO)) }
+                rate?.let {
+                    numberFormatter.format(CurrencyValue(baseCurrency, coinAmount?.times(it) ?: BigDecimal.ZERO))
+                }
             }
             SendModule.InputType.COIN -> {
                 numberFormatter.format(CoinValue(coin, coinAmount ?: BigDecimal.ZERO), realNumber = true)

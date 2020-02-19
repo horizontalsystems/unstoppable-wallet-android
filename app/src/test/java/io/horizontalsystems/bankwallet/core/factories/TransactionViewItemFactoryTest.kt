@@ -1,14 +1,5 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import com.nhaarman.mockito_kotlin.mock
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
-import org.junit.Assert
-import org.junit.Test
-import java.util.*
-
 //class TransactionViewItemFactoryTest {
 //
 //    private val txViewItemFactory = TransactionViewItemFactory(mock())

@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.util.*
 
