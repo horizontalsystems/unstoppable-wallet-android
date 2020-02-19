@@ -2,6 +2,7 @@ package io.horizontalsystems.core.helpers
 
 import android.content.Context
 import android.view.Gravity
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -32,6 +33,7 @@ object HudHelper {
         this.toast?.cancel()
 
         val toast = Toast.makeText(CoreApp.instance, text, toastDuration.duration)
+        (toast.view as? LinearLayout)?.gravity = Gravity.CENTER // to align text in center for Xiaomi Mi Mix 2
         val toastText = toast.view.findViewById(android.R.id.message) as TextView
         toastText.setTextColor(getColor(toast.view.context, R.color.white))
         toast.view.background.setTint(getColor(toast.view.context, backgroundColor))
