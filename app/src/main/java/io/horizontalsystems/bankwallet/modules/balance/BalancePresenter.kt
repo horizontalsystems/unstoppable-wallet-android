@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.xrateskit.entities.MarketInfo

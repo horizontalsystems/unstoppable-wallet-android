@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBlockedChartCoins
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.math.RoundingMode

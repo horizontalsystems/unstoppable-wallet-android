@@ -4,20 +4,19 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
-
 
 class SendAmountInteractor(
         private val baseCurrency: Currency,
         private val rateManager: IRateManager,
         private val localStorage: ILocalStorage,
         private val coin: Coin,
-        private val backgroundManager: BackgroundManager
-) : SendAmountModule.IInteractor, BackgroundManager.Listener {
+        private val backgroundManager: BackgroundManager)
+    : SendAmountModule.IInteractor, BackgroundManager.Listener {
 
     private val disposables = CompositeDisposable()
     var delegate: SendAmountModule.IInteractorDelegate? = null
