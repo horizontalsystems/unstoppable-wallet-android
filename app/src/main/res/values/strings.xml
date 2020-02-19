@@ -275,11 +275,6 @@
     <string name="SettingsSecurity_EnableTor">Enable Tor</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
 
-    <!--Setting_Currency-->
-
-    <string name="SettingsCurrency_Title">Base Currency</string>
-    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
-
     <!--Setting_About-->
 
     <string name="SettingsAbout_Title">About</string>

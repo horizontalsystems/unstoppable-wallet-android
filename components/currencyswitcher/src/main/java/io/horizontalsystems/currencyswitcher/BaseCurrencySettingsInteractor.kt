@@ -1,6 +1,6 @@
-package io.horizontalsystems.bankwallet.modules.settings.basecurrency
+package io.horizontalsystems.currencyswitcher
 
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 
 class BaseCurrencySettingsInteractor(private val currencyManager: ICurrencyManager) : BaseCurrencySettingsModule.IInteractor {

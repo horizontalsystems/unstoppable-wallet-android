@@ -35,7 +35,6 @@ class App : CoreApp() {
         lateinit var wordsManager: WordsManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
-        lateinit var currencyManager: ICurrencyManager
         lateinit var backgroundManager: BackgroundManager
         lateinit var keyStoreChangeListener: KeyStoreChangeListener
         lateinit var appConfigProvider: IAppConfigProvider

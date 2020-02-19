@@ -1,12 +1,12 @@
-package io.horizontalsystems.bankwallet.modules.settings.basecurrency
+package io.horizontalsystems.currencyswitcher
 
 import androidx.lifecycle.ViewModel
 
 class BaseCurrencySettingsPresenter(
         var view: BaseCurrencySettingsModule.IView,
         var router: BaseCurrencySettingsModule.IRouter,
-        private val interactor: BaseCurrencySettingsModule.IInteractor
-): ViewModel(), BaseCurrencySettingsModule.IViewDelegate {
+        private val interactor: BaseCurrencySettingsModule.IInteractor)
+    : ViewModel(), BaseCurrencySettingsModule.IViewDelegate {
 
     private val currencies = interactor.currencies
 

@@ -202,9 +202,6 @@
     <string name="SettingsSecurity_BlockchainSettings">Blockchain Einstellungen</string>
     <string name="SettingsSecurity_EnableTor">Tor aktivieren</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Währung</string>
-    <string name="SettingsCurrency_InfoText">Wechselkurse in Echtzeit und historische Kurse werden von CryptoCompare.com bereitgestellt</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

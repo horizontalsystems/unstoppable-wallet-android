@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.basecurrency
+package io.horizontalsystems.currencyswitcher
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,16 +10,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.BaseActivity
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.core.CoreActivity
+import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.LayoutHelper
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
 
-class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Listener {
+class BaseCurrencySettingsActivity : CoreActivity(), CurrencySwitcherAdapter.Listener {
 
     private lateinit var presenter: BaseCurrencySettingsPresenter
     private lateinit var presenterView: BaseCurrencySettingsView

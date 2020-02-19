@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.basecurrency
+package io.horizontalsystems.currencyswitcher
 
 import io.horizontalsystems.core.SingleLiveEvent
 

@@ -202,9 +202,6 @@
     <string name="SettingsSecurity_BlockchainSettings">Configuración de Blockchain</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor puede proteger tus actividades de navegación en la cartera. Autoriza el permiso para usar el navegador tor en la configuración.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Moneda principal</string>
-    <string name="SettingsCurrency_InfoText">CryptoCompare.com proporciona tipos de cambio en tiempo real e históricos</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

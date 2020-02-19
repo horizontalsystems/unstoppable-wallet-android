@@ -20,10 +20,10 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
-import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
 import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.currencyswitcher.BaseCurrencySettingsModule
 import io.horizontalsystems.languageswitcher.LanguageSwitcherModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 

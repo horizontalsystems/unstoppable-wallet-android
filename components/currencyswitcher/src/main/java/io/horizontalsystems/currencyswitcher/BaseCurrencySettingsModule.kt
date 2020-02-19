@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.settings.basecurrency
+package io.horizontalsystems.currencyswitcher
 
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.entities.Currency
 
 object BaseCurrencySettingsModule {
@@ -37,7 +37,7 @@ object BaseCurrencySettingsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = BaseCurrencySettingsView()
             val router = BaseCurrencySettingsRouter()
-            val interactor = BaseCurrencySettingsInteractor(App.currencyManager)
+            val interactor = BaseCurrencySettingsInteractor(CoreApp.currencyManager)
             val presenter = BaseCurrencySettingsPresenter(view, router, interactor)
 
             return presenter as T
