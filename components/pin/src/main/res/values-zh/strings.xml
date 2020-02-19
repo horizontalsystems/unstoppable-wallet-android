@@ -3,21 +3,17 @@
 <resources>
     <!--Common-->
     <string name="Button_Cancel">取消</string>
-
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">密码</string>
-
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">指纹登录</string>
     <string name="Fingerprint_Hint">触控传感器</string>
     <string name="Fingerprint_EnterPin">密码</string>
     <string name="Fingerprint_NotRecognized">指纹无法识别。请重试</string>
     <string name="Fingerprint_Success">成功！</string>
-
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">禁用至：%s</string>
     <string name="UnlockPin_Error_PinIncorrect">错误</string>
-
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
     <string name="SetPin_Info">您的密码将用于解锁钱包和发送资金</string>
@@ -26,7 +22,6 @@
     <string name="SetPin_Success">锁定密码设置成功！</string>
     <string name="SetPin_ErrorPinsDontMatch">密码不匹配。请重试。</string>
     <string name="SetPin_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
-
     <!--Edit Pin-->
     <string name="EditPin_Title">编辑密码</string>
     <string name="EditPin_UnlockInfo">当前密码</string>

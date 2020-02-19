@@ -3,21 +3,17 @@
 <resources>
     <!--Common-->
     <string name="Button_Cancel">کنسل</string>
-
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">رمز عبور</string>
-
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>
     <string name="Fingerprint_EnterPin">رمز عبور</string>
     <string name="Fingerprint_NotRecognized">اثر انگشت شناخته نشد. دوباره تلاش كنيد</string>
     <string name="Fingerprint_Success">موفقيت!</string>
-
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:٪؜s</string>
     <string name="UnlockPin_Error_PinIncorrect">نادرست</string>
-
     <!--Set Pin-->
     <string name="SetPin_Title">رمز عبور</string>
     <string name="SetPin_Info">از کد عبور شما برای باز کردن کیف پول و ارسال پول استفاده می شود</string>
@@ -26,7 +22,6 @@
     <string name="SetPin_Success">رمز عبور قفل با موفقیت تنظیم شد!</string>
     <string name="SetPin_ErrorPinsDontMatch">کد عبور مطابقت نداشت. دوباره امتحان کنید.</string>
     <string name="SetPin_ErrorFailedToSavePin">هنگام ذخیره کد عبور شما خطایی روی داد. لطفا دوباره تلاش کنید.</string>
-
     <!--Edit Pin-->
     <string name="EditPin_Title">تغییر رمزعبور</string>
     <string name="EditPin_UnlockInfo">رمز عبور فعلي</string>

@@ -3,21 +3,17 @@
 <resources>
     <!--Common-->
     <string name="Button_Cancel">İptal</string>
-
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Kod</string>
-
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Parmak iziyle giriş</string>
     <string name="Fingerprint_Hint">Dokunmatik sensör</string>
     <string name="Fingerprint_EnterPin">Kod</string>
     <string name="Fingerprint_NotRecognized">Parmak izi tanınmadı. Tekrar deneyin</string>
     <string name="Fingerprint_Success">Başarılı!</string>
-
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
     <string name="UnlockPin_Error_PinIncorrect">Yanlış</string>
-
     <!--Set Pin-->
     <string name="SetPin_Title">Kod</string>
     <string name="SetPin_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
@@ -26,7 +22,6 @@
     <string name="SetPin_Success">Kilit şifresi başarıyla oluşturuldu!</string>
     <string name="SetPin_ErrorPinsDontMatch">Kod uyuşmadı. Tekrar deneyin.</string>
     <string name="SetPin_ErrorFailedToSavePin">Şifre kaydedilirken hata oluştu. Tekrar deneyin.</string>
-
     <!--Edit Pin-->
     <string name="EditPin_Title">Kod Değiştir</string>
     <string name="EditPin_UnlockInfo">Şimdiki Kod</string>

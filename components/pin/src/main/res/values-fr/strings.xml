@@ -3,21 +3,17 @@
 <resources>
     <!--Common-->
     <string name="Button_Cancel">Annuler</string>
-
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Code</string>
-
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Prise d\'empreintes digitales</string>
     <string name="Fingerprint_Hint">Détecteur tactile</string>
     <string name="Fingerprint_EnterPin">Code</string>
     <string name="Fingerprint_NotRecognized">Empreinte digitale non reconnue. Réessayez</string>
     <string name="Fingerprint_Success">Effectué!</string>
-
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
-
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Votre code secret sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
@@ -26,7 +22,6 @@
     <string name="SetPin_Success">Votre code a été défini avec succès!</string>
     <string name="SetPin_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
     <string name="SetPin_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
-
     <!--Edit Pin-->
     <string name="EditPin_Title">Modifier le code </string>
     <string name="EditPin_UnlockInfo">Le code actuel</string>
