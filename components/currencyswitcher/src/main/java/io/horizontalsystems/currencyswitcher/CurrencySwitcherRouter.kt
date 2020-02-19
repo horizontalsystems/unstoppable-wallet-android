@@ -2,7 +2,7 @@ package io.horizontalsystems.currencyswitcher
 
 import io.horizontalsystems.core.SingleLiveEvent
 
-class BaseCurrencySettingsRouter : BaseCurrencySettingsModule.IRouter {
+class CurrencySwitcherRouter : CurrencySwitcherModule.IRouter {
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
     override fun close() {

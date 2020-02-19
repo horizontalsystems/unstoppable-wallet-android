@@ -3,7 +3,7 @@ package io.horizontalsystems.currencyswitcher
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 
-class BaseCurrencySettingsInteractor(private val currencyManager: ICurrencyManager) : BaseCurrencySettingsModule.IInteractor {
+class CurrencySwitcherInteractor(private val currencyManager: ICurrencyManager) : CurrencySwitcherModule.IInteractor {
 
     override val currencies: List<Currency>
         get() = currencyManager.currencies

@@ -84,7 +84,7 @@
             android:name="io.horizontalsystems.pin.PinActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="io.horizontalsystems.currencyswitcher.BaseCurrencySettingsActivity"
+            android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.managecoins.views.ManageWalletsActivity"

@@ -18,19 +18,19 @@ import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
 
-class BaseCurrencySettingsActivity : CoreActivity(), CurrencySwitcherAdapter.Listener {
+class CurrencySwitcherActivity : CoreActivity(), CurrencySwitcherAdapter.Listener {
 
-    private lateinit var presenter: BaseCurrencySettingsPresenter
-    private lateinit var presenterView: BaseCurrencySettingsView
-    private lateinit var presenterRouter: BaseCurrencySettingsRouter
+    private lateinit var presenter: CurrencySwitcherPresenter
+    private lateinit var presenterView: CurrencySwitcherView
+    private lateinit var presenterRouter: CurrencySwitcherRouter
     private var adapter: CurrencySwitcherAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = ViewModelProvider(this, BaseCurrencySettingsModule.Factory()).get(BaseCurrencySettingsPresenter::class.java)
-        presenterView = presenter.view as BaseCurrencySettingsView
-        presenterRouter = presenter.router as BaseCurrencySettingsRouter
+        presenter = ViewModelProvider(this, CurrencySwitcherModule.Factory()).get(CurrencySwitcherPresenter::class.java)
+        presenterView = presenter.view as CurrencySwitcherView
+        presenterRouter = presenter.router as CurrencySwitcherRouter
 
         setContentView(R.layout.activity_currency_switcher)
 

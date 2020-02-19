@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.entities.Currency
 
-object BaseCurrencySettingsModule {
+object CurrencySwitcherModule {
 
     interface IView {
         fun show(items: List<CurrencyViewItem>)
@@ -28,17 +28,17 @@ object BaseCurrencySettingsModule {
     }
 
     fun start(context: Context) {
-        val intent = Intent(context, BaseCurrencySettingsActivity::class.java)
+        val intent = Intent(context, CurrencySwitcherActivity::class.java)
         context.startActivity(intent)
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = BaseCurrencySettingsView()
-            val router = BaseCurrencySettingsRouter()
-            val interactor = BaseCurrencySettingsInteractor(CoreApp.currencyManager)
-            val presenter = BaseCurrencySettingsPresenter(view, router, interactor)
+            val view = CurrencySwitcherView()
+            val router = CurrencySwitcherRouter()
+            val interactor = CurrencySwitcherInteractor(CoreApp.currencyManager)
+            val presenter = CurrencySwitcherPresenter(view, router, interactor)
 
             return presenter as T
         }

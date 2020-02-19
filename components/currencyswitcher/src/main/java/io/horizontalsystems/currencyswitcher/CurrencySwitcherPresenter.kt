@@ -2,11 +2,11 @@ package io.horizontalsystems.currencyswitcher
 
 import androidx.lifecycle.ViewModel
 
-class BaseCurrencySettingsPresenter(
-        var view: BaseCurrencySettingsModule.IView,
-        var router: BaseCurrencySettingsModule.IRouter,
-        private val interactor: BaseCurrencySettingsModule.IInteractor)
-    : ViewModel(), BaseCurrencySettingsModule.IViewDelegate {
+class CurrencySwitcherPresenter(
+        var view: CurrencySwitcherModule.IView,
+        var router: CurrencySwitcherModule.IRouter,
+        private val interactor: CurrencySwitcherModule.IInteractor)
+    : ViewModel(), CurrencySwitcherModule.IViewDelegate {
 
     private val currencies = interactor.currencies
 
