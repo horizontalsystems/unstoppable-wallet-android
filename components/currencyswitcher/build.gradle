@@ -43,5 +43,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
 
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    implementation project(':core')
+    implementation project(':components:views')
+
     testImplementation 'junit:junit:4.12'
 }

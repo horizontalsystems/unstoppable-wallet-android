@@ -203,9 +203,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_BlockchainSettings">Paramètres de la Blockchain</string>
     <string name="SettingsSecurity_EnableTor">Enable Tor</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Devise de Base</string>
-    <string name="SettingsCurrency_InfoText">Les taux de change en temps réel et historiques sont fournis par CryptoCompare.com</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

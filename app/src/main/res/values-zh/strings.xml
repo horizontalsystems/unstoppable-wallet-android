@@ -202,9 +202,6 @@
     <string name="SettingsSecurity_BlockchainSettings">区块链设置</string>
     <string name="SettingsSecurity_EnableTor">Enable Tor</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">基础货币</string>
-    <string name="SettingsCurrency_InfoText">实时和历史汇率由 CryptoCompare.com 提供</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

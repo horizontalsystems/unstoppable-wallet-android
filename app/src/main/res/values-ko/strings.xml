@@ -202,9 +202,6 @@
     <string name="SettingsSecurity_BlockchainSettings">블록 체인 설정</string>
     <string name="SettingsSecurity_EnableTor">토르 활성화</string>
     <string name="SettingsSecurity_TorConnectionDescription">토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기위한 권한을 허용해 주세요.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">기초 통화</string>
-    <string name="SettingsCurrency_InfoText">실시간 및 이전 과거 환율은 CryptoCompare.com 에서 제공하고 있습니다</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>

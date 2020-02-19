@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Single
 
 class BackgroundPriceAlertManager(
@@ -12,8 +13,8 @@ class BackgroundPriceAlertManager(
         private val currencyManager: ICurrencyManager,
         private val rateStorage: IRateStorage,
         private val priceAlertHandler: IPriceAlertHandler,
-        private val notificationManager: INotificationManager
-) : IBackgroundPriceAlertManager, BackgroundManager.Listener {
+        private val notificationManager: INotificationManager)
+    : IBackgroundPriceAlertManager, BackgroundManager.Listener {
 
     init {
         if (notificationManager.isEnabled && localStorage.isAlertNotificationOn) {

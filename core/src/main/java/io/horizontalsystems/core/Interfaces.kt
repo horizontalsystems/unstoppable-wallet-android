@@ -2,6 +2,8 @@ package io.horizontalsystems.core
 
 import android.content.SharedPreferences
 import androidx.biometric.BiometricPrompt
+import io.horizontalsystems.core.entities.Currency
+import io.reactivex.Observable
 import java.util.*
 import javax.crypto.SecretKey
 
@@ -12,6 +14,7 @@ interface ICoreApp {
     var encryptionManager: IEncryptionManager
     var systemInfoManager: ISystemInfoManager
     var languageManager: ILanguageManager
+    var currencyManager: ICurrencyManager
     var lockManager: ILockManager
     var keyStoreManager: IKeyStoreManager
     var keyProvider: IKeyProvider
@@ -69,6 +72,12 @@ interface ILanguageManager {
 
     fun getName(language: String): String
     fun getNativeName(language: String): String
+}
+
+interface ICurrencyManager {
+    var baseCurrency: Currency
+    val baseCurrencyUpdatedSignal: Observable<Unit>
+    val currencies: List<Currency>
 }
 
 interface IPinStorage {

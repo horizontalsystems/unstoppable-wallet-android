@@ -127,12 +127,6 @@ interface IClipboardManager {
     val hasPrimaryClip: Boolean
 }
 
-interface ICurrencyManager {
-    var baseCurrency: Currency
-    val baseCurrencyUpdatedSignal: Observable<Unit>
-    val currencies: List<Currency>
-}
-
 interface ITransactionDataProviderManager {
     val baseProviderUpdatedSignal: Observable<Unit>
 
