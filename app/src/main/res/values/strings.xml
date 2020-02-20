@@ -329,6 +329,8 @@
     <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
     <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
     <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo contains only digits</string>
 
     <!--Hud texts-->
 
