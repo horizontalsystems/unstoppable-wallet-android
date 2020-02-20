@@ -2,11 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.TransactionType
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.eoskit.core.exceptions.BackendError
 import io.horizontalsystems.eoskit.models.Transaction
@@ -118,11 +114,11 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
 
     private fun getException(error: Throwable): Exception {
         return when (error) {
-            is BackendError.TransferToSelfError -> CoinException(R.string.Eos_Backend_Error_SelfTransfer)
-            is BackendError.AccountNotExistError -> CoinException(R.string.Eos_Backend_Error_AccountNotExist)
-            is BackendError.InsufficientRamError -> CoinException(R.string.Eos_Backend_Error_InsufficientRam)
-            is BackendError -> CoinException(null, error.detail)
-            else -> Exception()
+            is BackendError.TransferToSelfError -> LocalizedException(R.string.Eos_Backend_Error_SelfTransfer)
+            is BackendError.AccountNotExistError -> LocalizedException(R.string.Eos_Backend_Error_AccountNotExist)
+            is BackendError.InsufficientRamError -> LocalizedException(R.string.Eos_Backend_Error_InsufficientRam)
+            is BackendError -> Exception(error.detail)
+            else -> Exception(error.message)
         }
     }
 
