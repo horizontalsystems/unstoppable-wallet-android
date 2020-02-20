@@ -5,11 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreModule
+import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
+import io.horizontalsystems.pin.PinModule
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -36,15 +36,15 @@ class LauncherActivity : AppCompatActivity() {
         })
 
         viewModel.openNoSystemLockModule.observe(this, Observer {
-            KeyStoreModule.startForNoSystemLock(this)
+            KeyStoreActivity.startForNoSystemLock(this)
         })
 
         viewModel.openKeyInvalidatedModule.observe(this, Observer {
-            KeyStoreModule.startForInvalidKey(this)
+            KeyStoreActivity.startForInvalidKey(this)
         })
 
         viewModel.openUserAuthenticationModule.observe(this, Observer {
-            KeyStoreModule.startForUserAuthentication(this)
+            KeyStoreActivity.startForUserAuthentication(this)
         })
 
         viewModel.closeApplication.observe(this, Observer {

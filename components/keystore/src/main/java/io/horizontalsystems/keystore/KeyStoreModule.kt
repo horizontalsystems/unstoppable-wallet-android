@@ -1,10 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.keystore
+package io.horizontalsystems.keystore
 
-import android.content.Context
-import android.content.Intent
 import android.os.Parcelable
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.putParcelableExtra
+import io.horizontalsystems.core.CoreApp
 import kotlinx.android.parcel.Parcelize
 
 object KeyStoreModule {
@@ -41,31 +38,12 @@ object KeyStoreModule {
     }
 
     fun init(view: KeyStoreViewModel, router: IRouter, mode: ModeType) {
-        val interactor = KeyStoreInteractor(App.systemInfoManager, App.keyStoreManager)
+        val interactor = KeyStoreInteractor(CoreApp.systemInfoManager, CoreApp.keyStoreManager)
         val presenter = KeyStorePresenter(interactor, router, mode)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
-    }
-
-    fun startForNoSystemLock(context: Context) {
-        start(context, ModeType.NoSystemLock)
-    }
-
-    fun startForInvalidKey(context: Context) {
-        start(context, ModeType.InvalidKey)
-    }
-
-    fun startForUserAuthentication(context: Context) {
-        start(context, ModeType.UserAuthentication)
-    }
-
-    private fun start(context: Context, mode: ModeType) {
-        val intent = Intent(context, KeyStoreActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        intent.putParcelableExtra(MODE, mode)
-        context.startActivity(intent)
     }
 
     @Parcelize

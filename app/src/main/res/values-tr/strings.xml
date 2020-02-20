@@ -233,12 +233,6 @@
     <string name="Notification_Notifications">Bildirimler %s</string>
     <string name="Notification_Up">Yukarı</string>
     <string name="Notification_Down">Aşağı</string>
-    <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
-    <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
-    <string name="Alert_TitleWarning">Uyarı</string>
-    <string name="Alert_NoDeviceLockDescription">Devam edebilmek için cihaz kilidi oluşturmalısınız. Ekran kilidi oluşturmak için, Ayarlarlarda ki Güvenlik &gt; Ekran Kilidi bölümene gidin.</string>
-    <string name="Alert_CustomKeyboardIsUsed">Cihaz harici klavye kullanıyorsunuz. Asıl klavyeyi kullanmanız gerekiyor.</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
     <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
@@ -254,10 +248,6 @@
     <string name="Hud_Text_InvalidPinError">Şimdiki Kod</string>
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">%s</string>
-    <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Telefon PİN\'i</string>
-    <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
-    <string name="OSPin_Prompt_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>

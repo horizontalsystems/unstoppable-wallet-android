@@ -234,12 +234,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Notification_Notifications">Notification : %s</string>
     <string name="Notification_Up">Monter</string>
     <string name="Notification_Down">Descendre</string>
-    <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
-    <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
-    <string name="Alert_TitleWarning">Attention</string>
-    <string name="Alert_NoDeviceLockDescription">Paramétrez un écran de verrouillage sur cet appareil pour continuer. Allez dans « Paramètres » &gt; « Sécurité » &gt; « Écran de verrouillage » et activez le paramètre d’écran de verrouillage.</string>
-    <string name="Alert_CustomKeyboardIsUsed">Vous utilisez un clavier tiers. Vous devez utiliser le clavier par défaut.</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
     <string name="Eos_Backend_Error_SelfTransfer">Impossible de transférer des tokens sur votre propre compte</string>
@@ -255,10 +249,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Hud_Text_InvalidPinError">Le code incorrect</string>
     <string name="Hud_Network_Issue">Problèmes réseau. Réessayez</string>
     <string name="Hud_UnknownError">%s</string>
-    <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">PIN de téléphone</string>
-    <string name="OSPin_Confirm_Desciption">Cette application nécessite qu\'un code secret soit activé sur le téléphone (verrouillage de l\'écran). \n\nVous pouvez activer cette fonction dans les paramètres Android. \n\nVeuillez noter que lorsque vous avez désactivé le code PIN au niveau du système d\'exploitation, les mesures de sécurité stockées sur votre téléphone ont rendu invalide les données précédemment stockées. Vous devrez Restaurer vos clés de porte-monnaie pour revenir à votre porte-monnaie.</string>
-    <string name="OSPin_Prompt_Desciption">Cette application nécessite le code PIN de votre téléphone afin de conserver les données confidentielles de votre porte-monnaie dans le stockage sécurisé d\'Android et non dans l\'application elle-même.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Portefeuilles</string>
     <string name="ManageCoins_save">Sauvegarder</string>

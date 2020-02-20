@@ -315,14 +315,6 @@
     <string name="Notification_Up">Up</string>
     <string name="Notification_Down">Down</string>
 
-    <!--Alert-->
-
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_TitleWarning">Warning</string>
-    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” > “Security” > “Screen Lock” and enable the lock screen setting.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
-
     <!--Errors-->
 
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
@@ -343,12 +335,6 @@
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <string name="Hud_UnknownError">%s</string>
-
-    <!--OS Pin-->
-
-    <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
 
     <!--Manage Coins-->
 
