@@ -1,10 +1,12 @@
-package io.horizontalsystems.bankwallet.modules.keystore
+package io.horizontalsystems.keystore
 
-import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreModule.ModeType
+import io.horizontalsystems.keystore.KeyStoreModule.ModeType
 
-class KeyStorePresenter(private val interactor: KeyStoreModule.IInteractor,
-                        private val router: KeyStoreModule.IRouter,
-                        private val mode: ModeType) : KeyStoreModule.IViewDelegate, KeyStoreModule.IInteractorDelegate {
+class KeyStorePresenter(
+        private val interactor: KeyStoreModule.IInteractor,
+        private val router: KeyStoreModule.IRouter,
+        private val mode: ModeType)
+    : KeyStoreModule.IViewDelegate, KeyStoreModule.IInteractorDelegate {
 
     var view: KeyStoreModule.IView? = null
 

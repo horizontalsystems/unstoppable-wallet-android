@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.keystore
+package io.horizontalsystems.keystore
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent

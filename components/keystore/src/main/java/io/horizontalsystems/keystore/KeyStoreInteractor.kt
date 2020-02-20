@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.keystore
+package io.horizontalsystems.keystore
 
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.ISystemInfoManager
@@ -24,5 +24,4 @@ class KeyStoreInteractor(private val systemInfoManager: ISystemInfoManager, priv
     override fun removeKey() {
         keyStoreManager.removeKey()
     }
-
 }

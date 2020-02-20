@@ -233,12 +233,6 @@
     <string name="Notification_Notifications">اطلاعیه ها%s</string>
     <string name="Notification_Up">بالا</string>
     <string name="Notification_Down">پایین</string>
-    <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">خطای کلید اصلی اندروید</string>
-    <string name="Alert_KeysInvalidatedDescription">داده رمزگذاری شده که کیف پول شما را نگه داشته است اخیراً باطل نشده است زیرا صفحه قفل اندروید شما تغییر کرده است</string>
-    <string name="Alert_TitleWarning">هشدار</string>
-    <string name="Alert_NoDeviceLockDescription">برای ادامه یک صفحه قفل در این دستگاه تنظیم کنید. رفتن به \"تنظیمات\"؛ \"امنیت\" &gt;؛ \"قفل صفحه\" &gt; را فعال کرده و تنظیم صفحه قفل را فعال کنید.</string>
-    <string name="Alert_CustomKeyboardIsUsed">شما از یک صفحه کلید شخص ثالث استفاده می کنید. شما باید از صفحه کلید پیش فرض استفاده کنید.</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">ارز پشتیبانی نشده</string>
     <string name="Eos_Backend_Error_SelfTransfer">مبلغ نمی تواند به حساب خودتان منتقل شود</string>
@@ -254,10 +248,6 @@
     <string name="Hud_Text_InvalidPinError">رمز عبور اشتباه</string>
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
     <string name="Hud_UnknownError">%s</string>
-    <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">كد تلفن</string>
-    <string name="OSPin_Confirm_Desciption">این برنامه نیاز دارد که تلفن دارای رمز عبور (قفل صفحه) باشد.\n\n شما می توانید آن را در تنظیمات اندروید فعال کنید.\n\nلطفاً توجه داشته باشید که هنگامی که PIN یا کد را در سطح OS یا سیستم عامل غیرفعال کردید ، اقدامات امنیتی در ذخیره ایمن ایجاد شده در تلفن شما ، اطلاعاتی که قبلا ذخیره شده است را نامعتبر می کند. برای بازگشت به کیف پول خود، باید کلیدهای کیف پول خود را بازیابی کنید.</string>
-    <string name="OSPin_Prompt_Desciption">این برنامه برای حفظ اطلاعات حساس از کیف پول شما در حافظه امن اندروید و نه در خود برنامه به PIN یا رمز تلفن شما نیاز دارد.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
     <string name="ManageCoins_save">ذخیره</string>
