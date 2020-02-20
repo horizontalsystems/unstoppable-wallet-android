@@ -31,7 +31,6 @@
     <!--Welcome-->
 
     <string name="Welcome_Title">Unstoppable \nWallet</string>
-    <string name="Welcome_Subtitle">Be Free, Be Unstoppable</string>
     <string name="Welcome_SecurityCenter">Security Center</string>
     <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
