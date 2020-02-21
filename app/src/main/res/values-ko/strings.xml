@@ -24,7 +24,6 @@
     <string name="Wallet">%s 지갑</string>
     <!--Welcome-->
     <string name="Welcome_Title">언스타퍼블 \n지갑</string>
-    <string name="Welcome_Subtitle">자유롭고 언스타퍼블 되세요</string>
     <string name="Welcome_SecurityCenter">보안 센터</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
@@ -164,7 +163,7 @@
     <string name="FullInfo_Source_Online">온라인</string>
     <string name="FullInfo_Source_Offline">오프라인</string>
     <string name="FullInfo_Error_ProviderOffline">오프라인</string>
-    <string name="FullInfo_Error_TransactionNotFound">거래를 찾을 수 없습니다</string>
+    <string name="FullInfo_Error_TransactionNotFound">블록 체인에서 거래를 찾을 수 없습니다</string>
     <string name="FullInfo_Error_Retry">재시도</string>
     <string name="FullInfo_Error_ChangeSource">출처를 변경하다</string>
     <!--no used-->
@@ -202,9 +201,6 @@
     <string name="SettingsSecurity_BlockchainSettings">블록 체인 설정</string>
     <string name="SettingsSecurity_EnableTor">토르 활성화</string>
     <string name="SettingsSecurity_TorConnectionDescription">토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기위한 권한을 허용해 주세요.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">기초 통화</string>
-    <string name="SettingsCurrency_InfoText">실시간 및 이전 과거 환율은 CryptoCompare.com 에서 제공하고 있습니다</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -242,17 +238,13 @@
     <string name="Notification_Notifications">알림%s</string>
     <string name="Notification_Up">위로</string>
     <string name="Notification_Down">아래로</string>
-    <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
-    <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
-    <string name="Alert_TitleWarning">경고</string>
-    <string name="Alert_NoDeviceLockDescription">이 장치에서 계속하기위해서 스크린 장금을 설정하세요. \"설정\",\"보안\",\"스크린 장금\"으로가서 장금화면 가면 화면장금 설정을 할 수 있습니다.</string>
-    <string name="Alert_CustomKeyboardIsUsed">당신은 제3자의 키보드를 사용하고 있습니다. 기본 키보드를 사용해야만 합니다.</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">지원되지 않는 통화</string>
     <string name="Eos_Backend_Error_SelfTransfer">토큰을 개인계정으로 옮길 수 없습니다</string>
     <string name="Eos_Backend_Error_AccountNotExist">회원 계정이 존재하지 않습니다</string>
     <string name="Eos_Backend_Error_InsufficientRam">귀하의 EOS계정은 이 토큰을 보내기엔 RAM이 충분하지 않습니다. 진행하시려면 RAM량을 늘리셔야 합니다.</string>
+    <string name="Binance_Backend_Error_MemoRequired">수신자는 송금 내역에 메모 기록을 필요로 합니다</string>
+    <string name="Binance_Backend_Error_RequiresDigits">메모에는 숫자만 포함하셔야 합니다</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">잠금 해제</string>
     <string name="Hud_Text_Success">성공</string>
@@ -263,10 +255,6 @@
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
     <string name="Hud_Network_Issue">네트워크에 문제가 있습니다. 잠시 후 다시 시도해 주세요</string>
     <string name="Hud_UnknownError">%s</string>
-    <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">핸드폰 핀넘버</string>
-    <string name="OSPin_Confirm_Desciption">이 앱을 사용하려면 휴대전화에 암호(화면 잠금) 가 활성화되어 있어야 합니다. \n\n Android 설정에서 활성화할 수 있습니다. \n\nOS 수준에서 PIN을 비활성화하면 휴대기기의 안전한 저장에 대한 보안조치로 인해 이전에 저장된 데이터가 유효하지 않게 됩니다. 지갑으로 돌아가려면 지갑 암호를 복원하십시오.</string>
-    <string name="OSPin_Prompt_Desciption">앱 자체가 아닌 안드로이드의 안전한 저장소에 지갑의 중요한 데이터를 저장하려면 이 앱은 휴대전화의 PIN이 필요합니다.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
@@ -330,11 +318,11 @@
     <string name="Charts_TimeDuration_Day">하루</string>
     <string name="Charts_TimeDuration_Week">일주일</string>
     <string name="Charts_TimeDuration_Month">한 달</string>
-    <string name="Charts_TimeDuration_Month3">3M</string>
+    <string name="Charts_TimeDuration_Month3">3개월</string>
     <string name="Charts_TimeDuration_Quartal">3개월</string>
     <string name="Charts_TimeDuration_HalfYear">6개월</string>
     <string name="Charts_TimeDuration_Year">1년</string>
-    <string name="Charts_TimeDuration_Year2">2Y</string>
+    <string name="Charts_TimeDuration_Year2">2년</string>
     <string name="Charts_Title">%s 금액</string>
     <string name="Charts_Rate_High">높음</string>
     <string name="Charts_Rate_Low">낮음</string>
@@ -347,7 +335,7 @@
     <string name="Charts_MarketCap_Billion">십억</string>
     <string name="Charts_MarketCap_Trillion">조</string>
     <string name="Charts_Volume">음량</string>
-    <string name="Charts_Price">Price</string>
+    <string name="Charts_Price">금액</string>
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
     <!--Rate list-->
     <string name="RateList_updated">업데이트되었습니다\n%s</string>
