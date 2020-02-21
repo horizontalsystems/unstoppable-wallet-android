@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Para birimi</string>
+    <string name="SettingsCurrency_InfoText">Gerçek zamanlı ve geçmiş döviz kurları CryptoCompare.com tarafından sağlanır</string>
+</resources>
