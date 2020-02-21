@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Базовая Валюта</string>
+    <string name="SettingsCurrency_InfoText">Курсы реального времени и исторические курсы предоставляются CryptoCompare.com</string>
+</resources>
