@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Moneda principal</string>
+    <string name="SettingsCurrency_InfoText">CryptoCompare.com proporciona tipos de cambio en tiempo real e históricos</string>
+</resources>
