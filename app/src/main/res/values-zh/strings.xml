@@ -23,7 +23,7 @@
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable \nWallet</string>
+    <string name="Welcome_Title">Unstoppable\n钱包</string>
     <string name="Welcome_SecurityCenter">安全中心</string>
     <string name="Welcome_CreateWallet">创建钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
@@ -163,7 +163,7 @@
     <string name="FullInfo_Source_Online">在线</string>
     <string name="FullInfo_Source_Offline">离线</string>
     <string name="FullInfo_Error_ProviderOffline">离线</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaction can not be found on the blockchain</string>
+    <string name="FullInfo_Error_TransactionNotFound">无法在区块链上找到交易</string>
     <string name="FullInfo_Error_Retry">重试</string>
     <string name="FullInfo_Error_ChangeSource">更改源</string>
     <!--no used-->
@@ -199,8 +199,8 @@
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_BlockchainSettings">区块链设置</string>
-    <string name="SettingsSecurity_EnableTor">Enable Tor</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
+    <string name="SettingsSecurity_EnableTor">启用Tor</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -237,8 +237,8 @@
     <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
     <string name="Eos_Backend_Error_AccountNotExist">目标账户不存在</string>
     <string name="Eos_Backend_Error_InsufficientRam">您的EOS账户没有足够的RAM来发送此令牌。您必须增加RAM才能继续。</string>
-    <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo contains only digits</string>
+    <string name="Binance_Backend_Error_MemoRequired">收款人要求在转账交易中包含非空的备注</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">解锁​​​​</string>
     <string name="Hud_Text_Success">成功</string>
@@ -293,8 +293,8 @@
     <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Tor Connection -->
-    <string name="TorPage_Title">Tor Connection</string>
-    <string name="TorPage_Description">Before creating or restoring enable Tor for secure connection with network.\n\nTor can safeguard your browsing activities on wallet. Allow permission for using Tor browser in settings.</string>
+    <string name="TorPage_Title">Tor连接</string>
+    <string name="TorPage_Description">在创建或恢复前启用Tor以便实现网络的安全连接。\n\nTor可以保护您钱包上的浏览活动。在设置中启用权限以使用Tor浏览器。</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
