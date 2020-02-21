@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_keystore.*
 
-abstract class KeyStore : AppCompatActivity() {
+abstract class BaseKeyStoreActivity : AppCompatActivity() {
 
     abstract var viewModel: KeyStoreViewModel
 

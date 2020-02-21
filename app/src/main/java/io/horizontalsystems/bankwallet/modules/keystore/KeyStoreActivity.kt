@@ -6,12 +6,12 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
 import io.horizontalsystems.core.putParcelableExtra
-import io.horizontalsystems.keystore.KeyStore
+import io.horizontalsystems.keystore.BaseKeyStoreActivity
 import io.horizontalsystems.keystore.KeyStoreModule
 import io.horizontalsystems.keystore.KeyStoreViewModel
 import io.horizontalsystems.keystore.R
 
-class KeyStoreActivity : KeyStore() {
+class KeyStoreActivity : BaseKeyStoreActivity() {
 
     override lateinit var viewModel: KeyStoreViewModel
 
