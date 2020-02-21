@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">기초 통화</string>
+    <string name="SettingsCurrency_InfoText">실시간 및 이전 과거 환율은 CryptoCompare.com 에서 제공하고 있습니다</string>
+</resources>
