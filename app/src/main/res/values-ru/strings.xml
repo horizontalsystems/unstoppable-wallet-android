@@ -238,7 +238,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
     <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
     <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo contains only digits</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
