@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">基本货币</string>
+    <string name="SettingsCurrency_InfoText">实时和历史汇率由 CryptoCompare.com 提供</string>
+</resources>
