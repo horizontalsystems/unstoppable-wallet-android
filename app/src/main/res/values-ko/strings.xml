@@ -244,7 +244,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">회원 계정이 존재하지 않습니다</string>
     <string name="Eos_Backend_Error_InsufficientRam">귀하의 EOS계정은 이 토큰을 보내기엔 RAM이 충분하지 않습니다. 진행하시려면 RAM량을 늘리셔야 합니다.</string>
     <string name="Binance_Backend_Error_MemoRequired">수신자는 송금 내역에 메모 기록을 필요로 합니다</string>
-    <string name="Binance_Backend_Error_RequiresDigits">메모에는 숫자만 포함하셔야 합니다</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">잠금 해제</string>
     <string name="Hud_Text_Success">성공</string>
