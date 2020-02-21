@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="Alert_Ok">OK</string>
+    <!--Alert-->
+    <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
+    <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
+    <string name="Alert_TitleWarning">Внимание</string>
+    <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Вы используете стороннюю клавиатуру. Вам необходимо использовать клавиатуру по умолчанию.</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">PIN-код телефона</string>
+    <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>
+    <string name="OSPin_Prompt_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
+</resources>
