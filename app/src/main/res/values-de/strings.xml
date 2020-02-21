@@ -24,7 +24,6 @@
     <string name="Wallet">%s wallet</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable \nWallet</string>
-    <string name="Welcome_Subtitle">Frei sein, unaufhaltsam sein</string>
     <string name="Welcome_SecurityCenter">Sicherheits-Center</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
@@ -164,7 +163,7 @@
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
     <string name="FullInfo_Error_ProviderOffline">Offline</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaktion wurde nicht gefunden</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transaktion kann in der Blockchain nicht gefunden werden</string>
     <string name="FullInfo_Error_Retry">Wiederholen</string>
     <string name="FullInfo_Error_ChangeSource">Quelle ändern</string>
     <!--no used-->
@@ -202,9 +201,6 @@
     <string name="SettingsSecurity_BlockchainSettings">Blockchain Einstellungen</string>
     <string name="SettingsSecurity_EnableTor">Tor aktivieren</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Währung</string>
-    <string name="SettingsCurrency_InfoText">Wechselkurse in Echtzeit und historische Kurse werden von CryptoCompare.com bereitgestellt</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -230,17 +226,13 @@
     <string name="Notification_Notifications">Benachrichtigung: %s</string>
     <string name="Notification_Up">Hoch</string>
     <string name="Notification_Down">Runter</string>
-    <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
-    <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
-    <string name="Alert_TitleWarning">Warnung</string>
-    <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie zu \"Einstellungen\" </string>
-    <string name="Alert_CustomKeyboardIsUsed">Du verwendest eine Fremdanbieter-Tastatur. Du musst Standard-Tastatur verwenden.</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Nicht unterstützte Währung</string>
     <string name="Eos_Backend_Error_SelfTransfer">Token kann nicht auf das eigene Konto übertragen werden</string>
     <string name="Eos_Backend_Error_AccountNotExist">Das Zielkonto existiert nicht</string>
     <string name="Eos_Backend_Error_InsufficientRam">Ihr EOS-Konto hat nicht genügend RAM, um dieses Token zu senden. Um fortfahren zu können, müssen Sie den RAM-Stake erhöhen.</string>
+    <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Der Vermerk darf nur Zahlen enthalten</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Entsperren</string>
     <string name="Hud_Text_Success">Erfolgreich</string>
@@ -251,12 +243,6 @@
     <string name="Hud_Text_InvalidPinError">Falscher Code</string>
     <string name="Hud_Network_Issue">Es sind Netzwerkprobleme aufgetreten. Bitte versuchen Sie es erneut</string>
     <string name="Hud_UnknownError">%s</string>
-    <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Telefon PIN</string>
-    <string name="OSPin_Confirm_Desciption">Diese App erfordert, dass Zugangsperre (Bildschirmsperre) aktiviert ist.
-\n\nSie können dies in den Android-Einstellungen vornehmen.
-\n\nBitte beachten Sie, wenn Sie PIN auf dem OS ausgeschaltete haben, wurden die Sicherheitsmaßnahmen im Safe Storage Ihres Telefons für vorher gespeicherte Daten ungültig. Sie müssen Ihre Wallet-Schlüssel wiederherstellen, um an Ihr Wallet zu gelangen.</string>
-    <string name="OSPin_Prompt_Desciption">Diese App benötigt die PIN Ihres Telefons, um sensible Daten von Ihrer Wallet in Android-sicherer Speicherung zu halten und nicht in der App selbst.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coins</string>
     <string name="ManageCoins_save">Speichern</string>
