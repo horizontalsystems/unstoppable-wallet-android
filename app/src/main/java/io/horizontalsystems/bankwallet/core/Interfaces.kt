@@ -71,7 +71,7 @@ interface IAccountManager {
     val deleteAccountObservable: Flowable<String>
 
     fun account(coinType: CoinType): Account?
-    fun preloadAccounts()
+    fun loadAccounts()
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)

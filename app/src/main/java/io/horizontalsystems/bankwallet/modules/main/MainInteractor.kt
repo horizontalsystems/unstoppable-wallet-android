@@ -10,7 +10,7 @@ class MainInteractor(private val accountManager: IAccountManager, private val wa
     var delegate: MainModule.IInteractorDelegate? = null
 
     override fun onStart() {
-        accountManager.preloadAccounts()
+        accountManager.loadAccounts()
         walletManager.loadWallets()
         adapterManager.preloadAdapters()
 
