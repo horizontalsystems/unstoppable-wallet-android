@@ -238,7 +238,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">حساب کاربری مقصد وجود ندارد</string>
     <string name="Eos_Backend_Error_InsufficientRam">حساب EOS شما RAM یا حافظه کافی برای ارسال این مبلغ ندارد. برای ادامه پردازش باید RAM را افزایش دهید.</string>
     <string name="Binance_Backend_Error_MemoRequired">دریافت کننده در انتقال تراکنش ها به نمونه غیر خالی نیاز دارد</string>
-    <string name="Binance_Backend_Error_RequiresDigits">به نمونه شامل تنها رقم نیاز دارد</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">بازگشایی قفل</string>
     <string name="Hud_Text_Success">موفقيت</string>
