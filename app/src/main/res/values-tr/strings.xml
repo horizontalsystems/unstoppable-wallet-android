@@ -24,7 +24,6 @@
     <string name="Wallet">%s cüzdanı</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable \nCüzdan</string>
-    <string name="Welcome_Subtitle">Özgür Ol! Durdurulamaz Ol</string>
     <string name="Welcome_SecurityCenter">Güvenlik Merkezi</string>
     <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
@@ -164,7 +163,7 @@
     <string name="FullInfo_Source_Online">Çevrimiçi</string>
     <string name="FullInfo_Source_Offline">Çevrimdışı</string>
     <string name="FullInfo_Error_ProviderOffline">Çevrimdışı</string>
-    <string name="FullInfo_Error_TransactionNotFound">İşlem bulunamadı</string>
+    <string name="FullInfo_Error_TransactionNotFound">Işlem Blockchain\'de bulunamadı</string>
     <string name="FullInfo_Error_Retry">Yeniden Dene</string>
     <string name="FullInfo_Error_ChangeSource">Kaynağı Değiştir</string>
     <!--no used-->
@@ -202,9 +201,6 @@
     <string name="SettingsSecurity_BlockchainSettings">Blockchain Ayarları</string>
     <string name="SettingsSecurity_EnableTor">Tor\'u etkinleştir</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor, tarama etkinliklerinizi cüzdanda koruyabilir. Ayarlarda Tor tarayıcı kullanmaya izin ver.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Para birimi</string>
-    <string name="SettingsCurrency_InfoText">Gerçek zamanlı ve geçmiş döviz kurları CryptoCompare.com tarafından sağlanır</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
@@ -236,17 +232,13 @@
     <string name="Notification_Notifications">Bildirimler %s</string>
     <string name="Notification_Up">Yukarı</string>
     <string name="Notification_Down">Aşağı</string>
-    <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
-    <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
-    <string name="Alert_TitleWarning">Uyarı</string>
-    <string name="Alert_NoDeviceLockDescription">Devam edebilmek için cihaz kilidi oluşturmalısınız. Ekran kilidi oluşturmak için, Ayarlarlarda ki Güvenlik &gt; Ekran Kilidi bölümene gidin.</string>
-    <string name="Alert_CustomKeyboardIsUsed">Cihaz harici klavye kullanıyorsunuz. Asıl klavyeyi kullanmanız gerekiyor.</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
     <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
     <string name="Eos_Backend_Error_AccountNotExist">Bu hesap mevcut değil</string>
     <string name="Eos_Backend_Error_InsufficientRam">EOS hesabınızda bu kripto parayı göndermek için yeterli RAM bulunmuyor. Devam etmek için EOS RAM hissenizi arttırmak gerekiyor.</string>
+    <string name="Binance_Backend_Error_MemoRequired">Aktarım işleminde alıcı boş olmayan not istiyor</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo contains only digits</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Kilidi Aç</string>
     <string name="Hud_Text_Success">Başarılı</string>
@@ -257,10 +249,6 @@
     <string name="Hud_Text_InvalidPinError">Şimdiki Kod</string>
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">%s</string>
-    <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Telefon PİN\'i</string>
-    <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
-    <string name="OSPin_Prompt_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>
