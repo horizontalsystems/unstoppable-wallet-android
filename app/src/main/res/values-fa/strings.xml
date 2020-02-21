@@ -18,21 +18,20 @@
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
-    <string name="Button_Done">Done</string>
+    <string name="Button_Done">انجام شد</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable \nWallet</string>
-    <string name="Welcome_Subtitle">Be Free, Be Unstoppable</string>
-    <string name="Welcome_SecurityCenter">Security Center</string>
+    <string name="Welcome_Title">غیرقابل توقف \n کیف پول</string>
+    <string name="Welcome_SecurityCenter">مركز امنيتي</string>
     <string name="Welcome_CreateWallet">ايجاد كيف پول</string>
     <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
     <!--Create-->
     <string name="Create_Title">کیف پول جدید</string>
     <string name="Create_Description">برای شروع ، یک ارز رمزگذاری شده انتخاب کنید. بعداً می توانید ارزهای رمزنگاری شده دیگری را اضافه کنید.</string>
     <!--Restore-->
-    <string name="Restore_ChooseWallet">Choose Wallet</string>
+    <string name="Restore_ChooseWallet">انتخاب کیف پول</string>
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">کلید خصوصی خود را برای کیف پول %1s که از کلمات %2s تشکیل شده است وارد کنید. کلمات باید به ترتیب صحیح وارد شوند و با فاصله از هم جدا شوند.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
@@ -68,7 +67,7 @@
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
-    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
+    <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس</string>
@@ -137,14 +136,14 @@
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
-    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
+    <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">قفل زمان</string>
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
-    <string name="Info_DoubleSpend_Title">Double Spend</string>
-    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
-    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
-    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
+    <string name="Info_DoubleSpend_Title">دو برابر هزینه کردن</string>
+    <string name="Info_DoubleSpend_Description">خطر دو برابر هزینه کردن! تراکنش دیگری در زنجیره بلوکی وجود دارد که سعی می کنید ورودی های استفاده شده در این تراکنش را استفاده کند. فقط یک تراکنش توسط شبکه پذیرفته خواهد شد.</string>
+    <string name="Info_DoubleSpend_ThisTx">این Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Tx متناقص</string>
     <!--Full Info-->
     <string name="FullInfo_Title">تراکنش</string>
     <string name="FullInfo_Time">زمان</string>
@@ -164,7 +163,7 @@
     <string name="FullInfo_Source_Online">آنلاین</string>
     <string name="FullInfo_Source_Offline">آفلاین</string>
     <string name="FullInfo_Error_ProviderOffline">آفلاین</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaction was not found</string>
+    <string name="FullInfo_Error_TransactionNotFound">تراکنش در زنجیره بلوکی یافت نمی شود</string>
     <string name="FullInfo_Error_Retry">دوباره تلاش کنید</string>
     <string name="FullInfo_Error_ChangeSource">تغییر منبع</string>
     <!--no used-->
@@ -182,7 +181,7 @@
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
     <string name="Settings_ManageCoins">مدیریت سکه ها</string>
-    <string name="Settings_ExperimentalFeatures">Experimental</string>
+    <string name="Settings_ExperimentalFeatures">آزمایشی</string>
     <string name="Settings_RestoreWallet">بازیابی كيف پول</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
@@ -199,12 +198,9 @@
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
-    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
-    <string name="SettingsSecurity_EnableTor">Enable Tor</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
-    <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">ارز مرجع</string>
-    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
+    <string name="SettingsSecurity_BlockchainSettings">تنظیمات زنجیره بلوکی</string>
+    <string name="SettingsSecurity_EnableTor">فعال کردن Tor</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor می تواند از فعالیت های مرورگر شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
@@ -220,11 +216,11 @@
     <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Contact</string>
-    <string name="SettingsContact_Email">Mail</string>
-    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
-    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
-    <string name="SettingsContact_AppStatus">App Status</string>
+    <string name="SettingsContact_Title">تماس</string>
+    <string name="SettingsContact_Email">ايميل</string>
+    <string name="SettingsContact_WalletHelpTelegram">تلگرام (راهنما درباره کیف پول)</string>
+    <string name="SettingsContact_DevelopersTelegram">تلگرام (توسعه دهندگان)</string>
+    <string name="SettingsContact_AppStatus">وضعیت برنامه</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">اطلاعیه ها</string>
     <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت را برای سکه هایی که می خواهید تماشا کنید تنظیم کنید.\n\nوقتی تغییر قیمت برای ۲۴ ساعت گذشته بیش از آستانه انتخاب شده باشد ، به شما هشدار داده می شود.</string>
@@ -236,17 +232,13 @@
     <string name="Notification_Notifications">اطلاعیه ها%s</string>
     <string name="Notification_Up">بالا</string>
     <string name="Notification_Down">پایین</string>
-    <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">خطای کلید اصلی اندروید</string>
-    <string name="Alert_KeysInvalidatedDescription">داده رمزگذاری شده که کیف پول شما را نگه داشته است اخیراً باطل نشده است زیرا صفحه قفل اندروید شما تغییر کرده است</string>
-    <string name="Alert_TitleWarning">هشدار</string>
-    <string name="Alert_NoDeviceLockDescription">برای ادامه یک صفحه قفل در این دستگاه تنظیم کنید. رفتن به \"تنظیمات\"؛ \"امنیت\" &gt;؛ \"قفل صفحه\" &gt; را فعال کرده و تنظیم صفحه قفل را فعال کنید.</string>
-    <string name="Alert_CustomKeyboardIsUsed">شما از یک صفحه کلید شخص ثالث استفاده می کنید. شما باید از صفحه کلید پیش فرض استفاده کنید.</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">ارز پشتیبانی نشده</string>
     <string name="Eos_Backend_Error_SelfTransfer">مبلغ نمی تواند به حساب خودتان منتقل شود</string>
     <string name="Eos_Backend_Error_AccountNotExist">حساب کاربری مقصد وجود ندارد</string>
     <string name="Eos_Backend_Error_InsufficientRam">حساب EOS شما RAM یا حافظه کافی برای ارسال این مبلغ ندارد. برای ادامه پردازش باید RAM را افزایش دهید.</string>
+    <string name="Binance_Backend_Error_MemoRequired">دریافت کننده در انتقال تراکنش ها به نمونه غیر خالی نیاز دارد</string>
+    <string name="Binance_Backend_Error_RequiresDigits">به نمونه شامل تنها رقم نیاز دارد</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">بازگشایی قفل</string>
     <string name="Hud_Text_Success">موفقيت</string>
@@ -257,10 +249,6 @@
     <string name="Hud_Text_InvalidPinError">رمز عبور اشتباه</string>
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
     <string name="Hud_UnknownError">%s</string>
-    <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">كد تلفن</string>
-    <string name="OSPin_Confirm_Desciption">این برنامه نیاز دارد که تلفن دارای رمز عبور (قفل صفحه) باشد.\n\n شما می توانید آن را در تنظیمات اندروید فعال کنید.\n\nلطفاً توجه داشته باشید که هنگامی که PIN یا کد را در سطح OS یا سیستم عامل غیرفعال کردید ، اقدامات امنیتی در ذخیره ایمن ایجاد شده در تلفن شما ، اطلاعاتی که قبلا ذخیره شده است را نامعتبر می کند. برای بازگشت به کیف پول خود، باید کلیدهای کیف پول خود را بازیابی کنید.</string>
-    <string name="OSPin_Prompt_Desciption">این برنامه برای حفظ اطلاعات حساس از کیف پول شما در حافظه امن اندروید و نه در خود برنامه به PIN یا رمز تلفن شما نیاز دارد.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
     <string name="ManageCoins_save">ذخیره</string>
@@ -269,9 +257,9 @@
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">تجربی</string>
     <string name="ExperimentalFeatures_Description">ویژگی های زیر تجربی است و باید با احتیاط استفاده شود. در حالی که ما این ویژگی ها را با استفاده از وجوه رمزنگاری شده خودمان به طور آزمایشی آزمایش کرده ایم ، اما نمی توانیم تضمین کنیم که آنها مطابق آنچه انتظار می رود عمل کنند.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">قفل زمان</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">TimeLock</string>
+    <string name="BitcoinHodling_Title">قفل زمان</string>
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
@@ -280,7 +268,7 @@
     <string name="ManageKeys_Delete">پاک کردن</string>
     <string name="ManageKeys_Backup">پيشتيباني</string>
     <string name="ManageKeys_Show">نشان دادن</string>
-    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Unlink">جدا کردن</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">پاک کردن کیف پول</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
@@ -296,23 +284,23 @@
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">Settings</string>
-    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
-    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
-    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_Title">تنظيمات</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">ساختار آدرس</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">تغییر به %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">این اقدام به برنامه غیرقابل توقف نیاز دارد تا بتواند خود را با بیت کوین زنجیره بلوکی همزمان کند. تراکنش های فعلی بیت کوین شما دیگر قابل مشاهده نخواهد بود. تغییر آن به تنظیمات قبلی ، همه چیز را پس از تنظیم مجدد برنامه به زنجیره بلوکی باز می گرداند.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">در صورت فعال کردن هر یک از این نشانه ها ، این برنامه به برنامه غیرقابل توقف نیاز دارد تا بتواند مجدداً خود را با بیت کوین ، بیت کوین نقد و زنجیره های بلوکی ارزهای رمزنگاری شده بازنویسی کند. تراکنش ها یا مانده حساب شما تحت تأثیر قرار نخواهد گرفت. \n\n توصیه می کنیم در صورت عدم اطمینان از انجام این کار، این تنظیمات را تغییر ندهید.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Tor Connection -->
-    <string name="TorPage_Title">Tor Connection</string>
-    <string name="TorPage_Description">Before creating or restoring enable Tor for secure connection with network.\n\nTor can safeguard your browsing activities on wallet. Allow permission for using Tor browser in settings.</string>
+    <string name="TorPage_Title">ارتباط Tor</string>
+    <string name="TorPage_Description">قبل از ایجاد یا بازیابی Tor را برای اتصال ایمن به شبکه فعال کنید. \n\n Tor می تواند از فعالیتهای مرور شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">غیرقابل توقف</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast_Subtitle">۰-۲ ساعت (توصیه شده)</string>
-    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_RestoreSourceDescription">لینک منابع API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
     <string name="CoinOption_AddressFormatTitle">فرمت آدرس را انتخاب کنید</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
@@ -340,7 +328,7 @@
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">درجه صدا</string>
-    <string name="Charts_Price">Price</string>
+    <string name="Charts_Price">قیمت</string>
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
     <!--Rate list-->
     <string name="RateList_updated">به روز شده \n%s</string>
