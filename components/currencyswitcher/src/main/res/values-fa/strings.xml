@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">ارز مرجع</string>
+    <string name="SettingsCurrency_InfoText">نرخ ارز در تاریخ و زمان واقعی توسط CryptoCompare.com ارائه شده است</string>
+</resources>
