@@ -23,6 +23,14 @@ class ManageWalletsInteractor(
     override val accounts: List<Account>
         get() = accountManager.accounts
 
+    override fun loadAccounts() {
+        accountManager.loadAccounts()
+    }
+
+    override fun loadWallets() {
+        walletManager.loadWallets()
+    }
+
     override fun save(wallet: Wallet) {
         walletManager.save(listOf(wallet))
     }
