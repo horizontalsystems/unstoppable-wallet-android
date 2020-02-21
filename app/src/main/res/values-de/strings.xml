@@ -232,7 +232,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">Das Zielkonto existiert nicht</string>
     <string name="Eos_Backend_Error_InsufficientRam">Ihr EOS-Konto hat nicht genügend RAM, um dieses Token zu senden. Um fortfahren zu können, müssen Sie den RAM-Stake erhöhen.</string>
     <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Der Vermerk darf nur Zahlen enthalten</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Entsperren</string>
     <string name="Hud_Text_Success">Erfolgreich</string>
