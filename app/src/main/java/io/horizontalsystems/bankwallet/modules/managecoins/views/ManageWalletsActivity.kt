@@ -68,7 +68,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         })
 
         view.showSuccessEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Done)
+            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Done)
         })
 
     }
