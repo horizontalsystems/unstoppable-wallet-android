@@ -41,7 +41,7 @@ class BackupEosActivity : BaseActivity() {
 
     private fun onCopy(text: String) {
         TextHelper.copyText(text)
-        HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+        HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
     }
 
     companion object {

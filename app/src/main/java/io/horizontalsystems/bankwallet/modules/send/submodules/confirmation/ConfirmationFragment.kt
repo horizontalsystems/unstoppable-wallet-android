@@ -60,7 +60,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         })
 
         presenterView?.showCopied?.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+            context?.let { context -> HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied) }
         })
 
         presenterView?.addSecondaryDataViewItem?.observe(viewLifecycleOwner, Observer { secondaryData ->
@@ -84,7 +84,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         })
 
         sendView?.error?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->
-            errorMsgTextRes?.let { HudHelper.showErrorMessage(getErrorText(it)) }
+            errorMsgTextRes?.let { context?.let { context -> HudHelper.showErrorMessage(context, getErrorText(it)) } }
             presenter?.onSendError()
         })
 

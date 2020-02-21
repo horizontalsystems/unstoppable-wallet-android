@@ -18,6 +18,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.pin.core.NumPadItem
+import io.horizontalsystems.pin.core.NumPadItemType
+import io.horizontalsystems.pin.core.NumPadItemsAdapter
+import io.horizontalsystems.pin.core.SmoothLinearLayoutManager
 import io.horizontalsystems.pin.edit.EditPinModule
 import io.horizontalsystems.pin.edit.EditPinPresenter
 import io.horizontalsystems.pin.edit.EditPinRouter
@@ -27,12 +33,6 @@ import io.horizontalsystems.pin.set.SetPinRouter
 import io.horizontalsystems.pin.unlock.UnlockPinModule
 import io.horizontalsystems.pin.unlock.UnlockPinPresenter
 import io.horizontalsystems.pin.unlock.UnlockPinRouter
-import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.pin.core.NumPadItem
-import io.horizontalsystems.pin.core.NumPadItemType
-import io.horizontalsystems.pin.core.NumPadItemsAdapter
-import io.horizontalsystems.pin.core.SmoothLinearLayoutManager
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_pin.*
 import java.util.concurrent.Executor
@@ -151,7 +151,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         })
 
         pinView.showError.observe(viewLifecycleOwner, Observer {
-            HudHelper.showErrorMessage(it)
+            context?.let { context -> HudHelper.showErrorMessage(context, it) }
         })
 
         pinView.fillPinCircles.observe(viewLifecycleOwner, Observer { (length, pageIndex) ->

@@ -70,12 +70,12 @@ class ReceiveFragment: BaseBottomSheetDialogFragment() {
         })
 
         view.showError.observe(viewLifecycleOwner, Observer { error ->
-            error?.let { HudHelper.showErrorMessage(it) }
+            error?.let { context?.let { context -> HudHelper.showErrorMessage(context, it) } }
             dismiss()
         })
 
         view.showCopied.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+            context?.let { context -> HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied) }
         })
     }
 
