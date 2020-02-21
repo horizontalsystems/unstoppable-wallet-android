@@ -244,7 +244,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">La cuenta de destino no existe</string>
     <string name="Eos_Backend_Error_InsufficientRam">Su cuenta EOS no tiene suficiente memoria RAM para enviar este token. Necesita aumentar la participación en RAM para continuar.</string>
     <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo contains only digits</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Desbloquear</string>
     <string name="Hud_Text_Success">Completado</string>
