@@ -9,14 +9,13 @@ import androidx.preference.PreferenceManager
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.core.security.EncryptionManager
-import io.horizontalsystems.bankwallet.core.managers.KeyStoreCleaner
-import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
+import io.horizontalsystems.core.security.EncryptionManager
+import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.pin.core.PinManager
 import io.horizontalsystems.pin.core.SecureStorage
 import io.reactivex.plugins.RxJavaPlugins
@@ -99,7 +98,7 @@ class App : CoreApp() {
         appConfigTestMode = appConfig
         languageConfigProvider = appConfig
 
-        feeRateProvider = FeeRateProvider(instance, appConfigProvider)
+        feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
 
         ethereumKitManager = EthereumKitManager(appConfigTestMode)

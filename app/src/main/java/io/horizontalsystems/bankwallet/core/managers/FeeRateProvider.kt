@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.content.Context
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
@@ -10,12 +9,11 @@ import io.horizontalsystems.feeratekit.model.FeeProviderConfig
 import io.horizontalsystems.feeratekit.model.FeeRate
 import io.reactivex.Single
 
-class FeeRateProvider(context: Context, appConfig: IAppConfigProvider){
+class FeeRateProvider(appConfig: IAppConfigProvider) {
 
     private val feeRateKit = FeeRateKit(
             FeeProviderConfig(infuraProjectId = appConfig.infuraProjectId,
-                              infuraProjectSecret = appConfig.infuraProjectSecret),
-            context = context
+                    infuraProjectSecret = appConfig.infuraProjectSecret)
     )
 
     fun bitcoinFeeRates(): Single<List<FeeRateInfo>> {
