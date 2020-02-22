@@ -61,6 +61,7 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         })
 
         eosAccount.setListenerForTextInput(this)
+        eosActivePrivateKey.setListenerForTextInput(this)
 
         bindActions()
     }
