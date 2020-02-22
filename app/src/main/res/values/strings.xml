@@ -413,7 +413,7 @@
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast" translatable="false">API</string>
     <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
-    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
     <string name="CoinOption_Slow" translatable="false">Blockchain</string>
     <string name="CoinOption_Slow_Subtitle">1–24 hours</string>
     <string name="CoinOption_AddressFormatTitle">Bitcoin address format</string>
