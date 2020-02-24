@@ -31,7 +31,7 @@
     <string name="Create_Title">Новый кошелек</string>
     <string name="Create_Description">Выберите одну криптовалюту для начала. Вы сможете добавить другие криптовалюты позже.</string>
     <!--Restore-->
-    <string name="Restore_ChooseWallet">Choose Wallet</string>
+    <string name="Restore_ChooseWallet">Выберите Кошелек</string>
     <string name="Restore_Enter_Key_Title">Введите ключ</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Введите ваш приватный ключ для %1s кошелька, который состоит из %2s слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
     <string name="Restore_ValidationFailed">Неверный ключ</string>
@@ -67,7 +67,7 @@
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
     <string name="Balance_Sort_24hPriceChange">цене(%) за 24 ч</string>
-    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
+    <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s кошелька, прежде чем вы сможете получать %s.</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
@@ -136,14 +136,14 @@
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <string name="TransactionInfo_Fee">Комиссия</string>
     <string name="TransactionInfo_SentToSelfNote">Эта транзакция отправлена на свой адрес</string>
-    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
+    <string name="TransactionInfo_DoubleSpendNote">Двойные Трата Риск!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
-    <string name="Info_DoubleSpend_Title">Double Spend</string>
-    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
-    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
-    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
+    <string name="Info_DoubleSpend_Title">Двойная Трата</string>
+    <string name="Info_DoubleSpend_Description">Двойная Трата! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью.</string>
+    <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Конфликтная транзакция</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -198,8 +198,8 @@
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
-    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
-    <string name="SettingsSecurity_EnableTor">Enable Tor</string>
+    <string name="SettingsSecurity_BlockchainSettings">Настройки Блокчейна</string>
+    <string name="SettingsSecurity_EnableTor">Включить Tor</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">О приложении</string>
@@ -237,8 +237,8 @@
     <string name="Eos_Backend_Error_SelfTransfer">Не удается отправить токен на свой аккаунт</string>
     <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
     <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
-    <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
+    <string name="Binance_Backend_Error_MemoRequired">Получатель требует ввести memo в переводе транзакции</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Необходимо, чтобы memo содержало только цифры</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
@@ -293,14 +293,14 @@
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <!-- Tor Connection -->
-    <string name="TorPage_Title">Tor Connection</string>
+    <string name="TorPage_Title">Соединение с Tor</string>
     <string name="TorPage_Description">Before creating or restoring enable Tor for secure connection with network.\n\nTor can safeguard your browsing activities on wallet. Allow permission for using Tor browser in settings.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
-    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_RestoreSourceDescription">Ссылки на источники API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
     <string name="CoinOption_Slow_Subtitle">1–12 часов</string>
     <string name="CoinOption_AddressFormatTitle">Выберите формат адреса</string>
     <string name="CoinOption_SyncModeTitle">Опции восстановления</string>
