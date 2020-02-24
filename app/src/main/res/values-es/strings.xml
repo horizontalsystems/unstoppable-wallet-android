@@ -163,7 +163,7 @@
     <string name="FullInfo_Source_Online">En Línea</string>
     <string name="FullInfo_Source_Offline">Desconectado</string>
     <string name="FullInfo_Error_ProviderOffline">Desconectado</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaction can not be found on the blockchain</string>
+    <string name="FullInfo_Error_TransactionNotFound">La transacción no se pudo encontrar en el blockchain</string>
     <string name="FullInfo_Error_Retry">Reintentar</string>
     <string name="FullInfo_Error_ChangeSource">Cambiar Origen</string>
     <!--no used-->
@@ -243,8 +243,8 @@
     <string name="Eos_Backend_Error_SelfTransfer">No se puede transferir el token a su propia cuenta</string>
     <string name="Eos_Backend_Error_AccountNotExist">La cuenta de destino no existe</string>
     <string name="Eos_Backend_Error_InsufficientRam">Su cuenta EOS no tiene suficiente memoria RAM para enviar este token. Necesita aumentar la participación en RAM para continuar.</string>
-    <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
+    <string name="Binance_Backend_Error_MemoRequired">El receptor requiere que el memo no esté vacío en la transacción de transferencia</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Es necesario que el memo contenga únicamente dígitos</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Desbloquear</string>
     <string name="Hud_Text_Success">Completado</string>
@@ -306,7 +306,7 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
     <string name="CoinOption_Fast_Subtitle">0-2 horas (Recomendado)</string>
-    <string name="CoinOption_RestoreSourceDescription">Enlaces de fuentes API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_RestoreSourceDescription">Enlaces de fuentes API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
     <string name="CoinOption_Slow_Subtitle">1-12 horas</string>
     <string name="CoinOption_AddressFormatTitle">Elija un formato de dirección</string>
     <string name="CoinOption_SyncModeTitle">Restaurar los parámetros</string>
