@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Ok">Хорошо</string>
-
+    <string name="Alert_Ok">OK</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
     <string name="Alert_TitleWarning">Внимание</string>
-
- 
-    <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» </string>
-
+    <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
     <string name="Alert_CustomKeyboardIsUsed">Вы используете стороннюю клавиатуру. Вам необходимо использовать клавиатуру по умолчанию.</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN-код телефона</string>
