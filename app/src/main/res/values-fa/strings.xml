@@ -238,7 +238,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">حساب کاربری مقصد وجود ندارد</string>
     <string name="Eos_Backend_Error_InsufficientRam">حساب EOS شما RAM یا حافظه کافی برای ارسال این مبلغ ندارد. برای ادامه پردازش باید RAM را افزایش دهید.</string>
     <string name="Binance_Backend_Error_MemoRequired">دریافت کننده در انتقال تراکنش ها به نمونه غیر خالی نیاز دارد</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
+    <string name="Binance_Backend_Error_RequiresDigits">به نمونه شامل تنها رقم نیاز دارد</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">بازگشایی قفل</string>
     <string name="Hud_Text_Success">موفقيت</string>
@@ -300,7 +300,7 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast_Subtitle">۰-۲ ساعت (توصیه شده)</string>
-    <string name="CoinOption_RestoreSourceDescription">لینک منابع API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_RestoreSourceDescription">لینک منابع API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
     <string name="CoinOption_AddressFormatTitle">فرمت آدرس را انتخاب کنید</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
