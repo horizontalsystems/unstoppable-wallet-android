@@ -199,6 +199,8 @@
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_BlockchainSettings">区块链设置</string>
+    <string name="SettingsSecurity_EnableTor">启用Tor</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
