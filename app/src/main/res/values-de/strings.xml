@@ -232,7 +232,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">Das Zielkonto existiert nicht</string>
     <string name="Eos_Backend_Error_InsufficientRam">Ihr EOS-Konto hat nicht genügend RAM, um dieses Token zu senden. Um fortfahren zu können, müssen Sie den RAM-Stake erhöhen.</string>
     <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Der Vermerk darf nur Zahlen enthalten</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Entsperren</string>
     <string name="Hud_Text_Success">Erfolgreich</string>
@@ -294,7 +294,7 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Optionen Wiederherstellen</string>
     <string name="CoinOption_Fast_Subtitle">0-2 Stunden (Empfohlen)</string>
-    <string name="CoinOption_RestoreSourceDescription">Links zu API-Quellen: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_RestoreSourceDescription">Links zu API-Quellen: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
     <string name="CoinOption_Slow_Subtitle">1–12 Stunden</string>
     <string name="CoinOption_AddressFormatTitle">Wählen Sie das Adressformat aus</string>
     <string name="CoinOption_SyncModeTitle">Parameter wiederherstellen</string>
