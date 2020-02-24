@@ -200,6 +200,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <string name="SettingsSecurity_BlockchainSettings">Paramètres de la Blockchain</string>
+    <string name="SettingsSecurity_EnableTor">Activer Tor</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor peut sécuriser vos activités de navigation sur votre portefeuille. Autoriser l\'utilisation du navigateur Tor dans les paramètres.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
