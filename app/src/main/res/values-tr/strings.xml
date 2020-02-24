@@ -238,7 +238,7 @@
     <string name="Eos_Backend_Error_AccountNotExist">Bu hesap mevcut değil</string>
     <string name="Eos_Backend_Error_InsufficientRam">EOS hesabınızda bu kripto parayı göndermek için yeterli RAM bulunmuyor. Devam etmek için EOS RAM hissenizi arttırmak gerekiyor.</string>
     <string name="Binance_Backend_Error_MemoRequired">Aktarım işleminde alıcı boş olmayan not istiyor</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Notun yalnızca rakam içermesini gerektirir</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Kilidi Aç</string>
     <string name="Hud_Text_Success">Başarılı</string>
@@ -300,7 +300,7 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
     <string name="CoinOption_Fast_Subtitle">0-2 saat (Tavsiye edilen)</string>
-    <string name="CoinOption_RestoreSourceDescription">API kaynak linkleri: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/ap</string>
+    <string name="CoinOption_RestoreSourceDescription">API kaynak linkleri: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/ap/</string>
     <string name="CoinOption_Slow_Subtitle">1-12 saat</string>
     <string name="CoinOption_AddressFormatTitle">Adres formatını seçin</string>
     <string name="CoinOption_SyncModeTitle">Geri Yükleme Ayarları</string>
