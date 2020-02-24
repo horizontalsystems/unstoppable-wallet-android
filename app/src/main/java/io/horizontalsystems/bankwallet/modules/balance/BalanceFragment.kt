@@ -181,7 +181,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
         headerViewItem.apply {
             balanceText.text = xBalanceText
-            balanceText.setTextColor(xBalanceTextColor)
+            context?.let { context -> balanceText.setTextColor(getBalanceTextColor(context)) }
         }
     }
 }

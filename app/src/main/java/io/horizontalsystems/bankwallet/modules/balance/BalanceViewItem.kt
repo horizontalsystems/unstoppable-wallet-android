@@ -1,13 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.content.Context
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBlockedChartCoins
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -42,7 +43,7 @@ data class BalanceViewItem(
 }
 
 data class RateDiff(
-        val deemedValue:DeemedValue,
+        val deemedValue: DeemedValue,
         val positive: Boolean
 )
 
@@ -52,7 +53,8 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
         App.numberFormatter.format(it)
     }
 
-    val xBalanceTextColor = ContextCompat.getColor(App.instance, if (upToDate) R.color.yellow_d else R.color.yellow_50)
+    fun getBalanceTextColor(context: Context) = ContextCompat.getColor(context, if (upToDate) R.color.yellow_d else R.color.yellow_50)
+
 }
 
 class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)

@@ -31,7 +31,7 @@ abstract class BaseActivity : CoreActivity() {
                 false,
                 object : AlertDialogFragment.Listener {
                     override fun onButtonClick() {
-                        val imeManager = App.instance.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imeManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imeManager.showInputMethodPicker()
                         hideSoftKeyboard()
                         Handler().postDelayed({

@@ -178,7 +178,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
 
         txValueInFiat.text = transactionRecord.currencyValue?.let {
-            App.numberFormatter.formatForTransactions(it, incoming, canUseLessSymbol = true, trimmable = true)
+            App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
         }
 
         val lockIcon = when {

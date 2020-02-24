@@ -6,7 +6,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import kotlinx.android.synthetic.main.view_transaction_full_info_item.view.*
 
@@ -78,7 +77,7 @@ class FullTransactionInfoItemView : ConstraintLayout {
     }
 
     private fun showTypeIcon(icon: Int) {
-        typeIcon.setImageDrawable(ContextCompat.getDrawable(App.instance, icon))
+        typeIcon.setImageDrawable(ContextCompat.getDrawable(context, icon))
         typeIcon.visibility = View.VISIBLE
     }
 

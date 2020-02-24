@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.content.Context
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -113,12 +113,12 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return "${currencyValue.currency.symbol}$formatted"
     }
 
-    override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean, canUseLessSymbol: Boolean, trimmable: Boolean): SpannableString {
+    override fun formatForTransactions(context: Context, currencyValue: CurrencyValue, isIncoming: Boolean, canUseLessSymbol: Boolean, trimmable: Boolean): SpannableString {
         val spannable = SpannableString(format(currencyValue, showNegativeSign = false, trimmable = trimmable, canUseLessSymbol = canUseLessSymbol))
 
         //  set color
         val amountTextColor = if (isIncoming) R.color.green_d else R.color.yellow_d
-        val color = ContextCompat.getColor(App.instance, amountTextColor)
+        val color = ContextCompat.getColor(context, amountTextColor)
 
         spannable.setSpan(ForegroundColorSpan(color), 0, spannable.length, 0)
         return spannable

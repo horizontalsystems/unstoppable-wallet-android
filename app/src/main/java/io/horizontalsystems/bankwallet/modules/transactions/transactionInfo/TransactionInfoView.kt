@@ -93,7 +93,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     fiatValueWrapper.visibility = View.VISIBLE
                     fiatName.visibility = View.VISIBLE
 
-                    fiatValue.text =  App.numberFormatter.formatForTransactions(txRec.currencyValue, incoming, canUseLessSymbol = false, trimmable = false)
+                    fiatValue.text =  App.numberFormatter.formatForTransactions(context, txRec.currencyValue, incoming, canUseLessSymbol = false, trimmable = false)
 
                     val lockIcon = when {
                         txRec.lockInfo == null -> 0
