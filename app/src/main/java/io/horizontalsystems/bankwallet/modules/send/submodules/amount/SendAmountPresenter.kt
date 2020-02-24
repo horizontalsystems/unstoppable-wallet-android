@@ -3,16 +3,15 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.InsufficientBalance
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.TooFewAmount
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.math.RoundingMode
-
 
 class SendAmountPresenter(
         val view: SendAmountModule.IView,

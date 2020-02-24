@@ -171,7 +171,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:b589aa1'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:c9e55cf'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:c12eab7'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:344f900'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
@@ -191,6 +191,8 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':components:languageswitcher')
+    implementation project(':components:currencyswitcher')
+    implementation project(':components:keystore')
     implementation project(':components:pin')
 
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha03'

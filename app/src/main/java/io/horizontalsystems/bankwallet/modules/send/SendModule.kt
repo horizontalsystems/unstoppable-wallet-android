@@ -35,7 +35,7 @@ object SendModule {
         fun setSendButtonEnabled(enabled: Boolean)
         fun showConfirmation(confirmationViewItems: List<SendConfirmationViewItem>)
         fun showErrorInToast(error: Throwable)
-        fun showErrorInDialog(coinException: CoinException)
+        fun showErrorInDialog(coinException: LocalizedException)
     }
 
     interface IViewDelegate {

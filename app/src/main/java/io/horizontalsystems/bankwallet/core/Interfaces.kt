@@ -5,13 +5,14 @@ import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.core.entities.AppVersion
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.xrateskit.entities.ChartInfo
@@ -70,7 +71,7 @@ interface IAccountManager {
     val deleteAccountObservable: Flowable<String>
 
     fun account(coinType: CoinType): Account?
-    fun preloadAccounts()
+    fun loadAccounts()
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
@@ -125,12 +126,6 @@ interface IClipboardManager {
     fun copyText(text: String)
     fun getCopiedText(): String
     val hasPrimaryClip: Boolean
-}
-
-interface ICurrencyManager {
-    var baseCurrency: Currency
-    val baseCurrencyUpdatedSignal: Observable<Unit>
-    val currencies: List<Currency>
 }
 
 interface ITransactionDataProviderManager {
@@ -419,7 +414,7 @@ interface IBlockedChartCoins {
     var blockedCoins: MutableList<String>
 }
 
-interface INetManager{
+interface INetManager {
     fun start()
     fun stop(): Single<Boolean>
 }

@@ -34,7 +34,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
         return accounts.find { account -> coinType.canSupport(account.type) }
     }
 
-    override fun preloadAccounts() {
+    override fun loadAccounts() {
         val accounts = storage.allAccounts()
         cache.set(accounts)
     }

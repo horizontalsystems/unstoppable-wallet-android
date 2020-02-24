@@ -31,7 +31,6 @@
     <!--Welcome-->
 
     <string name="Welcome_Title">Unstoppable \nWallet</string>
-    <string name="Welcome_Subtitle">Be Free, Be Unstoppable</string>
     <string name="Welcome_SecurityCenter">Security Center</string>
     <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
@@ -224,7 +223,7 @@
     <string name="FullInfo_Source_Offline">Offline</string>
 
     <string name="FullInfo_Error_ProviderOffline">Offline</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaction was not found</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transaction can not be found on the blockchain</string>
     <string name="FullInfo_Error_Retry">Retry</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
 
@@ -275,11 +274,6 @@
     <string name="SettingsSecurity_EnableTor">Enable Tor</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
 
-    <!--Setting_Currency-->
-
-    <string name="SettingsCurrency_Title">Base Currency</string>
-    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
-
     <!--Setting_About-->
 
     <string name="SettingsAbout_Title">About</string>
@@ -321,20 +315,14 @@
     <string name="Notification_Up">Up</string>
     <string name="Notification_Down">Down</string>
 
-    <!--Alert-->
-
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_TitleWarning">Warning</string>
-    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” > “Security” > “Screen Lock” and enable the lock screen setting.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
-
     <!--Errors-->
 
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
     <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
     <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
     <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
 
     <!--Hud texts-->
 
@@ -347,12 +335,6 @@
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <string name="Hud_UnknownError">%s</string>
-
-    <!--OS Pin-->
-
-    <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
 
     <!--Manage Coins-->
 
@@ -431,7 +413,7 @@
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast" translatable="false">API</string>
     <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
-    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \nbch.horizontalsystems.xyz/apg</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
     <string name="CoinOption_Slow" translatable="false">Blockchain</string>
     <string name="CoinOption_Slow_Subtitle">1–24 hours</string>
     <string name="CoinOption_AddressFormatTitle">Bitcoin address format</string>

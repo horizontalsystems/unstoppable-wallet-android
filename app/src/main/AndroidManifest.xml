@@ -84,7 +84,7 @@
             android:name="io.horizontalsystems.pin.PinActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.basecurrency.BaseCurrencySettingsActivity"
+            android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.managecoins.views.ManageWalletsActivity"
@@ -102,7 +102,7 @@
             android:name=".modules.restore.eos.RestoreEosActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.keystore.KeyStoreActivity"
+            android:name="io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.eos.BackupEosActivity"

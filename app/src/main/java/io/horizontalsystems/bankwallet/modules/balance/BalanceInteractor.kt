@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -17,8 +18,8 @@ class BalanceInteractor(
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager
-) : BalanceModule.IInteractor {
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
+    : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
 

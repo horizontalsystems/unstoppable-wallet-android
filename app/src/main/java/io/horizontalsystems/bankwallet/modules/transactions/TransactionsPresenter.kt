@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
 class TransactionsPresenter(

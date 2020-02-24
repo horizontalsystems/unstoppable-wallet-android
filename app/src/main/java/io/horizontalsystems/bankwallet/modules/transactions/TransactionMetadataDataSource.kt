@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
 class TransactionMetadataDataSource {

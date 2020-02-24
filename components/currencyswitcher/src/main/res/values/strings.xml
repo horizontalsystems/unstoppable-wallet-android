@@ -1,0 +1,7 @@
+<resources>
+    <!--Setting_Currency-->
+
+    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_InfoText">Real-time and historical exchange rates are provided by CryptoCompare.com</string>
+
+</resources>
