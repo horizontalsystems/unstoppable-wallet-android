@@ -25,6 +25,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_incoming" />
 
+    <ImageView
+        android:id="@+id/doubleSpendIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:src="@drawable/ic_doublespend"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/txDate"
         style="@style/Headline2"
@@ -72,7 +82,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
             android:src="@drawable/ic_incoming"
-            android:tint="?ColorRemus"/>
+            android:tint="?ColorRemus" />
     </LinearLayout>
 
     <TextView

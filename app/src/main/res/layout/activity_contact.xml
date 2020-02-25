@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <io.horizontalsystems.views.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.horizontalsystems.views.CellView
+        android:id="@+id/mail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:imageDrawable="@drawable/ic_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
+        app:rightArrow="true"
+        app:title="@string/SettingsContact_Email" />
+
+    <io.horizontalsystems.views.CellView
+        android:id="@+id/walletHelpTelegramGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:bottomBorder="true"
+        app:imageDrawable="@drawable/ic_telegram"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mail"
+        app:rightArrow="true"
+        app:title="@string/SettingsContact_WalletHelpTelegram" />
+
+    <io.horizontalsystems.views.CellView
+        android:id="@+id/developersTelegramGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:bottomBorder="true"
+        app:imageDrawable="@drawable/ic_telegram"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/walletHelpTelegramGroup"
+        app:rightArrow="true"
+        app:title="@string/SettingsContact_DevelopersTelegram" />
+
+    <io.horizontalsystems.views.CellView
+        android:id="@+id/appStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:bottomBorder="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/developersTelegramGroup"
+        app:rightArrow="true"
+        app:title="@string/SettingsContact_AppStatus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

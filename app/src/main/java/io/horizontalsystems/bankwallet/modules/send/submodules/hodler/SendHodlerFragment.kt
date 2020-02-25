@@ -10,8 +10,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
-import io.horizontalsystems.bankwallet.ui.dialogs.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.dialogs.SelectorItem
 import kotlinx.android.synthetic.main.view_hodler_input.*
 
 class SendHodlerFragment(

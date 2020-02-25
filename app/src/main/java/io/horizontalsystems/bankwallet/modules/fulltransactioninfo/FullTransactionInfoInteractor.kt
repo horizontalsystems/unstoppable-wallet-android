@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import io.horizontalsystems.bankwallet.core.managers.TransactionDataProviderManager
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

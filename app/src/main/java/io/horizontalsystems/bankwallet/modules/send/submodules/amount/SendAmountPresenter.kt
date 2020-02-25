@@ -3,16 +3,15 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.InsufficientBalance
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.TooFewAmount
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.math.RoundingMode
-
 
 class SendAmountPresenter(
         val view: SendAmountModule.IView,
@@ -20,7 +19,7 @@ class SendAmountPresenter(
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
         private val baseCurrency: Currency)
-    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IAmountModule {
+    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
     var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
 
@@ -188,6 +187,43 @@ class SendAmountPresenter(
 
         moduleDelegate?.onChangeAmount()
         view.addTextChangeListener()
+    }
+
+    // IInteractorDelegate
+
+    override fun didUpdateRate(rate: BigDecimal) {
+        syncXRate(rate)
+    }
+
+    override fun willEnterForeground() {
+        syncXRate(interactor.getRate())
+    }
+
+    // ViewModel
+
+    override fun onCleared() {
+        super.onCleared()
+        interactor.onCleared()
+    }
+
+    // Internal methods
+
+    private fun syncXRate(rate: BigDecimal?) {
+        if (rate == xRate) {
+            return
+        }
+
+        xRate = rate
+        inputType = when (xRate) {
+            null -> SendModule.InputType.COIN
+            else -> interactor.defaultInputType
+        }
+
+        syncAmount()
+        syncAvailableBalance()
+        syncAmountType()
+        syncHint()
+        syncSwitchButton()
     }
 
     private fun syncAmount() {

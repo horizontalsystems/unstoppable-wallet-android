@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
@@ -20,9 +22,11 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     val isSortOn = SingleLiveEvent<Boolean>()
     val setHeaderViewItem = SingleLiveEvent<BalanceHeaderViewItem>()
-    val setViewItems = SingleLiveEvent<List<BalanceViewItem>>() // MuLiveData
+    val setViewItems = SingleLiveEvent<List<BalanceViewItem>>()
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
+
+    private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     fun init() {
         BalanceModule.init(this, this)
@@ -67,7 +71,14 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun set(viewItems: List<BalanceViewItem>) {
-        setViewItems.postValue(viewItems)
+        /**
+         * viewItems are updated very often and partially, using updateType payload for recyclerView adapter.
+         * Since LiveData doesn't handle backpressure and propagates only last item, sometimes view does not receive updates.
+         * As a temporary solution LiveData.setValue() is used instead of postValue(), also it is called in main thread using Handler.
+         */
+        mainThreadHandler.post {
+            setViewItems.value = viewItems
+        }
     }
 
     override fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType) {

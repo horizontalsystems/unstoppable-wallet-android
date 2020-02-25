@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.core.helpers.DateHelper
 import java.math.BigInteger
 
 class FullTransactionEthereumAdapter(private val provider: FullTransactionInfoModule.EthereumForksProvider,

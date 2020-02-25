@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
-
 
 class SendFeePresenter(
         val view: SendFeeModule.IView,
@@ -45,8 +45,8 @@ class SendFeePresenter(
 
     private fun syncError() {
 
-        if(error != null) {
-            view.setError( error )
+        if (error != null) {
+            view.setError(error)
             return
         }
 
@@ -179,8 +179,8 @@ class SendFeePresenter(
         }
     }
 
-    private fun getFeeRateInfoByPriority( searchList: List<FeeRateInfo>, priority: FeeRatePriority): FeeRateInfo?{
-        return searchList?.find { it.priority == priority }
+    private fun getFeeRateInfoByPriority(searchList: List<FeeRateInfo>, priority: FeeRatePriority): FeeRateInfo? {
+        return searchList.find { it.priority == priority }
     }
 
     private fun feeRateInfoViewItem(rateInfo: FeeRateInfo): SendFeeModule.FeeRateInfoViewItem {
@@ -196,8 +196,9 @@ class SendFeePresenter(
         moduleDelegate?.onUpdateFeeRate()
     }
 
-    override fun didUpdate(feeRates: List<FeeRateInfo>) {
+    // IInteractorDelegate
 
+    override fun didUpdate(feeRates: List<FeeRateInfo>) {
         this.feeRates = feeRates
         moduleDelegate?.onUpdateFeeRate()
     }
@@ -205,6 +206,11 @@ class SendFeePresenter(
     override fun didReceiveError(error: Exception) {
         this.error = error
         moduleDelegate?.onUpdateFeeRate()
+    }
+
+    override fun didUpdateExchangeRate(rate: BigDecimal) {
+        xRate = rate
+        syncFeeLabels()
     }
 
     // ViewModel

@@ -16,7 +16,8 @@ data class TransactionRecord(
         val to: String?,
         val type: TransactionType,
         val lockInfo: TransactionLockInfo? = null,
-        val failed: Boolean = false)
+        val failed: Boolean = false,
+        val conflictingTxHash: String? = null)
     : Comparable<TransactionRecord> {
 
     override fun compareTo(other: TransactionRecord): Int {

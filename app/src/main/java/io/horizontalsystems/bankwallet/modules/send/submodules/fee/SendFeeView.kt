@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 

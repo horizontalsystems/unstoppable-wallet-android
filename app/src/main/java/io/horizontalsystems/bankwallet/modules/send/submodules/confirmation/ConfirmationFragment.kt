@@ -8,15 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.CoinException
+import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.AlertDialogFragment
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
 
@@ -60,7 +60,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         })
 
         presenterView?.showCopied?.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         presenterView?.addSecondaryDataViewItem?.observe(viewLifecycleOwner, Observer { secondaryData ->
@@ -89,7 +89,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         })
 
         sendView?.errorInDialog?.observe(viewLifecycleOwner, Observer { coinThrowable ->
-            val errorText = coinThrowable.errorTextRes?.let { getString(it) } ?: coinThrowable.nonTranslatableText
+            val errorText = getString(coinThrowable.errorTextRes)
             AlertDialogFragment.newInstance(
                     descriptionString = errorText,
                     buttonText = R.string.Alert_Ok,
@@ -110,13 +110,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
     private fun getErrorText(error: Throwable): String {
         return when (error) {
             is UnknownHostException -> getString(R.string.Hud_Text_NoInternet)
-            is CoinException -> {
-                error.errorTextRes?.let {
-                    return getString(it)
-                }
-
-                return error.nonTranslatableText ?: getString(R.string.Hud_UnknownError, error)
-            }
+            is LocalizedException -> getString(error.errorTextRes)
             else -> getString(R.string.Hud_UnknownError, error)
         }
     }

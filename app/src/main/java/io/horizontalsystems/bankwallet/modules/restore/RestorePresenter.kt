@@ -1,33 +1,49 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
 class RestorePresenter(
-        private val router: RestoreModule.Router,
+        val view: RestoreModule.IView,
+        val router: RestoreModule.IRouter,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
-    : RestoreModule.ViewDelegate {
+    : ViewModel(), RestoreModule.ViewDelegate {
 
-    var view: RestoreModule.View? = null
-
-    //  View Delegate
+    private var accountType: AccountType? = null
+    private var predefinedAccountType: PredefinedAccountType? = null
 
     override var items = listOf<PredefinedAccountType>()
 
-    override fun viewDidLoad() {
+    override fun onLoad() {
         items = predefinedAccountTypeManager.allTypes
-        view?.reload(items)
+        view.reload(items)
     }
 
     override fun onSelect(predefinedAccountType: PredefinedAccountType) {
-        router.startRestoreCoins(predefinedAccountType)
+        this.predefinedAccountType = predefinedAccountType
+        router.showKeyInput(predefinedAccountType)
+    }
+
+    override fun didEnterValidAccount(accountType: AccountType) {
+        this.accountType = accountType
+        if (predefinedAccountType == PredefinedAccountType.Standard) {
+            router.showCoinSettings()
+        } else {
+            predefinedAccountType?.let { router.showRestoreCoins(it, accountType) }
+        }
+    }
+
+    override fun didReturnFromCoinSettings() {
+        predefinedAccountType?.let {
+            accountType?.let { accountType ->
+                router.showRestoreCoins(it, accountType)
+            }
+        }
     }
 
     override fun onClickClose() {
-        router.close()
-    }
-
-    override fun onRestore() {
         router.close()
     }
 

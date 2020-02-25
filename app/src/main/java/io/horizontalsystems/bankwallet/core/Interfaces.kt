@@ -1,17 +1,18 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.text.SpannableString
-import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
+import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.core.entities.AppVersion
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.xrateskit.entities.ChartInfo
@@ -23,7 +24,6 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
-import javax.crypto.SecretKey
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Unit>
@@ -38,39 +38,30 @@ interface IAdapterManager {
 
 interface ILocalStorage {
     var isBackedUp: Boolean
-    var isFingerprintEnabled: Boolean
     var sendInputType: SendModule.InputType?
-    var isLightModeOn: Boolean
     var iUnderstand: Boolean
     var baseCurrencyCode: String?
     var blockTillDate: Long?
-    var failedAttempts: Int?
-    var lockoutUptime: Long?
+
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
     var baseBinanceProvider: String?
     var baseEosProvider: String?
-    var syncMode: SyncMode
+    var syncMode: SyncMode?
     var sortType: BalanceSortType
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
     var isLockTimeEnabled: Boolean
     var encryptedSampleText: String?
+    var bitcoinDerivation: AccountType.Derivation?
+    var torEnabled: Boolean
 
     fun clear()
 }
 
 interface IChartTypeStorage {
     var chartType: ChartType?
-}
-
-interface ISecuredStorage {
-    val authData: AuthData?
-    val savedPin: String?
-    fun savePin(pin: String)
-    fun removePin()
-    fun pinIsEmpty(): Boolean
 }
 
 interface IAccountManager {
@@ -80,7 +71,7 @@ interface IAccountManager {
     val deleteAccountObservable: Flowable<String>
 
     fun account(coinType: CoinType): Account?
-    fun preloadAccounts()
+    fun loadAccounts()
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
@@ -112,6 +103,7 @@ interface IWalletStorage {
     fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun wallet(account: Account, coin: Coin): Wallet?
 }
 
 interface IPredefinedAccountTypeManager {
@@ -130,33 +122,10 @@ interface INetworkManager {
     fun ping(host: String, url: String): Flowable<Any>
 }
 
-interface IEncryptionManager {
-    fun encrypt(data: String): String
-    fun decrypt(data: String): String
-    fun getCryptoObject(): BiometricPrompt.CryptoObject?
-}
-
-interface IKeyStoreManager {
-    val isKeyInvalidated: Boolean
-    val isUserNotAuthenticated: Boolean
-
-    fun removeKey()
-}
-
-interface IKeyProvider {
-    fun getKey(): SecretKey
-}
-
 interface IClipboardManager {
     fun copyText(text: String)
     fun getCopiedText(): String
     val hasPrimaryClip: Boolean
-}
-
-interface ICurrencyManager {
-    var baseCurrency: Currency
-    val baseCurrencyUpdatedSignal: Observable<Unit>
-    val currencies: List<Currency>
 }
 
 interface ITransactionDataProviderManager {
@@ -180,15 +149,6 @@ interface IWordsManager {
 
     fun validate(words: List<String>)
     fun generateWords(count: Int = 12): List<String>
-}
-
-interface ILanguageManager {
-    var currentLocale: Locale
-    var currentLanguage: String
-    val currentLanguageName: String
-
-    fun getName(language: String): String
-    fun getNativeName(language: String): String
 }
 
 sealed class AdapterState {
@@ -224,8 +184,8 @@ interface IBinanceKitManager {
 
 interface ITransactionsAdapter {
     val confirmationsThreshold: Int
-    val lastBlockHeight: Int?
-    val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+    val lastBlockInfo: LastBlockInfo?
+    val lastBlockUpdatedFlowable: Flowable<Unit>
 
     fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>>
     val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
@@ -243,6 +203,7 @@ interface IBalanceAdapter {
 
 interface IReceiveAdapter {
     val receiveAddress: String
+    fun getReceiveAddressType(wallet: Wallet): String?
 }
 
 interface ISendBitcoinAdapter {
@@ -299,56 +260,26 @@ interface IAdapter {
     val debugInfo: String
 }
 
-interface ISystemInfoManager {
-    val appVersion: String
-    val isSystemLockOff: Boolean
-    val biometricAuthSupported: Boolean
-    val deviceModel: String
-    val osVersion: String
-}
-
 interface IAppStatusManager {
     val status: Map<String, Any>
-}
-
-interface IPinManager {
-    var isFingerprintEnabled: Boolean
-    val isPinSet: Boolean
-
-    fun store(pin: String)
-    fun validate(pin: String): Boolean
-    fun clear()
-}
-
-interface ILockManager {
-    var isLocked: Boolean
-    fun onUnlock()
 }
 
 interface IAppConfigProvider {
     val companyWebPageLink: String
     val appWebPageLink: String
     val reportEmail: String
-    val reportTelegramGroup: String
+    val walletHelpTelegramGroup: String
+    val developersTelegramGroup: String
     val ipfsId: String
     val ipfsMainGateway: String
     val ipfsFallbackGateway: String
     val infuraProjectId: String?
     val infuraProjectSecret: String?
-    val btcCoreRpcUrl: String?
-    val btcCoreRpcUser: String?
-    val btcCoreRpcPassword: String?
     val fiatDecimal: Int
     val maxDecimal: Int
-    val testMode: Boolean
-    val localizations: List<String>
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
-}
-
-interface OneTimerDelegate {
-    fun onFire()
 }
 
 interface IRateStorage {
@@ -425,25 +356,6 @@ interface IEnabledWalletStorage {
     fun deleteAll()
 }
 
-interface ILockoutManager {
-    fun didFailUnlock()
-    fun dropFailedAttempts()
-
-    val currentState: LockoutState
-}
-
-interface IUptimeProvider {
-    val uptime: Long
-}
-
-interface ILockoutUntilDateFactory {
-    fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date?
-}
-
-interface ICurrentDateProvider {
-    val currentDate: Date
-}
-
 interface IWalletManager {
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
@@ -458,9 +370,10 @@ interface IWalletManager {
 
 interface IAppNumberFormatter {
     fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false, trimmable: Boolean = false): String?
-    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true, maxFraction: Int? = null): String?
+    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
+    fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean = false, maxFraction: Int? = null): String?
     fun formatForTransactions(coinValue: CoinValue): String?
-    fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
+    fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean, canUseLessSymbol: Boolean, trimmable: Boolean): SpannableString
     fun format(value: Double, showSign: Boolean = false, precision: Int = 8): String
     fun format(value: BigDecimal, precision: Int): String?
 }
@@ -478,9 +391,32 @@ interface IBackgroundRateAlertScheduler {
     fun stopPeriodicWorker()
 }
 
-interface ICoinSettingsManager{
-    fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin) : CoinSettings
-    fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings) : CoinSettings
+interface ICoinSettingsManager {
+    var syncMode: SyncMode
+    var bitcoinDerivation: AccountType.Derivation
+    fun coinSettingsForCreate(coinType: CoinType): CoinSettings
+    fun coinSettings(coinType: CoinType): CoinSettings
+}
+
+interface IAccountCleaner {
+    fun clearAccounts(accountIds: List<String>)
+    fun clearAccount(coinType: CoinType, accountId: String)
+}
+
+interface IRateCoinMapper {
+    var convertedCoinMap: MutableMap<String, String>
+    var unconvertedCoinMap: MutableMap<String, String>
+
+    fun addCoin(direction: RateDirectionMap, from: String, to: String?)
+}
+
+interface IBlockedChartCoins {
+    var blockedCoins: MutableList<String>
+}
+
+interface INetManager {
+    fun start()
+    fun stop(): Single<Boolean>
 }
 
 enum class FeeRatePriority(val value: Int) {

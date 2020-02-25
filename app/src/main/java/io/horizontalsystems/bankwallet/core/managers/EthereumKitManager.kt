@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.IAppConfigTestMode
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 
-class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
+class EthereumKitManager(appConfig: IAppConfigTestMode) : IEthereumKitManager {
     private var kit: EthereumKit? = null
     private var useCount = 0
     private val testMode = appConfig.testMode

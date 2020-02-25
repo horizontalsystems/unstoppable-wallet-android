@@ -66,4 +66,19 @@ class TransactionItemDataSource {
     fun shouldInsertRecord(record: TransactionRecord): Boolean {
         return items.lastOrNull()?.record?.let { it < record } ?: true
     }
+
+    fun itemIndexesForLocked(wallet: Wallet, unlockingBefore: Long, oldBlockTimestamp: Long?): List<Int> {
+        val indexes = mutableListOf<Int>()
+
+        items.forEachIndexed { index, item ->
+            if (item.wallet == wallet && item.record.lockInfo != null &&
+                    item.record.lockInfo.lockedUntil.time / 1000 > oldBlockTimestamp ?: 0 &&
+                    item.record.lockInfo.lockedUntil.time / 1000 <= unlockingBefore) {
+                indexes.add(index)
+            }
+        }
+
+        return indexes
+    }
+
 }

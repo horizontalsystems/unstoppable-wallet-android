@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.welcome
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class WelcomeViewModel : ViewModel(), WelcomeModule.IView, WelcomeModule.IRouter {
 
@@ -10,6 +10,7 @@ class WelcomeViewModel : ViewModel(), WelcomeModule.IView, WelcomeModule.IRouter
 
     val openRestoreModule = SingleLiveEvent<Void>()
     val openCreateWalletModule = SingleLiveEvent<Void>()
+    val openTorPage = SingleLiveEvent<Void>()
     val appVersionLiveData = MutableLiveData<String>()
 
     fun init() {
@@ -31,5 +32,9 @@ class WelcomeViewModel : ViewModel(), WelcomeModule.IView, WelcomeModule.IRouter
 
     override fun openCreateWalletModule() {
         openCreateWalletModule.call()
+    }
+
+    override fun openTorPage() {
+        openTorPage.call()
     }
 }

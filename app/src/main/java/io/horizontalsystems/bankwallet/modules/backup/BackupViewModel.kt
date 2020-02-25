@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Account
 
 class BackupViewModel : ViewModel(), BackupModule.View, BackupModule.Router {
@@ -12,12 +12,17 @@ class BackupViewModel : ViewModel(), BackupModule.View, BackupModule.Router {
     val startBackupWordsModule = SingleLiveEvent<List<String>>()
     val startBackupEosModule = SingleLiveEvent<Pair<String, String>>()
     val closeLiveEvent = SingleLiveEvent<Void>()
+    val showSuccessAndFinishEvent = SingleLiveEvent<Void>()
 
     fun init(account: Account) {
         BackupModule.init(this, this, account)
     }
 
     // router
+
+    override fun showSuccessAndFinish() {
+        showSuccessAndFinishEvent.call()
+    }
 
     override fun startUnlockPinModule() {
         startPinModule.call()

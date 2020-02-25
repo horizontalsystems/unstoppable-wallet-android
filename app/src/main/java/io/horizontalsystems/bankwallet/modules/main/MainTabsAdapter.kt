@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
 
-class MainTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class MainTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     var currentItem = 0
 

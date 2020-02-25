@@ -6,14 +6,18 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.IAppConfigTestMode
+import io.horizontalsystems.core.ILanguageConfigProvider
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
-class AppConfigProvider : IAppConfigProvider {
+class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfigTestMode {
+
     override val companyWebPageLink: String = "https://horizontalsystems.io"
     override val appWebPageLink: String = "https://unstoppable.money"
     override val reportEmail = "hsdao@protonmail.ch"
-    override val reportTelegramGroup = "unstoppable_wallet"
+    override val walletHelpTelegramGroup = "unstoppable_wallet"
+    override val developersTelegramGroup = "unstoppable_development"
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
     override val ipfsMainGateway = "ipfs-ext.horizontalsystems.xyz"
     override val ipfsFallbackGateway = "ipfs.io"
@@ -21,15 +25,8 @@ class AppConfigProvider : IAppConfigProvider {
     override val infuraProjectId = "2a1306f1d12f4c109a4d4fb9be46b02e"
     override val infuraProjectSecret = "fc479a9290b64a84a15fa6544a130218"
 
-    // Bitcoin-Core RPC config
-    override val btcCoreRpcUrl: String = "https://damp-old-pond.quiknode.io/38708434-ee69-4c9a-84d7-cb0f7f45f2cc/YiBzRob3cfnxTRSvByiyFh2bU93pKzxeyyTHpacaaPF0YnCg9u_cxvvoPIC-3wh6eaQAPyZh5Hd-fDjLGFXCIA==/"
-    override val btcCoreRpcUser: String? = null
-    override val btcCoreRpcPassword: String? = null
-
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
-
-    override val testMode: Boolean = BuildConfig.testMode
 
     override val currencies: List<Currency> = listOf(
             Currency(code = "USD", symbol = "\u0024"),
@@ -37,12 +34,6 @@ class AppConfigProvider : IAppConfigProvider {
             Currency(code = "GBP", symbol = "\u00A3"),
             Currency(code = "JPY", symbol = "\u00A5")
     )
-
-    override val localizations: List<String>
-        get() {
-            val coinsString = App.instance.getString(R.string.localizations)
-            return coinsString.split(",")
-        }
 
     override val featuredCoins: List<Coin>
         get() = listOf(
@@ -119,5 +110,17 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("USDC",      "USD Coin",                "USDC",         6,      CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
             Coin("WTC",       "Waltonchain",             "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74"))
     )
+
+    //  ILanguageConfigProvider
+
+    override val localizations: List<String>
+        get() {
+            val coinsString = App.instance.getString(R.string.localizations)
+            return coinsString.split(",")
+        }
+
+    //  IAppConfigTestMode
+
+    override val testMode: Boolean = BuildConfig.testMode
 
 }

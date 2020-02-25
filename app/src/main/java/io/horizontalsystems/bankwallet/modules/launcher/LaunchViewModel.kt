@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
 

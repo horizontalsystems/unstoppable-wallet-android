@@ -83,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemSentToSelf" />
+        app:layout_constraintTop_toBottomOf="@+id/itemDoubleSpend" />
 
     <View
         android:id="@+id/border2"
@@ -168,5 +168,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemLockTime" />
+
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemDoubleSpend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemSentToSelf" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

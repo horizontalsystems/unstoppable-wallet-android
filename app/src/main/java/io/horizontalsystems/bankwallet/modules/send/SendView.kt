@@ -1,17 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.CoinException
-import java.time.Instant
-import kotlin.math.log
+import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.core.SingleLiveEvent
 
 class SendView : SendModule.IView {
 
     override lateinit var delegate: SendModule.IViewDelegate
 
     val error = MutableLiveData<Throwable>()
-    val errorInDialog = SingleLiveEvent<CoinException>()
+    val errorInDialog = SingleLiveEvent<LocalizedException>()
     val confirmationViewItems = MutableLiveData<List<SendModule.SendConfirmationViewItem>>()
     val showSendConfirmation = SingleLiveEvent<Unit>()
     val sendButtonEnabled = MutableLiveData<Boolean>()
@@ -29,7 +27,7 @@ class SendView : SendModule.IView {
         this.error.value = error
     }
 
-    override fun showErrorInDialog(coinException: CoinException) {
+    override fun showErrorInDialog(coinException: LocalizedException) {
         errorInDialog.value = coinException
     }
 

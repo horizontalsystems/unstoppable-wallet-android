@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TextView android:id="@+id/txtView"
-    style="@style/Subhead1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:hint="0.29%"
-    android:textColor="?ColorRemus"
-    xmlns:android="http://schemas.android.com/apk/res/android" />

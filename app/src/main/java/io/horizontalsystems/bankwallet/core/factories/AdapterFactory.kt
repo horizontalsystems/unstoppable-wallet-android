@@ -2,17 +2,17 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.IAppConfigTestMode
 
 class AdapterFactory(
         private val context: Context,
-        private val appConfigProvider: IAppConfigProvider,
+        private val appConfigProvider: IAppConfigTestMode,
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager) {

@@ -7,7 +7,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+    <io.horizontalsystems.views.ShadowlessToolbarView
         android:id="@+id/shadowlessToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:orientation="vertical" />
     </androidx.core.widget.NestedScrollView>

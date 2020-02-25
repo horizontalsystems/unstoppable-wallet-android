@@ -12,10 +12,10 @@ class SendAddressInteractor(
     var delegate: SendAddressModule.IInteractorDelegate? = null
 
     override val addressFromClipboard: String?
-        get() = textHelper.getCopiedText()
-
-    override val clipboardHasPrimaryClip: Boolean
-        get() = textHelper.hasPrimaryClip
+        get() {
+            val clipboardText = textHelper.getCopiedText().trim()
+            return if (clipboardText.isNotEmpty()) clipboardText else null
+        }
 
     override fun parseAddress(address: String): Pair<String, BigDecimal?> {
         val addressData = addressParser.parse(address)

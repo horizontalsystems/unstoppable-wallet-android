@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import java.math.BigDecimal
 
 object SendAddressModule {
@@ -13,7 +13,6 @@ object SendAddressModule {
     interface IView {
         fun setAddress(address: String?)
         fun setAddressError(error: Exception?)
-        fun setPasteButtonState(enabled: Boolean)
         fun setAddressInputAsEditable(editable: Boolean)
     }
 
@@ -27,7 +26,6 @@ object SendAddressModule {
 
     interface IInteractor {
         val addressFromClipboard: String?
-        val clipboardHasPrimaryClip: Boolean
 
         fun parseAddress(address: String): Pair<String, BigDecimal?>
     }
@@ -59,7 +57,7 @@ object SendAddressModule {
     class Factory(private val coin: Coin,
                   private val editable: Boolean,
                   private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendAddressView()

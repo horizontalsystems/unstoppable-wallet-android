@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="Alert_Ok">확인</string>
+    <!--Alert-->
+    <string name="Alert_KeysInvalidatedTitle">안드로이드 키 저장소 에러</string>
+    <string name="Alert_KeysInvalidatedDescription">안드로이드 잠금 화면이 변경 되어 지갑을 보유한 암호화된 데이터가 최근에 무효화되었습니다.</string>
+    <string name="Alert_TitleWarning">경고</string>
+    <string name="Alert_NoDeviceLockDescription">계속하시려면 이 장치에서 잠금 화면을 설정하세요. \"설정\"으로 이동해서 &gt;\"보안\"&gt;\"스크린 잠금: 을 누르고 잠금 화면 설정을 활성화 해주세요.</string>
+    <string name="Alert_CustomKeyboardIsUsed">귀하께서는 제3자 키보드를 사용하시고 계십니다. 기본 키보드를 사용해 주세요.</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">휴대폰 PIN 번호</string>
+    <string name="OSPin_Confirm_Desciption">이 앱을 사용하시려면 휴대 전화에 비밀번호 (잠금 화면) 이 활성화 되어야 합니다. \n\n안드로이드 설정에서 활성화 하도록 설정 할 수 있습니다.\n\nOS 수준에서 PIN 번호를 비활성화 하시게 되면 안전한 저장에 대한 보안 조치로 인해 이전에 저장된 데이터가 유효하지 않게 되는 것을 명심하세요. 귀하께서는 지갑으로 돌아가시려면 지갑 암호를 복원해야 합니다.</string>
+    <string name="OSPin_Prompt_Desciption">이 앱은 앱 자체가 아닌 안드로이드의 안전한 저장소에 지갑의 중요한 데이터를 유지하려면 휴대 전화의 PIN 번호가 필요합니다.</string>
+</resources>

@@ -8,17 +8,22 @@ import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
 
 class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
+        private val isColdStart: Boolean,
         val showCloseButton: Boolean,
         val router: ManageWalletsModule.IRouter,
         val view: ManageWalletsModule.IView
-        )
-    : ViewModel(), ManageWalletsModule.IViewDelegate {
+) : ViewModel(), ManageWalletsModule.IViewDelegate {
 
     private val wallets = mutableMapOf<Coin, Wallet>()
 
     //  ViewDelegate
 
-    override fun viewDidLoad() {
+    override fun onLoad() {
+        if (isColdStart) {
+            interactor.loadAccounts()
+            interactor.loadWallets()
+        }
+
         interactor.wallets.forEach { wallet ->
             wallets[wallet.coin] = wallet
         }
@@ -28,14 +33,7 @@ class ManageWalletsPresenter(
 
     override fun onEnable(coin: Coin) {
         val account = account(coin) ?: return
-
-        val coinSettingsToRequest = interactor.coinSettingsToRequest(coin, account.origin)
-
-        if (coinSettingsToRequest.isEmpty()) {
-            createWallet(coin, account, mutableMapOf())
-        } else {
-            router.showCoinSettings(coin, coinSettingsToRequest, account.origin)
-        }
+        createWallet(coin, account)
     }
 
     override fun onDisable(coin: Coin) {
@@ -53,6 +51,7 @@ class ManageWalletsPresenter(
         try {
             val account = interactor.createAccount(predefinedAccountType)
             handleCreated(account)
+            view.showSuccess()
         } catch (e: Exception) {
             syncViewItems()
             view.showError(e)
@@ -66,15 +65,20 @@ class ManageWalletsPresenter(
     override fun didRestore(accountType: AccountType) {
         val account = interactor.createRestoredAccount(accountType)
         handleCreated(account)
+
+        if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
+            router.showCoinSettings()
+        } else {
+            view.showSuccess()
+        }
+    }
+
+    override fun onCoinSettingsClose() {
+        view.showSuccess()
     }
 
     override fun onClickCancel() {
         syncViewItems()
-    }
-
-    override fun onSelect(coinSettings: MutableMap<CoinSetting, String>, coin: Coin) {
-        val account = account(coin) ?: return
-        createWallet(coin, account, coinSettings)
     }
 
     private fun account(coin: Coin): Account? {
@@ -106,8 +110,8 @@ class ManageWalletsPresenter(
         view.setItems(viewItems)
     }
 
-    private fun createWallet(coin: Coin, account: Account, requestedCoinSettings: CoinSettings) {
-        val coinSettings = interactor.coinSettingsToSave(coin, account.origin, requestedCoinSettings)
+    private fun createWallet(coin: Coin, account: Account) {
+        val coinSettings = interactor.getCoinSettings(coin.type)
 
         val wallet = Wallet(coin, account, coinSettings)
 
@@ -119,6 +123,5 @@ class ManageWalletsPresenter(
         interactor.save(account)
 
         syncViewItems()
-        view.showSuccess()
     }
 }

@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.welcome
 
-class WelcomePresenter(private val interactor: WelcomeModule.IInteractor, private val router: WelcomeModule.IRouter) : WelcomeModule.IViewDelegate {
+class WelcomePresenter(
+        private val interactor: WelcomeModule.IInteractor,
+        private val router: WelcomeModule.IRouter) : WelcomeModule.IViewDelegate {
 
     var view: WelcomeModule.IView? = null
 
@@ -16,4 +18,7 @@ class WelcomePresenter(private val interactor: WelcomeModule.IInteractor, privat
         router.openRestoreModule()
     }
 
+    override fun openTorPage() {
+        router.openTorPage()
+    }
 }

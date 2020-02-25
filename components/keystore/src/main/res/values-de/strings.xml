@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="Alert_Ok">OK</string>
+    <!--Alert-->
+    <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
+    <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
+    <string name="Alert_TitleWarning">Warnung</string>
+    <string name="Alert_NoDeviceLockDescription">Richten Sie auf diesem Gerät einen Sperrbildschirm ein, um fortzufahren. Gehen Sie zu \"Einstellungen\" &gt; \"Sicherheit\" &gt; \"Bildschirmsperre\" und aktivieren Sie die Bildschirmsperre.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Du verwendest eine Fremdanbieter-Tastatur. Du musst Standard-Tastatur verwenden.</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Telefon PIN</string>
+    <string name="OSPin_Confirm_Desciption">Diese App erfordert, dass Zugangsperre (Bildschirmsperre) aktiviert ist.
+\n\nSie können dies in den Android-Einstellungen vornehmen.
+\n\nBitte beachten Sie, wenn Sie PIN auf dem OS ausgeschaltete haben, wurden die Sicherheitsmaßnahmen im Safe Storage Ihres Telefons für vorher gespeicherte Daten ungültig. Sie müssen Ihre Wallet-Schlüssel wiederherstellen, um an Ihr Wallet zu gelangen.</string>
+    <string name="OSPin_Prompt_Desciption">Diese App benötigt die PIN Ihres Mobiltelefons, um sensible Daten aus Ihrer Wallet im sicheren Speicher des Android-Systems und nicht in der App selbst zu speichern.</string>
+</resources>

@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -30,22 +32,25 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     //
 
     override val confirmationsThreshold: Int = defaultConfirmationsThreshold
-    override val lastBlockHeight: Int?
-        get() = kit.lastBlockInfo?.height
+
+    override val lastBlockInfo: LastBlockInfo?
+        get() = kit.lastBlockInfo?.let { LastBlockInfo(it.height, it.timestamp) }
 
     override val receiveAddress: String
         get() = kit.receiveAddress()
 
+    override fun getReceiveAddressType(wallet: Wallet): String? = null
+
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    protected val lastBlockHeightUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
-        get() = lastBlockHeightUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val lastBlockUpdatedFlowable: Flowable<Unit>
+        get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val stateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -59,7 +64,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         get() = satoshiToBTC(kit.balance.spendable)
 
     override val balanceLocked: BigDecimal?
-        get() = if(kit.balance.unspendable > 0L) satoshiToBTC(kit.balance.unspendable) else null
+        get() = if (kit.balance.unspendable > 0L) satoshiToBTC(kit.balance.unspendable) else null
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
@@ -82,7 +87,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit> {
         return Single.create { emitter ->
             try {
-                kit.send(address, (amount * satoshisInBitcoin).toLong(), feeRate = feeRate.toInt(), pluginData = pluginData ?: mapOf())
+                kit.send(address, (amount * satoshisInBitcoin).toLong(), feeRate = feeRate.toInt(), pluginData = pluginData
+                        ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -92,7 +98,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
 
     fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
         return try {
-            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate.toInt(), pluginData ?: mapOf())
+            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate.toInt(), pluginData
+                    ?: mapOf())
             satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO
@@ -112,7 +119,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
-            val fee = kit.fee(satoshiAmount, address, senderPay = true, feeRate = feeRate.toInt(), pluginData = pluginData ?: mapOf())
+            val fee = kit.fee(satoshiAmount, address, senderPay = true, feeRate = feeRate.toInt(), pluginData = pluginData
+                    ?: mapOf())
             satoshiToBTC(fee, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO
@@ -192,7 +200,8 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 to = to,
                 type = type,
                 failed = transaction.status == TransactionStatus.INVALID,
-                lockInfo = transactionLockInfo
+                lockInfo = transactionLockInfo,
+                conflictingTxHash = transaction.conflictingTxHash
         )
     }
 

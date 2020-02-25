@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Devise de Base</string>
+    <string name="SettingsCurrency_InfoText">Les taux de change en temps réel et historiques sont fournis par CryptoCompare.com</string>
+</resources>

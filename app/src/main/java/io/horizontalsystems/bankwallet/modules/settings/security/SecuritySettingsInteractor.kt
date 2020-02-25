@@ -2,15 +2,18 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IPinManager
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
+import io.horizontalsystems.bankwallet.core.INetManager
+import io.horizontalsystems.core.IPinManager
+import io.horizontalsystems.core.ISystemInfoManager
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsInteractor(
         private val backupManager: IBackupManager,
         private val localStorage: ILocalStorage,
         private val systemInfoManager: ISystemInfoManager,
-        private val pinManager: IPinManager)
+        private val pinManager: IPinManager,
+        private val netManager: INetManager)
     : SecuritySettingsModule.ISecuritySettingsInteractor {
 
     var delegate: SecuritySettingsModule.ISecuritySettingsInteractorDelegate? = null
@@ -34,6 +37,12 @@ class SecuritySettingsInteractor(
             pinManager.isFingerprintEnabled = value
         }
 
+    override var isTorEnabled: Boolean
+        get() = localStorage.torEnabled
+        set(value) {
+            localStorage.torEnabled = value
+        }
+
     override val isPinSet: Boolean
         get() = pinManager.isPinSet
 
@@ -45,4 +54,13 @@ class SecuritySettingsInteractor(
         disposables.clear()
     }
 
+    override fun stopTor() {
+        disposables.add(netManager.stop()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.didStopTor()
+                }, {
+
+                }))
+    }
 }

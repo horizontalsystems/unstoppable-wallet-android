@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.createwallet
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 

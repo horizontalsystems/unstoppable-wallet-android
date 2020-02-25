@@ -8,29 +8,31 @@ platform :android do
   desc "Submit a new Version Build"
   lane :dev_build do |options|
     commit = last_git_commit
-    build_number = options[:build_number]
 
     gradle(task: "clean")
     gradle(task: "assembleDevMainnetVersionHockeyApp", flags: "--stacktrace --no-daemon")
 
-    upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
+    upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
 
   desc "Submit a new Master Build"
   lane :dev_testnet_build do |options|
     commit = last_git_commit
-    build_number = options[:build_number]
 
     gradle(task: "clean")
     gradle(task: "assembleDevMainnetMasterHockeyApp", flags: "--stacktrace --no-daemon")
 
-    upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
+    upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
 
-  private_lane :upload_to_hockey do |options|
-      hockey(
-        api_token: "61f67135578645d3a9a762baa0a75a13",
-        notes: options[:notes],
+  private_lane :upload_to_app_center do |options|
+    appcenter_upload(
+        api_token: options[:api_token],
+        app_name: options[:app_name],
+        owner_name: "Horizontal-Systems",
+        owner_type: "organization",
+        release_notes: options[:notes],
+        notify_testers: true
       )
   end
 

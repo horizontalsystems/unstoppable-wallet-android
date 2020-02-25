@@ -1,48 +1,41 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.preference.PreferenceManager
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
-import com.squareup.leakcanary.LeakCanary
+import androidx.preference.PreferenceManager
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.security.EncryptionManager
-import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
+import io.horizontalsystems.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.managers.KeyStoreCleaner
+import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
-import io.horizontalsystems.bankwallet.localehelper.LocaleHelper
+import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
-import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
+import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.ICoreApp
+import io.horizontalsystems.pin.core.PinManager
+import io.horizontalsystems.pin.core.SecureStorage
 import io.reactivex.plugins.RxJavaPlugins
-import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class App : Application() {
+class App : CoreApp() {
 
-    companion object {
-
-        lateinit var preferences: SharedPreferences
+    companion object : ICoreApp by CoreApp {
 
         lateinit var feeRateProvider: FeeRateProvider
-        lateinit var secureStorage: ISecuredStorage
-        lateinit var localStorage: LocalStorageManager
-        lateinit var keyStoreManager: IKeyStoreManager
-        lateinit var keyProvider: IKeyProvider
-        lateinit var encryptionManager: IEncryptionManager
+        lateinit var localStorage: ILocalStorage
+        lateinit var netKitManager: INetManager
+        lateinit var chartTypeStorage: IChartTypeStorage
+
         lateinit var wordsManager: WordsManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
-        lateinit var currencyManager: ICurrencyManager
         lateinit var backgroundManager: BackgroundManager
-        lateinit var languageManager: ILanguageManager
-        lateinit var systemInfoManager: ISystemInfoManager
-        lateinit var pinManager: IPinManager
-        lateinit var lockManager: ILockManager
         lateinit var keyStoreChangeListener: KeyStoreChangeListener
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
@@ -80,22 +73,14 @@ class App : Application() {
         lateinit var appVersionManager: AppVersionManager
         lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
         lateinit var coinSettingsManager: ICoinSettingsManager
-
-        lateinit var instance: App
-            private set
+        lateinit var accountCleaner: IAccountCleaner
+        lateinit var rateCoinMapper: RateCoinMapper
 
         var lastExitDate: Long = 0
     }
 
     override fun onCreate() {
         super.onCreate()
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return
-        }
-        LeakCanary.install(this)
 
         if (!BuildConfig.DEBUG) {
             //Disable logging for lower levels in Release build
@@ -109,18 +94,17 @@ class App : Application() {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        appConfigProvider = AppConfigProvider()
+        val appConfig = AppConfigProvider()
+        appConfigProvider = appConfig
+        appConfigTestMode = appConfig
+        languageConfigProvider = appConfig
+
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
-        KeyStoreManager("MASTER_KEY").apply {
-            keyStoreManager = this
-            keyProvider = this
-        }
-        encryptionManager = EncryptionManager(keyProvider)
-        secureStorage = SecuredStorageManager(encryptionManager)
-        ethereumKitManager = EthereumKitManager(appConfigProvider)
-        eosKitManager = EosKitManager(appConfigProvider)
-        binanceKitManager = BinanceKitManager(appConfigProvider)
+
+        ethereumKitManager = EthereumKitManager(appConfigTestMode)
+        eosKitManager = EosKitManager(appConfigTestMode)
+        binanceKitManager = BinanceKitManager(appConfigTestMode)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
@@ -129,37 +113,55 @@ class App : Application() {
         walletFactory = WalletFactory()
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(appConfigProvider, walletFactory, enabledWalletsStorage)
-        localStorage = LocalStorageManager()
+
+        LocalStorageManager().apply {
+            localStorage = this
+            chartTypeStorage = this
+            pinStorage = this
+            themeStorage = this
+        }
+
+        netKitManager = NetManager(instance, localStorage)
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()
-        accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
+        accountCleaner = AccountCleaner(appConfigTestMode.testMode)
+        accountManager = AccountManager(accountsStorage, accountCleaner)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
         accountCreator = AccountCreator(AccountFactory(), wordsManager)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
         walletRemover = WalletRemover(accountManager, walletManager)
 
+        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
+            keyStoreManager = this
+            keyProvider = this
+        }
+
+        encryptionManager = EncryptionManager(keyProvider)
+        secureStorage = SecureStorage(encryptionManager)
+
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
-        pinManager = PinManager(secureStorage, localStorage)
+        pinManager = PinManager(secureStorage)
         lockManager = LockManager(pinManager).apply {
             backgroundManager.registerListener(this)
         }
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
-        languageManager = LanguageManager(appConfigProvider, "en")
+        languageManager = LanguageManager()
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
         connectivityManager = ConnectivityManager()
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
-        xRateManager = RateManager(this, walletManager, currencyManager)
+        rateCoinMapper = RateCoinMapper()
+        xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
 
-        transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
+        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
@@ -180,7 +182,15 @@ class App : Application() {
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
-        coinSettingsManager = CoinSettingsManager()
+        coinSettingsManager = CoinSettingsManager(localStorage)
+
+        val nightMode = if (CoreApp.themeStorage.isLightModeOn)
+            AppCompatDelegate.MODE_NIGHT_NO else
+            AppCompatDelegate.MODE_NIGHT_YES
+
+        if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+            AppCompatDelegate.setDefaultNightMode(nightMode)
+        }
     }
 
     override fun attachBaseContext(base: Context) {
@@ -190,21 +200,5 @@ class App : Application() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         localeAwareContext(this)
-    }
-
-    fun localeAwareContext(base: Context): Context {
-        return LocaleHelper.onAttach(base)
-    }
-
-    fun getLocale(): Locale {
-        return LocaleHelper.getLocale(this)
-    }
-
-    fun setLocale(currentLocale: Locale) {
-        LocaleHelper.setLocale(this, currentLocale)
-    }
-
-    fun isLocaleRTL(): Boolean {
-        return LocaleHelper.isRTL(Locale.getDefault())
     }
 }

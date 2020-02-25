@@ -5,14 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.InputTextView
 
 class BackupWordsConfirmFragment : Fragment() {
-    private lateinit var viewModel: BackupWordsViewModel
+
+    val viewModel by activityViewModels<BackupWordsViewModel>()
 
     private var wordIndex1 = -1
     private var wordIndex2 = -1
@@ -26,10 +27,6 @@ class BackupWordsConfirmFragment : Fragment() {
 
         val wordOne: InputTextView? = view.findViewById(R.id.wordOne)
         val wordTwo: InputTextView? = view.findViewById(R.id.wordTwo)
-
-        activity?.let {
-            viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
-        }
 
         viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {

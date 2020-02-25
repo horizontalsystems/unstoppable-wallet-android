@@ -1,95 +1,93 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysViewModel
-import io.horizontalsystems.bankwallet.viewHelpers.inflate
+import io.horizontalsystems.views.AccountButtonItemType
+import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_account.*
 
-class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<ManageKeysAdapter.KeysViewHolder>() {
+
+    interface Listener {
+        fun onClickCreate(item: ManageAccountItem)
+        fun onClickRestore(item: ManageAccountItem)
+        fun onClickBackup(item: ManageAccountItem)
+        fun onClickUnlink(item: ManageAccountItem)
+    }
 
     var items = listOf<ManageAccountItem>()
 
-    private val keys = 1
-    private val keysInfo = 2
+    override fun getItemCount() = items.size
 
-    override fun getItemCount() = items.size + 1
-    override fun getItemViewType(position: Int) = if (position == 0) keysInfo else keys
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            keys -> KeysViewHolder(inflate(parent, R.layout.view_holder_account))
-            else -> KeysInfoViewHolder(inflate(parent, R.layout.view_holder_account_info))
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeysViewHolder {
+        return KeysViewHolder(inflate(parent, R.layout.view_holder_account))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is KeysViewHolder) {
-            holder.bind(items[position - 1])
-        }
+    override fun onBindViewHolder(holder: KeysViewHolder, position: Int) {
+        holder.bind(items[position])
     }
 
     inner class KeysViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(item: ManageAccountItem) {
-            hideButtons()
-            changeStates(isEnabled = true)
-
             val predefinedAccount = item.predefinedAccountType
             val accountTypeTitle = containerView.resources.getString(predefinedAccount.title)
-            accountName.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
-            accountCoins.text = containerView.resources.getString(predefinedAccount.coinCodes)
 
-            buttonNew.isEnabled = predefinedAccount.isCreationSupported()
+            titleText.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
+            subtitleText.text = containerView.resources.getString(predefinedAccount.coinCodes)
+
+            createButton.visibility = View.GONE
+            restoreButton.visibility = View.GONE
+            backupButton.visibility = View.GONE
+            unlinkButton.visibility = View.GONE
 
             if (item.account == null) {
-                changeStates(isEnabled = false)
-
-                buttonNew.visibility = View.VISIBLE
-                buttonNew.setOnClickListener {
-                    viewModel.delegate.onClickCreate(item)
+                if (predefinedAccount.isCreationSupported()) {
+                    createButton.visibility = View.VISIBLE
+                    createButton.bind(containerView.resources.getString(R.string.ManageKeys_Create), AccountButtonItemType.SimpleButton, false) {
+                        listener.onClickCreate(item)
+                    }
                 }
 
-                buttonImport.visibility = View.VISIBLE
-                buttonImport.setOnClickListener { viewModel.delegate.onClickRestore(item) }
+                restoreButton.visibility = View.VISIBLE
+                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.SimpleButton, false) {
+                    listener.onClickRestore(item)
+                }
+
+                headerIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.grey))
 
                 return
             }
 
+            headerIcon.imageTintList = null
+
             val account = item.account
-            if (account.isBackedUp) {
-                buttonShow.visibility = View.VISIBLE
-                buttonShow.setOnClickListener { viewModel.delegate.onClickBackup(item) }
-            } else {
-                buttonBackup.visibility = View.VISIBLE
-            }
 
-            buttonUnlink.visibility = View.VISIBLE
-            buttonUnlink.setOnClickListener { viewModel.delegate.onClickUnlink(item) }
-            buttonBackup.setOnClickListener { viewModel.delegate.onClickBackup(item) }
+            backupButton.visibility = View.VISIBLE
+            unlinkButton.visibility = View.VISIBLE
+
+            backupButton.bind(
+                    title = containerView.resources.getString(R.string.ManageKeys_Backup),
+                    type = AccountButtonItemType.SimpleButton,
+                    showAttentionIcon = !account.isBackedUp,
+                    onClick = {
+                        listener.onClickBackup(item)
+                    })
+
+            unlinkButton.bind(
+                    title = containerView.resources.getString(R.string.ManageKeys_Unlink),
+                    type = AccountButtonItemType.RedButton,
+                    onClick = {
+                        listener.onClickUnlink(item)
+                    })
         }
 
-        private fun hideButtons() {
-            buttonNew.visibility = View.GONE
-            buttonImport.visibility = View.GONE
-            buttonUnlink.visibility = View.GONE
-            buttonShow.visibility = View.GONE
-            buttonBackup.visibility = View.GONE
-        }
-
-        private fun changeStates(isEnabled: Boolean) {
-            viewHolderRoot.isEnabled = isEnabled
-            accountName.isEnabled = isEnabled
-            accountCoins.isEnabled = isEnabled
-
-            keyIcon.isEnabled = isEnabled
-            keyIcon.alpha = if (isEnabled) 1F else 0.25F
-        }
     }
 
-    class KeysInfoViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 }

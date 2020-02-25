@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.components.CellView
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.bankwallet.ui.dialogs.PriceAlertStateSelectorDialog
+import io.horizontalsystems.views.CellView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_alerts.*
 
@@ -29,7 +28,7 @@ class NotificationsActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        presenter = ViewModelProviders.of(this, NotificationsModule.Factory()).get(NotificationsPresenter::class.java)
+        presenter = ViewModelProvider(this, NotificationsModule.Factory()).get(NotificationsPresenter::class.java)
 
         observeView(presenter.view as NotificationsView)
         observeRouter(presenter.router as NotificationsRouter)

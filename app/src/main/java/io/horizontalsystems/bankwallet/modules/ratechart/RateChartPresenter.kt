@@ -2,19 +2,20 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
+import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateChartPresenter(
         val view: View,
+        val rateFormatter: RateFormatter,
         private val interactor: Interactor,
         private val coin: Coin,
         private val currency: Currency,
@@ -58,7 +59,11 @@ class RateChartPresenter(
 
     override fun onTouchSelect(point: ChartPoint) {
         val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
-        view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
+        val volumeValue = point.volume?.let { volume ->
+            CurrencyValue(currency, volume.toBigDecimal())
+        }
+
+        view.showSelectedPoint(ChartPointViewItem(point.timestamp, currencyValue, volumeValue, chartType))
     }
 
     private fun fetchChartInfo() {
@@ -81,7 +86,7 @@ class RateChartPresenter(
         view.hideSpinner()
 
         try {
-            val viewItem = factory.createChartInfo(chartType, info, currency)
+            val viewItem = factory.createChartInfo(chartType, info)
             view.showChartInfo(viewItem)
         } catch (e: Exception) {
             view.showError(e)

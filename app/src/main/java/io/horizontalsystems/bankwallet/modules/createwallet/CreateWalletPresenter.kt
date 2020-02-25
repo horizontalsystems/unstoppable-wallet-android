@@ -29,12 +29,7 @@ class CreateWalletPresenter(
     override fun onEnable(coin: Coin) {
         try {
             val account = resolveAccount(coin.type.predefinedAccountType)
-            val coinSettingsToRequest = interactor.coinSettingsToRequest(coin, AccountOrigin.Created)
-            if (coinSettingsToRequest.isEmpty()) {
-                createWallet(coin, account, coinSettingsToRequest)
-            } else {
-                router.showCoinSettings(coin, coinSettingsToRequest)
-            }
+            createWallet(coin, account)
         } catch (e: Exception) {
             syncViewItems()
         }
@@ -57,21 +52,9 @@ class CreateWalletPresenter(
             if (presentationMode == PresentationMode.Initial) {
                 router.startMainModule()
             } else {
-                router.close()
+                router.showSuccessAndClose()
             }
         }
-    }
-
-    override fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin) {
-        accounts[coin.type.predefinedAccountType]?.let {
-            createWallet(coin, it, coinSettings)
-        } ?:run {
-            syncViewItems()
-        }
-    }
-
-    override fun onCancelSelectingCoinSettings() {
-        syncViewItems()
     }
 
     private fun viewItem(coin: Coin): CoinManageViewItem {
@@ -120,8 +103,8 @@ class CreateWalletPresenter(
         return account
     }
 
-    private fun createWallet(coin: Coin, account: Account, requestedCoinSettings: CoinSettings) {
-        val coinSettings = interactor.coinSettingsToSave(coin, AccountOrigin.Created, requestedCoinSettings)
+    private fun createWallet(coin: Coin, account: Account) {
+        val coinSettings = interactor.coinSettings(coin.type)
 
         wallets[coin] = Wallet(coin, account, coinSettings)
 

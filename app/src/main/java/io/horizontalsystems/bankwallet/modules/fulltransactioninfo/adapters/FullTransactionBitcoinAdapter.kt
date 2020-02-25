@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.core.helpers.DateHelper
 
 class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coin: Coin, val unitName: String)
     : FullTransactionInfoModule.Adapter {
@@ -15,7 +15,7 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         val sections = mutableListOf<FullTransactionSection>()
 
         val blockItems = mutableListOf(
-                FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDate(data.date), icon = FullTransactionIcon.TIME),
+                FullTransactionItem(R.string.FullInfo_Time, value = data.date?.let { DateHelper.getFullDate(it) }, icon = FullTransactionIcon.TIME),
                 FullTransactionItem(R.string.FullInfo_Block, value = data.height.toString(), icon = FullTransactionIcon.BLOCK)
         )
 

@@ -48,83 +48,113 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coinRateWrap" />
 
-    <LinearLayout
-        android:id="@+id/chartActions"
+    <HorizontalScrollView
+        android:id="@+id/chartWrap"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:orientation="horizontal"
-        android:paddingTop="9dp"
-        android:paddingBottom="8dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2">
 
-        <TextView
-            android:id="@+id/button1D"
-            style="@style/TextFlatButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Day"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+        <LinearLayout
+            android:id="@+id/chartActions"
+            android:layout_width="wrap_content"
+            android:layout_height="49dp"
+            android:orientation="horizontal"
+            android:paddingTop="9dp"
+            android:paddingBottom="8dp">
 
-        <TextView
-            android:id="@+id/button1W"
-            style="@style/TextFlatButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Week"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            <TextView
+                android:id="@+id/button1D"
+                style="@style/TextFlatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:text="@string/Charts_TimeDuration_Day" />
 
-        <TextView
-            android:id="@+id/button1M"
-            style="@style/TextFlatButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Month"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            <TextView
+                android:id="@+id/button1W"
+                style="@style/TextFlatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:text="@string/Charts_TimeDuration_Week" />
 
-        <TextView
-            android:id="@+id/button6M"
-            style="@style/TextFlatButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_HalfYear"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            <TextView
+                android:id="@+id/button1M"
+                style="@style/TextFlatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:text="@string/Charts_TimeDuration_Month" />
 
-        <TextView
-            android:id="@+id/button1Y"
-            style="@style/TextFlatButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Year"
-            android:textColor="@color/stateful_button_lightgrey_color" />
+            <TextView
+                android:id="@+id/button3M"
+                style="@style/TextFlatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:text="@string/Charts_TimeDuration_Month3" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/button6M"
+                style="@style/TextFlatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:text="@string/Charts_TimeDuration_HalfYear" />
 
-    <LinearLayout
+            <TextView
+                android:id="@+id/button1Y"
+                style="@style/TextFlatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:text="@string/Charts_TimeDuration_Year" />
+
+            <TextView
+                android:id="@+id/button2Y"
+                style="@style/TextFlatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:text="@string/Charts_TimeDuration_Year2" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chartPointsInfo"
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:orientation="vertical"
         android:paddingTop="2dp"
         android:paddingBottom="8dp"
         android:visibility="invisible"
@@ -133,26 +163,92 @@
         app:layout_constraintTop_toBottomOf="@+id/border2">
 
         <TextView
-            android:id="@+id/pointInfoPrice"
+            android:id="@+id/pointInfoDate"
             style="@style/Body"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="start"
             android:textColor="?ColorLeah"
             android:textSize="14sp"
-            tools:text="3,867.50" />
+            app:layout_constraintEnd_toStartOf="@+id/pointInfoPrice"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="09/02/2020" />
 
         <TextView
-            android:id="@+id/pointInfoDate"
+            android:id="@+id/pointInfoTime"
             style="@font/noto_sans_regular"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="start"
             android:textColor="@color/grey"
             android:textSize="12sp"
-            tools:text="June 18, 2019 at 1:45 PM" />
+            app:layout_constraintEnd_toStartOf="@+id/pointInfoPriceTitle"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pointInfoPrice"
+            tools:text="15:21" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/pointInfoPrice"
+            style="@style/Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="?ColorLeah"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/pointInfoVolume"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/pointInfoDate"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$10,083.34" />
+
+        <TextView
+            android:id="@+id/pointInfoPriceTitle"
+            style="@font/noto_sans_regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/Charts_Price"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/pointInfoVolumeTitle"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/pointInfoTime"
+            app:layout_constraintTop_toBottomOf="@id/pointInfoPrice" />
+
+        <TextView
+            android:id="@+id/pointInfoVolume"
+            style="@style/Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="?ColorLeah"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$36,166B" />
+
+        <TextView
+            android:id="@+id/pointInfoVolumeTitle"
+            style="@font/noto_sans_regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/Charts_Volume"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/pointInfoPriceTitle"
+            app:layout_constraintTop_toBottomOf="@id/pointInfoVolume" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/coinChartView"
@@ -162,7 +258,7 @@
         android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartActions">
+        app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo">
 
         <ProgressBar
             android:id="@+id/chartViewSpinner"
@@ -184,13 +280,13 @@
             android:gravity="center"
             android:textColor="@color/red_d" />
 
-        <io.horizontalsystems.bankwallet.lib.chartview.ChartIndicator
+        <io.horizontalsystems.chartview.ChartIndicator
             android:id="@+id/chartViewIndicator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
-        <io.horizontalsystems.bankwallet.lib.chartview.ChartView
+        <io.horizontalsystems.chartview.ChartView
             android:id="@+id/chartView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -340,7 +436,7 @@
         android:paddingBottom="16dp"
         android:text="@string/Charts_CryptoCompare"
         android:textAlignment="textEnd"
-        android:textColor="@color/grey"
+        android:textColor="@color/grey_50"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintHorizontal_bias="0.854"

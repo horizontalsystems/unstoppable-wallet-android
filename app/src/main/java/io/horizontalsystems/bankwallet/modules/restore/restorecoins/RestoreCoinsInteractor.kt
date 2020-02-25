@@ -27,6 +27,10 @@ class RestoreCoinsInteractor(
         walletManager.save(wallets)
     }
 
+    override fun getCoinSettings(coinType: CoinType): CoinSettings {
+        return coinSettingsManager.coinSettings(coinType)
+    }
+
     @Throws
     override fun account(accountType: AccountType): Account {
         return accountCreator.restoredAccount(accountType)
@@ -36,11 +40,4 @@ class RestoreCoinsInteractor(
         accountManager.save(account)
     }
 
-    override fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin): CoinSettings {
-        return coinSettingsManager.coinSettingsToRequest(coin, accountOrigin)
-    }
-
-    override fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings): CoinSettings {
-        return coinSettingsManager.coinSettingsToSave(coin, accountOrigin, requestedCoinSettings)
-    }
 }

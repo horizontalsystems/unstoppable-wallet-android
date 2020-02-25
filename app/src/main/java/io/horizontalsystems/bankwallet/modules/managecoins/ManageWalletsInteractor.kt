@@ -23,12 +23,12 @@ class ManageWalletsInteractor(
     override val accounts: List<Account>
         get() = accountManager.accounts
 
-    override fun coinSettingsToSave(coin: Coin, origin: AccountOrigin, requestedCoinSettings: MutableMap<CoinSetting, String>): CoinSettings {
-        return coinSettingsManager.coinSettingsToSave(coin, origin, requestedCoinSettings)
+    override fun loadAccounts() {
+        accountManager.loadAccounts()
     }
 
-    override fun coinSettingsToRequest(coin: Coin, origin: AccountOrigin): CoinSettings {
-        return coinSettingsManager.coinSettingsToRequest(coin, origin)
+    override fun loadWallets() {
+        walletManager.loadWallets()
     }
 
     override fun save(wallet: Wallet) {
@@ -51,4 +51,7 @@ class ManageWalletsInteractor(
         return accountCreator.restoredAccount(accountType)
     }
 
+    override fun getCoinSettings(coinType: CoinType): CoinSettings {
+        return coinSettingsManager.coinSettings(coinType)
+    }
 }

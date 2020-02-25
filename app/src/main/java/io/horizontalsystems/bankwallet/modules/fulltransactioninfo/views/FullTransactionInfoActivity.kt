@@ -19,8 +19,8 @@ import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
@@ -36,8 +36,8 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val transactionHash = intent.getStringExtra(transactionHashKey)
-        val wallet = intent.getParcelableExtra<Wallet>(walletKey)
+        val transactionHash = intent.getStringExtra(transactionHashKey) ?: run { finish(); return }
+        val wallet = intent.getParcelableExtra<Wallet>(walletKey) ?: run { finish(); return }
 
         viewModel = ViewModelProvider(this).get(FullTransactionInfoViewModel::class.java)
         viewModel.init(transactionHash, wallet)
@@ -76,7 +76,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         viewModel.openLinkLiveEvent.observe(this, Observer { url ->

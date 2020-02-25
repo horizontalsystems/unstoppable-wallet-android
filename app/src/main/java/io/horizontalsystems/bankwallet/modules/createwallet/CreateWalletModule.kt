@@ -22,8 +22,7 @@ object CreateWalletModule {
 
     interface IRouter {
         fun startMainModule()
-        fun showCoinSettings(coin: Coin, coinSettingsToRequest: CoinSettings)
-        fun close()
+        fun showSuccessAndClose()
     }
 
     interface IViewDelegate {
@@ -32,8 +31,6 @@ object CreateWalletModule {
         fun onDisable(coin: Coin)
         fun onSelect(coin: Coin)
         fun onCreateButtonClick()
-        fun onSelectCoinSettings(coinSettings: CoinSettings, coin: Coin)
-        fun onCancelSelectingCoinSettings()
     }
 
     interface IInteractor {
@@ -44,12 +41,12 @@ object CreateWalletModule {
         fun createAccounts(accounts: List<Account>)
         @Throws
         fun account(predefinedAccountType: PredefinedAccountType) : Account
-        fun coinSettingsToRequest(coin: Coin, accountOrigin: AccountOrigin): CoinSettings
-        fun coinSettingsToSave(coin: Coin, accountOrigin: AccountOrigin, requestedCoinSettings: CoinSettings): CoinSettings
+        fun coinSettings(coinType: CoinType): CoinSettings
         fun saveWallets(wallets: List<Wallet>)
     }
 
     class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType?) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = CreateWalletView()
             val router = CreateWalletRouter()

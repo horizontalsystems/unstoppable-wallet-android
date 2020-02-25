@@ -1,10 +1,11 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.IRateCoinMapper
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -15,7 +16,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
-class RateManager(context: Context, walletManager: IWalletManager, private val currencyManager: ICurrencyManager) : IRateManager {
+class RateManager(
+        context: Context,
+        walletManager: IWalletManager,
+        private val currencyManager: ICurrencyManager,
+        private val rateCoinMapper: IRateCoinMapper) : IRateManager {
 
     private val disposables = CompositeDisposable()
     private val kit: XRatesKit by lazy {
@@ -40,6 +45,8 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
                 }.let {
                     disposables.add(it)
                 }
+
+        initMapper()
     }
 
     override fun set(coins: List<String>) {
@@ -102,21 +109,23 @@ class RateManager(context: Context, walletManager: IWalletManager, private val c
     }
 
     private fun converted(coinCode: String): String {
-        return when (coinCode) {
-            "HOT" -> "HOLO"
-            "SAI",
-            "DAI" -> "SAI-DAI" // invalid code excludes xrates for this coin
-            else -> coinCode
-        }
-
+        return rateCoinMapper.convertedCoinMap[coinCode] ?: coinCode
     }
 
     private fun unconverted(coinCode: String): String {
-        return when (coinCode) {
-            "HOLO" -> "HOT"
-            "DAI",
-            "SAI" -> "DAI-SAI" // invalid code excludes xrates for this coin
-            else -> coinCode
-        }
+        return rateCoinMapper.unconvertedCoinMap[coinCode] ?: coinCode
     }
+
+    private fun initMapper() {
+        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "HOT", to = "HOLO")
+        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "HOLO", to = "HOT")
+
+        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "PGL", to = null)
+        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "PPT", to = null)
+        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "EOSDT", to = null)
+        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "PGL", to = null)
+        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "PPT", to = null)
+        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "EOSDT", to = null)
+    }
+
 }

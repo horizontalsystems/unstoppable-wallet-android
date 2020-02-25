@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 
 object MainSettingsModule {
 
@@ -62,12 +62,12 @@ object MainSettingsModule {
     }
 
     class Factory : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = MainSettingsView()
             val router = MainSettingsRouter()
             val interactor = MainSettingsInteractor(
-                    localStorage = App.localStorage,
+                    themeStorage = App.themeStorage,
                     backupManager = App.backupManager,
                     languageManager = App.languageManager,
                     systemInfoManager = App.systemInfoManager,

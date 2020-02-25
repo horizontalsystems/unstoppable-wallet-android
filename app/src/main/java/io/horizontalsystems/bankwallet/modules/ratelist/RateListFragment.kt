@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.views.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_rates.*
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
@@ -78,17 +78,17 @@ class CoinRatesAdapter : RecyclerView.Adapter<ViewHolderCoinRate>() {
 class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(viewItem: RateViewItem, isLast: Boolean) {
-        coinIcon.bind(viewItem.coin)
-        txCoinCode.text = viewItem.coin.code
-        txCoinName.text = viewItem.coin.title
+        val coin = viewItem.coin
+        coinIcon.bind(coin.code)
+        txCoinCode.text = coin.code
+        txCoinName.text = coin.title
 
         txValueInFiat.text =  containerView.context.getString(R.string.NotAvailable)
         LayoutHelper.getAttr(R.attr.ColorLeah, containerView.context.theme)?.let { color ->
             txValueInFiat.setTextColor(color)
         }
         viewItem.rate?.let { rate ->
-            val rateString = App.numberFormatter.format(rate, trimmable = true, canUseLessSymbol = false)
-            txValueInFiat.text = rateString
+            txValueInFiat.text = App.numberFormatter.formatForRates(rate, trimmable = true)
             if (viewItem.rateExpired == true){
                 txValueInFiat.setTextColor(ContextCompat.getColor(containerView.context, R.color.grey_50))
             }

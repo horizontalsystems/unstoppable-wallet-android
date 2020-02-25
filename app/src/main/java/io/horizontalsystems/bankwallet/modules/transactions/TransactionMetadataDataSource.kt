@@ -1,23 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
 class TransactionMetadataDataSource {
 
-    private val lastBlockHeights = mutableMapOf<Wallet, Int>()
+    private val lastBlockInfos = mutableMapOf<Wallet, LastBlockInfo>()
     private val thresholds = mutableMapOf<Wallet, Int>()
     private val rates = mutableMapOf<Coin, MutableMap<Long, CurrencyValue>>()
 
-    fun setLastBlockHeight(lastBlockHeight: Int, wallet: Wallet) {
-        lastBlockHeights[wallet] = lastBlockHeight
+    fun setLastBlockInfo(lastBlockInfo: LastBlockInfo, wallet: Wallet) {
+        lastBlockInfos[wallet] = lastBlockInfo
     }
 
-    fun getLastBlockHeight(wallet: Wallet): Int? {
-        return lastBlockHeights[wallet]
+    fun getLastBlockInfo(wallet: Wallet): LastBlockInfo? {
+        return lastBlockInfos[wallet]
     }
 
     fun setConfirmationThreshold(confirmationThreshold: Int, wallet: Wallet) {

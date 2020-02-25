@@ -6,11 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_backup_eos.*
-import kotlinx.android.synthetic.main.activity_manage_keys.shadowlessToolbar
 
 class BackupEosActivity : BaseActivity() {
 
@@ -19,7 +18,10 @@ class BackupEosActivity : BaseActivity() {
         setContentView(R.layout.activity_backup_eos)
         shadowlessToolbar.bind(getString(R.string.Backup_DisplayTitle), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
 
-        bind(intent.getStringExtra(ACCOUNT), intent.getStringExtra(ACTIVE_PRIVATE_KEY))
+        val account = intent.getStringExtra(ACCOUNT) ?: run { finish(); return }
+        val activePrivateKey = intent.getStringExtra(ACTIVE_PRIVATE_KEY) ?: run { finish(); return }
+
+        bind(account, activePrivateKey)
     }
 
     private fun bind(account: String, privateKey: String) {

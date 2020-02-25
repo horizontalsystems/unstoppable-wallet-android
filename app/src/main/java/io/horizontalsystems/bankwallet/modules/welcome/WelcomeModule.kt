@@ -14,6 +14,7 @@ object WelcomeModule {
         fun createWalletDidClick()
         fun restoreWalletDidClick()
         fun viewDidLoad()
+        fun openTorPage()
     }
 
     interface IInteractor {
@@ -23,6 +24,7 @@ object WelcomeModule {
     interface IRouter {
         fun openRestoreModule()
         fun openCreateWalletModule()
+        fun openTorPage()
     }
 
     fun start(context: Context) {

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.viewHelpers.inflate
+import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
 
@@ -19,8 +19,7 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
 
     private val coinWithSwitch = 0
     private val coinWithArrow = 1
-    private val descriptionView = 2
-    private val dividerView = 3
+    private val dividerView = 2
     var viewItems = listOf<CoinManageViewItem>()
 
     override fun getItemCount(): Int {
@@ -31,7 +30,6 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
             when (viewItems[position].type) {
                 is CoinManageViewType.CoinWithArrow -> coinWithArrow
                 is CoinManageViewType.CoinWithSwitch -> coinWithSwitch
-                is CoinManageViewType.Description -> descriptionView
                 is CoinManageViewType.Divider -> dividerView
             }
 
@@ -49,7 +47,6 @@ class CoinItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
                     onSwitch = { isChecked, index ->
                         onSwitchToggle(isChecked, index)
                     })
-            descriptionView -> ViewHolderTopDescription(inflate(parent, R.layout.view_holder_top_description, false))
             dividerView -> ViewHolderDivider(inflate(parent, R.layout.view_holder_coin_manager_divider, false))
             else -> throw Exception("No such view type")
         }
@@ -88,13 +85,17 @@ class CoinItemWithSwitchViewHolder(
             toggleSwitch.isChecked = !toggleSwitch.isChecked
             onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
         }
+
+        toggleSwitch.setOnClickListener {
+            onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
+        }
     }
 
     fun bind(item: CoinManageViewItem) {
         val viewItem = item.coinViewItem ?: return
         val coin = viewItem.coin
 
-        coinIcon.bind(coin)
+        coinIcon.bind(coin.code)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
@@ -124,7 +125,7 @@ class CoinItemWithArrowViewHolder(
         val coin = viewItem.coin
 
         rightArrow.visibility = View.VISIBLE
-        coinIcon.bind(coin)
+        coinIcon.bind(coin.code)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.typeLabel()
@@ -133,15 +134,13 @@ class CoinItemWithArrowViewHolder(
     }
 }
 
-class ViewHolderTopDescription(val containerView: View) : RecyclerView.ViewHolder(containerView)
 class ViewHolderDivider(val containerView: View) : RecyclerView.ViewHolder(containerView)
 
 data class CoinManageViewItem(val type: CoinManageViewType, val coinViewItem: CoinViewItem? = null)
 data class CoinViewItem(val coin: Coin, var showBottomShade: Boolean = false)
 
-sealed class CoinManageViewType{
-    object Divider: CoinManageViewType()
-    object Description: CoinManageViewType()
-    object CoinWithArrow: CoinManageViewType()
-    class CoinWithSwitch(var enabled: Boolean): CoinManageViewType()
+sealed class CoinManageViewType {
+    object Divider : CoinManageViewType()
+    object CoinWithArrow : CoinManageViewType()
+    class CoinWithSwitch(var enabled: Boolean) : CoinManageViewType()
 }

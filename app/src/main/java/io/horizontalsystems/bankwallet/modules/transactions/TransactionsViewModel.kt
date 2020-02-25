@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -34,7 +34,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { unit -> reloadWithBuffer() }
+                .doOnNext { _ -> reloadWithBuffer() }
                 .subscribe()?.let { disposables.add(it) }
     }
 

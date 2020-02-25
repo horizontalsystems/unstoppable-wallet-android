@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class SendRouter : SendModule.IRouter {
 

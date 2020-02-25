@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -18,7 +17,7 @@ object RateChartModule {
         fun setChartType(type: ChartType)
         fun showChartInfo(viewItem: ChartInfoViewItem)
         fun showMarketInfo(viewItem: MarketInfoViewItem)
-        fun showSelectedPoint(data: Triple<Long, CurrencyValue, ChartType>)
+        fun showSelectedPoint(item: ChartPointViewItem)
         fun showError(ex: Throwable)
     }
 
@@ -47,11 +46,14 @@ object RateChartModule {
     interface Router
 
     class Factory(private val coin: Coin) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val currency = App.currencyManager.baseCurrency
+            val rateFormatter = RateFormatter(currency)
+
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.xRateManager, App.localStorage)
-            val presenter = RateChartPresenter(view, interactor, coin, App.currencyManager.baseCurrency, RateChartViewFactory())
+            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage)
+            val presenter = RateChartPresenter(view, rateFormatter, interactor, coin, currency, RateChartViewFactory())
 
             interactor.delegate = presenter
 

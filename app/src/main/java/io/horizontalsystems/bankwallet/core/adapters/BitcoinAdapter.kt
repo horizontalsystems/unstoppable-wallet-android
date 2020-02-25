@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.Bip
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
@@ -14,6 +13,7 @@ import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
+import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
@@ -33,6 +33,13 @@ class BitcoinAdapter(override val kit: BitcoinKit)
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
+    override fun getReceiveAddressType(wallet: Wallet): String? {
+        val walletDerivation = wallet.settings[CoinSetting.Derivation]?.let {
+            Derivation.valueOf(it)
+        }
+        return walletDerivation?.addressType
+    }
+
     //
     // BitcoinKit Listener
     //
@@ -42,7 +49,7 @@ class BitcoinAdapter(override val kit: BitcoinKit)
     }
 
     override fun onLastBlockInfoUpdate(blockInfo: BlockInfo) {
-        lastBlockHeightUpdatedSubject.onNext(Unit)
+        lastBlockUpdatedSubject.onNext(Unit)
     }
 
     override fun onKitStateUpdate(state: BitcoinCore.KitState) {

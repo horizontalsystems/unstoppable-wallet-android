@@ -11,7 +11,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 22
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 23
     return "$buildNumber".toInteger()
 }
 
@@ -22,7 +22,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 29
         versionCode computeVersionCode()
-        versionName "0.11.0"
+        versionName "0.12.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         resValue "string", "localizations", buildProperties.get("localizations")
@@ -112,7 +112,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
-    def lifecycle_version = '2.2.0-rc03'
+    def lifecycle_version = '2.2.0'
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     // alternatively - just ViewModel
@@ -125,9 +125,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation 'androidx.fragment:fragment-ktx:1.2.0'
+    implementation "androidx.preference:preference-ktx:1.1.0"
 
     // Room
-    def room_version = '2.2.2'
+    def room_version = '2.2.3'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
@@ -139,7 +141,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'com.aurelhubert:ahbottomnavigation:2.3.4'
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
@@ -151,35 +153,47 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "androidx.biometric:biometric:1.0.0"
+    implementation "androidx.biometric:biometric:1.0.1"
+
     //ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.4'
 
     api 'com.aurelhubert:ahbottomnavigation:2.3.4'
-    api "org.jetbrains.anko:anko-commons:0.10.8"
 
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     // WorkManager Kotlin
-    def work_version = "2.2.0"
+    def work_version = "2.3.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-    hockeyAppImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:ca50a01'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:c9e55cf'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:c12eab7'
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:169917d'
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:344f900'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:809e1a5'
-    implementation 'com.github.horizontalsystems:xrates-kit-android:7d651b8'
-    implementation('com.github.horizontalsystems:eos-kit-android:8526085') {
+    implementation 'com.github.horizontalsystems:binance-chain-kit-android:3327874'
+    implementation 'com.github.horizontalsystems:xrates-kit-android:d2b018b'
+    implementation('com.github.horizontalsystems:eos-kit-android:70897ea') {
         exclude group: 'com.google.protobuf'
     }
+
+    // in case native file tor.so not loading, switch to 'api' or 'implementation'
+    implementation 'com.github.horizontalsystems:net-kit-android:116cb31'
+
+    // UI modules
+
+    implementation project(':core')
+    implementation project(':components:views')
+    implementation project(':components:icons')
+    implementation project(':components:chartview')
+    implementation project(':components:languageswitcher')
+    implementation project(':components:currencyswitcher')
+    implementation project(':components:keystore')
+    implementation project(':components:pin')
 
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha03'
@@ -193,8 +207,8 @@ dependencies {
     testImplementation 'org.powermock:powermock-module-junit4:2.0.2'
 
     // Spek
-    testImplementation "org.spekframework.spek2:spek-dsl-jvm:2.0.6"
-    testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:2.0.6"
+    testImplementation "org.spekframework.spek2:spek-dsl-jvm:2.0.7"
+    testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:2.0.7"
     testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 

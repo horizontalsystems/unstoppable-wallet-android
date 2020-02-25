@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class ReceiveRouter: ReceiveModule.IRouter {
 

@@ -28,7 +28,7 @@ object SendFeeModule {
         fun showFeeRatePrioritySelector(feeRates: List<FeeRateInfoViewItem>)
 
         fun setLoading(loading: Boolean)
-        fun setFee( fee: AmountInfo, convertedFee: AmountInfo?)
+        fun setFee(fee: AmountInfo, convertedFee: AmountInfo?)
         fun setError(error: Exception?)
 
     }
@@ -48,6 +48,7 @@ object SendFeeModule {
     interface IInteractorDelegate {
         fun didUpdate(feeRates: List<FeeRateInfo>)
         fun didReceiveError(error: Exception)
+        fun didUpdateExchangeRate(rate: BigDecimal)
     }
 
     interface IFeeModule {
@@ -78,7 +79,7 @@ object SendFeeModule {
             private val sendHandler: SendModule.ISendHandler,
             private val feeModuleDelegate: IFeeModuleDelegate
     ) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendFeeView()
@@ -88,7 +89,7 @@ object SendFeeModule {
 
             val baseCurrency = App.currencyManager.baseCurrency
             val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
-            val interactor = SendFeeInteractor(App.xRateManager, feeRateProvider, App.currencyManager)
+            val interactor = SendFeeInteractor(baseCurrency, App.xRateManager, feeRateProvider, feeCoin)
 
             val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData)
 

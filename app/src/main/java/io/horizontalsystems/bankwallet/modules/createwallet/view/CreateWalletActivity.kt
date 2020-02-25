@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.createwallet.view
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,20 +7,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.PresentationMode
-import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsModule
-import io.horizontalsystems.bankwallet.modules.coinsettings.CoinSettingsWrapped
-import io.horizontalsystems.bankwallet.modules.coinsettings.SettingsMode
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletPresenter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletRouter
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
 class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
@@ -64,32 +59,14 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
-            R.id.menuCreate ->  {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuCreate -> {
                 presenter.onCreateButtonClick()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            ModuleCode.COIN_SETTINGS -> {
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    presenter.onCancelSelectingCoinSettings()
-                } else if (resultCode == Activity.RESULT_OK && data != null) {
-                    val coin = data.getParcelableExtra<Coin>(ModuleField.COIN) ?: return
-                    val coinSettings = data.getParcelableExtra<CoinSettingsWrapped>(ModuleField.COIN_SETTINGS)
-                            ?: return
-
-                    presenter.onSelectCoinSettings(coinSettings.settings, coin)
-                }
-            }
-        }
     }
 
     // CoinItemsAdapter.Listener
@@ -117,7 +94,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             invalidateOptionsMenu()
         })
 
-        view.showNotSupported.observe(this, Observer {predefinedAccountType ->
+        view.showNotSupported.observe(this, Observer { predefinedAccountType ->
             AlertDialogFragment.newInstance(
                     getString(R.string.ManageCoins_Alert_CantCreateTitle, getString(predefinedAccountType.title)),
                     getString(R.string.ManageCoins_Alert_CantCreateDescription, getString(predefinedAccountType.title)),
@@ -131,10 +108,8 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             MainModule.startAsNewTask(this)
             finish()
         })
-        router.showCoinSettings.observe(this, Observer { (coin, coinSettings) ->
-            CoinSettingsModule.startForResult(coin, coinSettings, SettingsMode.Creating, this)
-        })
-        router.close.observe(this, Observer {
+        router.showSuccessAndClose.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Done, HudHelper.ToastDuration.LONG)
             finish()
         })
     }

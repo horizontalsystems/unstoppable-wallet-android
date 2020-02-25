@@ -1,20 +1,23 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.annotation.SuppressLint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.entities.AppVersion
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.core.IPinStorage
+import io.horizontalsystems.core.IThemeStorage
 import io.horizontalsystems.xrateskit.entities.ChartType
 
-class LocalStorageManager : ILocalStorage, IChartTypeStorage {
+class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
-    private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val SEND_INPUT_TYPE = "send_input_type"
     private val WORDLIST_BACKUP = "wordlist_backup"
     private val I_UNDERSTAND = "i_understand"
@@ -34,6 +37,8 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
+    private val BITCOIN_DERIVATION = "bitcoin_derivation"
+    private val TOR_ENABLED = "tor_enabled"
 
     val gson by lazy { Gson() }
 
@@ -41,12 +46,6 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
         get() = App.preferences.getBoolean(WORDLIST_BACKUP, false)
         set(backedUp) {
             App.preferences.edit().putBoolean(WORDLIST_BACKUP, backedUp).apply()
-        }
-
-    override var isFingerprintEnabled: Boolean
-        get() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
-        set(enabled) {
-            App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, enabled).apply()
         }
 
     override var sendInputType: SendModule.InputType?
@@ -63,12 +62,6 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
                 null -> editor.remove(SEND_INPUT_TYPE).apply()
                 else -> editor.putString(SEND_INPUT_TYPE, value.name).apply()
             }
-        }
-
-    override var isLightModeOn: Boolean
-        get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
-        set(enabled) {
-            App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
         }
 
     override var iUnderstand: Boolean
@@ -94,34 +87,6 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
             } ?: run {
                 App.preferences.edit().remove(BLOCK_TILL_DATE).apply()
             }
-        }
-
-    override var failedAttempts: Int?
-        get() {
-            val attempts = App.preferences.getInt(FAILED_ATTEMPTS, 0)
-            return when (attempts) {
-                0 -> null
-                else -> attempts
-            }
-        }
-        set(value) {
-            value?.let {
-                App.preferences.edit().putInt(FAILED_ATTEMPTS, it).apply()
-            } ?: App.preferences.edit().remove(FAILED_ATTEMPTS).apply()
-        }
-
-    override var lockoutUptime: Long?
-        get() {
-            val timestamp = App.preferences.getLong(LOCKOUT_TIMESTAMP, 0L)
-            return when (timestamp) {
-                0L -> null
-                else -> timestamp
-            }
-        }
-        set(value) {
-            value?.let {
-                App.preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
-            } ?: App.preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
         }
 
     override var baseBitcoinProvider: String?
@@ -154,13 +119,13 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
             App.preferences.edit().putString(BASE_EOS_PROVIDER, value).apply()
         }
 
-    override var syncMode: SyncMode
+    override var syncMode: SyncMode?
         get() {
-            val syncString = App.preferences.getString(SYNC_MODE, SyncMode.Fast.value)
-            return syncString?.let { SyncMode.valueOf(syncString) } ?: SyncMode.Fast
+            val syncString = App.preferences.getString(SYNC_MODE, null)
+            return syncString?.let { SyncMode.valueOf(it) }
         }
         set(syncMode) {
-            App.preferences.edit().putString(SYNC_MODE, syncMode.value).apply()
+            App.preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
         }
 
     override var sortType: BalanceSortType
@@ -202,9 +167,56 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
             App.preferences.edit().putString(ENCRYPTION_CHECKER_TEXT, encryptedText).apply()
         }
 
+    override var bitcoinDerivation: AccountType.Derivation?
+        get() {
+            val derivationString = App.preferences.getString(BITCOIN_DERIVATION, null)
+            return derivationString?.let { AccountType.Derivation.valueOf(it) }
+        }
+        set(derivation) {
+            App.preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()
+        }
+
     override fun clear() {
         App.preferences.edit().clear().apply()
     }
+
+    //  IThemeStorage
+
+    override var isLightModeOn: Boolean
+        get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
+        set(enabled) {
+            App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
+        }
+
+    //  IPinStorage
+
+    override var failedAttempts: Int?
+        get() {
+            val attempts = App.preferences.getInt(FAILED_ATTEMPTS, 0)
+            return when (attempts) {
+                0 -> null
+                else -> attempts
+            }
+        }
+        set(value) {
+            value?.let {
+                App.preferences.edit().putInt(FAILED_ATTEMPTS, it).apply()
+            } ?: App.preferences.edit().remove(FAILED_ATTEMPTS).apply()
+        }
+
+    override var lockoutUptime: Long?
+        get() {
+            val timestamp = App.preferences.getLong(LOCKOUT_TIMESTAMP, 0L)
+            return when (timestamp) {
+                0L -> null
+                else -> timestamp
+            }
+        }
+        set(value) {
+            value?.let {
+                App.preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
+            } ?: App.preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
+        }
 
     //  IChartTypeStorage
 
@@ -214,5 +226,13 @@ class LocalStorageManager : ILocalStorage, IChartTypeStorage {
         }
         set(mode) {
             App.preferences.edit().putString(CHART_TYPE, mode?.name).apply()
+        }
+
+    override var torEnabled: Boolean
+        get() = App.preferences.getBoolean(TOR_ENABLED, false)
+        @SuppressLint("ApplySharedPref")
+        set(enabled) {
+            //keep using commit() for synchronous storing
+            App.preferences.edit().putBoolean(TOR_ENABLED, enabled).commit()
         }
 }

@@ -16,7 +16,8 @@
         android:label="@string/App_Name"
         android:roundIcon="@mipmap/bitcoin_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/DarkModeAppTheme"
+        android:theme="@style/Theme.AppTheme.DayNight"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".modules.launcher.LauncherActivity"
@@ -28,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.coinsettings.CoinSettingsActivity"
+            android:name=".modules.blockchainsettings.BlockchainSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.BackupActivity"
@@ -62,7 +63,7 @@
             android:name=".modules.fulltransactioninfo.dataprovider.DataProviderSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.language.LanguageSettingsActivity"
+            android:name="io.horizontalsystems.languageswitcher.LanguageSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.settings.security.SecuritySettingsActivity"
@@ -74,16 +75,16 @@
             android:name=".modules.notifications.NotificationsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.reportproblem.ReportProblemActivity"
+            android:name=".modules.contact.ContactActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.pin.PinActivity"
+            android:name="io.horizontalsystems.pin.PinActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.basecurrency.BaseCurrencySettingsActivity"
+            android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.managecoins.views.ManageWalletsActivity"
@@ -101,13 +102,13 @@
             android:name=".modules.restore.eos.RestoreEosActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.keystore.KeyStoreActivity"
+            android:name="io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.eos.BackupEosActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.reportproblem.appstatus.AppStatusActivity"
+            android:name=".modules.contact.appstatus.AppStatusActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.settings.experimental.ExperimentalFeaturesActivity"
@@ -120,6 +121,9 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.restore.restorecoins.RestoreCoinsActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".modules.torpage.TorPageActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

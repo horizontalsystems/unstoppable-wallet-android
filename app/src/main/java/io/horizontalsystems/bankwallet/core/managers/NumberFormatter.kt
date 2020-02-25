@@ -6,9 +6,9 @@ import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
@@ -55,7 +55,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return formatted
     }
 
-    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean, maxFraction: Int?): String? {
+    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
 
         val absValue = currencyValue.value.abs()
         var value = absValue
@@ -63,15 +63,9 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
-            maxFraction != null -> {
-                customFormatter.maximumFractionDigits = maxFraction
-            }
             value.compareTo(BigDecimal.ZERO) == 0 -> {
                 value = BigDecimal.ZERO
                 customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
-            }
-            value < FIAT_TEN_CENT_EDGE && !canUseLessSymbol -> {
-                customFormatter.maximumFractionDigits = 4
             }
             value < FIAT_SMALL_NUMBER_EDGE -> {
                 value = BigDecimal("0.01")
@@ -100,8 +94,27 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return result
     }
 
-    override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
-        val spannable = SpannableString(format(currencyValue, showNegativeSign = false, trimmable = true, canUseLessSymbol = true))
+    override fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean, maxFraction: Int?): String? {
+        val value = currencyValue.value.abs()
+
+        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
+
+        when {
+            maxFraction != null -> customFormatter.maximumFractionDigits = maxFraction
+            value.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
+            else -> {
+                val significantDecimalCount: Int = getSignificantDecimal(value, maxDecimal = 8)
+                customFormatter.maximumFractionDigits = significantDecimalCount
+            }
+        }
+
+        val formatted = customFormatter.format(value)
+
+        return "${currencyValue.currency.symbol}$formatted"
+    }
+
+    override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean, canUseLessSymbol: Boolean, trimmable: Boolean): SpannableString {
+        val spannable = SpannableString(format(currencyValue, showNegativeSign = false, trimmable = trimmable, canUseLessSymbol = canUseLessSymbol))
 
         //  set color
         val amountTextColor = if (isIncoming) R.color.green_d else R.color.yellow_d
@@ -137,6 +150,19 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
 
         return numberFormat?.format(value)
+    }
+
+    private fun getSignificantDecimal(value: BigDecimal, maxDecimal: Int): Int {
+        //Here 4 numbers is significant value
+        val ten = 10.toBigDecimal()
+        val threshold = 1000.toBigDecimal()
+
+        for (decimalCount in 0 until maxDecimal) {
+            if (value * ten.pow(decimalCount) >= threshold) {
+                return decimalCount
+            }
+        }
+        return maxDecimal
     }
 
     private fun getFormatter(locale: Locale): NumberFormat? {

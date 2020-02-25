@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.util.*
 
@@ -23,7 +23,9 @@ data class TransactionViewItem(
         val date: Date?,
         val status: TransactionStatus,
         val rate: CurrencyValue?,
-        val lockInfo: TransactionLockInfo?)
+        val lockInfo: TransactionLockInfo?,
+        val conflictingTxHash: String?,
+        val unlocked: Boolean = true)
 
 
 data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?)
@@ -69,10 +71,10 @@ object TransactionsModule {
     }
 
     interface IInteractorDelegate {
-        fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, Int?>>)
+        fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>)
         fun onUpdateSelectedWallets(selectedWallets: List<Wallet>)
         fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>)
-        fun onUpdateLastBlockHeight(wallet: Wallet, lastBlockHeight: Int)
+        fun onUpdateLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo)
         fun onUpdateBaseCurrency()
         fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long)
         fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet)

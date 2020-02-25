@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -27,15 +29,18 @@ abstract class EthereumBaseAdapter(
         // refreshed via EthereumKitManager
     }
 
+    override fun getReceiveAddressType(wallet: Wallet): String? = null
+
     override val debugInfo: String = ethereumKit.debugInfo()
 
     // ITransactionsAdapter
 
     override val confirmationsThreshold: Int = 12
 
-    override val lastBlockHeight: Int? get() = ethereumKit.lastBlockHeight?.toInt()
+    override val lastBlockInfo: LastBlockInfo?
+        get() = ethereumKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
-    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+    override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = ethereumKit.lastBlockHeightFlowable.map { Unit }
 
     // ISendEthereumAdapter
@@ -66,7 +71,7 @@ abstract class EthereumBaseAdapter(
         return Single.just(Unit)
     }
 
-    override fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>{
+    override fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long> {
         return Single.just(ethereumKit.gasLimit)
     }
 

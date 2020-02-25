@@ -51,7 +51,25 @@ open class AccountType : Parcelable {
     enum class Derivation(val value: String) : Parcelable {
         bip44("bip44"),
         bip49("bip49"),
-        bip84("bip84")
+        bip84("bip84");
+
+        val addressType: String
+            get() = when (this) {
+                bip44 -> "Legacy"
+                bip49 -> "SegWit"
+                bip84 -> "Native SegWit"
+            }
+    }
+
+    companion object{
+
+        fun getDerivationTitle(derivation: Derivation): String {
+            return when(derivation) {
+                Derivation.bip44 -> "BIP 44"
+                Derivation.bip49 -> "BIP 49"
+                Derivation.bip84 -> "BIP 84"
+            }
+        }
     }
 }
 

@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecuritySettingsView, SecuritySettingsModule.ISecuritySettingsRouter {
 
@@ -13,11 +13,14 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val editPinVisibleLiveData = MutableLiveData<Boolean>()
     val biometricSettingsVisibleLiveData = MutableLiveData<Boolean>()
     val biometricEnabledLiveData = MutableLiveData<Boolean>()
+    val torEnabledLiveData = MutableLiveData<Boolean>()
 
     val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openSetPinLiveEvent = SingleLiveEvent<Unit>()
     val openUnlockPinLiveEvent = SingleLiveEvent<Unit>()
+    val openBlockchainSettings = SingleLiveEvent<Unit>()
+    val restartApp = SingleLiveEvent<Unit>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
@@ -52,6 +55,10 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
         biometricEnabledLiveData.postValue(enabled)
     }
 
+    override fun toggleTorEnabled(enabled: Boolean) {
+        torEnabledLiveData.postValue(enabled)
+    }
+
     //  ISecuritySettingsRouter
 
     override fun showManageKeys() {
@@ -68,5 +75,13 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun showUnlockPin() {
         openUnlockPinLiveEvent.call()
+    }
+
+    override fun showBlockchainSettings() {
+        openBlockchainSettings.call()
+    }
+
+    override fun restartApp() {
+        restartApp.call()
     }
 }

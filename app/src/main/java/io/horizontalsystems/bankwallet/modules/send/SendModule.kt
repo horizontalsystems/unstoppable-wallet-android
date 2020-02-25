@@ -35,7 +35,7 @@ object SendModule {
         fun setSendButtonEnabled(enabled: Boolean)
         fun showConfirmation(confirmationViewItems: List<SendConfirmationViewItem>)
         fun showErrorInToast(error: Throwable)
-        fun showErrorInDialog(coinException: CoinException)
+        fun showErrorInDialog(coinException: LocalizedException)
     }
 
     interface IViewDelegate {
@@ -172,7 +172,7 @@ object SendModule {
     data class SendConfirmationLockTimeViewItem(val lockTimeInterval: LockTimeInterval) : SendConfirmationViewItem()
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendView()

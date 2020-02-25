@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
-import io.horizontalsystems.bankwallet.ui.extensions.MultipleInputEditTextView
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.MultipleInputEditTextView
 import kotlinx.android.synthetic.main.activity_restore_eos.*
 import java.util.*
 
@@ -30,13 +30,11 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val accountTypeTitleRes = intent.getIntExtra(ModuleField.ACCOUNT_TYPE_TITLE, 0)
-        if (accountTypeTitleRes > 0) {
-            description.text = getString(R.string.Restore_Enter_Key_Description_Eos, getString(accountTypeTitleRes))
-        }
-
         viewModel = ViewModelProvider(this).get(RestoreEosViewModel::class.java)
         viewModel.init()
+
+        eosAccount.btnText = getString(R.string.Send_Button_Paste)
+        eosActivePrivateKey.btnText = getString(R.string.Send_Button_Paste)
 
         viewModel.setAccount.observe(this, Observer {
             eosAccount.text = it
@@ -72,8 +70,8 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
             R.id.menuRestore ->  {
                 viewModel.delegate.onClickDone(
                         eosAccount.text.trim().toLowerCase(Locale.ENGLISH),

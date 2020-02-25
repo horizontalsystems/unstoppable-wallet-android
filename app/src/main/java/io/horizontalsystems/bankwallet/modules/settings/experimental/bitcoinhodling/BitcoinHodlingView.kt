@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling
 
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 
 class BitcoinHodlingView : BitcoinHodlingModule.IView {
     val lockTimeEnabledLiveEvent = SingleLiveEvent<Boolean>()

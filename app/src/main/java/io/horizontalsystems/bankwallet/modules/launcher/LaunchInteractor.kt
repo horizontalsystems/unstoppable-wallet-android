@@ -1,14 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IKeyStoreManager
-import io.horizontalsystems.bankwallet.core.IPinManager
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
+import io.horizontalsystems.core.IKeyStoreManager
+import io.horizontalsystems.core.IPinManager
+import io.horizontalsystems.core.ISystemInfoManager
 
-class LaunchInteractor(private val accountManager: IAccountManager,
-                       private val pinManager: IPinManager,
-                       private val systemInfoManager: ISystemInfoManager,
-                       private val keyStoreManager: IKeyStoreManager) : LaunchModule.IInteractor {
+class LaunchInteractor(
+        private val accountManager: IAccountManager,
+        private val pinManager: IPinManager,
+        private val systemInfoManager: ISystemInfoManager,
+        private val keyStoreManager: IKeyStoreManager)
+    : LaunchModule.IInteractor {
 
     var delegate: LaunchModule.IInteractorDelegate? = null
 

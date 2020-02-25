@@ -57,6 +57,7 @@ object NotificationsModule {
     }
 
     class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = NotificationsView()
             val router = NotificationsRouter()

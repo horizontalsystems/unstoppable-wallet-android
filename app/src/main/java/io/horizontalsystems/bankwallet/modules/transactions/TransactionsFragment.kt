@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
@@ -47,7 +47,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
                     layoutManager.scrollToPosition(0)
                 }
             }
-        });
+        })
 
         recyclerTags.adapter = filterAdapter
         recyclerTransactions.setHasFixedSize(true)
@@ -178,16 +178,23 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
 
         txValueInFiat.text = transactionRecord.currencyValue?.let {
-            App.numberFormatter.formatForTransactions(it, incoming)
+            App.numberFormatter.formatForTransactions(it, incoming, canUseLessSymbol = true, trimmable = true)
         }
-        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (transactionRecord.lockInfo != null) R.drawable.ic_lock else 0, 0)
+
+        val lockIcon = when {
+            transactionRecord.lockInfo == null -> 0
+            transactionRecord.unlocked -> R.drawable.ic_unlock
+            else -> R.drawable.ic_lock
+        }
+        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
         directionIcon.setImageResource(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
-        txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
+        txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, incoming, time)
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
         sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
+        doubleSpendIcon.visibility = if (transactionRecord.conflictingTxHash == null) View.GONE else View.VISIBLE
     }
 }
 
@@ -237,7 +244,8 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
     }
 
     fun bind(wallet: Wallet?, active: Boolean) {
-        filter_text.text = wallet?.coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
+        filter_text.text = wallet?.coin?.code
+                ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
         filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
     }

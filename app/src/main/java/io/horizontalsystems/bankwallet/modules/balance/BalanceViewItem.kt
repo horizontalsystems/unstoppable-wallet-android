@@ -4,8 +4,10 @@ import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IBlockedChartCoins
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -28,7 +30,8 @@ data class BalanceViewItem(
         val syncingData: SyncingData,
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
-        val coinTypeLabelVisible: Boolean
+        val coinTypeLabelVisible: Boolean,
+        val blockChart: Boolean
 ) {
     enum class UpdateType {
         MARKET_INFO,
@@ -55,7 +58,7 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true)
 
-class BalanceViewItemFactory {
+class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) {
 
     private val diffScale = 2
 
@@ -83,7 +86,7 @@ class BalanceViewItemFactory {
         var dimmed = false
         val value = marketInfo?.let {
             dimmed = marketInfo.isExpired()
-            App.numberFormatter.format(CurrencyValue(currency, marketInfo.rate), trimmable = true, canUseLessSymbol = false)
+            App.numberFormatter.formatForRates(CurrencyValue(currency, marketInfo.rate), trimmable = true)
         }
 
         return DeemedValue(value, dimmed = dimmed)
@@ -96,7 +99,7 @@ class BalanceViewItemFactory {
         }
 
         val dateFormatted = state.lastBlockDate?.let { until ->
-            DateHelper.formatDate(until, "MMM d.yyyy")
+            DateHelper.formatDate(until, "MMM d, yyyy")
         }
 
         return SyncingData(state.progress, dateFormatted, !expanded)
@@ -135,7 +138,8 @@ class BalanceViewItemFactory {
                 syncingData = syncingData(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
-                coinTypeLabelVisible = coinTypeLabelVisible(coin.type)
+                coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
+                blockChart = blockedChartCoins.blockedCoins.contains(coin.code)
         )
     }
 

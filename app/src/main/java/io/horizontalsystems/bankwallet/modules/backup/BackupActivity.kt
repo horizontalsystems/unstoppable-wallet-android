@@ -13,7 +13,8 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.pin.PinModule
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_backup.*
 import kotlinx.android.synthetic.main.activity_backup_words.buttonBack
 import kotlinx.android.synthetic.main.activity_backup_words.buttonNext
@@ -26,7 +27,7 @@ class BackupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
 
-        val account = intent.getParcelableExtra<Account>(ModuleField.ACCOUNT)
+        val account = intent.getParcelableExtra<Account>(ModuleField.ACCOUNT) ?: run { finish(); return }
         val accountCoins = intent.getStringExtra(ModuleField.ACCOUNT_COINS)
 
         viewModel = ViewModelProvider(this).get(BackupViewModel::class.java)
@@ -51,6 +52,11 @@ class BackupActivity : BaseActivity() {
             finish()
         })
 
+        viewModel.showSuccessAndFinishEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Done, HudHelper.ToastDuration.LONG)
+            finish()
+        })
+
         backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
 
         if (account.isBackedUp) {
@@ -70,7 +76,6 @@ class BackupActivity : BaseActivity() {
                         viewModel.delegate.didBackup()
                     }
                 }
-                finish()
             }
             ModuleCode.BACKUP_EOS -> {
                 finish()

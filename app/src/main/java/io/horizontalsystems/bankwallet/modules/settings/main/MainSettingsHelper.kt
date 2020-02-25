@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 
 class MainSettingsHelper {
 

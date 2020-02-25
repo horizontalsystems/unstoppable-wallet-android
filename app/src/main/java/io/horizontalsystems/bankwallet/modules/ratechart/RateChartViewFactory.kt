@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -16,8 +16,14 @@ data class ChartInfoViewItem(
         val chartPoints: List<ChartPoint>,
         val diffValue: BigDecimal,
         val startTimestamp: Long,
-        val endTimestamp: Long,
-        val currency: Currency
+        val endTimestamp: Long
+)
+
+data class ChartPointViewItem(
+        val date: Long,
+        val currencyValue: CurrencyValue,
+        val volume: CurrencyValue?,
+        val chartType: ChartType
 )
 
 data class MarketInfoViewItem(
@@ -30,8 +36,8 @@ data class MarketInfoViewItem(
 )
 
 class RateChartViewFactory {
-    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, currency: Currency): ChartInfoViewItem {
-        val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.timestamp) }
+    fun createChartInfo(type: ChartType, chartInfo: ChartInfo): ChartInfoViewItem {
+        val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }
 
         val startValue = chartPoints.firstOrNull()?.value ?: 0f
         val endValue = chartPoints.lastOrNull()?.value ?: 0f
@@ -40,8 +46,10 @@ class RateChartViewFactory {
             ChartType.DAILY -> ChartView.ChartType.DAILY
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
             ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
+            ChartType.MONTHLY3 -> ChartView.ChartType.MONTHLY3
             ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
             ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12
+            ChartType.MONTHLY24 -> ChartView.ChartType.MONTHLY24
         }
 
         val diffValue = ((endValue - startValue) / startValue * 100).toBigDecimal()
@@ -51,8 +59,7 @@ class RateChartViewFactory {
                 chartPoints,
                 diffValue,
                 chartInfo.startTimestamp,
-                chartInfo.endTimestamp,
-                currency
+                chartInfo.endTimestamp
         )
     }
 
@@ -66,4 +73,5 @@ class RateChartViewFactory {
                 marketInfo.timestamp
         )
     }
+
 }

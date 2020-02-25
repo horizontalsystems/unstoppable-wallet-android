@@ -10,26 +10,24 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
 
         syncPinSet(interactor.isPinSet)
         view?.toggleBiometricEnabled(interactor.isBiometricEnabled)
-    }
-
-    override fun didTapManageKeys() {
-        router.showManageKeys()
-    }
-
-    override fun didSwitchPinSet(enable: Boolean) {
-        if (enable) {
-            router.showSetPin()
-        } else {
-            router.showUnlockPin()
-        }
-    }
-
-    override fun didTapEditPin() {
-        router.showEditPin()
+        view?.toggleTorEnabled(interactor.isTorEnabled)
     }
 
     override fun didSwitchBiometricEnabled(enable: Boolean) {
         interactor.isBiometricEnabled = enable
+    }
+
+    override fun didSwitchTorEnabled(enable: Boolean) {
+        interactor.isTorEnabled = enable
+        if (enable) {
+            router.restartApp()
+        } else {
+            interactor.stopTor()
+        }
+    }
+
+    override fun didStopTor() {
+        router.restartApp()
     }
 
     override fun didSetPin() {
@@ -66,4 +64,25 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         view?.setBackupAlertVisible(!allBackedUp)
     }
 
+    // ISecuritySettingsRouter
+
+    override fun didTapManageKeys() {
+        router.showManageKeys()
+    }
+
+    override fun didSwitchPinSet(enable: Boolean) {
+        if (enable) {
+            router.showSetPin()
+        } else {
+            router.showUnlockPin()
+        }
+    }
+
+    override fun didTapEditPin() {
+        router.showEditPin()
+    }
+
+    override fun didTapBlockchainSettings() {
+        router.showBlockchainSettings()
+    }
 }

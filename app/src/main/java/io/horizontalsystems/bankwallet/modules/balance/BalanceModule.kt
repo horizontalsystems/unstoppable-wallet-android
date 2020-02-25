@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
@@ -109,7 +110,7 @@ object BalanceModule {
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
         val interactor = BalanceInteractor(App.walletManager, App.adapterManager, currencyManager, App.localStorage, App.xRateManager, App.predefinedAccountTypeManager)
-        val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
+        val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory(App.rateCoinMapper))
 
         presenter.view = view
         interactor.delegate = presenter

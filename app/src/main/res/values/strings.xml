@@ -30,7 +30,8 @@
 
     <!--Welcome-->
 
-    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_Title">Unstoppable \nWallet</string>
+    <string name="Welcome_SecurityCenter">Security Center</string>
     <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
@@ -41,12 +42,9 @@
 
     <!--Restore-->
 
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_ChooseCrypto">Choose Crypto</string>
+    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">Enter Key</string>
-    <string name="Restore_Enter_Key_Description_Eos">Enter your private key for %s Wallet.</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
-    <string name="Restore_Description">Choose a wallet you want to restore. You will need a private key for that wallet.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
@@ -95,6 +93,7 @@
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
+    <string name="Balance_Backup_Alert">You need to backup the %s Wallet before you may receive %s.</string>
 
     <!--Send-->
 
@@ -159,20 +158,6 @@
     <string name="Deposit_Your_Address">Your Address</string>
     <string name="Deposit_Your_Account">Your Account</string>
 
-    <!--Timestamp-->
-
-    <string name="Timestamp_JustNow">just now</string>
-    <string name="Timestamp_MinAgo">%dm. ago</string>
-    <string name="Timestamp_HoursAgo">%dh. ago</string>
-    <string name="Timestamp_Today">Тoday</string>
-    <string name="Timestamp_Yesterday">Yesterday</string>
-
-    <string name="Duration_instant">Instant</string>
-    <string name="Duration_Within">Within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
-
     <!--Transactions-->
 
     <string name="Transactions_Title">Transactions</string>
@@ -197,11 +182,17 @@
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
+    <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
 
     <!-- Info -->
 
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours but until the lock period expires you can not spend them on the Bitcoin network.</string>
+
+    <string name="Info_DoubleSpend_Title">Double Spend</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on blockchain that trying to spend inputs used in this transaction. Only one transaction will be accepted by the network.</string>
+    <string name="Info_DoubleSpend_ThisTx">This Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
 
     <!--Full Info-->
 
@@ -232,7 +223,7 @@
     <string name="FullInfo_Source_Offline">Offline</string>
 
     <string name="FullInfo_Error_ProviderOffline">Offline</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaction was not found</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transaction can not be found on the blockchain</string>
     <string name="FullInfo_Error_Retry">Retry</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
 
@@ -256,7 +247,7 @@
     <string name="Settings_SecurityCenter">Security Center</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">Manage Coins</string>
-    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
@@ -265,7 +256,7 @@
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">Contact</string>
 
     <!--Settings-->
 
@@ -279,14 +270,9 @@
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
-
-    <!--Setting_Currency-->
-
-    <string name="SettingsCurrency_Title">Base Currency</string>
-
-    <!--Setting_Language-->
-
-    <string name="SettingsLanguage_Title">Language</string>
+    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
+    <string name="SettingsSecurity_EnableTor">Enable Tor</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
 
     <!--Setting_About-->
 
@@ -307,12 +293,13 @@
     <string name="SettingsShare_Title">Share</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
 
-    <!--Setting_Report-->
+    <!--Setting_Contact-->
 
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
-    <string name="SettingsReport_AppStatus">App Status</string>
+    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
+    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_AppStatus">App Status</string>
 
     <!--Setting_Notifications-->
 
@@ -328,24 +315,14 @@
     <string name="Notification_Up">Up</string>
     <string name="Notification_Down">Down</string>
 
-    <!--Alert-->
-
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_TitleWarning">Warning</string>
-    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” > “Security” > “Screen Lock” and enable the lock screen setting.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
-
-    <!--Unlock-->
-
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
-
     <!--Errors-->
 
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
     <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
     <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
     <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
 
     <!--Hud texts-->
 
@@ -357,42 +334,7 @@
     <string name="Hud_Text_Copied">Copied</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
-    <string name="Hud_UnknownError">Unknown Error %s</string>
-
-    <!--Fingerprint texts-->
-
-    <string name="Fingerprint_DialogTitle">Fingerprint login</string>
-    <string name="Fingerprint_Hint">Touch sensor</string>
-    <string name="Fingerprint_EnterPin">Passcode</string>
-    <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
-    <string name="Fingerprint_Success">Success!</string>
-
-    <!--Unlock Pin-->
-
-    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
-
-    <!--OS Pin-->
-
-    <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
-
-    <!--Set Pin-->
-
-    <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
-    <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
-
-    <!--Edit Pin-->
-
-    <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="Hud_UnknownError">%s</string>
 
     <!--Manage Coins-->
 
@@ -405,23 +347,23 @@
 
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
-    <string name="ExperimentalFeatures_BitcoinHodling">Lock Bitcoins</string>
+    <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
 
     <!-- Bitcoin Hodling -->
 
-    <string name="BitcoinHodling_Title">Lock Bitcoins</string>
-    <string name="BitcoinHodling_LockTime" translatable="false">TimeLock</string>
+    <string name="BitcoinHodling_Title">TimeLock</string>
+    <string name="BitcoinHodling_LockTime" translatable="false">Activate</string>
     <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet app version 0.10 or newer with BIP44 address format for the Bitcoin.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet controls a set of cryptocurrencies.\n\nYou must backup each highlighted wallet by backing up the private key for it. This key is the only way to restore and access your funds if your phone is ever lost, stolen or the app malfunctions.</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
 
     <!--Manage Keys Delete Alert-->
 
@@ -431,7 +373,7 @@
     <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
     <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
 
     <!-- Manage Keys Alert -->
 
@@ -440,6 +382,22 @@
     <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
+
+    <!-- Blockchain Settings -->
+
+    <string name="BlockchainSettings_Title">Settings</string>
+    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
+    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
+    <string name="BlockchainSettings_SyncMode_Api">API</string>
+
+    <!-- Tor Connection -->
+
+    <string name="TorPage_Title">Tor Connection</string>
+    <string name="TorPage_Description">Before creating or restoring enable Tor for secure connection with network.\n\nTor can safeguard your browsing activities on wallet. Allow permission for using Tor browser in settings.</string>
 
     <!-- Account Types -->
 
@@ -453,18 +411,16 @@
     <!--Coin Option-->
 
     <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast" translatable="false">Horizontal Systems API</string>
+    <string name="CoinOption_Fast" translatable="false">API</string>
     <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
-    <string name="CoinOption_SyncModeDescription">Select the source the Unstoppable app should use to download your balance and transactions. \n\nHorizontal Systems %1s API:\n%2s</string>
-    <string name="CoinOption_Slow" translatable="false">%s Blockchain</string>
-    <string name="CoinOption_Slow_Subtitle">1–12 hours</string>
-    <string name="CoinOption_BipDescriptionCreate">This setting controls the address format for the Bitcoin in this wallet. We recommend using BIP49 if not sure.</string>
-    <string name="CoinOption_BipDescriptionRestore">Select the address format for the Bitcoin in the wallet you\'re trying to restore.</string>
-    <string name="CoinOption_AddressFormatTitle">Choose address format</string>
-    <string name="CoinOption_SyncModeTitle">Restore Parameters</string>
+    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_Slow" translatable="false">Blockchain</string>
+    <string name="CoinOption_Slow_Subtitle">1–24 hours</string>
+    <string name="CoinOption_AddressFormatTitle">Bitcoin address format</string>
+    <string name="CoinOption_SyncModeTitle">Restore Source</string>
     <string name="CoinOption_bip44" translatable="false">Legacy - BIP 44</string>
     <string name="CoinOption_bip49" translatable="false">SegWit - BIP 49</string>
-    <string name="CoinOption_bip84" translatable="false">Native Segwit - BIP 84</string>
+    <string name="CoinOption_bip84" translatable="false">Native SegWit - BIP 84</string>
     <string name="CoinOption_bip44_Subtitle">Older (start with 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Popular (start with 3...)</string>
     <string name="CoinOption_bip84_Subtitle">Newest (start with bc1...)</string>
@@ -474,15 +430,17 @@
     <string name="Charts_TimeDuration_Day">1D</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Month3">3M</string>
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>
     <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_TimeDuration_Year2">2Y</string>
 
     <string name="Charts_Title">%s Price</string>
     <string name="Charts_Rate_High">%s High</string>
     <string name="Charts_Rate_Low">%s Low</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_Volume24">Volume (24 hours)</string>
+    <string name="Charts_Volume24">Volume (24h)</string>
     <string name="Charts_inCirculation">in Circulation</string>
     <string name="Charts_TotalSupply">Total Supply</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
@@ -491,6 +449,7 @@
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Volume</string>
+    <string name="Charts_Price">Price</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
 
     <!--Rate list-->

@@ -43,6 +43,6 @@ object MainModule {
             intent.putExtra(MainActivity.ACTIVE_TAB_KEY, it)
         }
         context.startActivity(intent)
-        context.overridePendingTransition(0,0)
+        context.overridePendingTransition(0, 0)
     }
 }

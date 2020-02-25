@@ -3,8 +3,10 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -85,7 +87,7 @@ class TransactionsInteractor(
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe { records, t2 ->
+                .subscribe { records, _ ->
                     delegate?.didFetchRecords(records)
                 }
                 .let { disposables.add(it) }
@@ -100,11 +102,11 @@ class TransactionsInteractor(
 
         walletManager.wallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
-                adapter.lastBlockHeightUpdatedFlowable
+                adapter.lastBlockUpdatedFlowable
                         .throttleLast(3, TimeUnit.SECONDS)
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
-                        .subscribe { onUpdateLastBlockHeight(wallet, adapter) }
+                        .subscribe { onUpdateLastBlock(wallet, adapter) }
                         .let { lastBlockHeightDisposables.add(it) }
             }
         }
@@ -137,19 +139,19 @@ class TransactionsInteractor(
         transactionUpdatesDisposables.clear()
     }
 
-    private fun onUpdateLastBlockHeight(wallet: Wallet, adapter: ITransactionsAdapter) {
-        adapter.lastBlockHeight?.let { lastBlockHeight ->
-            delegate?.onUpdateLastBlockHeight(wallet, lastBlockHeight)
+    private fun onUpdateLastBlock(wallet: Wallet, adapter: ITransactionsAdapter) {
+        adapter.lastBlockInfo?.let { lastBlockInfo ->
+            delegate?.onUpdateLastBlock(wallet, lastBlockInfo)
         }
     }
 
     private fun onUpdateWallets() {
         transactionUpdatesDisposables.clear()
 
-        val walletsData = mutableListOf<Triple<Wallet, Int, Int?>>()
+        val walletsData = mutableListOf<Triple<Wallet, Int, LastBlockInfo?>>()
         walletManager.wallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
-                walletsData.add(Triple(wallet, adapter.confirmationsThreshold, adapter.lastBlockHeight))
+                walletsData.add(Triple(wallet, adapter.confirmationsThreshold, adapter.lastBlockInfo))
 
                 adapter.transactionRecordsFlowable
                         .subscribeOn(Schedulers.io())

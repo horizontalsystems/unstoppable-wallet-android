@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.notifications
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
 class NotificationsView : NotificationsModule.IView {

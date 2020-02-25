@@ -17,9 +17,9 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragme
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : BaseActivity() {
@@ -34,7 +34,7 @@ class SendActivity : BaseActivity() {
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
-        val iconRes = LayoutHelper.getCoinDrawableResource(wallet.coin.code)
+        val iconRes = LayoutHelper.getCoinDrawableResource(this, wallet.coin.code)
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Title, wallet.coin.code),
@@ -52,7 +52,7 @@ class SendActivity : BaseActivity() {
 
     private fun subscribeToRouterEvents(router: SendRouter) {
         router.closeWithSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Send_Success)
+            HudHelper.showSuccessMessage(R.string.Send_Success, HudHelper.ToastDuration.LONG)
             finish()
         })
 

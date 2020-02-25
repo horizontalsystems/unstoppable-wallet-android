@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
+import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -29,6 +33,8 @@ class BinanceAdapter(
     override fun refresh() {
         // handled by BinanceKitManager
     }
+
+    override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     override val debugInfo: String
         get() = ""
@@ -56,10 +62,10 @@ class BinanceAdapter(
     override val confirmationsThreshold: Int
         get() = 1
 
-    override val lastBlockHeight: Int?
-        get() = binanceKit.latestBlock?.height
+    override val lastBlockInfo: LastBlockInfo?
+        get() = binanceKit.latestBlock?.height?.let { LastBlockInfo(it) }
 
-    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+    override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { Unit }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
@@ -115,7 +121,22 @@ class BinanceAdapter(
         get() = transferFee
 
     override fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit> {
-        return binanceKit.send(symbol, address, amount, memo ?: "").map { Unit }
+        return binanceKit.send(symbol, address, amount, memo ?: "")
+                .onErrorResumeNext { Single.error(getException(it)) }
+                .map { Unit }
+    }
+
+    private fun getException(error: Throwable): Exception {
+        when (error) {
+            is BinanceError -> {
+                if (error.message.contains("receiver requires non-empty memo in transfer transaction")) {
+                    return LocalizedException(R.string.Binance_Backend_Error_MemoRequired)
+                } else if(error.message.contains("requires the memo contains only digits")) {
+                    return LocalizedException(R.string.Binance_Backend_Error_RequiresDigits)
+                }
+            }
+        }
+        return Exception(error.message)
     }
 
     override fun validate(address: String) {

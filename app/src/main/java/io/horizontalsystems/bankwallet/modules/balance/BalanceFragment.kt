@@ -17,10 +17,9 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
-import io.horizontalsystems.bankwallet.ui.dialogs.BalanceSortDialogFragment
-import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.views.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDialogFragment.Listener, ReceiveFragment.Listener {
@@ -84,11 +83,13 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     // ReceiveFragment listener
     override fun shareReceiveAddress(address: String) {
-        ShareCompat.IntentBuilder
-                .from(activity)
+        activity?.let {
+            ShareCompat.IntentBuilder
+                .from(it)
                 .setType("text/plain")
                 .setText(address)
                 .startChooser()
+        }
     }
 
     // BalanceAdapter listener
@@ -113,11 +114,17 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         viewModel.delegate.onAddCoinClick()
     }
 
+    override fun onAttachFragment(childFragment: Fragment) {
+        if (childFragment is ReceiveFragment) {
+            childFragment.setListener(this)
+        }
+    }
+
     // LiveData
 
     private fun observeLiveData() {
         viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { wallet ->
-            ReceiveFragment(wallet, this).also { it.show(childFragmentManager, it.tag) }
+            ReceiveFragment.newInstance(wallet).show(childFragmentManager, "ReceiveFragment")
         })
 
         viewModel.openSendDialog.observe(viewLifecycleOwner, Observer {
@@ -152,7 +159,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             activity?.let { activity ->
                 val title = getString(R.string.ManageKeys_Delete_Alert_Title)
                 val subtitle = getString(predefinedAccount.title)
-                val description = getString(R.string.ManageKeys_Delete_Alert)
+                val description = getString(R.string.Balance_Backup_Alert, getString(predefinedAccount.title), coin.title)
                 ManageKeysDialog.show(title, subtitle, description, activity, object : ManageKeysDialog.Listener {
                     override fun onClickBackupKey() {
                         viewModel.delegate.onBackupClick()
@@ -166,7 +173,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            RateChartFragment(coin).also { it.show(childFragmentManager, it.tag) }
+            RateChartFragment.newInstance(coin).show(childFragmentManager, "RateChartFragment")
         })
 
     }

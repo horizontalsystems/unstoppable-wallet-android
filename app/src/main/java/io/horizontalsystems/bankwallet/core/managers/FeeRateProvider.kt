@@ -14,10 +14,7 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider){
 
     private val feeRateKit = FeeRateKit(
             FeeProviderConfig(infuraProjectId = appConfig.infuraProjectId,
-                              infuraProjectSecret = appConfig.infuraProjectSecret,
-                              btcCoreRpcUrl = appConfig.btcCoreRpcUrl,
-                              btcCoreRpcUSer =  appConfig.btcCoreRpcUser,
-                              btcCoreRpcPassword = appConfig.btcCoreRpcPassword),
+                              infuraProjectSecret = appConfig.infuraProjectSecret),
             context = context
     )
 
