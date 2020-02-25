@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -10,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 13, exportSchema = false, entities = [
+@Database(version = 14, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     PriceAlertRecord::class,
@@ -45,7 +46,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_9_10,
                             MIGRATION_10_11,
                             renameCoinDaiToSai,
-                            moveCoinSettingsFromAccountToWallet
+                            moveCoinSettingsFromAccountToWallet,
+                            storeBipToPreferences
                     )
                     .build()
         }
@@ -196,5 +198,34 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE new_EnabledWallet RENAME TO EnabledWallet")
             }
         }
+
+        private val storeBipToPreferences: Migration = object : Migration(13, 14) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                val walletsCursor = database.query("SELECT * FROM EnabledWallet")
+                while (walletsCursor.moveToNext()) {
+                    val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
+                    if (coinIdColumnIndex >= 0) {
+                        val coinId = walletsCursor.getString(coinIdColumnIndex)
+
+                        if (coinId == "BTC") {
+                            val derivationColumnIndex = walletsCursor.getColumnIndex("derivation")
+                            if (derivationColumnIndex >= 0){
+                                val walletDerivation= walletsCursor.getString(derivationColumnIndex)
+                                if (walletDerivation != null) {
+                                    try {
+                                        val derivation = AccountType.Derivation.valueOf(walletDerivation)
+                                        App.localStorage.bitcoinDerivation = derivation
+                                    } catch (e: Exception){
+                                        Log.e("AppDatabase", "migration 13-14 exception", e)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 }
