@@ -6,7 +6,7 @@ platform :android do
   end
 
   desc "Submit a new Version Build"
-  lane :dev_build do |options|
+  lane :dev_version_build do |options|
     commit = last_git_commit
 
     gradle(task: "clean")
@@ -16,7 +16,7 @@ platform :android do
   end
 
   desc "Submit a new Master Build"
-  lane :dev_testnet_build do |options|
+  lane :dev_master_build do |options|
     commit = last_git_commit
 
     gradle(task: "clean")
