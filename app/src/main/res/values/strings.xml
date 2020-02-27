@@ -22,6 +22,7 @@
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Share</string>
     <string name="Button_Done">Done</string>
+    <string name="Button_Retry">Retry</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>

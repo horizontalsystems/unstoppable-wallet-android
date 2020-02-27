@@ -23,6 +23,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import java.math.BigDecimal
 import java.util.*
 
@@ -418,6 +419,8 @@ interface IBlockedChartCoins {
 interface INetManager {
     fun start()
     fun stop(): Single<Boolean>
+    val isTorEnabled: Boolean
+    val torObservable: Subject<Boolean>
 }
 
 enum class FeeRatePriority(val value: Int) {
