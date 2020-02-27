@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
-import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDialogFragment.Listener, ReceiveFragment.Listener {

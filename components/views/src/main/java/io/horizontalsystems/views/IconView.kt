@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_icon.view.*
 
 class IconView : ConstraintLayout {
