@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.ui.helpers.AnimationHelper
 import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.helpers.AnimationHelper
 import io.horizontalsystems.views.inflate
 import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer

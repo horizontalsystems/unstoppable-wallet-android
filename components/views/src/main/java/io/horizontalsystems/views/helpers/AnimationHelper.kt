@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.helpers
+package io.horizontalsystems.views.helpers
 
 import android.view.View
 import android.view.animation.Animation
