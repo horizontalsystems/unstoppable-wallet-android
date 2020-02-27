@@ -21,12 +21,12 @@ class MainInteractor(
 
         accountManager.clearAccounts()
 
-        if (netManager.isTorEnabled) {
-            netManager.torObservable
-                    .subscribe { isConnected ->
-                        if(!isConnected)
-                            delegate?.showTorConnectionStatus()
-                    }
-        }
+//        if (netManager.isTorEnabled) {
+//            netManager.torObservable
+//                    .subscribe { isConnected ->
+//                        if(!isConnected)
+//                            delegate?.showTorConnectionStatus()
+//                    }
+//        }
     }
 }

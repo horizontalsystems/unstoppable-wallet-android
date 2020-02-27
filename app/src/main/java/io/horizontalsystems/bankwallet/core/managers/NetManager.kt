@@ -32,7 +32,7 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
                                 .subscribe({
                                                torObservable.onNext(it.connection.status == ConnectionStatus.CONNECTED)
                                                Log.i("NetManager",
-                                                     "Tor connection: ${it.connection.status}, Tor state: ${it.status}")
+                                                     "Tor connection: ${it.connection.status}")
                                            }, {
                                                Log.e("NetManager", "Tor exception", it)
                                            }))
