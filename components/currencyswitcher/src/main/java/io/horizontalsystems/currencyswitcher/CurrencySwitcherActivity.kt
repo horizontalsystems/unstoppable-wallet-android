@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.core.CoreActivity
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.views.LayoutHelper
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
 

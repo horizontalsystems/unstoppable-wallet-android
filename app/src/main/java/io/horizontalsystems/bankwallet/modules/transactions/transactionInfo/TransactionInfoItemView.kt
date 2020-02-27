@@ -7,7 +7,7 @@ import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 
 class TransactionInfoItemView : ConstraintLayout {

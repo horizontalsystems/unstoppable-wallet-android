@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_receive.*
 
 class ReceiveFragment: BaseBottomSheetDialogFragment() {

@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_cell.view.*
 
 class CellView : ConstraintLayout {

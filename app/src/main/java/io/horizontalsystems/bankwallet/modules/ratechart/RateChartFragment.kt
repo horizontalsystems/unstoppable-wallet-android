@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragme
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.views.LayoutHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal

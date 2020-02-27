@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.views.LayoutHelper
 import io.horizontalsystems.views.helpers.AnimationHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
@@ -248,7 +248,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         return if (dimmed) {
             containerView.context.getColor(R.color.grey_50)
         } else {
-            LayoutHelper.getAttr(R.attr.ColorLeah, containerView.context.theme) ?: containerView.context.getColor(R.color.grey)
+            LayoutHelper.getAttr(R.attr.ColorLeah, containerView.context.theme)
+                    ?: containerView.context.getColor(R.color.grey)
         }
     }
 
