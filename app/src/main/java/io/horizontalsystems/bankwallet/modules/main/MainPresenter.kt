@@ -9,4 +9,7 @@ class MainPresenter(private val interactor: MainModule.IInteractor,
         interactor.onStart()
     }
 
+    override fun showTorConnectionStatus() {
+        view?.showTorConnectionStatus()
+    }
 }

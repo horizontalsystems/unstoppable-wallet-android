@@ -40,9 +40,9 @@ class SecuritySettingsActivity : BaseActivity() {
             viewModel.delegate.didSwitchBiometricEnabled(isChecked)
         }
 
-//        torConnectionSwitch.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-//            viewModel.delegate.didSwitchTorEnabled(isChecked)
-//        }
+        torConnectionSwitch.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            viewModel.delegate.didSwitchTorEnabled(isChecked)
+        }
 
         fingerprint.setOnClickListener {
             fingerprint.switchToggle()

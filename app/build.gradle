@@ -181,8 +181,8 @@ dependencies {
         exclude group: 'com.google.protobuf'
     }
 
-    // in case native file tor.so not loading, switch to 'api' or 'implementation'
-    implementation 'com.github.horizontalsystems:net-kit-android:116cb31'
+    // in case native file tor.so not loading, do full gradle clean and build.
+    implementation 'com.github.horizontalsystems:net-kit-android:df1d805'
 
     // UI modules
 
