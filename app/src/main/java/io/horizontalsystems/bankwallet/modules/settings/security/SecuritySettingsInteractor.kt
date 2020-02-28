@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
 import io.horizontalsystems.bankwallet.core.IBackupManager
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INetManager
 import io.horizontalsystems.core.IPinManager
 import io.horizontalsystems.core.ISystemInfoManager
@@ -10,7 +9,6 @@ import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsInteractor(
         private val backupManager: IBackupManager,
-        private val localStorage: ILocalStorage,
         private val systemInfoManager: ISystemInfoManager,
         private val pinManager: IPinManager,
         private val netManager: INetManager)
@@ -38,9 +36,13 @@ class SecuritySettingsInteractor(
         }
 
     override var isTorEnabled: Boolean
-        get() = localStorage.torEnabled
+        get() = netManager.isTorEnabled
         set(value) {
-            localStorage.torEnabled = value
+            if (value) {
+                netManager.enableTor()
+            } else {
+                netManager.disableTor()
+            }
         }
 
     override val isPinSet: Boolean

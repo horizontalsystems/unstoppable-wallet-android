@@ -1,23 +1,20 @@
-package io.horizontalsystems.bankwallet
+package io.horizontalsystems.bankwallet.modules.base
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.base.BaseModule
-import io.horizontalsystems.bankwallet.base.BasePresenter
-import io.horizontalsystems.bankwallet.base.BaseView
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
-import io.horizontalsystems.bankwallet.modules.main.tor.TorConnectionActivity
+import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.core.CoreActivity
 import io.horizontalsystems.views.AlertDialogFragment
 import java.util.logging.Logger
@@ -29,9 +26,6 @@ abstract class BaseActivity : CoreActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val info = packageManager.getActivityInfo(this.componentName, 0)
-        Log.e("BaseActivity", "onCreate ${info.name}")
-
         val presenter = ViewModelProvider(this, BaseModule.Factory()).get(BasePresenter::class.java)
         presenter.viewDidLoad()
 
@@ -40,8 +34,6 @@ abstract class BaseActivity : CoreActivity() {
 
     private fun observeView(baseView: BaseView) {
         baseView.torConnectionStatus.observe(this, Observer {
-            val info = packageManager.getActivityInfo(this.componentName, 0)
-            Log.e("BaseActivity", "torConnectionStatus ${info.name}")
             //check if its foreground, call only once for whole
             val isActivityInForeground = lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
             if(isActivityInForeground) {

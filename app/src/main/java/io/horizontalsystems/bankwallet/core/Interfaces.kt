@@ -5,6 +5,7 @@ import android.text.SpannableString
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
@@ -419,8 +420,10 @@ interface IBlockedChartCoins {
 interface INetManager {
     fun start()
     fun stop(): Single<Boolean>
+    fun enableTor()
+    fun disableTor()
     val isTorEnabled: Boolean
-    val torObservable: Subject<Boolean>
+    val torObservable: Subject<TorStatus>
 }
 
 enum class FeeRatePriority(val value: Int) {

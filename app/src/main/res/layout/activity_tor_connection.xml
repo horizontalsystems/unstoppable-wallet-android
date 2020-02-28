@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.horizontalsystems.bankwallet.modules.main.tor.TorConnectionActivity">
+    tools:context="io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity">
 
 
     <ImageView
