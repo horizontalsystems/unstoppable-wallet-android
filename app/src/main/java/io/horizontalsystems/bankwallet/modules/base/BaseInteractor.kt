@@ -1,6 +1,7 @@
-package io.horizontalsystems.bankwallet.base
+package io.horizontalsystems.bankwallet.modules.base
 
 import io.horizontalsystems.bankwallet.core.INetManager
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.reactivex.disposables.Disposable
 
 class BaseInteractor(private val netManager: INetManager): BaseModule.Interactor {
@@ -11,8 +12,8 @@ class BaseInteractor(private val netManager: INetManager): BaseModule.Interactor
     override fun subscribeToEvents() {
         if (netManager.isTorEnabled) {
             disposable = netManager.torObservable
-                    .subscribe { isConnected ->
-                        if(!isConnected)
+                    .subscribe { connectionStatus ->
+                        if(connectionStatus != TorStatus.Connected)
                             delegate?.showTorConnectionStatus()
                     }
         }

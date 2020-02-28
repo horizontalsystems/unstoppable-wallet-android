@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.welcome
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.BaseActivity
+import io.horizontalsystems.bankwallet.modules.base.BaseActivity
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -56,9 +56,9 @@ class WelcomeActivity : BaseActivity() {
             viewModel.delegate.restoreWalletDidClick()
         }
 
-//        securityCenter.setOnSingleClickListener {
-//            viewModel.delegate.openTorPage()
-//        }
+        securityCenter.setOnSingleClickListener {
+            viewModel.delegate.openTorPage()
+        }
     }
 
 }

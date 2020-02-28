@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.App
 object MainModule {
 
     interface IView {
-        fun showTorConnectionStatus()
     }
 
     interface IViewDelegate {
@@ -20,13 +19,12 @@ object MainModule {
     }
 
     interface IInteractorDelegate {
-        fun showTorConnectionStatus()
     }
 
     interface IRouter
 
     fun init(view: MainViewModel, router: IRouter) {
-        val interactor = MainInteractor(App.accountManager, App.walletManager, App.adapterManager, App.netKitManager)
+        val interactor = MainInteractor(App.accountManager, App.walletManager, App.adapterManager)
         val presenter = MainPresenter(interactor, router)
 
         view.delegate = presenter

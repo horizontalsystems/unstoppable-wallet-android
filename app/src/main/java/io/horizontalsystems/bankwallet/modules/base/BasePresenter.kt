@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.base
+package io.horizontalsystems.bankwallet.modules.base
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

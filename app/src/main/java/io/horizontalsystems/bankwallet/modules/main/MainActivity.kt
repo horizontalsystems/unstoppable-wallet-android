@@ -8,20 +8,15 @@ import android.view.ViewStub
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import io.horizontalsystems.bankwallet.BaseActivity
+import io.horizontalsystems.bankwallet.modules.base.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.info.InfoActivity
-import io.horizontalsystems.bankwallet.modules.info.InfoModule
-import io.horizontalsystems.bankwallet.modules.main.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
@@ -48,10 +43,6 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.init()
-        viewModel.torConnectionStatus.observe(this, Observer {
-            val intent = Intent(this, TorConnectionActivity::class.java)
-            startActivity(intent)
-        })
 
         adapter = MainTabsAdapter(supportFragmentManager)
 
