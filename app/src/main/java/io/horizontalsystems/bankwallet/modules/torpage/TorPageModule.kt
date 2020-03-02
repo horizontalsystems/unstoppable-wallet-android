@@ -5,11 +5,13 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 
 object TorPageModule {
 
     interface IView {
         fun setTorSwitch(enabled: Boolean)
+        fun setConnectionStatus(connectionStatus: TorStatus)
     }
 
     interface IViewDelegate {
@@ -21,7 +23,14 @@ object TorPageModule {
     interface IInteractor {
         fun enableTor()
         fun disableTor()
+        fun onViewLoad()
+        fun onClear()
+
         var isTorEnabled: Boolean
+    }
+
+    interface InteractorDelegate{
+        fun updateConnectionStatus(connectionStatus: TorStatus)
     }
 
     interface IRouter{
@@ -33,8 +42,10 @@ object TorPageModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = TorPageView()
             val router = TorPageRouter()
-            val interactor = TorPageInteractor(App.netKitManager, App.localStorage)
+            val interactor = TorPageInteractor(App.netKitManager)
             val presenter = TorPagePresenter(view, router, interactor)
+
+            interactor.delegate = presenter
 
             return presenter as T
         }
