@@ -1,16 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.torpage
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.CompoundButton
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.core.CoreActivity
 import kotlinx.android.synthetic.main.activity_tor_page.*
 
-class TorPageActivity: CoreActivity() {
+class TorPageActivity : CoreActivity() {
 
     lateinit var presenter: TorPagePresenter
 
@@ -25,16 +28,58 @@ class TorPageActivity: CoreActivity() {
 
         presenter.viewDidLoad()
 
-        torEnableSwitch.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            presenter.onTorSwitch(isChecked)
-        }
+        observeView(presenter.view as TorPageView)
+        observeRouter(presenter.router as TorPageRouter)
 
-        (presenter.view as TorPageView).setTorSwitch.observe(this, Observer {
-            torEnableSwitch.switchIsChecked = it
+        controlView.setOnClickListener {
+            switchView.toggle()
+        }
+    }
+
+    private fun observeRouter(router: TorPageRouter) {
+        router.closePage.observe(this, Observer {
+            onBackPressed()
+        })
+    }
+
+    private fun observeView(view: TorPageView) {
+        view.setTorSwitch.observe(this, Observer {
+            switchView.setOnCheckedChangeListener(null)
+            switchView.isChecked = it
+            switchView.setOnCheckedChangeListener { _, isChecked ->
+                presenter.onTorSwitch(isChecked)
+            }
         })
 
-        (presenter.router as TorPageRouter).closePage.observe(this, Observer {
-            onBackPressed()
+        view.setTorConnectionStatus.observe(this, Observer { torStatus ->
+            torStatus?.let {
+                when (torStatus) {
+                    TorStatus.Connecting -> {
+                        connectionSpinner.visibility = View.VISIBLE
+                        controlIcon.setTint(getTint(R.color.grey))
+                        controlIcon.bind(R.drawable.ic_tor_connected)
+                        subtitleText.text = getString(R.string.TorPage_Connecting)
+                    }
+                    TorStatus.Connected -> {
+                        connectionSpinner.visibility = View.GONE
+                        controlIcon.setTint(getTint(R.color.yellow_d))
+                        controlIcon.bind(R.drawable.ic_tor_connected)
+                        subtitleText.text = getString(R.string.TorPage_Connected)
+                    }
+                    TorStatus.Failed -> {
+                        connectionSpinner.visibility = View.GONE
+                        controlIcon.setTint(getTint(R.color.yellow_d))
+                        controlIcon.bind(R.drawable.ic_tor_status_error)
+                        subtitleText.text = getString(R.string.TorPage_Failed)
+                    }
+                    TorStatus.Closed -> {
+                        connectionSpinner.visibility = View.GONE
+                        controlIcon.setTint(getTint(R.color.yellow_d))
+                        controlIcon.bind(R.drawable.ic_tor)
+                        subtitleText.text = getString(R.string.TorPage_ConnectionClosed)
+                    }
+                }
+            }
         })
     }
 
@@ -52,4 +97,6 @@ class TorPageActivity: CoreActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun getTint(color: Int) = ColorStateList.valueOf(ContextCompat.getColor(this, color))
 }

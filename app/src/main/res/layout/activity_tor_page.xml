@@ -2,40 +2,126 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
+                android:id="@+id/descriptionText"
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
                 android:text="@string/TorPage_Description"
-                android:textColor="@color/grey"/>
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
-            <io.horizontalsystems.views.CellView
-                android:id="@+id/torEnableSwitch"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/controlView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginTop="32dp"
-                app:bottomBorder="true"
-                app:imageDrawable="@drawable/ic_tor"
-                app:layout_constraintTop_toBottomOf="@+id/fingerprint"
-                app:title="@string/SettingsSecurity_EnableTor" />
+                app:layout_constraintTop_toBottomOf="@+id/descriptionText"
+                android:background="@drawable/clickable_background_color_lawrence">
 
-        </LinearLayout>
+                <View
+                    android:id="@+id/topShade"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <io.horizontalsystems.views.IconView
+                    android:id="@+id/controlIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_tor_connected" />
+
+                <ProgressBar
+                    android:id="@+id/connectionSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/grey"
+                    android:indeterminateTintMode="src_atop"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/controlIcon"
+                    app:layout_constraintStart_toStartOf="@+id/controlIcon"
+                    app:layout_constraintEnd_toEndOf="@+id/controlIcon"
+                    app:layout_constraintTop_toTopOf="@+id/controlIcon"
+                    />
+
+                <TextView
+                    android:id="@+id/titleText"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="?TextColorBarsToDark"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintBottom_toTopOf="@+id/subtitleText"
+                    app:layout_constraintStart_toEndOf="@+id/controlIcon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@string/SettingsSecurity_EnableTor" />
+
+                <TextView
+                    android:id="@+id/subtitleText"
+                    style="@style/Subhead2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/titleText"
+                    app:layout_constraintTop_toBottomOf="@+id/titleText"
+                    tools:text="Subtitle" />
+
+                <Switch
+                    android:id="@+id/switchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
+                    android:checked="false"
+                    android:saveEnabled="false"
+                    android:theme="@style/SwitchTheme"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <View
+                    android:id="@+id/bottomShade"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -44,7 +130,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height_tall"
         android:background="@color/transparent"
-        app:elevation="0dp">
+        app:elevation="0dp"
+        >
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
@@ -54,7 +141,8 @@
             app:expandedTitleMarginBottom="16dp"
             app:expandedTitleMarginStart="16dp"
             app:expandedTitleTextAppearance="@style/Title2"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            >
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -63,7 +151,8 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="1dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/TorPage_Title" />
+                app:title="@string/TorPage_Title"
+                />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

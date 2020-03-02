@@ -10,12 +10,11 @@ import io.horizontalsystems.tor.Tor
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 
 class NetManager(context: Context, val localStorage: ILocalStorage) : INetManager {
 
-    override val torObservable = PublishSubject.create<TorStatus>()
-
+    override val torObservable = BehaviorSubject.create<TorStatus>()
     private val disposables = CompositeDisposable()
     private val kit: NetKit by lazy {
         NetKit(context)
@@ -58,8 +57,8 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
         return when (torinfo.connection.status) {
             ConnectionStatus.CONNECTED ->TorStatus.Connected
             ConnectionStatus.CONNECTING ->TorStatus.Connecting
+            ConnectionStatus.CLOSED ->TorStatus.Closed
             ConnectionStatus.FAILED ->TorStatus.Failed
-            ConnectionStatus.CLOSED ->TorStatus.Failed
         }
     }
 
@@ -68,5 +67,6 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
 enum class TorStatus(val value: String) {
     Connected("Connected"),
     Connecting("Connecting"),
+    Closed("Closed"),
     Failed("Failed");
 }
