@@ -23,7 +23,7 @@
     <string name="NotAvailable">S. O.</string>
     <string name="Wallet">%s portefeuille</string>
     <!--Welcome-->
-    <string name="Welcome_Title">\nPortefeuille Unstoppable</string>
+    <string name="Welcome_Title">Portefeuille \nUnstoppable</string>
     <string name="Welcome_SecurityCenter">Centre de Sécurité</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
