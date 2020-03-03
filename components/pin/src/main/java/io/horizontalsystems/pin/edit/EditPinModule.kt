@@ -18,7 +18,7 @@ object EditPinModule {
             val view = PinView()
             val router = EditPinRouter()
 
-            val interactor = PinInteractor(CoreApp.pinManager)
+            val interactor = PinInteractor(CoreApp.pinComponent)
             val presenter = EditPinPresenter(view, router, interactor)
 
             interactor.delegate = presenter

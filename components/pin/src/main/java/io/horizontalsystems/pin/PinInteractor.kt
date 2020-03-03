@@ -1,8 +1,8 @@
 package io.horizontalsystems.pin
 
-import io.horizontalsystems.core.IPinManager
+import io.horizontalsystems.core.IPinComponent
 
-class PinInteractor(private val pinManager: IPinManager) : PinModule.IInteractor {
+class PinInteractor(private val pinComponent: IPinComponent) : PinModule.IInteractor {
 
     var delegate: PinModule.IInteractorDelegate? = null
     private var storedPin: String? = null
@@ -17,7 +17,7 @@ class PinInteractor(private val pinManager: IPinManager) : PinModule.IInteractor
 
     override fun save(pin: String) {
         try {
-            pinManager.store(pin)
+            pinComponent.store(pin)
             delegate?.didSavePin()
         } catch (ex: Exception) {
             delegate?.didFailToSavePin()
@@ -25,7 +25,7 @@ class PinInteractor(private val pinManager: IPinManager) : PinModule.IInteractor
     }
 
     override fun unlock(pin: String): Boolean {
-        return pinManager.validate(pin)
+        return pinComponent.validate(pin)
     }
 
 }

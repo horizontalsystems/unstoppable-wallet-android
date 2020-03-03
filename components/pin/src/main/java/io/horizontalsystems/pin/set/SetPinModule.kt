@@ -19,7 +19,7 @@ object SetPinModule {
             val view = PinView()
             val router = SetPinRouter()
 
-            val interactor = PinInteractor(CoreApp.pinManager)
+            val interactor = PinInteractor(CoreApp.pinComponent)
             val presenter = SetPinPresenter(view, router, interactor)
 
             interactor.delegate = presenter

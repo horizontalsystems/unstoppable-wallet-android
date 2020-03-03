@@ -35,7 +35,7 @@ object LaunchModule {
     }
 
     fun init(view: LaunchViewModel, router: IRouter) {
-        val interactor = LaunchInteractor(App.accountManager, App.pinManager, App.systemInfoManager, App.keyStoreManager)
+        val interactor = LaunchInteractor(App.accountManager, App.pinComponent, App.systemInfoManager, App.keyStoreManager)
         val presenter = LaunchPresenter(interactor, router)
 
         view.delegate = presenter

@@ -2,8 +2,7 @@ package io.horizontalsystems.pin.unlock
 
 import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.core.IEncryptionManager
-import io.horizontalsystems.core.ILockManager
-import io.horizontalsystems.core.IPinManager
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.pin.core.ILockoutManager
 import io.horizontalsystems.pin.core.LockoutState
@@ -11,8 +10,7 @@ import io.horizontalsystems.pin.core.OneTimeTimer
 import io.horizontalsystems.pin.core.OneTimerDelegate
 
 class UnlockPinInteractor(
-        private val pinManager: IPinManager,
-        private val lockManager: ILockManager,
+        private val pinComponent: IPinComponent,
         private val lockoutManager: ILockoutManager,
         private val encryptionManager: IEncryptionManager,
         private val systemInfoManager: ISystemInfoManager,
@@ -26,7 +24,7 @@ class UnlockPinInteractor(
     }
 
     override val isFingerprintEnabled: Boolean
-        get() = pinManager.isFingerprintEnabled
+        get() = pinComponent.isFingerprintEnabled
 
     override val biometricAuthSupported: Boolean
         get() = systemInfoManager.biometricAuthSupported
@@ -35,9 +33,9 @@ class UnlockPinInteractor(
         get() = encryptionManager.getCryptoObject()
 
     override fun unlock(pin: String): Boolean {
-        val valid = pinManager.validate(pin)
+        val valid = pinComponent.validate(pin)
         if (valid) {
-            lockManager.onUnlock()
+            pinComponent.onUnlock()
             lockoutManager.dropFailedAttempts()
         } else {
             lockoutManager.didFailUnlock()
@@ -49,7 +47,7 @@ class UnlockPinInteractor(
 
     override fun onUnlock() {
         delegate?.unlock()
-        lockManager.onUnlock()
+        pinComponent.onUnlock()
     }
 
     override fun onFire() {

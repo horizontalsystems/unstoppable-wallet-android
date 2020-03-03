@@ -14,8 +14,13 @@ import io.reactivex.subjects.BehaviorSubject
 
 class NetManager(context: Context, val localStorage: ILocalStorage) : INetManager {
 
+    interface Listener{
+        fun onStatusChange(torStatus: TorStatus)
+    }
+
     override val torObservable = BehaviorSubject.create<TorStatus>()
     private val disposables = CompositeDisposable()
+    private var listener: Listener? = null
     private val kit: NetKit by lazy {
         NetKit(context)
     }
@@ -30,6 +35,7 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
         disposables.add(kit.torInfoSubject
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+                    listener?.onStatusChange(getStatus(it))
                     torObservable.onNext(getStatus(it))
                 }, {
                     Log.e("NetManager", "Tor exception", it)
@@ -50,10 +56,14 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
         localStorage.torEnabled = false
     }
 
+    override fun setListener(listener: Listener) {
+        this.listener = listener
+    }
+
     override val isTorEnabled: Boolean
         get() = localStorage.torEnabled
 
-    fun getStatus(torinfo: Tor.Info): TorStatus {
+    private fun getStatus(torinfo: Tor.Info): TorStatus {
         return when (torinfo.connection.status) {
             ConnectionStatus.CONNECTED ->TorStatus.Connected
             ConnectionStatus.CONNECTING ->TorStatus.Connecting

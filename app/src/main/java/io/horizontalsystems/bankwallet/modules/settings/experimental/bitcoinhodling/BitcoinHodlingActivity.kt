@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.base.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.activity_app_status.toolbar
 import kotlinx.android.synthetic.main.activity_bitcoin_hodling.*
