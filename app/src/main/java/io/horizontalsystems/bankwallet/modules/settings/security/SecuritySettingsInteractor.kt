@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.INetManager
-import io.horizontalsystems.core.IPinManager
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 class SecuritySettingsInteractor(
         private val backupManager: IBackupManager,
         private val systemInfoManager: ISystemInfoManager,
-        private val pinManager: IPinManager,
+        private val pinComponent: IPinComponent,
         private val netManager: INetManager)
     : SecuritySettingsModule.ISecuritySettingsInteractor {
 
@@ -30,14 +30,15 @@ class SecuritySettingsInteractor(
         get() = backupManager.allBackedUp
 
     override var isBiometricEnabled: Boolean
-        get() = pinManager.isFingerprintEnabled
+        get() = pinComponent.isFingerprintEnabled
         set(value) {
-            pinManager.isFingerprintEnabled = value
+            pinComponent.isFingerprintEnabled = value
         }
 
     override var isTorEnabled: Boolean
         get() = netManager.isTorEnabled
         set(value) {
+            pinComponent.updateLastExitDateBeforeRestart()
             if (value) {
                 netManager.enableTor()
             } else {
@@ -46,10 +47,10 @@ class SecuritySettingsInteractor(
         }
 
     override val isPinSet: Boolean
-        get() = pinManager.isPinSet
+        get() = pinComponent.isPinSet
 
     override fun disablePin() {
-        pinManager.clear()
+        pinComponent.clear()
     }
 
     override fun clear() {

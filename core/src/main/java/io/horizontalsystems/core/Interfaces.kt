@@ -15,11 +15,10 @@ interface ICoreApp {
     var systemInfoManager: ISystemInfoManager
     var languageManager: ILanguageManager
     var currencyManager: ICurrencyManager
-    var lockManager: ILockManager
     var keyStoreManager: IKeyStoreManager
     var keyProvider: IKeyProvider
     var secureStorage: ISecuredStorage
-    var pinManager: IPinManager
+    var pinComponent: IPinComponent
     var pinStorage: IPinStorage
     var themeStorage: IThemeStorage
 
@@ -56,13 +55,15 @@ interface ISecuredStorage {
     fun pinIsEmpty(): Boolean
 }
 
-interface IPinManager {
+interface IPinComponent {
     var isFingerprintEnabled: Boolean
     val isPinSet: Boolean
 
+    fun updateLastExitDateBeforeRestart()
     fun store(pin: String)
     fun validate(pin: String): Boolean
     fun clear()
+    fun onUnlock()
 }
 
 interface ILanguageManager {
@@ -104,11 +105,6 @@ interface IKeyStoreCleaner {
 
 interface IKeyProvider {
     fun getKey(): SecretKey
-}
-
-interface ILockManager {
-    var isLocked: Boolean
-    fun onUnlock()
 }
 
 interface ICurrentDateProvider {

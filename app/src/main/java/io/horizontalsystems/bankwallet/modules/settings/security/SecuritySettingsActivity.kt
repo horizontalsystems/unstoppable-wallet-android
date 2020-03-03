@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.base.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity

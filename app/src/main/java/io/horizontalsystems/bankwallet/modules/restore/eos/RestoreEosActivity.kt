@@ -8,7 +8,7 @@ import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
-import io.horizontalsystems.bankwallet.modules.base.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils

@@ -12,11 +12,15 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
+import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
+import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
-import io.horizontalsystems.pin.core.PinManager
+import io.horizontalsystems.pin.PinComponent
 import io.horizontalsystems.pin.core.SecureStorage
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
@@ -74,8 +78,6 @@ class App : CoreApp() {
         lateinit var coinSettingsManager: ICoinSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
-
-        var lastExitDate: Long = 0
     }
 
     override fun onCreate() {
@@ -142,10 +144,6 @@ class App : CoreApp() {
 
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
-        pinManager = PinManager(secureStorage)
-        lockManager = LockManager(pinManager).apply {
-            backgroundManager.registerListener(this)
-        }
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
@@ -182,6 +180,12 @@ class App : CoreApp() {
             backgroundManager.registerListener(this)
         }
         coinSettingsManager = CoinSettingsManager(localStorage)
+        pinComponent = PinComponent(
+                application = this,
+                securedStorage = secureStorage,
+                excludedActivityNames = listOf(LockScreenActivity::class.java.name, LauncherActivity::class.java.name, TorConnectionActivity::class.java.name),
+                onFire = { activity, requestCode  -> LockScreenModule.startForUnlock(activity, requestCode)}
+        )
 
         val nightMode = if (CoreApp.themeStorage.isLightModeOn)
             AppCompatDelegate.MODE_NIGHT_NO else
@@ -190,6 +194,8 @@ class App : CoreApp() {
         if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
             AppCompatDelegate.setDefaultNightMode(nightMode)
         }
+
+        registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(netKitManager))
     }
 
     override fun attachBaseContext(base: Context) {

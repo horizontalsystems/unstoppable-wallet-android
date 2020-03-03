@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.backup.eos
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import io.horizontalsystems.bankwallet.modules.base.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper

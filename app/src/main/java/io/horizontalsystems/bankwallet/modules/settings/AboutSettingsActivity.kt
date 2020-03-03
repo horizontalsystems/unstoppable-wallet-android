@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import io.horizontalsystems.bankwallet.modules.base.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_about_settings.*

@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.lockscreen
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import io.horizontalsystems.bankwallet.modules.base.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
+import io.horizontalsystems.bankwallet.modules.ratelist.RatesFragment
 import io.horizontalsystems.pin.PinFragment
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import io.horizontalsystems.bankwallet.modules.ratelist.RatesFragment
 import kotlinx.android.synthetic.main.activity_lockscreen.*
 
 
@@ -36,7 +36,7 @@ class LockScreenActivity : BaseActivity() {
 
     companion object {
 
-        fun startForResult(context: AppCompatActivity, requestCode: Int = 0) {
+        fun startForResult(context: Activity, requestCode: Int = 0) {
             val intent = Intent(context, LockScreenActivity::class.java)
             intent.putParcelableExtra(PinModule.keyInteractionType, PinInteractionType.UNLOCK)
             intent.putExtra(PinModule.keyShowCancel, false)
