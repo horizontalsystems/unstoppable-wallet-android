@@ -11,12 +11,12 @@ class LockManager(private val pinManager: PinManager, private val context: Conte
     private val lockTimeout = 60L
     private var lastExitDate: Long
         get() {
-            return getPreferences(context).getLong(LockTimeOut, 0)
+            return getPreferences(context).getLong(BackgroundedTime, 0)
         }
         set(value) {
             getPreferences(context)
                     .edit()
-                    .putLong(LockTimeOut, value)
+                    .putLong(BackgroundedTime, value)
                     .commit()
         }
 
@@ -52,7 +52,7 @@ class LockManager(private val pinManager: PinManager, private val context: Conte
     }
 
     companion object{
-        private const val LockTimeOut = "LockManager.Timeout"
+        private const val BackgroundedTime = "LockManager.BackgroundedTime"
     }
 
 }

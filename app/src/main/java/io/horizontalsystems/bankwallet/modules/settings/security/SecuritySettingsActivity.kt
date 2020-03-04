@@ -6,12 +6,14 @@ import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
+import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
@@ -109,6 +111,10 @@ class SecuritySettingsActivity : BaseActivity() {
             finishAffinity()
             MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
             SecuritySettingsModule.start(this)
+            if(App.localStorage.torEnabled) {
+                val intent = Intent(this, TorConnectionActivity::class.java)
+                startActivity(intent)
+            }
             exitProcess(0)
         })
     }
