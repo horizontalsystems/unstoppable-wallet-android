@@ -5,9 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
 import io.horizontalsystems.pin.PinModule
 
@@ -28,6 +30,10 @@ class LauncherActivity : AppCompatActivity() {
 
         viewModel.openMainModule.observe(this, Observer {
             MainModule.start(this)
+            if(App.localStorage.torEnabled) {
+                val intent = Intent(this, TorConnectionActivity::class.java)
+                startActivity(intent)
+            }
             finish()
         })
 
