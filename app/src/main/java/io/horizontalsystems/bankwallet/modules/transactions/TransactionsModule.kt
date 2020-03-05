@@ -88,13 +88,11 @@ object TransactionsModule {
     fun initModule(view: TransactionsViewModel, router: IRouter) {
         val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), TransactionItemFactory())
         val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
-        val transactionsLoader = TransactionsLoader(dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.feeCoinProvider), transactionsLoader, TransactionMetadataDataSource())
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.feeCoinProvider), dataSource, TransactionMetadataDataSource())
 
         presenter.view = view
         interactor.delegate = presenter
         view.delegate = presenter
-        transactionsLoader.delegate = presenter
     }
 
 }
