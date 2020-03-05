@@ -163,17 +163,7 @@ class TransactionsPresenter(
             return
         }
 
-        val fetchDataList = dataSource.getFetchDataList()
-        if (fetchDataList.isEmpty()) {
-            val currentItemsCount = dataSource.itemsCount
-            val insertedCount = dataSource.increasePage()
-            if (insertedCount > 0) {
-                view?.addItems(currentItemsCount, insertedCount)
-            }
-            loading = false
-        } else {
-            interactor.fetchRecords(fetchDataList)
-        }
+        interactor.fetchRecords(dataSource.getFetchDataList())
     }
 
 }
