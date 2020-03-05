@@ -7,30 +7,6 @@
     tools:context="io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity">
 
 
-    <ImageView
-        android:id="@+id/imgTorStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="201dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_tor_status"
-        android:contentDescription="TODO" />
-
-    <ImageView
-        android:id="@+id/imgTorStatusError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="201dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_tor_status_error"
-        android:contentDescription="TODO" />
-
     <ProgressBar
         android:id="@+id/pgTorStatus"
         style="?android:attr/progressBarStyle"
@@ -49,12 +25,36 @@
         app:layout_constraintStart_toStartOf="@+id/imgTorStatus"
         app:layout_constraintTop_toTopOf="@+id/imgTorStatus" />
 
+    <ImageView
+        android:id="@+id/imgTorStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="201dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_tor_status"
+        android:contentDescription="" />
+
+    <ImageView
+        android:id="@+id/imgTorStatusError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="201dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_tor_status_error"
+        android:contentDescription="" />
+
     <TextView
         android:id="@+id/txTorStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="289dp"
-        android:text="Starting Tor ..."
+        android:text="@string/Tor_Status_Starting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -74,12 +74,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="47dp"
-        android:text="Disable Tor"
+        android:autoLink="all"
+        android:clickable="true"
+        android:text="@string/Button_Disable"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRetry"
-        android:clickable="true"
-        android:autoLink="all" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRetry" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
