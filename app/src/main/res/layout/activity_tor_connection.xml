@@ -13,12 +13,12 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/grey"
         android:indeterminate="true"
-        android:indeterminateTint="@color/grey"
+        android:indeterminateTint="@color/black"
         android:indeterminateTintMode="src_atop"
         app:layout_constraintBottom_toBottomOf="@+id/imgTorStatus"
         app:layout_constraintEnd_toEndOf="@+id/imgTorStatus"
@@ -42,12 +42,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="201dp"
+        android:contentDescription=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_tor_status_error"
-        android:contentDescription="" />
+        app:srcCompat="@drawable/ic_tor_status_error" />
 
     <TextView
         android:id="@+id/txTorStatus"
