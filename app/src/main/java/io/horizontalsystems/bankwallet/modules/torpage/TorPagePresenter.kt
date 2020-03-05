@@ -29,6 +29,10 @@ class TorPagePresenter(
 
     override fun updateConnectionStatus(connectionStatus: TorStatus) {
         view.setConnectionStatus(connectionStatus)
+        if (connectionStatus == TorStatus.Failed){
+            interactor.isTorEnabled = false
+            view.setTorSwitch(false)
+        }
     }
 
     override fun onCleared() {
