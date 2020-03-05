@@ -13,14 +13,11 @@ class TransactionRecordDataSource(
         private val viewItemFactory: TransactionViewItemFactory,
         private val metadataDataSource: TransactionMetadataDataSource) {
 
-    val itemsCount
-        get() = itemsDataSource.count
+    val items
+        get() = itemsDataSource.items
 
     val allShown
         get() = poolRepo.activePools.all { it.allShown }
-
-    fun itemForIndex(index: Int): TransactionViewItem =
-            itemsDataSource.itemForIndex(index)
 
     fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> =
             itemsDataSource.itemIndexesForTimestamp(coin, timestamp)
@@ -69,7 +66,7 @@ class TransactionRecordDataSource(
         return true
     }
 
-    fun increasePage(): Int {
+    fun increasePage(): List<TransactionViewItem> {
         val unusedItems = mutableListOf<TransactionViewItem>()
 
         poolRepo.activePools.forEach { pool ->
@@ -78,7 +75,7 @@ class TransactionRecordDataSource(
             })
         }
 
-        if (unusedItems.isEmpty()) return 0
+        if (unusedItems.isEmpty()) return listOf()
 
         unusedItems.sortDescending()
 
@@ -90,7 +87,7 @@ class TransactionRecordDataSource(
             poolRepo.getPool(it.wallet)?.increaseFirstUnusedIndex()
         }
 
-        return usedItems.size
+        return usedItems
     }
 
     private fun transactionViewItem(wallet: Wallet, record: TransactionRecord): TransactionViewItem {

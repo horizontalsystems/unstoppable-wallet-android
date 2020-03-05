@@ -16,9 +16,8 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     val filterItems = MutableLiveData<List<Wallet?>>()
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
-    val reloadLiveEvent = SingleLiveEvent<Unit>()
     val reloadItemsLiveEvent = SingleLiveEvent<List<Int>>()
-    val addItemsLiveEvent = SingleLiveEvent<Pair<Int, Int>>()
+    val items = MutableLiveData<List<TransactionViewItem>>()
 
     private var flushSubject = PublishSubject.create<Unit>()
     private var indexesToUpdate = mutableListOf<Int>()
@@ -40,8 +39,8 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         filterItems.postValue(filters)
     }
 
-    override fun reload() {
-        reloadLiveEvent.postValue(Unit)
+    override fun showTransactions(items: List<TransactionViewItem>) {
+        this.items.postValue(items)
     }
 
     override fun reloadItems(updatedIndexes: List<Int>) {
@@ -55,12 +54,8 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         indexesToUpdate.clear()
     }
 
-    override fun addItems(fromIndex: Int, count: Int) {
-        if (fromIndex == 0) {
-            reload()
-        } else {
-            addItemsLiveEvent.postValue(Pair(fromIndex, count))
-        }
+    override fun addTransactions(items: List<TransactionViewItem>) {
+        this.items.postValue(this.items.value ?: listOf<TransactionViewItem>() + items)
     }
 
     val noTransactions = MutableLiveData<Unit>()
