@@ -86,7 +86,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@+id/fingerprint"
                 app:title="@string/SettingsSecurity_EnableTor" />
 
@@ -95,17 +94,18 @@
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="24dp"
-                android:textColor="?ColorJacob"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/background_yellow_for_alert_text"
                 android:paddingStart="12dp"
-                android:visibility="gone"
                 android:paddingTop="8dp"
                 android:paddingEnd="12dp"
                 android:paddingBottom="8dp"
                 android:text="@string/SettingsSecurity_TorConnectionDescription"
+                android:textColor="?ColorJacob"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/torConnectionSwitch" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

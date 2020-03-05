@@ -17,9 +17,13 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         interactor.isBiometricEnabled = enable
     }
 
-    override fun didSwitchTorEnabled(enable: Boolean) {
-        interactor.isTorEnabled = enable
-        if (enable) {
+    override fun didSwitchTorEnabled(checked: Boolean) {
+        view?.showRestartAlert(checked)
+    }
+
+    override fun setTorEnabled(checked: Boolean) {
+        interactor.isTorEnabled = checked
+        if (checked) {
             router.restartApp()
         } else {
             interactor.stopTor()

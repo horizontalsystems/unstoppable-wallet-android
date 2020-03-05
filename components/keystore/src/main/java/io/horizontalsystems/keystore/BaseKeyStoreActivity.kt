@@ -38,14 +38,16 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
 
         viewModel.showInvalidKeyWarning.observe(this, Observer {
             AlertDialogFragment.newInstance(
-                    getString(R.string.Alert_KeysInvalidatedTitle),
-                    getString(R.string.Alert_KeysInvalidatedDescription),
-                    R.string.Alert_Ok,
-                    false,
-                    object : AlertDialogFragment.Listener {
+                    titleString = getString(R.string.Alert_KeysInvalidatedTitle),
+                    descriptionString = getString(R.string.Alert_KeysInvalidatedDescription),
+                    buttonText = R.string.Alert_Ok,
+                    cancelable = false,
+                    listener = object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
                             viewModel.delegate.onCloseInvalidKeyWarning()
                         }
+
+                        override fun onCancel() {}
                     }).show(supportFragmentManager, "keys_invalidated_alert")
         })
 

@@ -11,6 +11,7 @@
     <string name="Alert_Success">Success</string>
     <string name="Alert_Copied">Copied</string>
     <string name="Alert_Loading">Loading...</string>
+    <string name="Alert_Restart">Restart</string>
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
@@ -273,6 +274,7 @@
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
     <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <string name="SettingsSecurity_EnableTor">Enable Tor</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
 
     <!--Setting_About-->

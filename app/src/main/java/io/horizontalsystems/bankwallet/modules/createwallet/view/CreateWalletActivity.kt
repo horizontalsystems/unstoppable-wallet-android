@@ -5,8 +5,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
@@ -96,9 +96,9 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
         view.showNotSupported.observe(this, Observer { predefinedAccountType ->
             AlertDialogFragment.newInstance(
-                    getString(R.string.ManageCoins_Alert_CantCreateTitle, getString(predefinedAccountType.title)),
-                    getString(R.string.ManageCoins_Alert_CantCreateDescription, getString(predefinedAccountType.title)),
-                    R.string.Alert_Ok
+                    titleString = getString(R.string.ManageCoins_Alert_CantCreateTitle, getString(predefinedAccountType.title)),
+                    descriptionString = getString(R.string.ManageCoins_Alert_CantCreateDescription, getString(predefinedAccountType.title)),
+                    buttonText = R.string.Alert_Ok
             ).show(supportFragmentManager, "alert_dialog")
         })
     }

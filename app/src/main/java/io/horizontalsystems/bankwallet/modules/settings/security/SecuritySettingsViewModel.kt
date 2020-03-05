@@ -14,6 +14,7 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val biometricSettingsVisibleLiveData = MutableLiveData<Boolean>()
     val biometricEnabledLiveData = MutableLiveData<Boolean>()
     val torEnabledLiveData = MutableLiveData<Boolean>()
+    val showAppRestartAlertForTor = SingleLiveEvent<Boolean>()
 
     val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
@@ -57,6 +58,10 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun toggleTorEnabled(enabled: Boolean) {
         torEnabledLiveData.postValue(enabled)
+    }
+
+    override fun showRestartAlert(checked: Boolean) {
+        showAppRestartAlertForTor.postValue(checked)
     }
 
     //  ISecuritySettingsRouter

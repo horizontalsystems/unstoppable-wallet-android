@@ -10,11 +10,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
-import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.pin.PinModule
+import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
 import kotlin.system.exitProcess
@@ -85,6 +85,10 @@ class SecuritySettingsActivity : BaseActivity() {
             torConnectionSwitch.switchIsChecked = it
         })
 
+        viewModel.showAppRestartAlertForTor.observe(this, Observer { checked->
+            showAppRestartAlert(checked)
+        })
+
         //router
 
         viewModel.openManageKeysLiveEvent.observe(this, Observer {
@@ -108,15 +112,34 @@ class SecuritySettingsActivity : BaseActivity() {
         })
 
         viewModel.restartApp.observe(this, Observer {
-            finishAffinity()
-            MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
-            SecuritySettingsModule.start(this)
-            if(App.localStorage.torEnabled) {
-                val intent = Intent(this, TorConnectionActivity::class.java)
-                startActivity(intent)
-            }
-            exitProcess(0)
+            restartApp()
         })
+    }
+
+    private fun showAppRestartAlert(checked: Boolean) {
+        AlertDialogFragment.newInstance(
+                descriptionString = getString(R.string.SettingsSecurity_AppRestartWarning),
+                buttonText = R.string.Alert_Restart,
+                cancelButtonText = R.string.Alert_Cancel,
+                cancelable = true,
+                listener = object : AlertDialogFragment.Listener {
+                    override fun onButtonClick() {
+                        viewModel.delegate.setTorEnabled(checked)
+                    }
+
+                    override fun onCancel() {
+                        torConnectionSwitch.switchIsChecked = !checked
+                    }
+                }).show(supportFragmentManager, "alert_dialog")
+    }
+
+    private fun restartApp() {
+        MainModule.startAsNewTask(this)
+        if (App.localStorage.torEnabled) {
+            val intent = Intent(this, TorConnectionActivity::class.java)
+            startActivity(intent)
+        }
+        exitProcess(0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
