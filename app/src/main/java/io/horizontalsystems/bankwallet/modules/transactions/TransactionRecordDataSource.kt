@@ -19,17 +19,11 @@ class TransactionRecordDataSource(
     val allShown
         get() = poolRepo.activePools.all { it.allShown }
 
-    val allRecords: Map<Wallet, List<TransactionRecord>>
-        get() = poolRepo.activePools.map {
-            Pair(it.wallet, it.records)
-        }.toMap()
-
     fun itemForIndex(index: Int): TransactionViewItem =
             itemsDataSource.itemForIndex(index)
 
     fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> =
             itemsDataSource.itemIndexesForTimestamp(coin, timestamp)
-
 
     fun itemIndexesForPending(wallet: Wallet, thresholdBlockHeight: Int): List<Int> =
             itemsDataSource.itemIndexesForPending(wallet, thresholdBlockHeight)
