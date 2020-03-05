@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.tor
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
 import kotlinx.android.synthetic.main.activity_tor_connection.*
 import kotlin.system.exitProcess
 
+@SuppressLint("SetTextI18n")
 class TorConnectionActivity : AppCompatActivity() {
 
     private lateinit var presenter: TorStatusPresenter
@@ -33,7 +35,8 @@ class TorConnectionActivity : AppCompatActivity() {
             presenter.disableTor()
         }
 
-        setStatus(false, "Starting Tor ... ")
+        txDisableTor.text = "${getString(R.string.Button_Disable)} Tor"
+        setStatus(false, getString(R.string.Tor_Status_Starting))
     }
 
     override fun onBackPressed() {
@@ -56,7 +59,9 @@ class TorConnectionActivity : AppCompatActivity() {
         torStatusView.torConnectionStatus.observe(this, Observer {status ->
 
             val isError = status == TorStatus.Failed
-            val text = if(status == TorStatus.Connecting) "Starting Tor" else "Error starting Tor"
+            val text = if(status == TorStatus.Connecting)
+                getString(R.string.Tor_Status_Starting)
+            else getString(R.string.Tor_Status_Error)
             setStatus(isError, text)
         })
     }
@@ -70,5 +75,4 @@ class TorConnectionActivity : AppCompatActivity() {
 
         btnRetry.isEnabled = isError
     }
-
 }
