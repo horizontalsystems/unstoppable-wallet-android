@@ -10,8 +10,7 @@ import java.math.BigDecimal
 class TransactionsPresenter(
         private val interactor: TransactionsModule.IInteractor,
         private val router: TransactionsModule.IRouter,
-        private val dataSource: TransactionRecordDataSource,
-        private val metadataDataSource: TransactionMetadataDataSource)
+        private val dataSource: TransactionRecordDataSource)
     : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
 
     var view: TransactionsModule.IView? = null
@@ -21,7 +20,7 @@ class TransactionsPresenter(
     }
 
     override fun onVisible() {
-        view?.showTransactions(dataSource.items)
+        view?.showTransactions(dataSource.itemsCopy)
     }
 
     override fun onTransactionItemClick(transaction: TransactionViewItem) {
@@ -74,7 +73,7 @@ class TransactionsPresenter(
         val insertedItems = dataSource.increasePage()
         if (insertedItems.isNotEmpty()) {
             if (initial) {
-                view?.showTransactions(dataSource.items)
+                view?.showTransactions(dataSource.itemsCopy)
             } else {
                 view?.addTransactions(insertedItems)
             }
@@ -86,29 +85,29 @@ class TransactionsPresenter(
 
     override fun onUpdateLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo) {
         if (dataSource.setLastBlock(wallet, lastBlockInfo)) {
-            view?.showTransactions(dataSource.items)
+            view?.showTransactions(dataSource.itemsCopy)
         }
     }
 
     override fun onUpdateBaseCurrency() {
-        metadataDataSource.clearRates()
-        view?.showTransactions(dataSource.items)
+        dataSource.clearRates()
+        view?.showTransactions(dataSource.itemsCopy)
     }
 
     override fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
         if (dataSource.setRate(rateValue, coin, currency, timestamp)) {
-            view?.showTransactions(dataSource.items)
+            view?.showTransactions(dataSource.itemsCopy)
         }
     }
 
     override fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet) {
         if (dataSource.handleUpdatedRecords(records, wallet)) {
-            view?.showTransactions(dataSource.items)
+            view?.showTransactions(dataSource.itemsCopy)
         }
     }
 
     override fun onConnectionRestore() {
-        view?.showTransactions(dataSource.items)
+        view?.showTransactions(dataSource.itemsCopy)
     }
 
     private fun getOrderedList(wallets: List<Wallet>): MutableList<Wallet> {

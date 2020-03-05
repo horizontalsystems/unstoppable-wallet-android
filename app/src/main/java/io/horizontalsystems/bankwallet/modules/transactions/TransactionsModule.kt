@@ -13,7 +13,7 @@ data class TransactionViewItem(
         val wallet: Wallet,
         val transactionHash: String,
         val coinValue: CoinValue,
-        val currencyValue: CurrencyValue?,
+        var currencyValue: CurrencyValue?,
         val feeCoinValue: CoinValue?,
         val from: String?,
         val to: String?,
@@ -21,7 +21,7 @@ data class TransactionViewItem(
         val showFromAddress: Boolean,
         val date: Date?,
         val status: TransactionStatus,
-        val rate: CurrencyValue?,
+        var rate: CurrencyValue?,
         val lockInfo: TransactionLockInfo?,
         val conflictingTxHash: String?,
         val unlocked: Boolean = true,
@@ -51,6 +51,11 @@ data class TransactionViewItem(
                 && date == other.date
                 && status == other.status
                 && rate == other.rate
+    }
+
+    fun clearRates() {
+        currencyValue = null
+        rate = null
     }
 
 }
@@ -112,10 +117,9 @@ object TransactionsModule {
     }
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
-        val metadataDataSource = TransactionMetadataDataSource()
-        val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 10, TransactionViewItemFactory(App.feeCoinProvider), metadataDataSource)
+        val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 10, TransactionViewItemFactory(App.feeCoinProvider), TransactionMetadataDataSource())
         val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
-        val presenter = TransactionsPresenter(interactor, router, dataSource, metadataDataSource)
+        val presenter = TransactionsPresenter(interactor, router, dataSource)
 
         presenter.view = view
         interactor.delegate = presenter

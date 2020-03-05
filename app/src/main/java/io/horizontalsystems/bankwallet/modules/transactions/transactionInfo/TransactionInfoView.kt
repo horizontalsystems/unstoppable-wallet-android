@@ -89,11 +89,12 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     setOnClickListener { viewModel.onClickTransactionId() }
                 }
 
-                if (txRec.currencyValue != null) {
+                val currencyValue = txRec.currencyValue
+                if (currencyValue != null) {
                     fiatValueWrapper.visibility = View.VISIBLE
                     fiatName.visibility = View.VISIBLE
 
-                    fiatValue.text =  App.numberFormatter.formatForTransactions(context, txRec.currencyValue, incoming, canUseLessSymbol = false, trimmable = false)
+                    fiatValue.text =  App.numberFormatter.formatForTransactions(context, currencyValue, incoming, canUseLessSymbol = false, trimmable = false)
 
                     val lockIcon = when {
                         txRec.lockInfo == null -> 0
@@ -101,7 +102,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                         else -> R.drawable.ic_lock
                     }
                     fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
-                    fiatName.text = txRec.currencyValue.currency.code
+                    fiatName.text = currencyValue.currency.code
                     sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
                 } else {
                     fiatValueWrapper.visibility = View.GONE
@@ -128,12 +129,13 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemDoubleSpend.visibility = View.GONE
                 }
 
-                if (txRec.rate == null) {
+                val rate = txRec.rate
+                if (rate == null) {
                     itemRate.visibility = View.GONE
                 } else {
                     itemRate.visibility = View.VISIBLE
-                    val rate = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.formatForRates(txRec.rate), txRec.wallet.coin.code)
-                    itemRate.bind(context.getString(R.string.TransactionInfo_HistoricalRate), rate)
+                    val rateValue = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.formatForRates(rate), txRec.wallet.coin.code)
+                    itemRate.bind(context.getString(R.string.TransactionInfo_HistoricalRate), rateValue)
                 }
 
                 itemFee.visibility = View.GONE

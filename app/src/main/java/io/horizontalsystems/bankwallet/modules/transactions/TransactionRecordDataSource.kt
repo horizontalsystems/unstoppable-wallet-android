@@ -16,8 +16,8 @@ class TransactionRecordDataSource(
         private val viewItemFactory: TransactionViewItemFactory,
         private val metadataDataSource: TransactionMetadataDataSource) {
 
-    val items
-        get() = itemsDataSource.items
+    val itemsCopy
+        get() = itemsDataSource.items.map { it.copy() }
 
     val allShown
         get() = poolRepo.activePools.all { it.allShown }
@@ -171,5 +171,9 @@ class TransactionRecordDataSource(
         handleUpdatedWallets(wallets)
     }
 
+    fun clearRates() {
+        metadataDataSource.clearRates()
+        itemsDataSource.items.forEach { it.clearRates() }
+    }
 }
 
