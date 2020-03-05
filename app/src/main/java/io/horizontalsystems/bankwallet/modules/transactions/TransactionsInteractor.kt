@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -60,9 +63,9 @@ class TransactionsInteractor(
                 .let { disposables.add(it) }
     }
 
-    override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
+    override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>, initial: Boolean) {
         if (fetchDataList.isEmpty()) {
-            delegate?.didFetchRecords(mapOf())
+            delegate?.didFetchRecords(mapOf(), initial)
             return
         }
 
@@ -88,7 +91,7 @@ class TransactionsInteractor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { records, _ ->
-                    delegate?.didFetchRecords(records)
+                    delegate?.didFetchRecords(records, initial)
                 }
                 .let { disposables.add(it) }
     }

@@ -93,6 +93,10 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
+        viewModel.noTransactions.observe(viewLifecycleOwner, Observer {
+            transactionsAdapter.notifyDataSetChanged()
+        })
+
         viewModel.reloadItemsLiveEvent.observe(viewLifecycleOwner, Observer {
             it?.forEach { index ->
                 transactionsAdapter.notifyItemChanged(index)
