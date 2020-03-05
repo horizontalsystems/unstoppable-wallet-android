@@ -84,6 +84,7 @@ object TransactionsModule {
         fun onClear()
 
         fun onBottomReached()
+        fun willShow(transactionViewItem: TransactionViewItem)
         fun onVisible()
     }
 
