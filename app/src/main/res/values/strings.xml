@@ -31,10 +31,6 @@
 
     <string name="Wallet">%s Wallet</string>
 
-    <!--Tor-->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-
     <!--Welcome-->
 
     <string name="Welcome_Title">Unstoppable \nWallet</string>
@@ -402,8 +398,10 @@
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
 
-    <!-- Tor Connection -->
+    <!-- Tor -->
 
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
     <string name="TorPage_Connecting">Connecting…</string>
     <string name="TorPage_Connected">Connected</string>
     <string name="TorPage_Failed">Failed</string>
