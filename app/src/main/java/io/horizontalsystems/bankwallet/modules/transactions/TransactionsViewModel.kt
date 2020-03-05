@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -67,6 +67,12 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         } else {
             addItemsLiveEvent.postValue(Pair(fromIndex, count))
         }
+    }
+
+    val noTransactions = MutableLiveData<Unit>()
+
+    override fun showNoTransactions() {
+        noTransactions.postValue(Unit)
     }
 
     override fun openTransactionInfo(transactionViewItem: TransactionViewItem) {

@@ -87,12 +87,14 @@ class TransactionsPresenter(
         loadNext(true)
     }
 
-    override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>) {
+    override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean) {
         dataSource.handleNextRecords(records)
         val currentItemsCount = dataSource.itemsCount
         val insertedCount = dataSource.increasePage()
         if (insertedCount > 0) {
             view?.addItems(currentItemsCount, insertedCount)
+        } else if (initial) {
+            view?.showNoTransactions()
         }
         loading = false
     }
@@ -157,13 +159,13 @@ class TransactionsPresenter(
 
         if (dataSource.allShown) {
             if (initial) {
-                view?.reload()
+                view?.showNoTransactions()
             }
             loading = false
             return
         }
 
-        interactor.fetchRecords(dataSource.getFetchDataList())
+        interactor.fetchRecords(dataSource.getFetchDataList(), initial)
     }
 
 }
