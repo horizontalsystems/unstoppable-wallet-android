@@ -25,7 +25,24 @@ data class TransactionViewItem(
         val rate: CurrencyValue?,
         val lockInfo: TransactionLockInfo?,
         val conflictingTxHash: String?,
-        val unlocked: Boolean = true)
+        val unlocked: Boolean = true,
+        val record: TransactionRecord) : Comparable<TransactionViewItem> {
+
+    override fun compareTo(other: TransactionViewItem): Int {
+        return record.compareTo(other.record)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is TransactionViewItem) {
+            return record == other.record
+        }
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return record.hashCode()
+    }
+}
 
 
 data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?)
@@ -87,9 +104,10 @@ object TransactionsModule {
     }
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
-        val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), TransactionItemFactory())
+        val metadataDataSource = TransactionMetadataDataSource()
+        val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 10, TransactionViewItemFactory(App.feeCoinProvider), metadataDataSource)
         val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.feeCoinProvider), dataSource, TransactionMetadataDataSource())
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.feeCoinProvider), dataSource, metadataDataSource)
 
         presenter.view = view
         interactor.delegate = presenter

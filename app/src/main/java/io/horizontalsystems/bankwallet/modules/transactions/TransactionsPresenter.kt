@@ -42,17 +42,7 @@ class TransactionsPresenter(
         get() = dataSource.itemsCount
 
     override fun itemForIndex(index: Int): TransactionViewItem {
-        val transactionItem = dataSource.itemForIndex(index)
-        val wallet = transactionItem.wallet
-        val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
-        val threshold = metadataDataSource.getConfirmationThreshold(wallet)
-        val rate = metadataDataSource.getRate(wallet.coin, transactionItem.record.timestamp)
-
-        if (rate == null) {
-            interactor.fetchRate(wallet.coin, transactionItem.record.timestamp)
-        }
-
-        return factory.item(wallet, transactionItem, lastBlockInfo, threshold, rate)
+        return dataSource.itemForIndex(index)
     }
 
     override fun onBottomReached() {
