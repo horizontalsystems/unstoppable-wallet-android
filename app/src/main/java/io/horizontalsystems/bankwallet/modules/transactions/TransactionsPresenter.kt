@@ -49,17 +49,11 @@ class TransactionsPresenter(
     }
 
     override fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>) {
-        val wallets = allWalletsData.map { it.first }
-
-        allWalletsData.forEach { (wallet, confirmationThreshold, lastBlockHeight) ->
-            metadataDataSource.setConfirmationThreshold(confirmationThreshold, wallet)
-            lastBlockHeight?.let {
-                metadataDataSource.setLastBlockInfo(it, wallet)
-            }
-        }
+        dataSource.onUpdateWalletsData(allWalletsData)
 
         interactor.fetchLastBlockHeights()
 
+        val wallets = allWalletsData.map { it.first }
         val filters = when {
             wallets.size < 2 -> listOf()
             else -> listOf(null).plus(getOrderedList(wallets))
@@ -67,7 +61,6 @@ class TransactionsPresenter(
 
         view?.showFilters(filters)
 
-        dataSource.handleUpdatedWallets(wallets)
         loadNext(true)
     }
 
@@ -92,24 +85,8 @@ class TransactionsPresenter(
     }
 
     override fun onUpdateLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo) {
-        val oldBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
-        val threshold = metadataDataSource.getConfirmationThreshold(wallet)
-
-        metadataDataSource.setLastBlockInfo(lastBlockInfo, wallet)
-
-        if (oldBlockInfo == null) {
+        if (dataSource.setLastBlock(wallet, lastBlockInfo)) {
             view?.showTransactions(dataSource.items)
-            return
-        }
-
-        val indexes = dataSource.itemIndexesForPending(wallet, oldBlockInfo.height - threshold).toMutableList()
-        lastBlockInfo.timestamp?.let { lastBlockTimestamp ->
-            val lockedIndexes = dataSource.itemIndexesForLocked(wallet, lastBlockTimestamp, oldBlockInfo.timestamp)
-            indexes.addAll(lockedIndexes)
-        }
-
-        if (indexes.isNotEmpty()) {
-            view?.reloadItems(indexes)
         }
     }
 

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
@@ -108,7 +109,7 @@ class TransactionRecordDataSource(
         itemsDataSource.clear()
     }
 
-    fun handleUpdatedWallets(wallets: List<Wallet>) {
+    private fun handleUpdatedWallets(wallets: List<Wallet>) {
         val unusedWallets = poolRepo.allPools.map { it.wallet }.filter { !wallets.contains(it) }
 
         poolRepo.deactivatePools(unusedWallets)
@@ -131,6 +132,43 @@ class TransactionRecordDataSource(
         }
 
         return itemIndexes.isNotEmpty()
+    }
+
+    fun setLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo): Boolean {
+        val oldBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
+        val threshold = metadataDataSource.getConfirmationThreshold(wallet)
+
+        metadataDataSource.setLastBlockInfo(lastBlockInfo, wallet)
+
+        if (oldBlockInfo == null) {
+            return true
+        }
+
+        val indexes = itemIndexesForPending(wallet, oldBlockInfo.height - threshold).toMutableList()
+        lastBlockInfo.timestamp?.let { lastBlockTimestamp ->
+            val lockedIndexes = itemIndexesForLocked(wallet, lastBlockTimestamp, oldBlockInfo.timestamp)
+            indexes.addAll(lockedIndexes)
+        }
+
+        indexes.forEach {
+            val transactionViewItem = itemsDataSource.items[it]
+            itemsDataSource.items[it] = transactionViewItem(transactionViewItem.wallet, transactionViewItem.record)
+        }
+
+        return indexes.isNotEmpty()
+    }
+
+    fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>) {
+        allWalletsData.forEach { (wallet, confirmationThreshold, lastBlockHeight) ->
+            metadataDataSource.setConfirmationThreshold(confirmationThreshold, wallet)
+            lastBlockHeight?.let {
+                metadataDataSource.setLastBlockInfo(it, wallet)
+            }
+        }
+
+        val wallets = allWalletsData.map { it.first }
+
+        handleUpdatedWallets(wallets)
     }
 
 }

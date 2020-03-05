@@ -72,7 +72,6 @@ object TransactionsModule {
     interface IView {
         fun showFilters(filters: List<Wallet?>)
         fun showTransactions(items: List<TransactionViewItem>)
-        fun reloadItems(updatedIndexes: List<Int>)
         fun addTransactions(items: List<TransactionViewItem>)
         fun showNoTransactions()
     }

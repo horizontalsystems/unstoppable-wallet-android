@@ -4,11 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
 
 class TransactionsViewModel : ViewModel(), TransactionsModule.IView, TransactionsModule.IRouter {
 
@@ -16,23 +11,11 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     val filterItems = MutableLiveData<List<Wallet?>>()
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
-    val reloadItemsLiveEvent = SingleLiveEvent<List<Int>>()
     val items = MutableLiveData<List<TransactionViewItem>>()
-
-    private var flushSubject = PublishSubject.create<Unit>()
-    private var indexesToUpdate = mutableListOf<Int>()
-    private val disposables = CompositeDisposable()
 
     fun init() {
         TransactionsModule.initModule(this, this)
         delegate.viewDidLoad()
-
-        flushSubject
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { _ -> reloadWithBuffer() }
-                .subscribe()?.let { disposables.add(it) }
     }
 
     override fun showFilters(filters: List<Wallet?>) {
@@ -41,17 +24,6 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     override fun showTransactions(items: List<TransactionViewItem>) {
         this.items.postValue(items)
-    }
-
-    override fun reloadItems(updatedIndexes: List<Int>) {
-        indexesToUpdate.addAll(updatedIndexes)
-        indexesToUpdate = indexesToUpdate.distinct().toMutableList()
-        flushSubject.onNext(Unit)
-    }
-
-    private fun reloadWithBuffer() {
-        reloadItemsLiveEvent.value = indexesToUpdate
-        indexesToUpdate.clear()
     }
 
     override fun addTransactions(items: List<TransactionViewItem>) {
