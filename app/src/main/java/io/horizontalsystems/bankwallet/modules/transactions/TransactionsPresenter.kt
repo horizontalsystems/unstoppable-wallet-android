@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -11,7 +10,6 @@ import java.math.BigDecimal
 class TransactionsPresenter(
         private val interactor: TransactionsModule.IInteractor,
         private val router: TransactionsModule.IRouter,
-        private val factory: TransactionViewItemFactory,
         private val dataSource: TransactionRecordDataSource,
         private val metadataDataSource: TransactionMetadataDataSource)
     : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
