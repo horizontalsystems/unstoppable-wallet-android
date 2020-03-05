@@ -68,6 +68,7 @@ class TorConnectionActivity : AppCompatActivity() {
 
     private fun setStatus(isError: Boolean, statusText: String) {
 
+        pgTorStatus.bringToFront()
         imgTorStatus.visibility = if(!isError) View.VISIBLE else View.GONE
         pgTorStatus.visibility = if(!isError) View.VISIBLE else View.GONE
         imgTorStatusError.visibility = if(isError) View.VISIBLE else View.GONE
