@@ -112,7 +112,7 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
     private val noTransactionsView = 0
     private val transactionView = 1
     private val logger = Logger.getLogger("TransactionsAdapter")
-    private val items = mutableListOf<TransactionViewItem>()
+    private var items = listOf<TransactionViewItem>()
 
     interface Listener {
         fun onItemClick(item: TransactionViewItem)
@@ -156,12 +156,11 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
 
     fun updateItems(items: List<TransactionViewItem>) {
         if (this.items.isEmpty()) {
-            this.items.addAll(items)
+            this.items = items
             notifyDataSetChanged()
         } else {
             val diffResult = DiffUtil.calculateDiff(TransactionViewItemDiff(this.items, items))
-            this.items.clear()
-            this.items.addAll(items)
+            this.items = items
             diffResult.dispatchUpdatesTo(this)
         }
     }
