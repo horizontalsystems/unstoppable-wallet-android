@@ -148,6 +148,7 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
 
         if (holder is ViewHolderTransaction) {
             try {
+                viewModel.delegate.willShow(items[position])
                 holder.bind(items[position], showBottomShade = (position == itemCount - 1))
             } catch (e: ArrayIndexOutOfBoundsException) {
                 logger.warning("throwing exception ArrayIndexOutOfBoundsException in TransactionsFragment")

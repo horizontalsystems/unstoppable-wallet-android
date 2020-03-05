@@ -5,6 +5,8 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
+import io.horizontalsystems.core.entities.Currency
+import java.math.BigDecimal
 
 class TransactionRecordDataSource(
         private val poolRepo: PoolRepo,
@@ -116,6 +118,19 @@ class TransactionRecordDataSource(
 
     fun itemIndexesForLocked(wallet: Wallet, unlockingBefore: Long, oldBlockTimestamp: Long?): List<Int> {
         return itemsDataSource.itemIndexesForLocked(wallet, unlockingBefore, oldBlockTimestamp)
+    }
+
+    fun setRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long): Boolean {
+        metadataDataSource.setRate(rateValue, coin, currency, timestamp)
+
+        val itemIndexes = itemIndexesForTimestamp(coin, timestamp)
+
+        itemIndexes.forEach {
+            val transactionViewItem = itemsDataSource.items[it]
+            itemsDataSource.items[it] = transactionViewItem(transactionViewItem.wallet, transactionViewItem.record)
+        }
+
+        return itemIndexes.isNotEmpty()
     }
 
 }

@@ -40,6 +40,14 @@ class TransactionsPresenter(
         loadNext(false)
     }
 
+    override fun willShow(transactionViewItem: TransactionViewItem) {
+        if (transactionViewItem.rate == null) {
+            transactionViewItem.date?.let {
+                interactor.fetchRate(transactionViewItem.wallet.coin, it.time / 1000)
+            }
+        }
+    }
+
     override fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>) {
         val wallets = allWalletsData.map { it.first }
 
@@ -111,11 +119,8 @@ class TransactionsPresenter(
     }
 
     override fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
-        metadataDataSource.setRate(rateValue, coin, currency, timestamp)
-
-        val itemIndexes = dataSource.itemIndexesForTimestamp(coin, timestamp)
-        if (itemIndexes.isNotEmpty()) {
-            view?.reloadItems(itemIndexes)
+        if (dataSource.setRate(rateValue, coin, currency, timestamp)) {
+            view?.showTransactions(dataSource.items)
         }
     }
 
