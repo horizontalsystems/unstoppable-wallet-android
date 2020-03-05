@@ -13,11 +13,11 @@ abstract class BaseActivity : CoreActivity() {
 
     fun showCustomKeyboardAlert() {
         AlertDialogFragment.newInstance(
-                getString(R.string.Alert_TitleWarning),
-                getString(R.string.Alert_CustomKeyboardIsUsed),
-                R.string.Alert_Ok,
-                false,
-                object : AlertDialogFragment.Listener {
+                titleString = getString(R.string.Alert_TitleWarning),
+                descriptionString = getString(R.string.Alert_CustomKeyboardIsUsed),
+                buttonText = R.string.Alert_Ok,
+                cancelable = false,
+                listener = object : AlertDialogFragment.Listener {
                     override fun onButtonClick() {
                         val imeManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imeManager.showInputMethodPicker()
@@ -30,6 +30,8 @@ abstract class BaseActivity : CoreActivity() {
                             }
                         }, (1 * 750).toLong())
                     }
+
+                    override fun onCancel() {}
                 }).show(supportFragmentManager, "custom_keyboard_alert")
     }
 

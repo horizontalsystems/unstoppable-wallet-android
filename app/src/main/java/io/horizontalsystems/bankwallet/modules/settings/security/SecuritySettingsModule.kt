@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
 
@@ -13,6 +13,7 @@ object SecuritySettingsModule {
         fun setBiometricSettingsVisible(visible: Boolean)
         fun toggleBiometricEnabled(enabled: Boolean)
         fun toggleTorEnabled(enabled: Boolean)
+        fun showRestartAlert(checked: Boolean)
     }
 
     interface ISecuritySettingsViewDelegate {
@@ -21,13 +22,14 @@ object SecuritySettingsModule {
         fun didTapEditPin()
         fun didSwitchPinSet(enable: Boolean)
         fun didSwitchBiometricEnabled(enable: Boolean)
-        fun didSwitchTorEnabled(enable: Boolean)
+        fun didSwitchTorEnabled(checked: Boolean)
         fun didSetPin()
         fun didCancelSetPin()
         fun didUnlockPinToDisablePin()
         fun didCancelUnlockPinToDisablePin()
         fun onClear()
         fun didTapBlockchainSettings()
+        fun setTorEnabled(checked: Boolean)
     }
 
     interface ISecuritySettingsInteractor {
@@ -56,8 +58,8 @@ object SecuritySettingsModule {
         fun restartApp()
     }
 
-    fun start(context: Context) {
-        context.startActivity(Intent(context, SecuritySettingsActivity::class.java))
+    fun start(activity: Activity) {
+        activity.startActivity(Intent(activity, SecuritySettingsActivity::class.java))
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {

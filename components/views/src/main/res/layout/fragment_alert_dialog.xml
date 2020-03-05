@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
         tools:text="Your encrypted data was recently invalidated because your Android lock screen was changed" />
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,20 +52,44 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/steel_20" />
+            android:background="@color/steel_20"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/buttonTextView"
-            android:layout_width="match_parent"
+            android:id="@+id/cancelButtonTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_bold"
+            android:paddingStart="6dp"
             android:paddingTop="16dp"
+            android:paddingEnd="6dp"
             android:paddingBottom="16dp"
-            android:textAlignment="center"
             android:textColor="?ColorJacob"
             android:textSize="17sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/actionButtonTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Cancel" />
+
+        <TextView
+            android:id="@+id/actionButtonTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_bold"
+            android:paddingStart="6dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="16dp"
+            android:textColor="?ColorJacob"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cancelButtonTextView"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="OK" />
 
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

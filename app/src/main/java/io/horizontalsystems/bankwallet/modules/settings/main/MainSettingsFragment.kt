@@ -149,7 +149,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let {
+            activity?.let {
                 SecuritySettingsModule.start(it)
             }
         })

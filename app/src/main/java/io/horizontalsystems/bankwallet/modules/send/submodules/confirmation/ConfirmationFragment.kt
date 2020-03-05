@@ -97,6 +97,8 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
                         override fun onButtonClick() {
                             activity?.onBackPressed()
                         }
+
+                        override fun onCancel() {}
                     }).show(parentFragmentManager, "alert_dialog")
         })
 
