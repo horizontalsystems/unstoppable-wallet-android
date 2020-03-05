@@ -126,8 +126,8 @@ class TransactionsPresenter(
     }
 
     override fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet) {
-        dataSource.handleUpdatedRecords(records, wallet)?.let {
-            view?.reloadChange(it)
+        if (dataSource.handleUpdatedRecords(records, wallet)) {
+            view?.reload()
         }
     }
 

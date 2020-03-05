@@ -79,14 +79,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
-        viewModel.reloadChangeEvent.observe(viewLifecycleOwner, Observer { diff ->
-            diff?.dispatchUpdatesTo(transactionsAdapter)
-
-            if (viewModel.delegate.itemsCount == 0) {
-                viewModel.delegate.onBottomReached()
-            }
-        })
-
         viewModel.addItemsLiveEvent.observe(viewLifecycleOwner, Observer {
             it?.let { (fromIndex, count) ->
                 transactionsAdapter.notifyItemRangeInserted(fromIndex, count)
