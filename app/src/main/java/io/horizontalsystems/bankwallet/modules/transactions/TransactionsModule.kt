@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
@@ -61,7 +60,6 @@ object TransactionsModule {
     interface IView {
         fun showFilters(filters: List<Wallet?>)
         fun reload()
-        fun reloadChange(diff: DiffUtil.DiffResult)
         fun reloadItems(updatedIndexes: List<Int>)
         fun addItems(fromIndex: Int, count: Int)
         fun showNoTransactions()

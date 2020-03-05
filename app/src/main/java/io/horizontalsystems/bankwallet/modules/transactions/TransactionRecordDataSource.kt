@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -45,8 +44,8 @@ class TransactionRecordDataSource(
         }
     }
 
-    fun handleUpdatedRecords(records: List<TransactionRecord>, wallet: Wallet): DiffUtil.DiffResult? {
-        val pool = poolRepo.getPool(wallet) ?: return null
+    fun handleUpdatedRecords(records: List<TransactionRecord>, wallet: Wallet): Boolean {
+        val pool = poolRepo.getPool(wallet) ?: return false
 
         val updatedRecords = mutableListOf<TransactionRecord>()
         val insertedRecords = mutableListOf<TransactionRecord>()
@@ -66,12 +65,14 @@ class TransactionRecordDataSource(
             }
         }
 
-        if (!poolRepo.isPoolActiveByWallet(wallet)) return null
+        if (!poolRepo.isPoolActiveByWallet(wallet)) return false
 
         val updatedItems = updatedRecords.map { transactionViewItem(wallet, it) }
         val insertedItems = insertedRecords.map { transactionViewItem(wallet, it) }
 
-        return itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
+        itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
+
+        return true
     }
 
     fun increasePage(): Int {
