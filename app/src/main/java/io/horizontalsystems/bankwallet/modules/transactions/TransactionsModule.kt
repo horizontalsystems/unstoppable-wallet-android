@@ -41,6 +41,18 @@ data class TransactionViewItem(
     override fun hashCode(): Int {
         return record.hashCode()
     }
+
+    fun itemTheSame(other: TransactionViewItem): Boolean {
+        return wallet == other.wallet && transactionHash == other.transactionHash
+    }
+
+    fun contentTheSame(other: TransactionViewItem): Boolean {
+        return currencyValue == other.currencyValue
+                && date == other.date
+                && status == other.status
+                && rate == other.rate
+    }
+
 }
 
 
@@ -59,9 +71,9 @@ object TransactionsModule {
 
     interface IView {
         fun showFilters(filters: List<Wallet?>)
-        fun reload()
+        fun showTransactions(items: List<TransactionViewItem>)
         fun reloadItems(updatedIndexes: List<Int>)
-        fun addItems(fromIndex: Int, count: Int)
+        fun addTransactions(items: List<TransactionViewItem>)
         fun showNoTransactions()
     }
 
@@ -71,8 +83,6 @@ object TransactionsModule {
         fun onFilterSelect(wallet: Wallet?)
         fun onClear()
 
-        val itemsCount: Int
-        fun itemForIndex(index: Int): TransactionViewItem
         fun onBottomReached()
         fun onVisible()
     }

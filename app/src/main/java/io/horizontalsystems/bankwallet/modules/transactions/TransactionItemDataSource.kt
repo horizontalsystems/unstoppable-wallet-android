@@ -6,10 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionItemDataSource {
-    val count
-        get() = items.size
-
-    private val items = CopyOnWriteArrayList<TransactionViewItem>()
+    val items = CopyOnWriteArrayList<TransactionViewItem>()
 
     fun clear() {
         items.clear()
@@ -18,8 +15,6 @@ class TransactionItemDataSource {
     fun add(items: List<TransactionViewItem>) {
         this.items.addAll(items)
     }
-
-    fun itemForIndex(index: Int): TransactionViewItem = items[index]
 
     fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> {
         val indexes = mutableListOf<Int>()

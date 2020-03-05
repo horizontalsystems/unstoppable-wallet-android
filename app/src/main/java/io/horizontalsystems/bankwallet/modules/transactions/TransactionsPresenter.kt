@@ -21,7 +21,7 @@ class TransactionsPresenter(
     }
 
     override fun onVisible() {
-        view?.reload()
+        view?.showTransactions(dataSource.items)
     }
 
     override fun onTransactionItemClick(transaction: TransactionViewItem) {
@@ -34,13 +34,6 @@ class TransactionsPresenter(
 
     override fun onClear() {
         interactor.clear()
-    }
-
-    override val itemsCount: Int
-        get() = dataSource.itemsCount
-
-    override fun itemForIndex(index: Int): TransactionViewItem {
-        return dataSource.itemForIndex(index)
     }
 
     override fun onBottomReached() {
@@ -77,10 +70,13 @@ class TransactionsPresenter(
 
     override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean) {
         dataSource.handleNextRecords(records)
-        val currentItemsCount = dataSource.itemsCount
-        val insertedCount = dataSource.increasePage()
-        if (insertedCount > 0) {
-            view?.addItems(currentItemsCount, insertedCount)
+        val insertedItems = dataSource.increasePage()
+        if (insertedItems.isNotEmpty()) {
+            if (initial) {
+                view?.showTransactions(dataSource.items)
+            } else {
+                view?.addTransactions(insertedItems)
+            }
         } else if (initial) {
             view?.showNoTransactions()
         }
@@ -94,7 +90,7 @@ class TransactionsPresenter(
         metadataDataSource.setLastBlockInfo(lastBlockInfo, wallet)
 
         if (oldBlockInfo == null) {
-            view?.reload()
+            view?.showTransactions(dataSource.items)
             return
         }
 
@@ -111,7 +107,7 @@ class TransactionsPresenter(
 
     override fun onUpdateBaseCurrency() {
         metadataDataSource.clearRates()
-        view?.reload()
+        view?.showTransactions(dataSource.items)
     }
 
     override fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
@@ -125,12 +121,12 @@ class TransactionsPresenter(
 
     override fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet) {
         if (dataSource.handleUpdatedRecords(records, wallet)) {
-            view?.reload()
+            view?.showTransactions(dataSource.items)
         }
     }
 
     override fun onConnectionRestore() {
-        view?.reload()
+        view?.showTransactions(dataSource.items)
     }
 
     private fun getOrderedList(wallets: List<Wallet>): MutableList<Wallet> {
