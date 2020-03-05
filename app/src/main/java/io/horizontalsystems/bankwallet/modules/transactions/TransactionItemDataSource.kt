@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import java.util.concurrent.CopyOnWriteArrayList
@@ -11,17 +10,17 @@ class TransactionItemDataSource {
     val count
         get() = items.size
 
-    private val items = CopyOnWriteArrayList<TransactionItem>()
+    private val items = CopyOnWriteArrayList<TransactionViewItem>()
 
     fun clear() {
         items.clear()
     }
 
-    fun add(items: List<TransactionItem>) {
+    fun add(items: List<TransactionViewItem>) {
         this.items.addAll(items)
     }
 
-    fun itemForIndex(index: Int): TransactionItem = items[index]
+    fun itemForIndex(index: Int): TransactionViewItem = items[index]
 
     fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> {
         val indexes = mutableListOf<Int>()
@@ -47,7 +46,7 @@ class TransactionItemDataSource {
         return indexes
     }
 
-    fun handleModifiedItems(updatedItems: List<TransactionItem>, insertedItems: List<TransactionItem>): DiffUtil.DiffResult {
+    fun handleModifiedItems(updatedItems: List<TransactionViewItem>, insertedItems: List<TransactionViewItem>): DiffUtil.DiffResult {
         val tmpList = items.toMutableList()
         tmpList.removeAll(updatedItems)
         tmpList.addAll(updatedItems)

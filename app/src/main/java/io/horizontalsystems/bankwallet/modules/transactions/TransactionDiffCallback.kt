@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.recyclerview.widget.DiffUtil
-import io.horizontalsystems.bankwallet.entities.TransactionItem
 
-class TransactionDiffCallback(private val oldTxList: List<TransactionItem>, private val newTxList: List<TransactionItem>)
+class TransactionDiffCallback(private val oldTxList: List<TransactionViewItem>, private val newTxList: MutableList<TransactionViewItem>)
     : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {

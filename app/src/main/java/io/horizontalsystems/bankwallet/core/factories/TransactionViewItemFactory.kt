@@ -7,9 +7,7 @@ import java.util.*
 
 class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
-    fun item(wallet: Wallet, transactionItem: TransactionItem, lastBlockInfo: LastBlockInfo?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
-        val record = transactionItem.record
-
+    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
         var status: TransactionStatus = TransactionStatus.Pending
 
         if (record.failed) {
@@ -29,12 +27,12 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
             CurrencyValue(it.currency, record.amount * it.value)
         }
 
-        val coin = transactionItem.wallet.coin
+        val coin = wallet.coin
         val date = if (record.timestamp == 0L) null else Date(record.timestamp * 1000)
 
-        val feeCoinValue = transactionItem.record.fee?.let {
+        val feeCoinValue = record.fee?.let {
             val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
-            CoinValue(feeCoin, transactionItem.record.fee)
+            CoinValue(feeCoin, record.fee)
         }
 
         val unlocked = record.lockInfo?.let { lockInfo ->
@@ -56,7 +54,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 rate,
                 record.lockInfo,
                 record.conflictingTxHash,
-                unlocked
+                unlocked,
+                record
         )
     }
 

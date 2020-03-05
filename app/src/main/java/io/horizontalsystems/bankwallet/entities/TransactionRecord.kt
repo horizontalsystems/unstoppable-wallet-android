@@ -40,23 +40,6 @@ data class TransactionRecord(
     }
 }
 
-data class TransactionItem(val wallet: Wallet, val record: TransactionRecord) : Comparable<TransactionItem> {
-    override fun compareTo(other: TransactionItem): Int {
-        return record.compareTo(other.record)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (other is TransactionItem) {
-            return record == other.record
-        }
-        return super.equals(other)
-    }
-
-    override fun hashCode(): Int {
-        return record.hashCode()
-    }
-}
-
 enum class TransactionType {
     Incoming, Outgoing, SentToSelf
 }

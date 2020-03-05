@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.recyclerview.widget.DiffUtil
+import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
@@ -10,8 +10,9 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.F
 class TransactionRecordDataSource(
         private val poolRepo: PoolRepo,
         private val itemsDataSource: TransactionItemDataSource,
-        private val factory: TransactionItemFactory,
-        private val limit: Int = 10) {
+        private val limit: Int = 10,
+        private val viewItemFactory: TransactionViewItemFactory,
+        private val metadataDataSource: TransactionMetadataDataSource) {
 
     val itemsCount
         get() = itemsDataSource.count
@@ -24,7 +25,7 @@ class TransactionRecordDataSource(
             Pair(it.wallet, it.records)
         }.toMap()
 
-    fun itemForIndex(index: Int): TransactionItem =
+    fun itemForIndex(index: Int): TransactionViewItem =
             itemsDataSource.itemForIndex(index)
 
     fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> =
@@ -67,18 +68,18 @@ class TransactionRecordDataSource(
 
         if (!poolRepo.isPoolActiveByWallet(wallet)) return null
 
-        val updatedItems = updatedRecords.map { factory.createTransactionItem(wallet, it) }
-        val insertedItems = insertedRecords.map { factory.createTransactionItem(wallet, it) }
+        val updatedItems = updatedRecords.map { transactionViewItem(wallet, it) }
+        val insertedItems = insertedRecords.map { transactionViewItem(wallet, it) }
 
         return itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
     }
 
     fun increasePage(): Int {
-        val unusedItems = mutableListOf<TransactionItem>()
+        val unusedItems = mutableListOf<TransactionViewItem>()
 
         poolRepo.activePools.forEach { pool ->
             unusedItems.addAll(pool.unusedRecords.map { record ->
-                factory.createTransactionItem(pool.wallet, record)
+                transactionViewItem(pool.wallet, record)
             })
         }
 
@@ -95,6 +96,14 @@ class TransactionRecordDataSource(
         }
 
         return usedItems.size
+    }
+
+    private fun transactionViewItem(wallet: Wallet, record: TransactionRecord): TransactionViewItem {
+        val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
+        val threshold = metadataDataSource.getConfirmationThreshold(wallet)
+        val rate = metadataDataSource.getRate(wallet.coin, record.timestamp)
+
+        return viewItemFactory.item(wallet, record, lastBlockInfo, threshold, rate)
     }
 
     fun setWallets(wallets: List<Wallet>) {
