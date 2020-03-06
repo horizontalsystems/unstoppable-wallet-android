@@ -19,4 +19,9 @@ class TransactionViewItemDiff(private val old: List<TransactionViewItem>, privat
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return old[oldItemPosition].contentTheSame(new[newItemPosition])
     }
+
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        return new[newItemPosition].updateType
+    }
+
 }
