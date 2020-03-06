@@ -90,6 +90,7 @@ object TransactionsModule {
         fun showTransactions(items: List<TransactionViewItem>)
         fun addTransactions(items: List<TransactionViewItem>)
         fun showNoTransactions()
+        fun reloadTransactions()
     }
 
     interface IViewDelegate {
