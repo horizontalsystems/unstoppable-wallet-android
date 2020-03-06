@@ -84,6 +84,10 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             transactionsAdapter.updateItems(it)
         })
 
+        viewModel.reloadTransactions.observe(viewLifecycleOwner, Observer {
+            transactionsAdapter.notifyDataSetChanged()
+        })
+
         viewModel.noTransactions.observe(viewLifecycleOwner, Observer {
             transactionsAdapter.updateItems(listOf())
             transactionsAdapter.notifyDataSetChanged()

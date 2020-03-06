@@ -12,6 +12,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     val filterItems = MutableLiveData<List<Wallet?>>()
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val items = MutableLiveData<List<TransactionViewItem>>()
+    val reloadTransactions = SingleLiveEvent<Unit>()
 
     fun init() {
         TransactionsModule.initModule(this, this)
@@ -24,6 +25,10 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     override fun showTransactions(items: List<TransactionViewItem>) {
         this.items.postValue(items)
+    }
+
+    override fun reloadTransactions() {
+        reloadTransactions.postValue(Unit)
     }
 
     override fun addTransactions(items: List<TransactionViewItem>) {

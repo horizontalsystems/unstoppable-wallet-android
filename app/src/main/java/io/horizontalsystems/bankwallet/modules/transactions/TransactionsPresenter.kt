@@ -107,7 +107,7 @@ class TransactionsPresenter(
     }
 
     override fun onConnectionRestore() {
-        view?.showTransactions(dataSource.itemsCopy)
+        view?.reloadTransactions()
     }
 
     private fun getOrderedList(wallets: List<Wallet>): MutableList<Wallet> {
