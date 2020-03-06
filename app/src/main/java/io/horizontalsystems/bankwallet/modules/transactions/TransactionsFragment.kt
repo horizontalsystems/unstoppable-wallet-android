@@ -58,6 +58,16 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 filterAdapter.filterChangeable = newState == SCROLL_STATE_IDLE
             }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+                val diff = 9
+                if (diff + pastVisibleItems + visibleItemCount >= totalItemCount) { //End of list
+                    viewModel.delegate.onBottomReached()
+                }
+            }
         })
 
         viewModel.filterItems.observe(viewLifecycleOwner, Observer { filters ->
@@ -102,6 +112,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
     }
 
     override fun onFilterItemClick(item: Wallet?) {
+        recyclerTransactions.layoutManager?.scrollToPosition(0)
         viewModel.delegate.onFilterSelect(item)
     }
 
@@ -139,10 +150,6 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (holder !is ViewHolderTransaction) return
-
-        if (position > itemCount - 9) {
-            viewModel.delegate.onBottomReached()
-        }
 
         viewModel.delegate.willShow(items[position])
 
