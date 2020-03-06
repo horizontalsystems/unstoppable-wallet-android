@@ -128,6 +128,9 @@
         <activity
             android:name=".modules.torpage.TorPageActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.ratechart.RateChartActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
@@ -173,9 +174,10 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            RateChartFragment.newInstance(coin).show(childFragmentManager, "RateChartFragment")
+            startActivity(Intent(activity, RateChartActivity::class.java).apply {
+                putExtra("coin", coin)
+            })
         })
-
     }
 
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {

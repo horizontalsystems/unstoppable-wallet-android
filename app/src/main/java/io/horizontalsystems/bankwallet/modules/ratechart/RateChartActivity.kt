@@ -4,42 +4,38 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
-import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
+import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
-
+class RateChartActivity : BaseActivity(), ChartView.Listener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_rate_chart)
 
-        if (savedInstanceState != null) {
-            //close fragment in case it's restoring
-            dismiss()
+        val coin = intent.getParcelableExtra<Coin>("coin") ?: run {
+            finish()
+            return
         }
 
-        val coin = arguments?.getParcelable<Coin>(keyCoin) ?: run { dismiss(); return }
-
-        setContentView(R.layout.view_bottom_sheet_chart)
-
-        setTitle(getString(R.string.Charts_Title, coin.title))
-        context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, coin.code)) }
+        toolbar.title = coin.title
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         presenter = ViewModelProvider(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
@@ -50,37 +46,51 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
 
         observeData()
         bindActions()
-    }
 
-    override fun onShow() {
         presenter.viewDidLoad()
     }
 
+    //  ChartView Listener
+
+    override fun onTouchDown() {
+        setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = true)
+        setViewVisibility(chartActions, isVisible = false)
+    }
+
+    override fun onTouchUp() {
+        setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = false)
+        setViewVisibility(chartActions, isVisible = true)
+    }
+
+    override fun onTouchSelect(point: ChartPoint) {
+        presenter.onTouchSelect(point)
+    }
+
+    //  Private
+
     private fun observeData() {
-        presenterView.showSpinner.observe(viewLifecycleOwner, Observer {
+        presenterView.showSpinner.observe(this, Observer {
             setViewVisibility(chartView, chartError, isVisible = false)
             setViewVisibility(chartViewSpinner, isVisible = true)
         })
 
-        presenterView.hideSpinner.observe(viewLifecycleOwner, Observer {
+        presenterView.hideSpinner.observe(this, Observer {
             setViewVisibility(chartView, isVisible = true)
             setViewVisibility(chartViewSpinner, isVisible = false)
         })
 
-        presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
+        presenterView.setDefaultMode.observe(this, Observer { type ->
             actions[type]?.let { resetActions(it, setDefault = true) }
         })
 
-        presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
+        presenterView.showChartInfo.observe(this, Observer { item ->
             chartView.visibility = View.VISIBLE
             chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
 
             coinRateDiff.diff = item.diffValue
         })
 
-        presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
-            setSubtitle(DateHelper.getFullDate(Date(item.timestamp * 1000)))
-
+        presenterView.showMarketInfo.observe(this, Observer { item ->
             coinRateLast.text = formatter.formatForRates(item.rateValue)
 
             val shortCapValue = shortenValue(item.marketCap.value)
@@ -100,7 +110,7 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
             }
         })
 
-        presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
+        presenterView.setSelectedPoint.observe(this, Observer { item ->
             pointInfoVolume.visibility = View.INVISIBLE
             pointInfoVolumeTitle.visibility = View.INVISIBLE
             pointInfoTime.visibility = View.INVISIBLE
@@ -121,31 +131,11 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
             }
         })
 
-        presenterView.showError.observe(viewLifecycleOwner, Observer {
+        presenterView.showError.observe(this, Observer {
             chartView.visibility = View.INVISIBLE
             chartError.visibility = View.VISIBLE
             chartError.text = getString(R.string.Charts_Error_NotAvailable)
         })
-    }
-
-    //  ChartView Listener
-
-    override fun onTouchDown() {
-        shouldCloseOnSwipe = false
-
-        setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = true)
-        setViewVisibility(chartActions, isVisible = false)
-    }
-
-    override fun onTouchUp() {
-        shouldCloseOnSwipe = true
-
-        setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = false)
-        setViewVisibility(chartActions, isVisible = true)
-    }
-
-    override fun onTouchSelect(point: ChartPoint) {
-        presenter.onTouchSelect(point)
     }
 
     private fun bindActions() {
@@ -195,6 +185,7 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
     }
 
     // Need to move this to helpers
+
     private fun shortenValue(number: Number): Pair<BigDecimal, String> {
         val suffix = arrayOf(
                 " ",
@@ -215,14 +206,5 @@ class RateChartFragment : BaseBottomSheetDialogFragment(), ChartView.Listener {
         }
 
         return Pair(valueDecimal, returnSuffix)
-    }
-
-    companion object {
-        private const val keyCoin = "coin_key"
-        fun newInstance(coin: Coin) = RateChartFragment().apply {
-            arguments = Bundle(1).apply {
-                putParcelable(keyCoin, coin)
-            }
-        }
     }
 }
