@@ -70,13 +70,8 @@ class TransactionsPresenter(
 
     override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean) {
         dataSource.handleNextRecords(records)
-        val insertedItems = dataSource.increasePage()
-        if (insertedItems.isNotEmpty()) {
-            if (initial) {
-                view?.showTransactions(dataSource.itemsCopy)
-            } else {
-                view?.addTransactions(insertedItems)
-            }
+        if (dataSource.increasePage()) {
+            view?.showTransactions(dataSource.itemsCopy)
         } else if (initial) {
             view?.showNoTransactions()
         }

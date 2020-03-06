@@ -63,7 +63,7 @@ class TransactionRecordDataSource(
         return true
     }
 
-    fun increasePage(): List<TransactionViewItem> {
+    fun increasePage(): Boolean {
         val unusedItems = mutableListOf<TransactionViewItem>()
 
         poolRepo.activePools.forEach { pool ->
@@ -72,7 +72,7 @@ class TransactionRecordDataSource(
             })
         }
 
-        if (unusedItems.isEmpty()) return listOf()
+        if (unusedItems.isEmpty()) return false
 
         unusedItems.sortDescending()
 
@@ -84,7 +84,7 @@ class TransactionRecordDataSource(
             poolRepo.getPool(it.wallet)?.increaseFirstUnusedIndex()
         }
 
-        return usedItems
+        return true
     }
 
     private fun transactionViewItem(wallet: Wallet, record: TransactionRecord): TransactionViewItem {

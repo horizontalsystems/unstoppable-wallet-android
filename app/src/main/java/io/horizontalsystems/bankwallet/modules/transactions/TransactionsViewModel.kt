@@ -31,14 +31,8 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         reloadTransactions.postValue(Unit)
     }
 
-    override fun addTransactions(items: List<TransactionViewItem>) {
-        this.items.postValue(this.items.value ?: listOf<TransactionViewItem>() + items)
-    }
-
-    val noTransactions = MutableLiveData<Unit>()
-
     override fun showNoTransactions() {
-        noTransactions.postValue(Unit)
+        this.items.postValue(listOf())
     }
 
     override fun openTransactionInfo(transactionViewItem: TransactionViewItem) {
