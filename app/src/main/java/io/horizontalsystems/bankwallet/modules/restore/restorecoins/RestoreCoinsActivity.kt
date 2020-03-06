@@ -5,8 +5,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -99,7 +99,8 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     private fun observeRouter(router: RestoreCoinsRouter) {
         router.startMainModuleLiveEvent.observe(this, Observer {
-            MainModule.startAsNewTask(this)
+            MainModule.start(this)
+            finishAffinity()
         })
 
         router.close.observe(this, Observer {

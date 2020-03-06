@@ -71,4 +71,9 @@
         <item name="ColorGwen">@drawable/light_gradient_background</item>
         <item name="ColorNina">@color/black_50</item>
     </style>
+
+    <style name="LauncherTheme" parent="Theme.AppTheme">
+        <item name="android:windowBackground">@color/dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
 </resources>
