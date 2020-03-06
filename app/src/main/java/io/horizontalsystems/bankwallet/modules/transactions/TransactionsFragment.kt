@@ -88,10 +88,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             transactionsAdapter.notifyDataSetChanged()
         })
 
-        viewModel.noTransactions.observe(viewLifecycleOwner, Observer {
-            transactionsAdapter.updateItems(listOf())
-            transactionsAdapter.notifyDataSetChanged()
-        })
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
