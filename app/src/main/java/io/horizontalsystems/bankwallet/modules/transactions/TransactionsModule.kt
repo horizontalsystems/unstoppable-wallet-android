@@ -27,6 +27,9 @@ data class TransactionViewItem(
         val unlocked: Boolean = true,
         val record: TransactionRecord) : Comparable<TransactionViewItem> {
 
+    val isPending: Boolean
+        get() = status is TransactionStatus.Pending || status is TransactionStatus.Processing
+
     override fun compareTo(other: TransactionViewItem): Int {
         return record.compareTo(other.record)
     }
@@ -56,6 +59,14 @@ data class TransactionViewItem(
     fun clearRates() {
         currencyValue = null
         rate = null
+    }
+
+    fun becomesUnlocked(oldBlockTimestamp: Long?, lastBlockTimestamp: Long?): Boolean {
+        if (lastBlockTimestamp == null || record.lockInfo == null) return false
+
+        val lockedUntilTimestamp = record.lockInfo.lockedUntil.time / 1000
+
+        return lockedUntilTimestamp > oldBlockTimestamp ?: 0 && lockedUntilTimestamp <= lastBlockTimestamp
     }
 
 }

@@ -22,12 +22,6 @@ class TransactionRecordDataSource(
     val allShown
         get() = poolRepo.activePools.all { it.allShown }
 
-    fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> =
-            itemsDataSource.itemIndexesForTimestamp(coin, timestamp)
-
-    fun itemIndexesForPending(wallet: Wallet, thresholdBlockHeight: Int): List<Int> =
-            itemsDataSource.itemIndexesForPending(wallet, thresholdBlockHeight)
-
     fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
         it.getFetchData(limit)
     }
@@ -117,45 +111,45 @@ class TransactionRecordDataSource(
         setWallets(wallets)
     }
 
-    fun itemIndexesForLocked(wallet: Wallet, unlockingBefore: Long, oldBlockTimestamp: Long?): List<Int> {
-        return itemsDataSource.itemIndexesForLocked(wallet, unlockingBefore, oldBlockTimestamp)
-    }
-
     fun setRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long): Boolean {
         metadataDataSource.setRate(rateValue, coin, currency, timestamp)
 
-        val itemIndexes = itemIndexesForTimestamp(coin, timestamp)
+        var hasUpdate = false
+        itemsDataSource.items.forEachIndexed { index, item ->
+            if (item.wallet.coin == coin && item.record.timestamp == timestamp) {
+                itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
 
-        itemIndexes.forEach {
-            val transactionViewItem = itemsDataSource.items[it]
-            itemsDataSource.items[it] = transactionViewItem(transactionViewItem.wallet, transactionViewItem.record)
+                hasUpdate = true
+            }
         }
 
-        return itemIndexes.isNotEmpty()
+        return hasUpdate
     }
 
     fun setLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo): Boolean {
         val oldBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
-        val threshold = metadataDataSource.getConfirmationThreshold(wallet)
-
         metadataDataSource.setLastBlockInfo(lastBlockInfo, wallet)
 
         if (oldBlockInfo == null) {
+            itemsDataSource.items.forEachIndexed { index, item ->
+                if (wallet == item.wallet) {
+                    itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
+                }
+            }
+
             return true
         }
 
-        val indexes = itemIndexesForPending(wallet, oldBlockInfo.height - threshold).toMutableList()
-        lastBlockInfo.timestamp?.let { lastBlockTimestamp ->
-            val lockedIndexes = itemIndexesForLocked(wallet, lastBlockTimestamp, oldBlockInfo.timestamp)
-            indexes.addAll(lockedIndexes)
+        var hasUpdate = false
+        itemsDataSource.items.forEachIndexed { index, item ->
+            if (item.wallet == wallet && (item.isPending || item.becomesUnlocked(oldBlockInfo.timestamp, lastBlockInfo.timestamp))) {
+                itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
+
+                hasUpdate = true
+            }
         }
 
-        indexes.forEach {
-            val transactionViewItem = itemsDataSource.items[it]
-            itemsDataSource.items[it] = transactionViewItem(transactionViewItem.wallet, transactionViewItem.record)
-        }
-
-        return indexes.isNotEmpty()
+        return hasUpdate
     }
 
     fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>) {
