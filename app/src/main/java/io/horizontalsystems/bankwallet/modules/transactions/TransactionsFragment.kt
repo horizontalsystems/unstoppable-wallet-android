@@ -22,7 +22,6 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
-import java.util.logging.Logger
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
@@ -82,14 +81,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
-//        viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
-//            transactionsAdapter.notifyDataSetChanged()
-//
-//            if (viewModel.delegate.itemsCount == 0) {
-//                viewModel.delegate.onBottomReached()
-//            }
-//        })
-
         viewModel.items.observe(viewLifecycleOwner, Observer {
             transactionsAdapter.updateItems(it)
         })
@@ -122,7 +113,6 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
 
     private val noTransactionsView = 0
     private val transactionView = 1
-    private val logger = Logger.getLogger("TransactionsAdapter")
     private var items = listOf<TransactionViewItem>()
 
     interface Listener {
