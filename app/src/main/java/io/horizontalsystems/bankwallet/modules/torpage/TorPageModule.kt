@@ -12,6 +12,7 @@ object TorPageModule {
     interface IView {
         fun setTorSwitch(enabled: Boolean)
         fun setConnectionStatus(connectionStatus: TorStatus)
+        fun showNotificationsNotEnabledAlert()
     }
 
     interface IViewDelegate {
@@ -26,6 +27,7 @@ object TorPageModule {
         fun onViewLoad()
         fun onClear()
 
+        val isTorNotificationEnabled: Boolean
         var isTorEnabled: Boolean
     }
 

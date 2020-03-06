@@ -9,6 +9,9 @@ class TorPageInteractor(private var netManager: INetManager) : TorPageModule.IIn
     var delegate: TorPageModule.InteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
 
+    override val isTorNotificationEnabled: Boolean
+        get() = netManager.isTorNotificationEnabled
+
     override var isTorEnabled: Boolean
         get() = netManager.isTorEnabled
         set(value) {

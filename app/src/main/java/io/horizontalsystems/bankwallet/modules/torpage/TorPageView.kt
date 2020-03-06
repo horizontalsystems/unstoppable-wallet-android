@@ -7,6 +7,7 @@ class TorPageView: TorPageModule.IView {
 
     val setTorSwitch = SingleLiveEvent<Boolean>()
     val setTorConnectionStatus = SingleLiveEvent<TorStatus>()
+    val notificationsNotEnabledAlert = SingleLiveEvent<Unit>()
 
     override fun setTorSwitch(enabled: Boolean) {
         setTorSwitch.postValue(enabled)
@@ -14,5 +15,9 @@ class TorPageView: TorPageModule.IView {
 
     override fun setConnectionStatus(connectionStatus: TorStatus) {
         setTorConnectionStatus.postValue(connectionStatus)
+    }
+
+    override fun showNotificationsNotEnabledAlert() {
+        notificationsNotEnabledAlert.call()
     }
 }

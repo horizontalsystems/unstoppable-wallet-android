@@ -18,6 +18,12 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
     }
 
     override fun didSwitchTorEnabled(checked: Boolean) {
+        if (checked) {
+            if (!interactor.isTorNotificationEnabled) {
+                view?.showNotificationsNotEnabledAlert()
+                return
+            }
+        }
         view?.showRestartAlert(checked)
     }
 

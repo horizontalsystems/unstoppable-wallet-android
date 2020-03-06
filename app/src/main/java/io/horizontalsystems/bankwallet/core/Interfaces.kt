@@ -425,6 +425,7 @@ interface INetManager {
     fun disableTor()
     fun setListener(listener: NetManager.Listener)
     val isTorEnabled: Boolean
+    val isTorNotificationEnabled: Boolean
     val torObservable: Subject<TorStatus>
 }
 

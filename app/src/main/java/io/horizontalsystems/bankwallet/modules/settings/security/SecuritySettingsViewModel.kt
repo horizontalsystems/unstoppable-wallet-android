@@ -22,6 +22,7 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val openUnlockPinLiveEvent = SingleLiveEvent<Unit>()
     val openBlockchainSettings = SingleLiveEvent<Unit>()
     val restartApp = SingleLiveEvent<Unit>()
+    val showNotificationsNotEnabledAlert = SingleLiveEvent<Unit>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
@@ -88,5 +89,9 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun restartApp() {
         restartApp.call()
+    }
+
+    override fun showNotificationsNotEnabledAlert() {
+        showNotificationsNotEnabledAlert.call()
     }
 }

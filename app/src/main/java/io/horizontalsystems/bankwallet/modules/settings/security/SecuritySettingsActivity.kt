@@ -89,6 +89,10 @@ class SecuritySettingsActivity : BaseActivity() {
             showAppRestartAlert(checked)
         })
 
+        viewModel.showNotificationsNotEnabledAlert.observe(this, Observer {
+            showNotificationsNotEnabledAlert()
+        })
+
         //router
 
         viewModel.openManageKeysLiveEvent.observe(this, Observer {
@@ -116,6 +120,48 @@ class SecuritySettingsActivity : BaseActivity() {
         })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_SET_PIN) {
+            when (resultCode) {
+                PinModule.RESULT_OK -> viewModel.delegate.didSetPin()
+                PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelSetPin()
+            }
+        }
+
+        if (requestCode == REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN) {
+            when (resultCode) {
+                PinModule.RESULT_OK -> viewModel.delegate.didUnlockPinToDisablePin()
+                PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlockPinToDisablePin()
+            }
+        }
+    }
+
+    private fun showNotificationsNotEnabledAlert() {
+        AlertDialogFragment.newInstance(
+                descriptionString = getString(R.string.SettingsSecurity_NotificationsDisabledWarning),
+                buttonText = R.string.Button_Enable,
+                cancelButtonText = R.string.Alert_Cancel,
+                cancelable = true,
+                listener = object : AlertDialogFragment.Listener {
+                    override fun onButtonClick() {
+                        openAppNotificationSettings()
+                    }
+
+                    override fun onCancel() {
+                        torConnectionSwitch.switchIsChecked = false
+                    }
+                }).show(supportFragmentManager, "alert_dialog_notification")
+    }
+
+    private fun openAppNotificationSettings() {
+        val intent = Intent()
+        intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+        intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+        startActivity(intent)
+    }
+
     private fun showAppRestartAlert(checked: Boolean) {
         AlertDialogFragment.newInstance(
                 descriptionString = getString(R.string.SettingsSecurity_AppRestartWarning),
@@ -140,24 +186,6 @@ class SecuritySettingsActivity : BaseActivity() {
             startActivity(intent)
         }
         exitProcess(0)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE_SET_PIN) {
-            when (resultCode) {
-                PinModule.RESULT_OK -> viewModel.delegate.didSetPin()
-                PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelSetPin()
-            }
-        }
-
-        if (requestCode == REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN) {
-            when (resultCode) {
-                PinModule.RESULT_OK -> viewModel.delegate.didUnlockPinToDisablePin()
-                PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlockPinToDisablePin()
-            }
-        }
     }
 
     companion object {
