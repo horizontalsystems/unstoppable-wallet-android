@@ -135,7 +135,9 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = Unit
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (holder !is ViewHolderTransaction) return
 
         if (position > itemCount - 9) {
@@ -143,7 +145,13 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
         }
 
         viewModel.delegate.willShow(items[position])
-        holder.bind(items[position], showBottomShade = (position == itemCount - 1))
+
+        if (payloads.isEmpty()) {
+            holder.bind(items[position], showBottomShade = (position == itemCount - 1))
+        } else {
+            holder.bindUpdate(items[position], payloads)
+        }
+
     }
 
     override fun onClick(position: Int) {
@@ -195,6 +203,33 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
         sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
         doubleSpendIcon.visibility = if (transactionRecord.conflictingTxHash == null) View.GONE else View.VISIBLE
+    }
+
+    fun bindUpdate(transactionViewItem: TransactionViewItem, payloads: MutableList<Any>) {
+        payloads.forEach {
+            when (it) {
+                TransactionViewItem.UpdateType.RATE -> {
+                    val incoming = transactionViewItem.type == TransactionType.Incoming
+
+                    txValueInFiat.text = transactionViewItem.currencyValue?.let {
+                        App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
+                    }
+                }
+
+                TransactionViewItem.UpdateType.STATUS -> {
+                    val incoming = transactionViewItem.type == TransactionType.Incoming
+                    val time = transactionViewItem.date?.let { DateHelper.getOnlyTime(it) }
+                    txStatusWithTimeView.bind(transactionViewItem.status, incoming, time)
+
+                    val lockIcon = when {
+                        transactionViewItem.lockInfo == null -> 0
+                        transactionViewItem.unlocked -> R.drawable.ic_unlock
+                        else -> R.drawable.ic_lock
+                    }
+                    txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
+                }
+            }
+        }
     }
 }
 
