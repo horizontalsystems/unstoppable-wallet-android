@@ -46,7 +46,7 @@ data class TransactionViewItem(
     }
 
     fun itemTheSame(other: TransactionViewItem): Boolean {
-        return wallet == other.wallet && transactionHash == other.transactionHash
+        return record == other.record
     }
 
     fun contentTheSame(other: TransactionViewItem): Boolean {
@@ -54,6 +54,8 @@ data class TransactionViewItem(
                 && date == other.date
                 && status == other.status
                 && rate == other.rate
+                && unlocked == other.unlocked
+                && conflictingTxHash == other.conflictingTxHash
     }
 
     fun clearRates() {
