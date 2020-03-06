@@ -140,18 +140,14 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (holder !is ViewHolderTransaction) return
+
         if (position > itemCount - 9) {
             viewModel.delegate.onBottomReached()
         }
 
-        if (holder is ViewHolderTransaction) {
-            try {
-                viewModel.delegate.willShow(items[position])
-                holder.bind(items[position], showBottomShade = (position == itemCount - 1))
-            } catch (e: ArrayIndexOutOfBoundsException) {
-                logger.warning("throwing exception ArrayIndexOutOfBoundsException in TransactionsFragment")
-            }
-        }
+        viewModel.delegate.willShow(items[position])
+        holder.bind(items[position], showBottomShade = (position == itemCount - 1))
     }
 
     override fun onClick(position: Int) {
