@@ -20,12 +20,10 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
     override val isEnabled: Boolean
         get() = when {
             !androidNotificationManager.areNotificationsEnabled() -> false
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+            else -> {
                 val notificationChannel = androidNotificationManager.getNotificationChannel(channelId)
-
                 notificationChannel?.importance != NotificationManagerCompat.IMPORTANCE_NONE
             }
-            else -> true
         }
 
     override fun show(notifications: List<AlertNotification>) {

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.torpage
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.core.CoreActivity
+import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_tor_page.*
 
 class TorPageActivity : CoreActivity() {
@@ -43,12 +45,8 @@ class TorPageActivity : CoreActivity() {
     }
 
     private fun observeView(view: TorPageView) {
-        view.setTorSwitch.observe(this, Observer {
-            switchView.setOnCheckedChangeListener(null)
-            switchView.isChecked = it
-            switchView.setOnCheckedChangeListener { _, isChecked ->
-                presenter.onTorSwitch(isChecked)
-            }
+        view.setTorSwitch.observe(this, Observer { checked ->
+            setSwitch(checked)
         })
 
         view.setTorConnectionStatus.observe(this, Observer { torStatus ->
@@ -81,6 +79,18 @@ class TorPageActivity : CoreActivity() {
                 }
             }
         })
+
+        view.notificationsNotEnabledAlert.observe(this, Observer {
+            showNotificationsNotEnabledAlert()
+        })
+    }
+
+    private fun setSwitch(checked: Boolean) {
+        switchView.setOnCheckedChangeListener(null)
+        switchView.isChecked = checked
+        switchView.setOnCheckedChangeListener { _, isChecked ->
+            presenter.onTorSwitch(isChecked)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -96,6 +106,30 @@ class TorPageActivity : CoreActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showNotificationsNotEnabledAlert() {
+        AlertDialogFragment.newInstance(
+                descriptionString = getString(R.string.SettingsSecurity_NotificationsDisabledWarning),
+                buttonText = R.string.Button_Enable,
+                cancelButtonText = R.string.Alert_Cancel,
+                cancelable = true,
+                listener = object : AlertDialogFragment.Listener {
+                    override fun onButtonClick() {
+                        openAppNotificationSettings()
+                    }
+
+                    override fun onCancel() {
+                        setSwitch(false)
+                    }
+                }).show(supportFragmentManager, "alert_dialog_notification")
+    }
+
+    private fun openAppNotificationSettings() {
+        val intent = Intent()
+        intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+        intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+        startActivity(intent)
     }
 
     private fun getTint(color: Int) = ColorStateList.valueOf(ContextCompat.getColor(this, color))

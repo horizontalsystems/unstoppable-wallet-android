@@ -19,6 +19,9 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
     }
 
     override val torObservable = BehaviorSubject.create<TorStatus>()
+    override val isTorNotificationEnabled: Boolean
+        get() = kit.isNotificationEnabled
+
     private val disposables = CompositeDisposable()
     private var listener: Listener? = null
     private val kit: NetKit by lazy {

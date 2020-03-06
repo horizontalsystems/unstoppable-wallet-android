@@ -14,6 +14,7 @@ object SecuritySettingsModule {
         fun toggleBiometricEnabled(enabled: Boolean)
         fun toggleTorEnabled(enabled: Boolean)
         fun showRestartAlert(checked: Boolean)
+        fun showNotificationsNotEnabledAlert()
     }
 
     interface ISecuritySettingsViewDelegate {
@@ -38,6 +39,7 @@ object SecuritySettingsModule {
         val isPinSet: Boolean
         var isBiometricEnabled: Boolean
         var isTorEnabled: Boolean
+        val isTorNotificationEnabled: Boolean
 
         fun disablePin()
         fun clear()

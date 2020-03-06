@@ -19,6 +19,12 @@ class TorPagePresenter(
     }
 
     override fun onTorSwitch(enabled: Boolean) {
+        if (enabled) {
+            if (!interactor.isTorNotificationEnabled) {
+                view.showNotificationsNotEnabledAlert()
+                return
+            }
+        }
         interactor.isTorEnabled = enabled
         if (enabled) {
             interactor.enableTor()

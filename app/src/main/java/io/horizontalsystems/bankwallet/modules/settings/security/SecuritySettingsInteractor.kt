@@ -23,6 +23,9 @@ class SecuritySettingsInteractor(
                 .let { disposables.add(it) }
     }
 
+    override val isTorNotificationEnabled: Boolean
+        get() = netManager.isTorNotificationEnabled
+
     override val biometricAuthSupported: Boolean
         get() = systemInfoManager.biometricAuthSupported
 

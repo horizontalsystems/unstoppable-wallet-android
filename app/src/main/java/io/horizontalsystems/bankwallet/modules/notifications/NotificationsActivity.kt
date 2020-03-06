@@ -8,8 +8,8 @@ import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.views.CellView
@@ -109,14 +109,7 @@ class NotificationsActivity : BaseActivity() {
         router.openNotificationSettingsLiveEvent.observe(this, Observer {
             val intent = Intent()
             intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-
-            //for Android 5-7
-            intent.putExtra("app_package", packageName)
-            intent.putExtra("app_uid", applicationInfo.uid)
-
-            // for Android 8 and above
             intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
-
             startActivity(intent)
         })
     }
