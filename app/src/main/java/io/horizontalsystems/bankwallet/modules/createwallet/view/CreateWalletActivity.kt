@@ -105,8 +105,8 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     private fun observeRouter(router: CreateWalletRouter) {
         router.startMainModuleLiveEvent.observe(this, Observer {
-            MainModule.startAsNewTask(this)
-            finish()
+            MainModule.start(this)
+            finishAffinity()
         })
         router.showSuccessAndClose.observe(this, Observer {
             HudHelper.showSuccessMessage(this, R.string.Hud_Text_Done, HudHelper.ToastDuration.LONG)

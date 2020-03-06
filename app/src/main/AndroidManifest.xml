@@ -23,6 +23,7 @@
                   android:launchMode="singleTask"/>
         <activity
             android:name=".modules.launcher.LauncherActivity"
+            android:theme="@style/LauncherTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
