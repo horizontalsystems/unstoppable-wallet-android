@@ -24,7 +24,7 @@ class FullTransactionInfoProvider(private val networkManager: INetworkManager,
 
         val requestFlowable = when (request) {
             is FullTransactionInfoModule.Request.GetRequest -> {
-                networkManager.getTransaction(host, uri)
+                networkManager.getTransaction(host, uri, request.isSafeCall)
             }
             is FullTransactionInfoModule.Request.PostRequest -> {
                 networkManager.getTransactionWithPost(host, uri, request.body)

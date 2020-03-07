@@ -24,9 +24,9 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
     }
 
     private val bitcoinCashProviders = when {
-        appConfig.testMode -> listOf(CoinSpaceBitcoinCashProvider())
+        appConfig.testMode -> listOf(CashexplorerBitcoinCashProvider())
         else -> listOf(
-                CoinSpaceBitcoinCashProvider(),
+                CashexplorerBitcoinCashProvider(),
                 BlockChairBitcoinCashProvider(),
                 BtcComBitcoinCashProvider())
     }

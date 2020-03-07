@@ -5,18 +5,18 @@ import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
 
-class CoinSpaceBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider {
-    override val name = "Coin.space"
-    override val pingUrl = "https://bch.coin.space/api/sync"
+class CashexplorerBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    override val name = "Cashexplorer.bitcoin.com"
+    override val pingUrl = "https://cashexplorer.bitcoin.com/api/sync"
 
-    private val baseUrl = "https://bch.coin.space"
+    private val baseUrl = "https://cashexplorer.bitcoin.com"
 
     override fun url(hash: String): String {
         return "$baseUrl/tx/$hash"
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("$baseUrl/api/tx/$hash")
+        return GetRequest("$baseUrl/api/tx/$hash", false)
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
