@@ -121,7 +121,7 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getTransaction(host: String, path: String): Flowable<JsonObject>
+    fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
 }

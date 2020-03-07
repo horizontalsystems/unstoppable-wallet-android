@@ -71,9 +71,9 @@ object FullTransactionInfoModule {
         fun apiRequest(hash: String): Request
     }
 
-    sealed class Request(val url: String) {
-        class GetRequest(url: String) : Request(url)
-        class PostRequest(url: String, val body: Map<String, Any>) : Request(url)
+    sealed class Request(val url: String,val isSafeCall: Boolean) {
+        class GetRequest(url: String, isSafeCall: Boolean = true) : Request(url, isSafeCall)
+        class PostRequest(url: String, val body: Map<String, Any>) : Request(url, true)
     }
 
     interface FullProvider {
