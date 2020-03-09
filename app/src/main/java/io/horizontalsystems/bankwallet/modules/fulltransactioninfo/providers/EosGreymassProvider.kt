@@ -7,6 +7,7 @@ class EosGreymassProvider : FullTransactionInfoModule.EosProvider {
 
     override val name = "Greymass.com"
     override val pingUrl = "https://eos.greymass.com/"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String? {
         return null

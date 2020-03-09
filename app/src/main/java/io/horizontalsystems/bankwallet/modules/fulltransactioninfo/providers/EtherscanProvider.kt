@@ -16,6 +16,7 @@ class EtherscanEthereumProvider(val testMode: Boolean) : FullTransactionInfoModu
 
     override val name = "Etherscan.io"
     override val pingUrl = if (testMode) "https://api-ropsten.etherscan.io/api?module=stats&action=ethprice" else "https://api.etherscan.io/api?module=stats&action=ethprice"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String = "$url$hash"
 

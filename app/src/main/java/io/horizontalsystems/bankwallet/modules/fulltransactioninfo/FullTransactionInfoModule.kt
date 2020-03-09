@@ -66,6 +66,7 @@ object FullTransactionInfoModule {
     interface Provider {
         val name: String
         val pingUrl: String
+        val isTrusted: Boolean
 
         fun url(hash: String): String?
         fun apiRequest(hash: String): Request

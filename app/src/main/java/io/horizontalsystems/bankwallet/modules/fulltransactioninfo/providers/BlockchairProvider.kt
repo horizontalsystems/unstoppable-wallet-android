@@ -12,6 +12,7 @@ import java.util.*
 
 class BlockChairBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
     private val baseApiUrl = "https://api.blockchair.com/bitcoin"
+    override val isTrusted: Boolean = true
 
     override val name = "BlockChair.com"
     override val pingUrl = "$baseApiUrl/stats"
@@ -38,6 +39,7 @@ class BlockChairBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProv
 
     override val name = "BlockChair.com"
     override val pingUrl = "$baseApiUrl/stats"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "https://blockchair.com/bitcoin-cash/transaction/$hash"
@@ -61,6 +63,7 @@ class BlockChairDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
 
     override val name = "BlockChair.com"
     override val pingUrl = "$baseApiUrl/stats"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "https://blockchair.com/dash/transaction/$hash"
@@ -84,6 +87,7 @@ class BlockChairEthereumProvider : FullTransactionInfoModule.EthereumForksProvid
 
     override val name = "BlockChair.com"
     override val pingUrl = "$baseApiUrl/stats"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "https://blockchair.com/ethereum/transaction/$hash"

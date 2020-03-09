@@ -13,7 +13,7 @@ class DataProviderSettingsPresenter(val coin: Coin, val transactionHash: String,
         val allProviders = interactor.providers(coin)
 
         allProviders.forEach { provider ->
-            interactor.pingProvider(provider.name, provider.pingUrl)
+            interactor.pingProvider(provider.name, provider.pingUrl, provider.isTrusted)
         }
 
         items = allProviders.map {

@@ -15,11 +15,11 @@ class DataProviderSettingsInteractor(private val dataProviderManager: ITransacti
     val disposables = CompositeDisposable()
     var delegate: DataProviderSettingsModule.InteractorDelegate? = null
 
-    override fun pingProvider(name: String, url: String) {
+    override fun pingProvider(name: String, url: String, isTrusted: Boolean) {
         val uri = URL(url)
         val host = "${uri.protocol}://${uri.host}"
 
-        disposables.add(networkManager.ping(host, url)
+        disposables.add(networkManager.ping(host, url, isSafeCall = isTrusted)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

@@ -12,6 +12,7 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
 
     override val name = "HorizontalSystems.xyz"
     override val pingUrl = "$baseUrl/apg/block/0"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String? {
         return null
@@ -32,6 +33,7 @@ class HorsysDashProvider(val testMode: Boolean) : FullTransactionInfoModule.Bitc
 
     override val name: String = "HorizontalSystems.xyz"
     override val pingUrl = "$baseUrl/apg/block/0"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "$baseUrl/insight/tx/$hash"

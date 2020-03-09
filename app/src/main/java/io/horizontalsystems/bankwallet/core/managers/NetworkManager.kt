@@ -31,8 +31,8 @@ class NetworkManager : INetworkManager {
                 .getFullTransactionWithPost(path, body.mapValues { it.value.toString() })
     }
 
-    override fun ping(host: String, url: String): Flowable<Any> {
-        return ServicePing.service(host).ping(url)
+    override fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any> {
+        return ServicePing.service(host, isSafeCall).ping(url)
     }
 
 }
@@ -56,8 +56,8 @@ object ServiceFullTransaction {
 }
 
 object ServicePing {
-    fun service(apiURL: String): FullTransactionAPI {
-        return APIClient.retrofit(apiURL, timeout = 8).create(FullTransactionAPI::class.java)
+    fun service(apiURL: String, isSafeCall: Boolean = true): FullTransactionAPI {
+        return APIClient.retrofit(apiURL, timeout = 8, isSafeCall = isSafeCall).create(FullTransactionAPI::class.java)
     }
 
     interface FullTransactionAPI {
