@@ -11,6 +11,7 @@ class BinanceChainProvider(val testMode: Boolean) : FullTransactionInfoModule.Bi
 
     override val name = "Binance.org"
     override val pingUrl = "$baseApiUrl/node-info"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "https://${if (testMode) "testnet-explorer" else "explorer"}.binance.org/tx/$hash"

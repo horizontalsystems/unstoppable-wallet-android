@@ -12,6 +12,7 @@ class BtcComBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
 
     override val name = "Btc.com"
     override val pingUrl = "$baseApiUrl/block/0"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "https://btc.com/$hash"
@@ -31,6 +32,7 @@ class BtcComBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider
 
     override val name = "Btc.com"
     override val pingUrl = "$baseApiUrl/block/0"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "https://bch.btc.com/$hash"

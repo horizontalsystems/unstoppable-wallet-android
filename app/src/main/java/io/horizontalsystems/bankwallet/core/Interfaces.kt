@@ -123,7 +123,7 @@ interface IRandomProvider {
 interface INetworkManager {
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
-    fun ping(host: String, url: String): Flowable<Any>
+    fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
 }
 
 interface IClipboardManager {

@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 class CashexplorerBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider {
     override val name = "Cashexplorer.bitcoin.com"
     override val pingUrl = "https://cashexplorer.bitcoin.com/api/sync"
+    override val isTrusted: Boolean = false
 
     private val baseUrl = "https://cashexplorer.bitcoin.com"
 
@@ -16,7 +17,7 @@ class CashexplorerBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksPr
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        return GetRequest("$baseUrl/api/tx/$hash", false)
+        return GetRequest("$baseUrl/api/tx/$hash", isTrusted)
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {

@@ -10,6 +10,7 @@ class InsightDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
 
     override val name = "Insight.dash.org"
     override val pingUrl = "$baseApiUrl/block/0"
+    override val isTrusted: Boolean = true
 
     override fun url(hash: String): String {
         return "https://insight.dash.org/insight/tx/$hash"

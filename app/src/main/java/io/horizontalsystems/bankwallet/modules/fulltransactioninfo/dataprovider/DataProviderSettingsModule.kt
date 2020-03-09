@@ -21,7 +21,7 @@ object DataProviderSettingsModule {
     }
 
     interface Interactor {
-        fun pingProvider(name: String, url: String)
+        fun pingProvider(name: String, url: String, isTrusted: Boolean)
         fun providers(coin: Coin): List<FullTransactionInfoModule.Provider>
         fun baseProvider(coin: Coin): FullTransactionInfoModule.Provider
         fun setBaseProvider(name: String, coin: Coin)
