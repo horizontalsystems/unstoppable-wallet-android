@@ -5,8 +5,9 @@ import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
 sealed class CoinType : Parcelable {
-    @Parcelize object BitcoinCash : CoinType()
     @Parcelize object Bitcoin : CoinType()
+    @Parcelize object Litecoin : CoinType()
+    @Parcelize object BitcoinCash : CoinType()
     @Parcelize object Dash : CoinType()
     @Parcelize object Ethereum : CoinType()
 
@@ -20,6 +21,7 @@ sealed class CoinType : Parcelable {
                 return accountType is AccountType.Eos
             }
             is Bitcoin,
+            is Litecoin,
             is BitcoinCash,
             is Dash,
             is Ethereum,
@@ -59,6 +61,7 @@ sealed class CoinType : Parcelable {
     val predefinedAccountType: PredefinedAccountType
         get() = when (this) {
             is Bitcoin,
+            is Litecoin,
             is Erc20,
             is BitcoinCash,
             is Dash,
@@ -68,17 +71,18 @@ sealed class CoinType : Parcelable {
         }
 
     val settings: List<CoinSetting>
-         get() = when (this) {
-            is Bitcoin ->  listOf(CoinSetting.Derivation, CoinSetting.SyncMode)
+        get() = when (this) {
+            is Bitcoin,
+            is Litecoin -> listOf(CoinSetting.Derivation, CoinSetting.SyncMode)
             is BitcoinCash -> listOf(CoinSetting.SyncMode)
-            is Dash ->  listOf(CoinSetting.SyncMode)
+            is Dash -> listOf(CoinSetting.SyncMode)
             else -> listOf()
         }
 
 }
 
 @Parcelize
-enum class CoinSetting: Parcelable {
+enum class CoinSetting : Parcelable {
     Derivation,
     SyncMode
 }

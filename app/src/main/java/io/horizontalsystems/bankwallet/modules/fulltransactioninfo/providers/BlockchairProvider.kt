@@ -34,6 +34,30 @@ class BlockChairBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider
     }
 }
 
+class BlockChairLitecoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseApiUrl = "https://api.blockchair.com/litecoin"
+    override val isTrusted: Boolean = true
+
+    override val name = "BlockChair.com"
+    override val pingUrl = "$baseApiUrl/stats"
+
+    override fun url(hash: String): String {
+        return "https://blockchair.com/litecoin/transaction/$hash"
+    }
+
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("$baseApiUrl/dashboards/transaction/$hash")
+    }
+
+    override fun convert(json: JsonObject): BitcoinResponse {
+        val response = Gson().fromJson(json, BlockchairBTCResponse::class.java)
+        val transaction = response.data.entries.firstOrNull()
+                ?: throw Exception("Failed to parse transaction response")
+
+        return transaction.value
+    }
+}
+
 class BlockChairBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider {
     private val baseApiUrl = "https://api.blockchair.com/bitcoin-cash"
 

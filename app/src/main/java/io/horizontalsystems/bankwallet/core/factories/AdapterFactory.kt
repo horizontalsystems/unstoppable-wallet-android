@@ -20,6 +20,7 @@ class AdapterFactory(
     fun adapter(wallet: Wallet): IAdapter? {
         return when (val coinType = wallet.coin.type) {
             is CoinType.Bitcoin -> BitcoinAdapter(wallet, appConfigProvider.testMode)
+            is CoinType.Litecoin -> LitecoinAdapter(wallet, appConfigProvider.testMode)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode)
             is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode)
             is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)

@@ -7,12 +7,12 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThemeStorage
+import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
 
 class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
@@ -26,6 +26,7 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
     private val FAILED_ATTEMPTS = "failed_attempts"
     private val LOCKOUT_TIMESTAMP = "lockout_timestamp"
     private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
+    private val BASE_LITECOIN_PROVIDER = "base_litecoin_provider"
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
     private val BASE_DASH_PROVIDER = "base_dash_provider"
     private val BASE_BINANCE_PROVIDER = "base_binance_provider"
@@ -93,6 +94,12 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         get() = App.preferences.getString(BASE_BITCOIN_PROVIDER, null)
         set(value) {
             App.preferences.edit().putString(BASE_BITCOIN_PROVIDER, value).apply()
+        }
+
+    override var baseLitecoinProvider: String?
+        get() = App.preferences.getString(BASE_LITECOIN_PROVIDER, null)
+        set(value) {
+            App.preferences.edit().putString(BASE_LITECOIN_PROVIDER, value).apply()
         }
 
     override var baseEthereumProvider: String?

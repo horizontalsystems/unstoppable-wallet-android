@@ -10,15 +10,15 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoinkit.BitcoinKit
-import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.litecoinkit.LitecoinKit
+import io.horizontalsystems.litecoinkit.LitecoinKit.NetworkType
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinAdapter(override val kit: BitcoinKit)
-    : BitcoinBaseAdapter(kit), BitcoinKit.Listener, ISendBitcoinAdapter {
+class LitecoinAdapter(override val kit: LitecoinKit)
+    : BitcoinBaseAdapter(kit), LitecoinKit.Listener, ISendBitcoinAdapter {
 
     constructor(wallet: Wallet, testMode: Boolean) : this(createKit(wallet, testMode))
 
@@ -40,7 +40,7 @@ class BitcoinAdapter(override val kit: BitcoinKit)
     }
 
     //
-    // BitcoinKit Listener
+    // LitecoinKit Listener
     //
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
@@ -108,13 +108,13 @@ class BitcoinAdapter(override val kit: BitcoinKit)
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
+        private fun createKit(wallet: Wallet, testMode: Boolean): LitecoinKit {
             val account = wallet.account
             val accountType = account.type
             val walletDerivation = wallet.settings[CoinSetting.Derivation]?.let { Derivation.valueOf(it) }
             val syncMode = wallet.settings[CoinSetting.SyncMode]?.let { SyncMode.valueOf(it) }
             if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
-                return BitcoinKit(context = App.instance,
+                return LitecoinKit(context = App.instance,
                         words = accountType.words,
                         walletId = account.id,
                         syncMode = getSyncMode(syncMode),
@@ -127,7 +127,7 @@ class BitcoinAdapter(override val kit: BitcoinKit)
         }
 
         fun clear(walletId: String, testMode: Boolean) {
-            BitcoinKit.clear(App.instance, getNetworkType(testMode), walletId)
+            LitecoinKit.clear(App.instance, getNetworkType(testMode), walletId)
         }
     }
 }
