@@ -28,6 +28,27 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
     }
 }
 
+class HorsysLitecoinProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
+    private val baseUrl = "${if (testMode) "http://ltc-testnet" else "http://ltc"}.horizontalsystems.xyz"
+
+    override val name = "HorizontalSystems.xyz"
+    override val pingUrl = "$baseUrl/api/block/0"
+    override val isTrusted: Boolean = true
+
+    override fun url(hash: String): String? {
+        return null
+    }
+
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        val url = "$baseUrl/api/tx/$hash"
+        return GetRequest(url)
+    }
+
+    override fun convert(json: JsonObject): BitcoinResponse {
+        return Gson().fromJson(json, HorsysLitecoinResponse::class.java)
+    }
+}
+
 class HorsysDashProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
     private val baseUrl = "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz"
 
@@ -76,4 +97,36 @@ class HorsysBTCResponse(
     }
 
     class BCoin(@SerializedName("value") val amount: Int, @SerializedName("address") val addr: String)
+}
+
+class HorsysLitecoinResponse(
+        @SerializedName("fee") override val fee: Double,
+        @SerializedName("ts") val time: Long,
+        @SerializedName("rate") val rateString: String,
+        @SerializedName("inputs") val vin: ArrayList<Vin>,
+        @SerializedName("outputs") val vout: ArrayList<Vout>,
+        @SerializedName("hash") override val hash: String,
+        @SerializedName("height") override val height: Int,
+        @SerializedName("confirmations") override val confirmations: String) : BitcoinResponse() {
+
+    override val date get() = Date(time * 1000)
+    override val inputs get() = vin.filter { it.coin != null } as ArrayList<Input>
+    override val outputs get() = vout as ArrayList<Output>
+    override val feePerByte: Double?
+        get() = rateString.toDoubleOrNull()?.let {
+            it * btcRate / 1000
+        }
+
+    override val size: Int? get() = feePerByte?.let { ((fee / it) * btcRate).toInt() }
+
+    class Vin(@SerializedName("coin") val coin: BCoin?) : Input() {
+        override val value get() = coin?.let { it.amount / btcRate } ?: 0.0
+        override val address get() = coin?.address ?: ""
+    }
+
+    class Vout(@SerializedName("value") override val value: Double,
+               @SerializedName("address") override val address: String) : Output()
+
+    class BCoin(@SerializedName("value") val amount: Double,
+                @SerializedName("address") val address: String)
 }

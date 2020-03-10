@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">134.209.138.9</domain>
         <domain includeSubdomains="true">btc-testnet.horizontalsystems.xyz</domain>
+        <domain includeSubdomains="true">ltc.horizontalsystems.xyz</domain>
     </domain-config>
 </network-security-config>

@@ -28,6 +28,12 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
                 provider = providerBTC
                 adapter = FullTransactionBitcoinAdapter(providerBTC, coin, "satoshi")
             }
+            coin.type is CoinType.Litecoin -> {
+                val providerLTC = dataProviderManager.litecoin(baseProvider.name)
+
+                provider = providerLTC
+                adapter = FullTransactionBitcoinAdapter(providerLTC, coin, "satoshi")
+            }
             // BCH, BCHt
             coin.type is CoinType.BitcoinCash -> {
                 val providerBCH = dataProviderManager.bitcoinCash(baseProvider.name)

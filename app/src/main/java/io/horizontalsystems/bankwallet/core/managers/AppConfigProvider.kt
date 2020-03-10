@@ -47,6 +47,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
 
     override val coins: List<Coin> = listOf(
             Coin("BTC",       "Bitcoin",                 "BTC",          8,      CoinType.Bitcoin),
+            Coin("LTC",       "Litecoin",                "LTC",          8,      CoinType.Litecoin),
             Coin("ETH",       "Ethereum",                "ETH",         18,      CoinType.Ethereum),
             Coin("BCH",       "Bitcoin Cash",            "BCH",          8,      CoinType.BitcoinCash),
             Coin("DASH",      "Dash",                    "DASH",         8,      CoinType.Dash),

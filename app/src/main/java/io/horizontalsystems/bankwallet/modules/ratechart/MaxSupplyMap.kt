@@ -6,6 +6,7 @@ object MaxSupplyMap {
     
     val maxSupplies = mapOf(
             "BTC" to BigDecimal(21_000_000),
+            "LTC" to BigDecimal(84_000_000),
             "BCH" to BigDecimal(21_000_000),
             "DASH" to BigDecimal(18_900_000),
             "BNB" to BigDecimal(187_536_713),

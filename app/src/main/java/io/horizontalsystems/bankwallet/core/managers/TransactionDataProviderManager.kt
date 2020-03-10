@@ -23,6 +23,14 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
                 BtcComBitcoinProvider())
     }
 
+    private val litecoinProviders = when {
+        appConfig.testMode -> listOf()
+        else -> listOf(
+                HorsysLitecoinProvider(testMode = false),
+                BlockChairLitecoinProvider()
+        )
+    }
+
     private val bitcoinCashProviders = when {
         appConfig.testMode -> listOf(CashexplorerBitcoinCashProvider())
         else -> listOf(
@@ -59,6 +67,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
 
     override fun providers(coin: Coin): List<Provider> = when (coin.type) {
         is CoinType.Bitcoin -> bitcoinProviders
+        is CoinType.Litecoin -> litecoinProviders
         is CoinType.BitcoinCash -> bitcoinCashProviders
         is CoinType.Ethereum, is CoinType.Erc20 -> ethereumProviders
         is CoinType.Dash -> dashProviders
@@ -69,6 +78,9 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
     override fun baseProvider(coin: Coin) = when (coin.type) {
         is CoinType.Bitcoin, is CoinType.BitcoinCash -> {
             bitcoin(localStorage.baseBitcoinProvider ?: bitcoinProviders[0].name)
+        }
+        is CoinType.Litecoin -> {
+            litecoin(localStorage.baseLitecoinProvider ?: litecoinProviders[0].name)
         }
         is CoinType.Ethereum, is CoinType.Erc20 -> {
             ethereum(localStorage.baseEthereumProvider ?: ethereumProviders[0].name)
@@ -88,6 +100,9 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
         when (coin.type) {
             is CoinType.Bitcoin, is CoinType.BitcoinCash -> {
                 localStorage.baseBitcoinProvider = name
+            }
+            is CoinType.Litecoin -> {
+                localStorage.baseLitecoinProvider = name
             }
             is CoinType.Ethereum, is CoinType.Erc20 -> {
                 localStorage.baseEthereumProvider = name
@@ -109,6 +124,12 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
 
     override fun bitcoin(name: String): BitcoinForksProvider {
         bitcoinProviders.let { list ->
+            return list.find { it.name == name } ?: list[0]
+        }
+    }
+
+    override fun litecoin(name: String): BitcoinForksProvider {
+        litecoinProviders.let { list ->
             return list.find { it.name == name } ?: list[0]
         }
     }
