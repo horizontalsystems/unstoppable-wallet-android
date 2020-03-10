@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.cryptonews
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -78,5 +80,14 @@ class ViewHolderNews(override val containerView: View) : RecyclerView.ViewHolder
     fun bind(item: CryptoNews) {
         newsTitle.text = item.title
         newsTime.text = DateUtils.getRelativeTimeSpanString(item.timestamp * 1000)
+
+        containerView.setOnClickListener {
+            loadNews(item.url)
+        }
+    }
+
+    private fun loadNews(url: String) {
+        val customTabsIntent = CustomTabsIntent.Builder().build()
+        customTabsIntent.launchUrl(containerView.context, Uri.parse(url))
     }
 }
