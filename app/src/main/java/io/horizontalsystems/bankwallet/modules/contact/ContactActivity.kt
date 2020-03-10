@@ -34,10 +34,6 @@ class ContactActivity : BaseActivity() {
             walletHelpTelegramGroup.subtitle = it
         })
 
-        presenterView.developersTelegramGroupLiveData.observe(this, Observer {
-            developersTelegramGroup.subtitle = it
-        })
-
         presenterView.showCopiedLiveEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
         })
@@ -65,10 +61,6 @@ class ContactActivity : BaseActivity() {
 
         walletHelpTelegramGroup.setOnSingleClickListener {
             presenter.didTapWalletHelpTelegram()
-        }
-
-        developersTelegramGroup.setOnSingleClickListener {
-            presenter.didTapDevelopersTelegram()
         }
 
         appStatus.setOnSingleClickListener {

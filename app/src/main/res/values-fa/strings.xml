@@ -218,8 +218,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">تماس</string>
     <string name="SettingsContact_Email">ايميل</string>
-    <string name="SettingsContact_WalletHelpTelegram">تلگرام (راهنما درباره کیف پول)</string>
-    <string name="SettingsContact_DevelopersTelegram">تلگرام (توسعه دهندگان)</string>
+    <string name="SettingsContact_Telegram">تلگرام (توسعه دهندگان)</string>
     <string name="SettingsContact_AppStatus">وضعیت برنامه</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">اطلاعیه ها</string>

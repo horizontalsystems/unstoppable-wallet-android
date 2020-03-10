@@ -218,8 +218,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Kонтакты</string>
     <string name="SettingsContact_Email">Эл. почта</string>
-    <string name="SettingsContact_WalletHelpTelegram">Telegram (Помощь по кошельку)</string>
-    <string name="SettingsContact_DevelopersTelegram">Telegram (Разработчики)</string>
+    <string name="SettingsContact_Telegram">Telegram (Разработчики)</string>
     <string name="SettingsContact_AppStatus">Статус Приложения</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Уведомления </string>

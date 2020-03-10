@@ -6,7 +6,6 @@ import io.horizontalsystems.core.SingleLiveEvent
 class ContactView : ContactModule.IView {
     val emailLiveData = MutableLiveData<String>()
     val walletHelpTelegramGroupLiveData = MutableLiveData<String>()
-    val developersTelegramGroupLiveData = MutableLiveData<String>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
 
     override fun setEmail(email: String) {
@@ -15,10 +14,6 @@ class ContactView : ContactModule.IView {
 
     override fun setWalletHelpTelegramGroup(group: String) {
         walletHelpTelegramGroupLiveData.postValue(group)
-    }
-
-    override fun setDevelopersTelegramGroup(group: String) {
-        developersTelegramGroupLiveData.postValue(group)
     }
 
     override fun showCopied() {

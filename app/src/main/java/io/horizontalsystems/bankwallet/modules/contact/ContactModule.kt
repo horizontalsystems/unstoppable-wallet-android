@@ -11,7 +11,6 @@ object ContactModule {
     interface IView {
         fun setEmail(email: String)
         fun setWalletHelpTelegramGroup(group: String)
-        fun setDevelopersTelegramGroup(group: String)
         fun showCopied()
     }
 
@@ -19,14 +18,12 @@ object ContactModule {
         fun viewDidLoad()
         fun didTapEmail()
         fun didTapWalletHelpTelegram()
-        fun didTapDevelopersTelegram()
         fun didTapAppStatus()
     }
 
     interface IInteractor {
         val email: String
         val walletHelpTelegramGroup: String
-        val developersTelegramGroup: String
         fun copyToClipboard(value: String)
     }
 
