@@ -9,6 +9,7 @@ import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CryptoNews
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -94,6 +95,10 @@ class RateManager(
 
     override fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
         return kit.chartInfoObservable(converted(coinCode), currencyCode, chartType)
+    }
+
+    override fun getCryptoNews(coinCode: String): Single<List<CryptoNews>> {
+        return kit.cryptoNews(coinCode)
     }
 
     override fun refresh() {

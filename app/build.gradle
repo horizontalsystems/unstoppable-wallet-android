@@ -132,6 +132,7 @@ dependencies {
     def room_version = '2.2.4'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$room_version"
     // alternately - if using Java8, use the following instead of compiler
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
@@ -176,7 +177,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:068c167'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:3327874'
-    implementation 'com.github.horizontalsystems:xrates-kit-android:d2b018b'
+    implementation 'com.github.horizontalsystems:xrates-kit-android:f7ecbdf'
     implementation('com.github.horizontalsystems:eos-kit-android:70897ea') {
         exclude group: 'com.google.protobuf'
     }

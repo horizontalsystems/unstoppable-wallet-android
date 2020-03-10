@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
@@ -18,8 +18,8 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodler
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.TopMenuItem
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : BaseActivity() {

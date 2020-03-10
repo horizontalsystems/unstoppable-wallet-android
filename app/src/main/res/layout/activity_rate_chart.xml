@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
-        app:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
@@ -39,442 +36,458 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/coinRateWrap"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
-
-        <TextView
-            android:id="@+id/coinRateLast"
-            style="@style/Headline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?BottomDialogTextColor"
-            android:textSize="16sp"
-            tools:text="3,979.87" />
-
-        <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
-            android:id="@+id/coinRateDiff"
-            style="@style/Headline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:textSize="12sp"
-            app:negativeColor="?ColorLucian"
-            app:positiveColor="?ColorRemus"
-            tools:text="-18" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/border2"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinRateWrap" />
-
-    <HorizontalScrollView
-        android:id="@+id/chartWrap"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border2">
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:id="@+id/chartActions"
-            android:layout_width="wrap_content"
-            android:layout_height="49dp"
-            android:orientation="horizontal"
-            android:paddingTop="9dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/button1D"
-                style="@style/TextFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:text="@string/Charts_TimeDuration_Day" />
-
-            <TextView
-                android:id="@+id/button1W"
-                style="@style/TextFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:text="@string/Charts_TimeDuration_Week" />
-
-            <TextView
-                android:id="@+id/button1M"
-                style="@style/TextFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:text="@string/Charts_TimeDuration_Month" />
-
-            <TextView
-                android:id="@+id/button3M"
-                style="@style/TextFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:text="@string/Charts_TimeDuration_Month3" />
-
-            <TextView
-                android:id="@+id/button6M"
-                style="@style/TextFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:text="@string/Charts_TimeDuration_HalfYear" />
-
-            <TextView
-                android:id="@+id/button1Y"
-                style="@style/TextFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:text="@string/Charts_TimeDuration_Year" />
-
-            <TextView
-                android:id="@+id/button2Y"
-                style="@style/TextFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:text="@string/Charts_TimeDuration_Year2" />
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/chartPointsInfo"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="8dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border2">
-
-        <TextView
-            android:id="@+id/pointInfoDate"
-            style="@style/Body"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textColor="?ColorLeah"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/pointInfoPrice"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="09/02/2020" />
-
-        <TextView
-            android:id="@+id/pointInfoTime"
-            style="@font/noto_sans_regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textColor="@color/grey"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/pointInfoPriceTitle"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pointInfoPrice"
-            tools:text="15:21" />
-
-        <TextView
-            android:id="@+id/pointInfoPrice"
-            style="@style/Body"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textColor="?ColorLeah"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/pointInfoVolume"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/pointInfoDate"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="$10,083.34" />
-
-        <TextView
-            android:id="@+id/pointInfoPriceTitle"
-            style="@font/noto_sans_regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/Charts_Price"
-            android:textColor="@color/grey"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/pointInfoVolumeTitle"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/pointInfoTime"
-            app:layout_constraintTop_toBottomOf="@id/pointInfoPrice" />
-
-        <TextView
-            android:id="@+id/pointInfoVolume"
-            style="@style/Body"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textColor="?ColorLeah"
-            android:textSize="14sp"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="$36,166B" />
-
-        <TextView
-            android:id="@+id/pointInfoVolumeTitle"
-            style="@font/noto_sans_regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/Charts_Volume"
-            android:textColor="@color/grey"
-            android:textSize="12sp"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/pointInfoPriceTitle"
-            app:layout_constraintTop_toBottomOf="@id/pointInfoVolume" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <RelativeLayout
-        android:id="@+id/coinChartView"
-        android:layout_width="match_parent"
-        android:layout_height="213dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo">
-
-        <ProgressBar
-            android:id="@+id/chartViewSpinner"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:backgroundTint="@color/grey"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/grey"
-            android:indeterminateTintMode="src_atop" />
-
-        <TextView
-            android:id="@+id/chartError"
-            style="@style/Headline2"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/red_d" />
+            android:layout_height="wrap_content">
 
-        <io.horizontalsystems.chartview.ChartIndicator
-            android:id="@+id/chartViewIndicator"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp" />
 
-        <io.horizontalsystems.chartview.ChartView
-            android:id="@+id/chartView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:fallColor="@color/red_d"
-            app:gridDottedColor="?ColorNina"
-            app:growColor="@color/green_d"
-            app:indicatorColor="?ColorOz"
-            app:partialChartColor="@color/grey_50"
-            app:textColor="@color/grey"
-            app:textPriceColor="?ColorLeah"
-            app:touchColor="?ColorOz" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="16dp" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/coinRateLast"
+                style="@style/Headline2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:textColor="?BottomDialogTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="3,979.87" />
 
-    <View
-        android:id="@+id/border3"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinChartView" />
+            <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
+                android:id="@+id/coinRateDiff"
+                style="@style/Headline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
+                app:layout_constraintStart_toEndOf="@id/coinRateLast"
+                app:layout_constraintTop_toTopOf="@+id/coinRateLast"
+                app:negativeColor="?ColorLucian"
+                app:positiveColor="?ColorRemus"
+                tools:text="-18" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/startGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+            <View
+                android:id="@+id/border2"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:background="@color/steel_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coinRateLast" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/endGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
+            <HorizontalScrollView
+                android:id="@+id/chartWrap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/border2">
 
-    <TextView
-        android:id="@+id/volumeTitle"
-        style="@font/noto_sans_regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/Charts_Volume24"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/border3" />
+                <LinearLayout
+                    android:id="@+id/chartActions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="49dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="9dp"
+                    android:paddingBottom="8dp">
 
-    <TextView
-        android:id="@+id/volumeValue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans_regular"
-        android:textAlignment="textEnd"
-        android:textColor="?ColorLeah"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintStart_toEndOf="@id/volumeTitle"
-        app:layout_constraintTop_toTopOf="@+id/volumeTitle"
-        tools:text="$ 1.92 B" />
+                    <TextView
+                        android:id="@+id/button1D"
+                        style="@style/TextFlatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/Charts_TimeDuration_Day" />
 
-    <TextView
-        android:id="@+id/coinMarketCapTitle"
-        style="@font/noto_sans_regular"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/Charts_MarketCap"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/volumeTitle" />
+                    <TextView
+                        android:id="@+id/button1W"
+                        style="@style/TextFlatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/Charts_TimeDuration_Week" />
 
-    <TextView
-        android:id="@+id/coinMarketCap"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans_regular"
-        android:textAlignment="textEnd"
-        android:textColor="?ColorLeah"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintStart_toEndOf="@id/coinMarketCapTitle"
-        app:layout_constraintTop_toTopOf="@+id/coinMarketCapTitle"
-        tools:text="$ 100.92 B" />
+                    <TextView
+                        android:id="@+id/button1M"
+                        style="@style/TextFlatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/Charts_TimeDuration_Month" />
 
-    <TextView
-        android:id="@+id/circulationTitle"
-        style="@font/noto_sans_regular"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/Charts_inCirculation"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/coinMarketCapTitle" />
+                    <TextView
+                        android:id="@+id/button3M"
+                        style="@style/TextFlatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/Charts_TimeDuration_Month3" />
 
-    <TextView
-        android:id="@+id/circulationValue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans_regular"
-        android:textAlignment="textEnd"
-        android:textColor="?ColorLeah"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintStart_toEndOf="@id/circulationTitle"
-        app:layout_constraintTop_toTopOf="@+id/circulationTitle"
-        tools:text="100.92B BTC" />
+                    <TextView
+                        android:id="@+id/button6M"
+                        style="@style/TextFlatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/Charts_TimeDuration_HalfYear" />
 
-    <TextView
-        android:id="@+id/totalSupplyTitle"
-        style="@font/noto_sans_regular"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/Charts_TotalSupply"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/circulationTitle" />
+                    <TextView
+                        android:id="@+id/button1Y"
+                        style="@style/TextFlatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/Charts_TimeDuration_Year" />
 
-    <TextView
-        android:id="@+id/totalSupplyValue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans_regular"
-        android:textAlignment="textEnd"
-        android:textColor="?ColorLeah"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintStart_toEndOf="@id/totalSupplyTitle"
-        app:layout_constraintTop_toTopOf="@+id/totalSupplyTitle"
-        tools:text="100M BTC" />
+                    <TextView
+                        android:id="@+id/button2Y"
+                        style="@style/TextFlatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/Charts_TimeDuration_Year2" />
 
-    <TextView
-        android:id="@+id/sourceValue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans_regular"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
-        android:text="@string/Charts_CryptoCompare"
-        android:textAlignment="textEnd"
-        android:textColor="@color/grey_50"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintHorizontal_bias="0.854"
-        app:layout_constraintStart_toEndOf="@id/totalSupplyTitle"
-        app:layout_constraintTop_toBottomOf="@+id/totalSupplyValue" />
+                </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </HorizontalScrollView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/chartPointsInfo"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="8dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/border2">
+
+                <TextView
+                    android:id="@+id/pointInfoDate"
+                    style="@style/Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="?ColorLeah"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/pointInfoPrice"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="09/02/2020" />
+
+                <TextView
+                    android:id="@+id/pointInfoTime"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@+id/pointInfoPriceTitle"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pointInfoPrice"
+                    tools:text="15:21" />
+
+                <TextView
+                    android:id="@+id/pointInfoPrice"
+                    style="@style/Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="?ColorLeah"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/pointInfoVolume"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@+id/pointInfoDate"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="$10,083.34" />
+
+                <TextView
+                    android:id="@+id/pointInfoPriceTitle"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/Charts_Price"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@+id/pointInfoVolumeTitle"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@+id/pointInfoTime"
+                    app:layout_constraintTop_toBottomOf="@id/pointInfoPrice" />
+
+                <TextView
+                    android:id="@+id/pointInfoVolume"
+                    style="@style/Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="?ColorLeah"
+                    android:textSize="14sp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="$36,166B" />
+
+                <TextView
+                    android:id="@+id/pointInfoVolumeTitle"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/Charts_Volume"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@+id/pointInfoPriceTitle"
+                    app:layout_constraintTop_toBottomOf="@id/pointInfoVolume" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <RelativeLayout
+                android:id="@+id/coinChartView"
+                android:layout_width="match_parent"
+                android:layout_height="213dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo">
+
+                <ProgressBar
+                    android:id="@+id/chartViewSpinner"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="@color/grey"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/grey"
+                    android:indeterminateTintMode="src_atop" />
+
+                <TextView
+                    android:id="@+id/chartError"
+                    style="@style/Headline2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/red_d" />
+
+                <io.horizontalsystems.chartview.ChartIndicator
+                    android:id="@+id/chartViewIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible" />
+
+                <io.horizontalsystems.chartview.ChartView
+                    android:id="@+id/chartView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:fallColor="@color/red_d"
+                    app:gridDottedColor="?ColorNina"
+                    app:growColor="@color/green_d"
+                    app:indicatorColor="?ColorOz"
+                    app:partialChartColor="@color/grey_50"
+                    app:textColor="@color/grey"
+                    app:textPriceColor="?ColorLeah"
+                    app:touchColor="?ColorOz" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/border3"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/steel_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coinChartView" />
+
+            <TextView
+                android:id="@+id/volumeTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/Charts_Volume24"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/border3" />
+
+            <TextView
+                android:id="@+id/volumeValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/volumeTitle"
+                app:layout_constraintTop_toTopOf="@+id/volumeTitle"
+                tools:text="$ 1.92 B" />
+
+            <TextView
+                android:id="@+id/coinMarketCapTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/Charts_MarketCap"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/volumeTitle" />
+
+            <TextView
+                android:id="@+id/coinMarketCap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/coinMarketCapTitle"
+                app:layout_constraintTop_toTopOf="@+id/coinMarketCapTitle"
+                tools:text="$ 100.92 B" />
+
+            <TextView
+                android:id="@+id/circulationTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/Charts_inCirculation"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/coinMarketCapTitle" />
+
+            <TextView
+                android:id="@+id/circulationValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/circulationTitle"
+                app:layout_constraintTop_toTopOf="@+id/circulationTitle"
+                tools:text="100.92B BTC" />
+
+            <TextView
+                android:id="@+id/totalSupplyTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/Charts_TotalSupply"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/circulationTitle" />
+
+            <TextView
+                android:id="@+id/totalSupplyValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/totalSupplyTitle"
+                app:layout_constraintTop_toTopOf="@+id/totalSupplyTitle"
+                tools:text="100M BTC" />
+
+            <FrameLayout
+                android:id="@+id/cryptoNews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/totalSupplyTitle" />
+
+            <TextView
+                android:id="@+id/sourceValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_regular"
+                android:paddingTop="11dp"
+                android:paddingBottom="31dp"
+                android:text="@string/Charts_CryptoCompare"
+                android:textAlignment="center"
+                android:textColor="@color/grey_50"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cryptoNews" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
