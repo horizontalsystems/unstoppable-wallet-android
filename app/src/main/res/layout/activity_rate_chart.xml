@@ -36,8 +36,10 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView
+        android:id="@+id/scroller"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -488,6 +490,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/cryptoNews" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    </io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

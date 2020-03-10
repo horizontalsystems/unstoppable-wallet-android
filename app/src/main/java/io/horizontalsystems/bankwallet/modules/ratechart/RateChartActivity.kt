@@ -59,11 +59,15 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
     //  ChartView Listener
 
     override fun onTouchDown() {
+        scroller.setScrollingEnabled(false)
+
         setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = true)
         setViewVisibility(chartActions, isVisible = false)
     }
 
     override fun onTouchUp() {
+        scroller.setScrollingEnabled(true)
+
         setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = false)
         setViewVisibility(chartActions, isVisible = true)
     }
