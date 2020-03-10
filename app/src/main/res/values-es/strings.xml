@@ -224,8 +224,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contacto</string>
     <string name="SettingsContact_Email">Correo electrónico</string>
-    <string name="SettingsContact_WalletHelpTelegram">Telegram (Ayuda de monedero)</string>
-    <string name="SettingsContact_DevelopersTelegram">Telegram (Desarrolladores)</string>
+    <string name="SettingsContact_Telegram">Telegram (Desarrolladores)</string>
     <string name="SettingsContact_AppStatus">Estado de la aplicación</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Notificaciones</string>

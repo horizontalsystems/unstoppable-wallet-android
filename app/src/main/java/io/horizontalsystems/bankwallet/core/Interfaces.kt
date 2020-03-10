@@ -276,7 +276,6 @@ interface IAppConfigProvider {
     val appWebPageLink: String
     val reportEmail: String
     val walletHelpTelegramGroup: String
-    val developersTelegramGroup: String
     val ipfsId: String
     val ipfsMainGateway: String
     val ipfsFallbackGateway: String

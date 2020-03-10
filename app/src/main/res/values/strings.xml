@@ -303,8 +303,7 @@
 
     <string name="SettingsContact_Title">Contact</string>
     <string name="SettingsContact_Email">Mail</string>
-    <string name="SettingsContact_WalletHelpTelegram">Telegram (Wallet Help)</string>
-    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_Telegram">Telegram</string>
     <string name="SettingsContact_AppStatus">App Status</string>
 
     <!--Setting_Notifications-->

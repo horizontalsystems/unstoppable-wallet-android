@@ -224,8 +224,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">연락처</string>
     <string name="SettingsContact_Email">메일</string>
-    <string name="SettingsContact_WalletHelpTelegram">Telegram (지갑 고객 지원)</string>
-    <string name="SettingsContact_DevelopersTelegram">Telegram (개발자)</string>
+    <string name="SettingsContact_Telegram">Telegram (개발자)</string>
     <string name="SettingsContact_AppStatus">앱 상태</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">알림</string>

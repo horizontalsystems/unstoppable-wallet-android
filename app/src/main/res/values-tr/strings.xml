@@ -218,8 +218,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
     <string name="SettingsContact_Email">E-posta</string>
-    <string name="SettingsContact_WalletHelpTelegram">Telegram (Cüzdan Kullanım Yardımı)</string>
-    <string name="SettingsContact_DevelopersTelegram">Telegram (Developers)</string>
+    <string name="SettingsContact_Telegram">Telegram (Developers)</string>
     <string name="SettingsContact_AppStatus">Uygulama Durumu</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Bildirimler</string>

@@ -218,8 +218,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系信息</string>
     <string name="SettingsContact_Email">邮件</string>
-    <string name="SettingsContact_WalletHelpTelegram">电报（钱包帮助）</string>
-    <string name="SettingsContact_DevelopersTelegram">电报（开发者）</string>
+    <string name="SettingsContact_Telegram">电报（开发者）</string>
     <string name="SettingsContact_AppStatus">应用状态</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">通知</string>

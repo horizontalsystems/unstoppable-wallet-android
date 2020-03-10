@@ -219,8 +219,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contact</string>
     <string name="SettingsContact_Email">E-mail</string>
-    <string name="SettingsContact_WalletHelpTelegram">Telegram (Aide portefeuille)</string>
-    <string name="SettingsContact_DevelopersTelegram">Telegram (Développeurs)</string>
+    <string name="SettingsContact_Telegram">Telegram (Développeurs)</string>
     <string name="SettingsContact_AppStatus">Statut de l\'appli</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Notifications</string>
