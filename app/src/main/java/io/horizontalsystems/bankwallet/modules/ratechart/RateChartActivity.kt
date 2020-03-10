@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.cryptonews.CryptoNewsFragment
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
@@ -46,6 +47,11 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
 
         observeData()
         bindActions()
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.cryptoNews, CryptoNewsFragment(coin))
+            commit()
+        }
 
         presenter.viewDidLoad()
     }

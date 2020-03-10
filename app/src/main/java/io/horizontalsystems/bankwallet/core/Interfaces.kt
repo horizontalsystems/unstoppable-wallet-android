@@ -20,6 +20,7 @@ import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CryptoNews
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -304,6 +305,7 @@ interface IRateManager {
     fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal>
     fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
+    fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun refresh()
 }
 
