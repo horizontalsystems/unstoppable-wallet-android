@@ -50,6 +50,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         })
 
         recyclerTags.adapter = filterAdapter
+        recyclerTransactions.itemAnimator = null
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = layoutManager
