@@ -183,7 +183,7 @@ dependencies {
     }
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    api 'com.github.horizontalsystems:net-kit-android:a186723'
+    api 'com.github.horizontalsystems:net-kit-android:61da566'
 
     // UI modules
 
