@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
@@ -49,10 +50,21 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         setOnCloseCallback { listener?.closeTransactionInfo() }
 
         txtFullInfo.setOnClickListener { viewModel.onClickOpenFullInfo() }
+        btnShare.setOnClickListener{ viewModel.onClickShareId() }
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
             HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied)
         })
+
+        viewModel.showShareLiveEvent.observe(lifecycleOwner, Observer { url ->
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, url)
+                type = "text/plain"
+            }
+            context.startActivity(sendIntent)
+        })
+
 
         viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, Observer { pair ->
             pair?.let {

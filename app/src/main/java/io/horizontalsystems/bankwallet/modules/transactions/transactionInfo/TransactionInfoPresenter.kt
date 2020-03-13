@@ -17,6 +17,10 @@ class TransactionInfoPresenter(
         view?.showCopied()
     }
 
+    override fun onShare(value: String) {
+        view?.share(value)
+    }
+
     override fun openFullInfo(transactionHash: String, wallet: Wallet) {
         router.openFullInfo(transactionHash, wallet)
     }
