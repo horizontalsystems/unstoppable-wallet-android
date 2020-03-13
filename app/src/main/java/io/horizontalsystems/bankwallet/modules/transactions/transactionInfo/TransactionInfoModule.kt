@@ -7,10 +7,12 @@ import java.util.*
 object TransactionInfoModule {
     interface View {
         fun showCopied()
+        fun share(value: String)
     }
 
     interface ViewDelegate {
         fun onCopy(value: String)
+        fun onShare(value: String)
         fun openFullInfo(transactionHash: String, wallet: Wallet)
         fun onClickLockInfo(lockDate: Date)
         fun onClickDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)

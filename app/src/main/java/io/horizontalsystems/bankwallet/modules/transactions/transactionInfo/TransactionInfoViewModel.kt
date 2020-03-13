@@ -15,6 +15,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val showLockInfo = SingleLiveEvent<Date>()
     val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
+    val showShareLiveEvent = SingleLiveEvent<String>()
 
     fun init() {
         TransactionInfoModule.init(this, this)
@@ -24,6 +25,10 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
 
     override fun showCopied() {
         showCopiedLiveEvent.call()
+    }
+
+    override fun share(value: String) {
+        showShareLiveEvent.value = value
     }
 
     // IRouter
@@ -47,6 +52,12 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     fun onClickTransactionId() {
         transactionLiveData.value?.let {
             delegate.onCopy(it.transactionHash)
+        }
+    }
+
+    fun onClickShareId() {
+        transactionLiveData.value?.let {
+            delegate.onShare(it.transactionHash)
         }
     }
 
