@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true">
+    android:background="?attr/ColorLawrence"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <View
         android:id="@+id/divider"
