@@ -4,7 +4,7 @@
     android:id="@+id/latestNews"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/steel_dark"
+    android:background="?attr/ColorLawrence"
     android:paddingTop="16dp">
 
     <TextView
@@ -24,6 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/grey_50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
