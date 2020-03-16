@@ -66,7 +66,7 @@
                 android:id="@+id/coinRateLast"
                 style="@style/Headline2"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingStart="16dp"
                 android:paddingEnd="0dp"
@@ -91,15 +91,6 @@
                 app:positiveColor="?ColorRemus"
                 tools:text="-18" />
 
-            <View
-                android:id="@+id/border2"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/coinRateLast" />
-
             <HorizontalScrollView
                 android:id="@+id/chartWrap"
                 android:layout_width="match_parent"
@@ -110,15 +101,15 @@
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/border2">
+                app:layout_constraintTop_toBottomOf="@+id/coinRateLast">
 
                 <LinearLayout
                     android:id="@+id/chartActions"
                     android:layout_width="wrap_content"
                     android:layout_height="49dp"
                     android:orientation="horizontal"
-                    android:paddingTop="9dp"
-                    android:paddingBottom="8dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/button1D"
@@ -207,12 +198,12 @@
                 android:layout_height="49dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="8dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/border2">
+                app:layout_constraintTop_toBottomOf="@+id/coinRateLast">
 
                 <TextView
                     android:id="@+id/pointInfoDate"
