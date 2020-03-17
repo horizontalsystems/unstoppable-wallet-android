@@ -21,9 +21,9 @@
         android:layout_gravity="top"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:text="@string/CoinOption_bip44"
         android:textColor="?TextColorBarsToDark"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/BlockchainSettings_Title" />
 
     <TextView
         android:id="@+id/itemSubtitle"
@@ -35,8 +35,8 @@
         android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/CoinOption_bip44_Subtitle"
-        android:textColor="@color/grey" />
+        android:textColor="@color/grey"
+        tools:text="@string/CoinOption_bip44_Subtitle" />
 
     <ImageView
         android:id="@+id/checkMark"

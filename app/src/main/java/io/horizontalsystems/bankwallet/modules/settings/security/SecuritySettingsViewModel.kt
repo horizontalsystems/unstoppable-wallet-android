@@ -8,7 +8,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     lateinit var delegate: SecuritySettingsModule.ISecuritySettingsViewDelegate
 
-    val backupAlertVisibleLiveData = MutableLiveData<Boolean>()
     val pinSetLiveData = MutableLiveData<Boolean>()
     val editPinVisibleLiveData = MutableLiveData<Boolean>()
     val biometricSettingsVisibleLiveData = MutableLiveData<Boolean>()
@@ -16,11 +15,9 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val torEnabledLiveData = MutableLiveData<Boolean>()
     val showAppRestartAlertForTor = SingleLiveEvent<Boolean>()
 
-    val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openSetPinLiveEvent = SingleLiveEvent<Unit>()
     val openUnlockPinLiveEvent = SingleLiveEvent<Unit>()
-    val openBlockchainSettings = SingleLiveEvent<Unit>()
     val restartApp = SingleLiveEvent<Unit>()
     val showNotificationsNotEnabledAlert = SingleLiveEvent<Unit>()
 
@@ -36,10 +33,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     }
 
     //  ISecuritySettingsView
-
-    override fun setBackupAlertVisible(visible: Boolean) {
-        backupAlertVisibleLiveData.postValue(visible)
-    }
 
     override fun togglePinSet(pinSet: Boolean) {
         pinSetLiveData.postValue(pinSet)
@@ -67,10 +60,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     //  ISecuritySettingsRouter
 
-    override fun showManageKeys() {
-        openManageKeysLiveEvent.call()
-    }
-
     override fun showEditPin() {
         openEditPinLiveEvent.call()
     }
@@ -81,10 +70,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun showUnlockPin() {
         openUnlockPinLiveEvent.call()
-    }
-
-    override fun showBlockchainSettings() {
-        openBlockchainSettings.call()
     }
 
     override fun restartApp() {

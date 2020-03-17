@@ -23,6 +23,10 @@ class MainSettingsPresenter(
         view.setAppVersion(interactor.appVersion)
     }
 
+    override fun didTapManageKeys() {
+        router.showManageKeys()
+    }
+
     override fun didTapSecurity() {
         router.showSecuritySettings()
     }

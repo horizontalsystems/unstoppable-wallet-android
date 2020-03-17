@@ -47,6 +47,11 @@ class CreateWalletPresenter(
     override fun onCreateButtonClick() {
         if (wallets.isNotEmpty()) {
             val accounts = wallets.values.map { it.account }
+            wallets.forEach { (coin, wallet) ->
+                interactor.blockchainSettings(coin.type)?.let {
+                    interactor.saveBlockchainSettings(it)
+                }
+            }
             interactor.createAccounts(accounts)
             interactor.saveWallets(wallets.values.toList())
             if (presentationMode == PresentationMode.Initial) {
@@ -104,10 +109,7 @@ class CreateWalletPresenter(
     }
 
     private fun createWallet(coin: Coin, account: Account) {
-        val coinSettings = interactor.coinSettings(coin.type)
-
-        wallets[coin] = Wallet(coin, account, coinSettings)
-
+        wallets[coin] = Wallet(coin, account)
         syncCreateButton()
     }
 

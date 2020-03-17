@@ -8,7 +8,7 @@ class ManageWalletsInteractor(
         private val walletManager: IWalletManager,
         private val accountManager: IAccountManager,
         private val accountCreator: IAccountCreator,
-        private val coinSettingsManager: ICoinSettingsManager
+        private val blockchainSettingsManager: IBlockchainSettingsManager
 ) : ManageWalletsModule.IInteractor {
 
     override val coins: List<Coin>
@@ -47,11 +47,15 @@ class ManageWalletsInteractor(
         return accountCreator.newAccount(predefinedAccountType)
     }
 
-    override fun createRestoredAccount(accountType: AccountType): Account {
-        return accountCreator.restoredAccount(accountType)
+    override fun blockchainSettings(coinType: CoinType): BlockchainSetting? {
+        return blockchainSettingsManager.blockchainSettings(coinType)
     }
 
-    override fun getCoinSettings(coinType: CoinType): CoinSettings {
-        return coinSettingsManager.coinSettings(coinType)
+    override fun blockchainSettingsForCreate(coinType: CoinType): BlockchainSetting? {
+        return blockchainSettingsManager.blockchainSettingsForCreate(coinType)
+    }
+
+    override fun saveBlockchainSettings(blockchainSettings: BlockchainSetting) {
+        blockchainSettingsManager.updateSettings(blockchainSettings)
     }
 }

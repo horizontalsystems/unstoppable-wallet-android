@@ -43,7 +43,6 @@ class App : CoreApp() {
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var walletManager: IWalletManager
-        lateinit var walletFactory: IWalletFactory
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
         lateinit var backupManager: IBackupManager
@@ -75,7 +74,7 @@ class App : CoreApp() {
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
         lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
-        lateinit var coinSettingsManager: ICoinSettingsManager
+        lateinit var blockchainSettingsManager: IBlockchainSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
     }
@@ -111,9 +110,8 @@ class App : CoreApp() {
         rateStorage = RatesRepository(appDatabase)
         accountsStorage = AccountsStorage(appDatabase)
 
-        walletFactory = WalletFactory()
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(appConfigProvider, walletFactory, enabledWalletsStorage)
+        walletStorage = WalletStorage(appConfigProvider, enabledWalletsStorage)
 
         LocalStorageManager().apply {
             localStorage = this
@@ -129,7 +127,7 @@ class App : CoreApp() {
         accountCleaner = AccountCleaner(appConfigTestMode.testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
         backupManager = BackupManager(accountManager)
-        walletManager = WalletManager(accountManager, walletFactory, walletStorage)
+        walletManager = WalletManager(accountManager, walletStorage)
         accountCreator = AccountCreator(AccountFactory(), wordsManager)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
         walletRemover = WalletRemover(accountManager, walletManager)
@@ -153,7 +151,9 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager()
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
+        blockchainSettingsManager = BlockchainSettingsManager(appDatabase, appConfigProvider)
+
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
         rateCoinMapper = RateCoinMapper()
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
@@ -179,7 +179,6 @@ class App : CoreApp() {
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
-        coinSettingsManager = CoinSettingsManager(localStorage)
         pinComponent = PinComponent(
                 application = this,
                 securedStorage = secureStorage,

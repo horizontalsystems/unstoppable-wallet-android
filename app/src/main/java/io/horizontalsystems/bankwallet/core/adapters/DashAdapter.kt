@@ -16,11 +16,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class DashAdapter(override val kit: DashKit) :
-        BitcoinBaseAdapter(kit), DashKit.Listener, ISendDashAdapter {
+class DashAdapter(override val kit: DashKit, override val settings: BlockchainSetting?) :
+        BitcoinBaseAdapter(kit, settings), DashKit.Listener, ISendDashAdapter {
 
-    constructor(wallet: Wallet, testMode: Boolean) :
-            this(createKit(wallet, testMode))
+    constructor(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean) :
+            this(createKit(wallet, settings, testMode), settings)
 
     init {
         kit.listener = this
@@ -121,10 +121,10 @@ class DashAdapter(override val kit: DashKit) :
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, testMode: Boolean): DashKit {
+        private fun createKit(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean): DashKit {
             val account = wallet.account
             val accountType = account.type
-            val syncMode = wallet.settings[CoinSetting.SyncMode]?.let { SyncMode.valueOf(it) }
+            val syncMode = settings?.syncMode
             if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return DashKit(context = App.instance,
                             words = accountType.words,

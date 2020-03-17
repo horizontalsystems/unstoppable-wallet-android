@@ -1,81 +1,82 @@
 package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.CoinSetting
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.*
 
 class BlockchainSettingsPresenter(
-        val view: CoinSettingsModule.IView,
-        val router: CoinSettingsModule.IRouter,
-        private val mode: SettingsMode,
-        private val interactor: CoinSettingsModule.IInteractor)
-    : ViewModel(), CoinSettingsModule.IViewDelegate {
+        val view: BlockchainSettingsModule.IView,
+        val router: BlockchainSettingsModule.IRouter,
+        private val interactor: BlockchainSettingsModule.IInteractor,
+        private val coinType: CoinType)
+    : ViewModel(), BlockchainSettingsModule.IViewDelegate {
 
-    private var selectedDerivation = interactor.bitcoinDerivation()
-    private var selectedSyncMode = interactor.syncMode()
-    var showDoneButton = mode == SettingsMode.InsideRestore
+    private var blockchainSettings = interactor.blockchainSettings(coinType)
+    private val coinTitle: String = interactor.coinWithSetting(coinType)?.title ?: ""
 
-    override fun onLoad() {
-        updatedView()
+    override fun onViewLoad() {
+        view.setTitle(coinTitle)
+        setSettings()
+    }
+
+    private fun setSettings() {
+        blockchainSettings?.derivation?.let {
+            view.setDerivation(it)
+        }
+        blockchainSettings?.syncMode?.let {
+            val syncMode = if (it == SyncMode.New) SyncMode.Fast else it
+            view.setSyncMode(syncMode)
+        }
+        view.setSourceLink(coinType)
     }
 
     override fun onSelect(syncMode: SyncMode) {
-        if (selectedSyncMode != syncMode && interactor.getWalletsForSyncModeUpdate().isNotEmpty()) {
-            view.showSyncModeChangeAlert(syncMode)
-        } else {
-            interactor.updateSyncMode(syncMode)
-            updatedView()
+        val blockchainSettings = blockchainSettings ?: return
 
+        if (blockchainSettings.syncMode != syncMode && interactor.getWalletForUpdate(coinType) != null) {
+            view.showSyncModeChangeAlert(syncMode, coinTitle)
+        } else {
+            blockchainSettings.syncMode = syncMode
+            interactor.updateSettings(blockchainSettings)
+            view.setSyncMode(syncMode)
         }
     }
 
     override fun onSelect(derivation: AccountType.Derivation) {
-        if (selectedDerivation != derivation && interactor.getWalletsForDerivationUpdate().isNotEmpty()) {
-            view.showDerivationChangeAlert(derivation)
+        val blockchainSettings = blockchainSettings ?: return
+
+        if (blockchainSettings.derivation != derivation && interactor.getWalletForUpdate(coinType) != null) {
+            view.showDerivationChangeAlert(derivation, coinTitle)
         } else {
-            interactor.updateBitcoinDerivation(derivation)
-            updatedView()
+            blockchainSettings.derivation = derivation
+            interactor.updateSettings(blockchainSettings)
+            view.setDerivation(derivation)
         }
     }
 
     override fun proceedWithDerivationChange(derivation: AccountType.Derivation) {
-        selectedDerivation = derivation
-        interactor.updateBitcoinDerivation(selectedDerivation)
-        updatedView()
+        val blockchainSettings = blockchainSettings ?: return
 
-        //update derivation
-        val wallets = interactor.getWalletsForDerivationUpdate()
-        wallets.forEach { wallet ->
-            wallet.settings[CoinSetting.Derivation] = derivation.value
+        blockchainSettings.derivation = derivation
+        interactor.updateSettings(blockchainSettings)
+
+        view.setDerivation(derivation)
+
+        interactor.getWalletForUpdate(coinType)?.let {
+            interactor.reSyncWallet(it)
         }
-        interactor.reSyncWalletsWithNewSettings(wallets)
     }
 
     override fun proceedWithSyncModeChange(syncMode: SyncMode) {
-        selectedSyncMode = syncMode
-        interactor.updateSyncMode(syncMode)
-        updatedView()
+        val blockchainSettings = blockchainSettings ?: return
 
-        //update syncMode
-        val wallets = interactor.getWalletsForSyncModeUpdate()
-        wallets.forEach { wallet ->
-            wallet.settings[CoinSetting.SyncMode] = syncMode.value
+        blockchainSettings.syncMode = syncMode
+        interactor.updateSettings(blockchainSettings)
+
+        view.setSyncMode(syncMode)
+
+        interactor.getWalletForUpdate(coinType)?.let {
+            interactor.reSyncWallet(it)
         }
-        interactor.reSyncWalletsWithNewSettings(wallets)
-    }
-
-    override fun onDone() {
-        when (mode) {
-            SettingsMode.InsideRestore -> router.closeWithResultOk()
-            SettingsMode.StandAlone -> router.close()
-        }
-    }
-
-    private fun updatedView() {
-        val derivation = interactor.bitcoinDerivation()
-        val restoreSource = interactor.syncMode()
-        view.setSelection(derivation, restoreSource)
     }
 
 }

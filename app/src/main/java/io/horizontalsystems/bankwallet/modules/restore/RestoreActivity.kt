@@ -11,12 +11,11 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.PresentationMode
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.SettingsMode
+import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.restorecoins.RestoreCoinsModule
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
@@ -32,8 +31,12 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
 
         setContentView(R.layout.activity_restore)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        presenter = ViewModelProvider(this, RestoreModule.Factory()).get(RestorePresenter::class.java)
+        val predefinedAccountType: PredefinedAccountType? = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE)
+        val mode: RestoreMode = intent.getParcelableExtra(ModuleField.RESTORE_MODE) ?: RestoreMode.FromWelcome
+
+        presenter = ViewModelProvider(this, RestoreModule.Factory(predefinedAccountType, mode)).get(RestorePresenter::class.java)
 
         adapter = RestoreNavigationAdapter(this)
         recyclerView.adapter = adapter
@@ -46,6 +49,8 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
 
     private fun observeView(view: RestoreView) {
         view.reloadLiveEvent.observe(this, Observer {
+            recyclerView.visibility = View.VISIBLE
+            toolbar.setTitle(R.string.Restore_ChooseWallet)
             adapter.items = it
             adapter.notifyDataSetChanged()
         })
@@ -56,19 +61,29 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
     }
 
     private fun observeRouter(router: RestoreRouter) {
-        router.showRestoreCoins.observe(this, Observer { (predefinedAccountType, accountType) ->
-            RestoreCoinsModule.start(this, predefinedAccountType, accountType, PresentationMode.Initial)
-        })
-
         router.showKeyInputEvent.observe(this, Observer { predefinedAccountType ->
-            RestoreModule.startForResult(this, predefinedAccountType, ModuleCode.RESTORE_KEY_INPUT)
+            when(predefinedAccountType){
+                PredefinedAccountType.Standard -> RestoreWordsModule.startForResult(this, 12, predefinedAccountType.title, ModuleCode.RESTORE_KEY_INPUT)
+                PredefinedAccountType.Binance -> RestoreWordsModule.startForResult(this, 24, predefinedAccountType.title, ModuleCode.RESTORE_KEY_INPUT)
+                PredefinedAccountType.Eos -> RestoreEosModule.startForResult(this, ModuleCode.RESTORE_KEY_INPUT)
+            }
         })
 
-        router.showCoinSettingsEvent.observe(this, Observer {
-            CoinSettingsModule.startForResult(this, SettingsMode.InsideRestore)
+        router.showRestoreCoins.observe(this, Observer { predefinedAccountType ->
+            RestoreCoinsModule.startForResult(this, predefinedAccountType)
+        })
+
+        router.startMainModuleLiveEvent.observe(this, Observer {
+            MainModule.start(this)
+            finishAffinity()
         })
 
         router.closeEvent.observe(this, Observer {
+            finish()
+        })
+
+        router.closeWithSuccessEvent.observe(this, Observer {
+            setResult(Activity.RESULT_OK)
             finish()
         })
     }
@@ -90,16 +105,22 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            presenter.onReturnWithCancel()
+            return
+        }
 
         when (requestCode) {
             ModuleCode.RESTORE_KEY_INPUT -> {
-                val accountType = data?.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
-                        ?: return
-                presenter.didEnterValidAccount(accountType)
-            }
-            ModuleCode.COIN_SETTINGS -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    presenter.didReturnFromCoinSettings()
+                    val accountType = data?.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE) ?: return
+                    presenter.didEnterValidAccount(accountType)
+                }
+            }
+            ModuleCode.RESTORE_COINS -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val enabledCoins = data?.getParcelableArrayListExtra<Coin>(ModuleField.COINS)
+                    presenter.didReturnFromRestoreCoins(enabledCoins)
                 }
             }
         }

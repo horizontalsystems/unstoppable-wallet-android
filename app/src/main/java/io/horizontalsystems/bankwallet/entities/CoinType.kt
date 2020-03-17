@@ -51,9 +51,10 @@ sealed class CoinType : Parcelable {
 
     fun restoreUrl(): String {
         return when (this) {
-            is Bitcoin -> "https://btc.horizontalsystems.xyz/apg"
-            is BitcoinCash -> "https://blockdozer.com"
-            is Dash -> "https://dash.horizontalsystems.xyz"
+            is Bitcoin -> "btc.horizontalsystems.xyz/apg"
+            is Litecoin -> "ltc.horizontalsystems.xyz/api"
+            is BitcoinCash -> "cashexplorer.bitcoin.com/api"
+            is Dash -> "dash.horizontalsystems.xyz/apg"
             else -> ""
         }
     }
@@ -68,15 +69,6 @@ sealed class CoinType : Parcelable {
             is Ethereum -> PredefinedAccountType.Standard
             is Binance -> PredefinedAccountType.Binance
             is Eos -> PredefinedAccountType.Eos
-        }
-
-    val settings: List<CoinSetting>
-        get() = when (this) {
-            is Bitcoin,
-            is Litecoin -> listOf(CoinSetting.Derivation, CoinSetting.SyncMode)
-            is BitcoinCash -> listOf(CoinSetting.SyncMode)
-            is Dash -> listOf(CoinSetting.SyncMode)
-            else -> listOf()
         }
 
 }

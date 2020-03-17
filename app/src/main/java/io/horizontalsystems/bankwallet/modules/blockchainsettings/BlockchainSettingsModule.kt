@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import android.content.Intent
-import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,36 +8,34 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.Wallet
-import kotlinx.android.parcel.Parcelize
 
-object CoinSettingsModule {
+object BlockchainSettingsModule {
 
     interface IView {
-        fun setSelection(derivation: Derivation, syncMode: SyncMode)
-        fun showDerivationChangeAlert(derivation: Derivation)
-        fun showSyncModeChangeAlert(syncMode: SyncMode)
+        fun showDerivationChangeAlert(derivation: Derivation, coinTitle: String)
+        fun showSyncModeChangeAlert(syncMode: SyncMode, coinTitle: String)
+        fun setDerivation(derivation: Derivation)
+        fun setSyncMode(syncMode: SyncMode)
+        fun setSourceLink(coinType: CoinType)
+        fun setTitle(title: String)
     }
 
     interface IViewDelegate {
-        fun onLoad()
+        fun onViewLoad()
         fun onSelect(syncMode: SyncMode)
         fun onSelect(derivation: Derivation)
-        fun onDone()
         fun proceedWithDerivationChange(derivation: Derivation)
         fun proceedWithSyncModeChange(syncMode: SyncMode)
     }
 
     interface IInteractor {
-        fun bitcoinDerivation(): Derivation
-        fun syncMode(): SyncMode
-        fun updateBitcoinDerivation(derivation: Derivation)
-        fun updateSyncMode(source: SyncMode)
-        fun getWalletsForSyncModeUpdate(): List<Wallet>
-        fun getWalletsForDerivationUpdate(): List<Wallet>
-        fun reSyncWalletsWithNewSettings(wallets: List<Wallet>)
+        fun coinWithSetting(coinType: CoinType): Coin?
+        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
+        fun getWalletForUpdate(coinType: CoinType): Wallet?
+        fun reSyncWallet(wallet: Wallet)
+        fun updateSettings(blockchainSettings: BlockchainSetting)
     }
 
     interface IRouter {
@@ -46,33 +43,21 @@ object CoinSettingsModule {
         fun close()
     }
 
-    fun startForResult(context: AppCompatActivity, mode: SettingsMode = SettingsMode.StandAlone) {
+    fun startForResult(context: AppCompatActivity, coinType: CoinType) {
         val intent = Intent(context, BlockchainSettingsActivity::class.java)
-        intent.putParcelableExtra(ModuleField.COIN_SETTINGS_CLOSE_MODE, mode)
+        intent.putParcelableExtra(ModuleField.COIN_TYPE, coinType)
         context.startActivityForResult(intent, ModuleCode.COIN_SETTINGS)
     }
 
-    fun start(context: AppCompatActivity, mode: SettingsMode = SettingsMode.StandAlone) {
-        val intent = Intent(context, BlockchainSettingsActivity::class.java)
-        intent.putParcelableExtra(ModuleField.COIN_SETTINGS_CLOSE_MODE, mode)
-        context.startActivity(intent)
-    }
-
-    class Factory(private val mode: SettingsMode) : ViewModelProvider.Factory {
+    class Factory(private val coinType: CoinType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = BlockchainSettingsView()
             val router = BlockchainSettingsRouter()
-            val interactor = BlockchainSettingsInteractor(App.coinSettingsManager, App.walletManager, App.accountCleaner, App.appConfigProvider)
-            val presenter = BlockchainSettingsPresenter(view, router, mode, interactor)
+            val interactor = BlockchainSettingsInteractor(App.blockchainSettingsManager, App.walletManager)
+            val presenter = BlockchainSettingsPresenter(view, router, interactor, coinType)
 
             return presenter as T
         }
     }
-}
-
-@Parcelize
-enum class SettingsMode: Parcelable {
-    StandAlone,
-    InsideRestore
 }

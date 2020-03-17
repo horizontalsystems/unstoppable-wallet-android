@@ -25,6 +25,7 @@
     <string name="Button_Share">Share</string>
     <string name="Button_Done">Done</string>
     <string name="Button_Retry">Retry</string>
+    <string name="Button_Change">Change</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
@@ -273,7 +274,6 @@
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
-    <string name="SettingsSecurity_BlockchainSettings">Blockchain Settings</string>
     <string name="SettingsSecurity_EnableTor">Enable Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
@@ -363,6 +363,7 @@
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
@@ -388,16 +389,21 @@
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
+    <!-- Blockchain Settings List -->
+
+    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
+    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+
     <!-- Blockchain Settings -->
 
-    <string name="BlockchainSettings_Title">Settings</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
+    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
 
     <!-- Tor -->
 
@@ -424,14 +430,11 @@
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast" translatable="false">API</string>
     <string name="CoinOption_Fast_Subtitle">0–2 hours (Recommended)</string>
-    <string name="CoinOption_RestoreSourceDescription">API sources links: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
     <string name="CoinOption_Slow" translatable="false">Blockchain</string>
     <string name="CoinOption_Slow_Subtitle">1–24 hours</string>
-    <string name="CoinOption_AddressFormatTitle">Bitcoin address format</string>
+    <string name="CoinOption_AddressFormatTitle">Address format</string>
     <string name="CoinOption_SyncModeTitle">Restore Source</string>
-    <string name="CoinOption_bip44" translatable="false">Legacy - BIP 44</string>
-    <string name="CoinOption_bip49" translatable="false">SegWit - BIP 49</string>
-    <string name="CoinOption_bip84" translatable="false">Native SegWit - BIP 84</string>
     <string name="CoinOption_bip44_Subtitle">Older (start with 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Popular (start with 3...)</string>
     <string name="CoinOption_bip84_Subtitle">Newest (start with bc1...)</string>

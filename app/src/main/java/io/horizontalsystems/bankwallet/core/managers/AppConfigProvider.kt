@@ -4,8 +4,7 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.IAppConfigTestMode
 import io.horizontalsystems.core.ILanguageConfigProvider
 import io.horizontalsystems.core.entities.Currency
@@ -41,7 +40,8 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 coins[2],
                 coins[3],
                 coins[4],
-                coins[5]
+                coins[5],
+                coins[6]
         )
 
     override val coins: List<Coin> = listOf(
@@ -110,6 +110,13 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
             Coin("USDT",      "Tether USD",              "USDT",         6,      CoinType.Erc20("0xdAC17F958D2ee523a2206206994597C13D831ec7")),
             Coin("USDC",      "USD Coin",                "USDC",         6,      CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
             Coin("WTC",       "Waltonchain",             "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74"))
+    )
+
+    override val blockchainSettings: List<BlockchainSetting> = listOf(
+            BlockchainSetting(CoinType.Bitcoin, AccountType.Derivation.bip49, SyncMode.Fast),
+            BlockchainSetting(CoinType.Litecoin, AccountType.Derivation.bip49, SyncMode.Fast),
+            BlockchainSetting(CoinType.BitcoinCash, null, SyncMode.Fast),
+            BlockchainSetting(CoinType.Dash, null, SyncMode.Fast)
     )
 
     //  ILanguageConfigProvider

@@ -63,6 +63,10 @@ open class AccountType : Parcelable {
 
     companion object{
 
+        fun getDerivationLongTitle(derivation: Derivation): String {
+            return "${derivation.addressType} - ${getDerivationTitle(derivation)}"
+        }
+
         fun getDerivationTitle(derivation: Derivation): String {
             return when(derivation) {
                 Derivation.bip44 -> "BIP 44"

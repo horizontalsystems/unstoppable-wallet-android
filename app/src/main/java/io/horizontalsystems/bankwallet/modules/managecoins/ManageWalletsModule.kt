@@ -28,9 +28,10 @@ object ManageWalletsModule {
         fun onSelectNewAccount(predefinedAccountType: PredefinedAccountType)
         fun onSelectRestoreAccount(predefinedAccountType: PredefinedAccountType)
 
-        fun didRestore(accountType: AccountType)
         fun onClickCancel()
-        fun onCoinSettingsClose()
+        fun onAccountRestored()
+        fun onBlockchainSettingsApproved()
+        fun onBlockchainSettingsCancel()
     }
 
     interface IInteractor {
@@ -45,16 +46,17 @@ object ManageWalletsModule {
         fun delete(wallet: Wallet)
 
         fun createAccount(predefinedAccountType: PredefinedAccountType): Account
-        fun createRestoredAccount(accountType: AccountType): Account
         fun save(account: Account)
 
-        fun getCoinSettings(coinType: CoinType): CoinSettings
+        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
+        fun blockchainSettingsForCreate(coinType: CoinType): BlockchainSetting?
+        fun saveBlockchainSettings(blockchainSettings: BlockchainSetting)
     }
 
     interface IRouter {
-        fun showCoinSettings()
         fun openRestore(predefinedAccountType: PredefinedAccountType)
         fun close()
+        fun showSettings(coinType: CoinType)
     }
 
     fun start(context: Context, showCloseButton: Boolean) {
@@ -68,7 +70,7 @@ object ManageWalletsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageWalletsView()
             val router = ManageWalletsRouter()
-            val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.coinSettingsManager)
+            val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.blockchainSettingsManager)
             val presenter = ManageWalletsPresenter(interactor, isColdStart, showCloseButton, router, view)
 
             return presenter as T

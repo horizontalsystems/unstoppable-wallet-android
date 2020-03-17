@@ -21,24 +21,6 @@ class ManageKeysPresenter(
         interactor.loadAccounts()
     }
 
-    override fun didEnterValidAccount(accountType: AccountType) {
-        val predefinedAccountType = predefinedAccountType ?: return
-        this.accountType = accountType
-
-        if (predefinedAccountType == PredefinedAccountType.Standard) {
-            router.showCoinSettings()
-        } else {
-            router.showCoinManager(predefinedAccountType, accountType)
-        }
-    }
-
-    override fun didReturnFromCoinSettings() {
-        val predefinedAccountType = predefinedAccountType ?: return
-        val accountType = this.accountType ?: return
-
-        router.showCoinManager(predefinedAccountType, accountType)
-    }
-
     override fun onClickCreate(accountItem: ManageAccountItem) {
         router.showCreateWallet(accountItem.predefinedAccountType)
     }
@@ -50,7 +32,7 @@ class ManageKeysPresenter(
 
     override fun onClickRestore(accountItem: ManageAccountItem) {
         predefinedAccountType = accountItem.predefinedAccountType
-        router.showRestoreKeyInput(accountItem.predefinedAccountType)
+        router.showRestore(accountItem.predefinedAccountType)
     }
 
     override fun onClickUnlink(accountItem: ManageAccountItem) {
@@ -61,6 +43,13 @@ class ManageKeysPresenter(
         } else {
             view.showBackupConfirmation(accountItem)
         }
+    }
+
+    override fun onClickAdvancedSettings(item: ManageAccountItem) {
+        val enabledCoinTypes = interactor.getWallets()
+                .filter { it.account.id == item.account?.id }
+                .map{it.coin.type}
+        router.showBlockchainSettings(enabledCoinTypes)
     }
 
     override fun onConfirmBackup() {

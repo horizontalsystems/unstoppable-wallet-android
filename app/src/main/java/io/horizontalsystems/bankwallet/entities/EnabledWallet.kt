@@ -17,7 +17,5 @@ import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 data class EnabledWallet(
         val coinId: String,
         val accountId: String,
-        val walletOrder: Int? = null,
-        val syncMode: String? = null,
-        val derivation: String? = null
+        val walletOrder: Int? = null
 )

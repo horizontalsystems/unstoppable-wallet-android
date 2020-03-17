@@ -11,11 +11,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 14, exportSchema = false, entities = [
+@Database(version = 15, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     PriceAlertRecord::class,
-    AccountRecord::class]
+    AccountRecord::class,
+    BlockchainSetting::class]
 )
 
 @TypeConverters(DatabaseConverters::class)
@@ -25,6 +26,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun accountsDao(): AccountsDao
     abstract fun priceAlertsDao(): PriceAlertsDao
+    abstract fun blockchainSettingDao(): BlockchainSettingDao
 
     companion object {
 
@@ -47,7 +49,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_10_11,
                             renameCoinDaiToSai,
                             moveCoinSettingsFromAccountToWallet,
-                            storeBipToPreferences
+                            storeBipToPreferences,
+                            addBlockchainSettingsTable
                     )
                     .build()
         }
@@ -157,7 +160,7 @@ abstract class AppDatabase : RoomDatabase() {
                         val coinId = walletsCursor.getString(coinIdColumnIndex)
 
                         val syncModeColumnIndex = walletsCursor.getColumnIndex("syncMode")
-                        if (syncModeColumnIndex >= 0){
+                        if (syncModeColumnIndex >= 0) {
                             walletSyncMode = walletsCursor.getString(syncModeColumnIndex)
                         }
 
@@ -173,11 +176,11 @@ abstract class AppDatabase : RoomDatabase() {
                         if (coinId == "BTC" || coinId == "BCH" || coinId == "DASH") {
                             var newSyncMode = SyncMode.Fast
 
-                            try{
+                            try {
                                 walletSyncMode?.toLowerCase()?.capitalize()?.let {
                                     newSyncMode = SyncMode.valueOf(it)
                                 }
-                            } catch (e: Exception){
+                            } catch (e: Exception) {
                                 //invalid value for Enum, use default value
                             }
 
@@ -209,16 +212,68 @@ abstract class AppDatabase : RoomDatabase() {
 
                         if (coinId == "BTC") {
                             val derivationColumnIndex = walletsCursor.getColumnIndex("derivation")
-                            if (derivationColumnIndex >= 0){
-                                val walletDerivation= walletsCursor.getString(derivationColumnIndex)
+                            if (derivationColumnIndex >= 0) {
+                                val walletDerivation = walletsCursor.getString(derivationColumnIndex)
                                 if (walletDerivation != null) {
                                     try {
                                         val derivation = AccountType.Derivation.valueOf(walletDerivation)
                                         App.localStorage.bitcoinDerivation = derivation
-                                    } catch (e: Exception){
+                                    } catch (e: Exception) {
                                         Log.e("AppDatabase", "migration 13-14 exception", e)
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private val addBlockchainSettingsTable: Migration = object : Migration(14, 15) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                //remove unused field from EnabledWallet
+                database.execSQL("ALTER TABLE EnabledWallet RENAME TO TempEnabledWallet")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWallet` (`coinId` TEXT NOT NULL, `accountId` TEXT NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinId`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
+                database.execSQL("INSERT INTO EnabledWallet (`coinId`,`accountId`,`walletOrder`) SELECT `coinId`,`accountId`,`walletOrder` FROM TempEnabledWallet")
+                database.execSQL("DROP TABLE TempEnabledWallet")
+
+                //add new table
+                database.execSQL("CREATE TABLE IF NOT EXISTS `BlockchainSetting` (`coinType` TEXT NOT NULL, `derivation` TEXT, `syncMode` TEXT, PRIMARY KEY(`coinType`))")
+
+                //write settings from SharedPreferences to new table
+                val dbConverter = DatabaseConverters()
+                val walletsCursor = database.query("SELECT * FROM EnabledWallet")
+                while (walletsCursor.moveToNext()) {
+                    val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
+                    if (coinIdColumnIndex >= 0) {
+                        val coinId = walletsCursor.getString(coinIdColumnIndex)
+                        val syncMode = App.localStorage.syncMode ?: SyncMode.Fast
+                        when (coinId) {
+                            "BTC" -> {
+                                val coinTypeStr = dbConverter.fromCoinType(CoinType.Bitcoin)
+                                val derivationStr = dbConverter.fromDerivation(App.localStorage.bitcoinDerivation ?: AccountType.Derivation.bip49)
+                                val syncModeStr = dbConverter.fromSyncMode(syncMode)
+                                database.execSQL("""
+                                                INSERT INTO BlockchainSetting (`coinType`,`derivation`,`syncMode`) 
+                                                VALUES ('$coinTypeStr','$derivationStr', '$syncModeStr')
+                                                """.trimIndent())
+                            }
+                            "BCH" -> {
+                                val coinTypeStr = dbConverter.fromCoinType(CoinType.BitcoinCash)
+                                val syncModeStr = dbConverter.fromSyncMode(syncMode)
+                                database.execSQL("""
+                                                INSERT INTO BlockchainSetting (`coinType`,`syncMode`) 
+                                                VALUES ('$coinTypeStr','$syncModeStr')
+                                                """.trimIndent())
+                            }
+                            "DASH" -> {
+                                val coinTypeStr = dbConverter.fromCoinType(CoinType.Dash)
+                                val syncModeStr = dbConverter.fromSyncMode(syncMode)
+                                database.execSQL("""
+                                                INSERT INTO BlockchainSetting (`coinType`,`syncMode`) 
+                                                VALUES ('$coinTypeStr', '$syncModeStr')
+                                                """.trimIndent())
                             }
                         }
                     }

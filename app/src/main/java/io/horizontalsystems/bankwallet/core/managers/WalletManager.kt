@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletFactory
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -9,7 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class WalletManager(private val accountManager: IAccountManager, private val walletFactory: IWalletFactory, private val storage: IWalletStorage)
+class WalletManager(private val accountManager: IAccountManager, private val storage: IWalletStorage)
     : IWalletManager {
 
     override val wallets get() = cache.walletsSet.toList()

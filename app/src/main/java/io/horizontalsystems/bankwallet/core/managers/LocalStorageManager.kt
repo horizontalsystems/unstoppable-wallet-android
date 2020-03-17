@@ -126,15 +126,6 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
             App.preferences.edit().putString(BASE_EOS_PROVIDER, value).apply()
         }
 
-    override var syncMode: SyncMode?
-        get() {
-            val syncString = App.preferences.getString(SYNC_MODE, null)
-            return syncString?.let { SyncMode.valueOf(it) }
-        }
-        set(syncMode) {
-            App.preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
-        }
-
     override var sortType: BalanceSortType
         get() {
             val sortString = App.preferences.getString(SORT_TYPE, null)
@@ -172,15 +163,6 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         get() = App.preferences.getString(ENCRYPTION_CHECKER_TEXT, null)
         set(encryptedText) {
             App.preferences.edit().putString(ENCRYPTION_CHECKER_TEXT, encryptedText).apply()
-        }
-
-    override var bitcoinDerivation: AccountType.Derivation?
-        get() {
-            val derivationString = App.preferences.getString(BITCOIN_DERIVATION, null)
-            return derivationString?.let { AccountType.Derivation.valueOf(it) }
-        }
-        set(derivation) {
-            App.preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()
         }
 
     override fun clear() {
@@ -223,6 +205,26 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
             value?.let {
                 App.preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
             } ?: App.preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
+        }
+
+    //used only in db migration
+    override var syncMode: SyncMode?
+        get() {
+            val syncString = App.preferences.getString(SYNC_MODE, null)
+            return syncString?.let { SyncMode.valueOf(it) }
+        }
+        set(syncMode) {
+            App.preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
+        }
+
+    //used only in db migration
+    override var bitcoinDerivation: AccountType.Derivation?
+        get() {
+            val derivationString = App.preferences.getString(BITCOIN_DERIVATION, null)
+            return derivationString?.let { AccountType.Derivation.valueOf(it) }
+        }
+        set(derivation) {
+            App.preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()
         }
 
     //  IChartTypeStorage

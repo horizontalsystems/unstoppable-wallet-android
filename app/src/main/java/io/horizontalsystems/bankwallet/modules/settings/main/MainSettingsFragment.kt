@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.currencyswitcher.CurrencySwitcherModule
@@ -58,6 +59,9 @@ class MainSettingsFragment : Fragment() {
     }
 
     private fun bindViewListeners(presenter: MainSettingsPresenter) {
+
+        manageKeys.setOnClickListener { presenter.didTapManageKeys() }
+
         securityCenter.setOnClickListener { presenter.didTapSecurity() }
 
         notifications.setOnClickListener { presenter.didTapNotifications() }
@@ -89,7 +93,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            securityCenter.badge = !wordListBackedUp
+            manageKeys.badge = !wordListBackedUp
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
@@ -119,9 +123,15 @@ class MainSettingsFragment : Fragment() {
                 appName.text = appVersion
             }
         })
+
     }
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
+
+        router.showManageKeysLiveEvent.observe(this, Observer {
+            context?.let { context -> ManageKeysModule.start(context) }
+        })
+
         router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> CurrencySwitcherModule.start(context) }
         })

@@ -41,8 +41,9 @@ object CreateWalletModule {
         fun createAccounts(accounts: List<Account>)
         @Throws
         fun account(predefinedAccountType: PredefinedAccountType) : Account
-        fun coinSettings(coinType: CoinType): CoinSettings
+        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
         fun saveWallets(wallets: List<Wallet>)
+        fun saveBlockchainSettings(blockchainSettings: BlockchainSetting)
     }
 
     class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType?) : ViewModelProvider.Factory {
@@ -50,7 +51,7 @@ object CreateWalletModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = CreateWalletView()
             val router = CreateWalletRouter()
-            val interactor = CreateWalletInteractor(App.appConfigProvider, App.accountCreator, App.accountManager, App.walletManager, App.coinSettingsManager)
+            val interactor = CreateWalletInteractor(App.appConfigProvider, App.accountCreator, App.accountManager, App.walletManager, App.blockchainSettingsManager)
             val presenter = CreateWalletPresenter(presentationMode, predefinedAccountType, view, router, interactor)
 
             return presenter as T
