@@ -22,6 +22,7 @@
     <string name="Button_Share">Compartir</string>
     <string name="Button_Done">Listo</string>
     <string name="Button_Retry">Retry</string>
+    <string name="Button_Change">Change</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s monedero</string>
@@ -201,7 +202,6 @@
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
-    <string name="SettingsSecurity_BlockchainSettings">Configuración de Blockchain</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor puede proteger tus actividades de navegación en la cartera. Autoriza el permiso para usar el navegador tor en la configuración.</string>
@@ -273,6 +273,7 @@
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gestionar Monederos</string>
+    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
@@ -293,15 +294,18 @@
     <string name="AddCoin_Description">Usted no tiene un monedero que pueda restaurar %1$s. La aplicación puede generar un nuevo monedero para usted. Use el botón de crear, que se encuentra abajo, para generar un nuevo monedero.\n\nPodrá usar el nuevo monedero para las siguientes monedas: %2$s.\n\nUsted también piede utilizar el la clave existente del monedero%3$s si ya tiene uno. Use el botón restaurar para hacerlo.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
+    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">Ajustes</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">Formato de Dirección</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Cambiar a %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">Esta acción requerirá que la aplicación Unstoppable se vuelva a sincronizar con la blockchain de Bitcoin. Sus transacciones actuales de Bitcoin ya no serán visibles. Cambiarlo de nuevo a la configuración anterior volverá a traer todo después de que la aplicación se vuelva a sincronizar con blockchain.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">Esta acción requerirá que la aplicación Unstoppable se vuelva a sincronizar con Bitcoin, Bitcoin Cash y Dash blockchains, si has activado cualquiera de estos tokens. Su saldo o transacciones no se verán afectadas.\n\n Recomendamos no cambiar esta configuración si no está seguro de lo que hace.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
+    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
     <!-- Tor -->
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
@@ -316,9 +320,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
     <string name="CoinOption_Fast_Subtitle">0-2 horas (Recomendado)</string>
-    <string name="CoinOption_RestoreSourceDescription">Enlaces de fuentes API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1-12 horas</string>
-    <string name="CoinOption_AddressFormatTitle">Elija un formato de dirección</string>
+    <string name="CoinOption_AddressFormatTitle">Address format</string>
     <string name="CoinOption_SyncModeTitle">Restaurar los parámetros</string>
     <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Popular (comenzar con 3...)</string>
