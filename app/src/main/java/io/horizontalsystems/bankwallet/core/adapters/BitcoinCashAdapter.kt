@@ -16,11 +16,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinCashAdapter(override val kit: BitcoinCashKit)
-    : BitcoinBaseAdapter(kit), BitcoinCashKit.Listener, ISendBitcoinAdapter {
+class BitcoinCashAdapter(override val kit: BitcoinCashKit, override val settings: BlockchainSetting?)
+    : BitcoinBaseAdapter(kit, settings), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, testMode: Boolean) :
-            this(createKit(wallet, testMode))
+    constructor(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean) :
+            this(createKit(wallet, settings, testMode), settings)
 
     init {
         kit.listener = this
@@ -101,10 +101,10 @@ class BitcoinCashAdapter(override val kit: BitcoinCashKit)
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinCashKit {
+        private fun createKit(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
             val accountType = account.type
-            val syncMode = wallet.settings[CoinSetting.SyncMode]?.let { SyncMode.valueOf(it) }
+            val syncMode = settings?.syncMode
             if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return BitcoinCashKit(context = App.instance,
                         words = accountType.words,

@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.restore.restorecoins
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -7,19 +9,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.PresentationMode
+import io.horizontalsystems.bankwallet.modules.blockchainsettingslist.BlockchainSettingsListModule
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
 class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     private lateinit var presenter: RestoreCoinsPresenter
     private lateinit var coinItemsAdapter: CoinItemsAdapter
     private var buttonEnabled = false
+    private var proceedButtonTitle: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +30,9 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val presentationMode: PresentationMode = intent.getParcelableExtra(ModuleField.PRESENTATION_MODE) ?: PresentationMode.Initial
-        val predefinedAccountType: PredefinedAccountType? = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE)
-        val accountType: AccountType? = intent.getParcelableExtra(ModuleField.ACCOUNT_TYPE)
+        val predefinedAccountType: PredefinedAccountType = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE) ?: run { finish(); return }
 
-        if (predefinedAccountType != null && accountType != null) {
-            presenter = ViewModelProvider(this, RestoreCoinsModule.Factory(presentationMode, predefinedAccountType, accountType)).get(RestoreCoinsPresenter::class.java)
-        } else {
-            //predefinedAccountType and accountTyoe must not be null
-            finish()
-        }
+        presenter = ViewModelProvider(this, RestoreCoinsModule.Factory(predefinedAccountType)).get(RestoreCoinsPresenter::class.java)
 
         observeView(presenter.view as RestoreCoinsView)
         observeRouter(presenter.router as RestoreCoinsRouter)
@@ -55,6 +50,9 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         menu?.findItem(R.id.menuNext)?.apply {
+            proceedButtonTitle?.let {
+                setTitle(it)
+            }
             isEnabled = buttonEnabled
         }
         return true
@@ -84,7 +82,24 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         //not used here
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            ModuleCode.BLOCKCHAIN_SETTINGS_LIST -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    presenter.onReturnFromBlockchainSettingsList()
+                }
+            }
+        }
+    }
+
     private fun observeView(view: RestoreCoinsView) {
+        view.setProceedButtonAsDone.observe(this, Observer {
+            proceedButtonTitle = R.string.Button_Done
+            invalidateOptionsMenu()
+        })
+
         view.coinsLiveData.observe(this, Observer {viewItems ->
             coinItemsAdapter.viewItems = viewItems
             coinItemsAdapter.notifyDataSetChanged()
@@ -98,12 +113,14 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     }
 
     private fun observeRouter(router: RestoreCoinsRouter) {
-        router.startMainModuleLiveEvent.observe(this, Observer {
-            MainModule.start(this)
-            finishAffinity()
+        router.showBlockchainSettingsListEvent.observe(this, Observer { coinTypes ->
+            BlockchainSettingsListModule.startForResult(this, coinTypes, true)
         })
 
-        router.close.observe(this, Observer {
+        router.closeWithSelectedCoins.observe(this, Observer { coins ->
+            setResult(RESULT_OK, Intent().apply {
+                putParcelableArrayListExtra(ModuleField.COINS, ArrayList(coins))
+            })
             finish()
         })
     }

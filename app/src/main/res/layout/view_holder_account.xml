@@ -63,6 +63,11 @@
         android:layout_height="wrap_content" />
 
     <io.horizontalsystems.views.ManageAccountView
+        android:id="@+id/advancedSettingsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/createButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

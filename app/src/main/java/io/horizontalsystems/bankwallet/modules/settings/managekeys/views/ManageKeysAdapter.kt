@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
 import io.horizontalsystems.views.AccountButtonItemType
 import io.horizontalsystems.views.inflate
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.view_holder_account.*
 class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<ManageKeysAdapter.KeysViewHolder>() {
 
     interface Listener {
+        fun onClickAdvancedSettings(item: ManageAccountItem)
         fun onClickCreate(item: ManageAccountItem)
         fun onClickRestore(item: ManageAccountItem)
         fun onClickBackup(item: ManageAccountItem)
@@ -42,6 +44,7 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             titleText.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
             subtitleText.text = containerView.resources.getString(predefinedAccount.coinCodes)
 
+            advancedSettingsButton.visibility = View.GONE
             createButton.visibility = View.GONE
             restoreButton.visibility = View.GONE
             backupButton.visibility = View.GONE
@@ -63,6 +66,13 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
                 headerIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.grey))
 
                 return
+            }
+
+            if (predefinedAccount == PredefinedAccountType.Standard){
+                advancedSettingsButton.visibility = View.VISIBLE
+                advancedSettingsButton.bind(containerView.resources.getString(R.string.ManageKeys_AdvancedSettings), AccountButtonItemType.SimpleButton, false) {
+                    listener.onClickAdvancedSettings(item)
+                }
             }
 
             headerIcon.imageTintList = null

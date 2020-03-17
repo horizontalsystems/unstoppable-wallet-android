@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysActivity
 
 object ManageKeysModule {
@@ -27,15 +28,15 @@ object ManageKeysModule {
 
         fun onConfirmBackup()
         fun onConfirmUnlink(accountId: String)
+        fun onClickAdvancedSettings(item: ManageAccountItem)
         fun onClear()
-        fun didEnterValidAccount(accountType: AccountType)
-        fun didReturnFromCoinSettings()
     }
 
     interface Interactor {
         val predefinedAccountTypes: List<PredefinedAccountType>
         fun account(predefinedAccountType: PredefinedAccountType): Account?
 
+        fun getWallets(): List<Wallet>
         fun loadAccounts()
         fun deleteAccount(id: String)
         fun clear()
@@ -47,11 +48,10 @@ object ManageKeysModule {
 
     interface IRouter {
         fun close()
-        fun showCoinSettings()
         fun showCreateWallet(predefinedAccountType: PredefinedAccountType)
         fun showBackup(account: Account, predefinedAccountType: PredefinedAccountType)
-        fun showCoinManager(predefinedAccountType: PredefinedAccountType, accountType: AccountType)
-        fun showRestoreKeyInput(predefinedAccountType: PredefinedAccountType)
+        fun showRestore(predefinedAccountType: PredefinedAccountType)
+        fun showBlockchainSettings(enabledCoinTypes: List<CoinType>)
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -59,7 +59,7 @@ object ManageKeysModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageKeysView()
             val router = ManageKeysRouter()
-            val interactor = ManageKeysInteractor(App.accountManager, App.predefinedAccountTypeManager)
+            val interactor = ManageKeysInteractor(App.accountManager, App.walletManager, App.predefinedAccountTypeManager)
             val presenter = ManageKeysPresenter(view, router, interactor)
 
             interactor.delegate = presenter

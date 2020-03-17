@@ -1,22 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.PresentationMode
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.SettingsMode
+import io.horizontalsystems.bankwallet.modules.blockchainsettingslist.BlockchainSettingsListModule
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
+import io.horizontalsystems.bankwallet.modules.restore.RestoreMode
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.modules.restore.restorecoins.RestoreCoinsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog.ManageAction
 import kotlinx.android.synthetic.main.activity_manage_keys.*
@@ -78,16 +71,8 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
     }
 
     private fun observeRouter(router: ManageKeysRouter) {
-        router.showRestoreKeyInput.observe(this, Observer { predefinedAccountType ->
-            RestoreModule.startForResult(this, predefinedAccountType, ModuleCode.RESTORE_KEY_INPUT)
-        })
-
-        router.showCoinSettingsEvent.observe(this, Observer {
-            CoinSettingsModule.startForResult(this, SettingsMode.InsideRestore)
-        })
-
-        router.showCoinManager.observe(this, Observer { (predefinedAccountType, accountType) ->
-            RestoreCoinsModule.start(this, predefinedAccountType, accountType, PresentationMode.InApp)
+        router.showRestore.observe(this, Observer { predefinedAccountType ->
+            RestoreModule.startForResult(this, predefinedAccountType, RestoreMode.FromManageKeys)
         })
 
         router.showCreateWalletLiveEvent.observe(this, Observer { predefinedAccountType ->
@@ -98,29 +83,20 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
             BackupModule.start(this, account, getString(predefinedAccountType.coinCodes))
         })
 
+        router.showBlockchainSettings.observe(this, Observer { enabledCoinTypes ->
+            BlockchainSettingsListModule.startForResult(this, enabledCoinTypes, false)
+        })
+
         router.closeEvent.observe(this, Observer {
             finish()
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            ModuleCode.RESTORE_KEY_INPUT -> {
-                val accountType = data?.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
-                        ?: return
-                presenter.didEnterValidAccount(accountType)
-            }
-            ModuleCode.COIN_SETTINGS -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    presenter.didReturnFromCoinSettings()
-                }
-            }
-        }
-    }
-
     //  ManageKeysAdapter Listener
+
+    override fun onClickAdvancedSettings(item: ManageAccountItem) {
+        presenter.onClickAdvancedSettings(item)
+    }
 
     override fun onClickCreate(item: ManageAccountItem) {
         presenter.onClickCreate(item)

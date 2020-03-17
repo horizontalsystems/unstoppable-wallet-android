@@ -35,6 +35,9 @@
             android:name=".modules.blockchainsettings.BlockchainSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".modules.blockchainsettingslist.BlockchainSettingsListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".modules.backup.BackupActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />

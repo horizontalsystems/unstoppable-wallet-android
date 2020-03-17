@@ -7,12 +7,10 @@ import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewT
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
 
 class RestoreCoinsPresenter(
-        private val presentationMode: PresentationMode,
-        private val predefinedAccountType: PredefinedAccountType,
-        private val accountType: AccountType,
         val view: RestoreCoinsModule.IView,
         val router: RestoreCoinsModule.IRouter,
-        private val interactor: RestoreCoinsModule.IInteractor
+        private val interactor: RestoreCoinsModule.IInteractor,
+        private val predefinedAccountType: PredefinedAccountType
 ) : ViewModel(), RestoreCoinsModule.IViewDelegate {
 
     private var enabledCoins = mutableListOf<Coin>()
@@ -20,6 +18,9 @@ class RestoreCoinsPresenter(
     override fun onLoad() {
         syncViewItems()
         syncProceedButton()
+        if (predefinedAccountType != PredefinedAccountType.Standard) {
+            view.setProceedButtonTitleAsDone()
+        }
     }
 
     override fun onEnable(coin: Coin) {
@@ -34,20 +35,18 @@ class RestoreCoinsPresenter(
 
     override fun onProceedButtonClick() {
         if (enabledCoins.isNotEmpty()) {
-            val account = interactor.account(accountType)
-            interactor.create(account)
-
-            val wallets = enabledCoins.map {
-                val coinSettings = interactor.getCoinSettings(it.type)
-                Wallet(it, account, coinSettings)
+            if (predefinedAccountType == PredefinedAccountType.Standard) {
+                val coinTypes = enabledCoins.map { it.type }
+                router.showBlockchainSettingsList(coinTypes)
+            } else {
+                router.closeWithSelectedCoins(enabledCoins)
             }
+        }
+    }
 
-            interactor.saveWallets(wallets)
-
-            when (presentationMode) {
-                PresentationMode.Initial -> router.startMainModule()
-                PresentationMode.InApp -> router.close()
-            }
+    override fun onReturnFromBlockchainSettingsList() {
+        if (enabledCoins.isNotEmpty()) {
+            router.closeWithSelectedCoins(enabledCoins)
         }
     }
 

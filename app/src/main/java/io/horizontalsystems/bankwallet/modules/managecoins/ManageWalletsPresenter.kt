@@ -15,6 +15,7 @@ class ManageWalletsPresenter(
 ) : ViewModel(), ManageWalletsModule.IViewDelegate {
 
     private val wallets = mutableMapOf<Coin, Wallet>()
+    private var walletWithSettings: Wallet? = null
 
     //  ViewDelegate
 
@@ -33,7 +34,12 @@ class ManageWalletsPresenter(
 
     override fun onEnable(coin: Coin) {
         val account = account(coin) ?: return
-        createWallet(coin, account)
+        if (account.origin == AccountOrigin.Restored && interactor.blockchainSettings(coin.type) != null) {
+            walletWithSettings = Wallet(coin, account)
+            router.showSettings(coin.type)
+            return
+        }
+        enableWallet(coin, account)
     }
 
     override fun onDisable(coin: Coin) {
@@ -50,7 +56,8 @@ class ManageWalletsPresenter(
     override fun onSelectNewAccount(predefinedAccountType: PredefinedAccountType) {
         try {
             val account = interactor.createAccount(predefinedAccountType)
-            handleCreated(account)
+            interactor.save(account)
+            syncViewItems()
             view.showSuccess()
         } catch (e: Exception) {
             syncViewItems()
@@ -62,22 +69,22 @@ class ManageWalletsPresenter(
         router.openRestore(predefinedAccountType)
     }
 
-    override fun didRestore(accountType: AccountType) {
-        val account = interactor.createRestoredAccount(accountType)
-        handleCreated(account)
+    override fun onClickCancel() {
+        syncViewItems()
+    }
 
-        if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
-            router.showCoinSettings()
-        } else {
-            view.showSuccess()
+    override fun onAccountRestored() {
+        syncViewItems()
+    }
+
+    override fun onBlockchainSettingsApproved() {
+        walletWithSettings?.let {
+            enableWallet(it.coin, it.account)
+            walletWithSettings = null
         }
     }
 
-    override fun onCoinSettingsClose() {
-        view.showSuccess()
-    }
-
-    override fun onClickCancel() {
+    override fun onBlockchainSettingsCancel() {
         syncViewItems()
     }
 
@@ -110,18 +117,19 @@ class ManageWalletsPresenter(
         view.setItems(viewItems)
     }
 
-    private fun createWallet(coin: Coin, account: Account) {
-        val coinSettings = interactor.getCoinSettings(coin.type)
+    private fun enableWallet(coin: Coin, account: Account) {
+        val settings = when (account.origin) {
+            AccountOrigin.Created -> interactor.blockchainSettingsForCreate(coin.type)
+            else -> interactor.blockchainSettings(coin.type)
+        }
+        settings?.let {
+            interactor.saveBlockchainSettings(it)
+        }
 
-        val wallet = Wallet(coin, account, coinSettings)
+        val wallet = Wallet(coin, account)
 
         interactor.save(wallet)
         wallets[coin] = wallet
     }
 
-    private fun handleCreated(account: Account) {
-        interactor.save(account)
-
-        syncViewItems()
-    }
 }

@@ -2,6 +2,9 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import java.math.BigDecimal
 
 class DatabaseConverters {
@@ -67,4 +70,56 @@ class DatabaseConverters {
             App.encryptionManager.encrypt(it)
         }
     }
+
+    @TypeConverter
+    fun fromSyncMode(syncMode: SyncMode?): String? {
+        return syncMode?.value
+    }
+
+    @TypeConverter
+    fun toSyncMode(value: String?): SyncMode? {
+        return value?.let { SyncMode.valueOf(it) }
+    }
+
+    @TypeConverter
+    fun fromDerivation(derivation: AccountType.Derivation?): String? {
+        return derivation?.value
+    }
+
+    @TypeConverter
+    fun toDerivation(value: String?): AccountType.Derivation? {
+        if (value == null) return null
+
+        return AccountType.Derivation.valueOf(value)
+    }
+
+    @TypeConverter
+    fun fromCoinType(coinType: CoinType): String {
+        return when(coinType) {
+            CoinType.Bitcoin -> bitcoin
+            CoinType.Litecoin -> litecoin
+            CoinType.BitcoinCash -> bitcoinCash
+            CoinType.Dash -> dash
+            else -> ""
+        }
+    }
+
+    @TypeConverter
+    fun toCoinType(value: String): CoinType? {
+        return when (value) {
+            bitcoin -> CoinType.Bitcoin
+            litecoin -> CoinType.Litecoin
+            bitcoinCash -> CoinType.BitcoinCash
+            dash -> CoinType.Dash
+            else -> null
+        }
+    }
+
+    companion object {
+        const val bitcoin = "bitcoin"
+        const val litecoin = "litecoin"
+        const val bitcoinCash = "bitcoincash"
+        const val dash = "dash"
+    }
+
 }

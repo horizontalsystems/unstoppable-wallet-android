@@ -100,10 +100,6 @@ interface IAccountFactory {
     fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
 }
 
-interface IWalletFactory {
-    fun wallet(coin: Coin, account: Account, settings: CoinSettings): Wallet
-}
-
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
     fun enabledCoins(): List<Coin>
@@ -286,6 +282,7 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
+    val blockchainSettings: List<BlockchainSetting>
 }
 
 interface IRateStorage {
@@ -398,11 +395,12 @@ interface IBackgroundRateAlertScheduler {
     fun stopPeriodicWorker()
 }
 
-interface ICoinSettingsManager {
-    var syncMode: SyncMode
-    var bitcoinDerivation: AccountType.Derivation
-    fun coinSettingsForCreate(coinType: CoinType): CoinSettings
-    fun coinSettings(coinType: CoinType): CoinSettings
+interface IBlockchainSettingsManager {
+    val coinsWithSettings: List<Coin>
+    val defaultBlockchainSettings: List<BlockchainSetting>
+    fun blockchainSettingsForCreate(coinType: CoinType): BlockchainSetting?
+    fun blockchainSettings(coinType: CoinType): BlockchainSetting?
+    fun updateSettings(blockchainSettings: BlockchainSetting)
 }
 
 interface IAccountCleaner {

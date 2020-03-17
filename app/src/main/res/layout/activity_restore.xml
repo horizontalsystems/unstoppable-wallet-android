@@ -13,6 +13,7 @@
         android:clipToPadding="false"
         android:paddingTop="24dp"
         android:paddingBottom="16dp"
+        android:visibility="invisible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:itemCount="3"
@@ -41,8 +42,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
-                app:layout_collapseMode="pin"
-                app:title="@string/Restore_ChooseWallet" />
+                app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

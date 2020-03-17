@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.adapters.*
@@ -15,14 +16,16 @@ class AdapterFactory(
         private val appConfigProvider: IAppConfigTestMode,
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
-        private val binanceKitManager: BinanceKitManager) {
+        private val binanceKitManager: BinanceKitManager,
+        private val blockchainSettingManager: IBlockchainSettingsManager) {
 
     fun adapter(wallet: Wallet): IAdapter? {
+        val settings = blockchainSettingManager.blockchainSettings(wallet.coin.type)
         return when (val coinType = wallet.coin.type) {
-            is CoinType.Bitcoin -> BitcoinAdapter(wallet, appConfigProvider.testMode)
-            is CoinType.Litecoin -> LitecoinAdapter(wallet, appConfigProvider.testMode)
-            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode)
-            is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode)
+            is CoinType.Bitcoin -> BitcoinAdapter(wallet, settings, appConfigProvider.testMode)
+            is CoinType.Litecoin -> LitecoinAdapter(wallet, settings, appConfigProvider.testMode)
+            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, settings, appConfigProvider.testMode)
+            is CoinType.Dash -> DashAdapter(wallet, settings, appConfigProvider.testMode)
             is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet))

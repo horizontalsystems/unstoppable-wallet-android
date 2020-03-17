@@ -9,9 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.AlertDialogFragment
@@ -34,10 +32,6 @@ class SecuritySettingsActivity : BaseActivity() {
 
         changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
 
-        manageKeys.setOnClickListener { viewModel.delegate.didTapManageKeys() }
-
-        blockchainSettings.setOnClickListener { viewModel.delegate.didTapBlockchainSettings() }
-
         fingerprint.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchBiometricEnabled(isChecked)
         }
@@ -59,10 +53,6 @@ class SecuritySettingsActivity : BaseActivity() {
         }
 
         //  Handling view model live events
-
-        viewModel.backupAlertVisibleLiveData.observe(this, Observer { alert ->
-            manageKeys.badge = alert
-        })
 
         viewModel.pinSetLiveData.observe(this, Observer { pinEnabled ->
             enablePin.switchIsChecked = pinEnabled
@@ -95,10 +85,6 @@ class SecuritySettingsActivity : BaseActivity() {
 
         //router
 
-        viewModel.openManageKeysLiveEvent.observe(this, Observer {
-            ManageKeysModule.start(this)
-        })
-
         viewModel.openEditPinLiveEvent.observe(this, Observer {
             PinModule.startForEditPin(this)
         })
@@ -109,10 +95,6 @@ class SecuritySettingsActivity : BaseActivity() {
 
         viewModel.openUnlockPinLiveEvent.observe(this, Observer {
             PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN)
-        })
-
-        viewModel.openBlockchainSettings.observe(this, Observer {
-            CoinSettingsModule.start(this)
         })
 
         viewModel.restartApp.observe(this, Observer {

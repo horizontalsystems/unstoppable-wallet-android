@@ -2,14 +2,17 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
-import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
+import io.horizontalsystems.bankwallet.core.EosUnsupportedException
+import io.horizontalsystems.bankwallet.core.putParcelableExtra
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.*
+import kotlinx.android.parcel.Parcelize
 
 object RestoreModule {
 
@@ -26,36 +29,60 @@ object RestoreModule {
         fun onClickClose()
         fun didEnterValidAccount(accountType: AccountType)
         fun didReturnFromCoinSettings()
+        fun didReturnFromRestoreCoins(enabledCoins: List<Coin>?)
+        fun onReturnWithCancel()
+    }
+
+    interface IInteractor {
+        @Throws(EosUnsupportedException::class)
+        fun createAccounts(accounts: List<Account>)
+        @Throws
+        fun account(accountType: AccountType) : Account
+        fun saveWallets(wallets: List<Wallet>)
+        fun create(account: Account)
+        fun getBlockchainSettings(coinType: CoinType): BlockchainSetting?
+        fun saveBlockchainSettings(settings: BlockchainSetting)
     }
 
     interface IRouter {
-        fun close()
-        fun showRestoreCoins(predefinedAccountType: PredefinedAccountType, accountType: AccountType)
+        fun showRestoreCoins(predefinedAccountType: PredefinedAccountType)
         fun showKeyInput(predefinedAccountType: PredefinedAccountType)
-        fun showCoinSettings()
+        fun startMainModule()
+        fun close()
+        fun closeWithSuccess()
+    }
+
+    class Factory(
+            private val predefinedAccountType: PredefinedAccountType?,
+            private val restoreMode: RestoreMode
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = RestoreView()
+            val router = RestoreRouter()
+            val interactor = RestoreInteractor(App.accountCreator, App.accountManager, App.walletManager, App.blockchainSettingsManager)
+            val presenter = RestorePresenter(view, router, interactor, App.predefinedAccountTypeManager, predefinedAccountType, restoreMode)
+
+            return presenter as T
+        }
     }
 
     fun start(context: Context) {
         context.startActivity(Intent(context, RestoreActivity::class.java))
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = RestoreView()
-            val router = RestoreRouter()
-            val presenter = RestorePresenter(view, router, App.predefinedAccountTypeManager)
-
-            return presenter as T
-        }
+    fun startForResult(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
+        val intent = Intent(context, RestoreActivity::class.java)
+        intent.putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
+        intent.putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
+        context.startActivityForResult(intent, ModuleCode.RESTORE)
     }
 
-    fun startForResult(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, requestCode: Int) {
-        when(predefinedAccountType){
-            PredefinedAccountType.Standard -> RestoreWordsModule.startForResult(context, 12, predefinedAccountType.title, requestCode)
-            PredefinedAccountType.Binance -> RestoreWordsModule.startForResult(context, 24, predefinedAccountType.title, requestCode)
-            PredefinedAccountType.Eos -> RestoreEosModule.startForResult(context, requestCode)
-        }
-    }
+}
 
+@Parcelize
+enum class RestoreMode(val value: String) : Parcelable {
+    FromWelcome("FromWelcome"),
+    FromManageKeys("FromManageKeys"),
+    InApp("InApp")
 }

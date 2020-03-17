@@ -47,13 +47,24 @@
             android:layout_height="wrap_content">
 
             <io.horizontalsystems.views.CellView
-                android:id="@+id/securityCenter"
+                android:id="@+id/manageKeys"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                app:imageDrawable="@drawable/ic_manage_keys"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:rightArrow="true"
+                app:title="@string/SettingsSecurity_ManageKeys" />
+
+            <io.horizontalsystems.views.CellView
+                android:id="@+id/securityCenter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/manageKeys"
                 app:rightArrow="true"
                 app:imageDrawable="@drawable/ic_security"
                 app:title="@string/Settings_SecurityCenter" />

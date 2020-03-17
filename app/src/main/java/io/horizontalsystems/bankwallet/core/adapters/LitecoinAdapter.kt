@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
@@ -17,10 +16,10 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class LitecoinAdapter(override val kit: LitecoinKit)
-    : BitcoinBaseAdapter(kit), LitecoinKit.Listener, ISendBitcoinAdapter {
+class LitecoinAdapter(override val kit: LitecoinKit, override val settings: BlockchainSetting?)
+    : BitcoinBaseAdapter(kit, settings), LitecoinKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, testMode: Boolean) : this(createKit(wallet, testMode))
+    constructor(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean) : this(createKit(wallet, settings, testMode), settings)
 
     init {
         kit.listener = this
@@ -33,10 +32,7 @@ class LitecoinAdapter(override val kit: LitecoinKit)
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     override fun getReceiveAddressType(wallet: Wallet): String? {
-        val walletDerivation = wallet.settings[CoinSetting.Derivation]?.let {
-            Derivation.valueOf(it)
-        }
-        return walletDerivation?.addressType
+        return settings?.derivation?.addressType
     }
 
     //
@@ -108,11 +104,11 @@ class LitecoinAdapter(override val kit: LitecoinKit)
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, testMode: Boolean): LitecoinKit {
+        private fun createKit(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean): LitecoinKit {
             val account = wallet.account
             val accountType = account.type
-            val walletDerivation = wallet.settings[CoinSetting.Derivation]?.let { Derivation.valueOf(it) }
-            val syncMode = wallet.settings[CoinSetting.SyncMode]?.let { SyncMode.valueOf(it) }
+            val walletDerivation = settings?.derivation
+            val syncMode = settings?.syncMode
             if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return LitecoinKit(context = App.instance,
                         words = accountType.words,
