@@ -22,6 +22,7 @@
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Button_Done">انجام شد</string>
     <string name="Button_Retry">Retry</string>
+    <string name="Button_Change">Change</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
@@ -201,7 +202,6 @@
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
-    <string name="SettingsSecurity_BlockchainSettings">تنظیمات زنجیره بلوکی</string>
     <string name="SettingsSecurity_EnableTor">فعال کردن Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor می تواند از فعالیت های مرورگر شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
@@ -267,6 +267,7 @@
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
+    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
     <string name="ManageKeys_Create">به وجود آوردن</string>
     <string name="ManageKeys_Restore">بازیابی</string>
     <string name="ManageKeys_Delete">پاک کردن</string>
@@ -287,15 +288,18 @@
     <string name="AddCoin_Description">شما کیف پولی ندارید که بتواند ذخیره کند%1$s. این برنامه می تواند یک کیف پول جدید برای شما ایجاد کند. برای ایجاد کیف پول جدید از دکمه به وجود آوردن زیر استفاده کنید. \n\n شما می توانید از کیف پول جدید برای سکه های زیر استفاده کنید:%2$s. \n\n همچنین می توانید از کلید کیف پول %3$s موجود استفاده کنید اگر دارید. برای این کار از دکمه بازیابی استفاده کنید.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
+    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">تنظيمات</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">ساختار آدرس</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">تغییر به %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">این اقدام به برنامه غیرقابل توقف نیاز دارد تا بتواند خود را با بیت کوین زنجیره بلوکی همزمان کند. تراکنش های فعلی بیت کوین شما دیگر قابل مشاهده نخواهد بود. تغییر آن به تنظیمات قبلی ، همه چیز را پس از تنظیم مجدد برنامه به زنجیره بلوکی باز می گرداند.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">در صورت فعال کردن هر یک از این نشانه ها ، این برنامه به برنامه غیرقابل توقف نیاز دارد تا بتواند مجدداً خود را با بیت کوین ، بیت کوین نقد و زنجیره های بلوکی ارزهای رمزنگاری شده بازنویسی کند. تراکنش ها یا مانده حساب شما تحت تأثیر قرار نخواهد گرفت. \n\n توصیه می کنیم در صورت عدم اطمینان از انجام این کار، این تنظیمات را تغییر ندهید.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
+    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
     <!-- Tor -->
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
@@ -310,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast_Subtitle">۰-۲ ساعت (توصیه شده)</string>
-    <string name="CoinOption_RestoreSourceDescription">لینک منابع API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
-    <string name="CoinOption_AddressFormatTitle">فرمت آدرس را انتخاب کنید</string>
+    <string name="CoinOption_AddressFormatTitle">Address format</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
     <string name="CoinOption_bip44_Subtitle">قدیمی تر (شروع با ۱...)</string>
     <string name="CoinOption_bip49_Subtitle">محبوب (شروع با ۳...)</string>
