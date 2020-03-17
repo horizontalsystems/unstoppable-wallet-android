@@ -9,16 +9,19 @@
     <string name="Alert_Success">Completado</string>
     <string name="Alert_Copied">Copiado</string>
     <string name="Alert_Loading">Cargando...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Create">Crear</string>
     <string name="Button_Next">Siguiente</string>
     <string name="Button_Restore">Restaurar</string>
     <string name="Button_Enable">Habilitar</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">Aceptar</string>
     <string name="Button_Share">Compartir</string>
     <string name="Button_Done">Listo</string>
+    <string name="Button_Retry">Retry</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s monedero</string>
@@ -200,7 +203,9 @@
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <string name="SettingsSecurity_BlockchainSettings">Configuración de Blockchain</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor puede proteger tus actividades de navegación en la cartera. Autoriza el permiso para usar el navegador tor en la configuración.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -297,7 +302,13 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Esta acción requerirá que la aplicación Unstoppable se vuelva a sincronizar con Bitcoin, Bitcoin Cash y Dash blockchains, si has activado cualquiera de estos tokens. Su saldo o transacciones no se verán afectadas.\n\n Recomendamos no cambiar esta configuración si no está seguro de lo que hace.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">Conexión Tor</string>
     <string name="TorPage_Description">Antes de crear o restaurar habilite Tor para una conexión segura con la red. \n\nTor puede proteger sus actividades de navegación en el monedero. Autoriza el permiso para usar el navegador Tor en la configuración.</string>
     <!-- Account Types -->
@@ -335,6 +346,7 @@
     <string name="Charts_Volume">Volumen</string>
     <string name="Charts_Price">Precio</string>
     <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">actualizado\n%s</string>
 </resources>
