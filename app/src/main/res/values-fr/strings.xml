@@ -9,16 +9,19 @@
     <string name="Alert_Success">Effectué</string>
     <string name="Alert_Copied">Copié</string>
     <string name="Alert_Loading">Chargement en cours...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">Annuler</string>
     <string name="Button_Create">Créer</string>
     <string name="Button_Next">Suivant</string>
     <string name="Button_Restore">Restaurer</string>
     <string name="Button_Enable">Activer</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Back">Retour</string>
     <string name="Button_Close">Fermer</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Partager</string>
     <string name="Button_Done">Fait</string>
+    <string name="Button_Retry">Retry</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Wallet">%s portefeuille</string>
@@ -201,7 +204,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <string name="SettingsSecurity_BlockchainSettings">Paramètres de la Blockchain</string>
     <string name="SettingsSecurity_EnableTor">Activer Tor</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor peut sécuriser vos activités de navigation sur votre portefeuille. Autoriser l\'utilisation du navigateur Tor dans les paramètres.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -292,7 +297,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Si vous avez activé l\'un de ces tokens, l\'application Unstoppable devra se resynchroniser avec les blockchains Bitcoin, Bitcoin Cash et Dash. Votre solde ou vos transactions ne seront pas affectés.\n\nNous vous recommandons de ne pas modifier ce paramètre si vous n\'êtes pas sûr de sa fonction.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">Connection Tor</string>
     <string name="TorPage_Description">Avant de créer ou de restaurer, activez \n\nTor pour une connexion sécurisée avec le réseau. Tor peut sécuriser vos activités de navigation sur votre portefeuille. Autoriser l\'utilisation du navigateur Tor dans les paramètres.</string>
     <!-- Account Types -->
@@ -330,6 +341,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Charts_Volume">Volume</string>
     <string name="Charts_Price">Prix</string>
     <string name="Charts_Error_NotAvailable">Graphique non disponible</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">mis à jour\n%s</string>
 </resources>
