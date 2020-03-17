@@ -9,16 +9,19 @@
     <string name="Alert_Success">موفقیت</string>
     <string name="Alert_Copied">کپی شد</string>
     <string name="Alert_Loading">درحال بارگذاری...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">کنسل</string>
     <string name="Button_Create">به وجود آوردن</string>
     <string name="Button_Next">بعدي</string>
     <string name="Button_Restore">بازگرداني</string>
     <string name="Button_Enable">فعال کردن</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Back">برگشت</string>
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Button_Done">انجام شد</string>
+    <string name="Button_Retry">Retry</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
@@ -200,7 +203,9 @@
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
     <string name="SettingsSecurity_BlockchainSettings">تنظیمات زنجیره بلوکی</string>
     <string name="SettingsSecurity_EnableTor">فعال کردن Tor</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor می تواند از فعالیت های مرورگر شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
@@ -291,7 +296,13 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">در صورت فعال کردن هر یک از این نشانه ها ، این برنامه به برنامه غیرقابل توقف نیاز دارد تا بتواند مجدداً خود را با بیت کوین ، بیت کوین نقد و زنجیره های بلوکی ارزهای رمزنگاری شده بازنویسی کند. تراکنش ها یا مانده حساب شما تحت تأثیر قرار نخواهد گرفت. \n\n توصیه می کنیم در صورت عدم اطمینان از انجام این کار، این تنظیمات را تغییر ندهید.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">ارتباط Tor</string>
     <string name="TorPage_Description">قبل از ایجاد یا بازیابی Tor را برای اتصال ایمن به شبکه فعال کنید. \n\n Tor می تواند از فعالیتهای مرور شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
     <!-- Account Types -->
@@ -329,6 +340,7 @@
     <string name="Charts_Volume">درجه صدا</string>
     <string name="Charts_Price">قیمت</string>
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">به روز شده \n%s</string>
 </resources>
