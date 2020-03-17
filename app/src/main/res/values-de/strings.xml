@@ -9,16 +9,19 @@
     <string name="Alert_Success">Erfolgreich</string>
     <string name="Alert_Copied">Kopiert</string>
     <string name="Alert_Loading">Wird geladen ...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">Abbrechen</string>
     <string name="Button_Create">Erstellen</string>
     <string name="Button_Next">Weiter</string>
     <string name="Button_Restore">Wiederherstellen</string>
     <string name="Button_Enable">Aktivieren</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Back">Zurück</string>
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Teilen</string>
     <string name="Button_Done">Fertig</string>
+    <string name="Button_Retry">Retry</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s wallet</string>
@@ -200,7 +203,9 @@
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_BlockchainSettings">Blockchain Einstellungen</string>
     <string name="SettingsSecurity_EnableTor">Tor aktivieren</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -285,7 +290,13 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Diese Aktion erfordert, dass sich die Unstoppable App mit Bitcoin, Bitcoin Cash und Dash Blockchains neu synchronisiert, falls Sie eines dieser Token aktiviert haben. Ihr Guthaben oder Ihre Transaktionen sind davon nicht betroffen.\n\nWir empfehlen, diese Einstellung nicht zu ändern, falls Sie sich der Wirkungsweise nicht sicher sind.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">Tor-Verbindung</string>
     <string name="TorPage_Description">Vor dem Erstellen oder Wiederherstellen aktivieren Sie Tor für eine sichere Verbindung mit dem Netzwerk.\n\nTor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
     <!-- Account Types -->
@@ -323,6 +334,7 @@
     <string name="Charts_Volume">Lautstärke</string>
     <string name="Charts_Price">Preis</string>
     <string name="Charts_Error_NotAvailable">Diagramm nicht verfügbar</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">aktualisiert\n%s</string>
 </resources>
