@@ -118,6 +118,7 @@
 
     <style name="TextButtonWithIcon" parent="TextButton">
         <item name="android:drawableStart">@drawable/round_person_18px</item>
+        <item name="android:paddingTop">4dp</item>
         <item name="android:drawablePadding">8dp</item>
         <item name="android:drawableTint">@color/grey</item>
     </style>
