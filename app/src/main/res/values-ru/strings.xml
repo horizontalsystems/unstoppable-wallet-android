@@ -22,6 +22,7 @@
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Done">Готово</string>
     <string name="Button_Retry">Retry</string>
+    <string name="Button_Change">Change</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Wallet">%s Кошелек</string>
@@ -201,7 +202,6 @@
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
-    <string name="SettingsSecurity_BlockchainSettings">Настройки Блокчейна</string>
     <string name="SettingsSecurity_EnableTor">Включить Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
@@ -267,6 +267,7 @@
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
+    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
@@ -287,15 +288,18 @@
     <string name="AddCoin_Description">У вас нет кошелька, который может хранить %1$s. Приложение может создать для вас новый кошелек. Используйте кнопку \"Создать\" ниже, чтобы создать новый кошелек.\n\nВы сможете использовать новый кошелек для следующих монет: %2$s.\n\nВы также можете использовать существующий ключ кошелька %3$s , если он у вас есть. Используйте кнопку \"Восстановить\" для этого.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
+    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">Настройки</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
+    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
     <!-- Tor -->
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
@@ -310,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
-    <string name="CoinOption_RestoreSourceDescription">Ссылки на источники API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1–12 часов</string>
-    <string name="CoinOption_AddressFormatTitle">Выберите формат адреса</string>
+    <string name="CoinOption_AddressFormatTitle">Address format</string>
     <string name="CoinOption_SyncModeTitle">Опции восстановления</string>
     <string name="CoinOption_bip44_Subtitle">Старые (начинается с 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Популярные (начинается с 3...)</string>
