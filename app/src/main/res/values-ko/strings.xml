@@ -9,16 +9,19 @@
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
     <string name="Alert_Loading">로딩중...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Create">생성하기</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_Enable">활성화</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Back">뒤로</string>
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
     <string name="Button_Done">완료</string>
+    <string name="Button_Retry">Retry</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -200,7 +203,9 @@
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
     <string name="SettingsSecurity_BlockchainSettings">블록 체인 설정</string>
     <string name="SettingsSecurity_EnableTor">토르 활성화</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기위한 권한을 허용해 주세요.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -298,7 +303,13 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 작업은 귀하께서 이러한 토큰을 활성화 하신 경우 언스타퍼블 앱이 비트코인, 비트코인 Cash 및 Dash 블록 체인과 다시 동기화 되어야 합니다. 귀하의 잔액 또는 거래에는 영향을 미치지 않습니다.\n\n저희는 이 기능이 확실치 않을 경우 설정을 변경하지 않는 것을 권장합니다.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">블록 체인</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">토르 연결</string>
     <string name="TorPage_Description">네트워크를 안전하게 연결하기 위해서는 토르를 활성화 하거나 복원하기 전에 \n\n토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기 위한 권한을 허용해 주세요.</string>
     <!-- Account Types -->
@@ -336,6 +347,7 @@
     <string name="Charts_Volume">음량</string>
     <string name="Charts_Price">금액</string>
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">업데이트되었습니다\n%s</string>
 </resources>
