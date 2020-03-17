@@ -9,16 +9,19 @@
     <string name="Alert_Success">Başarılı</string>
     <string name="Alert_Copied">Kopyalandı</string>
     <string name="Alert_Loading">Yükleniyor...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Create">Oluştur</string>
     <string name="Button_Next">İleri</string>
     <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_Enable">Etkinleştir</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Back">Geri</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Button_Done">Bitti</string>
+    <string name="Button_Retry">Retry</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
@@ -200,7 +203,9 @@
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <string name="SettingsSecurity_BlockchainSettings">Blockchain Ayarları</string>
     <string name="SettingsSecurity_EnableTor">Tor\'u etkinleştir</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor, tarama etkinliklerinizi cüzdanda koruyabilir. Ayarlarda Tor tarayıcı kullanmaya izin ver.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
@@ -291,7 +296,13 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Bu işlem, Unstoppable uygulaması Bitcoin, Bitcoin Cash and Dash blockchain ile kendini yeniden senkronize etmek için gerektirir, bu belirteçlerden herhangi birini etkinleştirdiyseniz. Bakiyeniz veya işlemleriniz etkilenmeyecektir.\n\nNe yaptığından emin değilseniz bu ayarı değiştirmemenizi öneririz.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">Tor Bağlantısı</string>
     <string name="TorPage_Description">Oluşturmadan veya geri yüklemeden önce ağ ile güvenli bağlantı için Tor özelliğini etkinleştirin. \n\nTor ile cüzdandaki tarama etkinliklerinizi koruyabilirsiniz. Ayarlarda Tor tarayıcıyı kullanmaya izin verin.</string>
     <!-- Account Types -->
@@ -329,6 +340,7 @@
     <string name="Charts_Volume">Hacim</string>
     <string name="Charts_Price">Fiyat</string>
     <string name="Charts_Error_NotAvailable">Grafik yok</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">güncellendi\n%s</string>
 </resources>
