@@ -9,16 +9,19 @@
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">已复制</string>
     <string name="Alert_Loading">正在加载...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Create">创建</string>
     <string name="Button_Next">继续</string>
     <string name="Button_Restore">恢复</string>
     <string name="Button_Enable">启用</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Back">返回</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Button_Done">完成</string>
+    <string name="Button_Retry">Retry</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
@@ -200,7 +203,9 @@
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_BlockchainSettings">区块链设置</string>
     <string name="SettingsSecurity_EnableTor">启用Tor</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -291,7 +296,13 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">如果您已任何比特币、比特币现金和Dash，此操作需要使用Unstoppable应用以将其和这些代币的区块链重新同步。您的余额和交易将不受影响。\n\n我们建议建议在不确定的情况下不要更改此设置。</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">Tor连接</string>
     <string name="TorPage_Description">在创建或恢复前启用Tor以便实现网络的安全连接。\n\nTor可以保护您钱包上的浏览活动。在设置中启用权限以使用Tor浏览器。</string>
     <!-- Account Types -->
@@ -329,6 +340,7 @@
     <string name="Charts_Volume">量</string>
     <string name="Charts_Price">价格</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">已更新\n%s</string>
 </resources>
