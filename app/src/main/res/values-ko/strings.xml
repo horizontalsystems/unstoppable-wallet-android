@@ -22,6 +22,7 @@
     <string name="Button_Share">공유</string>
     <string name="Button_Done">완료</string>
     <string name="Button_Retry">Retry</string>
+    <string name="Button_Change">Change</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -201,7 +202,6 @@
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
-    <string name="SettingsSecurity_BlockchainSettings">블록 체인 설정</string>
     <string name="SettingsSecurity_EnableTor">토르 활성화</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기위한 권한을 허용해 주세요.</string>
@@ -274,6 +274,7 @@
 \n\n귀하께서 호들러 이시면, 이 기능을 쓸 수 있고 이러한 거래를 귀하께 보냄으로써 귀하의 비트코인을 강제적으로 호들링 하게 할 수 있습니다.\n\n실험적인 기능의 한번의 최대 거래 양은 0.5 비트코인으로 제한되있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
+    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
@@ -294,15 +295,18 @@
     <string name="AddCoin_Description">귀하께서는 %1$s를 저장할 수 있는 지갑을 가지고 계시지 않습니다. 이 앱은 귀하를 위해 새로운 지갑을 만들어 드릴 수 있습니다. 새로운 지갑을 만들기 위해 밑에있는 생성하기 버튼을 사용하십시오.\n\n귀하께서는 다음 %2$s에 대한 새로운 지갑을 사용 하실 수 있을 것 입니다.\n\n귀하께서는 또한 기존에 가지고 계셨던%3$s 지갑 암호를 사용하실 수 있습니다. 복원하기 버튼을 누르십시오.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
+    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">설정</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">이 작업은 언스타퍼블 앱이 비트코인 블록 체인과 다시 동기화 되어야 합니다. 현재 비트코인 거래는 더이상 보실 수 없습니다. 이전 설정으로 다시 변경하려면 앱이 블록 체인과 다시 동기화 된 후에 모든 것이 다시 원상복귀 됩니다.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 작업은 귀하께서 이러한 토큰을 활성화 하신 경우 언스타퍼블 앱이 비트코인, 비트코인 Cash 및 Dash 블록 체인과 다시 동기화 되어야 합니다. 귀하의 잔액 또는 거래에는 영향을 미치지 않습니다.\n\n저희는 이 기능이 확실치 않을 경우 설정을 변경하지 않는 것을 권장합니다.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">블록 체인</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
+    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
     <!-- Tor -->
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
@@ -317,9 +321,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">옵션 복구</string>
     <string name="CoinOption_Fast_Subtitle">0-2 시간 (권장)</string>
-    <string name="CoinOption_RestoreSourceDescription">API 출처 링크: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1-12 시간</string>
-    <string name="CoinOption_AddressFormatTitle">주소 형식을 선택해 주세요</string>
+    <string name="CoinOption_AddressFormatTitle">Address format</string>
     <string name="CoinOption_SyncModeTitle">매개 변수 복원</string>
     <string name="CoinOption_bip44_Subtitle">더 오래된 (1부터 시작)</string>
     <string name="CoinOption_bip49_Subtitle">인기있는 (3부터 시작)</string>
