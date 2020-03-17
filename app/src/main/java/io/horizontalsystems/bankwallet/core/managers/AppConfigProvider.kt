@@ -105,6 +105,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
             Coin("EURS",      "STASIS EURO",             "EURS",         2,      CoinType.Erc20("0xdB25f211AB05b1c97D595516F45794528a807ad8")),
             Coin("SAI",       "Sai",                     "SAI",         18,      CoinType.Erc20("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")),
             Coin("SNT",       "Status",                  "SNT",         18,      CoinType.Erc20("0x744d70FDBE2Ba4CF95131626614a1763DF805B9E")),
+            Coin("SNX",       "Synthetix",               "SNX",         18,      CoinType.Erc20("0xc011a72400e58ecd99ee497cf89e3775d4bd732f")),
             Coin("TUSD",      "TrueUSD",                 "TUSD",        18,      CoinType.Erc20("0x0000000000085d4780B73119b644AE5ecd22b376")),
             Coin("USDT",      "Tether USD",              "USDT",         6,      CoinType.Erc20("0xdAC17F958D2ee523a2206206994597C13D831ec7")),
             Coin("USDC",      "USD Coin",                "USDC",         6,      CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
