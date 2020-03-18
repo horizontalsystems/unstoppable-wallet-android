@@ -260,7 +260,7 @@
     <string name="Hud_Network_Issue">Problemas de red. Inténtelo de nuevo</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Gestor de monedas</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">Guardar</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Monedero</string>
     <string name="ManageCoins_Alert_CantCreateDescription">En este momento Unstoppable no es capaz de crear nuevas cuentas de monederos %s. Solo puede restaurar la existente.</string>
