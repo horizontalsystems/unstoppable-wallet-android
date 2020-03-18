@@ -29,7 +29,7 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
 }
 
 class HorsysLitecoinProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
-    private val baseUrl = "${if (testMode) "http://ltc-testnet" else "http://ltc"}.horizontalsystems.xyz"
+    private val baseUrl = "${if (testMode) "https://ltc-testnet" else "https://ltc"}.horizontalsystems.xyz"
 
     override val name = "HorizontalSystems.xyz"
     override val pingUrl = "$baseUrl/api/block/0"
