@@ -72,7 +72,7 @@ class CoinItemWithArrowViewHolder(override val containerView: View) : RecyclerVi
 
         val coin = viewItem.coin
 
-        coinTitle.text = containerView.context.getString(R.string.BlockchainSettings_CoinSettings, coin.title)
+        coinTitle.text = coin.title
         coinSubtitle.text = viewItem.setting?.let { setting ->
             val derivationText = setting.derivation?.let {  AccountType.getDerivationLongTitle(it) } ?: ""
             val syncModeText = getSyncModeTitle(setting.syncMode)
