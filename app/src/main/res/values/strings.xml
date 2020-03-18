@@ -343,7 +343,7 @@
 
     <!--Manage Coins-->
 
-    <string name="ManageCoins_title">Coin Manager</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">Save</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Wallet</string>
     <string name="ManageCoins_Alert_CantCreateDescription">At this point Unstoppable is not able to create new %s wallets. You\'re only able to restore the existing one.</string>
@@ -419,7 +419,7 @@
     <!-- Account Types -->
 
     <string name="AccountType_Unstoppable">Standard</string>
-    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC20 tokens</string>
+    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, LTC, BCH, DASH, ETH, ERC20 tokens</string>
     <string name="AccountType_Eos" translatable="false">EOS</string>
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOSIO tokens</string>
     <string name="AccountType_Binance" translatable="false">Binance</string>
