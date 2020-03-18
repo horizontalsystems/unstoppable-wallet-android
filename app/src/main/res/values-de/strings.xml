@@ -248,7 +248,7 @@
     <string name="Hud_Network_Issue">Es sind Netzwerkprobleme aufgetreten. Bitte versuchen Sie es erneut</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coins</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">Speichern</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Wallet</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Im Moment kann das Wallet keine neuen %s Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
