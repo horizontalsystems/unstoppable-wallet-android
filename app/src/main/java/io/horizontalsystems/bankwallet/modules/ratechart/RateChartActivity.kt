@@ -103,15 +103,23 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         presenterView.showMarketInfo.observe(this, Observer { item ->
             coinRateLast.text = formatter.formatForRates(item.rateValue)
 
-            val shortCapValue = shortenValue(item.marketCap.value)
-            val marketCap = CurrencyValue(item.marketCap.currency, shortCapValue.first)
-            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + " " + shortCapValue.second
+            coinMarketCap.text = if (item.marketCap.value > BigDecimal.ZERO) {
+                val shortCapValue = shortenValue(item.marketCap.value)
+                val marketCap = CurrencyValue(item.marketCap.currency, shortCapValue.first)
+                formatter.format(marketCap, canUseLessSymbol = false) + " " + shortCapValue.second
+            } else {
+                getString(R.string.NotAvailable)
+            }
 
             val shortVolumeValue = shortenValue(item.volume.value)
             val volume = CurrencyValue(item.volume.currency, shortVolumeValue.first)
             volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + " " + shortVolumeValue.second
 
-            circulationValue.text = formatter.format(item.supply, trimmable = true)
+            circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
+                formatter.format(item.supply, trimmable = true)
+            } else {
+                getString(R.string.NotAvailable)
+            }
 
             totalSupplyValue.text = item.maxSupply?.let {
                 formatter.format(it, trimmable = true)
