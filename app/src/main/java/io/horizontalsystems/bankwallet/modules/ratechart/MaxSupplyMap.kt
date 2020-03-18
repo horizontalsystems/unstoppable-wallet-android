@@ -47,6 +47,7 @@ object MaxSupplyMap {
             "NPXS" to BigDecimal(259_810_708_833),
             "R" to BigDecimal(1_000_000_000),
             "SNT" to BigDecimal(6_804_870_174),
+            "SNX" to BigDecimal(174_648_076),
             "WTC" to BigDecimal(70_000_000),
             "ZIL" to BigDecimal(21_000_000_000)
     )
