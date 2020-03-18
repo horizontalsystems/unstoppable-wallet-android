@@ -21,6 +21,7 @@ class TransactionInfoItemView : ConstraintLayout {
     private var attrValueSubtitle: String? = null
     private var attrShowValueBackground: String? = null
     private var attrValueIcon: String? = null
+    private var attrShowBottomBorder: Boolean = true
 
 
     constructor(context: Context) : super(context)
@@ -37,6 +38,7 @@ class TransactionInfoItemView : ConstraintLayout {
         txtTitle.text = title
         valueText.text = value
         valueText.visibility = View.VISIBLE
+        bindBottomBorder()
 
         invalidate()
     }
@@ -45,6 +47,7 @@ class TransactionInfoItemView : ConstraintLayout {
         txtTitle.text = title
         decoratedText.text = address
         decoratedText.visibility = View.VISIBLE
+        bindBottomBorder()
 
         invalidate()
     }
@@ -53,6 +56,7 @@ class TransactionInfoItemView : ConstraintLayout {
         txtTitle.setText(R.string.TransactionInfo_Status)
         transactionStatusView.bind(transactionStatus, incoming)
         transactionStatusView.visibility = View.VISIBLE
+        bindBottomBorder()
 
         invalidate()
     }
@@ -62,6 +66,7 @@ class TransactionInfoItemView : ConstraintLayout {
         decoratedText.text = address
         decoratedText.visibility = View.VISIBLE
         decoratedText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.hash, 0, 0, 0)
+        bindBottomBorder()
 
         invalidate()
     }
@@ -76,6 +81,7 @@ class TransactionInfoItemView : ConstraintLayout {
         valueText.visibility = View.VISIBLE
         valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info, 0)
         valueText.compoundDrawablePadding = LayoutHelper.dp(16f, context)
+        bindBottomBorder()
 
         invalidate()
     }
@@ -85,8 +91,13 @@ class TransactionInfoItemView : ConstraintLayout {
         txtTitle.visibility = View.VISIBLE
         txtTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_incoming_16, 0, 0, 0)
         txtTitle.compoundDrawablePadding = LayoutHelper.dp(11f, context)
+        bindBottomBorder()
 
         invalidate()
+    }
+
+    private fun bindBottomBorder(){
+        border.visibility = if (attrShowBottomBorder) View.VISIBLE else View.GONE
     }
 
     private fun loadAttributes(attrs: AttributeSet) {
@@ -97,6 +108,7 @@ class TransactionInfoItemView : ConstraintLayout {
             attrValueSubtitle = ta.getString(R.styleable.TransactionInfoItemView_valueSubtitle)
             attrShowValueBackground = ta.getString(R.styleable.TransactionInfoItemView_showValueBackground)
             attrValueIcon = ta.getString(R.styleable.TransactionInfoItemView_valueIcon)
+            attrShowBottomBorder = ta.getBoolean(R.styleable.TransactionInfoItemView_bottomBorder, true)
         } finally {
             ta.recycle()
         }

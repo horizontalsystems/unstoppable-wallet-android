@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp">
+    android:paddingTop="11dp"
+    android:paddingBottom="11dp">
 
     <View
         android:id="@+id/background"
@@ -69,8 +69,8 @@
         <ImageButton
             android:id="@+id/btnBarcodeScan"
             style="@style/ImageButtonSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_scan_qr_copy"
             android:visibility="visible" />
@@ -78,16 +78,16 @@
         <Button
             android:id="@+id/btnPaste"
             style="@style/ButtonSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_width="55dp"
+            android:layout_height="28dp"
             android:text="@string/Send_Button_Paste"
             android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/btnDeleteAddress"
             style="@style/ImageButtonSecondary"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/ic_delete"
             android:visibility="visible" />
     </LinearLayout>
