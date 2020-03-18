@@ -254,7 +254,7 @@
     <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Токены</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">Сохранить</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Кошелек</string>
     <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек не может создать новые учетные записи %s. Вы можете восстановить только существующий.</string>
