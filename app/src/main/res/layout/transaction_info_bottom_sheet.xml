@@ -123,7 +123,6 @@
         android:id="@+id/itemFrom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemStatus" />
@@ -132,7 +131,6 @@
         android:id="@+id/itemTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +140,6 @@
         android:id="@+id/itemRecipientHash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemTo" />
@@ -152,6 +149,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="visible"
+        android:paddingEnd="-8dp"
+        app:bottomBorder="false"
         app:layout_constraintEnd_toStartOf="@+id/btnShare"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemRecipientHash" />
@@ -161,12 +160,24 @@
         style="@style/ImageButtonSecondary"
         android:layout_width="28dp"
         android:layout_height="28dp"
+        android:layout_marginStart="-8dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/share_icon"
+        android:tint="#EFEFF4"
         app:layout_constraintBottom_toBottomOf="@+id/itemId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/itemId"
         app:layout_constraintTop_toTopOf="@id/itemId" />
+
+    <View
+        android:id="@+id/ItemIdBorder"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/steel_20"
+        app:layout_constraintTop_toBottomOf="@+id/itemId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemLockTime"
@@ -174,7 +185,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemId" />
+        app:layout_constraintTop_toBottomOf="@+id/ItemIdBorder" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemSentToSelf"

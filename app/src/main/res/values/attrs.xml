@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="GlobalAttrDeclare">
-        <attr name="title" format="string" />
-        <attr name="subtitle" format="string" />
-        <attr name="bottomBorder" format="boolean" />
-    </declare-styleable>
     <declare-styleable name="TransactionInfoItemView">
         <attr name="title" />
         <attr name="value" format="string" />
         <attr name="valueSubtitle" format="string" />
         <attr name="showValueBackground" format="boolean" />
         <attr name="valueIcon" format="integer" />
+        <attr name="bottomBorder" format="boolean" />
     </declare-styleable>
     <declare-styleable name="FullTransactionInfoItemView">
         <attr name="infoTitle" format="string" />
