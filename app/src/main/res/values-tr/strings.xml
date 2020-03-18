@@ -254,7 +254,7 @@
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Cüzdanlar</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">Kaydet</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s cüzdanı</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Uygulama henüz %s cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
