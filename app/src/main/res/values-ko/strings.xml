@@ -260,7 +260,7 @@
     <string name="Hud_Network_Issue">네트워크에 문제가 있습니다. 잠시 후 다시 시도해 주세요</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">지갑</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">저장</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s 지갑</string>
     <string name="ManageCoins_Alert_CantCreateDescription">언스탑퍼블은 현재 새로운 %s 지갑을 만들 수 없습니다. 귀하께서는 기존 항목만 복원이 가능합니다.</string>
