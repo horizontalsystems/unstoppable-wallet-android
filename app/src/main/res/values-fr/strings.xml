@@ -255,7 +255,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Hud_Network_Issue">Problèmes réseau. Réessayez</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Portefeuilles</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">Sauvegarder</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Portefeuille</string>
     <string name="ManageCoins_Alert_CantCreateDescription">À ce stade, Unstoppable n\'est pas en mesure de créer de nouveaux portefeuilles EOS. Vous ne pouvez restaurer que celui déjà existant.</string>
