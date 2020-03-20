@@ -163,7 +163,7 @@
         android:layout_marginStart="-8dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/share_icon"
-        android:tint="#EFEFF4"
+        android:tint="?ColorLeah"
         app:layout_constraintBottom_toBottomOf="@+id/itemId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/itemId"
