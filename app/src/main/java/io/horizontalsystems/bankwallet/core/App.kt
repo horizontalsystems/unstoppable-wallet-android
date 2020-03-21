@@ -77,6 +77,7 @@ class App : CoreApp() {
         lateinit var blockchainSettingsManager: IBlockchainSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
+        lateinit var rateAppManager: IRateAppManager
     }
 
     override fun onCreate() {

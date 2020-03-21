@@ -18,7 +18,8 @@ class BalanceInteractor(
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val rateAppManager: IRateAppManager)
     : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
@@ -142,6 +143,14 @@ class BalanceInteractor(
         disposables.clear()
         adapterDisposables.clear()
         marketInfoDisposables.clear()
+    }
+
+    override fun notifyPageActive() {
+        rateAppManager.onBalancePageActive()
+    }
+
+    override fun notifyPageInactive() {
+        rateAppManager.onBalancePageInactive()
     }
 
     private fun onUpdateCurrency() {

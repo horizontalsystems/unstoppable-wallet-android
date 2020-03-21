@@ -430,6 +430,14 @@ interface INetManager {
     val torObservable: Subject<TorStatus>
 }
 
+interface IRateAppManager {
+    fun onBalancePageActive()
+    fun onBalancePageInactive()
+    //fun onLaunch()
+    //fun onBecomeActive()
+    //fun onResignActive()
+}
+
 enum class FeeRatePriority(val value: Int) {
     LOW(1),
     MEDIUM(2),

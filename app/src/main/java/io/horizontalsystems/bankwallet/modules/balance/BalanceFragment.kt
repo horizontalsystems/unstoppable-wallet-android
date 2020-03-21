@@ -121,6 +121,15 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.delegate.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.delegate.onPause()
+    }
     // LiveData
 
     private fun observeLiveData() {
