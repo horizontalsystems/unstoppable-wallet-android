@@ -34,6 +34,9 @@ object BalanceModule {
         fun onBackupClick()
 
         fun onClear()
+
+        fun onResume()
+        fun onPause()
     }
 
     interface IInteractor {
@@ -59,6 +62,9 @@ object BalanceModule {
         fun saveSortType(sortType: BalanceSortType)
 
         fun clear()
+
+        fun notifyPageActive()
+        fun notifyPageInactive()
     }
 
     interface IInteractorDelegate {
@@ -109,8 +115,17 @@ object BalanceModule {
 
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
-        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, currencyManager, App.localStorage, App.xRateManager, App.predefinedAccountTypeManager)
-        val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory(App.rateCoinMapper))
+
+        val interactor = BalanceInteractor(
+                App.walletManager,
+                App.adapterManager, currencyManager,
+                App.localStorage,
+                App.xRateManager,
+                App.predefinedAccountTypeManager,
+                App.rateAppManager)
+
+        val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager,
+                                         BalanceViewItemFactory(App.rateCoinMapper))
 
         presenter.view = view
         interactor.delegate = presenter

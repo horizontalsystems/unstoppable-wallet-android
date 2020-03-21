@@ -7,6 +7,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.xrateskit.entities.MarketInfo
+import okhttp3.internal.notify
 import java.math.BigDecimal
 import java.util.concurrent.Executors
 
@@ -133,6 +134,14 @@ class BalancePresenter(
 
     override fun onClear() {
         interactor.clear()
+    }
+
+    override fun onResume() {
+        interactor.notifyPageActive()
+    }
+
+    override fun onPause() {
+        interactor.notifyPageInactive()
     }
 
     // IInteractorDelegate
