@@ -9,20 +9,20 @@
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">已复制</string>
     <string name="Alert_Loading">正在加载...</string>
-    <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Restart">重新启动</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Create">创建</string>
     <string name="Button_Next">继续</string>
     <string name="Button_Restore">恢复</string>
     <string name="Button_Enable">启用</string>
-    <string name="Button_Disable">Disable</string>
+    <string name="Button_Disable">禁用</string>
     <string name="Button_Back">返回</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Button_Done">完成</string>
-    <string name="Button_Retry">Retry</string>
-    <string name="Button_Change">Change</string>
+    <string name="Button_Retry">重试</string>
+    <string name="Button_Change">更改</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
@@ -203,7 +203,7 @@
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_EnableTor">启用Tor</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
