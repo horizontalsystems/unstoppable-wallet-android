@@ -273,7 +273,7 @@
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gestionar Monederos</string>
-    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
+    <string name="ManageKeys_AdvancedSettings">Configuración avanzada</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
@@ -295,7 +295,7 @@
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
+    <string name="BlockchainSettingsList_Title">Configuración avanzada</string>
     <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Formato de Dirección</string>
