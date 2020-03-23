@@ -210,19 +210,13 @@
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">용어 및 정책:</string>
-    <string name="SettingsAbout_TermsPrivacyText">이 응용 프로그램은 peer-to-peer방식입니다. 작동하기 위해서 어떠한 웹 서버 또는 기술 지원 담당자에게 의존하지 않습니다.
-
-\n\n인터넷이 되는 어느 곳에서나 작동합니다. 누구도 이 어플을 작동하는 것을 막을 수 없고 그것을 사용하기 위해 누군가를 차단할 수 없습니다.
-
-\n\n당신의 자금은 안전하게 다른 어떤한 곳도 아닌 핸드폰 자체에 저장됩니다.
-
-\n\n너의 비밀 키를 백업하고 그것을 비공개로 지키는 것은 당신의 책임에 달려있습니다. 절대로 누군가에게 보여주지 마세요. 만약에 잃어버린다면, 당신의 비밀 키를 가진 사람이 당신의 자금을 훔치거나 잃어버리게 할 수 있습니다.
-
-\n\n당신의 핸드폰을 탈옥하지마세요, 알려지지 않은 (믿을 수 없는) 출처로부터의 어플을 설치하지마세요, 당신의 핸드폰을 믿을 수 없는 사람에게 주지 마세요, 그리고 당신의 핸드폰의 운영체제을 최신버전으로 유지하세요. 이것은 당신의 지갑의 안전을 지켜줄 것입니다. 
-
-\n\n이 어플을 작동시키는 전체코드는 시작할 때부터 대중의 감시에 공개됩니다. 의도하지 않은 소프트웨어 문제들이 없다는 보장은 없지만, 우리는 가장 안전하고 분권화된 지갑을 만들기 위해 시도할 것입니다. 즉, 이 지갑은 어떠한 스마트폰 어플보다 안전할 것입니다.
-
-\n\n통화 환율과 같은 총괄적이고 사적이지 않은 데이터는 분산된 저장소(IPFS)에 저장될 것입니다.</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no unintended software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
