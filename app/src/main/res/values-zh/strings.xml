@@ -210,13 +210,13 @@
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">条款和隐私：</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no unintended software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">此应用是一款点对点应用。其运作不依赖于任何网络服务器或技术支持人员。
+\n\n应用能在任何有网络的地方工作。没有实体能够阻止此应用工作或者阻止任何人使用它。
+\n\n控制着您资金的加密密钥安全地保存在电话上，而不是其他地方。
+\n\n您的职责是备份加密密钥并保证其私密性。绝不要向任何人展示密钥。如果密钥丢失、遗忘或被盗，您的资金将会被拥有密钥的人使用。
+\n\n不要对您的电话进行越狱，不要安装来源不明（不可靠）的应用，不要把您的电话交给不可靠的人，保证电话的操作系统是最新版本。您钱包的安全将取决于此。
+\n\n支持此应用的完整代码对公众监督开放。尽管我们相信比市面上任何智能手机钱包应用都安全得多，但这不保证其中不会存在意外的软件问题。
+\n\n像交易、余额等所有数据将仅保存在您的钱包应用且绝不会从您的设备上外泄。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
@@ -254,7 +254,7 @@
     <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Choose Coins</string>
+    <string name="ManageCoins_title">选择代币</string>
     <string name="ManageCoins_save">保存</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s钱包</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Unstoppable此时无法创建新的%s钱包。您只可以恢复现有的钱包。</string>
@@ -267,7 +267,7 @@
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用Unstoppable钱包。\n\n只有Unstoppable钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理钱包</string>
-    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
+    <string name="ManageKeys_AdvancedSettings">高级设置</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
@@ -289,8 +289,8 @@
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
-    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+    <string name="BlockchainSettingsList_Title">高级设置</string>
+    <string name="BlockchainSettingsList_Description">要更改设置，您必须启用上架代币，其他代币不具有设置</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">地址格式</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">更改为%s</string>
