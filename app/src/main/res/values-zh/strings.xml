@@ -294,19 +294,19 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">地址格式</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">更改为%s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">此更改后，钱包将必须与 %1$s 区块链重新同步。\n\n当您更改地址格式的 %2$s 时，当前余额和交易历史将不再在余额选项卡上可见。 将其更改为以前的设置将在钱包与区块链重新同步后恢复所有设置。 如果不确定，我们建议不要进行更改。</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <string name="BlockchainSettings_CoinSettings">%s 设置</string>
     <!-- Tor -->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="Tor_Status_Starting">正在启动Tor...</string>
+    <string name="Tor_Status_Error">启动Tor时出错！</string>
+    <string name="TorPage_Connecting">正在连接...</string>
+    <string name="TorPage_Connected">已连接</string>
+    <string name="TorPage_Failed">失败</string>
+    <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="TorPage_Title">Tor连接</string>
     <string name="TorPage_Description">在创建或恢复前启用Tor以便实现网络的安全连接。\n\nTor可以保护您钱包上的浏览活动。在设置中启用权限以使用Tor浏览器。</string>
     <!-- Account Types -->
@@ -314,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast_Subtitle">0 - 2小时（推荐）</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">API 源链接： \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1- 12 小时</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">地址格式</string>
     <string name="CoinOption_SyncModeTitle">恢复参数</string>
     <string name="CoinOption_bip44_Subtitle">更旧（以1开头...）</string>
     <string name="CoinOption_bip49_Subtitle">流行（以3开头...）</string>
@@ -344,7 +344,7 @@
     <string name="Charts_Volume">量</string>
     <string name="Charts_Price">价格</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">最新消息</string>
     <!--Rate list-->
     <string name="RateList_updated">已更新\n%s</string>
 </resources>
