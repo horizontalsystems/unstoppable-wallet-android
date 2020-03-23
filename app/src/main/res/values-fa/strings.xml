@@ -9,20 +9,20 @@
     <string name="Alert_Success">موفقیت</string>
     <string name="Alert_Copied">کپی شد</string>
     <string name="Alert_Loading">درحال بارگذاری...</string>
-    <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Restart">راه اندازی مجدد</string>
     <string name="Button_Cancel">کنسل</string>
     <string name="Button_Create">به وجود آوردن</string>
     <string name="Button_Next">بعدي</string>
     <string name="Button_Restore">بازگرداني</string>
     <string name="Button_Enable">فعال کردن</string>
-    <string name="Button_Disable">Disable</string>
+    <string name="Button_Disable">غیرفعال</string>
     <string name="Button_Back">برگشت</string>
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Button_Done">انجام شد</string>
-    <string name="Button_Retry">Retry</string>
-    <string name="Button_Change">Change</string>
+    <string name="Button_Retry">دوباره امتحان کنید</string>
+    <string name="Button_Change">تغییر</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
@@ -203,9 +203,9 @@
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
     <string name="SettingsSecurity_EnableTor">فعال کردن Tor</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">این اقدام کیف پول غیر قابل توقف را مجدداً راه اندازی می کند.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor می تواند از فعالیت های مرورگر شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
@@ -254,7 +254,7 @@
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Choose Coins</string>
+    <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
     <string name="ManageCoins_save">ذخیره</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s کیف پول</string>
     <string name="ManageCoins_Alert_CantCreateDescription">در این مرحله ، کیف پول قادر به ایجاد حساب های کیف پول جدید %s نیست. شما فقط قادر به بازیابی کیف پول موجود هستید.</string>
@@ -267,7 +267,7 @@
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
-    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
+    <string name="ManageKeys_AdvancedSettings">تنظیمات پیشرفته</string>
     <string name="ManageKeys_Create">به وجود آوردن</string>
     <string name="ManageKeys_Restore">بازیابی</string>
     <string name="ManageKeys_Delete">پاک کردن</string>
@@ -289,8 +289,8 @@
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
-    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+    <string name="BlockchainSettingsList_Title">تنظیمات پیشرفته</string>
+    <string name="BlockchainSettingsList_Description">برای تغییر دادن تنظیمات ، باید سکه های لیست شده را فعال کنید ، سایر سکه ها تنظیمات ندارند</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">ساختار آدرس</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">تغییر به %s</string>
@@ -299,14 +299,14 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <string name="BlockchainSettings_CoinSettings">%s تنظیمات</string>
     <!-- Tor -->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="Tor_Status_Starting">درحال راه اندازی Tor...</string>
+    <string name="Tor_Status_Error">خطا در راه اندازی Tor!</string>
+    <string name="TorPage_Connecting">در حال اتصال…</string>
+    <string name="TorPage_Connected">ارتباط برقرار شد</string>
+    <string name="TorPage_Failed">ناموفق</string>
+    <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="TorPage_Title">ارتباط Tor</string>
     <string name="TorPage_Description">قبل از ایجاد یا بازیابی Tor را برای اتصال ایمن به شبکه فعال کنید. \n\n Tor می تواند از فعالیتهای مرور شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
     <!-- Account Types -->
@@ -314,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast_Subtitle">۰-۲ ساعت (توصیه شده)</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">لینک منبع API: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">ساختار آدرس</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
     <string name="CoinOption_bip44_Subtitle">قدیمی تر (شروع با ۱...)</string>
     <string name="CoinOption_bip49_Subtitle">محبوب (شروع با ۳...)</string>
@@ -344,7 +344,7 @@
     <string name="Charts_Volume">درجه صدا</string>
     <string name="Charts_Price">قیمت</string>
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">آخرین اخبار</string>
     <!--Rate list-->
     <string name="RateList_updated">به روز شده \n%s</string>
 </resources>
