@@ -210,19 +210,13 @@
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Términos &amp; privacidad:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Esta aplicación es de servidor a servidor. No depende de ninguna web o tecnología personal de apoyo a la función.
-
-\n\nFunciona en cualquier lugar siempre que haya conexión a internet. Ninguna entidad puede bloquear el funcionamiento de esta aplicación o impedir el acceso de un usuario.
-
-\n\nSus fondos son almacenados de forma segura únicamente en el teléfono, en ningún otro lugar.
-
-\n\nEs su responsabilidad recordar su clave secreta y mantenerla en privado. Nunca la muestre a nadie. Si la pierde, la olvida o es sustraída, sus fondos pueden ser utilizados por la persona que tiene su clave secreta.
-
-\n\nNo modifique la seguridad del software de su teléfono, no instale aplicaciones de orígenes desconocidos , no entregue su dispositivo a desconocidos y mantenga actualizado el sistema operativo de tu teléfono. La seguridad de su cartera depende de ello.
-
-\n\nLa totalidad del código que soporta esta aplicación está abierta al escrutinio público desde el inicio de la aplicación. Hemos intentado construir la cartera más segura y descentralizada posible; sin embargo, hay ninguna garantía de que no se produzca algún problema de software no deseado. Dicho esto, esta carpeta es probable que sea significativamente más segura que cualquier aplicación de gestión de cartera de smartphone del mercado
-
-\n\nAlgunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no unintended software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
