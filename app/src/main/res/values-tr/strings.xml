@@ -205,7 +205,7 @@
     <string name="SettingsSecurity_EnableTor">Tor\'u etkinleştir</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor, tarama etkinliklerinizi cüzdanda koruyabilir. Ayarlarda Tor tarayıcı kullanmaya izin ver.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakılmış. Tor\'un çalışması için onları etkinleştirmeniz gerekir.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
@@ -254,7 +254,7 @@
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Choose Coins</string>
+    <string name="ManageCoins_title">Kripto Parayı Seç</string>
     <string name="ManageCoins_save">Kaydet</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s cüzdanı</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Uygulama henüz %s cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
@@ -290,7 +290,7 @@
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Blockchain Settings List -->
     <string name="BlockchainSettingsList_Title">Gelişmiş Ayarlar</string>
-    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+    <string name="BlockchainSettingsList_Description">Ayarları değiştirmek için listelenen paraları etkinleştirmelisiniz, diğer paralarda ayar yoktur</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adres Formatı</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s\'e değiştir</string>
