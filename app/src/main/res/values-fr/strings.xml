@@ -6,7 +6,7 @@
     <string name="Alert_Copy">Copier</string>
     <string name="Alert_Share">Transférer</string>
     <string name="Alert_Close">Fermer</string>
-    <string name="Alert_Success">Effectué</string>
+    <string name="Alert_Success">Opération réussie</string>
     <string name="Alert_Copied">Copié</string>
     <string name="Alert_Loading">Chargement en cours...</string>
     <string name="Alert_Restart">Redémarrer</string>
@@ -315,9 +315,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast_Subtitle">0-2 heures (Recommandé)</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">Lien source API : \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1 - 12 heures</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">Format de l\'adresse</string>
     <string name="CoinOption_SyncModeTitle">Restaurer les paramètres</string>
     <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Populaire (commence par 3...)</string>
@@ -345,7 +345,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Charts_Volume">Volume</string>
     <string name="Charts_Price">Prix</string>
     <string name="Charts_Error_NotAvailable">Graphique non disponible</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">Dernières nouvelles</string>
     <!--Rate list-->
     <string name="RateList_updated">mis à jour\n%s</string>
 </resources>
