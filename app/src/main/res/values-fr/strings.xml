@@ -211,13 +211,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Cette application est décentralisée. Elle ne dépend d\'aucun serveur Web ou personnel de support technique pour fonctionner.
-\n\nElle fonctionne partout tant qu\'il y a internet. Aucune entité ne peut empêcher cette application de fonctionner ou empêcher quelqu\'un de l\'utiliser.
-\n\nVos fonds sont stockés de manière sécurisée sur le téléphone, pas ailleurs.
-\n\nIl est de votre responsabilité de sauvegarder votre clé secrète et de la garder privée. Ne la montrez jamais à personne. En cas de perte, d’oubli ou de vol, vos fonds peuvent être utilisés par la personne qui détient votre clé secrète.
-\n\nNe piratez pas votre téléphone, n\'installez pas d\'applications de sources inconnues (non fiables), ne confiez pas votre appareil à des personnes non fiables et maintenez le système d\'exploitation à jour. La sécurité de votre porte-monnaie dépend de tout cela.
-\n\nLe code alimentant cette application a été ouvert au public depuis le début. Nous avons essayé de créer le porte-monnaie le plus sécurisé et le plus décentralisé possible, mais rien ne garantit qu’il n’y ait pas de problèmes logiciels inattendus. Cela dit, ce porte-monnaie sera probablement beaucoup plus sécurisé que n\'importe quelle application de porte-monnaie pour téléphone.
-\n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no unintended software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
