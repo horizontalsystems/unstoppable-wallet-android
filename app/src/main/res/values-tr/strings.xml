@@ -203,7 +203,7 @@
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <string name="SettingsSecurity_EnableTor">Tor\'u etkinleştir</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor, tarama etkinliklerinizi cüzdanda koruyabilir. Ayarlarda Tor tarayıcı kullanmaya izin ver.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <!--Setting_About-->
@@ -299,14 +299,14 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <string name="BlockchainSettings_CoinSettings">%s Ayarları</string>
     <!-- Tor -->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="Tor_Status_Starting">Tor Başlatılıyor...</string>
+    <string name="Tor_Status_Error">Tor başlatma hatası !</string>
+    <string name="TorPage_Connecting">Bağlanıyor…</string>
+    <string name="TorPage_Connected">Bağlandı</string>
+    <string name="TorPage_Failed">Başarısız</string>
+    <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
     <string name="TorPage_Title">Tor Bağlantısı</string>
     <string name="TorPage_Description">Oluşturmadan veya geri yüklemeden önce ağ ile güvenli bağlantı için Tor özelliğini etkinleştirin. \n\nTor ile cüzdandaki tarama etkinliklerinizi koruyabilirsiniz. Ayarlarda Tor tarayıcıyı kullanmaya izin verin.</string>
     <!-- Account Types -->
@@ -316,7 +316,7 @@
     <string name="CoinOption_Fast_Subtitle">0-2 saat (Tavsiye edilen)</string>
     <string name="CoinOption_RestoreSource">API source link: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1-12 saat</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">Adres Formatı</string>
     <string name="CoinOption_SyncModeTitle">Geri Yükleme Ayarları</string>
     <string name="CoinOption_bip44_Subtitle">Eski (1... ile başlar)</string>
     <string name="CoinOption_bip49_Subtitle">Popüler (3... ile başlar)</string>
@@ -344,7 +344,7 @@
     <string name="Charts_Volume">Hacim</string>
     <string name="Charts_Price">Fiyat</string>
     <string name="Charts_Error_NotAvailable">Grafik yok</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">Son Haberler</string>
     <!--Rate list-->
     <string name="RateList_updated">güncellendi\n%s</string>
 </resources>
