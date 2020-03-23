@@ -16,6 +16,7 @@
         android:paddingEnd="16dp"
         android:text="@string/Charts_LatestNews"
         android:textSize="17sp"
+        android:textColor="?attr/ColorLeah"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
