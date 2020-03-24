@@ -305,7 +305,7 @@
     <string name="Tor_Status_Error">Error starting Tor !</string>
     <string name="TorPage_Connecting">Connecting…</string>
     <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_Failed">Fehlgeschlagen</string>
     <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">Tor-Verbindung</string>
     <string name="TorPage_Description">Vor dem Erstellen oder Wiederherstellen aktivieren Sie Tor für eine sichere Verbindung mit dem Netzwerk.\n\nTor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
