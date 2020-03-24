@@ -9,16 +9,20 @@
     <string name="Alert_Success">Успешно</string>
     <string name="Alert_Copied">Скопировано</string>
     <string name="Alert_Loading">Загрузка...</string>
+    <string name="Alert_Restart">Перезапустить</string>
     <string name="Button_Cancel">Отменить</string>
     <string name="Button_Create">Создать</string>
     <string name="Button_Next">Далее</string>
     <string name="Button_Restore">Восстановить</string>
     <string name="Button_Enable">Активировать</string>
+    <string name="Button_Disable">Выкл.</string>
     <string name="Button_Back">Назад</string>
     <string name="Button_Close">Закрыть</string>
     <string name="Button_Ok">Хорошо</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Done">Готово</string>
+    <string name="Button_Retry">Повторить</string>
+    <string name="Button_Change">Изменить</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Wallet">%s Кошелек</string>
@@ -198,9 +202,10 @@
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
-    <string name="SettingsSecurity_BlockchainSettings">Настройки Блокчейна</string>
     <string name="SettingsSecurity_EnableTor">Включить Tor</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor может защитить вашу активность в браузере на кошельке. Разрешите использование Tor браузера в настройках.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для Unstoppable Кошелька отключены. Для работы Tor необходимо включить их.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -249,7 +254,7 @@
     <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Токены</string>
+    <string name="ManageCoins_title">Выберите монеты</string>
     <string name="ManageCoins_save">Сохранить</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Кошелек</string>
     <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек не может создать новые учетные записи %s. Вы можете восстановить только существующий.</string>
@@ -262,6 +267,7 @@
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
+    <string name="ManageKeys_AdvancedSettings">Дополнительные настройки</string>
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
@@ -282,16 +288,25 @@
     <string name="AddCoin_Description">У вас нет кошелька, который может хранить %1$s. Приложение может создать для вас новый кошелек. Используйте кнопку \"Создать\" ниже, чтобы создать новый кошелек.\n\nВы сможете использовать новый кошелек для следующих монет: %2$s.\n\nВы также можете использовать существующий ключ кошелька %3$s , если он у вас есть. Используйте кнопку \"Восстановить\" для этого.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">Дополнительные настройки</string>
+    <string name="BlockchainSettingsList_Description">Чтобы изменить настройки, вы должны включить перечисленные монеты, другие монеты не имеют настроек</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">Настройки</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin blockchain. Your current Bitcoin transactions will no longer be visible. Changing it back to previous setting will bring everything back after the app resyncs with blockchain.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %1$s .\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Если вернуться к предыдущей настройке, все вернется после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">This action will require Unstoppable app to resync itself with Bitcoin, Bitcoin Cash and Dash blockchains, if you have enabled any of these tokens. Your balance or transactions won\'t be affected.\n\nWe recommend not to change this setting if not sure what it does.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <string name="BlockchainSettings_CoinSettings">%s Настройки</string>
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Запуск Tor ...</string>
+    <string name="Tor_Status_Error">Ошибка запуска Tor !</string>
+    <string name="TorPage_Connecting">Подключение…</string>
+    <string name="TorPage_Connected">Подключен</string>
+    <string name="TorPage_Failed">Не удалось</string>
+    <string name="TorPage_ConnectionClosed">Отсоединено</string>
     <string name="TorPage_Title">Соединение с Tor</string>
     <string name="TorPage_Description">Before creating or restoring enable Tor for secure connection with network.\n\nTor can safeguard your browsing activities on wallet. Allow permission for using Tor browser in settings.</string>
     <!-- Account Types -->
@@ -299,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
-    <string name="CoinOption_RestoreSourceDescription">Ссылки на источники API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">Ссылка на источник API: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1–12 часов</string>
-    <string name="CoinOption_AddressFormatTitle">Выберите формат адреса</string>
+    <string name="CoinOption_AddressFormatTitle">Формат адреса</string>
     <string name="CoinOption_SyncModeTitle">Опции восстановления</string>
     <string name="CoinOption_bip44_Subtitle">Старые (начинается с 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Популярные (начинается с 3...)</string>
@@ -329,6 +344,7 @@
     <string name="Charts_Volume">Объём</string>
     <string name="Charts_Price">Цена</string>
     <string name="Charts_Error_NotAvailable">График недоступен</string>
+    <string name="Charts_LatestNews">Последние Новости</string>
     <!--Rate list-->
     <string name="RateList_updated">обновлено\n%s</string>
 </resources>

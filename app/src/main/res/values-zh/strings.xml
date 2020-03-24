@@ -9,16 +9,20 @@
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">已复制</string>
     <string name="Alert_Loading">正在加载...</string>
+    <string name="Alert_Restart">重新启动</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Create">创建</string>
     <string name="Button_Next">继续</string>
     <string name="Button_Restore">恢复</string>
     <string name="Button_Enable">启用</string>
+    <string name="Button_Disable">禁用</string>
     <string name="Button_Back">返回</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Button_Done">完成</string>
+    <string name="Button_Retry">重试</string>
+    <string name="Button_Change">更改</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
@@ -198,20 +202,21 @@
     <string name="SettingsSecurity_EditPin">编辑密码</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
-    <string name="SettingsSecurity_BlockchainSettings">区块链设置</string>
     <string name="SettingsSecurity_EnableTor">启用Tor</string>
+    <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">条款和隐私：</string>
     <string name="SettingsAbout_TermsPrivacyText">此应用是一款点对点应用。其运作不依赖于任何网络服务器或技术支持人员。
-\n\n只要有网络它就能工作。没有实体能够阻止此应用工作或者阻止任何人使用它。
-\n\n您的资金安全地保存在电话上，而不是其他地方。
-\n\n您的职责是备份密钥并保证其安全。绝不要向任何人展示密钥。如果密钥丢失、遗忘或被盗，您的资金将会被拥有密钥的人使用。
+\n\n应用能在任何有网络的地方工作。没有实体能够阻止此应用工作或者阻止任何人使用它。
+\n\n控制着您资金的加密密钥安全地保存在电话上，而不是其他地方。
+\n\n您的职责是备份加密密钥并保证其私密性。绝不要向任何人展示密钥。如果密钥丢失、遗忘或被盗，您的资金将会被拥有密钥的人使用。
 \n\n不要对您的电话进行越狱，不要安装来源不明（不可靠）的应用，不要把您的电话交给不可靠的人，保证电话的操作系统是最新版本。您钱包的安全将取决于此。
-\n\n支持此应用的完整代码从一开始就对公众监督开放。我们付出了最大努力以开发最安全的分散式钱包，但这不保证其中不会存在意外的软件问题。尽管如此，此钱包很可能还是比市面上的其他智能手机钱包更为安全。
-\n\n像货币汇率等通用非私有应用数据将保存在分散式存储系统（IPFS）。</string>
+\n\n支持此应用的完整代码对公众监督开放。尽管我们相信比市面上任何智能手机钱包应用都安全得多，但这不保证其中不会存在意外的软件问题。
+\n\n像交易、余额等所有数据将仅保存在您的钱包应用且绝不会从您的设备上外泄。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
@@ -249,7 +254,7 @@
     <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">代币管理器</string>
+    <string name="ManageCoins_title">选择代币</string>
     <string name="ManageCoins_save">保存</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s钱包</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Unstoppable此时无法创建新的%s钱包。您只可以恢复现有的钱包。</string>
@@ -262,6 +267,7 @@
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用Unstoppable钱包。\n\n只有Unstoppable钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理钱包</string>
+    <string name="ManageKeys_AdvancedSettings">高级设置</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
@@ -282,16 +288,25 @@
     <string name="AddCoin_Description">您没有可恢复 %1$s 的钱包。应用可以为您生成新的钱包。使用下方的“创建”按钮生成新钱包。\n\n您将可以为以下代币使用新钱包：%2$s。\n\n如果您已有钱包，那么您也可以使用现有的%3$s钱包。为此使用“恢复”按钮。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">高级设置</string>
+    <string name="BlockchainSettingsList_Description">要更改设置，您必须启用上架代币，其他代币不具有设置</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">设置</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">地址格式</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">更改为%s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">此操作需要使用Unstoppable应用以将其和比特币区块链重新同步。您目前的比特币交易将不再显示。将其更改回早前的设置将在应用和区块链重新同步后使一切得以恢复。</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">此更改后，钱包将必须与 %1$s 区块链重新同步。\n\n当您更改地址格式的 %2$s 时，当前余额和交易历史将不再在余额选项卡上可见。 将其更改为以前的设置将在钱包与区块链重新同步后恢复所有设置。 如果不确定，我们建议不要进行更改。</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">如果您已任何比特币、比特币现金和Dash，此操作需要使用Unstoppable应用以将其和这些代币的区块链重新同步。您的余额和交易将不受影响。\n\n我们建议建议在不确定的情况下不要更改此设置。</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <string name="BlockchainSettings_CoinSettings">%s 设置</string>
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">正在启动Tor...</string>
+    <string name="Tor_Status_Error">启动Tor时出错！</string>
+    <string name="TorPage_Connecting">正在连接...</string>
+    <string name="TorPage_Connected">已连接</string>
+    <string name="TorPage_Failed">失败</string>
+    <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="TorPage_Title">Tor连接</string>
     <string name="TorPage_Description">在创建或恢复前启用Tor以便实现网络的安全连接。\n\nTor可以保护您钱包上的浏览活动。在设置中启用权限以使用Tor浏览器。</string>
     <!-- Account Types -->
@@ -299,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast_Subtitle">0 - 2小时（推荐）</string>
-    <string name="CoinOption_RestoreSourceDescription">API 源链接： \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">API 源链接： \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1- 12 小时</string>
-    <string name="CoinOption_AddressFormatTitle">选择地址格式</string>
+    <string name="CoinOption_AddressFormatTitle">地址格式</string>
     <string name="CoinOption_SyncModeTitle">恢复参数</string>
     <string name="CoinOption_bip44_Subtitle">更旧（以1开头...）</string>
     <string name="CoinOption_bip49_Subtitle">流行（以3开头...）</string>
@@ -329,6 +344,7 @@
     <string name="Charts_Volume">量</string>
     <string name="Charts_Price">价格</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
+    <string name="Charts_LatestNews">最新消息</string>
     <!--Rate list-->
     <string name="RateList_updated">已更新\n%s</string>
 </resources>

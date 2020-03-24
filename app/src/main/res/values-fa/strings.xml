@@ -9,16 +9,20 @@
     <string name="Alert_Success">موفقیت</string>
     <string name="Alert_Copied">کپی شد</string>
     <string name="Alert_Loading">درحال بارگذاری...</string>
+    <string name="Alert_Restart">راه اندازی مجدد</string>
     <string name="Button_Cancel">کنسل</string>
     <string name="Button_Create">به وجود آوردن</string>
     <string name="Button_Next">بعدي</string>
     <string name="Button_Restore">بازگرداني</string>
     <string name="Button_Enable">فعال کردن</string>
+    <string name="Button_Disable">غیرفعال</string>
     <string name="Button_Back">برگشت</string>
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Button_Done">انجام شد</string>
+    <string name="Button_Retry">دوباره امتحان کنید</string>
+    <string name="Button_Change">تغییر</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
@@ -198,20 +202,20 @@
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
-    <string name="SettingsSecurity_BlockchainSettings">تنظیمات زنجیره بلوکی</string>
     <string name="SettingsSecurity_EnableTor">فعال کردن Tor</string>
+    <string name="SettingsSecurity_AppRestartWarning">این اقدام کیف پول غیر قابل توقف را مجدداً راه اندازی می کند.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor می تواند از فعالیت های مرورگر شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">شرايط &amp; حريم خصوصي:</string>
-    <string name="SettingsAbout_TermsPrivacyText">این برنامه از چندین وب سایت قابل دسترسی است. این به عملکرد سرورهای وب یا پرسنل پشتیبانی فنی بستگی ندارد.
-\n\nهرجا که اینترنت وجود داشته باشد، کار می کند. هیچ نهادی نمی تواند این برنامه را از کار بیندازد یا مانع دسترسی کسی به آن شود.
-\n\nمبلغ شما به طور ایمن در خود تلفن ذخیره می شود ، نه هیچ جای دیگر.
-\n\nتهیه نسخه پشتیبان از کلید و خصوصی نگهداشتن آن مسئولیت شماست. هرگز آن را به کسی نشان ندهید. در صورت گم کردن ، فراموش کردن یا دزدیده شدن آن، پول شما توسط شخصی که کلید شما را دارد می تواند استفاده شود.
-\n\nتلفن خود را رمزگشایی نکنید ، برنامه ها را از منابع ناشناخته (غیر قابل اعتماد) نصب نکنید، دستگاه خود را به افراد غیرقابل اعتماد ندهید و سیستم عامل را بر روی تلفن خود به روز نگه دارید. امنیت کیف پول شما به این بستگی دارد.
-\n\nتمام کد ی که به این برنامه قدرت می دهد از ابتدا برای تحقیق عموم آزاد بود. ما سعی کردیم ایمن ترین و غیر متمرکزترین کیف پولی را که می توانیم بسازیم ، با اینحال هیچ تضمینی برای عدم وجود مشکلات نرم افزاری ناخواسته وجود ندارد. این بدین معنی است که ، این کیف پول می تواند از هر نوع برنامه کیف پول تلفن هوشمند موجود ایمن تر باشد.
-\n\nبعضی از اطلاعات برنامه غیر خصوصی عمومی مانند نرخ ارز در ذخیره سازی غیرمتمرکز (IPFS) ذخیره می شوند.</string>
+    <string name="SettingsAbout_TermsPrivacyText">این برنامه به صورت همتا به همتا است. کارکرد این برنامه به عملکرد سرور وب یا پرسنل پشتیبانی فنی بستگی ندارد. \n\n تا زمانی که اینترنت وجود داشته باشد ، در همه جا کار می کند. هیچ نهادی نمی تواند این برنامه را از کار بیندازد یا کسی را از استفاده از آن بازدارد.
+\n\nکلیدهای رمزنگاری محرمانه که سرمایه رمزنگاری شده شما را کنترل می کنند ، کاملا مطمین در گوشی ذخیره می شوند ، و نه در هیچ جای دیگر.
+\n\nمسئولیت تهیه نسخه پشتیبان از کلیدهای رمزنگاری محرمانه و خصوصی نگه داشتن آنها با شما است. هرگز کلیدهای خود را به کسی نشان ندهید. در صورت گم شدن، فراموش کردن یا دزدیده شدن کلید ها، سرمایه شما توسط شخصی که کلید شما را پیدا می کند قابل استفاده است.
+\n\nتلفن خود را جیلبریک نکنید ، برنامه ای را از منابع ناشناخته (غیر قابل اعتماد) نصب نکنید ، موبایل خود را به افراد غیرقابل اعتماد ندهید و سیستم عامل تلفن خود را به روز نگه دارید. امنیت کیف پول شما به اینها بستگی دارد.
+\n\n کل کد قدرت این برنامه در معرض بررسی عموم قرار دارد. در حالی که ما اعتقاد داریم که این برنامه به طور قابل توجهی از دیگر برنامه های کیف پول گوشی های هوشمند ایمن تر است ، هیچ تضمینی برای عدم وجود مشکلات نرم افزاری ناخواسته وجود ندارد.
+\n\nتمام داده های شما برای مثال تراکنش ها ، موجودی و غیره فقط در برنامه کیف پول شما موجود است و هرگز دستگاه شما را ترک نمی کند.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
@@ -249,7 +253,7 @@
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">مدیر سكه</string>
+    <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
     <string name="ManageCoins_save">ذخیره</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s کیف پول</string>
     <string name="ManageCoins_Alert_CantCreateDescription">در این مرحله ، کیف پول قادر به ایجاد حساب های کیف پول جدید %s نیست. شما فقط قادر به بازیابی کیف پول موجود هستید.</string>
@@ -262,6 +266,7 @@
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
+    <string name="ManageKeys_AdvancedSettings">تنظیمات پیشرفته</string>
     <string name="ManageKeys_Create">به وجود آوردن</string>
     <string name="ManageKeys_Restore">بازیابی</string>
     <string name="ManageKeys_Delete">پاک کردن</string>
@@ -282,16 +287,25 @@
     <string name="AddCoin_Description">شما کیف پولی ندارید که بتواند ذخیره کند%1$s. این برنامه می تواند یک کیف پول جدید برای شما ایجاد کند. برای ایجاد کیف پول جدید از دکمه به وجود آوردن زیر استفاده کنید. \n\n شما می توانید از کیف پول جدید برای سکه های زیر استفاده کنید:%2$s. \n\n همچنین می توانید از کلید کیف پول %3$s موجود استفاده کنید اگر دارید. برای این کار از دکمه بازیابی استفاده کنید.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">تنظیمات پیشرفته</string>
+    <string name="BlockchainSettingsList_Description">برای تغییر دادن تنظیمات ، باید سکه های لیست شده را فعال کنید ، سایر سکه ها تنظیمات ندارند</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">تنظيمات</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">ساختار آدرس</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">تغییر به %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">این اقدام به برنامه غیرقابل توقف نیاز دارد تا بتواند خود را با بیت کوین زنجیره بلوکی همزمان کند. تراکنش های فعلی بیت کوین شما دیگر قابل مشاهده نخواهد بود. تغییر آن به تنظیمات قبلی ، همه چیز را پس از تنظیم مجدد برنامه به زنجیره بلوکی باز می گرداند.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %1$s مجدداً همزمان سازی کند. \n\n وقتی ساختار آدرس را برای %2$s تغییر می دهید ، موجودی فعلی و تاریخچه تراکنش ها دیگر در صفحه موجودی قابل مشاهده نخواهد بود. برگرداندن آن به تنظیمات قبلی ، همه چیز را فقط پس از اینکه کیف پول خود را با زنجیره بلوکی مجدداً همزمانی سازی کردید ، به حالت قبل برمی گرداند. ما به شما توصیه می کنیم اگر مطمئن نیستید که این چیست ، آن را تغییر ندهید.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">در صورت فعال کردن هر یک از این نشانه ها ، این برنامه به برنامه غیرقابل توقف نیاز دارد تا بتواند مجدداً خود را با بیت کوین ، بیت کوین نقد و زنجیره های بلوکی ارزهای رمزنگاری شده بازنویسی کند. تراکنش ها یا مانده حساب شما تحت تأثیر قرار نخواهد گرفت. \n\n توصیه می کنیم در صورت عدم اطمینان از انجام این کار، این تنظیمات را تغییر ندهید.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <string name="BlockchainSettings_CoinSettings">%s تنظیمات</string>
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">درحال راه اندازی Tor...</string>
+    <string name="Tor_Status_Error">خطا در راه اندازی Tor!</string>
+    <string name="TorPage_Connecting">در حال اتصال…</string>
+    <string name="TorPage_Connected">ارتباط برقرار شد</string>
+    <string name="TorPage_Failed">ناموفق</string>
+    <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="TorPage_Title">ارتباط Tor</string>
     <string name="TorPage_Description">قبل از ایجاد یا بازیابی Tor را برای اتصال ایمن به شبکه فعال کنید. \n\n Tor می تواند از فعالیتهای مرور شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
     <!-- Account Types -->
@@ -299,9 +313,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast_Subtitle">۰-۲ ساعت (توصیه شده)</string>
-    <string name="CoinOption_RestoreSourceDescription">لینک منابع API: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">لینک منبع API: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
-    <string name="CoinOption_AddressFormatTitle">فرمت آدرس را انتخاب کنید</string>
+    <string name="CoinOption_AddressFormatTitle">ساختار آدرس</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
     <string name="CoinOption_bip44_Subtitle">قدیمی تر (شروع با ۱...)</string>
     <string name="CoinOption_bip49_Subtitle">محبوب (شروع با ۳...)</string>
@@ -329,6 +343,7 @@
     <string name="Charts_Volume">درجه صدا</string>
     <string name="Charts_Price">قیمت</string>
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
+    <string name="Charts_LatestNews">آخرین اخبار</string>
     <!--Rate list-->
     <string name="RateList_updated">به روز شده \n%s</string>
 </resources>

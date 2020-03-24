@@ -9,16 +9,20 @@
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
     <string name="Alert_Loading">로딩중...</string>
+    <string name="Alert_Restart">재시작</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Create">생성하기</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_Enable">활성화</string>
+    <string name="Button_Disable">비활성화</string>
     <string name="Button_Back">뒤로</string>
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
     <string name="Button_Done">완료</string>
+    <string name="Button_Retry">재시도</string>
+    <string name="Button_Change">변경하기</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -198,26 +202,21 @@
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
-    <string name="SettingsSecurity_BlockchainSettings">블록 체인 설정</string>
     <string name="SettingsSecurity_EnableTor">토르 활성화</string>
+    <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기위한 권한을 허용해 주세요.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">용어 및 정책:</string>
-    <string name="SettingsAbout_TermsPrivacyText">이 응용 프로그램은 peer-to-peer방식입니다. 작동하기 위해서 어떠한 웹 서버 또는 기술 지원 담당자에게 의존하지 않습니다.
-
-\n\n인터넷이 되는 어느 곳에서나 작동합니다. 누구도 이 어플을 작동하는 것을 막을 수 없고 그것을 사용하기 위해 누군가를 차단할 수 없습니다.
-
-\n\n당신의 자금은 안전하게 다른 어떤한 곳도 아닌 핸드폰 자체에 저장됩니다.
-
-\n\n너의 비밀 키를 백업하고 그것을 비공개로 지키는 것은 당신의 책임에 달려있습니다. 절대로 누군가에게 보여주지 마세요. 만약에 잃어버린다면, 당신의 비밀 키를 가진 사람이 당신의 자금을 훔치거나 잃어버리게 할 수 있습니다.
-
-\n\n당신의 핸드폰을 탈옥하지마세요, 알려지지 않은 (믿을 수 없는) 출처로부터의 어플을 설치하지마세요, 당신의 핸드폰을 믿을 수 없는 사람에게 주지 마세요, 그리고 당신의 핸드폰의 운영체제을 최신버전으로 유지하세요. 이것은 당신의 지갑의 안전을 지켜줄 것입니다. 
-
-\n\n이 어플을 작동시키는 전체코드는 시작할 때부터 대중의 감시에 공개됩니다. 의도하지 않은 소프트웨어 문제들이 없다는 보장은 없지만, 우리는 가장 안전하고 분권화된 지갑을 만들기 위해 시도할 것입니다. 즉, 이 지갑은 어떠한 스마트폰 어플보다 안전할 것입니다.
-
-\n\n통화 환율과 같은 총괄적이고 사적이지 않은 데이터는 분산된 저장소(IPFS)에 저장될 것입니다.</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no unintended software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
@@ -255,7 +254,7 @@
     <string name="Hud_Network_Issue">네트워크에 문제가 있습니다. 잠시 후 다시 시도해 주세요</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">지갑</string>
+    <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">저장</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s 지갑</string>
     <string name="ManageCoins_Alert_CantCreateDescription">언스탑퍼블은 현재 새로운 %s 지갑을 만들 수 없습니다. 귀하께서는 기존 항목만 복원이 가능합니다.</string>
@@ -269,6 +268,7 @@
 \n\n귀하께서 호들러 이시면, 이 기능을 쓸 수 있고 이러한 거래를 귀하께 보냄으로써 귀하의 비트코인을 강제적으로 호들링 하게 할 수 있습니다.\n\n실험적인 기능의 한번의 최대 거래 양은 0.5 비트코인으로 제한되있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
+    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
@@ -289,16 +289,25 @@
     <string name="AddCoin_Description">귀하께서는 %1$s를 저장할 수 있는 지갑을 가지고 계시지 않습니다. 이 앱은 귀하를 위해 새로운 지갑을 만들어 드릴 수 있습니다. 새로운 지갑을 만들기 위해 밑에있는 생성하기 버튼을 사용하십시오.\n\n귀하께서는 다음 %2$s에 대한 새로운 지갑을 사용 하실 수 있을 것 입니다.\n\n귀하께서는 또한 기존에 가지고 계셨던%3$s 지갑 암호를 사용하실 수 있습니다. 복원하기 버튼을 누르십시오.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
+    <!-- Blockchain Settings List -->
+    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
+    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_Title">설정</string>
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">이 작업은 언스타퍼블 앱이 비트코인 블록 체인과 다시 동기화 되어야 합니다. 현재 비트코인 거래는 더이상 보실 수 없습니다. 이전 설정으로 다시 변경하려면 앱이 블록 체인과 다시 동기화 된 후에 모든 것이 다시 원상복귀 됩니다.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 작업은 귀하께서 이러한 토큰을 활성화 하신 경우 언스타퍼블 앱이 비트코인, 비트코인 Cash 및 Dash 블록 체인과 다시 동기화 되어야 합니다. 귀하의 잔액 또는 거래에는 영향을 미치지 않습니다.\n\n저희는 이 기능이 확실치 않을 경우 설정을 변경하지 않는 것을 권장합니다.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">블록 체인</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <!-- Tor Connection -->
+    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <!-- Tor -->
+    <string name="Tor_Status_Starting">Starting Tor...</string>
+    <string name="Tor_Status_Error">Error starting Tor !</string>
+    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connected">Connected</string>
+    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">토르 연결</string>
     <string name="TorPage_Description">네트워크를 안전하게 연결하기 위해서는 토르를 활성화 하거나 복원하기 전에 \n\n토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기 위한 권한을 허용해 주세요.</string>
     <!-- Account Types -->
@@ -306,9 +315,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">옵션 복구</string>
     <string name="CoinOption_Fast_Subtitle">0-2 시간 (권장)</string>
-    <string name="CoinOption_RestoreSourceDescription">API 출처 링크: \nbtc.horizontalsystems.xyz/apg \ndash.horizontalsystems.xyz/apg \ncashexplorer.bitcoin.com/api/</string>
+    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1-12 시간</string>
-    <string name="CoinOption_AddressFormatTitle">주소 형식을 선택해 주세요</string>
+    <string name="CoinOption_AddressFormatTitle">Address format</string>
     <string name="CoinOption_SyncModeTitle">매개 변수 복원</string>
     <string name="CoinOption_bip44_Subtitle">더 오래된 (1부터 시작)</string>
     <string name="CoinOption_bip49_Subtitle">인기있는 (3부터 시작)</string>
@@ -336,6 +345,7 @@
     <string name="Charts_Volume">음량</string>
     <string name="Charts_Price">금액</string>
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
+    <string name="Charts_LatestNews">Latest News</string>
     <!--Rate list-->
     <string name="RateList_updated">업데이트되었습니다\n%s</string>
 </resources>
