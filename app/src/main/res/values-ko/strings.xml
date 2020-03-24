@@ -295,19 +295,19 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">이 변경 후 지갑은 %1$s 블록체인과 다시 동기화 되어야합니다.\n\n%2$s 의 주소 형식을 변경하실 때에 현재 잔액 및 거래 내역이 더 이상 잔액 탭에 표기되지 않습니다. 이전 설정으로 다시 변경하시면 지갑이 블록체인과 다시 동기화된 후 모든 것을 다시 가져옵니다. 저희는 그것이 확실치 않을시에 변경하지 않는 것을 권장합니다.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">블록 체인</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <string name="BlockchainSettings_CoinSettings">%s 설정</string>
     <!-- Tor -->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="Tor_Status_Starting">토르 시작중...</string>
+    <string name="Tor_Status_Error">토르 시작 오류 !</string>
+    <string name="TorPage_Connecting">연결중...</string>
+    <string name="TorPage_Connected">연결됨</string>
+    <string name="TorPage_Failed">실패</string>
+    <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="TorPage_Title">토르 연결</string>
     <string name="TorPage_Description">네트워크를 안전하게 연결하기 위해서는 토르를 활성화 하거나 복원하기 전에 \n\n토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기 위한 권한을 허용해 주세요.</string>
     <!-- Account Types -->
@@ -315,9 +315,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">옵션 복구</string>
     <string name="CoinOption_Fast_Subtitle">0-2 시간 (권장)</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">API 출처 링크: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1-12 시간</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">주소 형식</string>
     <string name="CoinOption_SyncModeTitle">매개 변수 복원</string>
     <string name="CoinOption_bip44_Subtitle">더 오래된 (1부터 시작)</string>
     <string name="CoinOption_bip49_Subtitle">인기있는 (3부터 시작)</string>
@@ -345,7 +345,7 @@
     <string name="Charts_Volume">음량</string>
     <string name="Charts_Price">금액</string>
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">최신 뉴스</string>
     <!--Rate list-->
     <string name="RateList_updated">업데이트되었습니다\n%s</string>
 </resources>
