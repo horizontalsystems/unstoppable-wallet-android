@@ -302,11 +302,11 @@
     <string name="BlockchainSettings_CoinSettings">%s Einstellungen</string>
     <!-- Tor -->
     <string name="Tor_Status_Starting">Tor starten...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
+    <string name="Tor_Status_Error">Fehler beim Starten von Tor!</string>
+    <string name="TorPage_Connecting">Verbinde…</string>
+    <string name="TorPage_Connected">Verbunden</string>
     <string name="TorPage_Failed">Fehlgeschlagen</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="TorPage_Title">Tor-Verbindung</string>
     <string name="TorPage_Description">Vor dem Erstellen oder Wiederherstellen aktivieren Sie Tor für eine sichere Verbindung mit dem Netzwerk.\n\nTor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
     <!-- Account Types -->
@@ -314,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Optionen Wiederherstellen</string>
     <string name="CoinOption_Fast_Subtitle">0-2 Stunden (Empfohlen)</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">Link API-Quelle: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1–12 Stunden</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">Adressformat</string>
     <string name="CoinOption_SyncModeTitle">Parameter wiederherstellen</string>
     <string name="CoinOption_bip44_Subtitle">Älter (beginnt mit 1 ...)</string>
     <string name="CoinOption_bip49_Subtitle">Beliebt (beginnt mit 3 ...)</string>
@@ -344,7 +344,7 @@
     <string name="Charts_Volume">Lautstärke</string>
     <string name="Charts_Price">Preis</string>
     <string name="Charts_Error_NotAvailable">Diagramm nicht verfügbar</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">Neueste Nachrichten</string>
     <!--Rate list-->
     <string name="RateList_updated">aktualisiert\n%s</string>
 </resources>
