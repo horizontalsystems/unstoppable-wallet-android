@@ -14,6 +14,7 @@ import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThemeStorage
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
+import java.time.Instant
 
 class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
 
@@ -40,6 +41,8 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
     private val BITCOIN_DERIVATION = "bitcoin_derivation"
     private val TOR_ENABLED = "tor_enabled"
+    private val APP_LAUNCH_COUNT = "app_launch_count"
+    private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
 
     val gson by lazy { Gson() }
 
@@ -243,5 +246,17 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         set(enabled) {
             //keep using commit() for synchronous storing
             App.preferences.edit().putBoolean(TOR_ENABLED, enabled).commit()
+        }
+
+    override var appLaunchCount: Int
+        get() = App.preferences.getInt(APP_LAUNCH_COUNT, 0 )
+        set(value) {
+            App.preferences.edit().putInt(APP_LAUNCH_COUNT, value).apply()
+        }
+
+    override var rateAppLastRequestTime: Long
+        get() = App.preferences.getLong(RATE_APP_LAST_REQ_TIME, 0)
+        set(value) {
+            App.preferences.edit().putLong(RATE_APP_LAST_REQ_TIME, value).apply()
         }
 }

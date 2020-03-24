@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -136,8 +137,8 @@ class BalancePresenter(
         interactor.clear()
     }
 
-    override fun onResume() {
-        interactor.notifyPageActive()
+    override fun onResume(context: Context) {
+        interactor.notifyPageActive(context)
     }
 
     override fun onPause() {

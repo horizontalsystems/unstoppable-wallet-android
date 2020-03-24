@@ -123,7 +123,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     override fun onResume() {
         super.onResume()
-        viewModel.delegate.onResume()
+        viewModel.delegate.onResume(this.requireContext())
     }
 
     override fun onPause() {
