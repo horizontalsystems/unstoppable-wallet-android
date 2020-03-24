@@ -9,20 +9,20 @@
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
     <string name="Alert_Loading">로딩중...</string>
-    <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Restart">재시작</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Create">생성하기</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_Enable">활성화</string>
-    <string name="Button_Disable">Disable</string>
+    <string name="Button_Disable">비활성화</string>
     <string name="Button_Back">뒤로</string>
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
     <string name="Button_Done">완료</string>
-    <string name="Button_Retry">Retry</string>
-    <string name="Button_Change">Change</string>
+    <string name="Button_Retry">재시도</string>
+    <string name="Button_Change">변경하기</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -203,9 +203,9 @@
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
     <string name="SettingsSecurity_EnableTor">토르 활성화</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기위한 권한을 허용해 주세요.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
