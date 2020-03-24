@@ -9,20 +9,20 @@
     <string name="Alert_Success">Completado</string>
     <string name="Alert_Copied">Copiado</string>
     <string name="Alert_Loading">Cargando...</string>
-    <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Restart">Reiniciar</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Create">Crear</string>
     <string name="Button_Next">Siguiente</string>
     <string name="Button_Restore">Restaurar</string>
     <string name="Button_Enable">Habilitar</string>
-    <string name="Button_Disable">Disable</string>
+    <string name="Button_Disable">Desactivar</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">Aceptar</string>
     <string name="Button_Share">Compartir</string>
     <string name="Button_Done">Listo</string>
-    <string name="Button_Retry">Retry</string>
-    <string name="Button_Change">Change</string>
+    <string name="Button_Retry">Reintentar</string>
+    <string name="Button_Change">Cambiar</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s monedero</string>
@@ -203,9 +203,9 @@
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor puede proteger tus actividades de navegación en la cartera. Autoriza el permiso para usar el navegador tor en la configuración.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones de la aplicación Monedero Unstoppable están desactivadas. Debe activarlas para que Tor funcione.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
