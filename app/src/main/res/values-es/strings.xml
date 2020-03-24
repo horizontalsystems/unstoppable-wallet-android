@@ -306,14 +306,14 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <string name="BlockchainSettings_CoinSettings">%s Ajustes</string>
     <!-- Tor -->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="Tor_Status_Starting">Iniciando Tor...</string>
+    <string name="Tor_Status_Error">¡Error iniciando Tor!</string>
+    <string name="TorPage_Connecting">Conectando…</string>
+    <string name="TorPage_Connected">Conectado</string>
+    <string name="TorPage_Failed">Falló</string>
+    <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="TorPage_Title">Conexión Tor</string>
     <string name="TorPage_Description">Antes de crear o restaurar habilite Tor para una conexión segura con la red. \n\nTor puede proteger sus actividades de navegación en el monedero. Autoriza el permiso para usar el navegador Tor en la configuración.</string>
     <!-- Account Types -->
@@ -321,9 +321,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
     <string name="CoinOption_Fast_Subtitle">0-2 horas (Recomendado)</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">Enlace de la fuente API: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1-12 horas</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">Formato de dirección</string>
     <string name="CoinOption_SyncModeTitle">Restaurar los parámetros</string>
     <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Popular (comenzar con 3...)</string>
@@ -351,7 +351,7 @@
     <string name="Charts_Volume">Volumen</string>
     <string name="Charts_Price">Precio</string>
     <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">Últimas noticias</string>
     <!--Rate list-->
     <string name="RateList_updated">actualizado\n%s</string>
 </resources>
