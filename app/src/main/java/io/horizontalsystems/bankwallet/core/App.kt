@@ -187,6 +187,8 @@ class App : CoreApp() {
                 onFire = { activity, requestCode  -> LockScreenModule.startForUnlock(activity, requestCode)}
         )
 
+        rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
+
         val nightMode = if (CoreApp.themeStorage.isLightModeOn)
             AppCompatDelegate.MODE_NIGHT_NO else
             AppCompatDelegate.MODE_NIGHT_YES

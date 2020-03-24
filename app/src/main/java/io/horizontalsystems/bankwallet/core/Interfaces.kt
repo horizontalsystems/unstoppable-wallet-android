@@ -62,6 +62,8 @@ interface ILocalStorage {
     var encryptedSampleText: String?
     var bitcoinDerivation: AccountType.Derivation?
     var torEnabled: Boolean
+    var appLaunchCount: Int
+    var rateAppLastRequestTime: Long
 
     fun clear()
 }
@@ -431,11 +433,10 @@ interface INetManager {
 }
 
 interface IRateAppManager {
-    fun onBalancePageActive()
+    fun onBalancePageActive(context: Context)
     fun onBalancePageInactive()
-    //fun onLaunch()
-    //fun onBecomeActive()
-    //fun onResignActive()
+    fun onAppLaunch()
+    fun onAppBecomeActive()
 }
 
 enum class FeeRatePriority(val value: Int) {

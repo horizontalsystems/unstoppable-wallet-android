@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -145,8 +146,8 @@ class BalanceInteractor(
         marketInfoDisposables.clear()
     }
 
-    override fun notifyPageActive() {
-        rateAppManager.onBalancePageActive()
+    override fun notifyPageActive(context: Context) {
+        rateAppManager.onBalancePageActive(context)
     }
 
     override fun notifyPageInactive() {
