@@ -31,6 +31,11 @@
     <string name="Welcome_SecurityCenter">Centre de Sécurité</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
+    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
+    <string name="RateApp_Button_RateIt">Rate It</string>
+    <string name="RateApp_Button_NotNow">Not now</string>
     <!--Create-->
     <string name="Create_Title">Nouveau portefeuille</string>
     <string name="Create_Description">Sélectionnez une cryptomonnaie pour commencer. Vous pourrez ajouter d\'autres cryptomonnaies plus tard.</string>
