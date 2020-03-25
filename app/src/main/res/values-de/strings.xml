@@ -9,20 +9,20 @@
     <string name="Alert_Success">Erfolgreich</string>
     <string name="Alert_Copied">Kopiert</string>
     <string name="Alert_Loading">Wird geladen ...</string>
-    <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Restart">Neustart</string>
     <string name="Button_Cancel">Abbrechen</string>
     <string name="Button_Create">Erstellen</string>
     <string name="Button_Next">Weiter</string>
     <string name="Button_Restore">Wiederherstellen</string>
     <string name="Button_Enable">Aktivieren</string>
-    <string name="Button_Disable">Disable</string>
+    <string name="Button_Disable">Deaktivieren</string>
     <string name="Button_Back">Zurück</string>
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Teilen</string>
     <string name="Button_Done">Fertig</string>
     <string name="Button_Retry">Wiederholen</string>
-    <string name="Button_Change">Change</string>
+    <string name="Button_Change">Ändern</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s wallet</string>
@@ -203,20 +203,20 @@
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_EnableTor">Tor aktivieren</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Diese Aktion wird das Unstoppable Wallet neu starten.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Die Benachrichtigungen für die Unstoppable Wallet-App sind deaktiviert. Sie müssen diese einschalten, damit Tor überhaupt funktionieren kann.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">ANB &amp; Datenschutz:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no unintended software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">Diese App basiert auf dem Peer-to-Peer-Prinzip. Das bietet den Vorteil, dass die App zum Funktionieren nicht auf bestimmte Webserver oder technischem Supportpersonal abhängig ist.
+\n\nDie App funktioniert überall. Sie benötigen nur einen Internetzugang. Niemand kann die App stoppen oder jemanden zensieren, sie zu nutzen.
+\n\nDie geheimen kryptographischen Key, die Ihr kryptographisches Guthaben verwalten, werden sicher auf dem Mobiltelefon gespeichert, nirgendwo sonst.
+\n\nEs liegt in Ihrer Verantwortung, den geheimen kryptographischen Key zu sichern und ihn gut aufzubewahren. Zeigen Sie ihn niemandem. Wenn ein Key verloren geht, Sie ihn vergessen oder dieser gestohlen wird, kann Ihr Guthaben von demjenigen ausgegeben werden, der den Key besitzt.
+\n\nFühren Sie auf Ihrem Telefon keinen Jailbreak durch. Installieren Sie keine Apps aus unbekannten (nicht vertrauenswürdigen) Quellen. Geben Sie das Mobiltelefon keiner nicht vertrauenswürdigen Person und aktualisieren Sie das Betriebssystem Ihres Mobiltelefons regelmäßig. Die Sicherheit Ihres Wallets hängt davon ab.
+\n\nDer gesamte Code dieser App ist öffentlich einsehbar. Obwohl wir glauben, dass diese App wesentlich sicherer als jede andere Smartphone Wallet App ist, gibt es keine Garantie, dass es keine unbeabsichtigten Softwareprobleme gibt.
+\n\nAlle Ihre Daten, d.h. Transaktionen, Guthaben usw., sind nur für Ihre Wallet-App verfügbar und verlassen niemals Ihr Gerät.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - eine krypto Wallet, die ich empfehle</string>
@@ -254,7 +254,7 @@
     <string name="Hud_Network_Issue">Es sind Netzwerkprobleme aufgetreten. Bitte versuchen Sie es erneut</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Choose Coins</string>
+    <string name="ManageCoins_title">Coins auswählen</string>
     <string name="ManageCoins_save">Speichern</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Wallet</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Im Moment kann das Wallet keine neuen %s Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
@@ -290,23 +290,23 @@
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Blockchain Settings List -->
     <string name="BlockchainSettingsList_Title">Erweiterte Einstellungen</string>
-    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+    <string name="BlockchainSettingsList_Description">Um die Einstellungen zu ändern, müssen Sie die gelisteten Coins aktivieren, andere Coins haben keine Einstellungen</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adressformatierung</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Ändern zu %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %1$s Blockchain neu synchronisieren.\n\nWenn Sie das Adressformat für %2$s ändern, sind der aktuelle Saldo und die Transaktionshistorie auf der Registerkarte Kontostand nicht mehr sichtbar. Wenn Sie es auf die vorherige Einstellung zurücksetzen, wird alles wieder hergestellt, nachdem sich das Wallet mit der Blockchain synchronisiert hat. Wir empfehlen, dies nicht zu ändern, falls Sie nicht sicher sind, was das ist.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Einstellungen</string>
     <!-- Tor -->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
+    <string name="Tor_Status_Starting">Tor starten...</string>
+    <string name="Tor_Status_Error">Fehler beim Starten von Tor!</string>
+    <string name="TorPage_Connecting">Verbinde…</string>
+    <string name="TorPage_Connected">Verbunden</string>
     <string name="TorPage_Failed">Fehlgeschlagen</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="TorPage_Title">Tor-Verbindung</string>
     <string name="TorPage_Description">Vor dem Erstellen oder Wiederherstellen aktivieren Sie Tor für eine sichere Verbindung mit dem Netzwerk.\n\nTor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
     <!-- Account Types -->
@@ -314,9 +314,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Optionen Wiederherstellen</string>
     <string name="CoinOption_Fast_Subtitle">0-2 Stunden (Empfohlen)</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">Link API-Quelle: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1–12 Stunden</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">Adressformat</string>
     <string name="CoinOption_SyncModeTitle">Parameter wiederherstellen</string>
     <string name="CoinOption_bip44_Subtitle">Älter (beginnt mit 1 ...)</string>
     <string name="CoinOption_bip49_Subtitle">Beliebt (beginnt mit 3 ...)</string>
@@ -344,7 +344,7 @@
     <string name="Charts_Volume">Lautstärke</string>
     <string name="Charts_Price">Preis</string>
     <string name="Charts_Error_NotAvailable">Diagramm nicht verfügbar</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">Neueste Nachrichten</string>
     <!--Rate list-->
     <string name="RateList_updated">aktualisiert\n%s</string>
 </resources>

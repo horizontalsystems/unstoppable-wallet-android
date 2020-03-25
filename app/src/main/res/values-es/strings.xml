@@ -9,20 +9,20 @@
     <string name="Alert_Success">Completado</string>
     <string name="Alert_Copied">Copiado</string>
     <string name="Alert_Loading">Cargando...</string>
-    <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Restart">Reiniciar</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Create">Crear</string>
     <string name="Button_Next">Siguiente</string>
     <string name="Button_Restore">Restaurar</string>
     <string name="Button_Enable">Habilitar</string>
-    <string name="Button_Disable">Disable</string>
+    <string name="Button_Disable">Desactivar</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">Aceptar</string>
     <string name="Button_Share">Compartir</string>
     <string name="Button_Done">Listo</string>
-    <string name="Button_Retry">Retry</string>
-    <string name="Button_Change">Change</string>
+    <string name="Button_Retry">Reintentar</string>
+    <string name="Button_Change">Cambiar</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s monedero</string>
@@ -203,20 +203,27 @@
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor puede proteger tus actividades de navegación en la cartera. Autoriza el permiso para usar el navegador tor en la configuración.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones de la aplicación Monedero Unstoppable están desactivadas. Debe activarlas para que Tor funcione.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Términos &amp; privacidad:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no unintended software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">Esta aplicación es de servidor a servidor. No depende de ningún servidor web o personal de soporte técnico para funcionar.
+
+\n\nFunciona en cualquier lugar siempre que haya conexión a internet. Ninguna entidad puede bloquear el funcionamiento de esta aplicación o impedir el acceso de un usuario.
+
+\n\nLas claves secretas criptográficas que controlan sus fondos de criptomonedas están almacenados de forma en el propio teléfono y en ningún otro lugar.
+
+\n\nEs su responsabilidad recordar su clave secreta y mantenerla en privado. Nunca la muestre a nadie. Si la pierde, la olvida o es sustraída, sus fondos pueden ser utilizados por la persona que consiga su clave secreta.
+
+\n\nNo modifique la seguridad del software de su teléfono, no instale aplicaciones de orígenes desconocidos (no confiable), no entregue su dispositivo a desconocidos y mantenga actualizado el sistema operativo de tu teléfono. La seguridad de su monedero depende de ello.
+
+\n\nLa totalidad del código que soporta esta aplicación está abierta al escrutinio público desde el inicio de la aplicación. Creemos que 
+ nuestra aplicación es significativamente más segura que cualquier otra aplicación de monedero para teléfonos inteligente en el mercado; sin embargo, no hay ninguna garantía de que no se produzca algún problema de software no deseado.
+
+\n\nToda su información, por ejemplo transacciones, balances, etc., están disponibles solo dentro de su aplicación de monedero y nunca abandona su dispositivo.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
@@ -254,7 +261,7 @@
     <string name="Hud_Network_Issue">Problemas de red. Inténtelo de nuevo</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Choose Coins</string>
+    <string name="ManageCoins_title">Elegir monedas</string>
     <string name="ManageCoins_save">Guardar</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Monedero</string>
     <string name="ManageCoins_Alert_CantCreateDescription">En este momento Unstoppable no es capaz de crear nuevas cuentas de monederos %s. Solo puede restaurar la existente.</string>
@@ -290,23 +297,23 @@
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Blockchain Settings List -->
     <string name="BlockchainSettingsList_Title">Configuración avanzada</string>
-    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+    <string name="BlockchainSettingsList_Description">Para cambiar la configuración, debe habilitar las monedas listadas, otras monedas no tienen configuración</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Formato de Dirección</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Cambiar a %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %1$s.\n\nCuando cambie el formato de dirección para %2$s, el saldo actual y el historial de transacciones dejarán de ser visibles en la pestaña de saldo. Cambiarlo de vuelta a la configuración anterior traerá todo de vuelta después de que el monedero se resincronice a sí mismo con el blockchain. Recomendamos no cambiarlo si no está seguro de lo que es.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <string name="BlockchainSettings_CoinSettings">%s Ajustes</string>
     <!-- Tor -->
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
-    <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
+    <string name="Tor_Status_Starting">Iniciando Tor...</string>
+    <string name="Tor_Status_Error">¡Error iniciando Tor!</string>
+    <string name="TorPage_Connecting">Conectando…</string>
+    <string name="TorPage_Connected">Conectado</string>
+    <string name="TorPage_Failed">Falló</string>
+    <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="TorPage_Title">Conexión Tor</string>
     <string name="TorPage_Description">Antes de crear o restaurar habilite Tor para una conexión segura con la red. \n\nTor puede proteger sus actividades de navegación en el monedero. Autoriza el permiso para usar el navegador Tor en la configuración.</string>
     <!-- Account Types -->
@@ -314,9 +321,9 @@
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
     <string name="CoinOption_Fast_Subtitle">0-2 horas (Recomendado)</string>
-    <string name="CoinOption_RestoreSource">API source link: \n%s</string>
+    <string name="CoinOption_RestoreSource">Enlace de la fuente API: \n%s</string>
     <string name="CoinOption_Slow_Subtitle">1-12 horas</string>
-    <string name="CoinOption_AddressFormatTitle">Address format</string>
+    <string name="CoinOption_AddressFormatTitle">Formato de dirección</string>
     <string name="CoinOption_SyncModeTitle">Restaurar los parámetros</string>
     <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Popular (comenzar con 3...)</string>
@@ -344,7 +351,7 @@
     <string name="Charts_Volume">Volumen</string>
     <string name="Charts_Price">Precio</string>
     <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
-    <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_LatestNews">Últimas noticias</string>
     <!--Rate list-->
     <string name="RateList_updated">actualizado\n%s</string>
 </resources>
