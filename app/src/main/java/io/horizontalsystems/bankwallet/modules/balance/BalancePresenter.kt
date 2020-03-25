@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -8,7 +7,6 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.xrateskit.entities.MarketInfo
-import okhttp3.internal.notify
 import java.math.BigDecimal
 import java.util.concurrent.Executors
 
@@ -137,8 +135,8 @@ class BalancePresenter(
         interactor.clear()
     }
 
-    override fun onResume(context: Context) {
-        interactor.notifyPageActive(context)
+    override fun onResume() {
+        interactor.notifyPageActive()
     }
 
     override fun onPause() {
