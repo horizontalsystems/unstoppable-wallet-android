@@ -8,17 +8,21 @@ import io.horizontalsystems.bankwallet.core.App
 object MainModule {
 
     interface IView {
+        fun showRateApp()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
+        fun onClear()
     }
 
     interface IInteractor {
         fun onStart()
+        fun clear()
     }
 
     interface IInteractorDelegate {
+        fun didShowRateApp()
     }
 
     interface IRouter

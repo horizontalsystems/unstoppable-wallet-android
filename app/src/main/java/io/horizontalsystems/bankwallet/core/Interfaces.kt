@@ -433,7 +433,9 @@ interface INetManager {
 }
 
 interface IRateAppManager {
-    fun onBalancePageActive(context: Context)
+    val showRateAppObservable: Observable<Unit>
+
+    fun onBalancePageActive()
     fun onBalancePageInactive()
     fun onAppLaunch()
     fun onAppBecomeActive()

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.reactivex.disposables.CompositeDisposable
 
 class MainInteractor(
         private val accountManager: IAccountManager,
@@ -13,6 +14,7 @@ class MainInteractor(
     : MainModule.IInteractor {
 
     var delegate: MainModule.IInteractorDelegate? = null
+    val disposables = CompositeDisposable()
 
     override fun onStart() {
         rateAppManager.onAppLaunch()
@@ -21,5 +23,17 @@ class MainInteractor(
         adapterManager.preloadAdapters()
         accountManager.clearAccounts()
         rateAppManager.onAppBecomeActive()
+
+        rateAppManager.showRateAppObservable
+                .subscribe {
+                    delegate?.didShowRateApp()
+                }
+                .let {
+                    disposables.add(it)
+                }
+    }
+
+    override fun clear() {
+        disposables.clear()
     }
 }

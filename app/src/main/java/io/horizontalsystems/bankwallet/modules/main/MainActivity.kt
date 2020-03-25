@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.main
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewStub
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
@@ -17,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
@@ -26,7 +30,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.main_activity_view_pager_layout.*
 
-class MainActivity : BaseActivity(), TransactionInfoView.Listener {
+class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialogFragment.Listener {
 
     private var adapter: MainTabsAdapter? = null
     private var disposables = CompositeDisposable()
@@ -43,6 +47,10 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.init()
+
+        viewModel.showRateAppLiveEvent.observe(this, Observer {
+            RateAppDialogFragment.show(this, this)
+        })
 
         adapter = MainTabsAdapter(supportFragmentManager)
 
@@ -97,6 +105,35 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
     override fun closeTransactionInfo() {
         txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    // RateAppDialogFragment.Listener
+
+    override fun onClickRateApp() {
+        openAppInPlayStore()
+    }
+
+    override fun onClickCancel() {
+    }
+
+    override fun onDismiss() {
+    }
+
+    private fun openAppInPlayStore() {
+        val uri = Uri.parse("market://details?id=io.horizontalsystems.bankwallet")  //context.packageName
+        val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
+
+        val flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
+        goToMarketIntent.addFlags(flags)
+
+        try {
+            ContextCompat.startActivity(this, goToMarketIntent, null)
+        } catch (e: ActivityNotFoundException) {
+
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet"))
+
+            ContextCompat.startActivity(this, intent, null)
+        }
     }
 
     private fun loadViewPager() {

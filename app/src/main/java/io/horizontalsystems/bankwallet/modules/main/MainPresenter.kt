@@ -9,4 +9,11 @@ class MainPresenter(private val interactor: MainModule.IInteractor,
         interactor.onStart()
     }
 
+    override fun didShowRateApp() {
+        view?.showRateApp()
+    }
+
+    override fun onClear() {
+        interactor.clear()
+    }
 }

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
@@ -36,7 +35,7 @@ object BalanceModule {
 
         fun onClear()
 
-        fun onResume(context: Context)
+        fun onResume()
         fun onPause()
     }
 
@@ -64,7 +63,7 @@ object BalanceModule {
 
         fun clear()
 
-        fun notifyPageActive(context: Context)
+        fun notifyPageActive()
         fun notifyPageInactive()
     }
 
