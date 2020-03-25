@@ -90,6 +90,10 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             transactionsAdapter.notifyDataSetChanged()
         })
 
+        viewModel.showSyncing.observe(viewLifecycleOwner, Observer { show ->
+            toolbarSpinner.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        })
+
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
