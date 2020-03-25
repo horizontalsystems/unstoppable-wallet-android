@@ -30,7 +30,17 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:title="@string/Transactions_Title" />
+                app:title="@string/Transactions_Title" >
+                <ProgressBar
+                    android:id="@+id/toolbarSpinner"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:indeterminateTint="#C4C4C4"
+                    android:indeterminate="true"
+                    android:layout_marginEnd="18dp"
+                    android:layout_gravity="end"
+                    android:visibility="invisible"/>
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

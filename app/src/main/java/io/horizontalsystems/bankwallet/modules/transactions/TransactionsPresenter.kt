@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -14,6 +15,7 @@ class TransactionsPresenter(
     : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
 
     var view: TransactionsModule.IView? = null
+    private var adapterStates: MutableMap<Wallet, AdapterState> = mutableMapOf()
 
     override fun viewDidLoad() {
         interactor.initialFetch()
@@ -103,6 +105,24 @@ class TransactionsPresenter(
 
     override fun onConnectionRestore() {
         view?.reloadTransactions()
+    }
+
+    override fun initialAdapterStates(states: Map<Wallet, AdapterState>) {
+        adapterStates = states.toMutableMap()
+        syncState()
+    }
+
+    override fun onUpdateAdapterState(state: AdapterState, wallet: Wallet) {
+        adapterStates[wallet] = state
+        syncState()
+    }
+
+    private fun syncState() {
+        if (adapterStates.any { it.value is AdapterState.Syncing }) {
+            view?.showSyncing()
+        } else {
+            view?.hideSyncing()
+        }
     }
 
     private fun getOrderedList(wallets: List<Wallet>): MutableList<Wallet> {

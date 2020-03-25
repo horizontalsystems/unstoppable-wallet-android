@@ -15,6 +15,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val items = MutableLiveData<List<TransactionViewItem>>()
     val reloadTransactions = SingleLiveEvent<Unit>()
+    val showSyncing = SingleLiveEvent<Boolean>()
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
@@ -41,6 +42,14 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         mainThreadHandler.post {
             items.value = listOf()
         }
+    }
+
+    override fun showSyncing() {
+        showSyncing.postValue(true)
+    }
+
+    override fun hideSyncing() {
+        showSyncing.postValue(false)
     }
 
     override fun openTransactionInfo(transactionViewItem: TransactionViewItem) {

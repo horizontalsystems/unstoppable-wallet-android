@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
@@ -94,6 +95,8 @@ object TransactionsModule {
     data class FetchData(val wallet: Wallet, val from: TransactionRecord?, val limit: Int)
 
     interface IView {
+        fun showSyncing()
+        fun hideSyncing()
         fun showFilters(filters: List<Wallet?>)
         fun showTransactions(items: List<TransactionViewItem>)
         fun showNoTransactions()
@@ -129,6 +132,8 @@ object TransactionsModule {
         fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long)
         fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet)
         fun onConnectionRestore()
+        fun initialAdapterStates(states: Map<Wallet, AdapterState>)
+        fun onUpdateAdapterState(state: AdapterState, wallet: Wallet)
     }
 
     interface IRouter {

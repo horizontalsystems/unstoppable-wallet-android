@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -29,6 +26,7 @@ class TransactionsInteractor(
     private val ratesDisposables = CompositeDisposable()
     private val lastBlockHeightDisposables = CompositeDisposable()
     private val transactionUpdatesDisposables = CompositeDisposable()
+    private val adapterStateUpdatesDisposables = CompositeDisposable()
     private var requestedTimestamps = hashMapOf<String, Long>()
 
     override fun initialFetch() {
@@ -150,11 +148,15 @@ class TransactionsInteractor(
 
     private fun onUpdateWallets() {
         transactionUpdatesDisposables.clear()
+        adapterStateUpdatesDisposables.clear()
 
         val walletsData = mutableListOf<Triple<Wallet, Int, LastBlockInfo?>>()
+        val adapterStates = mutableMapOf<Wallet, AdapterState>()
+
         walletManager.wallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 walletsData.add(Triple(wallet, adapter.confirmationsThreshold, adapter.lastBlockInfo))
+                adapterStates[wallet] = adapter.state
 
                 adapter.transactionRecordsFlowable
                         .subscribeOn(Schedulers.io())
@@ -163,10 +165,19 @@ class TransactionsInteractor(
                             delegate?.didUpdateRecords(it, wallet)
                         }
                         .let { transactionUpdatesDisposables.add(it) }
+
+                adapter.stateUpdatedFlowable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe {
+                            delegate?.onUpdateAdapterState(adapter.state, wallet)
+                        }
+                        .let { adapterStateUpdatesDisposables.add(it) }
             }
         }
 
         delegate?.onUpdateWalletsData(walletsData)
+        delegate?.initialAdapterStates(adapterStates)
 
     }
 
