@@ -31,6 +31,11 @@
     <string name="Welcome_SecurityCenter">مركز امنيتي</string>
     <string name="Welcome_CreateWallet">ايجاد كيف پول</string>
     <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
+    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
+    <string name="RateApp_Button_RateIt">Rate It</string>
+    <string name="RateApp_Button_NotNow">Not now</string>
     <!--Create-->
     <string name="Create_Title">کیف پول جدید</string>
     <string name="Create_Description">برای شروع ، یک ارز رمزگذاری شده انتخاب کنید. بعداً می توانید ارزهای رمزنگاری شده دیگری را اضافه کنید.</string>
