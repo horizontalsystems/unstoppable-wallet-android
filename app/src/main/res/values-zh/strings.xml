@@ -32,10 +32,10 @@
     <string name="Welcome_CreateWallet">创建钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
-    <string name="RateApp_Button_RateIt">Rate It</string>
-    <string name="RateApp_Button_NotNow">Not now</string>
+    <string name="RateApp_Title_Rate_This_App">评价此应用</string>
+    <string name="RateApp_Description_Rate_This_App">希望Unstoppable钱包？请抽点时间评价此应用</string>
+    <string name="RateApp_Button_RateIt">评价它</string>
+    <string name="RateApp_Button_NotNow">暂不</string>
     <!--Create-->
     <string name="Create_Title">新的钱包</string>
     <string name="Create_Description">选择一种加密货币开始使用。您可以在以后添加其他加密货币。</string>
