@@ -32,10 +32,10 @@
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
-    <string name="RateApp_Button_RateIt">Rate It</string>
-    <string name="RateApp_Button_NotNow">Not now</string>
+    <string name="RateApp_Title_Rate_This_App">이 앱 평가하기</string>
+    <string name="RateApp_Description_Rate_This_App">Unstoppable Wallet 을 즐기고 계신가요? 잠시 시간을 내어 이 앱을 평가해주세요</string>
+    <string name="RateApp_Button_RateIt">평가 하기</string>
+    <string name="RateApp_Button_NotNow">다음에 확인</string>
     <!--Create-->
     <string name="Create_Title">새 지갑</string>
     <string name="Create_Description">시작하려면 한가지의 가상화폐를 선택하십시오. 귀하께서는 나중에 다른 가상화폐를 추가하실 수 있습니다.</string>
