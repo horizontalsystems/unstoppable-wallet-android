@@ -32,8 +32,8 @@
     <string name="Welcome_CreateWallet">Crear cartera</string>
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
+    <string name="RateApp_Title_Rate_This_App">Valorar app</string>
+    <string name="RateApp_Description_Rate_This_App">¿Disfrutas Unstoppable Wallet? Tómese un momento para calificar esta aplicación.</string>
     <string name="RateApp_Button_RateIt">Valóralo</string>
     <string name="RateApp_Button_NotNow">No ahora</string>
     <!--Create-->
