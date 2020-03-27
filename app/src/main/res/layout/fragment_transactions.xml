@@ -35,7 +35,7 @@
                     android:id="@+id/toolbarSpinner"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:indeterminateTint="#C4C4C4"
+                    android:indeterminateTint="@color/grey"
                     android:indeterminate="true"
                     android:layout_marginEnd="18dp"
                     android:layout_gravity="end"
