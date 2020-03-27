@@ -102,6 +102,9 @@
             android:name=".modules.restore.RestoreActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".modules.intro.IntroActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".modules.welcome.WelcomeActivity"
             android:screenOrientation="portrait" />
         <activity
