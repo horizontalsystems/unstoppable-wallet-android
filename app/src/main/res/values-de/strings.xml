@@ -31,6 +31,11 @@
     <string name="Welcome_SecurityCenter">Sicherheits-Center</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Diese App bewerten</string>
+    <string name="RateApp_Description_Rate_This_App">Gefällt Ihnen das Unstoppable Wallet? Nehmen Sie sich kurz Zeit und bewerten Sie die App</string>
+    <string name="RateApp_Button_RateIt">Bewerten</string>
+    <string name="RateApp_Button_NotNow">Nicht jetzt</string>
     <!--Create-->
     <string name="Create_Title">Krypto auswählen</string>
     <string name="Create_Description">Wählen Sie eine Kryptowährung. Sie können später weitere Kryptowährungen hinzufügen.</string>
@@ -223,7 +228,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Kontakt</string>
     <string name="SettingsContact_Email">E-Mail</string>
-    <string name="SettingsContact_Telegram">Telegram (Entwickler)</string>
+    <string name="SettingsContact_Telegram">Telegram</string>
     <string name="SettingsContact_AppStatus">App-Status</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Benachrichtigungen</string>

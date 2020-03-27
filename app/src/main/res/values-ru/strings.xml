@@ -31,6 +31,11 @@
     <string name="Welcome_SecurityCenter">Безопасность</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Оценить приложение</string>
+    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable Wallet? Пожалуйста, найдите минутку, чтобы оценить это приложение</string>
+    <string name="RateApp_Button_RateIt">Оценить</string>
+    <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Create-->
     <string name="Create_Title">Новый кошелек</string>
     <string name="Create_Description">Выберите одну криптовалюту для начала. Вы сможете добавить другие криптовалюты позже.</string>

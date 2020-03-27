@@ -31,6 +31,11 @@
     <string name="Welcome_SecurityCenter">Güvenlik Merkezi</string>
     <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Uygulamayı Değerlendirin</string>
+    <string name="RateApp_Description_Rate_This_App">Unstoppable Cüzdandan Yararlanıyor musunuz? Lütfen bu uygulamayı değerlendirmek için bir dakikanızı ayırın</string>
+    <string name="RateApp_Button_RateIt">Puanla</string>
+    <string name="RateApp_Button_NotNow">Şimdi değil</string>
     <!--Create-->
     <string name="Create_Title">Yeni Cüzdan</string>
     <string name="Create_Description">Başlamak için bir kripto para birimi seçin. Daha sonra başka kripto para birimleri ekleyebileceksiniz.</string>
@@ -222,7 +227,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
     <string name="SettingsContact_Email">E-posta</string>
-    <string name="SettingsContact_Telegram">Telegram (Developers)</string>
+    <string name="SettingsContact_Telegram">Telegram</string>
     <string name="SettingsContact_AppStatus">Uygulama Durumu</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Bildirimler</string>

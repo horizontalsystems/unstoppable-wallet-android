@@ -31,12 +31,17 @@
     <string name="Welcome_SecurityCenter">Centro de seguridad</string>
     <string name="Welcome_CreateWallet">Crear cartera</string>
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Valorar app</string>
+    <string name="RateApp_Description_Rate_This_App">¿Disfrutas Unstoppable Wallet? Tómese un momento para calificar esta aplicación.</string>
+    <string name="RateApp_Button_RateIt">Valóralo</string>
+    <string name="RateApp_Button_NotNow">No ahora</string>
     <!--Create-->
     <string name="Create_Title">Nueva cartera</string>
     <string name="Create_Description">Seleccione una criptomoneda para comenzar. Podrá añadir otras criptomonedas posteriormente.</string>
     <!--Restore-->
     <string name="Restore_ChooseWallet">Elegir el monedero</string>
-    <string name="Restore_Enter_Key_Title">Introduzca la clave</string>
+    <string name="Restore_Enter_Key_Title">Coloque la clave</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Introduzca su clave privada para la cartera %1s que consta de %2s palabras. Las palabras deben ser introducidas en orden correcto y separadas por espacios.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
@@ -230,7 +235,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contacto</string>
     <string name="SettingsContact_Email">Correo electrónico</string>
-    <string name="SettingsContact_Telegram">Telegram (Desarrolladores)</string>
+    <string name="SettingsContact_Telegram">Telegram</string>
     <string name="SettingsContact_AppStatus">Estado de la aplicación</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Notificaciones</string>
@@ -273,7 +278,7 @@
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Gestionar Monederos</string>
+    <string name="ManageKeys_Title">Monederos</string>
     <string name="ManageKeys_AdvancedSettings">Configuración avanzada</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>

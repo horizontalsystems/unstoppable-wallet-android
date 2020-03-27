@@ -31,6 +31,11 @@
     <string name="Welcome_SecurityCenter">Centre de Sécurité</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Evaluez cette application</string>
+    <string name="RateApp_Description_Rate_This_App">Vous aimez Unstoppable Wallet ? Merci de prendre un moment pour évaluer cette application.</string>
+    <string name="RateApp_Button_RateIt">Evaluez-là</string>
+    <string name="RateApp_Button_NotNow">Plus tard</string>
     <!--Create-->
     <string name="Create_Title">Nouveau portefeuille</string>
     <string name="Create_Description">Sélectionnez une cryptomonnaie pour commencer. Vous pourrez ajouter d\'autres cryptomonnaies plus tard.</string>
@@ -224,7 +229,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contact</string>
     <string name="SettingsContact_Email">E-mail</string>
-    <string name="SettingsContact_Telegram">Telegram (Développeurs)</string>
+    <string name="SettingsContact_Telegram">Telegram</string>
     <string name="SettingsContact_AppStatus">Statut de l\'appli</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Notifications</string>
@@ -255,7 +260,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Hud_Network_Issue">Problèmes réseau. Réessayez</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Choisissez les Pièces</string>
+    <string name="ManageCoins_title">Crypto Monnaie</string>
     <string name="ManageCoins_save">Sauvegarder</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Portefeuille</string>
     <string name="ManageCoins_Alert_CantCreateDescription">À ce stade, Unstoppable n\'est pas en mesure de créer de nouveaux portefeuilles EOS. Vous ne pouvez restaurer que celui déjà existant.</string>
@@ -267,7 +272,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Permet d\'envoyer des Bitcoins qui ne peuvent pas être dépensées avant la date spécifiée.\n\nLe destinataire d\'une telle transaction devrait utiliser un portefeuille Unstoppable.\n\nSeul un portefeuille Unstoppable peut identifier correctement de telles transactions sur le réseau Bitcoin ainsi que permettre au destinataire de dépenser ces Bitcoins après l\'expiration de la période de verrouillage.\n\nSi vous êtes un HODLer, vous pouvez utiliser cette fonction pour vous obliger à garder vos Bitcoins en vous envoyant une telle transaction à vous-même.\n\nPuisqu\'il s\'agit d\'une fonctionnalité expérimentale, le montant maximum par transaction est limité à 0,5 BTC.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Gérer les portefeuilles</string>
+    <string name="ManageKeys_Title">Portefeuilles</string>
     <string name="ManageKeys_AdvancedSettings">Configuration avancée</string>
     <string name="ManageKeys_Create">Créer</string>
     <string name="ManageKeys_Restore">Restaurer</string>

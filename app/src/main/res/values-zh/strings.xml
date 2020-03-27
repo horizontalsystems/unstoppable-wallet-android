@@ -31,6 +31,11 @@
     <string name="Welcome_SecurityCenter">安全中心</string>
     <string name="Welcome_CreateWallet">创建钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">评价此应用</string>
+    <string name="RateApp_Description_Rate_This_App">希望Unstoppable钱包？请抽点时间评价此应用</string>
+    <string name="RateApp_Button_RateIt">评价它</string>
+    <string name="RateApp_Button_NotNow">暂不</string>
     <!--Create-->
     <string name="Create_Title">新的钱包</string>
     <string name="Create_Description">选择一种加密货币开始使用。您可以在以后添加其他加密货币。</string>
@@ -223,7 +228,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系信息</string>
     <string name="SettingsContact_Email">邮件</string>
-    <string name="SettingsContact_Telegram">电报（开发者）</string>
+    <string name="SettingsContact_Telegram">电报</string>
     <string name="SettingsContact_AppStatus">应用状态</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">通知</string>
