@@ -39,6 +39,7 @@
                     android:indeterminate="true"
                     android:layout_marginEnd="18dp"
                     android:layout_gravity="end"
+                    android:indeterminateDrawable="@drawable/circular_spinner"
                     android:visibility="invisible"/>
             </androidx.appcompat.widget.Toolbar>
 
