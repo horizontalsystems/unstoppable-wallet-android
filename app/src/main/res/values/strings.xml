@@ -16,6 +16,7 @@
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Skip">Skip</string>
+    <string name="Button_Start">Get Started</string>
     <string name="Button_Next">Next</string>
     <string name="Button_Restore">Restore</string>
     <string name="Button_Enable">Enable</string>

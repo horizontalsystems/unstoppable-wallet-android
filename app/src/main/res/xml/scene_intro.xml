@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        app:constraintSetEnd="@+id/end"
+        app:constraintSetStart="@+id/start"
+        app:motionInterpolator="easeInOut">
+
+        <KeyFrameSet>
+
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="50"
+                app:motionTarget="@id/btnSkip" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="100"
+                app:motionTarget="@id/btnSkip" />
+
+        </KeyFrameSet>
+
+        <KeyFrameSet>
+
+            <KeyAttribute
+                android:translationY="0dp"
+                app:framePosition="50"
+                app:motionTarget="@id/btnNext" />
+
+            <KeyAttribute
+                android:translationY="100dp"
+                app:framePosition="100"
+                app:motionTarget="@id/btnNext" />
+
+        </KeyFrameSet>
+
+        <KeyFrameSet>
+
+            <KeyAttribute
+                android:translationX="200dp"
+                app:framePosition="50"
+                app:motionTarget="@id/btnStart" />
+
+            <KeyAttribute
+                android:translationX="0dp"
+                app:framePosition="100"
+                app:motionTarget="@id/btnStart" />
+
+        </KeyFrameSet>
+
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@id/btnSkip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:alpha="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+        <Constraint
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            android:translationY="0dp"
+        />
+
+        <Constraint
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            android:translationX="200dp"
+        />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@id/btnSkip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:alpha="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+        <Constraint
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            android:translationX="0dp"
+            />
+
+    </ConstraintSet>
+
+</MotionScene>

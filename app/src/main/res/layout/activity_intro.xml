@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    app:layoutDescription="@xml/scene_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -66,12 +69,9 @@
         android:id="@+id/btnSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:text="@string/Button_Skip"
         style="@style/Subhead1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        />
 
     <TextView
         android:id="@+id/btnNext"
@@ -84,5 +84,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
+    <TextView
+        android:id="@+id/btnStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/Button_Start"
+        style="@style/Subhead1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
