@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
 import kotlinx.android.synthetic.main.activity_intro.*
 
 class IntroActivity : BaseActivity() {
@@ -14,6 +15,7 @@ class IntroActivity : BaseActivity() {
         setContentView(R.layout.activity_intro)
 
         val viewPagerAdapter = IntroViewPagerAdapter(supportFragmentManager)
+        val pagesCount = viewPagerAdapter.count
 
         viewPager.adapter = viewPagerAdapter
 
@@ -21,7 +23,9 @@ class IntroActivity : BaseActivity() {
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                root.progress = (position + positionOffset) / (pagesCount - 1)
+            }
 
             override fun onPageSelected(position: Int) {
                 imageSwitcher.setImageResource(images[position])
@@ -31,13 +35,17 @@ class IntroActivity : BaseActivity() {
         circleIndicator.setViewPager(viewPager)
 
         btnNext.setOnClickListener {
-            if (viewPager.currentItem < viewPagerAdapter.count - 1) {
+            if (viewPager.currentItem < pagesCount - 1) {
                 viewPager.currentItem = viewPager.currentItem + 1
             }
         }
 
         btnSkip.setOnClickListener {
-            viewPager.currentItem = viewPagerAdapter.count - 1
+            viewPager.currentItem = pagesCount - 1
+        }
+
+        btnStart.setOnClickListener {
+            WelcomeModule.start(this)
         }
     }
 }
