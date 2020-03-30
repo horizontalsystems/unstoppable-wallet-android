@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.intro
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -8,6 +10,8 @@ import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
 import kotlinx.android.synthetic.main.activity_intro.*
 
 class IntroActivity : BaseActivity() {
+
+    private val presenter by lazy { ViewModelProvider(this, IntroModule.Factory()).get(IntroPresenter::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +45,17 @@ class IntroActivity : BaseActivity() {
         }
 
         btnSkip.setOnClickListener {
-            viewPager.currentItem = pagesCount - 1
+            presenter.skip()
         }
 
         btnStart.setOnClickListener {
-            WelcomeModule.start(this)
+            presenter.start()
+        }
+
+        (presenter.router as? IntroRouter)?.let { router ->
+            router.navigateToWelcomeLiveEvent.observe(this, Observer {
+                WelcomeModule.start(this)
+            })
         }
     }
 }
-
