@@ -8,8 +8,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 object BlockchainSettingsModule {
 
@@ -32,10 +35,12 @@ object BlockchainSettingsModule {
 
     interface IInteractor {
         fun coinWithSetting(coinType: CoinType): Coin?
-        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
         fun getWalletForUpdate(coinType: CoinType): Wallet?
         fun reSyncWallet(wallet: Wallet)
-        fun updateSettings(blockchainSettings: BlockchainSetting)
+        fun derivation(coinType: CoinType): Derivation?
+        fun syncMode(coinType: CoinType): SyncMode?
+        fun saveDerivation(coinType: CoinType, derivation: Derivation)
+        fun saveSyncMode(coinType: CoinType, derivation: SyncMode)
     }
 
     interface IRouter {

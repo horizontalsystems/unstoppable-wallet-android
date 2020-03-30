@@ -287,7 +287,8 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
-    val blockchainSettings: List<BlockchainSetting>
+    val derivationSettings: List<DerivationSetting>
+    val syncModeSettings: List<SyncModeSetting>
 }
 
 interface IRateStorage {
@@ -402,10 +403,23 @@ interface IBackgroundRateAlertScheduler {
 
 interface IBlockchainSettingsManager {
     val coinsWithSettings: List<Coin>
-    val defaultBlockchainSettings: List<BlockchainSetting>
-    fun blockchainSettingsForCreate(coinType: CoinType): BlockchainSetting?
-    fun blockchainSettings(coinType: CoinType): BlockchainSetting?
-    fun updateSettings(blockchainSettings: BlockchainSetting)
+
+    fun derivationSetting(coinType: CoinType, forCreate: Boolean = false): DerivationSetting?
+    fun syncModeSetting(coinType: CoinType, forCreate: Boolean = false): SyncModeSetting?
+    fun updateSetting(derivationSetting: DerivationSetting)
+    fun updateSetting(syncModeSetting: SyncModeSetting)
+}
+
+interface IDerivationSettingsManager {
+    fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
+    fun derivationSetting(coinType: CoinType): DerivationSetting?
+    fun updateSetting(derivationSetting: DerivationSetting)
+}
+
+interface ISyncModeSettingsManager {
+    fun defaultSyncModeSetting(coinType: CoinType): SyncModeSetting?
+    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
+    fun updateSetting(syncModeSetting: SyncModeSetting)
 }
 
 interface IAccountCleaner {

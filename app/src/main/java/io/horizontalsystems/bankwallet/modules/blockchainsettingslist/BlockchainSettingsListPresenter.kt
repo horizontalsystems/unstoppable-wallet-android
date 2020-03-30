@@ -27,8 +27,9 @@ class BlockchainSettingsListPresenter(
     private fun getViewItems(): List<BlockchainSettingListViewItem>{
         val all = interactor.coinsWithSettings
         val viewItems = all.map {
-            val setting = interactor.blockchainSettings(it.type)
-            BlockchainSettingListViewItem(it, setting, enabled = coinTypes.contains(it.type))
+            val derivation = interactor.derivation(it.type)
+            val syncMode = interactor.syncMode(it.type)
+            BlockchainSettingListViewItem(it, derivation, syncMode, enabled = coinTypes.contains(it.type))
         }
         viewItems.last().showBottomShade = true
         return viewItems

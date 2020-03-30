@@ -152,9 +152,12 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager()
 
-        blockchainSettingsManager = BlockchainSettingsManager(appDatabase, appConfigProvider)
+        val derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
+        val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
+        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, appConfigProvider)
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager), ethereumKitManager, eosKitManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, derivationSettingsManager, syncModeSettingsManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
 
         rateCoinMapper = RateCoinMapper()
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)

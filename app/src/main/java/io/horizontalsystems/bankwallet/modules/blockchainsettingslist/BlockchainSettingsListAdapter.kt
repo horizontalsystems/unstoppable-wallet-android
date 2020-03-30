@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.BlockchainSetting
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.views.inflate
@@ -73,13 +73,12 @@ class CoinItemWithArrowViewHolder(override val containerView: View) : RecyclerVi
         val coin = viewItem.coin
 
         coinTitle.text = coin.title
-        coinSubtitle.text = viewItem.setting?.let { setting ->
-            val derivationText = setting.derivation?.let {  AccountType.getDerivationLongTitle(it) } ?: ""
-            val syncModeText = getSyncModeTitle(setting.syncMode)
-            val middleText = if (derivationText.isNotEmpty() && syncModeText.isNotEmpty()) " | " else ""
-            val text = derivationText + middleText + getSyncModeTitle(setting.syncMode)
-            text
-        }
+
+        val derivationText = viewItem.derivation?.let {  AccountType.getDerivationLongTitle(it) } ?: ""
+        val syncModeText = getSyncModeTitle(viewItem.syncMode)
+        val middleText = if (derivationText.isNotEmpty() && syncModeText.isNotEmpty()) " | " else ""
+        val text = derivationText + middleText + getSyncModeTitle(viewItem.syncMode)
+        coinSubtitle.text = text
 
         rightArrow.visibility = View.VISIBLE
         coinIcon.bind(coin.code)
@@ -95,5 +94,9 @@ class CoinItemWithArrowViewHolder(override val containerView: View) : RecyclerVi
     }
 }
 
-
-data class BlockchainSettingListViewItem(val coin: Coin, val setting: BlockchainSetting?, var enabled: Boolean = false, var showBottomShade: Boolean = false)
+data class BlockchainSettingListViewItem(
+        val coin: Coin,
+        val derivation: Derivation?,
+        val syncMode: SyncMode?,
+        var enabled: Boolean = false,
+        var showBottomShade: Boolean = false)

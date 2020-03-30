@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import io.horizontalsystems.bankwallet.entities.BlockchainSetting
 import io.horizontalsystems.bankwallet.entities.CoinType
 
@@ -16,7 +19,7 @@ interface BlockchainSettingDao {
     @Query("DELETE FROM BlockchainSetting")
     fun deleteAll()
 
-    @Query("SELECT * FROM BlockchainSetting WHERE coinType = :coinType")
-    fun getSetting(coinType: CoinType): BlockchainSetting?
+    @Query("SELECT * FROM BlockchainSetting WHERE coinType = :coinType AND `key` == :key")
+    fun getSetting(coinType: CoinType, key: String): BlockchainSetting?
 
 }

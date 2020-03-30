@@ -2,37 +2,49 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
-import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
+import io.horizontalsystems.bankwallet.core.ISyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
 class BlockchainSettingsManager(
-        private val database: AppDatabase,
+        private val derivationSettingsManager: IDerivationSettingsManager,
+        private val syncModeSettingsManager: ISyncModeSettingsManager,
         private val appConfigProvider: IAppConfigProvider) : IBlockchainSettingsManager {
-
-    override val defaultBlockchainSettings: List<BlockchainSetting>
-        get() = appConfigProvider.blockchainSettings
 
     override val coinsWithSettings: List<Coin>
         get() {
-            return appConfigProvider.blockchainSettings.map { setting ->
-                appConfigProvider.coins.first { it.type == setting.coinType }
+            val coinTypesWithDerivationSetting = appConfigProvider.derivationSettings.map { it.coinType }
+            val coinTypesWithSyncModeSetting = appConfigProvider.syncModeSettings.map { it.coinType }
+            val allCoinTypes = coinTypesWithDerivationSetting.union(coinTypesWithSyncModeSetting)
+
+            return allCoinTypes.map { coinType ->
+                appConfigProvider.coins.first { it.type == coinType }
             }
         }
 
-    override fun blockchainSettingsForCreate(coinType: CoinType): BlockchainSetting? {
-        val settings = appConfigProvider.blockchainSettings.firstOrNull { it.coinType == coinType }
-                ?: return null
-        settings.syncMode = SyncMode.New
-        return settings
+    override fun derivationSetting(coinType: CoinType, forCreate: Boolean): DerivationSetting? {
+        val default = derivationSettingsManager.defaultDerivationSetting(coinType)
+        if (forCreate) {
+            return default
+        }
+        return derivationSettingsManager.derivationSetting(coinType) ?: default
     }
 
-    override fun blockchainSettings(coinType: CoinType): BlockchainSetting? {
-        return database.blockchainSettingDao().getSetting(coinType)
-                ?: appConfigProvider.blockchainSettings.firstOrNull { it.coinType == coinType }
+    override fun syncModeSetting(coinType: CoinType, forCreate: Boolean): SyncModeSetting? {
+        val default = syncModeSettingsManager.defaultSyncModeSetting(coinType)
+        if (forCreate) {
+            default?.syncMode = SyncMode.New
+            return default
+        }
+        return syncModeSettingsManager.syncModeSetting(coinType) ?: default
     }
 
-    override fun updateSettings(blockchainSettings: BlockchainSetting) {
-        database.blockchainSettingDao().insert(blockchainSettings)
+    override fun updateSetting(derivationSetting: DerivationSetting) {
+        derivationSettingsManager.updateSetting(derivationSetting)
+    }
+
+    override fun updateSetting(syncModeSetting: SyncModeSetting) {
+        syncModeSettingsManager.updateSetting(syncModeSetting)
     }
 
 }

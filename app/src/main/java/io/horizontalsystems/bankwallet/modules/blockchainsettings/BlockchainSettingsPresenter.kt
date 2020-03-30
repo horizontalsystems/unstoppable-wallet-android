@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class BlockchainSettingsPresenter(
         val view: BlockchainSettingsModule.IView,
@@ -10,7 +12,8 @@ class BlockchainSettingsPresenter(
         private val coinType: CoinType)
     : ViewModel(), BlockchainSettingsModule.IViewDelegate {
 
-    private var blockchainSettings = interactor.blockchainSettings(coinType)
+    private var derivation = interactor.derivation(coinType)
+    private var syncMode = interactor.syncMode(coinType)
     private val coinTitle: String = interactor.coinWithSetting(coinType)?.title ?: ""
 
     override fun onViewLoad() {
@@ -19,47 +22,46 @@ class BlockchainSettingsPresenter(
     }
 
     private fun setSettings() {
-        blockchainSettings?.derivation?.let {
+        derivation?.let {
             view.setDerivation(it)
         }
-        blockchainSettings?.syncMode?.let {
+        syncMode?.let {
             val syncMode = if (it == SyncMode.New) SyncMode.Fast else it
             view.setSyncMode(syncMode)
         }
         view.setSourceLink(coinType)
     }
 
-    override fun onSelect(syncMode: SyncMode) {
-        val blockchainSettings = blockchainSettings ?: return
+    private fun updateSyncMode(syncMode: SyncMode) {
+        this.syncMode = syncMode
+        interactor.saveSyncMode(coinType, syncMode)
+        view.setSyncMode(syncMode)
+    }
 
-        if (blockchainSettings.syncMode != syncMode && interactor.getWalletForUpdate(coinType) != null) {
+    private fun updateDerivation(derivation: Derivation) {
+        this.derivation = derivation
+        interactor.saveDerivation(coinType, derivation)
+        view.setDerivation(derivation)
+    }
+
+    override fun onSelect(syncMode: SyncMode) {
+        if (this.syncMode != syncMode && interactor.getWalletForUpdate(coinType) != null) {
             view.showSyncModeChangeAlert(syncMode, coinTitle)
         } else {
-            blockchainSettings.syncMode = syncMode
-            interactor.updateSettings(blockchainSettings)
-            view.setSyncMode(syncMode)
+            updateSyncMode(syncMode)
         }
     }
 
-    override fun onSelect(derivation: AccountType.Derivation) {
-        val blockchainSettings = blockchainSettings ?: return
-
-        if (blockchainSettings.derivation != derivation && interactor.getWalletForUpdate(coinType) != null) {
+    override fun onSelect(derivation: Derivation) {
+        if (this.derivation != derivation && interactor.getWalletForUpdate(coinType) != null) {
             view.showDerivationChangeAlert(derivation, coinTitle)
         } else {
-            blockchainSettings.derivation = derivation
-            interactor.updateSettings(blockchainSettings)
-            view.setDerivation(derivation)
+            updateDerivation(derivation)
         }
     }
 
-    override fun proceedWithDerivationChange(derivation: AccountType.Derivation) {
-        val blockchainSettings = blockchainSettings ?: return
-
-        blockchainSettings.derivation = derivation
-        interactor.updateSettings(blockchainSettings)
-
-        view.setDerivation(derivation)
+    override fun proceedWithDerivationChange(derivation: Derivation) {
+        updateDerivation(derivation)
 
         interactor.getWalletForUpdate(coinType)?.let {
             interactor.reSyncWallet(it)
@@ -67,12 +69,7 @@ class BlockchainSettingsPresenter(
     }
 
     override fun proceedWithSyncModeChange(syncMode: SyncMode) {
-        val blockchainSettings = blockchainSettings ?: return
-
-        blockchainSettings.syncMode = syncMode
-        interactor.updateSettings(blockchainSettings)
-
-        view.setSyncMode(syncMode)
+        updateSyncMode(syncMode)
 
         interactor.getWalletForUpdate(coinType)?.let {
             interactor.reSyncWallet(it)

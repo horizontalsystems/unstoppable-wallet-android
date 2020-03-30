@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountCreator
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 
 class RestoreInteractor(
         private val accountCreator: IAccountCreator,
@@ -21,12 +25,20 @@ class RestoreInteractor(
         walletManager.save(wallets)
     }
 
-    override fun getBlockchainSettings(coinType: CoinType): BlockchainSetting? {
-        return blockchainSettingsManager.blockchainSettings(coinType)
+    override fun derivation(coinType: CoinType): Derivation? {
+        return blockchainSettingsManager.derivationSetting(coinType)?.derivation
     }
 
-    override fun saveBlockchainSettings(settings: BlockchainSetting) {
-        blockchainSettingsManager.updateSettings(settings)
+    override fun syncMode(coinType: CoinType): SyncMode? {
+        return blockchainSettingsManager.syncModeSetting(coinType)?.syncMode
+    }
+
+    override fun saveDerivation(coinType: CoinType, derivation: Derivation) {
+        blockchainSettingsManager.updateSetting(DerivationSetting(coinType, derivation))
+    }
+
+    override fun saveSyncMode(coinType: CoinType, syncMode: SyncMode) {
+        blockchainSettingsManager.updateSetting(SyncModeSetting(coinType, syncMode))
     }
 
     @Throws

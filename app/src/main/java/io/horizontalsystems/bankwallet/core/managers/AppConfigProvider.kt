@@ -112,12 +112,19 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
             Coin("WTC",       "Waltonchain",             "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74"))
     )
 
-    override val blockchainSettings: List<BlockchainSetting> = listOf(
-            BlockchainSetting(CoinType.Bitcoin, AccountType.Derivation.bip49, SyncMode.Fast),
-            BlockchainSetting(CoinType.Litecoin, AccountType.Derivation.bip49, SyncMode.Fast),
-            BlockchainSetting(CoinType.BitcoinCash, null, SyncMode.Fast),
-            BlockchainSetting(CoinType.Dash, null, SyncMode.Fast)
-    )
+    override val derivationSettings: List<DerivationSetting>
+        get() = listOf(
+                DerivationSetting(CoinType.Bitcoin, AccountType.Derivation.bip49),
+                DerivationSetting(CoinType.Litecoin, AccountType.Derivation.bip49)
+        )
+
+    override val syncModeSettings: List<SyncModeSetting>
+        get() = listOf(
+                SyncModeSetting(CoinType.Bitcoin, SyncMode.Fast),
+                SyncModeSetting(CoinType.Litecoin, SyncMode.Fast),
+                SyncModeSetting(CoinType.BitcoinCash, SyncMode.Fast),
+                SyncModeSetting(CoinType.Dash, SyncMode.Fast)
+        )
 
     //  ILanguageConfigProvider
 
