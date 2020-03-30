@@ -67,33 +67,32 @@
 
     <TextView
         android:id="@+id/btnSkip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Button_Skip"
         style="@style/Subhead1"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="@string/Button_Skip" />
 
     <TextView
         android:id="@+id/btnNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:text="@string/Button_Next"
         style="@style/Subhead1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="@string/Button_Next" />
 
     <TextView
         android:id="@+id/btnStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:text="@string/Button_Start"
         style="@style/Subhead1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
-
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="@string/Button_Start" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
