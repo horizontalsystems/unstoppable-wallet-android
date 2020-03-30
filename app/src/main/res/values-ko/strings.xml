@@ -12,6 +12,8 @@
     <string name="Alert_Restart">재시작</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Create">생성하기</string>
+    <string name="Button_Skip">Skip</string>
+    <string name="Button_Start">Get Started</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_Enable">활성화</string>
@@ -26,6 +28,13 @@
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
+    <!--Intro-->
+    <string name="Intro_Independence_Title">Independence</string>
+    <string name="Intro_Independence_Description">Keep crypto safe, uncensorable and\n unconfiscatable. Make your assets\n independent</string>
+    <string name="Intro_Knowledge_Title">Knowledge</string>
+    <string name="Intro_Knowledge_Description">Learn about projects and discover the crypto likes of Apple, Amazon and Tesla in early stages.</string>
+    <string name="Intro_Privacy_Title">Privacy</string>
+    <string name="Intro_Privacy_Description">Stay incognito and out of radar. Some privacy settings were preset for quick start. You may change them now or later in the app.</string>
     <!--Welcome-->
     <string name="Welcome_Title">언스타퍼블 \n지갑</string>
     <string name="Welcome_SecurityCenter">보안 센터</string>
