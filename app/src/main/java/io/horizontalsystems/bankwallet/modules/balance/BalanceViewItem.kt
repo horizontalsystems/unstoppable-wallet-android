@@ -32,13 +32,15 @@ data class BalanceViewItem(
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
         val coinTypeLabelVisible: Boolean,
-        val blockChart: Boolean
+        val blockChart: Boolean,
+        val hideBalance: Boolean
 ) {
     enum class UpdateType {
         MARKET_INFO,
         BALANCE,
         STATE,
-        EXPANDED
+        EXPANDED,
+        TOGGLEBALANCE
     }
 }
 
@@ -111,7 +113,7 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
         return coinType.typeLabel() != null
     }
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
@@ -141,7 +143,8 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
-                blockChart = blockedChartCoins.blockedCoins.contains(coin.code)
+                blockChart = blockedChartCoins.blockedCoins.contains(coin.code),
+                hideBalance = hideBalance
         )
     }
 

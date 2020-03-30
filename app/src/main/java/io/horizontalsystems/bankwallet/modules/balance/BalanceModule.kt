@@ -16,6 +16,7 @@ object BalanceModule {
         fun set(sortIsOn: Boolean)
         fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun didRefresh()
+        fun setBalanceVisible(visible: Boolean)
     }
 
     interface IViewDelegate {
@@ -37,6 +38,8 @@ object BalanceModule {
 
         fun onResume()
         fun onPause()
+        fun onHideBalanceClick()
+        fun onShowBalanceClick()
     }
 
     interface IInteractor {

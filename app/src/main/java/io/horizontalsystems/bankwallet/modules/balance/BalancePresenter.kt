@@ -30,6 +30,7 @@ class BalancePresenter(
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
     private var accountToBackup: Account? = null
+    private var hideBalance = false
 
     // IViewDelegate
 
@@ -96,11 +97,11 @@ class BalancePresenter(
         }
 
         if (indexToCollapse != -1) {
-            viewItems[indexToCollapse] = factory.viewItem(items[indexToCollapse], currency, BalanceViewItem.UpdateType.EXPANDED, false)
+            viewItems[indexToCollapse] = factory.viewItem(items[indexToCollapse], currency, BalanceViewItem.UpdateType.EXPANDED, false, hideBalance)
         }
 
         if (indexToExpand != -1) {
-            viewItems[indexToExpand] = factory.viewItem(items[indexToExpand], currency, BalanceViewItem.UpdateType.EXPANDED, true)
+            viewItems[indexToExpand] = factory.viewItem(items[indexToExpand], currency, BalanceViewItem.UpdateType.EXPANDED, true, hideBalance)
         }
 
         view?.set(viewItemsCopy)
@@ -112,6 +113,18 @@ class BalancePresenter(
 
     override fun onSortClick() {
         router.openSortTypeDialog(sortType)
+    }
+
+    override fun onHideBalanceClick() {
+        view?.setBalanceVisible(false)
+        hideBalance = true
+        toggleBalanceVisibility()
+    }
+
+    override fun onShowBalanceClick() {
+        view?.setBalanceVisible(true)
+        hideBalance = false
+        toggleBalanceVisibility()
     }
 
     override fun onSortTypeChange(sortType: BalanceSortType) {
@@ -200,7 +213,7 @@ class BalancePresenter(
             items.forEachIndexed { index, item ->
                 marketInfo[item.wallet.coin.code]?.let {
                     item.marketInfo = it
-                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, viewItems[index].expanded)
+                    viewItems[index] = factory.viewItem(item, currency, BalanceViewItem.UpdateType.MARKET_INFO, viewItems[index].expanded, hideBalance)
                 }
             }
             view?.set(viewItemsCopy)
@@ -246,15 +259,20 @@ class BalancePresenter(
 
         val item = items[index]
         updateBlock(item)
-        viewItems[index] = factory.viewItem(item, currency, updateType, viewItems[index].expanded)
+        viewItems[index] = factory.viewItem(item, currency, updateType, viewItems[index].expanded, hideBalance)
 
+        view?.set(viewItemsCopy)
+    }
+
+    private fun toggleBalanceVisibility(){
+        viewItems = items.map { factory.viewItem(it, currency, BalanceViewItem.UpdateType.TOGGLEBALANCE, it.wallet == expandedViewItem?.wallet, hideBalance) }.toMutableList()
         view?.set(viewItemsCopy)
     }
 
     private fun updateViewItems() {
         items = sorter.sort(items, sortType)
 
-        viewItems = items.map { factory.viewItem(it, currency, null, it.wallet == expandedViewItem?.wallet) }.toMutableList()
+        viewItems = items.map { factory.viewItem(it, currency, null, it.wallet == expandedViewItem?.wallet, hideBalance) }.toMutableList()
 
         view?.set(viewItemsCopy)
     }
