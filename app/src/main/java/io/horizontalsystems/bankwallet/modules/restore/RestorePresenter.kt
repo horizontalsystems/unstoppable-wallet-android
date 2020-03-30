@@ -71,8 +71,12 @@ class RestorePresenter(
         }
 
         wallets.forEach {
-            interactor.getBlockchainSettings(it.coin.type)?.let { settings ->
-                interactor.saveBlockchainSettings(settings)
+            val coin = it.coin
+            interactor.derivation(coin.type)?.let { derivation ->
+                interactor.saveDerivation(coin.type, derivation)
+            }
+            interactor.syncMode(coin.type)?.let { syncMode ->
+                interactor.saveSyncMode(coin.type, syncMode)
             }
         }
 

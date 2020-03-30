@@ -20,8 +20,11 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-abstract class BitcoinBaseAdapter(open val kit: AbstractKit, open val settings: BlockchainSetting?)
-    : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+abstract class BitcoinBaseAdapter(
+        open val kit: AbstractKit,
+        open val derivation: AccountType.Derivation? = null,
+        open val syncMode: SyncMode? = null
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     abstract val satoshisInBitcoin: BigDecimal
 

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewType
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
@@ -34,7 +35,7 @@ class ManageWalletsPresenter(
 
     override fun onEnable(coin: Coin) {
         val account = account(coin) ?: return
-        if (account.origin == AccountOrigin.Restored && interactor.blockchainSettings(coin.type) != null) {
+        if (account.origin == AccountOrigin.Restored && (interactor.derivation(coin.type) != null || interactor.syncMode(coin.type) != null)) {
             walletWithSettings = Wallet(coin, account)
             router.showSettings(coin.type)
             return
@@ -118,12 +119,15 @@ class ManageWalletsPresenter(
     }
 
     private fun enableWallet(coin: Coin, account: Account) {
-        val settings = when (account.origin) {
-            AccountOrigin.Created -> interactor.blockchainSettingsForCreate(coin.type)
-            else -> interactor.blockchainSettings(coin.type)
+        val forCreate = account.origin == AccountOrigin.Created
+        val derivation: Derivation? = interactor.derivation(coin.type, forCreate)
+        val syncMode: SyncMode? = interactor.syncMode(coin.type, forCreate)
+
+        derivation?.let {
+            interactor.saveDerivation(coin.type, derivation)
         }
-        settings?.let {
-            interactor.saveBlockchainSettings(it)
+        syncMode?.let {
+            interactor.saveSyncMode(coin.type, syncMode)
         }
 
         val wallet = Wallet(coin, account)

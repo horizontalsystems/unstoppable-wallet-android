@@ -4,7 +4,10 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
 import io.horizontalsystems.bitcoincash.BitcoinCashKit.NetworkType
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -16,11 +19,13 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinCashAdapter(override val kit: BitcoinCashKit, override val settings: BlockchainSetting?)
-    : BitcoinBaseAdapter(kit, settings), BitcoinCashKit.Listener, ISendBitcoinAdapter {
+class BitcoinCashAdapter(
+        override val kit: BitcoinCashKit,
+        syncMode: SyncMode?
+) : BitcoinBaseAdapter(kit, syncMode = syncMode), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean) :
-            this(createKit(wallet, settings, testMode), settings)
+    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean) :
+            this(createKit(wallet, syncMode, testMode), syncMode)
 
     init {
         kit.listener = this
@@ -101,10 +106,9 @@ class BitcoinCashAdapter(override val kit: BitcoinCashKit, override val settings
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean): BitcoinCashKit {
+        private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
             val accountType = account.type
-            val syncMode = settings?.syncMode
             if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return BitcoinCashKit(context = App.instance,
                         words = accountType.words,

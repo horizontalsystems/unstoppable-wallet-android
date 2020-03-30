@@ -4,7 +4,10 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
@@ -16,11 +19,13 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class DashAdapter(override val kit: DashKit, override val settings: BlockchainSetting?) :
-        BitcoinBaseAdapter(kit, settings), DashKit.Listener, ISendDashAdapter {
+class DashAdapter(
+        override val kit: DashKit,
+        syncMode: SyncMode?
+) : BitcoinBaseAdapter(kit, syncMode = syncMode), DashKit.Listener, ISendDashAdapter {
 
-    constructor(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean) :
-            this(createKit(wallet, settings, testMode), settings)
+    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean) :
+            this(createKit(wallet, syncMode, testMode), syncMode)
 
     init {
         kit.listener = this
@@ -121,17 +126,16 @@ class DashAdapter(override val kit: DashKit, override val settings: BlockchainSe
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, settings: BlockchainSetting?, testMode: Boolean): DashKit {
+        private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): DashKit {
             val account = wallet.account
             val accountType = account.type
-            val syncMode = settings?.syncMode
             if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return DashKit(context = App.instance,
-                            words = accountType.words,
-                            walletId = account.id,
-                            syncMode = getSyncMode(syncMode),
-                            networkType = getNetworkType(testMode),
-                            confirmationsThreshold = defaultConfirmationsThreshold)
+                        words = accountType.words,
+                        walletId = account.id,
+                        syncMode = getSyncMode(syncMode),
+                        networkType = getNetworkType(testMode),
+                        confirmationsThreshold = defaultConfirmationsThreshold)
             }
 
             throw UnsupportedAccountException()

@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.BlockchainSetting
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object BlockchainSettingsListModule {
 
@@ -25,7 +26,8 @@ object BlockchainSettingsListModule {
 
     interface IInteractor {
         val coinsWithSettings: List<Coin>
-        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
+        fun derivation(coinType: CoinType): Derivation?
+        fun syncMode(coinType: CoinType): SyncMode?
     }
 
     interface IRouter {

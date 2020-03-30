@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CreateWalletActivity
 
@@ -41,9 +42,11 @@ object CreateWalletModule {
         fun createAccounts(accounts: List<Account>)
         @Throws
         fun account(predefinedAccountType: PredefinedAccountType) : Account
-        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
         fun saveWallets(wallets: List<Wallet>)
-        fun saveBlockchainSettings(blockchainSettings: BlockchainSetting)
+        fun derivation(coinType: CoinType): Derivation?
+        fun syncMode(coinType: CoinType): SyncMode?
+        fun saveDerivation(coinType: CoinType, derivation: Derivation)
+        fun saveSyncMode(coinType: CoinType, syncMode: SyncMode)
     }
 
     class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType?) : ViewModelProvider.Factory {

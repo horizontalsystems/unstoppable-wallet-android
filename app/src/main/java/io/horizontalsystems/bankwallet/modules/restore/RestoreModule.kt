@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import kotlinx.android.parcel.Parcelize
 
 object RestoreModule {
@@ -40,8 +41,10 @@ object RestoreModule {
         fun account(accountType: AccountType) : Account
         fun saveWallets(wallets: List<Wallet>)
         fun create(account: Account)
-        fun getBlockchainSettings(coinType: CoinType): BlockchainSetting?
-        fun saveBlockchainSettings(settings: BlockchainSetting)
+        fun derivation(coinType: CoinType): Derivation?
+        fun syncMode(coinType: CoinType): SyncMode?
+        fun saveDerivation(coinType: CoinType, derivation: Derivation)
+        fun saveSyncMode(coinType: CoinType, syncMode: SyncMode)
     }
 
     interface IRouter {
