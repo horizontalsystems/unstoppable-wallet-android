@@ -12,6 +12,8 @@
     <string name="Alert_Restart">Reiniciar</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Create">Crear</string>
+    <string name="Button_Skip">Skip</string>
+    <string name="Button_Start">Get Started</string>
     <string name="Button_Next">Siguiente</string>
     <string name="Button_Restore">Restaurar</string>
     <string name="Button_Enable">Habilitar</string>
@@ -26,6 +28,13 @@
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s monedero</string>
+    <!--Intro-->
+    <string name="Intro_Independence_Title">Independence</string>
+    <string name="Intro_Independence_Description">Keep crypto safe, uncensorable and\n unconfiscatable. Make your assets\n independent</string>
+    <string name="Intro_Knowledge_Title">Knowledge</string>
+    <string name="Intro_Knowledge_Description">Learn about projects and discover the crypto likes of Apple, Amazon and Tesla in early stages.</string>
+    <string name="Intro_Privacy_Title">Privacy</string>
+    <string name="Intro_Privacy_Description">Stay incognito and out of radar. Some privacy settings were preset for quick start. You may change them now or later in the app.</string>
     <!--Welcome-->
     <string name="Welcome_Title">Monedero \nUnstoppable</string>
     <string name="Welcome_SecurityCenter">Centro de seguridad</string>
