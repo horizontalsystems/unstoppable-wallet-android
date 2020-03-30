@@ -363,8 +363,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             balanceCoin.showIf(coinValue.visible)
             balanceFiat.showIf(fiatValue.visible)
-            balanceCoinLocked.showIf(coinValueLocked.visible, View.INVISIBLE)
-            balanceFiatLocked.showIf(fiatValueLocked.visible, View.INVISIBLE)
+            balanceCoinLocked.showIf(coinValueLocked.visible && !hideBalance)
+            balanceFiatLocked.showIf(fiatValueLocked.visible && !hideBalance)
             textSyncing.showIf(syncingData.syncingTextVisible)
             textSyncedUntil.showIf(syncingData.syncingTextVisible)
 
