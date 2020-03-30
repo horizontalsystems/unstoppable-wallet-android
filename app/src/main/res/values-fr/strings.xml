@@ -13,7 +13,7 @@
     <string name="Button_Cancel">Annuler</string>
     <string name="Button_Create">Créer</string>
     <string name="Button_Skip">Ignorer</string>
-    <string name="Button_Start">Get Started</string>
+    <string name="Button_Start">Démarrer</string>
     <string name="Button_Next">Suivant</string>
     <string name="Button_Restore">Restaurer</string>
     <string name="Button_Enable">Activer</string>
@@ -29,11 +29,11 @@
     <string name="NotAvailable">S. O.</string>
     <string name="Wallet">%s portefeuille</string>
     <!--Intro-->
-    <string name="Intro_Independence_Title">Independence</string>
+    <string name="Intro_Independence_Title">Indépendance</string>
     <string name="Intro_Independence_Description">Keep crypto safe, uncensorable and\n unconfiscatable. Make your assets\n independent</string>
-    <string name="Intro_Knowledge_Title">Knowledge</string>
-    <string name="Intro_Knowledge_Description">Learn about projects and discover the crypto likes of Apple, Amazon and Tesla in early stages.</string>
-    <string name="Intro_Privacy_Title">Privacy</string>
+    <string name="Intro_Knowledge_Title">Connaissances</string>
+    <string name="Intro_Knowledge_Description">Découvrez les projets et les crypto d\'Apple, Amazon et Tesla dans leurs débuts.</string>
+    <string name="Intro_Privacy_Title">Confidentialité</string>
     <string name="Intro_Privacy_Description">Stay incognito and out of radar. Some privacy settings were preset for quick start. You may change them now or later in the app.</string>
     <!--Welcome-->
     <string name="Welcome_Title">\nPortefeuille Unstoppable</string>
