@@ -1,14 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.animation.ValueAnimator
+import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.views.helpers.AnimationHelper
+import io.horizontalsystems.core.*
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import io.horizontalsystems.views.showIf
@@ -31,6 +40,36 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
     private val coinType = 1
     private val addCoinType = 2
 
+    private val context = App.instance
+    private var collapsedHeight = -1
+    private var expandedHeight = -1
+    private var expandedHeightBalanceHidden = -1
+    private var collapsedBalanceHiddenHeight = -1
+    private var lockedBalanceWrapperHeight = -1
+    private var balanceWrapperHeight = -1
+
+    private lateinit var recyclerView: RecyclerView
+
+    private val animationPlaybackSpeed: Double = 1.3
+    private val listItemExpandDuration: Long get() = (300L / animationPlaybackSpeed).toLong()
+
+    private fun setViewHeights(context: Context) {
+        val view = View.inflate(context, R.layout.view_holder_coin, null)
+        balanceWrapperHeight = view.findViewById<FrameLayout>(R.id.balanceWrapper)?.measureHeight()
+                ?: -1
+        lockedBalanceWrapperHeight = view.findViewById<FrameLayout>(R.id.lockedBalanceWrapper)?.measureHeight()
+                ?: -1
+        val buttonsWrapperHeight = view.findViewById<ConstraintLayout>(R.id.buttonsWrapper)?.measureHeight()
+                ?: -1
+        val borderHeight = view.findViewById<FrameLayout>(R.id.border)?.measureHeight() ?: -1
+
+        expandedHeight = view.measureHeight()
+        expandedHeightBalanceHidden = expandedHeight - balanceWrapperHeight - lockedBalanceWrapperHeight
+
+        collapsedHeight = expandedHeight - buttonsWrapperHeight
+        collapsedBalanceHiddenHeight = expandedHeight - buttonsWrapperHeight - balanceWrapperHeight - borderHeight
+    }
+
     fun setItems(items: List<BalanceViewItem>) {
         //  Update with regular method for the initial load to avoid showing balance tab with empty list
         if (this.items.isEmpty()) {
@@ -40,6 +79,14 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
             val diffResult = DiffUtil.calculateDiff(BalanceViewItemDiff(this.items, items))
             this.items = items
             diffResult.dispatchUpdatesTo(this)
+        }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+        if (balanceWrapperHeight <= 0) {
+            setViewHeights(recyclerView.context)
         }
     }
 
@@ -67,9 +114,139 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
 
         if (payloads.isEmpty()) {
             holder.bind(items[position])
+            applyChange(holder, items[position], false, null)
         } else {
+            val item = items[position]
             holder.bindUpdate(items[position], payloads)
+            if (payloads.contains(BalanceViewItem.UpdateType.TOGGLEBALANCE)) {
+                applyChange(holder, item, true, BalanceViewItem.UpdateType.TOGGLEBALANCE)
+            } else if (payloads.contains(BalanceViewItem.UpdateType.EXPANDED)) {
+                applyChange(holder, item, true, BalanceViewItem.UpdateType.EXPANDED)
+            }
         }
+    }
+
+    private fun applyChange(holder: ViewHolderCoin, viewItem: BalanceViewItem, animate: Boolean, changeType: BalanceViewItem.UpdateType?) {
+        if (animate) {
+
+            val animationForward = when (changeType) {
+                BalanceViewItem.UpdateType.TOGGLEBALANCE -> !viewItem.hideBalance
+                BalanceViewItem.UpdateType.EXPANDED -> viewItem.expanded
+                else -> true
+            }
+
+            var heightSmall = 0
+            var heightBig = 0
+
+            when (changeType) {
+                BalanceViewItem.UpdateType.TOGGLEBALANCE -> {
+                    heightSmall = getHeight(viewItem.expanded, true, viewItem.coinValueLocked.visible)
+                    heightBig = getHeight(viewItem.expanded, false, viewItem.coinValueLocked.visible)
+                }
+                BalanceViewItem.UpdateType.EXPANDED -> {
+                    heightSmall = getHeight(false, viewItem.hideBalance, viewItem.coinValueLocked.visible)
+                    heightBig = getHeight(true, viewItem.hideBalance, viewItem.coinValueLocked.visible)
+                }
+                else -> { }
+            }
+
+            val rootAnimator =
+                    if (animationForward) ValueAnimator.ofFloat(0f, 1f)
+                    else ValueAnimator.ofFloat(1f, 0f)
+
+            rootAnimator.duration = listItemExpandDuration
+            rootAnimator.interpolator = AccelerateDecelerateInterpolator()
+            rootAnimator.addUpdateListener { valueAnimator ->
+                val progress = valueAnimator.animatedValue as Float
+
+                if (changeType == BalanceViewItem.UpdateType.TOGGLEBALANCE) {
+                    setExpandProgress(holder.balanceWrapper, 0, balanceWrapperHeight, progress)
+                    if (viewItem.coinValueLocked.visible) {
+                        setExpandProgress(holder.lockedBalanceWrapper, 0, lockedBalanceWrapperHeight, progress)
+                    }
+                }
+
+                setExpandProgress(holder.rootWrapper, heightSmall, heightBig, progress)
+            }
+
+            if (animationForward) {
+                rootAnimator.doOnStart {
+                    when (changeType) {
+                        BalanceViewItem.UpdateType.EXPANDED -> {
+                            holder.buttonsWrapper.isVisible = true
+                        }
+                        BalanceViewItem.UpdateType.TOGGLEBALANCE -> {
+                            holder.buttonsWrapper.isVisible = true
+                            if (viewItem.coinValueLocked.visible && !holder.lockedBalanceWrapper.isVisible) {
+                                holder.lockedBalanceWrapper.isVisible = true
+                            }
+                        }
+                    }
+                }
+                rootAnimator.doOnEnd {
+                    when (changeType) {
+                        BalanceViewItem.UpdateType.TOGGLEBALANCE -> {
+                            if (viewItem.coinValueLocked.visible) {
+                                holder.balanceCoinLocked.isVisible = true
+                                holder.balanceFiatLocked.isVisible = true
+                            }
+                        }
+                    }
+                }
+            } else {
+                rootAnimator.doOnStart {
+                    when (changeType) {
+                        BalanceViewItem.UpdateType.TOGGLEBALANCE -> {
+                            if (viewItem.coinValueLocked.visible) {
+                                holder.balanceCoinLocked.isVisible = false
+                                holder.balanceFiatLocked.isVisible = false
+                            }
+                        }
+                    }
+                }
+                rootAnimator.doOnEnd {
+                    when (changeType) {
+                        BalanceViewItem.UpdateType.EXPANDED -> {
+                            holder.buttonsWrapper.isVisible = false
+                        }
+                    }
+                }
+            }
+
+            rootAnimator.start()
+    } else {
+            val smallHeight = getHeight(false, true, viewItem.coinValueLocked.visible)
+            val bigHeight = getHeight(viewItem.expanded, viewItem.hideBalance, viewItem.coinValueLocked.visible)
+
+            holder.lockedBalanceWrapper.isVisible = viewItem.coinValueLocked.visible && !viewItem.hideBalance
+
+            if (viewItem.coinValueLocked.visible) {
+                holder.balanceCoinLocked.isVisible = !viewItem.hideBalance
+                holder.balanceFiatLocked.isVisible = !viewItem.hideBalance
+            }
+
+            setExpandProgress(holder.balanceWrapper, 0, balanceWrapperHeight, if(!viewItem.hideBalance) 1f else 0f)
+
+            val forwardAnimation = viewItem.expanded || !viewItem.hideBalance
+            setExpandProgress(holder.rootWrapper, smallHeight, bigHeight, if (forwardAnimation) 1f else 0f)
+        }
+    }
+
+    private fun getHeight(expanded: Boolean, balanceHidden: Boolean, showLocked: Boolean): Int {
+        if (expanded) {
+            if (balanceHidden) {
+                return expandedHeightBalanceHidden
+            } else {
+                return if (showLocked) expandedHeight else expandedHeight - lockedBalanceWrapperHeight
+            }
+        } else {
+            return if (balanceHidden) collapsedBalanceHiddenHeight else collapsedHeight
+        }
+    }
+
+    private fun setExpandProgress(view: View, smallHeight: Int, bigHeight: Int, progress: Float) {
+        view.layoutParams.height = (smallHeight + (bigHeight - smallHeight) * progress).toInt()
+        view.requestLayout()
     }
 }
 
@@ -132,7 +309,12 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             buttonReceive.isEnabled = receiveEnabled
             buttonSend.isEnabled = sendEnabled
 
-            containerView.isSelected = expanded
+            balanceCoin.showIf(coinValue.visible)
+            balanceFiat.showIf(fiatValue.visible)
+            balanceCoinLocked.showIf(coinValueLocked.visible, View.INVISIBLE)
+            balanceFiatLocked.showIf(fiatValueLocked.visible, View.INVISIBLE)
+            textSyncing.showIf(syncingData.syncingTextVisible)
+            textSyncedUntil.showIf(syncingData.syncingTextVisible)
 
             balanceCoin.dimIf(coinValue.dimmed, 0.3f)
             balanceFiat.dimIf(fiatValue.dimmed)
@@ -143,44 +325,16 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             iconNotSynced.showIf(failedIconVisible)
             iconProgress.showIf(syncingData.progress != null)
 
-            balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
-            balanceFiat.showIf(fiatValue.visible)
             coinLabel.showIf(coinTypeLabelVisible)
-
-            balanceCoinLocked.showIf(coinValueLocked.visible)
-            balanceFiatLocked.showIf(fiatValueLocked.visible)
-
-            textSyncingGroup.showIf(syncingData.syncingTextVisible)
-
-            buttonsWrapper.showIf(expanded)
         }
     }
 
     fun bindUpdate(balanceViewItem: BalanceViewItem, payloads: MutableList<Any>) {
         payloads.forEach {
             when (it) {
-                BalanceViewItem.UpdateType.EXPANDED -> bindUpdateExpanded(balanceViewItem)
                 BalanceViewItem.UpdateType.STATE -> bindUpdateState(balanceViewItem)
                 BalanceViewItem.UpdateType.BALANCE -> bindUpdateBalance(balanceViewItem)
                 BalanceViewItem.UpdateType.MARKET_INFO -> bindUpdateMarketInfo(balanceViewItem)
-            }
-        }
-    }
-
-    private fun bindUpdateExpanded(item: BalanceViewItem) {
-        item.apply {
-            balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
-            balanceFiat.showIf(fiatValue.visible)
-
-            coinLabel.showIf(coinTypeLabelVisible)
-            textSyncingGroup.showIf(syncingData.syncingTextVisible)
-
-            containerView.isSelected = expanded
-
-            if (expanded) {
-                AnimationHelper.expand(buttonsWrapper)
-            } else {
-                AnimationHelper.collapse(buttonsWrapper)
             }
         }
     }
@@ -193,8 +347,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             balanceCoinLocked.text = coinValueLocked.text
             balanceFiatLocked.text = fiatValueLocked.text
 
-            balanceCoinLocked.showIf(coinValueLocked.visible)
-            balanceFiatLocked.showIf(fiatValueLocked.visible)
+            balanceCoinLocked.showIf(coinValueLocked.visible, View.INVISIBLE)
+            balanceFiatLocked.showIf(fiatValueLocked.visible, View.INVISIBLE)
         }
     }
 
@@ -205,12 +359,14 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             iconCoin.showIf(coinIconVisible)
             iconNotSynced.showIf(failedIconVisible)
-            textSyncingGroup.showIf(syncingData.syncingTextVisible)
             setTextSyncing(syncingData)
 
-            balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
-            coinLabel.showIf(coinTypeLabelVisible)
+            balanceCoin.showIf(coinValue.visible)
             balanceFiat.showIf(fiatValue.visible)
+            balanceCoinLocked.showIf(coinValueLocked.visible, View.INVISIBLE)
+            balanceFiatLocked.showIf(fiatValueLocked.visible, View.INVISIBLE)
+            textSyncing.showIf(syncingData.syncingTextVisible)
+            textSyncedUntil.showIf(syncingData.syncingTextVisible)
 
             balanceCoin.dimIf(coinValue.dimmed, 0.3f)
             balanceFiat.dimIf(fiatValue.dimmed)

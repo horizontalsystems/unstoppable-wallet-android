@@ -4,9 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +21,8 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
+import io.horizontalsystems.core.getValueAnimator
+import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
@@ -27,6 +30,9 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     private lateinit var viewModel: BalanceViewModel
     private val coinAdapter = BalanceCoinAdapter(this)
+    private var totalBalanceTabHeight: Int = 0
+    private val animationPlaybackSpeed: Double = 1.3
+    private val expandDuration: Long get() = (300L / animationPlaybackSpeed).toLong()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
@@ -42,7 +48,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        totalBalanceTabHeight = balanceTabWrapper.measureHeight()
 
         recyclerCoins.adapter = coinAdapter
         recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
@@ -56,8 +62,27 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             viewModel.delegate.onRefresh()
         }
 
+        balanceText.setOnClickListener { viewModel.delegate.onHideBalanceClick() }
+        hideButton.setOnClickListener { viewModel.delegate.onHideBalanceClick() }
+
         observeLiveData()
         setSwipeBackground()
+    }
+
+    private fun setOptionsMenuVisible(visible: Boolean){
+        if (visible) {
+            toolbar.menu.clear()
+            toolbar.inflateMenu(R.menu.balance_menu)
+            toolbar.setOnMenuItemClickListener { item: MenuItem? ->
+                if (item?.itemId == R.id.menuShowBalance) {
+                    viewModel.delegate.onShowBalanceClick()
+                    return@setOnMenuItemClickListener true
+                }
+                return@setOnMenuItemClickListener false
+            }
+        } else {
+            toolbar.menu.clear()
+        }
     }
 
     override fun onDestroyView() {
@@ -187,6 +212,19 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
                 putExtra("coin", coin)
             })
         })
+
+        viewModel.setBalanceVisibleLiveEvent.observe(viewLifecycleOwner, Observer { showBalance ->
+            setOptionsMenuVisible(!showBalance)
+
+            val animator = getValueAnimator(showBalance, expandDuration, AccelerateDecelerateInterpolator()
+            ) { progress -> setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, progress) }
+            animator.start()
+        })
+    }
+
+    private fun setExpandProgress(view: View, smallHeight: Int, bigHeight: Int, progress: Float) {
+        view.layoutParams.height = (smallHeight + (bigHeight - smallHeight) * progress).toInt()
+        view.requestLayout()
     }
 
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
