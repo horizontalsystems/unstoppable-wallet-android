@@ -14,7 +14,7 @@ class SyncModeSettingsManager(
 ) : ISyncModeSettingsManager {
 
     companion object {
-        private const val syncModeSettingKey: String = "sync_mode"
+        const val syncModeSettingKey: String = "sync_mode"
     }
 
     override fun defaultSyncModeSetting(coinType: CoinType): SyncModeSetting? {

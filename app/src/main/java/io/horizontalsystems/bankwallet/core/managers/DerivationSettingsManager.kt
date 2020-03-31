@@ -14,7 +14,7 @@ class DerivationSettingsManager(
 ) : IDerivationSettingsManager {
 
     companion object {
-        private const val derivationSettingKey: String = "derivation"
+        const val derivationSettingKey: String = "derivation"
     }
 
     override fun defaultDerivationSetting(coinType: CoinType): DerivationSetting? {
