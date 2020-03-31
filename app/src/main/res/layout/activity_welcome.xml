@@ -39,19 +39,18 @@
         android:layout_height="50dp"
         android:layout_marginBottom="24dp"
         android:text="@string/Welcome_RestoreWallet"
-        app:layout_constraintBottom_toTopOf="@+id/securityCenter"
+        app:layout_constraintBottom_toTopOf="@+id/privacySettings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/securityCenter"
-        style="@style/Subhead1"
+    <Button
+        android:id="@+id/privacySettings"
+        style="@style/ButtonPrivacySettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
-        android:padding="5dp"
-        android:text="@string/Welcome_SecurityCenter"
-        android:textColor="@color/stateful_text_color_leah"
+        android:text="@string/Welcome_PrivacySettings"
+        android:textColor="?ColorLeah"
         app:layout_constraintBottom_toTopOf="@+id/textVersion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
