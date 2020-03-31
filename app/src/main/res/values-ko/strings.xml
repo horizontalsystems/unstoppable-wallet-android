@@ -29,7 +29,7 @@
     <string name="Wallet">%s 지갑</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">독립</string>
-    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times.</string>
+    <string name="Intro_Independence_Description">암호와 자산을 항상 안전하고, 압수당하지 않으며, 접근 가능한 상태로 유지하세요.</string>
     <string name="Intro_Knowledge_Title">지식</string>
     <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
     <string name="Intro_Privacy_Title">개인정보</string>
