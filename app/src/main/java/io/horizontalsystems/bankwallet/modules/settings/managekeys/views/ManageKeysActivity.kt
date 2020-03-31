@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.modules.blockchainsettingslist.BlockchainSettingsListModule
+import io.horizontalsystems.bankwallet.modules.bipsettings.BipSettingsModule
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreMode
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
@@ -84,7 +84,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
         })
 
         router.showBlockchainSettings.observe(this, Observer { enabledCoinTypes ->
-            BlockchainSettingsListModule.startForResult(this, enabledCoinTypes, false)
+            BipSettingsModule.startForResult(this, enabledCoinTypes, false)
         })
 
         router.closeEvent.observe(this, Observer {

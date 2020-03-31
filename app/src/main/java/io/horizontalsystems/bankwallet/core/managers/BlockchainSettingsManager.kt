@@ -23,11 +23,16 @@ class BlockchainSettingsManager(
         }
 
     override fun derivationSetting(coinType: CoinType, forCreate: Boolean): DerivationSetting? {
-        val default = derivationSettingsManager.defaultDerivationSetting(coinType)
-        if (forCreate) {
-            return default
+        val defaultDerivationSetting: DerivationSetting? = try {
+            derivationSettingsManager.defaultDerivationSetting(coinType)
+        } catch (e: NoSuchElementException) {
+            null
         }
-        return derivationSettingsManager.derivationSetting(coinType) ?: default
+
+        if (forCreate) {
+            return defaultDerivationSetting
+        }
+        return derivationSettingsManager.derivationSetting(coinType) ?: defaultDerivationSetting
     }
 
     override fun syncModeSetting(coinType: CoinType, forCreate: Boolean): SyncModeSetting? {

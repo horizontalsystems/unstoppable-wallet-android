@@ -78,6 +78,7 @@ class App : CoreApp() {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
         lateinit var rateAppManager: IRateAppManager
+        lateinit var derivationSettingsManager: IDerivationSettingsManager
     }
 
     override fun onCreate() {
@@ -152,7 +153,7 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager()
 
-        val derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
+        derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
         val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
         blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, appConfigProvider)
 
