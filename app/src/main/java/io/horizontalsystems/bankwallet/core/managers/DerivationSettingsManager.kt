@@ -17,8 +17,8 @@ class DerivationSettingsManager(
         const val derivationSettingKey: String = "derivation"
     }
 
-    override fun defaultDerivationSetting(coinType: CoinType): DerivationSetting? {
-        return appConfigProvider.derivationSettings.firstOrNull { it.coinType == coinType }
+    override fun defaultDerivationSetting(coinType: CoinType): DerivationSetting {
+        return appConfigProvider.derivationSettings.first { it.coinType == coinType }
     }
 
     override fun derivationSetting(coinType: CoinType): DerivationSetting? {

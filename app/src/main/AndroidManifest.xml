@@ -32,10 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.blockchainsettings.BlockchainSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.blockchainsettingslist.BlockchainSettingsListActivity"
+            android:name=".modules.bipsettings.BipSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.BackupActivity"

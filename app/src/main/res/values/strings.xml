@@ -406,8 +406,7 @@
 
     <!-- Blockchain Settings List -->
 
-    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
-    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+    <string name="BipSettings_Title">Address Format</string>
 
     <!-- Blockchain Settings -->
 

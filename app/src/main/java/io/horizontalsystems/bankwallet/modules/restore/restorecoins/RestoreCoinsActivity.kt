@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.blockchainsettingslist.BlockchainSettingsListModule
+import io.horizontalsystems.bankwallet.modules.bipsettings.BipSettingsModule
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 
@@ -114,7 +114,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     private fun observeRouter(router: RestoreCoinsRouter) {
         router.showBlockchainSettingsListEvent.observe(this, Observer { coinTypes ->
-            BlockchainSettingsListModule.startForResult(this, coinTypes, true)
+            BipSettingsModule.startForResult(this, coinTypes, true)
         })
 
         router.closeWithSelectedCoins.observe(this, Observer { coins ->

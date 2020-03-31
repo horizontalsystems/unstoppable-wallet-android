@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.blockchainsettings
+package io.horizontalsystems.bankwallet.modules.bipsettings
 
 import io.horizontalsystems.core.SingleLiveEvent
 
-class BlockchainSettingsRouter: BlockchainSettingsModule.IRouter {
+class BipSettingsRouter: BipSettingsModule.IRouter {
 
     val closeWithResultOk = SingleLiveEvent<Unit>()
     val close = SingleLiveEvent<Unit>()
@@ -14,4 +14,5 @@ class BlockchainSettingsRouter: BlockchainSettingsModule.IRouter {
     override fun close() {
         close.call()
     }
+
 }
