@@ -33,10 +33,10 @@
     <string name="Intro_Knowledge_Title">지식</string>
     <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
     <string name="Intro_Privacy_Title">개인정보</string>
-    <string name="Intro_Privacy_Description">Stay incognito and out of radar while growing your wealth.</string>
+    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">언스타퍼블 \n지갑</string>
-    <string name="Welcome_SecurityCenter">보안 센터</string>
+    <string name="Welcome_Title">Unstoppable\nWallet</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
     <!--Rate App-->
