@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.intro
 
+import android.app.ActivityOptions
 import android.os.Bundle
-import android.view.WindowManager
+import android.transition.Fade
+import android.view.Window
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
@@ -17,8 +19,14 @@ class IntroActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_intro)
+        with(window) {
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+            // set an exit transition
+            exitTransition = Fade()
+        }
+
         setTransparentStatusBar()
+        setContentView(R.layout.activity_intro)
 
         val viewPagerAdapter = IntroViewPagerAdapter(supportFragmentManager)
         val pagesCount = viewPagerAdapter.count
@@ -54,7 +62,7 @@ class IntroActivity : BaseActivity() {
 
         (presenter.router as? IntroRouter)?.let { router ->
             router.navigateToWelcomeLiveEvent.observe(this, Observer {
-                WelcomeModule.start(this)
+                WelcomeModule.start(this, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
             })
         }
     }
