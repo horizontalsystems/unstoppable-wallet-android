@@ -29,14 +29,14 @@
     <string name="Wallet">%s portefeuille</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Indépendance</string>
-    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times.</string>
+    <string name="Intro_Independence_Description">Conservez les actifs cryptographiques en lieu sûr, sans possibilité de confiscation et accessibles à tout moment.</string>
     <string name="Intro_Knowledge_Title">Connaissances</string>
-    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
+    <string name="Intro_Knowledge_Description">Soyez informé et découvrez les projets Blockchain en cours de développement dès les premières étapes.</string>
     <string name="Intro_Privacy_Title">Confidentialité</string>
-    <string name="Intro_Privacy_Description">Stay incognito and out of radar while growing your wealth.</string>
+    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">\nPortefeuille Unstoppable</string>
-    <string name="Welcome_SecurityCenter">Centre de Sécurité</string>
+    <string name="Welcome_Title">Unstoppable\nWallet</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Rate App-->
