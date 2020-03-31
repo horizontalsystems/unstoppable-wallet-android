@@ -21,34 +21,6 @@
 
         </KeyFrameSet>
 
-        <KeyFrameSet>
-
-            <KeyAttribute
-                android:translationY="0dp"
-                app:framePosition="50"
-                app:motionTarget="@id/btnNext" />
-
-            <KeyAttribute
-                android:translationY="100dp"
-                app:framePosition="100"
-                app:motionTarget="@id/btnNext" />
-
-        </KeyFrameSet>
-
-        <KeyFrameSet>
-
-            <KeyAttribute
-                android:translationX="200dp"
-                app:framePosition="50"
-                app:motionTarget="@id/btnStart" />
-
-            <KeyAttribute
-                android:translationX="0dp"
-                app:framePosition="100"
-                app:motionTarget="@id/btnStart" />
-
-        </KeyFrameSet>
-
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -60,24 +32,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-        <Constraint
-            android:id="@+id/btnNext"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:translationY="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-        <Constraint
-            android:id="@+id/btnStart"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:translationX="200dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -88,24 +42,6 @@
             android:alpha="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-        <Constraint
-            android:id="@+id/btnNext"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:translationY="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-        <Constraint
-            android:id="@+id/btnStart"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:translationX="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     </ConstraintSet>

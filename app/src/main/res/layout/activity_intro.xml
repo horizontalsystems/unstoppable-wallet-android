@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/darkest"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkest"
     app:layoutDescription="@xml/scene_intro">
 
     <androidx.viewpager.widget.ViewPager
@@ -57,9 +57,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/dark"
-        app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/circleIndicator"
@@ -94,16 +93,9 @@
         android:background="?selectableItemBackground"
         android:gravity="center"
         android:paddingHorizontal="24dp"
-        android:text="@string/Button_Next" />
-
-    <TextView
-        android:id="@+id/btnStart"
-        style="@style/Subhead1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="?selectableItemBackground"
-        android:gravity="center"
-        android:paddingHorizontal="24dp"
-        android:text="@string/Button_Start" />
+        android:text="@string/Button_Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

@@ -43,15 +43,13 @@ class IntroActivity : BaseActivity() {
         btnNext.setOnClickListener {
             if (viewPager.currentItem < pagesCount - 1) {
                 viewPager.currentItem = viewPager.currentItem + 1
+            } else {
+                presenter.start()
             }
         }
 
         btnSkip.setOnClickListener {
             presenter.skip()
-        }
-
-        btnStart.setOnClickListener {
-            presenter.start()
         }
 
         (presenter.router as? IntroRouter)?.let { router ->
