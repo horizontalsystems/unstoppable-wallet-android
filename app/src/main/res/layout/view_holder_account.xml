@@ -12,7 +12,7 @@
     android:paddingStart="1dp"
     android:paddingEnd="1dp"
     android:paddingBottom="1dp"
-    android:background="@drawable/background_yellow_border"
+    android:background="@drawable/stateful_background_yellow_border"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
