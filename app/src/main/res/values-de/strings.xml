@@ -33,10 +33,10 @@
     <string name="Intro_Knowledge_Title">Wissen</string>
     <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
     <string name="Intro_Privacy_Title">Privatsphäre</string>
-    <string name="Intro_Privacy_Description">Stay incognito and out of radar while growing your wealth.</string>
+    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable \nWallet</string>
-    <string name="Welcome_SecurityCenter">Sicherheits-Center</string>
+    <string name="Welcome_Title">Unstoppable\nWallet</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Rate App-->
