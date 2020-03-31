@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.bipsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,16 +11,15 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.feeratekit.model.Coin
-import kotlinx.android.synthetic.main.activity_bip_settings.*
+import kotlinx.android.synthetic.main.activity_address_format_settings.*
 
-class BipSettingsActivity : BaseActivity() {
+class AddressFormatSettingsActivity : BaseActivity() {
 
-    private lateinit var presenter: BipSettingsPresenter
+    private lateinit var presenter: AddressFormatSettingsPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bip_settings)
+        setContentView(R.layout.activity_address_format_settings)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -28,13 +27,13 @@ class BipSettingsActivity : BaseActivity() {
         val coinTypes: List<CoinType> = intent.getParcelableArrayListExtra(ModuleField.COIN_TYPES) ?: listOf()
         val showDoneButton: Boolean = intent.getBooleanExtra(ModuleField.SHOW_DONE_BUTTON, false)
 
-        presenter = ViewModelProvider(this, BipSettingsModule.Factory(coinTypes, showDoneButton))
-                .get(BipSettingsPresenter::class.java)
+        presenter = ViewModelProvider(this, AddressFormatSettingsModule.Factory(coinTypes, showDoneButton))
+                .get(AddressFormatSettingsPresenter::class.java)
 
         presenter.onViewLoad()
 
-        observeView(presenter.view as BipSettingsView)
-        observeRouter(presenter.router as BipSettingsRouter)
+        observeView(presenter.view as AddressFormatSettingsView)
+        observeRouter(presenter.router as AddressFormatSettingsRouter)
 
         setBtcItems()
         setLtcItems()
@@ -62,7 +61,7 @@ class BipSettingsActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun observeView(view: BipSettingsView) {
+    private fun observeView(view: AddressFormatSettingsView) {
         view.btcBipTitle.observe(this, Observer { title ->
             btcHeader.text = title
         })
@@ -91,13 +90,13 @@ class BipSettingsActivity : BaseActivity() {
         })
         view.showDerivationChangeAlert.observe(this, Observer { (derivationSetting, coinTitle) ->
             val bipVersion = AccountType.getDerivationTitle(derivationSetting.derivation)
-            BipSettingsAlertDialog.show(
+            AddressFormatSettingsAlertDialog.show(
                     title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
                     subtitle = bipVersion,
                     contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content, coinTitle, coinTitle),
                     actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, bipVersion),
                     activity = this,
-                    listener = object : BipSettingsAlertDialog.Listener {
+                    listener = object : AddressFormatSettingsAlertDialog.Listener {
                         override fun onActionButtonClick() {
                             presenter.proceedWithDerivationChange(derivationSetting)
                         }
@@ -144,7 +143,7 @@ class BipSettingsActivity : BaseActivity() {
         )
     }
 
-    private fun observeRouter(router: BipSettingsRouter) {
+    private fun observeRouter(router: AddressFormatSettingsRouter) {
         router.closeWithResultOk.observe(this, Observer {
             setResult(RESULT_OK)
             finish()

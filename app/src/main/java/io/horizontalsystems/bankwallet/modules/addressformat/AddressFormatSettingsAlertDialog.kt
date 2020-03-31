@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.bipsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 
-class BipSettingsAlertDialog(
+class AddressFormatSettingsAlertDialog(
         private val listener: Listener,
         private val title: String,
         private val subtitle: String,
@@ -59,7 +59,7 @@ class BipSettingsAlertDialog(
 
     companion object {
         fun show(title: String, subtitle: String, contentText: String, actionButtonTitle: String, activity: FragmentActivity, listener: Listener) {
-            val fragment = BipSettingsAlertDialog(listener, title, subtitle, contentText, actionButtonTitle)
+            val fragment = AddressFormatSettingsAlertDialog(listener, title, subtitle, contentText, actionButtonTitle)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_coin_settings_alert_dialog")

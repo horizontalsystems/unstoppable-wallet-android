@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.bipsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 
-object BipSettingsModule {
+object AddressFormatSettingsModule {
 
     interface IView {
         fun setBtcBipsEnabled(enabled: Boolean)
@@ -43,7 +43,7 @@ object BipSettingsModule {
     }
 
     fun startForResult(context: AppCompatActivity, coinTypes: List<CoinType>, showDoneButton: Boolean) {
-        val intent = Intent(context, BipSettingsActivity::class.java)
+        val intent = Intent(context, AddressFormatSettingsActivity::class.java)
         intent.putParcelableArrayListExtra(ModuleField.COIN_TYPES, ArrayList(coinTypes))
         intent.putExtra(ModuleField.SHOW_DONE_BUTTON, showDoneButton)
         context.startActivityForResult(intent, ModuleCode.BLOCKCHAIN_SETTINGS_LIST)
@@ -52,10 +52,10 @@ object BipSettingsModule {
     class Factory(private val coinTypes: List<CoinType>, private val showDoneButton: Boolean) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = BipSettingsView()
-            val router = BipSettingsRouter()
-            val interactor = BipSettingsInteractor(App.derivationSettingsManager, App.appConfigProvider, App.walletManager)
-            val presenter = BipSettingsPresenter(view, router, interactor, coinTypes, showDoneButton)
+            val view = AddressFormatSettingsView()
+            val router = AddressFormatSettingsRouter()
+            val interactor = AddressFormatSettingsInteractor(App.derivationSettingsManager, App.appConfigProvider, App.walletManager)
+            val presenter = AddressFormatSettingsPresenter(view, router, interactor, coinTypes, showDoneButton)
 
             return presenter as T
         }

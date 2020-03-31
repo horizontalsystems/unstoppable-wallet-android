@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.bipsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import io.horizontalsystems.core.SingleLiveEvent
 
-class BipSettingsRouter: BipSettingsModule.IRouter {
+class AddressFormatSettingsRouter: AddressFormatSettingsModule.IRouter {
 
     val closeWithResultOk = SingleLiveEvent<Unit>()
     val close = SingleLiveEvent<Unit>()

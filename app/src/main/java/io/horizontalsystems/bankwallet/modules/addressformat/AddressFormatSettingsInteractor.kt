@@ -1,18 +1,16 @@
-package io.horizontalsystems.bankwallet.modules.bipsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.managers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 
-class BipSettingsInteractor(
+class AddressFormatSettingsInteractor(
         private val derivationSettingsManager: IDerivationSettingsManager,
         private val appConfigProvider: IAppConfigProvider,
         private val walletManager: IWalletManager
-) : BipSettingsModule.IInteractor {
+) : AddressFormatSettingsModule.IInteractor {
 
     override fun derivation(coinType: CoinType): Derivation {
         return derivationSettingsManager.derivationSetting(coinType)?.derivation
