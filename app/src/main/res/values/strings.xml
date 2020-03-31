@@ -44,7 +44,7 @@
     <!--Welcome-->
 
     <string name="Welcome_Title">Unstoppable\nWallet</string>
-    <string name="Welcome_SecurityCenter">Security Center</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
