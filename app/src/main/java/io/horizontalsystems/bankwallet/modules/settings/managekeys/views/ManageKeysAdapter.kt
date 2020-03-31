@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
 import io.horizontalsystems.views.AccountButtonItemType
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_account.*
@@ -49,6 +50,10 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             restoreButton.visibility = View.GONE
             backupButton.visibility = View.GONE
             unlinkButton.visibility = View.GONE
+
+            viewHolderRoot.isActivated = item.account != null
+            val padding = if (item.account != null) LayoutHelper.dp(1f, containerView.context) else 0
+            viewHolderRoot.setPadding(padding, 0, padding, padding)
 
             if (item.account == null) {
                 if (predefinedAccount.isCreationSupported()) {
