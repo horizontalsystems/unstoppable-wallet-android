@@ -53,13 +53,18 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             if (item.account == null) {
                 if (predefinedAccount.isCreationSupported()) {
                     createButton.visibility = View.VISIBLE
-                    createButton.bind(containerView.resources.getString(R.string.ManageKeys_Create), AccountButtonItemType.SimpleButton, false) {
-                        listener.onClickCreate(item)
-                    }
+                    createButton.bind(
+                            title = containerView.resources.getString(R.string.ManageKeys_Create),
+                            type = AccountButtonItemType.SimpleButton,
+                            showAttentionIcon = false,
+                            onClick = {
+                                listener.onClickCreate(item)
+                            }
+                    )
                 }
 
                 restoreButton.visibility = View.VISIBLE
-                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.SimpleButton, false) {
+                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.SimpleButton, false, true) {
                     listener.onClickRestore(item)
                 }
 
@@ -68,9 +73,9 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
                 return
             }
 
-            if (predefinedAccount == PredefinedAccountType.Standard){
+            if (predefinedAccount == PredefinedAccountType.Standard) {
                 advancedSettingsButton.visibility = View.VISIBLE
-                advancedSettingsButton.bind(containerView.resources.getString(R.string.ManageKeys_AdvancedSettings), AccountButtonItemType.SimpleButton, false) {
+                advancedSettingsButton.bind(containerView.resources.getString(R.string.ManageKeys_AddressFormat), AccountButtonItemType.SimpleButton, false) {
                     listener.onClickAdvancedSettings(item)
                 }
             }
@@ -93,6 +98,7 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             unlinkButton.bind(
                     title = containerView.resources.getString(R.string.ManageKeys_Unlink),
                     type = AccountButtonItemType.RedButton,
+                    isLast = true,
                     onClick = {
                         listener.onClickUnlink(item)
                     })

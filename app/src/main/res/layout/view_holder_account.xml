@@ -6,18 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     android:layout_marginBottom="8dp"
+    android:paddingStart="1dp"
+    android:paddingEnd="1dp"
+    android:paddingBottom="1dp"
+    android:background="@drawable/background_yellow_border"
     android:orientation="vertical">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/clickable_background_color_lawrence"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
@@ -48,13 +48,18 @@
         <TextView
             android:id="@+id/subtitleText"
             style="@style/Subhead2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:layout_marginEnd="30dp"
             android:textColor="@color/grey"
-            app:layout_constraintLeft_toLeftOf="@id/titleText"
+            android:maxLines="3"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="@id/titleText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleText"
-            tools:text="BTC, BCH, DASH, ETH, ERC-20" />
+            tools:text="BTC, LTC, BCH, DASH, ETH, ERC-20 Tokens, and more" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <io.horizontalsystems.views.ManageAccountView
@@ -81,10 +86,5 @@
         android:id="@+id/unlinkButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20" />
 
 </LinearLayout>

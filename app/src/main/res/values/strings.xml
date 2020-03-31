@@ -378,7 +378,7 @@
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
+    <string name="ManageKeys_AddressFormat">Address Format</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>

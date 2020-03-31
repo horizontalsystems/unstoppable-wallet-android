@@ -10,7 +10,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
         android:background="@color/steel_20" />
 
     <LinearLayout
@@ -25,7 +24,6 @@
             style="@style/Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:text="Backup"
             android:textColor="?ColorOz" />
@@ -35,9 +33,8 @@
             style="@style/Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Backup"
+            tools:text="Backup"
             android:textColor="?ColorLucian"
             android:visibility="gone" />
 
