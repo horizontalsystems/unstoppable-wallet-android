@@ -30,11 +30,11 @@
     <string name="Wallet">%s 지갑</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">독립</string>
-    <string name="Intro_Independence_Description">Keep crypto safe, uncensorable and\n unconfiscatable. Make your assets\n independent</string>
-    <string name="Intro_Knowledge_Title">Knowledge</string>
-    <string name="Intro_Knowledge_Description">Learn about projects and discover the crypto likes of Apple, Amazon and Tesla in early stages.</string>
-    <string name="Intro_Privacy_Title">Privacy</string>
-    <string name="Intro_Privacy_Description">Stay incognito and out of radar. Some privacy settings were preset for quick start. You may change them now or later in the app.</string>
+    <string name="Intro_Independence_Description">암호화를 안전하고, 검열 불가하게하고\n 압수할 수 없게 해주세요. 귀하의 자산을\n 독립적으로 만들어주세요</string>
+    <string name="Intro_Knowledge_Title">지식</string>
+    <string name="Intro_Knowledge_Description">초기 단계에서 프로젝트에 대해 배우시고 Apple, Amazon 및 Tesla와 같은 암호화를 발견해주세요.</string>
+    <string name="Intro_Privacy_Title">개인정보</string>
+    <string name="Intro_Privacy_Description">익명으로 유지하시고 레이더에서 벗어나세요. 일부 개인 정보 설정은 빠른 시작을 위해 먼저 설정이 되어있습니다. 앱에서 지금 또는 나중에 변경하실 수 있습니다.</string>
     <!--Welcome-->
     <string name="Welcome_Title">언스타퍼블 \n지갑</string>
     <string name="Welcome_SecurityCenter">보안 센터</string>
