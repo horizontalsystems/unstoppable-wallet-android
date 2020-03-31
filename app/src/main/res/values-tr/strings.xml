@@ -12,7 +12,7 @@
     <string name="Alert_Restart">Yeniden başlat</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Create">Oluştur</string>
-    <string name="Button_Skip">Skip</string>
+    <string name="Button_Skip">Atla</string>
     <string name="Button_Next">İleri</string>
     <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_Enable">Etkinleştir</string>
@@ -28,9 +28,9 @@
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
     <!--Intro-->
-    <string name="Intro_Independence_Title">Independence</string>
+    <string name="Intro_Independence_Title">Bağımsızlık</string>
     <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times.</string>
-    <string name="Intro_Knowledge_Title">Knowledge</string>
+    <string name="Intro_Knowledge_Title">Bilgi</string>
     <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
     <string name="Intro_Privacy_Title">Privacy</string>
     <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
