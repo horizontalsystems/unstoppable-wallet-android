@@ -13,7 +13,6 @@
     <string name="Button_Cancel">取消</string>
     <string name="Button_Create">创建</string>
     <string name="Button_Skip">跳过</string>
-    <string name="Button_Start">开始</string>
     <string name="Button_Next">继续</string>
     <string name="Button_Restore">恢复</string>
     <string name="Button_Enable">启用</string>
@@ -30,11 +29,11 @@
     <string name="Wallet">%s钱包</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">独立性</string>
-    <string name="Intro_Independence_Description">保持加密货币安全、不受审查以及\n不可没收。保证您的资产\n独立</string>
+    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times.</string>
     <string name="Intro_Knowledge_Title">知识</string>
-    <string name="Intro_Knowledge_Description">了解有如处于早期阶段的苹果、亚马逊和特斯拉的项目并对加密货币进行探索。</string>
+    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
     <string name="Intro_Privacy_Title">隐私</string>
-    <string name="Intro_Privacy_Description">保持隐身状态且不被追踪。快速启动中已具有一定的隐私设置。现在或以后均可在应用中对其进行更改。</string>
+    <string name="Intro_Privacy_Description">Stay incognito and out of radar while growing your wealth.</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n钱包</string>
     <string name="Welcome_SecurityCenter">安全中心</string>
