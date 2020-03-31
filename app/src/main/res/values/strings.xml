@@ -404,9 +404,9 @@
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
-    <!-- Blockchain Settings List -->
+    <!-- Address Format Settings List -->
 
-    <string name="BipSettings_Title">Address Format</string>
+    <string name="AddressFormatSettings_Title">Address Format</string>
 
     <!-- Blockchain Settings -->
 

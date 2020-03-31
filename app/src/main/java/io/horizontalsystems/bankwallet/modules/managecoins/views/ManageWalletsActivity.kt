@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.bipsettings.BipSettingsModule
+import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsPresenter
@@ -79,7 +79,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         })
 
         router.showBlockchainSettings.observe(this, Observer { coinType ->
-            BipSettingsModule.startForResult(this, listOf(coinType), true)
+            AddressFormatSettingsModule.startForResult(this, listOf(coinType), true)
         })
 
         router.closeLiveDate.observe(this, Observer {

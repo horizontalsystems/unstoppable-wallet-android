@@ -1,17 +1,16 @@
-package io.horizontalsystems.bankwallet.modules.bipsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 
-class BipSettingsPresenter(
-        val view: BipSettingsModule.IView,
-        val router: BipSettingsModule.IRouter,
-        private val interactor: BipSettingsModule.IInteractor,
+class AddressFormatSettingsPresenter(
+        val view: AddressFormatSettingsModule.IView,
+        val router: AddressFormatSettingsModule.IRouter,
+        private val interactor: AddressFormatSettingsModule.IInteractor,
         private val coinTypes: List<CoinType>,
         val showDoneButton: Boolean)
-    : ViewModel(), BipSettingsModule.IViewDelegate {
+    : ViewModel(), AddressFormatSettingsModule.IViewDelegate {
 
     private var derivations = mutableListOf<DerivationSetting>()
 

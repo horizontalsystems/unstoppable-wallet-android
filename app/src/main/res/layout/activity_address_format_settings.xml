@@ -99,7 +99,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="1dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/BipSettings_Title" />
+                app:title="@string/AddressFormatSettings_Title" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
