@@ -125,9 +125,11 @@ class RateManager(
         rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "HOT", to = "HOLO")
         rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "HOLO", to = "HOT")
 
+        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "SAI", to = null)
         rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "PGL", to = null)
         rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "PPT", to = null)
         rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "EOSDT", to = null)
+        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "SAI", to = null)
         rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "PGL", to = null)
         rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "PPT", to = null)
         rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "EOSDT", to = null)
