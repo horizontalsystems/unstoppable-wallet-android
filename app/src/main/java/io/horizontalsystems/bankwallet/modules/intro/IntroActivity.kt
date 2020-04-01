@@ -36,6 +36,14 @@ class IntroActivity : BaseActivity() {
 
         viewPager.adapter = viewPagerAdapter
 
+        try {
+            // set custom mScroller to viewPager via Reflection to make viewPager swipe smoothly for next and back buttons
+            val mScroller = ViewPager::class.java.getDeclaredField("mScroller")
+            mScroller.isAccessible = true
+            mScroller.set(viewPager, ViewPagerScroller(viewPager.context))
+        } catch (e: Exception) {
+        }
+
         val images = arrayOf(R.drawable.ic_independence, R.drawable.ic_knowledge, R.drawable.ic_privacy)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
@@ -67,6 +75,14 @@ class IntroActivity : BaseActivity() {
             router.navigateToWelcomeLiveEvent.observe(this, Observer {
                 WelcomeModule.start(this, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
             })
+        }
+    }
+
+    override fun onBackPressed() {
+        if (viewPager.currentItem == 0) {
+            super.onBackPressed()
+        } else {
+            viewPager.currentItem = viewPager.currentItem - 1
         }
     }
 }
