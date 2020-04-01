@@ -1,7 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.welcome
 
 import android.os.Bundle
-import android.transition.Fade
+import android.transition.*
+import android.view.Gravity
 import android.view.Window
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,8 +23,24 @@ class WelcomeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(window) {
-            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-            enterTransition = Fade()
+            requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+
+            val slideFromTop = Slide(Gravity.TOP)
+                    .addTarget(R.id.title)
+
+            val slideFromBottom = Slide(Gravity.BOTTOM)
+                    .addTarget(R.id.buttonCreate)
+                    .addTarget(R.id.buttonRestore)
+                    .addTarget(R.id.privacySettings)
+                    .addTarget(R.id.textVersion)
+
+            val transitionSet = TransitionSet()
+                    .addTransition(Fade())
+                    .addTransition(slideFromTop)
+                    .addTransition(slideFromBottom)
+
+            transitionSet.duration = 700
+            enterTransition = transitionSet
         }
         setTransparentStatusBar()
 

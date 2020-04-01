@@ -20,9 +20,12 @@ class IntroActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         with(window) {
-            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-            // set an exit transition
-            exitTransition = Fade()
+            requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+
+            val fade = Fade()
+            fade.duration = 700
+
+            exitTransition = fade
         }
 
         setTransparentStatusBar()
