@@ -62,8 +62,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             viewModel.delegate.onRefresh()
         }
 
-        balanceText.setOnClickListener { viewModel.delegate.onHideBalanceClick() }
-        hideButton.setOnClickListener { viewModel.delegate.onHideBalanceClick() }
+        totalBalanceWrapper.setOnClickListener { viewModel.delegate.onHideBalanceClick() }
 
         observeLiveData()
         setSwipeBackground()
