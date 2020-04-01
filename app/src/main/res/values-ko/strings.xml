@@ -281,7 +281,7 @@
 \n\n귀하께서 호들러 이시면, 이 기능을 쓸 수 있고 이러한 거래를 귀하께 보냄으로써 귀하의 비트코인을 강제적으로 호들링 하게 할 수 있습니다.\n\n실험적인 기능의 한번의 최대 거래 양은 0.5 비트코인으로 제한되있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
-    <string name="ManageKeys_AdvancedSettings">고급 설정</string>
+    <string name="ManageKeys_AddressFormat">Address Format</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
@@ -302,9 +302,8 @@
     <string name="AddCoin_Description">귀하께서는 %1$s를 저장할 수 있는 지갑을 가지고 계시지 않습니다. 이 앱은 귀하를 위해 새로운 지갑을 만들어 드릴 수 있습니다. 새로운 지갑을 만들기 위해 밑에있는 생성하기 버튼을 사용하십시오.\n\n귀하께서는 다음 %2$s에 대한 새로운 지갑을 사용 하실 수 있을 것 입니다.\n\n귀하께서는 또한 기존에 가지고 계셨던%3$s 지갑 암호를 사용하실 수 있습니다. 복원하기 버튼을 누르십시오.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">고급 설정</string>
-    <string name="BlockchainSettingsList_Description">설정 변경을 위해 귀하께서는 기재된 코인을 활성화시켜야 하며 다른 코인에는 설정을 가지고있지 않습니다.</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">Address Format</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
