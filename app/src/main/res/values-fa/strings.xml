@@ -279,7 +279,7 @@
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
-    <string name="ManageKeys_AdvancedSettings">تنظیمات پیشرفته</string>
+    <string name="ManageKeys_AddressFormat">Address Format</string>
     <string name="ManageKeys_Create">به وجود آوردن</string>
     <string name="ManageKeys_Restore">بازیابی</string>
     <string name="ManageKeys_Delete">پاک کردن</string>
@@ -300,9 +300,8 @@
     <string name="AddCoin_Description">شما کیف پولی ندارید که بتواند ذخیره کند%1$s. این برنامه می تواند یک کیف پول جدید برای شما ایجاد کند. برای ایجاد کیف پول جدید از دکمه به وجود آوردن زیر استفاده کنید. \n\n شما می توانید از کیف پول جدید برای سکه های زیر استفاده کنید:%2$s. \n\n همچنین می توانید از کلید کیف پول %3$s موجود استفاده کنید اگر دارید. برای این کار از دکمه بازیابی استفاده کنید.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">تنظیمات پیشرفته</string>
-    <string name="BlockchainSettingsList_Description">برای تغییر دادن تنظیمات ، باید سکه های لیست شده را فعال کنید ، سایر سکه ها تنظیمات ندارند</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">Address Format</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">ساختار آدرس</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">تغییر به %s</string>
