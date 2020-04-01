@@ -31,12 +31,12 @@
     <string name="Intro_Independence_Title">독립</string>
     <string name="Intro_Independence_Description">암호와 자산을 항상 안전하고, 압수당하지 않으며, 접근 가능한 상태로 유지하세요.</string>
     <string name="Intro_Knowledge_Title">지식</string>
-    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
+    <string name="Intro_Knowledge_Description">정보를 인지하시고 초기단계에서 성장하고 있는 블록체인 프로젝트를 발견하세요.</string>
     <string name="Intro_Privacy_Title">개인정보</string>
-    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
+    <string name="Intro_Privacy_Description">귀하의 재산을 늘리시는 동안 익명을 유지해주시고 눈에 띄이지 않게 하여 주세요.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable\nWallet</string>
-    <string name="Welcome_PrivacySettings">Privacy Settings</string>
+    <string name="Welcome_Title">언스타퍼블\n지갑</string>
+    <string name="Welcome_PrivacySettings">개인 정보 설정</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
     <!--Rate App-->
@@ -281,7 +281,7 @@
 \n\n귀하께서 호들러 이시면, 이 기능을 쓸 수 있고 이러한 거래를 귀하께 보냄으로써 귀하의 비트코인을 강제적으로 호들링 하게 할 수 있습니다.\n\n실험적인 기능의 한번의 최대 거래 양은 0.5 비트코인으로 제한되있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
-    <string name="ManageKeys_AddressFormat">Address Format</string>
+    <string name="ManageKeys_AddressFormat">주소 형식</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
@@ -303,7 +303,7 @@
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Title">Address Format</string>
+    <string name="AddressFormatSettings_Title">주소 형식</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
