@@ -280,7 +280,7 @@
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
-    <string name="ManageKeys_AdvancedSettings">Дополнительные настройки</string>
+    <string name="ManageKeys_AddressFormat">Address Format</string>
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
@@ -301,9 +301,8 @@
     <string name="AddCoin_Description">У вас нет кошелька, который может хранить %1$s. Приложение может создать для вас новый кошелек. Используйте кнопку \"Создать\" ниже, чтобы создать новый кошелек.\n\nВы сможете использовать новый кошелек для следующих монет: %2$s.\n\nВы также можете использовать существующий ключ кошелька %3$s , если он у вас есть. Используйте кнопку \"Восстановить\" для этого.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">Дополнительные настройки</string>
-    <string name="BlockchainSettingsList_Description">Чтобы изменить настройки, вы должны включить перечисленные монеты, другие монеты не имеют настроек</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">Address Format</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
