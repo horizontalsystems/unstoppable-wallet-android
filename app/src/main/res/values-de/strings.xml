@@ -206,19 +206,19 @@
     <string name="Settings_About">Info</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_Report">Problem melden</string>
-    <string name="SettingsOption_Enabled">Enabled</string>
-    <string name="SettingsOption_Disabled">Disabled</string>
-    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
+    <string name="SettingsOption_Enabled">Aktiviert</string>
+    <string name="SettingsOption_Disabled">Deaktiviert</string>
+    <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können bestimmte öffentliche Daten wie die IP-Adresse möglicherweise weitergegeben werden.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN CONNECTION</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
-    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN RESTORE</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN-VERBINDUNG</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Manche Blockchains bieten noch keine Möglichkeit des Peer-to-Peer-Betriebs von mobilen Anwendungen. Die Kommunikation mit BTC-, BCH-, LTC- und DASH-Blockchains erfolgt vollständig über Peer-to-Peer.</string>
+    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN WIEDERHERSTELLEN</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Wählen Sie die Datenquelle für die Wiederherstellung des Wallets mit Transaktionen aus.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Privacy">Privacy</string>
+    <string name="SettingsSecurity_Privacy">Privatsphäre</string>
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
@@ -226,7 +226,7 @@
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_EnableTor">Tor aktivieren</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion wird das Unstoppable Wallet neu starten.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Anonymisieren Sie Ihren Internetverkehr bei der Nutzung dieser App vollständig. Kann langsam sein.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Die Benachrichtigungen für die Unstoppable Wallet-App sind deaktiviert. Sie müssen diese einschalten, damit Tor überhaupt funktionieren kann.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
@@ -289,7 +289,7 @@
     <string name="BitcoinHodling_Description">Damit können Sie gesendete Bitcoins sperren, sodass sie bis zu dem festgesetzten Datum nicht ausgegeben werden können.\n\nDer Empfänger einer solchen Transaktion sollte das Unstoppable-Wallet in der Version 0.10 (oder neuer) sowie das Bitcoin-Adressformat BIP44 verwenden.\n\nNur das Unstoppable-Wallet erkennt solche Transaktionen im Bitcoin-Netzwerk korrekt und ermöglicht es dem Empfänger, die Bitcoins nach der Sperrzeit zu auszugeben.\n\nWenn Sie ein HODLer* sind, können Sie diese Funktion auch für sich selbst nutzen, indem Sie sich selbst eine solche Transaktion schicken und so ihre Bitcoin für sich selbst zeitlich sperren.\n\nDa es sich noch um eine experimentelle Funktion handelt, liegt der maximale Betrag bei 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Wallets verwalten</string>
-    <string name="ManageKeys_AddressFormat">Address Format</string>
+    <string name="ManageKeys_AddressFormat">Adressformat</string>
     <string name="ManageKeys_Create">Erstellen</string>
     <string name="ManageKeys_Restore">Wiederherstellen</string>
     <string name="ManageKeys_Delete">Löschen</string>
@@ -311,15 +311,15 @@
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Title">Address Format</string>
+    <string name="AddressFormatSettings_Title">Adressformat</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adressformatierung</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Ändern zu %s</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %1$s Blockchain neu synchronisieren.\n\nWenn Sie das Adressformat für %2$s ändern, sind der aktuelle Saldo und die Transaktionshistorie auf der Registerkarte Kontostand nicht mehr sichtbar. Wenn Sie es auf die vorherige Einstellung zurücksetzen, wird alles wieder hergestellt, nachdem sich das Wallet mit der Blockchain synchronisiert hat. Wir empfehlen, dies nicht zu ändern, falls Sie nicht sicher sind, was das ist.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Einstellungen</string>
