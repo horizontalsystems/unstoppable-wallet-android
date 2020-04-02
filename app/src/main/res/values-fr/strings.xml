@@ -207,10 +207,19 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_About">À propos de</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_Report">Signaler un problème</string>
+    <string name="SettingsOption_Enabled">Enabled</string>
+    <string name="SettingsOption_Disabled">Disabled</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN CONNECTION</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
+    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN RESTORE</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Empreinte digitale n\'est pas activé</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">Privacy</string>
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
@@ -218,7 +227,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <string name="SettingsSecurity_EnableTor">Activer Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Cette opération va redémarrer Unstoppable Wallet.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor peut sécuriser vos activités de navigation sur votre portefeuille. Autoriser l\'utilisation du navigateur Tor dans les paramètres.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Les notifications de l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour que Tor puisse fonctionner.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
@@ -310,6 +319,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="BlockchainSettings_BipChangeAlert_Content">Après ce changement, le portefeuille devra se resynchroniser avec la blockchain %1$s .\n\nSi vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel et des transactions ne sera plus visible dans l\'onglet solde. Si vous revenez au paramètre précédent, tout sera remis en place une fois que le portefeuille se sera resynchronisé avec la blockchain. Nous vous recommandons de ne pas faire de modification si vous n\'êtes pas sûr de vous.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">Paramètres %s</string>
