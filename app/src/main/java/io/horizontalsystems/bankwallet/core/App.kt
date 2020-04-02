@@ -155,7 +155,8 @@ class App : CoreApp() {
 
         derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
         val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
-        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, appConfigProvider)
+        val communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
+        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
 
         val adapterFactory = AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, derivationSettingsManager, syncModeSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
@@ -188,7 +189,7 @@ class App : CoreApp() {
                 application = this,
                 securedStorage = secureStorage,
                 excludedActivityNames = listOf(LockScreenActivity::class.java.name, LauncherActivity::class.java.name, TorConnectionActivity::class.java.name),
-                onFire = { activity, requestCode  -> LockScreenModule.startForUnlock(activity, requestCode)}
+                onFire = { activity, requestCode -> LockScreenModule.startForUnlock(activity, requestCode) }
         )
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)

@@ -1,0 +1,76 @@
+package io.horizontalsystems.bankwallet.modules.settings.security.privacy
+
+import android.app.Activity
+import android.content.Intent
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.*
+
+object PrivacySettingsModule {
+
+    interface IPrivacySettingsView {
+
+        fun showNotificationsNotEnabledAlert()
+        fun showRestartAlert(checked: Boolean)
+        fun toggleTorEnabled(torEnabled: Boolean)
+        fun setCommunicationSettingsViewItems(items: List<PrivacySettingsViewItem>)
+        fun setRestoreWalletSettingsViewItems(items: List<PrivacySettingsViewItem>)
+        fun showCommunicationSelectorDialog(communicationModeOptions: List<CommunicationMode>, selected: CommunicationMode)
+        fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode)
+        fun showRestoreModeChangeAlert(coin: Coin, selectedSyncMode: SyncMode)
+        fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode)
+    }
+
+    interface IPrivacySettingsViewDelegate {
+        fun viewDidLoad()
+        fun didSwitchTorEnabled(checked: Boolean)
+        fun setTorEnabled(checked: Boolean)
+        fun didTapItem(settingType: PrivacySettingsType, position: Int)
+        fun onSelectSetting(position: Int)
+        fun proceedWithSyncModeChange(coin: Coin, syncMode: SyncMode)
+        fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode)
+    }
+
+    interface IPrivacySettingsInteractor {
+        var isTorEnabled: Boolean
+        val isTorNotificationEnabled: Boolean
+        fun stopTor()
+        fun clear()
+        fun communicationSetting(coinType: CoinType): CommunicationSetting?
+        fun saveCommunicationSetting(communicationSetting: CommunicationSetting)
+
+        fun syncModeSetting(coinType: CoinType): SyncModeSetting?
+        fun saveSyncModeSetting(syncModeSetting: SyncModeSetting)
+
+        fun ether(): Coin
+        fun eos(): Coin
+        fun binance(): Coin
+        fun bitcoin(): Coin
+        fun litecoin(): Coin
+        fun bitcoinCash(): Coin
+        fun dash(): Coin
+        fun getWalletForUpdate(coinType: CoinType): Wallet?
+        fun reSyncWallet(wallet: Wallet)
+
+    }
+
+    interface IPrivacySettingsInteractorDelegate {
+        fun didStopTor()
+    }
+
+    interface IPrivacySettingsRouter {
+        fun restartApp()
+    }
+
+    fun init(view: PrivacySettingsViewModel, router: IPrivacySettingsRouter) {
+        val interactor = PrivacySettingsInteractor(App.pinComponent, App.netKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager)
+        val presenter = PrivacySettingsPresenter(interactor, router)
+
+        view.delegate = presenter
+        presenter.view = view
+    }
+
+    fun start(activity: Activity) {
+        activity.startActivity(Intent(activity, PrivacySettingsActivity::class.java))
+    }
+
+}
