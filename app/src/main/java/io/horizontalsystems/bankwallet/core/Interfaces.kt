@@ -167,7 +167,7 @@ interface IEthereumKitManager {
     val ethereumKit: EthereumKit?
     val statusInfo: Map<String, Any>?
 
-    fun ethereumKit(wallet: Wallet): EthereumKit
+    fun ethereumKit(wallet: Wallet, communicationMode: CommunicationMode?): EthereumKit
     fun unlink()
 }
 

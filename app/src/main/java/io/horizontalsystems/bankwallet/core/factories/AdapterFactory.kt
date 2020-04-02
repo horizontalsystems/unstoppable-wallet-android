@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
+import io.horizontalsystems.bankwallet.core.IEosKitManager
+import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.entities.CoinType
@@ -14,12 +17,12 @@ class AdapterFactory(
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager,
-        private val derivationSettingsManager: IDerivationSettingsManager,
-        private val syncModeSettingsManager: ISyncModeSettingsManager) {
+        private val blockchainSettingsManager: IBlockchainSettingsManager) {
 
     fun adapter(wallet: Wallet): IAdapter? {
-        val derivation = derivationSettingsManager.derivationSetting(wallet.coin.type)?.derivation
-        val syncMode = syncModeSettingsManager.syncModeSetting(wallet.coin.type)?.syncMode
+        val derivation = blockchainSettingsManager.derivationSetting(wallet.coin.type)?.derivation
+        val syncMode = blockchainSettingsManager.syncModeSetting(wallet.coin.type)?.syncMode
+        val communicationMode = blockchainSettingsManager.communicationSetting(wallet.coin.type)?.communicationMode
 
         return when (val coinType = wallet.coin.type) {
             is CoinType.Bitcoin -> BitcoinAdapter(wallet, derivation, syncMode, appConfigProvider.testMode)
@@ -28,8 +31,8 @@ class AdapterFactory(
             is CoinType.Dash -> DashAdapter(wallet, syncMode, appConfigProvider.testMode)
             is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
-            is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet))
-            is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), wallet.coin.decimal, coinType.fee, coinType.address, coinType.gasLimit, coinType.minimumRequiredBalance, coinType.minimumSendAmount)
+            is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet, communicationMode))
+            is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet, communicationMode), wallet.coin.decimal, coinType.fee, coinType.address, coinType.gasLimit, coinType.minimumRequiredBalance, coinType.minimumSendAmount)
         }
     }
 
