@@ -12,45 +12,58 @@ class BlockchainSettingsManager(
         private val communicationSettingsManager: ICommunicationSettingsManager
 ) : IBlockchainSettingsManager {
 
-    override fun derivationSetting(coinType: CoinType, forCreate: Boolean): DerivationSetting? {
-        val defaultDerivationSetting: DerivationSetting? = try {
-            derivationSettingsManager.defaultDerivationSetting(coinType)
-        } catch (e: NoSuchElementException) {
-            null
-        }
-
-        if (forCreate) {
-            return defaultDerivationSetting
-        }
-        return derivationSettingsManager.derivationSetting(coinType) ?: defaultDerivationSetting
+    override fun derivationSetting(coinType: CoinType): DerivationSetting? {
+        return derivationSettingsManager.derivationSetting(coinType)
+                ?: derivationSettingsManager.defaultDerivationSetting(coinType)
     }
 
-    override fun syncModeSetting(coinType: CoinType, forCreate: Boolean): SyncModeSetting? {
-        val default = syncModeSettingsManager.defaultSyncModeSetting(coinType)
-        if (forCreate) {
-            default?.syncMode = SyncMode.New
-            return default
-        }
-        return syncModeSettingsManager.syncModeSetting(coinType) ?: default
+    override fun syncModeSetting(coinType: CoinType): SyncModeSetting? {
+        return syncModeSettingsManager.syncModeSetting(coinType)
+                ?: syncModeSettingsManager.defaultSyncModeSetting(coinType)
     }
 
-    override fun communicationSetting(coinType: CoinType, forCreate: Boolean): CommunicationSetting? {
-        val default = communicationSettingsManager.defaultCommunicationSetting(coinType)
-        if (forCreate) {
-            return default
-        }
-        return communicationSettingsManager.communicationSetting(coinType) ?: default
+    override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
+        return communicationSettingsManager.communicationSetting(coinType)
+                ?: communicationSettingsManager.defaultCommunicationSetting(coinType)
     }
 
-    override fun updateSetting(derivationSetting: DerivationSetting) {
-        derivationSettingsManager.updateSetting(derivationSetting)
-    }
-
-    override fun updateSetting(syncModeSetting: SyncModeSetting) {
+    override fun saveSetting(syncModeSetting: SyncModeSetting) {
         syncModeSettingsManager.updateSetting(syncModeSetting)
     }
 
-    override fun updateSetting(communicationSetting: CommunicationSetting) {
+    override fun saveSetting(communicationSetting: CommunicationSetting) {
         communicationSettingsManager.updateSetting(communicationSetting)
     }
+
+    override fun initializeSettings(coinType: CoinType) {
+        if (derivationSettingsManager.derivationSetting(coinType) == null) {
+            derivationSettingsManager.defaultDerivationSetting(coinType)?.let {
+                derivationSettingsManager.updateSetting(it)
+            }
+        }
+        if (syncModeSettingsManager.syncModeSetting(coinType) == null) {
+            syncModeSettingsManager.defaultSyncModeSetting(coinType)?.let {
+                syncModeSettingsManager.updateSetting(it)
+            }
+        }
+        if (communicationSettingsManager.communicationSetting(coinType) == null) {
+            communicationSettingsManager.defaultCommunicationSetting(coinType)?.let {
+                communicationSettingsManager.updateSetting(it)
+            }
+        }
+    }
+
+    override fun initializeSettingsWithDefault(coinType: CoinType) {
+        derivationSettingsManager.defaultDerivationSetting(coinType)?.let {
+            derivationSettingsManager.updateSetting(it)
+        }
+        syncModeSettingsManager.defaultSyncModeSetting(coinType)?.let {
+            it.syncMode = SyncMode.New
+            syncModeSettingsManager.updateSetting(it)
+        }
+        communicationSettingsManager.defaultCommunicationSetting(coinType)?.let {
+            communicationSettingsManager.updateSetting(it)
+        }
+    }
+
 }

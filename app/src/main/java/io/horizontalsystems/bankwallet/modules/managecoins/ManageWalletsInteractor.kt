@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 
 class ManageWalletsInteractor(
         private val appConfigProvider: IAppConfigProvider,
@@ -48,19 +47,15 @@ class ManageWalletsInteractor(
         return accountCreator.newAccount(predefinedAccountType)
     }
 
-    override fun derivation(coinType: CoinType, forCreate: Boolean): Derivation? {
-        return blockchainSettingsManager.derivationSetting(coinType, forCreate)?.derivation
+    override fun derivationSetting(coinType: CoinType): DerivationSetting? {
+        return blockchainSettingsManager.derivationSetting(coinType)
     }
 
-    override fun syncMode(coinType: CoinType, forCreate: Boolean): SyncMode? {
-        return blockchainSettingsManager.syncModeSetting(coinType, forCreate)?.syncMode
+    override fun initializeSettingsWithDefault(coinType: CoinType) {
+        blockchainSettingsManager.initializeSettingsWithDefault(coinType)
     }
 
-    override fun saveDerivation(coinType: CoinType, derivation: Derivation) {
-        blockchainSettingsManager.updateSetting(DerivationSetting(coinType, derivation))
-    }
-
-    override fun saveSyncMode(coinType: CoinType, syncMode: SyncMode) {
-        blockchainSettingsManager.updateSetting(SyncModeSetting(coinType, syncMode))
+    override fun initializeSettings(coinType: CoinType) {
+        blockchainSettingsManager.initializeSettings(coinType)
     }
 }

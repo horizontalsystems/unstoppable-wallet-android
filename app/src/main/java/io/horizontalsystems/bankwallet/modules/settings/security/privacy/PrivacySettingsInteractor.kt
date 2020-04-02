@@ -40,7 +40,7 @@ class PrivacySettingsInteractor(
     }
 
     override fun saveCommunicationSetting(communicationSetting: CommunicationSetting) {
-        blockchainSettingsManager.updateSetting(communicationSetting)
+        blockchainSettingsManager.saveSetting(communicationSetting)
     }
 
     override fun syncModeSetting(coinType: CoinType): SyncModeSetting? {
@@ -48,7 +48,7 @@ class PrivacySettingsInteractor(
     }
 
     override fun saveSyncModeSetting(syncModeSetting: SyncModeSetting) {
-        blockchainSettingsManager.updateSetting(syncModeSetting)
+        blockchainSettingsManager.saveSetting(syncModeSetting)
     }
 
     override fun ether(): Coin {

@@ -71,13 +71,7 @@ class RestorePresenter(
         }
 
         wallets.forEach {
-            val coin = it.coin
-            interactor.derivation(coin.type)?.let { derivation ->
-                interactor.saveDerivation(coin.type, derivation)
-            }
-            interactor.syncMode(coin.type)?.let { syncMode ->
-                interactor.saveSyncMode(coin.type, syncMode)
-            }
+            interactor.initializeSettings(it.coin.type)
         }
 
         interactor.saveWallets(wallets)
@@ -92,8 +86,8 @@ class RestorePresenter(
         return account
     }
 
-    private fun closeWithSuccess(){
-        when (restoreMode){
+    private fun closeWithSuccess() {
+        when (restoreMode) {
             RestoreMode.FromWelcome -> router.startMainModule()
             else -> router.closeWithSuccess()
         }
