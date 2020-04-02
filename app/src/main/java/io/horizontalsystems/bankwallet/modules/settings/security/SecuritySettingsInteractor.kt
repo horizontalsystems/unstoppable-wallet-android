@@ -1,23 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import io.horizontalsystems.bankwallet.core.INetManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsInteractor(
         private val systemInfoManager: ISystemInfoManager,
-        private val pinComponent: IPinComponent,
-        private val netManager: INetManager)
-    : SecuritySettingsModule.ISecuritySettingsInteractor {
-
-    var delegate: SecuritySettingsModule.ISecuritySettingsInteractorDelegate? = null
-    private var disposables: CompositeDisposable = CompositeDisposable()
-
-
-    override val isTorNotificationEnabled: Boolean
-        get() = netManager.isTorNotificationEnabled
+        private val pinComponent: IPinComponent
+) : SecuritySettingsModule.ISecuritySettingsInteractor {
 
     override val biometricAuthSupported: Boolean
         get() = systemInfoManager.biometricAuthSupported
@@ -28,17 +17,6 @@ class SecuritySettingsInteractor(
             pinComponent.isFingerprintEnabled = value
         }
 
-    override var isTorEnabled: Boolean
-        get() = netManager.isTorEnabled
-        set(value) {
-            pinComponent.updateLastExitDateBeforeRestart()
-            if (value) {
-                netManager.enableTor()
-            } else {
-                netManager.disableTor()
-            }
-        }
-
     override val isPinSet: Boolean
         get() = pinComponent.isPinSet
 
@@ -46,17 +24,4 @@ class SecuritySettingsInteractor(
         pinComponent.clear()
     }
 
-    override fun clear() {
-        disposables.clear()
-    }
-
-    override fun stopTor() {
-        disposables.add(netManager.stop()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.didStopTor()
-                }, {
-
-                }))
-    }
 }

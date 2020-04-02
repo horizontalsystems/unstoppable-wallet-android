@@ -12,24 +12,15 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val editPinVisibleLiveData = MutableLiveData<Boolean>()
     val biometricSettingsVisibleLiveData = MutableLiveData<Boolean>()
     val biometricEnabledLiveData = MutableLiveData<Boolean>()
-    val torEnabledLiveData = MutableLiveData<Boolean>()
-    val showAppRestartAlertForTor = SingleLiveEvent<Boolean>()
 
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openSetPinLiveEvent = SingleLiveEvent<Unit>()
     val openUnlockPinLiveEvent = SingleLiveEvent<Unit>()
-    val restartApp = SingleLiveEvent<Unit>()
-    val showNotificationsNotEnabledAlert = SingleLiveEvent<Unit>()
+    val openPrivacySettingsLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
         delegate.viewDidLoad()
-    }
-
-    //  ViewModel
-
-    override fun onCleared() {
-        delegate.onClear()
     }
 
     //  ISecuritySettingsView
@@ -50,14 +41,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
         biometricEnabledLiveData.postValue(enabled)
     }
 
-    override fun toggleTorEnabled(enabled: Boolean) {
-        torEnabledLiveData.postValue(enabled)
-    }
-
-    override fun showRestartAlert(checked: Boolean) {
-        showAppRestartAlertForTor.postValue(checked)
-    }
-
     //  ISecuritySettingsRouter
 
     override fun showEditPin() {
@@ -72,11 +55,8 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
         openUnlockPinLiveEvent.call()
     }
 
-    override fun restartApp() {
-        restartApp.call()
+    override fun openPrivacySettings() {
+        openPrivacySettingsLiveEvent.call()
     }
 
-    override fun showNotificationsNotEnabledAlert() {
-        showNotificationsNotEnabledAlert.call()
-    }
 }

@@ -126,6 +126,13 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 SyncModeSetting(CoinType.Dash, SyncMode.Fast)
         )
 
+    override val communicationSettings: List<CommunicationSetting>
+        get() = listOf(
+                CommunicationSetting(CoinType.Ethereum, CommunicationMode.Infura),
+                CommunicationSetting(CoinType.Eos("eosio.token", "EOS"), CommunicationMode.Greymass),
+                CommunicationSetting(CoinType.Binance("BNB"), CommunicationMode.BinanceDex)
+        )
+
     //  ILanguageConfigProvider
 
     override val localizations: List<String>

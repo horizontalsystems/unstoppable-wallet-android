@@ -22,6 +22,7 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     private var listener: Listener? = null
     private var items = listOf<SelectorItem>()
     private var title: String? = null
+    private var toggleKeyboard: Boolean = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
@@ -55,19 +56,22 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     }
 
     private fun showKeyBoard() {
-        (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT)
+        if (toggleKeyboard)
+            (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun hideKeyBoard() {
-        (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
+        if (toggleKeyboard)
+            (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
     companion object {
-        fun newInstance(listener: Listener? = null, items: List<SelectorItem>, title: String?): SelectorDialog {
+        fun newInstance(listener: Listener? = null, items: List<SelectorItem>, title: String?, toggleKeyboard: Boolean = true): SelectorDialog {
             val dialog = SelectorDialog()
             dialog.listener = listener
             dialog.items = items
             dialog.title = title
+            dialog.toggleKeyboard = toggleKeyboard
             return dialog
         }
     }
