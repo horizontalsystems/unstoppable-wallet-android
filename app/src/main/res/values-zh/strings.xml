@@ -206,19 +206,19 @@
     <string name="Settings_About">关于</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_Report">报告问题</string>
-    <string name="SettingsOption_Enabled">Enabled</string>
-    <string name="SettingsOption_Disabled">Disabled</string>
-    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
-    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN CONNECTION</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
-    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN RESTORE</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
+    <string name="SettingsOption_Enabled">已启用</string>
+    <string name="SettingsOption_Disabled">已禁用</string>
+    <string name="SettingsPrivacy_Info">此应用不分享您的任何数据。但是，由于其使用区块链进行通信，所以部分像 IP 地址等公共数据将有可能会泄漏。</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">网络</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">区块链连接</string>
+    <string name="SettingsPrivacy_CommunicationDescription">部分区块链未为手机应用提供以点对点运行的方法。与BTC、BCH、LTC、DASH 区块链的通信属于完全点对点。</string>
+    <string name="SettingsPrivacy_WalletRestore">区块链恢复</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">通过交易为恢复钱包选择数据源。</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指纹未启用</string>
     <string name="Settings_Error_NoFingerprintAddedYet">您未在此设备上启用指纹。前往“设置 &gt; 安全”设置指纹访问。</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Privacy">Privacy</string>
+    <string name="SettingsSecurity_Privacy">隐私</string>
     <string name="SettingsSecurity_Fingerprint">指纹</string>
     <string name="SettingsSecurity_EnablePin">密码</string>
     <string name="SettingsSecurity_EditPin">编辑密码</string>
@@ -226,7 +226,7 @@
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_EnableTor">启用Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">在使用此应用时完全匿名使用您的网络流量。这可能会变得缓慢。</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
@@ -289,7 +289,7 @@
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用Unstoppable钱包。\n\n只有Unstoppable钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理钱包</string>
-    <string name="ManageKeys_AddressFormat">Address Format</string>
+    <string name="ManageKeys_AddressFormat">地址格式</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
@@ -311,15 +311,15 @@
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Title">Address Format</string>
+    <string name="AddressFormatSettings_Title">地址格式</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">地址格式</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">更改为%s</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">此更改后，钱包将必须与 %1$s 区块链重新同步。\n\n当您更改地址格式的 %2$s 时，当前余额和交易历史将不再在余额选项卡上可见。 将其更改为以前的设置将在钱包与区块链重新同步后恢复所有设置。 如果不确定，我们建议不要进行更改。</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s 设置</string>
