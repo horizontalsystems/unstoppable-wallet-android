@@ -31,7 +31,7 @@
         android:src="@drawable/ic_ellipse"
         app:layout_constraintBottom_toTopOf="@+id/verticalCenter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/viewPager"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageSwitcher
@@ -42,7 +42,7 @@
         android:outAnimation="@android:anim/fade_out"
         app:layout_constraintBottom_toTopOf="@+id/verticalCenter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/viewPager"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
