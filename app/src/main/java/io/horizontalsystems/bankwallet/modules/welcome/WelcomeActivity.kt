@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.welcome
 
 import android.os.Bundle
-import android.transition.*
+import android.transition.Fade
+import android.transition.Slide
+import android.transition.TransitionSet
 import android.view.Gravity
 import android.view.Window
 import androidx.lifecycle.Observer
@@ -12,7 +14,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.modules.torpage.TorPageModule
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
@@ -68,7 +70,7 @@ class WelcomeActivity : BaseActivity() {
         })
 
         viewModel.openTorPage.observe(this, Observer {
-            TorPageModule.start(this)
+            PrivacySettingsModule.start(this)
         })
 
         buttonCreate.setOnSingleClickListener {
