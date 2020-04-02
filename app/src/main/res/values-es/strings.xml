@@ -206,10 +206,19 @@
     <string name="Settings_About">Acerca de</string>
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
     <string name="Settings_Report">Reportar un problema</string>
+    <string name="SettingsOption_Enabled">Enabled</string>
+    <string name="SettingsOption_Disabled">Disabled</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN CONNECTION</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
+    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN RESTORE</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Huella digital no habilitada</string>
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">Privacy</string>
     <string name="SettingsSecurity_Fingerprint">Huella digital</string>
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
@@ -217,7 +226,7 @@
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor puede proteger tus actividades de navegación en la cartera. Autoriza el permiso para usar el navegador tor en la configuración.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones de la aplicación Monedero Unstoppable están desactivadas. Debe activarlas para que Tor funcione.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
@@ -316,6 +325,8 @@
     <string name="BlockchainSettings_BipChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %1$s.\n\nCuando cambie el formato de dirección para %2$s, el saldo actual y el historial de transacciones dejarán de ser visibles en la pestaña de saldo. Cambiarlo de vuelta a la configuración anterior traerá todo de vuelta después de que el monedero se resincronice a sí mismo con el blockchain. Recomendamos no cambiarlo si no está seguro de lo que es.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Ajustes</string>
