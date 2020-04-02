@@ -4,20 +4,6 @@
     android:height="240dp"
     android:viewportWidth="240"
     android:viewportHeight="240">
-  <path
-      android:pathData="M120,115m-100,0a100,100 0,1 1,200 0a100,100 0,1 1,-200 0">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:startY="15"
-          android:startX="120"
-          android:endY="215"
-          android:endX="120"
-          android:type="linear">
-        <item android:offset="0" android:color="#FFFFD000"/>
-        <item android:offset="0.604167" android:color="#FFFF9F01"/>
-      </gradient>
-    </aapt:attr>
-  </path>
   <group>
     <clip-path
         android:pathData="M59,38h145.2v201.8h-145.2z"/>

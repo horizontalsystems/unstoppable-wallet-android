@@ -24,6 +24,16 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_ellipse"
+        app:layout_constraintBottom_toTopOf="@+id/verticalCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/viewPager"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageSwitcher
         android:id="@+id/imageSwitcher"
         android:layout_width="240dp"

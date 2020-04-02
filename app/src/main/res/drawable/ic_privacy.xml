@@ -5,20 +5,6 @@
     android:viewportWidth="240"
     android:viewportHeight="240">
   <path
-      android:pathData="M120,115m-100,0a100,100 0,1 1,200 0a100,100 0,1 1,-200 0">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:startY="15"
-          android:startX="120"
-          android:endY="215"
-          android:endX="120"
-          android:type="linear">
-        <item android:offset="0" android:color="#FFFFD000"/>
-        <item android:offset="0.604167" android:color="#FFFF9F01"/>
-      </gradient>
-    </aapt:attr>
-  </path>
-  <path
       android:pathData="M55.174,155.086L45,228H217.8L207.67,150.339C207.262,147.212 205.056,144.617 202.036,143.711L153,129C148.5,127.2 137.88,123.6 131.4,123.6C124.92,123.6 114.3,126.3 109.8,127.65L59.968,148.829C57.382,149.928 55.562,152.303 55.174,155.086Z">
     <aapt:attr name="android:fillColor">
       <gradient 
