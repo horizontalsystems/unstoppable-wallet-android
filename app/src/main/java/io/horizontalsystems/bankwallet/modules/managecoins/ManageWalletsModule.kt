@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.managecoins.views.ManageWalletsActivity
 
@@ -48,10 +47,9 @@ object ManageWalletsModule {
 
         fun createAccount(predefinedAccountType: PredefinedAccountType): Account
         fun save(account: Account)
-        fun derivation(coinType: CoinType, forCreate: Boolean = false): Derivation?
-        fun syncMode(coinType: CoinType, forCreate: Boolean = false): SyncMode?
-        fun saveDerivation(coinType: CoinType, derivation: Derivation)
-        fun saveSyncMode(coinType: CoinType, syncMode: SyncMode)
+        fun derivationSetting(coinType: CoinType): DerivationSetting?
+        fun initializeSettingsWithDefault(coinType: CoinType)
+        fun initializeSettings(coinType: CoinType)
     }
 
     interface IRouter {

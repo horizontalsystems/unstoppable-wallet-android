@@ -403,17 +403,19 @@ interface IBackgroundRateAlertScheduler {
 }
 
 interface IBlockchainSettingsManager {
-    fun derivationSetting(coinType: CoinType, forCreate: Boolean = false): DerivationSetting?
-    fun syncModeSetting(coinType: CoinType, forCreate: Boolean = false): SyncModeSetting?
-    fun communicationSetting(coinType: CoinType, forCreate: Boolean = false): CommunicationSetting?
+    fun derivationSetting(coinType: CoinType): DerivationSetting?
+    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
+    fun communicationSetting(coinType: CoinType): CommunicationSetting?
 
-    fun updateSetting(derivationSetting: DerivationSetting)
-    fun updateSetting(syncModeSetting: SyncModeSetting)
-    fun updateSetting(communicationSetting: CommunicationSetting)
+    fun saveSetting(syncModeSetting: SyncModeSetting)
+    fun saveSetting(communicationSetting: CommunicationSetting)
+
+    fun initializeSettingsWithDefault(coinType: CoinType)
+    fun initializeSettings(coinType: CoinType)
 }
 
 interface IDerivationSettingsManager {
-    fun defaultDerivationSetting(coinType: CoinType): DerivationSetting
+    fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
     fun derivationSetting(coinType: CoinType): DerivationSetting?
     fun updateSetting(derivationSetting: DerivationSetting)
 }
