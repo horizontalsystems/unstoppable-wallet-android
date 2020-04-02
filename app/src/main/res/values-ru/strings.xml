@@ -206,10 +206,19 @@
     <string name="Settings_About">О приложении</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_Report">Сообщить о Проблеме</string>
+    <string name="SettingsOption_Enabled">Enabled</string>
+    <string name="SettingsOption_Disabled">Disabled</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN CONNECTION</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
+    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN RESTORE</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
     <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">Privacy</string>
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
     <string name="SettingsSecurity_EnablePin">Код Доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
@@ -217,7 +226,7 @@
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <string name="SettingsSecurity_EnableTor">Включить Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor может защитить вашу активность в браузере на кошельке. Разрешите использование Tor браузера в настройках.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для Unstoppable Кошелька отключены. Для работы Tor необходимо включить их.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">О приложении</string>
@@ -309,6 +318,8 @@
     <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %1$s .\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Если вернуться к предыдущей настройке, все вернется после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %s.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Настройки</string>
