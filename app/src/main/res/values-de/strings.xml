@@ -209,11 +209,14 @@
     <string name="SettingsOption_Enabled">Aktiviert</string>
     <string name="SettingsOption_Disabled">Deaktiviert</string>
     <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können bestimmte öffentliche Daten wie die IP-Adresse möglicherweise weitergegeben werden.</string>
-    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN-VERBINDUNG</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Connection</string>
     <string name="SettingsPrivacy_CommunicationDescription">Manche Blockchains bieten noch keine Möglichkeit des Peer-to-Peer-Betriebs von mobilen Anwendungen. Die Kommunikation mit BTC-, BCH-, LTC- und DASH-Blockchains erfolgt vollständig über Peer-to-Peer.</string>
-    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN WIEDERHERSTELLEN</string>
+    <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Wählen Sie die Datenquelle für die Wiederherstellung des Wallets mit Transaktionen aus.</string>
+    <string name="SettingsPrivacy_Transactions">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Inputs/Outputs</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
