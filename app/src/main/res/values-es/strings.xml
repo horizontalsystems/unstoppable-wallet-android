@@ -209,11 +209,14 @@
     <string name="SettingsOption_Enabled">Habilitado</string>
     <string name="SettingsOption_Disabled">Desabilitado</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte su información de forma alguna. Sin embargo, mientras se comunica con blockchains es potencialmente posible que cierta información pública como la dirección IP pueda filtrarse.</string>
-    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">CONEXIÓN BLOCKCHAIN</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Connection</string>
     <string name="SettingsPrivacy_CommunicationDescription">Algunos blockchains aún no brindan medios para poder usarse en aplicaciones móviles de modo peer-to-peer. Las comunicaciones con las blockchains BTC, BCH, LTC, DASH son completamente peer-to-peer.</string>
-    <string name="SettingsPrivacy_WalletRestore">RESTAURAR BLOCKCHAIN</string>
+    <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Seleccione la fuente de información para restaurar el monedero con las transacciones.</string>
+    <string name="SettingsPrivacy_Transactions">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Inputs/Outputs</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Huella digital no habilitada</string>
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
