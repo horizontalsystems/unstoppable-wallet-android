@@ -210,11 +210,14 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsOption_Enabled">Activé</string>
     <string name="SettingsOption_Disabled">Désactivé</string>
     <string name="SettingsPrivacy_Info">Cette application ne partage aucune de vos données. Cependant, comme elle communique avec des blockchains, certaines données publiques comme l\'adresse IP peuvent potentiellement être divulguées.</string>
-    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">CONNECTION DE BLOCKCHAIN</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Connection</string>
     <string name="SettingsPrivacy_CommunicationDescription">Certaines blockchains ne permettent pas encore aux applications mobiles de fonctionner en mode peer to peer. Les communications avec les blockchains BTC, BCH, LTC, DASH sont entièrement de type peer to peer.</string>
-    <string name="SettingsPrivacy_WalletRestore">RESTAURATION DE LA BLOCKCHAIN</string>
+    <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
+    <string name="SettingsPrivacy_Transactions">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Inputs/Outputs</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Empreinte digitale n\'est pas activé</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
