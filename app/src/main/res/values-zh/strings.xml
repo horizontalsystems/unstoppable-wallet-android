@@ -226,7 +226,7 @@
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_EnableTor">启用Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
-    <string name="SettingsSecurity_TorConnectionDescription">在使用此应用时完全匿名使用您的网络流量。这可能会变得缓慢。</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
