@@ -12,7 +12,7 @@
     <string name="Alert_Restart">راه اندازی مجدد</string>
     <string name="Button_Cancel">کنسل</string>
     <string name="Button_Create">به وجود آوردن</string>
-    <string name="Button_Skip">Skip</string>
+    <string name="Button_Skip">رد شدن</string>
     <string name="Button_Next">بعدي</string>
     <string name="Button_Restore">بازگرداني</string>
     <string name="Button_Enable">فعال کردن</string>
@@ -28,15 +28,15 @@
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
     <!--Intro-->
-    <string name="Intro_Independence_Title">Independence</string>
-    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times.</string>
-    <string name="Intro_Knowledge_Title">Knowledge</string>
-    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
-    <string name="Intro_Privacy_Title">Privacy</string>
-    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
+    <string name="Intro_Independence_Title">استقلال</string>
+    <string name="Intro_Independence_Description">ارزهای رمزنگاری شده را همیشه امن، غیرقابل تشخیص و قابل دسترس نگه دارید.</string>
+    <string name="Intro_Knowledge_Title">دانش</string>
+    <string name="Intro_Knowledge_Description">درباره پروژه های زنجیره بلوکی در حال رشد در مراحل اولیه آن مطلع شوید و کشف کنید.</string>
+    <string name="Intro_Privacy_Title">حریم خصوصی</string>
+    <string name="Intro_Privacy_Description">در حالی که ثروت خود را افزایش می دهید، ناشناس و تحت نظر رادار بمانید.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable\nWallet</string>
-    <string name="Welcome_PrivacySettings">Privacy Settings</string>
+    <string name="Welcome_Title">غیرقابل توقف \nکیف پول</string>
+    <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>
     <string name="Welcome_CreateWallet">ايجاد كيف پول</string>
     <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
     <!--Rate App-->
@@ -206,10 +206,10 @@
     <string name="Settings_About">درباره</string>
     <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
     <string name="Settings_Report">گزارش مشکل</string>
-    <string name="SettingsOption_Enabled">Enabled</string>
-    <string name="SettingsOption_Disabled">Disabled</string>
+    <string name="SettingsOption_Enabled">فعال شد</string>
+    <string name="SettingsOption_Disabled">غیر فعال شد</string>
     <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
-    <string name="SettingsPrivacy_ConnectionSettingsTitle">INTERNET</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN CONNECTION</string>
     <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
     <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN RESTORE</string>
@@ -218,7 +218,7 @@
     <string name="Settings_Error_FingerprintNotEnabled">اثر انگشت فعال نشده است</string>
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است. به تنظيمات برويد&gt; قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Privacy">Privacy</string>
+    <string name="SettingsSecurity_Privacy">حریم خصوصی</string>
     <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
     <string name="SettingsSecurity_EnablePin">رمز عبور</string>
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
@@ -288,7 +288,7 @@
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
-    <string name="ManageKeys_AddressFormat">Address Format</string>
+    <string name="ManageKeys_AddressFormat">ساختار آدرس</string>
     <string name="ManageKeys_Create">به وجود آوردن</string>
     <string name="ManageKeys_Restore">بازیابی</string>
     <string name="ManageKeys_Delete">پاک کردن</string>
@@ -310,14 +310,14 @@
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Title">Address Format</string>
+    <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">ساختار آدرس</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">تغییر به %s</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %1$s مجدداً همزمان سازی کند. \n\n وقتی ساختار آدرس را برای %2$s تغییر می دهید ، موجودی فعلی و تاریخچه تراکنش ها دیگر در صفحه موجودی قابل مشاهده نخواهد بود. برگرداندن آن به تنظیمات قبلی ، همه چیز را فقط پس از اینکه کیف پول خود را با زنجیره بلوکی مجدداً همزمانی سازی کردید ، به حالت قبل برمی گرداند. ما به شما توصیه می کنیم اگر مطمئن نیستید که این چیست ، آن را تغییر ندهید.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
