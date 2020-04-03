@@ -332,7 +332,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TorPage_Failed">Échec</string>
     <string name="TorPage_ConnectionClosed">Déconnecté</string>
     <string name="TorPage_Title">Connection Tor</string>
-    <string name="TorPage_Description">Avant de créer ou de restaurer, activez \n\nTor pour une connexion sécurisée avec le réseau. Tor peut sécuriser vos activités de navigation sur votre portefeuille. Autoriser l\'utilisation du navigateur Tor dans les paramètres.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
