@@ -338,7 +338,6 @@
     <string name="TorPage_Failed">Falló</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="TorPage_Title">Conexión Tor</string>
-    <string name="TorPage_Description">Antes de crear o restaurar habilite Tor para una conexión segura con la red. \n\nTor puede proteger sus actividades de navegación en el monedero. Autoriza el permiso para usar el navegador Tor en la configuración.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Ustoppable</string>
     <!--Coin Option-->
