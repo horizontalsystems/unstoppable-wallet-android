@@ -19,6 +19,8 @@ object PrivacySettingsModule {
         fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode)
         fun showRestoreModeChangeAlert(coin: Coin, selectedSyncMode: SyncMode)
         fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode)
+        fun setTransactionsOrdering(transactionsOrdering: TransactionDataSortingType)
+        fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType)
         fun setTorConnectionStatus(connectionStatus: TorStatus)
     }
 
@@ -30,10 +32,13 @@ object PrivacySettingsModule {
         fun onSelectSetting(position: Int)
         fun proceedWithSyncModeChange(coin: Coin, syncMode: SyncMode)
         fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode)
+        fun onTransactionOrderSettingTap()
+        fun onSelectTransactionSorting(transactionDataSortingType: TransactionDataSortingType)
     }
 
     interface IPrivacySettingsInteractor {
         val walletsCount: Int
+        var transactionsSortingType: TransactionDataSortingType
         var isTorEnabled: Boolean
         val isTorNotificationEnabled: Boolean
         fun stopTor()
@@ -68,7 +73,7 @@ object PrivacySettingsModule {
     }
 
     fun init(view: PrivacySettingsViewModel, router: IPrivacySettingsRouter) {
-        val interactor = PrivacySettingsInteractor(App.pinComponent, App.netKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager)
+        val interactor = PrivacySettingsInteractor(App.pinComponent, App.netKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager, App.localStorage)
         val presenter = PrivacySettingsPresenter(interactor, router)
         interactor.delegate = presenter
         view.delegate = presenter

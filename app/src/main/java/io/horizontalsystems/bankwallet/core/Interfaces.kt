@@ -64,6 +64,7 @@ interface ILocalStorage {
     var torEnabled: Boolean
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
+    var transactionSortingType: TransactionDataSortingType?
 
     fun clear()
 }
@@ -220,7 +221,7 @@ interface ISendBitcoinAdapter {
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
     fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit>
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit>
 }
 
 interface ISendDashAdapter {

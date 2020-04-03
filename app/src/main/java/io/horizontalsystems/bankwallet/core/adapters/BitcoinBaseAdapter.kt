@@ -85,10 +85,11 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit> {
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit> {
+        val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
-                kit.send(address, (amount * satoshisInBitcoin).toLong(),  true, feeRate.toInt(), TransactionDataSortType.Shuffle, pluginData ?: mapOf())
+                kit.send(address, (amount * satoshisInBitcoin).toLong(),  true, feeRate.toInt(), sortingType, pluginData ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -219,6 +220,12 @@ abstract class BitcoinBaseAdapter(
     companion object {
         const val defaultConfirmationsThreshold = 3
         const val decimal = 8
+
+        fun getTransactionSortingType(sortType: TransactionDataSortingType?): TransactionDataSortType = when(sortType){
+            TransactionDataSortingType.Bip69 -> TransactionDataSortType.Bip69
+            TransactionDataSortingType.Shuffle -> TransactionDataSortType.Shuffle
+            else -> TransactionDataSortType.Shuffle
+        }
 
         fun getBip(derivation: AccountType.Derivation?): Bip = when (derivation) {
             AccountType.Derivation.bip49 -> Bip.BIP49

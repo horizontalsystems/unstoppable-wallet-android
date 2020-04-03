@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.IPinStorage
@@ -43,6 +44,7 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
     private val TOR_ENABLED = "tor_enabled"
     private val APP_LAUNCH_COUNT = "app_launch_count"
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
+    private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
 
     val gson by lazy { Gson() }
 
@@ -258,5 +260,14 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         get() = App.preferences.getLong(RATE_APP_LAST_REQ_TIME, 0)
         set(value) {
             App.preferences.edit().putLong(RATE_APP_LAST_REQ_TIME, value).apply()
+        }
+
+    override var transactionSortingType: TransactionDataSortingType?
+        get() {
+            val txSortingTypeString = App.preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
+            return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) }
+        }
+        set(sortingType) {
+            App.preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType?.value).apply()
         }
 }

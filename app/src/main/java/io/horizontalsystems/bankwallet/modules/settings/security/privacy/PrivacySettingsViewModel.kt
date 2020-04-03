@@ -6,17 +6,20 @@ import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.core.SingleLiveEvent
 
 class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySettingsView, PrivacySettingsModule.IPrivacySettingsRouter {
     lateinit var delegate: PrivacySettingsModule.IPrivacySettingsViewDelegate
 
     val torEnabledLiveData = MutableLiveData<Boolean>()
+    val transactionOrderingLiveData = MutableLiveData<TransactionDataSortingType>()
     val showAppRestartAlertForTor = SingleLiveEvent<Boolean>()
     val showNotificationsNotEnabledAlert = SingleLiveEvent<Unit>()
     val communicationSettingsViewItems = SingleLiveEvent<List<PrivacySettingsViewItem>>()
     val restoreWalletSettingsViewItems = SingleLiveEvent<List<PrivacySettingsViewItem>>()
     val showSyncModeSelectorDialog = SingleLiveEvent<Pair<List<SyncMode>, SyncMode>>()
+    val showTransactionsSortingSelectorDialog = SingleLiveEvent<Pair<List<TransactionDataSortingType>, TransactionDataSortingType>>()
     val showCommunicationSelectorDialog = SingleLiveEvent<Pair<List<CommunicationMode>, CommunicationMode>>()
     val showRestoreModeChangeAlert = SingleLiveEvent<Pair<Coin, SyncMode>>()
     val showCommunicationModeChangeAlert = SingleLiveEvent<Pair<Coin, CommunicationMode>>()
@@ -37,6 +40,14 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
 
     override fun toggleTorEnabled(torEnabled: Boolean) {
         torEnabledLiveData.postValue(torEnabled)
+    }
+
+    override fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType) {
+        showTransactionsSortingSelectorDialog.postValue(Pair(items, selectedItem))
+    }
+
+    override fun setTransactionsOrdering(transactionsOrdering: TransactionDataSortingType) {
+        transactionOrderingLiveData.postValue(transactionsOrdering)
     }
 
     override fun setTorConnectionStatus(connectionStatus: TorStatus) {
