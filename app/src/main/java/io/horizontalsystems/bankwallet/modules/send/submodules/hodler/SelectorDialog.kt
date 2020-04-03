@@ -66,7 +66,7 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     }
 
     companion object {
-        fun newInstance(listener: Listener? = null, items: List<SelectorItem>, title: String?, toggleKeyboard: Boolean = true): SelectorDialog {
+        fun newInstance(listener: Listener? = null, items: List<SelectorItem>, title: String? = null, toggleKeyboard: Boolean = true): SelectorDialog {
             val dialog = SelectorDialog()
             dialog.listener = listener
             dialog.items = items

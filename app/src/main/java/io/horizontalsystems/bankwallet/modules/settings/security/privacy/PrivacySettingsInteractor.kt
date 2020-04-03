@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.INetManager
@@ -15,12 +16,19 @@ class PrivacySettingsInteractor(
         private val netManager: INetManager,
         private val blockchainSettingsManager: IBlockchainSettingsManager,
         private val appConfigProvider: IAppConfigProvider,
-        private val walletManager: IWalletManager
+        private val walletManager: IWalletManager,
+        private val localStorageManager: ILocalStorage
 ) : PrivacySettingsModule.IPrivacySettingsInteractor {
 
     var delegate: PrivacySettingsModule.IPrivacySettingsInteractorDelegate? = null
 
     private var disposables: CompositeDisposable = CompositeDisposable()
+
+    override var transactionsSortingType: TransactionDataSortingType
+        get() = localStorageManager.transactionSortingType ?: TransactionDataSortingType.Shuffle
+        set(value) {
+            localStorageManager.transactionSortingType = value
+        }
 
     override val walletsCount: Int
         get() = walletManager.wallets.count()

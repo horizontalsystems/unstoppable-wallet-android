@@ -42,6 +42,7 @@ class PrivacySettingsPresenter(
         interactor.subscribeToTorStatus()
 
         view?.toggleTorEnabled(interactor.isTorEnabled)
+        view?.setTransactionsOrdering(interactor.transactionsSortingType)
 
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
         view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
@@ -89,6 +90,12 @@ class PrivacySettingsPresenter(
                 view?.showSyncModeSelectorDialog(syncModeOptions, if (settingType.selected == SyncMode.New) SyncMode.Fast else settingType.selected)
             }
         }
+    }
+
+    override fun onTransactionOrderSettingTap() {
+        val types = TransactionDataSortingType.values().toList()
+        val selectedItem = interactor.transactionsSortingType
+        view?.showTransactionsSortingOptions(types, selectedItem)
     }
 
     override fun onSelectSetting(position: Int) {
@@ -155,6 +162,11 @@ class PrivacySettingsPresenter(
         interactor.getWalletForUpdate(coin.type)?.let {
             interactor.reSyncWallet(it)
         }
+    }
+
+    override fun onSelectTransactionSorting(transactionDataSortingType: TransactionDataSortingType) {
+        interactor.transactionsSortingType = transactionDataSortingType
+        view?.setTransactionsOrdering(interactor.transactionsSortingType)
     }
 
     override fun setTorEnabled(checked: Boolean) {

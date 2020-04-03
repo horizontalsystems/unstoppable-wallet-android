@@ -116,7 +116,7 @@ class DashAdapter(
     }
 
     override fun send(amount: BigDecimal, address: String): Single<Unit> {
-        return send(amount, address, feeRate, mapOf())
+        return send(amount, address, feeRate, mapOf(), null)
     }
 
     companion object {

@@ -45,6 +45,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!--Tor-->
+
             <TextView
                 android:id="@+id/connectionSettingsTitle"
                 style="@style/Subhead1"
@@ -53,6 +55,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="32dp"
+                android:textAllCaps="true"
                 android:text="@string/SettingsPrivacy_ConnectionSettingsTitle"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -160,6 +163,49 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/torControlView" />
 
+            <!--Transactions order-->
+
+            <TextView
+                android:id="@+id/transactionsSettingsTitle"
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="32dp"
+                android:textAllCaps="true"
+                android:text="@string/SettingsPrivacy_Transactions"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/torConnectionDescription" />
+
+            <io.horizontalsystems.views.CellView
+                android:id="@+id/transactionsOrderSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:bottomBorder="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transactionsSettingsTitle"
+                app:title="@string/SettingsPrivacy_TransactionsSettingText" />
+
+            <TextView
+                android:id="@+id/transactionsSettingsDescription"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsPrivacy_TransactionsDescription"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transactionsOrderSetting" />
+
+            <!--Connections-->
+
             <TextView
                 android:id="@+id/communicationSettingsTitle"
                 style="@style/Subhead1"
@@ -168,14 +214,15 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="38dp"
                 android:layout_marginEnd="32dp"
+                android:textAllCaps="true"
                 android:text="@string/SettingsPrivacy_CommunicationSettingsTitle"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/torConnectionDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/transactionsSettingsDescription" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/communicationSettings"
+                android:id="@+id/communicationSettingsRecyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -198,7 +245,9 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/communicationSettings" />
+                app:layout_constraintTop_toBottomOf="@+id/communicationSettingsRecyclerview" />
+
+            <!--Restore-->
 
             <TextView
                 android:id="@+id/walletRestoreTitle"
@@ -207,6 +256,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="38dp"
+                android:textAllCaps="true"
                 android:layout_marginEnd="32dp"
                 android:text="@string/SettingsPrivacy_WalletRestore"
                 android:textColor="@color/grey"
@@ -215,7 +265,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/communicationSettingsDescription" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/walletRestoreSettings"
+                android:id="@+id/walletRestoreSettingsRecyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -238,7 +288,7 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/walletRestoreSettings" />
+                app:layout_constraintTop_toBottomOf="@+id/walletRestoreSettingsRecyclerview" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

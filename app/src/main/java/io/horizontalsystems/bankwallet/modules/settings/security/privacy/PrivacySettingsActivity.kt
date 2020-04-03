@@ -35,10 +35,21 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
         walletRestoreSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
 
-        communicationSettings.adapter = communicationSettingsAdapter
-        walletRestoreSettings.adapter = walletRestoreSettingsAdapter
+        communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
+        walletRestoreSettingsRecyclerview.adapter = walletRestoreSettingsAdapter
 
         shadowlessToolbar.bind(getString(R.string.SettingsSecurity_Privacy), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
+
+        torConnectionSwitch.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            viewModel.delegate.didSwitchTorEnabled(isChecked)
+        }
+
+        transactionsOrderSetting.apply {
+            dropDownArrow = true
+            setOnClickListener {
+                viewModel.delegate.onTransactionOrderSettingTap()
+            }
+        }
 
         // IView
         viewModel.torEnabledLiveData.observe(this, Observer { enabled ->
@@ -76,6 +87,10 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
             }
         })
 
+        viewModel.transactionOrderingLiveData.observe(this, Observer { ordering ->
+            transactionsOrderSetting.dropDownText = ordering.value
+        })
+
         viewModel.showAppRestartAlertForTor.observe(this, Observer { checked ->
             showAppRestartAlert(checked)
         })
@@ -92,6 +107,18 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
             walletRestoreSettingsAdapter.items = it
             walletRestoreSettingsAdapter.notifyDataSetChanged()
+        })
+
+        viewModel.showTransactionsSortingSelectorDialog.observe(this, Observer { (items, selected) ->
+            SelectorDialog.newInstance(
+                    items = items.map { SelectorItem(it.value, it == selected) },
+                    toggleKeyboard = false,
+                    listener = object : SelectorDialog.Listener {
+                        override fun onSelectItem(position: Int) {
+                            viewModel.delegate.onSelectTransactionSorting(items[position])
+                        }
+                    })
+                    .show(supportFragmentManager, "transactions_sorting_settings_selector")
         })
 
         viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected) ->
