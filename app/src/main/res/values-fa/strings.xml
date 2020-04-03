@@ -208,12 +208,12 @@
     <string name="Settings_Report">گزارش مشکل</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
-    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
+    <string name="SettingsPrivacy_Info">این برنامه هیچکدام از داده های شما را به اشتراک نمی گذارد. با این وجود، از آنجا که با زنجیره های بلوکی ارتباط دارد، برخی از داده های عمومی مانند آدرس IP می توانند به صورت بالقوه فاش شوند.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">BLOCKCHAIN CONNECTION</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
-    <string name="SettingsPrivacy_WalletRestore">BLOCKCHAIN RESTORE</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">ارتباط زنجیره بلوکی</string>
+    <string name="SettingsPrivacy_CommunicationDescription">بعضی از زنجیره های بلوکی هنوز وسیله ای برای برنامه های تلفن همراه برای کار به روش همتا به همتا ارائه نمی دهند. ارتباطات با زنجیره های بلوکی BTC ، BCH ، LTC ، DASH کاملاً همتا به همتا است.</string>
+    <string name="SettingsPrivacy_WalletRestore">بازیابی زنجیره بلوکی</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">منبع داده را برای بازیابی کیف پول با تراکنش ها انتخاب کنید.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">اثر انگشت فعال نشده است</string>
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است. به تنظيمات برويد&gt; قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
@@ -226,7 +226,7 @@
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
     <string name="SettingsSecurity_EnableTor">فعال کردن Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">این اقدام کیف پول غیر قابل توقف را مجدداً راه اندازی می کند.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">هنگام استفاده از این برنامه، ترافیک اینترنت خود را کاملاً ناشناس کنید. می تواند آهسته باشد.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
@@ -318,7 +318,7 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">بعد از این تغییر، کیف پول باید مجدداً خود را با زنجیره بلوکی %s هماهنگ کند.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s تنظیمات</string>
