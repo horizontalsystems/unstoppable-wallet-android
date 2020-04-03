@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -19,6 +20,7 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
     val showCommunicationSelectorDialog = SingleLiveEvent<Pair<List<CommunicationMode>, CommunicationMode>>()
     val showRestoreModeChangeAlert = SingleLiveEvent<Pair<Coin, SyncMode>>()
     val showCommunicationModeChangeAlert = SingleLiveEvent<Pair<Coin, CommunicationMode>>()
+    val setTorConnectionStatus = SingleLiveEvent<TorStatus>()
 
     val restartApp = SingleLiveEvent<Unit>()
 
@@ -35,6 +37,10 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
 
     override fun toggleTorEnabled(torEnabled: Boolean) {
         torEnabledLiveData.postValue(torEnabled)
+    }
+
+    override fun setTorConnectionStatus(connectionStatus: TorStatus) {
+        setTorConnectionStatus.postValue(connectionStatus)
     }
 
     override fun showRestartAlert(checked: Boolean) {

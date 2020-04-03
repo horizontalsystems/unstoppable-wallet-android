@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import android.app.Activity
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 
 object PrivacySettingsModule {
@@ -18,6 +19,7 @@ object PrivacySettingsModule {
         fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode)
         fun showRestoreModeChangeAlert(coin: Coin, selectedSyncMode: SyncMode)
         fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode)
+        fun setTorConnectionStatus(connectionStatus: TorStatus)
     }
 
     interface IPrivacySettingsViewDelegate {
@@ -31,16 +33,18 @@ object PrivacySettingsModule {
     }
 
     interface IPrivacySettingsInteractor {
+        val walletsCount: Int
         var isTorEnabled: Boolean
         val isTorNotificationEnabled: Boolean
         fun stopTor()
-        fun clear()
+        fun enableTor()
+        fun disableTor()
+        fun subscribeToTorStatus()
+
         fun communicationSetting(coinType: CoinType): CommunicationSetting?
         fun saveCommunicationSetting(communicationSetting: CommunicationSetting)
-
         fun syncModeSetting(coinType: CoinType): SyncModeSetting?
         fun saveSyncModeSetting(syncModeSetting: SyncModeSetting)
-
         fun ether(): Coin
         fun eos(): Coin
         fun binance(): Coin
@@ -51,10 +55,12 @@ object PrivacySettingsModule {
         fun getWalletForUpdate(coinType: CoinType): Wallet?
         fun reSyncWallet(wallet: Wallet)
 
+        fun clear()
     }
 
     interface IPrivacySettingsInteractorDelegate {
         fun didStopTor()
+        fun onTorConnectionStatusUpdated(connectionStatus: TorStatus)
     }
 
     interface IPrivacySettingsRouter {
@@ -64,7 +70,7 @@ object PrivacySettingsModule {
     fun init(view: PrivacySettingsViewModel, router: IPrivacySettingsRouter) {
         val interactor = PrivacySettingsInteractor(App.pinComponent, App.netKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager)
         val presenter = PrivacySettingsPresenter(interactor, router)
-
+        interactor.delegate = presenter
         view.delegate = presenter
         presenter.view = view
     }

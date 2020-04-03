@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import io.horizontalsystems.bankwallet.core.INetManager
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsActivity
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 
 class ActivityLifecycleCallbacks(
@@ -40,7 +41,7 @@ class ActivityLifecycleCallbacks(
     //NetManager.Listener
 
     override fun onStatusChange(torStatus: TorStatus) {
-        if (netManager.isTorEnabled) {
+        if (netManager.isTorEnabled && foregroundActivity !is PrivacySettingsActivity) {
             foregroundActivity?.let { activity ->
                 val intent = Intent(activity, TorConnectionActivity::class.java)
                 activity.startActivity(intent)
