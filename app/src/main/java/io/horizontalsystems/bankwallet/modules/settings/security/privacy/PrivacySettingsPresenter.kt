@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 
 class PrivacySettingsPresenter(
@@ -10,6 +11,8 @@ class PrivacySettingsPresenter(
     var view: PrivacySettingsModule.IPrivacySettingsView? = null
 
     private var openedPrivacySettings: PrivacySettingsViewItem? = null
+    private val needToRestartAppForTor: Boolean
+        get() = interactor.walletsCount > 0
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
             interactor.ether(),
@@ -36,6 +39,8 @@ class PrivacySettingsPresenter(
     private val syncModeOptions = listOf(SyncMode.Fast, SyncMode.Slow)
 
     override fun viewDidLoad() {
+        interactor.subscribeToTorStatus()
+
         view?.toggleTorEnabled(interactor.isTorEnabled)
 
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
@@ -49,7 +54,24 @@ class PrivacySettingsPresenter(
                 return
             }
         }
-        view?.showRestartAlert(checked)
+        if (needToRestartAppForTor) {
+            view?.showRestartAlert(checked)
+        } else {
+            interactor.isTorEnabled = checked
+            if (checked) {
+                interactor.enableTor()
+            } else {
+                interactor.disableTor()
+            }
+        }
+    }
+
+    override fun onTorConnectionStatusUpdated(connectionStatus: TorStatus) {
+        view?.setTorConnectionStatus(connectionStatus)
+        if (connectionStatus == TorStatus.Failed) {
+            interactor.isTorEnabled = false
+            view?.toggleTorEnabled(false)
+        }
     }
 
     override fun didTapItem(settingType: PrivacySettingsType, position: Int) {
@@ -145,7 +167,9 @@ class PrivacySettingsPresenter(
     }
 
     override fun didStopTor() {
-        router.restartApp()
+        if (needToRestartAppForTor) {
+            router.restartApp()
+        }
     }
 
 }

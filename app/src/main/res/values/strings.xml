@@ -441,7 +441,6 @@
     <string name="TorPage_Failed">Failed</string>
     <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">TOR Network</string>
-    <string name="TorPage_Description">This is a power privacy feature for those with large wallet balances or living in places where the internet is being severely censored.\n\nBy enabling TOR setting below all traffic originating from the wallet will be encrypted and routed through anonymous network of servers, effectively hiding any information about the sender i.e. location, IP address etc.\n\nWhile in TOR mode the wallet may operate noticeably slower and in some cases have networking issues.</string>
 
     <!-- Account Types -->
 

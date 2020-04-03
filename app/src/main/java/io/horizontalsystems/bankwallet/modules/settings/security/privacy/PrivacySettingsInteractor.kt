@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.INetManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,6 +22,9 @@ class PrivacySettingsInteractor(
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
+    override val walletsCount: Int
+        get() = walletManager.wallets.count()
+
     override var isTorEnabled: Boolean
         get() = netManager.isTorEnabled
         set(value) {
@@ -34,6 +38,47 @@ class PrivacySettingsInteractor(
 
     override val isTorNotificationEnabled: Boolean
         get() = netManager.isTorNotificationEnabled
+
+    override fun subscribeToTorStatus() {
+        delegate?.onTorConnectionStatusUpdated(TorStatus.Closed)
+        netManager.torObservable
+                .subscribe { connectionStatus ->
+                    delegate?.onTorConnectionStatusUpdated(connectionStatus)
+                }.let {
+                    disposables.add(it)
+                }
+    }
+
+    override fun reSyncWallet(wallet: Wallet) {
+        walletManager.delete(listOf(wallet))
+
+        //start wallet with updated settings
+        walletManager.save(listOf(wallet))
+    }
+
+    override fun stopTor() {
+        netManager.stop()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.didStopTor()
+                }, {
+
+                }).let {
+                    disposables.add(it)
+                }
+    }
+
+    override fun enableTor() {
+        netManager.start()
+    }
+
+    override fun disableTor() {
+        netManager.stop()
+                .subscribe()
+                .let {
+                    disposables.add(it)
+                }
+    }
 
     override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
         return blockchainSettingsManager.communicationSetting(coinType)
@@ -81,25 +126,6 @@ class PrivacySettingsInteractor(
 
     override fun getWalletForUpdate(coinType: CoinType): Wallet? {
         return walletManager.wallets.firstOrNull { it.coin.type == coinType }
-    }
-
-    override fun reSyncWallet(wallet: Wallet) {
-        walletManager.delete(listOf(wallet))
-
-        //start wallet with updated settings
-        walletManager.save(listOf(wallet))
-    }
-
-    override fun stopTor() {
-        netManager.stop()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.didStopTor()
-                }, {
-
-                }).let {
-                    disposables.add(it)
-                }
     }
 
     override fun clear() {

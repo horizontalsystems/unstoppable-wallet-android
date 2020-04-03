@@ -1,13 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
-import android.widget.CompoundButton
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorDialog
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorItem
@@ -15,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
-import kotlinx.android.synthetic.main.activity_settings_security.shadowlessToolbar
 import kotlin.system.exitProcess
 
 class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
@@ -38,14 +40,40 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
 
         shadowlessToolbar.bind(getString(R.string.SettingsSecurity_Privacy), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
 
-        torConnectionSwitch.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            viewModel.delegate.didSwitchTorEnabled(isChecked)
-        }
-
         // IView
         viewModel.torEnabledLiveData.observe(this, Observer { enabled ->
-            torConnectionSwitch.switchIsChecked = enabled
-            torConnectionSwitch.subtitle = if (enabled) getString(R.string.SettingsOption_Enabled) else getString(R.string.SettingsOption_Disabled)
+            setTorSwitch(enabled)
+        })
+
+        viewModel.setTorConnectionStatus.observe(this, Observer { torStatus ->
+            torStatus?.let {
+                when (torStatus) {
+                    TorStatus.Connecting -> {
+                        connectionSpinner.visibility = View.VISIBLE
+                        controlIcon.setTint(getTint(R.color.grey))
+                        controlIcon.bind(R.drawable.ic_tor_connected)
+                        subtitleText.text = getString(R.string.TorPage_Connecting)
+                    }
+                    TorStatus.Connected -> {
+                        connectionSpinner.visibility = View.GONE
+                        controlIcon.setTint(getTint(R.color.yellow_d))
+                        controlIcon.bind(R.drawable.ic_tor_connected)
+                        subtitleText.text = getString(R.string.TorPage_Connected)
+                    }
+                    TorStatus.Failed -> {
+                        connectionSpinner.visibility = View.GONE
+                        controlIcon.setTint(getTint(R.color.yellow_d))
+                        controlIcon.bind(R.drawable.ic_tor_status_error)
+                        subtitleText.text = getString(R.string.TorPage_Failed)
+                    }
+                    TorStatus.Closed -> {
+                        connectionSpinner.visibility = View.GONE
+                        controlIcon.setTint(getTint(R.color.yellow_d))
+                        controlIcon.bind(R.drawable.ic_tor)
+                        subtitleText.text = getString(R.string.TorPage_ConnectionClosed)
+                    }
+                }
+            }
         })
 
         viewModel.showAppRestartAlertForTor.observe(this, Observer { checked ->
@@ -112,6 +140,14 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         })
     }
 
+    private fun setTorSwitch(checked: Boolean) {
+        torConnectionSwitch.setOnCheckedChangeListener(null)
+        torConnectionSwitch.isChecked = checked
+        torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.delegate.didSwitchTorEnabled(isChecked)
+        }
+    }
+
     override fun onSelectItem(position: Int) {
         viewModel.delegate.onSelectSetting(position)
     }
@@ -128,7 +164,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                     }
 
                     override fun onCancel() {
-                        torConnectionSwitch.switchIsChecked = !checked
+                        setTorSwitch(!checked)
                     }
                 }).show(supportFragmentManager, "alert_dialog")
     }
@@ -145,7 +181,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                     }
 
                     override fun onCancel() {
-                        torConnectionSwitch.switchIsChecked = false
+                        setTorSwitch(false)
                     }
                 }).show(supportFragmentManager, "alert_dialog_notification")
     }
@@ -165,4 +201,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         }
         exitProcess(0)
     }
+
+    private fun getTint(color: Int) = ColorStateList.valueOf(ContextCompat.getColor(this, color))
+
 }
