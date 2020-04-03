@@ -330,7 +330,6 @@
     <string name="TorPage_Failed">ناموفق</string>
     <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="TorPage_Title">ارتباط Tor</string>
-    <string name="TorPage_Description">قبل از ایجاد یا بازیابی Tor را برای اتصال ایمن به شبکه فعال کنید. \n\n Tor می تواند از فعالیتهای مرور شما در کیف پول محافظت کند. اجازه استفاده از مرورگر Tor را در تنظیمات فعال کنید.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">غیرقابل توقف</string>
     <!--Coin Option-->
