@@ -117,12 +117,13 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
             applyChange(holder, items[position], false, null)
         } else {
             val item = items[position]
-            holder.bindUpdate(items[position], payloads)
+
             if (payloads.contains(BalanceViewItem.UpdateType.TOGGLEBALANCE)) {
                 applyChange(holder, item, true, BalanceViewItem.UpdateType.TOGGLEBALANCE)
             } else if (payloads.contains(BalanceViewItem.UpdateType.EXPANDED)) {
                 applyChange(holder, item, true, BalanceViewItem.UpdateType.EXPANDED)
             }
+            holder.bindUpdate(items[position], payloads)
         }
     }
 
@@ -169,7 +170,7 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
                 setExpandProgress(holder.rootWrapper, heightSmall, heightBig, progress)
             }
 
-            if (animationForward) {
+            if (animationForward) { //expand animation
                 rootAnimator.doOnStart {
                     when (changeType) {
                         BalanceViewItem.UpdateType.EXPANDED -> {
@@ -177,23 +178,14 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
                         }
                         BalanceViewItem.UpdateType.TOGGLEBALANCE -> {
                             holder.buttonsWrapper.isVisible = true
-                            if (viewItem.coinValueLocked.visible && !holder.lockedBalanceWrapper.isVisible) {
-                                holder.lockedBalanceWrapper.isVisible = true
-                            }
                         }
                     }
                 }
                 rootAnimator.doOnEnd {
-                    when (changeType) {
-                        BalanceViewItem.UpdateType.TOGGLEBALANCE -> {
-                            if (viewItem.coinValueLocked.visible) {
-                                holder.balanceCoinLocked.isVisible = true
-                                holder.balanceFiatLocked.isVisible = true
-                            }
-                        }
-                    }
+                    holder.balanceCoinLocked.isVisible = viewItem.coinValueLocked.visible && !viewItem.hideBalance
+                    holder.balanceFiatLocked.isVisible = viewItem.coinValueLocked.visible && !viewItem.hideBalance
                 }
-            } else {
+            } else { //collapse animation
                 rootAnimator.doOnStart {
                     when (changeType) {
                         BalanceViewItem.UpdateType.TOGGLEBALANCE -> {
@@ -218,12 +210,8 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
             val smallHeight = getHeight(false, true, viewItem.coinValueLocked.visible)
             val bigHeight = getHeight(viewItem.expanded, viewItem.hideBalance, viewItem.coinValueLocked.visible)
 
-            holder.lockedBalanceWrapper.isVisible = viewItem.coinValueLocked.visible && !viewItem.hideBalance
-
-            if (viewItem.coinValueLocked.visible) {
-                holder.balanceCoinLocked.isVisible = !viewItem.hideBalance
-                holder.balanceFiatLocked.isVisible = !viewItem.hideBalance
-            }
+            holder.balanceCoinLocked.isVisible = viewItem.coinValueLocked.visible && !viewItem.hideBalance
+            holder.balanceFiatLocked.isVisible = viewItem.coinValueLocked.visible && !viewItem.hideBalance
 
             setExpandProgress(holder.balanceWrapper, 0, balanceWrapperHeight, if(!viewItem.hideBalance) 1f else 0f)
 
@@ -311,8 +299,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             balanceCoin.showIf(coinValue.visible)
             balanceFiat.showIf(fiatValue.visible)
-            balanceCoinLocked.showIf(coinValueLocked.visible, View.INVISIBLE)
-            balanceFiatLocked.showIf(fiatValueLocked.visible, View.INVISIBLE)
+            balanceCoinLocked.showIf(coinValueLocked.visible)
+            balanceFiatLocked.showIf(fiatValueLocked.visible)
             textSyncing.showIf(syncingData.syncingTextVisible)
             textSyncedUntil.showIf(syncingData.syncingTextVisible)
 
@@ -332,10 +320,22 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
     fun bindUpdate(balanceViewItem: BalanceViewItem, payloads: MutableList<Any>) {
         payloads.forEach {
             when (it) {
+                BalanceViewItem.UpdateType.EXPANDED,
+                BalanceViewItem.UpdateType.TOGGLEBALANCE -> bindUpdateExpanded(balanceViewItem)
                 BalanceViewItem.UpdateType.STATE -> bindUpdateState(balanceViewItem)
                 BalanceViewItem.UpdateType.BALANCE -> bindUpdateBalance(balanceViewItem)
                 BalanceViewItem.UpdateType.MARKET_INFO -> bindUpdateMarketInfo(balanceViewItem)
             }
+        }
+    }
+
+    private fun bindUpdateExpanded(item: BalanceViewItem) {
+        item.apply {
+            balanceCoin.showIf(coinValue.visible, View.INVISIBLE)
+            balanceFiat.showIf(fiatValue.visible)
+
+            textSyncing.showIf(item.syncingData.syncingTextVisible)
+            textSyncedUntil.showIf(item.syncingData.syncingTextVisible)
         }
     }
 
@@ -347,8 +347,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             balanceCoinLocked.text = coinValueLocked.text
             balanceFiatLocked.text = fiatValueLocked.text
 
-            balanceCoinLocked.showIf(coinValueLocked.visible, View.INVISIBLE)
-            balanceFiatLocked.showIf(fiatValueLocked.visible, View.INVISIBLE)
+            balanceCoinLocked.showIf(coinValueLocked.visible && !hideBalance)
+            balanceFiatLocked.showIf(fiatValueLocked.visible && !hideBalance)
         }
     }
 
@@ -357,14 +357,17 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             iconProgress.showIf(syncingData.progress != null)
             syncingData.progress?.let { iconProgress.setProgress(it.toFloat()) }
 
+            balanceCoin.text = coinValue.text
+            balanceFiat.text = fiatValue.text
+            balanceCoinLocked.text = coinValueLocked.text
+            balanceFiatLocked.text = fiatValueLocked.text
+
             iconCoin.showIf(coinIconVisible)
             iconNotSynced.showIf(failedIconVisible)
             setTextSyncing(syncingData)
 
             balanceCoin.showIf(coinValue.visible)
             balanceFiat.showIf(fiatValue.visible)
-            balanceCoinLocked.showIf(coinValueLocked.visible && !hideBalance)
-            balanceFiatLocked.showIf(fiatValueLocked.visible && !hideBalance)
             textSyncing.showIf(syncingData.syncingTextVisible)
             textSyncedUntil.showIf(syncingData.syncingTextVisible)
 
