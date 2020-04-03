@@ -73,7 +73,7 @@ class PrivacySettingsItemViewHolder(
         containerView.title = viewItem.coin.title
         containerView.subtitle = null
         containerView.dropDownText = viewItem.settingType.selectedTitle
-        containerView.dropDownArrow = true
+        containerView.dropDownArrow = viewItem.enabled
         containerView.bottomBorder = lastElement
 
         containerView.setOnClickListener {

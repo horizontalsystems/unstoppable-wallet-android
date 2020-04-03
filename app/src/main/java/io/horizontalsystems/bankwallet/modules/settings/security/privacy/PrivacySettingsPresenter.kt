@@ -15,12 +15,12 @@ class PrivacySettingsPresenter(
         get() = interactor.walletsCount > 0
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
-            interactor.ether(),
-            interactor.eos(),
-            interactor.binance())
-            .mapNotNull { coin ->
+            Pair(interactor.ether(), true),
+            Pair(interactor.eos(), false),
+            Pair(interactor.binance(), false))
+            .mapNotNull { (coin, enabled) ->
                 interactor.communicationSetting(coin.type)?.communicationMode?.let { selected ->
-                    PrivacySettingsViewItem(coin, PrivacySettingsType.Communication(selected))
+                    PrivacySettingsViewItem(coin, PrivacySettingsType.Communication(selected), enabled)
                 }
             }
 
