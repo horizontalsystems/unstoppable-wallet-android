@@ -209,8 +209,8 @@
     <string name="SettingsOption_Enabled">Etkinleştirildi</string>
     <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
     <string name="SettingsPrivacy_Info">Bu uygulama verilerinizden hiçbirini paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir.</string>
-    <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Connection</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blokzincir Bağlantısı</string>
     <string name="SettingsPrivacy_CommunicationDescription">Bazı blok zincirler, mobil uygulamaların peer to peer şekilde çalışması için henüz bir araç sağlamamaktadır. BTC, BCH, LTC, DASH blok zincirleriyle iletişim tamamen peer to peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
