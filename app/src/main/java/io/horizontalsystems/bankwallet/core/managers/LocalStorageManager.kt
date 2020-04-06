@@ -45,6 +45,7 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
     private val APP_LAUNCH_COUNT = "app_launch_count"
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
+    private val BALANCE_HIDDEN = "balance_hidden"
 
     val gson by lazy { Gson() }
 
@@ -269,5 +270,11 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         }
         set(sortingType) {
             App.preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
+        }
+
+    override var balanceHidden: Boolean
+        get() = App.preferences.getBoolean(BALANCE_HIDDEN, false)
+        set(value) {
+            App.preferences.edit().putBoolean(BALANCE_HIDDEN, value).apply()
         }
 }

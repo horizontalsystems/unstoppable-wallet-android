@@ -66,6 +66,7 @@ interface ILocalStorage {
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
     var transactionSortingType: TransactionDataSortingType
+    var balanceHidden: Boolean
 
     fun clear()
 }

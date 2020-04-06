@@ -25,7 +25,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val setViewItems = SingleLiveEvent<List<BalanceViewItem>>()
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
-    val setBalanceVisibleLiveEvent = SingleLiveEvent<Boolean>()
+    val setBalanceHiddenLiveEvent = SingleLiveEvent<Pair<Boolean, Boolean>>()
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
@@ -90,8 +90,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         didRefreshLiveEvent.postValue(null)
     }
 
-    override fun setBalanceVisible(visible: Boolean) {
-        setBalanceVisibleLiveEvent.postValue(visible)
+    override fun setBalanceHidden(hidden: Boolean, animate: Boolean) {
+        setBalanceHiddenLiveEvent.postValue(Pair(hidden, animate))
     }
 
     // ViewModel

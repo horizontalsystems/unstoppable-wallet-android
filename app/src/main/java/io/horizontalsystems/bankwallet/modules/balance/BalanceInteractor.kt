@@ -37,6 +37,12 @@ class BalanceInteractor(
     override val sortType: BalanceSortType
         get() = localStorage.sortType
 
+    override var balanceHidden: Boolean
+        get() = localStorage.balanceHidden
+        set(value) {
+            localStorage.balanceHidden = value
+        }
+
     override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
         return rateManager.marketInfo(coinCode, currencyCode)
     }

@@ -212,12 +212,16 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             })
         })
 
-        viewModel.setBalanceVisibleLiveEvent.observe(viewLifecycleOwner, Observer { showBalance ->
-            setOptionsMenuVisible(!showBalance)
+        viewModel.setBalanceHiddenLiveEvent.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
+            setOptionsMenuVisible(hideBalance)
 
-            val animator = getValueAnimator(showBalance, expandDuration, AccelerateDecelerateInterpolator()
-            ) { progress -> setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, progress) }
-            animator.start()
+            if (animate) {
+                val animator = getValueAnimator(!hideBalance, expandDuration, AccelerateDecelerateInterpolator()
+                ) { progress -> setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, progress) }
+                animator.start()
+            } else {
+                setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, if (hideBalance) 0f else 1f)
+            }
         })
     }
 

@@ -30,12 +30,14 @@ class BalancePresenter(
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
     private var accountToBackup: Account? = null
-    private var hideBalance = false
+    private var hideBalance = interactor.balanceHidden
 
     // IViewDelegate
 
     override fun onLoad() {
         executor.submit {
+            view?.setBalanceHidden(hideBalance, false)
+
             interactor.subscribeToWallets()
             interactor.subscribeToBaseCurrency()
 
@@ -116,14 +118,17 @@ class BalancePresenter(
     }
 
     override fun onHideBalanceClick() {
-        view?.setBalanceVisible(false)
-        hideBalance = true
-        toggleBalanceVisibility()
+        setBalanceHidden(hidden = true)
     }
 
     override fun onShowBalanceClick() {
-        view?.setBalanceVisible(true)
-        hideBalance = false
+        setBalanceHidden(hidden = false)
+    }
+
+    private fun setBalanceHidden(hidden: Boolean){
+        interactor.balanceHidden = hidden
+        hideBalance = hidden
+        view?.setBalanceHidden(hidden, true)
         toggleBalanceVisibility()
     }
 

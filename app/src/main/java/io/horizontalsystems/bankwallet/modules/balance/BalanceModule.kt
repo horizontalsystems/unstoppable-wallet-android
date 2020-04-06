@@ -16,7 +16,7 @@ object BalanceModule {
         fun set(sortIsOn: Boolean)
         fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun didRefresh()
-        fun setBalanceVisible(visible: Boolean)
+        fun setBalanceHidden(hidden: Boolean, animate: Boolean)
     }
 
     interface IViewDelegate {
@@ -46,6 +46,7 @@ object BalanceModule {
         val wallets: List<Wallet>
         val baseCurrency: Currency
         val sortType: BalanceSortType
+        var balanceHidden: Boolean
 
         fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun chartInfo(coinCode: String, currencyCode: String): ChartInfo?
