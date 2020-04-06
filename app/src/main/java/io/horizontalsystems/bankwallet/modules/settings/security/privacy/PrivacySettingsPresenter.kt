@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.Communication
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.WalletRestore
 
 class PrivacySettingsPresenter(
         private val interactor: PrivacySettingsModule.IPrivacySettingsInteractor,
@@ -15,14 +17,25 @@ class PrivacySettingsPresenter(
         get() = interactor.walletsCount > 0
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
-            Pair(interactor.ether(), true),
-            Pair(interactor.eos(), false),
-            Pair(interactor.binance(), false))
-            .mapNotNull { (coin, enabled) ->
-                interactor.communicationSetting(coin.type)?.communicationMode?.let { selected ->
-                    PrivacySettingsViewItem(coin, PrivacySettingsType.Communication(selected), enabled)
+            interactor.ether(),
+            interactor.eos(),
+            interactor.binance())
+            .mapNotNull { coin ->
+                getCommunicationSettingsViewItem(coin)
+            }
+
+    private fun getCommunicationSettingsViewItem(coin: Coin): PrivacySettingsViewItem? {
+        return when (coin.type) {
+            is CoinType.Ethereum -> {
+                interactor.communicationSetting(coin.type)?.communicationMode?.let { communicationMode ->
+                    PrivacySettingsViewItem(coin, Communication(communicationMode), enabled = true)
                 }
             }
+            is CoinType.Eos -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.Greymass), enabled = false)
+            is CoinType.Binance -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.BinanceDex), enabled = false)
+            else -> null
+        }
+    }
 
     private val walletRestoreSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
             interactor.bitcoin(),
@@ -31,7 +44,7 @@ class PrivacySettingsPresenter(
             interactor.dash())
             .mapNotNull { coin ->
                 interactor.syncModeSetting(coin.type)?.syncMode?.let { selected ->
-                    PrivacySettingsViewItem(coin, PrivacySettingsType.WalletRestore(selected))
+                    PrivacySettingsViewItem(coin, WalletRestore(selected))
                 }
             }
 
@@ -77,14 +90,14 @@ class PrivacySettingsPresenter(
 
     override fun didTapItem(settingType: PrivacySettingsType, position: Int) {
         when (settingType) {
-            is PrivacySettingsType.Communication -> {
+            is Communication -> {
                 val item = communicationSettingsViewItems[position]
                 if (item.coin == interactor.ether()) {
                     openedPrivacySettings = item
                     view?.showCommunicationSelectorDialog(communicationModeOptions, settingType.selected)
                 }
             }
-            is PrivacySettingsType.WalletRestore -> {
+            is WalletRestore -> {
                 val item = walletRestoreSettingsViewItems[position]
                 openedPrivacySettings = item
                 view?.showSyncModeSelectorDialog(syncModeOptions, if (settingType.selected == SyncMode.New) SyncMode.Fast else settingType.selected)
@@ -104,10 +117,10 @@ class PrivacySettingsPresenter(
             val coin = privacySettings.coin
             val settingType = privacySettings.settingType
 
-            if (settingType is PrivacySettingsType.WalletRestore) {
+            if (settingType is WalletRestore) {
                 val syncMode = syncModeOptions[position]
                 onSelectSyncMode(coin, syncMode, settingType.selected)
-            } else if (settingType is PrivacySettingsType.Communication) {
+            } else if (settingType is Communication) {
                 val communicationMode = communicationModeOptions[position]
                 onSelectCommunicationMode(coin, communicationMode, settingType.selected)
             }
@@ -131,7 +144,7 @@ class PrivacySettingsPresenter(
     }
 
     private fun updateSyncMode(coin: Coin, syncMode: SyncMode) {
-        (openedPrivacySettings?.settingType as? PrivacySettingsType.WalletRestore)?.selected = syncMode
+        (openedPrivacySettings?.settingType as? WalletRestore)?.selected = syncMode
 
         interactor.saveSyncModeSetting(SyncModeSetting(coin.type, syncMode))
         view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
@@ -148,7 +161,7 @@ class PrivacySettingsPresenter(
     }
 
     private fun updateCommunicationMode(coin: Coin, communicationMode: CommunicationMode) {
-        (openedPrivacySettings?.settingType as? PrivacySettingsType.Communication)?.selected = communicationMode
+        (openedPrivacySettings?.settingType as? Communication)?.selected = communicationMode
 
         interactor.saveCommunicationSetting(CommunicationSetting(coin.type, communicationMode))
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
