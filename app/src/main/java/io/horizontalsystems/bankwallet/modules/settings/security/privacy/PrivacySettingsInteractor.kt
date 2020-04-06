@@ -1,10 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
-import io.horizontalsystems.bankwallet.core.INetManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.IPinComponent
