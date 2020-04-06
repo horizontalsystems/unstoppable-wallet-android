@@ -307,7 +307,9 @@
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
-
+    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingBip69">Bip69</string>
+    <string name="SettingsSecurity_SortingOff">Off</string>
 
     <!--Setting_About-->
 

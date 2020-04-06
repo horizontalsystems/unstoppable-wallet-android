@@ -21,7 +21,7 @@ class PrivacySettingsInteractor(
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     override var transactionsSortingType: TransactionDataSortingType
-        get() = localStorageManager.transactionSortingType ?: TransactionDataSortingType.Shuffle
+        get() = localStorageManager.transactionSortingType
         set(value) {
             localStorageManager.transactionSortingType = value
         }
