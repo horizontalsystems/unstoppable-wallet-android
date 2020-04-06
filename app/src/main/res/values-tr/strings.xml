@@ -231,6 +231,9 @@
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internet trafiğinizi tamamen anonimleştirin. Yavaş olabilir.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakılmış. Tor\'un çalışması için onları etkinleştirmeniz gerekir.</string>
+    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingBip69">Bip69</string>
+    <string name="SettingsSecurity_SortingOff">Off</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
