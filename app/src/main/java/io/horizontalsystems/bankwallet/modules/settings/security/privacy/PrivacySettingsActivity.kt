@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorDialog
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorItem
@@ -88,7 +89,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         })
 
         viewModel.transactionOrderingLiveData.observe(this, Observer { ordering ->
-            transactionsOrderSetting.dropDownText = ordering.value
+            transactionsOrderSetting.dropDownText = getSortingLocalized(ordering)
         })
 
         viewModel.showAppRestartAlertForTor.observe(this, Observer { checked ->
@@ -111,7 +112,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
 
         viewModel.showTransactionsSortingSelectorDialog.observe(this, Observer { (items, selected) ->
             SelectorDialog.newInstance(
-                    items = items.map { SelectorItem(it.value, it == selected) },
+                    items = items.map { SelectorItem(getSortingLocalized(it), it == selected) },
                     toggleKeyboard = false,
                     listener = object : SelectorDialog.Listener {
                         override fun onSelectItem(position: Int) {
@@ -165,6 +166,14 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         viewModel.restartApp.observe(this, Observer {
             restartApp()
         })
+    }
+
+    private fun getSortingLocalized(sortingType: TransactionDataSortingType): String{
+        return when(sortingType) {
+            TransactionDataSortingType.Shuffle -> getString(R.string.SettingsSecurity_SortingShuffle)
+            TransactionDataSortingType.Bip69 -> getString(R.string.SettingsSecurity_SortingBip69)
+            TransactionDataSortingType.Off -> getString(R.string.SettingsSecurity_SortingOff)
+        }
     }
 
     private fun setTorSwitch(checked: Boolean) {

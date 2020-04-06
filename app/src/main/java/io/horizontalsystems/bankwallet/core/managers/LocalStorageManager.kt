@@ -262,12 +262,12 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
             App.preferences.edit().putLong(RATE_APP_LAST_REQ_TIME, value).apply()
         }
 
-    override var transactionSortingType: TransactionDataSortingType?
+    override var transactionSortingType: TransactionDataSortingType
         get() {
             val txSortingTypeString = App.preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
-            return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) }
+            return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) } ?: TransactionDataSortingType.Shuffle
         }
         set(sortingType) {
-            App.preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType?.value).apply()
+            App.preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
         }
 }

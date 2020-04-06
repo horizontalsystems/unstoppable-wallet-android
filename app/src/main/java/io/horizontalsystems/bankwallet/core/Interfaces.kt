@@ -64,7 +64,7 @@ interface ILocalStorage {
     var torEnabled: Boolean
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
-    var transactionSortingType: TransactionDataSortingType?
+    var transactionSortingType: TransactionDataSortingType
 
     fun clear()
 }
