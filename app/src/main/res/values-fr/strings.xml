@@ -232,6 +232,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_AppRestartWarning">Cette opération va redémarrer Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisez complètement votre trafic Internet en utilisant cette application. Peut être lent.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Les notifications de l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour que Tor puisse fonctionner.</string>
+    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingBip69">Bip69</string>
+    <string name="SettingsSecurity_SortingOff">Off</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
