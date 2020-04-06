@@ -13,7 +13,8 @@ class PrivacySettingsInteractor(
         private val blockchainSettingsManager: IBlockchainSettingsManager,
         private val appConfigProvider: IAppConfigProvider,
         private val walletManager: IWalletManager,
-        private val localStorageManager: ILocalStorage
+        private val localStorageManager: ILocalStorage,
+        private val adapterManager: IAdapterManager
 ) : PrivacySettingsModule.IPrivacySettingsInteractor {
 
     var delegate: PrivacySettingsModule.IPrivacySettingsInteractorDelegate? = null
@@ -53,11 +54,8 @@ class PrivacySettingsInteractor(
                 }
     }
 
-    override fun reSyncWallet(wallet: Wallet) {
-        walletManager.delete(listOf(wallet))
-
-        //start wallet with updated settings
-        walletManager.save(listOf(wallet))
+    override fun reSyncWallets(wallets: List<Wallet>) {
+        adapterManager.refreshAdapters(wallets)
     }
 
     override fun stopTor() {
@@ -128,8 +126,9 @@ class PrivacySettingsInteractor(
         return appConfigProvider.coins.first { it.code == "DASH" }
     }
 
-    override fun getWalletForUpdate(coinType: CoinType): Wallet? {
-        return walletManager.wallets.firstOrNull { it.coin.type == coinType }
+    override fun getWalletsForUpdate(coinType: CoinType): List<Wallet> {
+        // include Erc20 wallets for CoinType.Ethereum
+        return walletManager.wallets.filter { it.coin.type == coinType || (coinType == CoinType.Ethereum && it.coin.type is CoinType.Erc20) }
     }
 
     override fun clear() {

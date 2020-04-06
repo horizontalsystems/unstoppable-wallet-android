@@ -7,8 +7,11 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.DerivationSetting
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 object AddressFormatSettingsModule {
 
@@ -54,7 +57,7 @@ object AddressFormatSettingsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = AddressFormatSettingsView()
             val router = AddressFormatSettingsRouter()
-            val interactor = AddressFormatSettingsInteractor(App.derivationSettingsManager, App.appConfigProvider, App.walletManager)
+            val interactor = AddressFormatSettingsInteractor(App.derivationSettingsManager, App.appConfigProvider, App.walletManager, App.adapterManager)
             val presenter = AddressFormatSettingsPresenter(view, router, interactor, coinTypes, showDoneButton)
 
             return presenter as T
