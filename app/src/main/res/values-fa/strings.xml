@@ -231,6 +231,9 @@
     <string name="SettingsSecurity_AppRestartWarning">این اقدام کیف پول غیر قابل توقف را مجدداً راه اندازی می کند.</string>
     <string name="SettingsSecurity_TorConnectionDescription">هنگام استفاده از این برنامه، ترافیک اینترنت خود را کاملاً ناشناس کنید. می تواند آهسته باشد.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
+    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingBip69">Bip69</string>
+    <string name="SettingsSecurity_SortingOff">Off</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
