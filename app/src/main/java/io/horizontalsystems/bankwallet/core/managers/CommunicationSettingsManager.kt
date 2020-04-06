@@ -17,17 +17,24 @@ class CommunicationSettingsManager(
         const val communicationSettingKey: String = "communication"
     }
 
+    private fun getBaseCoinType(coinType: CoinType): CoinType {
+        return when (coinType) {
+            is CoinType.Erc20 -> CoinType.Ethereum
+            else -> coinType
+        }
+    }
+
     override fun defaultCommunicationSetting(coinType: CoinType): CommunicationSetting? {
-        return appConfigProvider.communicationSettings.firstOrNull { it.coinType.javaClass == coinType.javaClass }
+        return appConfigProvider.communicationSettings.firstOrNull { it.coinType.javaClass == getBaseCoinType(coinType).javaClass }
     }
 
     override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
-        val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(coinType, communicationSettingKey)
-        return blockchainSetting?.let { CommunicationSetting(coinType, CommunicationMode.valueOf(it.value)) }
+        val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(getBaseCoinType(coinType), communicationSettingKey)
+        return blockchainSetting?.let { CommunicationSetting(getBaseCoinType(coinType), CommunicationMode.valueOf(it.value)) }
     }
 
     override fun updateSetting(communicationSetting: CommunicationSetting) {
-        appDatabase.blockchainSettingDao().insert(BlockchainSetting(communicationSetting.coinType, communicationSettingKey, communicationSetting.communicationMode.value))
+        appDatabase.blockchainSettingDao().insert(BlockchainSetting(getBaseCoinType(communicationSetting.coinType), communicationSettingKey, communicationSetting.communicationMode.value))
     }
 
 }
