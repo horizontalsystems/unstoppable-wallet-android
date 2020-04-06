@@ -275,7 +275,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         balanceViewItem = item
 
         item.apply {
-            syncingData.progress?.let { iconProgress.setProgress(it.toFloat()) }
+            syncSpinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
 
             iconCoin.bind(coinCode)
 
@@ -311,7 +311,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
             iconCoin.showIf(coinIconVisible)
             iconNotSynced.showIf(failedIconVisible)
-            iconProgress.showIf(syncingData.progress != null)
+            iconProgress.showIf(syncSpinnerProgress != null)
 
             coinLabel.showIf(coinTypeLabelVisible)
         }
@@ -354,8 +354,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     private fun bindUpdateState(item: BalanceViewItem) {
         item.apply {
-            iconProgress.showIf(syncingData.progress != null)
-            syncingData.progress?.let { iconProgress.setProgress(it.toFloat()) }
+            iconProgress.showIf(syncSpinnerProgress != null)
+            syncSpinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
 
             balanceCoin.text = coinValue.text
             balanceFiat.text = fiatValue.text
