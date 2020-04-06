@@ -81,6 +81,38 @@ class AdapterManager(
 
     }
 
+    /**
+     * Partial refresh of adapters
+     * For the given list of wallets do:
+     * - remove corresponding adapters from adaptersMap and stop them
+     * - create new adapters, start and add them to adaptersMap
+     * - trigger adaptersReadySubject
+     */
+    @Synchronized
+    override fun refreshAdapters(wallets: List<Wallet>) {
+        handler.post {
+            val walletsToRefresh = wallets.filter { adaptersMap.containsKey(it) }
+
+            //remove and stop adapters
+            walletsToRefresh.forEach { wallet ->
+                adaptersMap.remove(wallet)?.let { previousAdapter ->
+                    previousAdapter.stop()
+                    adapterFactory.unlinkAdapter(previousAdapter)
+                }
+            }
+
+            //add and start new adapters
+            walletsToRefresh.forEach { wallet ->
+                adapterFactory.adapter(wallet)?.let { adapter ->
+                    adaptersMap[wallet] = adapter
+                    adapter.start()
+                }
+            }
+
+            adaptersReadySubject.onNext(Unit)
+        }
+    }
+
     override fun stopKits() {
         handler.post {
             adaptersMap.values.forEach {

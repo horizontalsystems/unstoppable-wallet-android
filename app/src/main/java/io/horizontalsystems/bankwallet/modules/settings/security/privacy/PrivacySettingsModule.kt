@@ -57,8 +57,8 @@ object PrivacySettingsModule {
         fun litecoin(): Coin
         fun bitcoinCash(): Coin
         fun dash(): Coin
-        fun getWalletForUpdate(coinType: CoinType): Wallet?
-        fun reSyncWallet(wallet: Wallet)
+        fun getWalletsForUpdate(coinType: CoinType): List<Wallet>
+        fun reSyncWallets(wallets: List<Wallet>)
 
         fun clear()
     }
@@ -73,7 +73,7 @@ object PrivacySettingsModule {
     }
 
     fun init(view: PrivacySettingsViewModel, router: IPrivacySettingsRouter) {
-        val interactor = PrivacySettingsInteractor(App.pinComponent, App.netKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager, App.localStorage)
+        val interactor = PrivacySettingsInteractor(App.pinComponent, App.netKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager, App.localStorage, App.adapterManager)
         val presenter = PrivacySettingsPresenter(interactor, router)
         interactor.delegate = presenter
         view.delegate = presenter

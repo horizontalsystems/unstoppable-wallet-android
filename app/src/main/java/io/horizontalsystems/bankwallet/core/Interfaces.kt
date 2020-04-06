@@ -39,6 +39,7 @@ interface IAdapterManager {
     fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
+    fun refreshAdapters(wallets: List<Wallet>)
 }
 
 interface ILocalStorage {

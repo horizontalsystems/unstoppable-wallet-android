@@ -128,7 +128,7 @@ class PrivacySettingsPresenter(
     }
 
     private fun onSelectCommunicationMode(coin: Coin, selectedValue: CommunicationMode, currentValue: CommunicationMode) {
-        if (currentValue != selectedValue && interactor.getWalletForUpdate(coin.type) != null) {
+        if (currentValue != selectedValue && interactor.getWalletsForUpdate(coin.type).count() > 0) {
             view?.showCommunicationModeChangeAlert(coin, selectedValue)
         } else {
             updateCommunicationMode(coin, selectedValue)
@@ -136,7 +136,7 @@ class PrivacySettingsPresenter(
     }
 
     private fun onSelectSyncMode(coin: Coin, selectedValue: SyncMode, currentValue: SyncMode) {
-        if (currentValue != selectedValue && interactor.getWalletForUpdate(coin.type) != null) {
+        if (currentValue != selectedValue && interactor.getWalletsForUpdate(coin.type).count() > 0) {
             view?.showRestoreModeChangeAlert(coin, selectedValue)
         } else {
             updateSyncMode(coin, selectedValue)
@@ -155,8 +155,8 @@ class PrivacySettingsPresenter(
     override fun proceedWithSyncModeChange(coin: Coin, syncMode: SyncMode) {
         updateSyncMode(coin, syncMode)
 
-        interactor.getWalletForUpdate(coin.type)?.let {
-            interactor.reSyncWallet(it)
+        interactor.getWalletsForUpdate(coin.type).let {
+            interactor.reSyncWallets(it)
         }
     }
 
@@ -172,8 +172,8 @@ class PrivacySettingsPresenter(
     override fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode) {
         updateCommunicationMode(coin, communicationMode)
 
-        interactor.getWalletForUpdate(coin.type)?.let {
-            interactor.reSyncWallet(it)
+        interactor.getWalletsForUpdate(coin.type).let {
+            interactor.reSyncWallets(it)
         }
     }
 

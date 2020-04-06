@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.addressformat
 
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -12,7 +13,8 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 class AddressFormatSettingsInteractor(
         private val derivationSettingsManager: IDerivationSettingsManager,
         private val appConfigProvider: IAppConfigProvider,
-        private val walletManager: IWalletManager
+        private val walletManager: IWalletManager,
+        private val adapterManager: IAdapterManager
 ) : AddressFormatSettingsModule.IInteractor {
 
     override fun derivation(coinType: CoinType): Derivation {
@@ -34,9 +36,6 @@ class AddressFormatSettingsInteractor(
     }
 
     override fun reSyncWallet(wallet: Wallet) {
-        walletManager.delete(listOf(wallet))
-
-        //start wallet with updated settings
-        walletManager.save(listOf(wallet))
+        adapterManager.refreshAdapters(listOf(wallet))
     }
 }
