@@ -210,13 +210,13 @@
     <string name="SettingsOption_Disabled">Deaktiviert</string>
     <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können bestimmte öffentliche Daten wie die IP-Adresse möglicherweise weitergegeben werden.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Connection</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain-Verbindung</string>
     <string name="SettingsPrivacy_CommunicationDescription">Manche Blockchains bieten noch keine Möglichkeit des Peer-to-Peer-Betriebs von mobilen Anwendungen. Die Kommunikation mit BTC-, BCH-, LTC- und DASH-Blockchains erfolgt vollständig über Peer-to-Peer.</string>
-    <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
+    <string name="SettingsPrivacy_WalletRestore">Blockchain-Wiederherstellung</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Wählen Sie die Datenquelle für die Wiederherstellung des Wallets mit Transaktionen aus.</string>
-    <string name="SettingsPrivacy_Transactions">Blockchain Transactions</string>
-    <string name="SettingsPrivacy_TransactionsSettingText">Inputs/Outputs</string>
-    <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
+    <string name="SettingsPrivacy_Transactions">Blockchain-Transaktionen</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Ein-/Ausgänge</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Machen Sie Ihre BTC-, LTC- und BCH-Transaktionen schwieriger nachvollziehbar, indem Sie die Transaktionsstruktur verändern.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
@@ -231,9 +231,9 @@
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion wird das Unstoppable Wallet neu starten.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisieren Sie Ihren Internetverkehr bei der Nutzung dieser App vollständig. Kann langsam sein.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Die Benachrichtigungen für die Unstoppable Wallet-App sind deaktiviert. Sie müssen diese einschalten, damit Tor überhaupt funktionieren kann.</string>
-    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingShuffle">Zufällig</string>
     <string name="SettingsSecurity_SortingBip69">Bip69</string>
-    <string name="SettingsSecurity_SortingOff">Off</string>
+    <string name="SettingsSecurity_SortingOff">Aus</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
