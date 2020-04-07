@@ -104,9 +104,7 @@ class TransactionRecordDataSource(
     }
 
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
-        val unusedWallets = poolRepo.allPools.map { it.wallet }.filter { !wallets.contains(it) }
-
-        poolRepo.deactivatePools(unusedWallets)
+        poolRepo.deactivatePools(wallets)
 
         setWallets(wallets)
     }
