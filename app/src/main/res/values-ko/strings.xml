@@ -233,7 +233,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
     <string name="SettingsSecurity_SortingBip69">Bip69</string>
-    <string name="SettingsSecurity_SortingOff">Off</string>
+    <string name="SettingsSecurity_SortingOff">끄기</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
