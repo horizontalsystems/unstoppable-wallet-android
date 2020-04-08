@@ -312,7 +312,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Subtitle">%s cüzdanı</string>
-    <string name="AddCoin_Description">%1$s saklayabilen bir cüzdanınız yok. Uygulamanın sizin için yeni bir cüzdan oluşturabilir. Yeni bir cüzdan oluşturmak için aşağıdaki Oluştur düğmesini kullanın.\n\nYeni cüzdanı aşağıdaki paralar için kullanabileceksiniz: %2$s.\n\nVarsa, mevcut %3$s Cüzdan anahtarını da kullanabilirsiniz. Bunun için Geri Yükle düğmesini kullanın.</string>
+    <string name="AddCoin_Description">%2$s göndermek ve alabilmek için %1$s cüzdanı gerekiyor. Yeni bir %3$s cüzdan oluşturmak için aşağıdaki Oluştur düğmesini kullanın\n\n, yada yukarıda bahsedilen Cüzdanınız varsa Geri Yükle düğmesini kullanın.\n\n Mevcut Cüzdanınızı %4$s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Address Format Settings List -->
