@@ -212,9 +212,9 @@
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Соединение с Блокчейном</string>
     <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в режиме peer-to-peer (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
-    <string name="SettingsPrivacy_WalletRestore">Восстановить через Блокчейн</string>
+    <string name="SettingsPrivacy_WalletRestore">Восстановить Блокчейн</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Выбрать источник данных для восстановления транзакций кошелька.</string>
-    <string name="SettingsPrivacy_Transactions">Блокчейн транзакции</string>
+    <string name="SettingsPrivacy_Transactions">Блокчейн Tранзакции</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
     <string name="SettingsPrivacy_TransactionsDescription">Поменять способ оформления транзакций что бы трудно было уследить за вашими BTC, LTC, BCH операциями.</string>
     <!--Settings-->
