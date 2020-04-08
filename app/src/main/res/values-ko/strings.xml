@@ -231,7 +231,7 @@
     <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷 거래를 전부 익명으로 처리하여 주세요. 느려질 수 있습니다.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
-    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingOff">끄기</string>
     <!--Setting_About-->
@@ -314,7 +314,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">추가하기 %s</string>
     <string name="AddCoin_Subtitle">%s 지갑</string>
-    <string name="AddCoin_Description">귀하께서는 %1$s를 저장할 수 있는 지갑을 가지고 계시지 않습니다. 이 앱은 귀하를 위해 새로운 지갑을 만들어 드릴 수 있습니다. 새로운 지갑을 만들기 위해 밑에있는 생성하기 버튼을 사용하십시오.\n\n귀하께서는 다음 %2$s에 대한 새로운 지갑을 사용 하실 수 있을 것 입니다.\n\n귀하께서는 또한 기존에 가지고 계셨던%3$s 지갑 암호를 사용하실 수 있습니다. 복원하기 버튼을 누르십시오.</string>
+    <string name="AddCoin_Description">귀하께서는 %1$s 을 보내거나 받으시려면 %2$s 지갑을 설정하셔야 합니다.\n\n아래의 생성 버튼을 사용하여 새로운 %3$s 지갑을 설정하거나 복원 버튼을 사용하여 기존 지갑을 가져옵니다.\n\n귀하께서는 이 지갑을 %4$s 를 위해 사용하실 수 있습니다.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Address Format Settings List -->
