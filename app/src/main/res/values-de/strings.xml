@@ -313,7 +313,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s hinzufügen</string>
     <string name="AddCoin_Subtitle">%s Wallet</string>
-    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_Description">Sie müssen das %1$s Wallet einrichten, um %2$s senden oder empfangen zu können.\n\nTippen Sie auf den Button „Erstellen“, um ein neues %3$s Wallet zu erstellen. Sie können auch auf den Button „Wiederherstellen“ tippen, um ein bereits bestehendes Wallet zu importieren.\n\nSie können dieses Wallet benutzen für: %4$s.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Address Format Settings List -->
