@@ -26,7 +26,7 @@
     <string name="Button_Change">Changer</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
-    <string name="Wallet">%s portefeuille</string>
+    <string name="Wallet">%s Portefeuille</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Indépendance</string>
     <string name="Intro_Independence_Description">Conservez les actifs cryptographiques en lieu sûr, sans possibilité de confiscation et accessibles à tout moment.</string>
