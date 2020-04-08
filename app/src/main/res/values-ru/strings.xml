@@ -37,7 +37,6 @@
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n Кошелек</string>
     <string name="Welcome_PrivacySettings">Настройки Конфиденциальности</string>
-
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Rate App-->
