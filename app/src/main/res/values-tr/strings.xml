@@ -232,7 +232,7 @@
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internet trafiğinizi tamamen anonimleştirin. Yavaş olabilir.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakılmış. Tor\'un çalışması için onları etkinleştirmeniz gerekir.</string>
     <string name="SettingsSecurity_SortingShuffle">Karıştır</string>
-    <string name="SettingsSecurity_SortingBip69">Bip69</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingOff">Kapat</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
