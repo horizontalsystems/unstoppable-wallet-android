@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorDi
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorItem
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.views.AlertDialogFragment
-import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
 import kotlin.system.exitProcess
 
@@ -30,6 +29,9 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_privacy)
 
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()
 
@@ -38,8 +40,6 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
 
         communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
         walletRestoreSettingsRecyclerview.adapter = walletRestoreSettingsAdapter
-
-        shadowlessToolbar.bind(getString(R.string.SettingsSecurity_Privacy), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
 
         torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchTorEnabled(isChecked)
