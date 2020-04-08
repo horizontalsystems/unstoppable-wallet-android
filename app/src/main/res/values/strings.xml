@@ -35,11 +35,11 @@
 
     <!--Intro-->
     <string name="Intro_Independence_Title">Independence</string>
-    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times.</string>
+    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times</string>
     <string name="Intro_Knowledge_Title">Knowledge</string>
-    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
+    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages</string>
     <string name="Intro_Privacy_Title">Privacy</string>
-    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
+    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth</string>
 
     <!--Welcome-->
 
@@ -308,7 +308,7 @@
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
-    <string name="SettingsSecurity_SortingBip69">Bip69</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingOff">Off</string>
 
     <!--Setting_About-->
