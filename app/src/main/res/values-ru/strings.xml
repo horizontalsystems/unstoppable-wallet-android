@@ -27,7 +27,7 @@
     <string name="NotAvailable">Нет данных</string>
     <string name="Wallet">%s Кошелек</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable \n Кошелек</string>
+    <string name="Welcome_Title">Unstoppable \nКошелек</string>
     <string name="Welcome_SecurityCenter">Безопасность</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
