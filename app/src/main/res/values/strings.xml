@@ -15,6 +15,7 @@
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
+    <string name="Button_Skip">Skip</string>
     <string name="Button_Next">Next</string>
     <string name="Button_Restore">Restore</string>
     <string name="Button_Enable">Enable</string>
@@ -32,10 +33,18 @@
 
     <string name="Wallet">%s Wallet</string>
 
+    <!--Intro-->
+    <string name="Intro_Independence_Title">Independence</string>
+    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times.</string>
+    <string name="Intro_Knowledge_Title">Knowledge</string>
+    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages.</string>
+    <string name="Intro_Privacy_Title">Privacy</string>
+    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth.</string>
+
     <!--Welcome-->
 
-    <string name="Welcome_Title">Unstoppable \nWallet</string>
-    <string name="Welcome_SecurityCenter">Security Center</string>
+    <string name="Welcome_Title">Unstoppable\nWallet</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
@@ -268,6 +277,19 @@
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_Report">Contact</string>
 
+    <string name="SettingsOption_Enabled">Enabled</string>
+    <string name="SettingsOption_Disabled">Disabled</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Connection</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
+    <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
+    <string name="SettingsPrivacy_Transactions">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Inputs/Outputs</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
+
+
     <!--Settings-->
 
     <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
@@ -275,6 +297,7 @@
 
     <!--Setting_Security-->
 
+    <string name="SettingsSecurity_Privacy">Privacy</string>
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
     <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
@@ -282,9 +305,11 @@
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
     <string name="SettingsSecurity_EnableTor">Enable Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor can safeguard your browsing activities on wallet. Allow permission for using tor browser in settings.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
-
+    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingBip69">Bip69</string>
+    <string name="SettingsSecurity_SortingOff">Off</string>
 
     <!--Setting_About-->
 
@@ -369,7 +394,7 @@
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_AdvancedSettings">Advanced Settings</string>
+    <string name="ManageKeys_AddressFormat">Address Format</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
@@ -395,10 +420,9 @@
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
-    <!-- Blockchain Settings List -->
+    <!-- Address Format Settings List -->
 
-    <string name="BlockchainSettingsList_Title">Advanced Settings</string>
-    <string name="BlockchainSettingsList_Description">To change the settings, you must enable the listed coins, other coins do not have settings</string>
+    <string name="AddressFormatSettings_Title">Address Format</string>
 
     <!-- Blockchain Settings -->
 
@@ -407,6 +431,8 @@
     <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Settings</string>
@@ -420,7 +446,6 @@
     <string name="TorPage_Failed">Failed</string>
     <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">TOR Network</string>
-    <string name="TorPage_Description">This is a power privacy feature for those with large wallet balances or living in places where the internet is being severely censored.\n\nBy enabling TOR setting below all traffic originating from the wallet will be encrypted and routed through anonymous network of servers, effectively hiding any information about the sender i.e. location, IP address etc.\n\nWhile in TOR mode the wallet may operate noticeably slower and in some cases have networking issues.</string>
 
     <!-- Account Types -->
 

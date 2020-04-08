@@ -40,8 +40,7 @@ object RestoreModule {
         fun account(accountType: AccountType) : Account
         fun saveWallets(wallets: List<Wallet>)
         fun create(account: Account)
-        fun getBlockchainSettings(coinType: CoinType): BlockchainSetting?
-        fun saveBlockchainSettings(settings: BlockchainSetting)
+        fun initializeSettings(coinType: CoinType)
     }
 
     interface IRouter {

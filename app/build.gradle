@@ -110,7 +110,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0-alpha03'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1' // check intro carousel when updating constraintlayout, since v 2.0.0-beta4 breaks it
 
     def lifecycle_version = '2.2.0'
     // ViewModel and LiveData
@@ -173,10 +173,10 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:05e7e3a'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:d5fb068'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:d9995e6'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:4159cc1'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:3327874'
+    implementation 'com.github.horizontalsystems:binance-chain-kit-android:b4ef576'
     implementation 'com.github.horizontalsystems:xrates-kit-android:37f988f'
     implementation('com.github.horizontalsystems:eos-kit-android:70897ea') {
         exclude group: 'com.google.protobuf'

@@ -19,6 +19,7 @@ data class BalanceViewItem(
         val coinTitle: String,
         val coinType: String?,
         val coinValue: DeemedValue,
+        val syncSpinnerProgress: Int?,
         val exchangeValue: DeemedValue,
         val diff: RateDiff,
         val fiatValue: DeemedValue,
@@ -32,13 +33,15 @@ data class BalanceViewItem(
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
         val coinTypeLabelVisible: Boolean,
-        val blockChart: Boolean
+        val blockChart: Boolean,
+        val hideBalance: Boolean
 ) {
     enum class UpdateType {
         MARKET_INFO,
         BALANCE,
         STATE,
-        EXPANDED
+        EXPANDED,
+        TOGGLEBALANCE
     }
 }
 
@@ -102,6 +105,8 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
 
         val dateFormatted = state.lastBlockDate?.let { until ->
             DateHelper.formatDate(until, "MMM d, yyyy")
+        } ?: run {
+            return SyncingData(null, null, !expanded)
         }
 
         return SyncingData(state.progress, dateFormatted, !expanded)
@@ -111,7 +116,7 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
         return coinType.typeLabel() != null
     }
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
@@ -128,6 +133,7 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
                 coinTitle = coin.title,
                 coinType = coin.type.typeLabel(),
                 coinValue = coinValue(state, item.balanceTotal, coin, balanceTotalVisibility),
+                syncSpinnerProgress = setSyncSpinnerProgress(state),
                 coinValueLocked = coinValue(state, item.balanceLocked, coin, balanceLockedVisibility),
                 fiatValue = currencyValue(state, item.balanceTotal, currency, marketInfo, balanceTotalVisibility),
                 fiatValueLocked = currencyValue(state, item.balanceLocked, currency, marketInfo, balanceLockedVisibility),
@@ -141,8 +147,16 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
-                blockChart = blockedChartCoins.blockedCoins.contains(coin.code)
+                blockChart = blockedChartCoins.blockedCoins.contains(coin.code),
+                hideBalance = hideBalance
         )
+    }
+
+    private fun setSyncSpinnerProgress(state: AdapterState?): Int? {
+        if (state is AdapterState.Syncing){
+            return state.progress
+        }
+        return null
     }
 
     private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {

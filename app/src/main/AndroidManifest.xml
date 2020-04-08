@@ -32,10 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.blockchainsettings.BlockchainSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.blockchainsettingslist.BlockchainSettingsListActivity"
+            android:name=".modules.addressformat.AddressFormatSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.BackupActivity"
@@ -102,7 +99,12 @@
             android:name=".modules.restore.RestoreActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".modules.intro.IntroActivity"
+            android:theme="@style/OnboardingTheme"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".modules.welcome.WelcomeActivity"
+            android:theme="@style/OnboardingTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.restore.eos.RestoreEosActivity"
@@ -133,6 +135,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.ratechart.RateChartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.settings.security.privacy.PrivacySettingsActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

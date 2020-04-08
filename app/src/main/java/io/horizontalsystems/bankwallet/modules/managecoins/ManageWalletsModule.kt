@@ -47,10 +47,9 @@ object ManageWalletsModule {
 
         fun createAccount(predefinedAccountType: PredefinedAccountType): Account
         fun save(account: Account)
-
-        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
-        fun blockchainSettingsForCreate(coinType: CoinType): BlockchainSetting?
-        fun saveBlockchainSettings(blockchainSettings: BlockchainSetting)
+        fun derivationSetting(coinType: CoinType): DerivationSetting?
+        fun initializeSettingsWithDefault(coinType: CoinType)
+        fun initializeSettings(coinType: CoinType)
     }
 
     interface IRouter {

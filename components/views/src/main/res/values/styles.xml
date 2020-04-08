@@ -70,6 +70,19 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="ButtonPrivacySettings">
+        <item name="android:background">@drawable/button_privacy_settings_background</item>
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingStart">11dp</item>
+        <item name="android:paddingEnd">11dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="ImageButtonSecondary" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>

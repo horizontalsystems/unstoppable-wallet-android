@@ -78,6 +78,7 @@ class App : CoreApp() {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
         lateinit var rateAppManager: IRateAppManager
+        lateinit var derivationSettingsManager: IDerivationSettingsManager
     }
 
     override fun onCreate() {
@@ -152,9 +153,13 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager()
 
-        blockchainSettingsManager = BlockchainSettingsManager(appDatabase, appConfigProvider)
+        derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
+        val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
+        val communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
+        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager), ethereumKitManager, eosKitManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
 
         rateCoinMapper = RateCoinMapper()
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
@@ -184,7 +189,7 @@ class App : CoreApp() {
                 application = this,
                 securedStorage = secureStorage,
                 excludedActivityNames = listOf(LockScreenActivity::class.java.name, LauncherActivity::class.java.name, TorConnectionActivity::class.java.name),
-                onFire = { activity, requestCode  -> LockScreenModule.startForUnlock(activity, requestCode)}
+                onFire = { activity, requestCode -> LockScreenModule.startForUnlock(activity, requestCode) }
         )
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)

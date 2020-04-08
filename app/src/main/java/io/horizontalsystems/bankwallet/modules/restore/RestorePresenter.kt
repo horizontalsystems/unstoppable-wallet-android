@@ -71,9 +71,7 @@ class RestorePresenter(
         }
 
         wallets.forEach {
-            interactor.getBlockchainSettings(it.coin.type)?.let { settings ->
-                interactor.saveBlockchainSettings(settings)
-            }
+            interactor.initializeSettings(it.coin.type)
         }
 
         interactor.saveWallets(wallets)
@@ -88,8 +86,8 @@ class RestorePresenter(
         return account
     }
 
-    private fun closeWithSuccess(){
-        when (restoreMode){
+    private fun closeWithSuccess() {
+        when (restoreMode) {
             RestoreMode.FromWelcome -> router.startMainModule()
             else -> router.closeWithSuccess()
         }

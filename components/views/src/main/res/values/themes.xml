@@ -76,4 +76,8 @@
         <item name="android:windowBackground">@color/dark</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
+
+    <style name="OnboardingTheme" parent="Theme.AppTheme.DayNight">
+        <item name="android:windowBackground">@color/darkest</item>
+    </style>
 </resources>

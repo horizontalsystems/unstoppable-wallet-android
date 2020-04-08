@@ -41,9 +41,8 @@ object CreateWalletModule {
         fun createAccounts(accounts: List<Account>)
         @Throws
         fun account(predefinedAccountType: PredefinedAccountType) : Account
-        fun blockchainSettings(coinType: CoinType): BlockchainSetting?
         fun saveWallets(wallets: List<Wallet>)
-        fun saveBlockchainSettings(blockchainSettings: BlockchainSetting)
+        fun initializeWithDefaultSettings(coinType: CoinType)
     }
 
     class Factory(private val presentationMode: PresentationMode, private val predefinedAccountType: PredefinedAccountType?) : ViewModelProvider.Factory {

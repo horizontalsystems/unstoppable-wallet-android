@@ -32,11 +32,7 @@ class CreateWalletInteractor(
         return accountCreator.newAccount(predefinedAccountType)
     }
 
-    override fun blockchainSettings(coinType: CoinType): BlockchainSetting? {
-        return blockchainSettingsManager.blockchainSettingsForCreate(coinType)
-    }
-
-    override fun saveBlockchainSettings(blockchainSettings: BlockchainSetting) {
-        blockchainSettingsManager.updateSettings(blockchainSettings)
+    override fun initializeWithDefaultSettings(coinType: CoinType) {
+        blockchainSettingsManager.initializeSettingsWithDefault(coinType)
     }
 }

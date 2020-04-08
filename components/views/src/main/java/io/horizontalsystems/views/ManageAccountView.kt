@@ -16,7 +16,7 @@ class ManageAccountView : LinearLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun bind(title: String, type: AccountButtonItemType, showAttentionIcon: Boolean = false, onClick: () -> Unit) {
+    fun bind(title: String, type: AccountButtonItemType, showAttentionIcon: Boolean = false, isLast: Boolean = false, onClick: () -> Unit) {
         when (type) {
             AccountButtonItemType.SimpleButton -> {
                 rightArrow.visibility = View.VISIBLE
@@ -36,6 +36,10 @@ class ManageAccountView : LinearLayout {
 
         attentionIcon.visibility = if (showAttentionIcon) View.VISIBLE else View.GONE
         itemWrapper.setOnClickListener { onClick.invoke() }
+        itemWrapper.setBackgroundResource(
+                if (isLast) R.drawable.manage_account_last_button_background
+                else R.drawable.clickable_background_color_lawrence
+        )
     }
 }
 

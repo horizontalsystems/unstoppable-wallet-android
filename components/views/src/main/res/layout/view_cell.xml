@@ -91,10 +91,11 @@
 
     <TextView
         android:id="@+id/dropdownValue"
-        style="@style/Body"
+        style="@style/Subhead1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:layout_marginEnd="16dp"
         android:textColor="?TextColorBarsToDark"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/dropDownIcon"
@@ -104,7 +105,6 @@
         android:id="@+id/dropDownIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:tint="@color/grey"
         app:layout_constraintEnd_toStartOf="@+id/arrowIcon"

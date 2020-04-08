@@ -1,7 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.core.IAccountCreator
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 class RestoreInteractor(
         private val accountCreator: IAccountCreator,
@@ -21,12 +27,8 @@ class RestoreInteractor(
         walletManager.save(wallets)
     }
 
-    override fun getBlockchainSettings(coinType: CoinType): BlockchainSetting? {
-        return blockchainSettingsManager.blockchainSettings(coinType)
-    }
-
-    override fun saveBlockchainSettings(settings: BlockchainSetting) {
-        blockchainSettingsManager.updateSettings(settings)
+    override fun initializeSettings(coinType: CoinType) {
+        blockchainSettingsManager.initializeSettings(coinType)
     }
 
     @Throws

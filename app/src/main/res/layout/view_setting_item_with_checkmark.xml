@@ -19,11 +19,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textColor="?TextColorBarsToDark"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@string/BlockchainSettings_Title" />
+        tools:text="@string/BipSettings_Title" />
 
     <TextView
         android:id="@+id/itemSubtitle"
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -48,7 +48,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:src="@drawable/ic_checkmark"
-        android:tint="?ColorJacob"
+        app:tint="?ColorJacob"
         android:visibility="invisible"
         tools:visibility="visible" />
 

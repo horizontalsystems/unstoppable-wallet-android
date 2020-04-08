@@ -20,8 +20,11 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-abstract class BitcoinBaseAdapter(open val kit: AbstractKit, open val settings: BlockchainSetting?)
-    : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+abstract class BitcoinBaseAdapter(
+        open val kit: AbstractKit,
+        open val derivation: AccountType.Derivation? = null,
+        open val syncMode: SyncMode? = null
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     abstract val satoshisInBitcoin: BigDecimal
 
@@ -82,10 +85,11 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit, open val settings: 
         kit.refresh()
     }
 
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit> {
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit> {
+        val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
-                kit.send(address, (amount * satoshisInBitcoin).toLong(),  true, feeRate.toInt(), TransactionDataSortType.Shuffle, pluginData ?: mapOf())
+                kit.send(address, (amount * satoshisInBitcoin).toLong(),  true, feeRate.toInt(), sortingType, pluginData ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -216,6 +220,12 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit, open val settings: 
     companion object {
         const val defaultConfirmationsThreshold = 3
         const val decimal = 8
+
+        fun getTransactionSortingType(sortType: TransactionDataSortingType?): TransactionDataSortType = when(sortType){
+            TransactionDataSortingType.Off -> TransactionDataSortType.None
+            TransactionDataSortingType.Bip69 -> TransactionDataSortType.Bip69
+            else -> TransactionDataSortType.Shuffle
+        }
 
         fun getBip(derivation: AccountType.Derivation?): Bip = when (derivation) {
             AccountType.Derivation.bip49 -> Bip.BIP49

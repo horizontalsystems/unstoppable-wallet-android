@@ -29,6 +29,11 @@ class SettingItemWithCheckmark: FrameLayout {
         bottomBorderView.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
     }
 
+    fun setEnabledState(enabled: Boolean) {
+        itemWrapper.isEnabled = enabled
+        itemWrapper.alpha = if (enabled) 1f else 0.5f
+    }
+
     fun setChecked(checked: Boolean){
         checkMark.visibility = if (checked) View.VISIBLE else View.GONE
     }

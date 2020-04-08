@@ -11,9 +11,6 @@ object SecuritySettingsModule {
         fun setEditPinVisible(visible: Boolean)
         fun setBiometricSettingsVisible(visible: Boolean)
         fun toggleBiometricEnabled(enabled: Boolean)
-        fun toggleTorEnabled(enabled: Boolean)
-        fun showRestartAlert(checked: Boolean)
-        fun showNotificationsNotEnabledAlert()
     }
 
     interface ISecuritySettingsViewDelegate {
@@ -21,36 +18,26 @@ object SecuritySettingsModule {
         fun didTapEditPin()
         fun didSwitchPinSet(enable: Boolean)
         fun didSwitchBiometricEnabled(enable: Boolean)
-        fun didSwitchTorEnabled(checked: Boolean)
         fun didSetPin()
         fun didCancelSetPin()
         fun didUnlockPinToDisablePin()
         fun didCancelUnlockPinToDisablePin()
-        fun onClear()
-        fun setTorEnabled(checked: Boolean)
+        fun didTapPrivacy()
     }
 
     interface ISecuritySettingsInteractor {
         val biometricAuthSupported: Boolean
         val isPinSet: Boolean
         var isBiometricEnabled: Boolean
-        var isTorEnabled: Boolean
-        val isTorNotificationEnabled: Boolean
 
         fun disablePin()
-        fun clear()
-        fun stopTor()
-    }
-
-    interface ISecuritySettingsInteractorDelegate {
-        fun didStopTor()
     }
 
     interface ISecuritySettingsRouter {
         fun showEditPin()
         fun showSetPin()
         fun showUnlockPin()
-        fun restartApp()
+        fun openPrivacySettings()
     }
 
     fun start(activity: Activity) {
@@ -58,11 +45,10 @@ object SecuritySettingsModule {
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.systemInfoManager, App.pinComponent, App.netKitManager)
+        val interactor = SecuritySettingsInteractor(App.systemInfoManager, App.pinComponent)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter
         presenter.view = view
-        interactor.delegate = presenter
     }
 }

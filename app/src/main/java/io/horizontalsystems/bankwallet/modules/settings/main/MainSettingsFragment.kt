@@ -62,7 +62,7 @@ class MainSettingsFragment : Fragment() {
 
         manageKeys.setOnClickListener { presenter.didTapManageKeys() }
 
-        securityCenter.setOnClickListener { presenter.didTapSecurity() }
+        privacySettings.setOnClickListener { presenter.didTapSecurity() }
 
         notifications.setOnClickListener { presenter.didTapNotifications() }
 

@@ -34,7 +34,7 @@ class ManageWalletsPresenter(
 
     override fun onEnable(coin: Coin) {
         val account = account(coin) ?: return
-        if (account.origin == AccountOrigin.Restored && interactor.blockchainSettings(coin.type) != null) {
+        if (account.origin == AccountOrigin.Restored && interactor.derivationSetting(coin.type) != null) {
             walletWithSettings = Wallet(coin, account)
             router.showSettings(coin.type)
             return
@@ -118,12 +118,10 @@ class ManageWalletsPresenter(
     }
 
     private fun enableWallet(coin: Coin, account: Account) {
-        val settings = when (account.origin) {
-            AccountOrigin.Created -> interactor.blockchainSettingsForCreate(coin.type)
-            else -> interactor.blockchainSettings(coin.type)
-        }
-        settings?.let {
-            interactor.saveBlockchainSettings(it)
+        if (account.origin == AccountOrigin.Created) {
+            interactor.initializeSettingsWithDefault(coin.type)
+        } else {
+            interactor.initializeSettings(coin.type)
         }
 
         val wallet = Wallet(coin, account)

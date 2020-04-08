@@ -47,10 +47,8 @@ class CreateWalletPresenter(
     override fun onCreateButtonClick() {
         if (wallets.isNotEmpty()) {
             val accounts = wallets.values.map { it.account }
-            wallets.forEach { (coin, wallet) ->
-                interactor.blockchainSettings(coin.type)?.let {
-                    interactor.saveBlockchainSettings(it)
-                }
+            wallets.forEach { (coin, _) ->
+                interactor.initializeWithDefaultSettings(coin.type)
             }
             interactor.createAccounts(accounts)
             interactor.saveWallets(wallets.values.toList())
@@ -91,8 +89,8 @@ class CreateWalletPresenter(
         view.setItems(viewItems)
     }
 
-    private fun filteredCoins(coins: List<Coin>) : List<Coin> {
-        if(predefinedAccountType == null) {
+    private fun filteredCoins(coins: List<Coin>): List<Coin> {
+        if (predefinedAccountType == null) {
             return coins
         }
         return coins.filter { it.type.predefinedAccountType == predefinedAccountType }

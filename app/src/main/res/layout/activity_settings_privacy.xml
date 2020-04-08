@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <io.horizontalsystems.views.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="32dp">
+            <TextView
+                android:id="@+id/privacyInfo"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/background_yellow_for_alert_text"
+                android:paddingStart="12dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="8dp"
+                android:text="@string/SettingsPrivacy_Info"
+                android:textColor="?ColorJacob"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Tor-->
+
+            <TextView
+                android:id="@+id/connectionSettingsTitle"
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="32dp"
+                android:textAllCaps="true"
+                android:text="@string/SettingsPrivacy_ConnectionSettingsTitle"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/privacyInfo" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/torControlView"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/clickable_background_color_lawrence"
+                app:layout_constraintTop_toBottomOf="@+id/connectionSettingsTitle">
+
+                <View
+                    android:id="@+id/topShade"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <io.horizontalsystems.views.IconView
+                    android:id="@+id/controlIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_tor_connected" />
+
+                <ProgressBar
+                    android:id="@+id/connectionSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/grey"
+                    android:indeterminateTintMode="src_atop"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/controlIcon"
+                    app:layout_constraintEnd_toEndOf="@+id/controlIcon"
+                    app:layout_constraintStart_toStartOf="@+id/controlIcon"
+                    app:layout_constraintTop_toTopOf="@+id/controlIcon" />
+
+                <TextView
+                    android:id="@+id/titleText"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/SettingsSecurity_EnableTor"
+                    android:textColor="?TextColorBarsToDark"
+                    app:layout_constraintBottom_toTopOf="@+id/subtitleText"
+                    app:layout_constraintStart_toEndOf="@+id/controlIcon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/subtitleText"
+                    style="@style/Subhead2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/titleText"
+                    app:layout_constraintTop_toBottomOf="@+id/titleText"
+                    tools:text="Subtitle" />
+
+                <Switch
+                    android:id="@+id/torConnectionSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
+                    android:checked="false"
+                    android:saveEnabled="false"
+                    android:theme="@style/SwitchTheme"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <View
+                    android:id="@+id/bottomShade"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/steel_20"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/torConnectionDescription"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsSecurity_TorConnectionDescription"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/torControlView" />
+
+            <!--Transactions order-->
+
+            <TextView
+                android:id="@+id/transactionsSettingsTitle"
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="32dp"
+                android:textAllCaps="true"
+                android:text="@string/SettingsPrivacy_Transactions"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/torConnectionDescription" />
+
+            <io.horizontalsystems.views.CellView
+                android:id="@+id/transactionsOrderSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:bottomBorder="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transactionsSettingsTitle"
+                app:title="@string/SettingsPrivacy_TransactionsSettingText" />
+
+            <TextView
+                android:id="@+id/transactionsSettingsDescription"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsPrivacy_TransactionsDescription"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transactionsOrderSetting" />
+
+            <!--Connections-->
+
+            <TextView
+                android:id="@+id/communicationSettingsTitle"
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="32dp"
+                android:textAllCaps="true"
+                android:text="@string/SettingsPrivacy_CommunicationSettingsTitle"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transactionsSettingsDescription" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/communicationSettingsRecyclerview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/communicationSettingsTitle"
+                tools:itemCount="1"
+                tools:listitem="@layout/view_cell" />
+
+            <TextView
+                android:id="@+id/communicationSettingsDescription"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsPrivacy_CommunicationDescription"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/communicationSettingsRecyclerview" />
+
+            <!--Restore-->
+
+            <TextView
+                android:id="@+id/walletRestoreTitle"
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="38dp"
+                android:textAllCaps="true"
+                android:layout_marginEnd="32dp"
+                android:text="@string/SettingsPrivacy_WalletRestore"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/communicationSettingsDescription" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/walletRestoreSettingsRecyclerview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/walletRestoreTitle"
+                tools:itemCount="1"
+                tools:listitem="@layout/view_cell" />
+
+            <TextView
+                android:id="@+id/walletRestoreSettingsDescription"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsPrivacy_WalletRestoreDescription"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/walletRestoreSettingsRecyclerview" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

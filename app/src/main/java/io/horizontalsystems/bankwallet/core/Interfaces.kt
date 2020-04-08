@@ -39,6 +39,7 @@ interface IAdapterManager {
     fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
+    fun refreshAdapters(wallets: List<Wallet>)
 }
 
 interface ILocalStorage {
@@ -64,6 +65,8 @@ interface ILocalStorage {
     var torEnabled: Boolean
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
+    var transactionSortingType: TransactionDataSortingType
+    var balanceHidden: Boolean
 
     fun clear()
 }
@@ -167,7 +170,7 @@ interface IEthereumKitManager {
     val ethereumKit: EthereumKit?
     val statusInfo: Map<String, Any>?
 
-    fun ethereumKit(wallet: Wallet): EthereumKit
+    fun ethereumKit(wallet: Wallet, communicationMode: CommunicationMode?): EthereumKit
     fun unlink()
 }
 
@@ -220,7 +223,7 @@ interface ISendBitcoinAdapter {
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
     fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit>
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit>
 }
 
 interface ISendDashAdapter {
@@ -287,7 +290,9 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val coins: List<Coin>
-    val blockchainSettings: List<BlockchainSetting>
+    val derivationSettings: List<DerivationSetting>
+    val syncModeSettings: List<SyncModeSetting>
+    val communicationSettings: List<CommunicationSetting>
 }
 
 interface IRateStorage {
@@ -401,11 +406,33 @@ interface IBackgroundRateAlertScheduler {
 }
 
 interface IBlockchainSettingsManager {
-    val coinsWithSettings: List<Coin>
-    val defaultBlockchainSettings: List<BlockchainSetting>
-    fun blockchainSettingsForCreate(coinType: CoinType): BlockchainSetting?
-    fun blockchainSettings(coinType: CoinType): BlockchainSetting?
-    fun updateSettings(blockchainSettings: BlockchainSetting)
+    fun derivationSetting(coinType: CoinType): DerivationSetting?
+    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
+    fun communicationSetting(coinType: CoinType): CommunicationSetting?
+
+    fun saveSetting(syncModeSetting: SyncModeSetting)
+    fun saveSetting(communicationSetting: CommunicationSetting)
+
+    fun initializeSettingsWithDefault(coinType: CoinType)
+    fun initializeSettings(coinType: CoinType)
+}
+
+interface IDerivationSettingsManager {
+    fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
+    fun derivationSetting(coinType: CoinType): DerivationSetting?
+    fun updateSetting(derivationSetting: DerivationSetting)
+}
+
+interface ISyncModeSettingsManager {
+    fun defaultSyncModeSetting(coinType: CoinType): SyncModeSetting?
+    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
+    fun updateSetting(syncModeSetting: SyncModeSetting)
+}
+
+interface ICommunicationSettingsManager {
+    fun defaultCommunicationSetting(coinType: CoinType): CommunicationSetting?
+    fun communicationSetting(coinType: CoinType): CommunicationSetting?
+    fun updateSetting(communicationSetting: CommunicationSetting)
 }
 
 interface IAccountCleaner {

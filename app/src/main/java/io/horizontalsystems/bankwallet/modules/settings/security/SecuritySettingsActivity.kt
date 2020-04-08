@@ -7,15 +7,11 @@ import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
 import io.horizontalsystems.pin.PinModule
-import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
-import kotlin.system.exitProcess
 
 class SecuritySettingsActivity : BaseActivity() {
 
@@ -32,12 +28,12 @@ class SecuritySettingsActivity : BaseActivity() {
 
         changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
 
-        fingerprint.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            viewModel.delegate.didSwitchBiometricEnabled(isChecked)
+        privacy.setOnClickListener {
+            viewModel.delegate.didTapPrivacy()
         }
 
-        torConnectionSwitch.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            viewModel.delegate.didSwitchTorEnabled(isChecked)
+        fingerprint.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            viewModel.delegate.didSwitchBiometricEnabled(isChecked)
         }
 
         fingerprint.setOnClickListener {
@@ -71,18 +67,6 @@ class SecuritySettingsActivity : BaseActivity() {
             fingerprint.switchIsChecked = it
         })
 
-        viewModel.torEnabledLiveData.observe(this, Observer {
-            torConnectionSwitch.switchIsChecked = it
-        })
-
-        viewModel.showAppRestartAlertForTor.observe(this, Observer { checked->
-            showAppRestartAlert(checked)
-        })
-
-        viewModel.showNotificationsNotEnabledAlert.observe(this, Observer {
-            showNotificationsNotEnabledAlert()
-        })
-
         //router
 
         viewModel.openEditPinLiveEvent.observe(this, Observer {
@@ -97,8 +81,8 @@ class SecuritySettingsActivity : BaseActivity() {
             PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN)
         })
 
-        viewModel.restartApp.observe(this, Observer {
-            restartApp()
+        viewModel.openPrivacySettingsLiveEvent.observe(this, Observer {
+            PrivacySettingsModule.start(this)
         })
     }
 
@@ -118,56 +102,6 @@ class SecuritySettingsActivity : BaseActivity() {
                 PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlockPinToDisablePin()
             }
         }
-    }
-
-    private fun showNotificationsNotEnabledAlert() {
-        AlertDialogFragment.newInstance(
-                descriptionString = getString(R.string.SettingsSecurity_NotificationsDisabledWarning),
-                buttonText = R.string.Button_Enable,
-                cancelButtonText = R.string.Alert_Cancel,
-                cancelable = true,
-                listener = object : AlertDialogFragment.Listener {
-                    override fun onButtonClick() {
-                        openAppNotificationSettings()
-                    }
-
-                    override fun onCancel() {
-                        torConnectionSwitch.switchIsChecked = false
-                    }
-                }).show(supportFragmentManager, "alert_dialog_notification")
-    }
-
-    private fun openAppNotificationSettings() {
-        val intent = Intent()
-        intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-        intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
-        startActivity(intent)
-    }
-
-    private fun showAppRestartAlert(checked: Boolean) {
-        AlertDialogFragment.newInstance(
-                descriptionString = getString(R.string.SettingsSecurity_AppRestartWarning),
-                buttonText = R.string.Alert_Restart,
-                cancelButtonText = R.string.Alert_Cancel,
-                cancelable = true,
-                listener = object : AlertDialogFragment.Listener {
-                    override fun onButtonClick() {
-                        viewModel.delegate.setTorEnabled(checked)
-                    }
-
-                    override fun onCancel() {
-                        torConnectionSwitch.switchIsChecked = !checked
-                    }
-                }).show(supportFragmentManager, "alert_dialog")
-    }
-
-    private fun restartApp() {
-        MainModule.startAsNewTask(this)
-        if (App.localStorage.torEnabled) {
-            val intent = Intent(this, TorConnectionActivity::class.java)
-            startActivity(intent)
-        }
-        exitProcess(0)
     }
 
     companion object {
