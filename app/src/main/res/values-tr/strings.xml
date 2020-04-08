@@ -12,6 +12,7 @@
     <string name="Alert_Restart">Yeniden başlat</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Create">Oluştur</string>
+    <string name="Button_Skip">Atla</string>
     <string name="Button_Next">İleri</string>
     <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_Enable">Etkinleştir</string>
@@ -26,9 +27,16 @@
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
+    <!--Intro-->
+    <string name="Intro_Independence_Title">Bağımsızlık</string>
+    <string name="Intro_Independence_Description">Kripto varlıklarını her zaman güvende, el koyulamaz ve erişilebilir tutun.</string>
+    <string name="Intro_Knowledge_Title">Bilgi</string>
+    <string name="Intro_Knowledge_Description">Haberdar olun ve erken aşamalarda büyüyen blockchain projelerini keşfedin.</string>
+    <string name="Intro_Privacy_Title">Gizlilik</string>
+    <string name="Intro_Privacy_Description">Servetinizi büyütürken gizli ve radarın altında kalın.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable \nCüzdan</string>
-    <string name="Welcome_SecurityCenter">Güvenlik Merkezi</string>
+    <string name="Welcome_Title">Unstoppable\nCüzdan</string>
+    <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Rate App-->
@@ -198,10 +206,22 @@
     <string name="Settings_About">Hakkında</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_Report">Sorunu Bildir</string>
+    <string name="SettingsOption_Enabled">Etkinleştirildi</string>
+    <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
+    <string name="SettingsPrivacy_Info">Bu uygulama verilerinizden hiçbirini paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blokzincir Bağlantısı</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Bazı blok zincirler, mobil uygulamaların peer to peer şekilde çalışması için henüz bir araç sağlamamaktadır. BTC, BCH, LTC, DASH blok zincirleriyle iletişim tamamen peer to peer.</string>
+    <string name="SettingsPrivacy_WalletRestore">Blockchain Geri Yükleme</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
+    <string name="SettingsPrivacy_Transactions">Blockchain İşlemleri</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Giriş/Çıkış</string>
+    <string name="SettingsPrivacy_TransactionsDescription">İşlemlerin yapılandırılma şeklini değiştirerek BTC, LTC, BCH işlemlerinizin izlenilmesini zorlaştırın.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Parmak izi etkin değil</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">Gizlilik</string>
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
     <string name="SettingsSecurity_EnablePin">Kod</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
@@ -209,8 +229,11 @@
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <string name="SettingsSecurity_EnableTor">Tor\'u etkinleştir</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor, tarama etkinliklerinizi cüzdanda koruyabilir. Ayarlarda Tor tarayıcı kullanmaya izin ver.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internet trafiğinizi tamamen anonimleştirin. Yavaş olabilir.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakılmış. Tor\'un çalışması için onları etkinleştirmeniz gerekir.</string>
+    <string name="SettingsSecurity_SortingShuffle">Karıştır</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingOff">Kapat</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
@@ -271,7 +294,7 @@
     <string name="BitcoinHodling_Description">Belirtilen tarihe kadar harcanmamış Bitcoin\'leri göndermenize olanak verir.\n\nBu tür bir işlemin alıcısı Unstoppable cüzdan kullanmalıdır.\n\nSadece Unstoppable cüzdan, Bitcoin ağındaki bu tür işlemleri doğru bir şekilde tanımlayabilir ve kilitleme süresi dolduktan sonra da alıcının bu Bitcoin\'leri harcamasını sağlayabilir.\n\nEğer bir HODLer iseniz, kendinize böyle bir işlem göndererek, bu özelliği Bitcoin\'lerinizi zarar etmeden uzun süre elinizde tutmaya zorlamak için kullanabilirsiniz.\n\nDeneysel bir özellik olduğundan, işlem başına maksimum tutar 0.5 BTC ile sınırlandırılmıştır.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Cüzdanları yönet</string>
-    <string name="ManageKeys_AdvancedSettings">Gelişmiş Ayarlar</string>
+    <string name="ManageKeys_AddressFormat">Adres Formatı</string>
     <string name="ManageKeys_Create">Oluştur</string>
     <string name="ManageKeys_Restore">Geri Yükle</string>
     <string name="ManageKeys_Delete">Sil</string>
@@ -289,18 +312,19 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Subtitle">%s cüzdanı</string>
-    <string name="AddCoin_Description">%1$s saklayabilen bir cüzdanınız yok. Uygulamanın sizin için yeni bir cüzdan oluşturabilir. Yeni bir cüzdan oluşturmak için aşağıdaki Oluştur düğmesini kullanın.\n\nYeni cüzdanı aşağıdaki paralar için kullanabileceksiniz: %2$s.\n\nVarsa, mevcut %3$s Cüzdan anahtarını da kullanabilirsiniz. Bunun için Geri Yükle düğmesini kullanın.</string>
+    <string name="AddCoin_Description">%2$s göndermek ve alabilmek için %1$s cüzdanı gerekiyor. Yeni bir %3$s cüzdan oluşturmak için aşağıdaki Oluştur düğmesini kullanın\n\n, yada yukarıda bahsedilen Cüzdanınız varsa Geri Yükle düğmesini kullanın.\n\n Mevcut Cüzdanınızı %4$s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">Gelişmiş Ayarlar</string>
-    <string name="BlockchainSettingsList_Description">Ayarları değiştirmek için listelenen paraları etkinleştirmelisiniz, diğer paralarda ayar yoktur</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">Adres Formatı</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adres Formatı</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s\'e değiştir</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">Bu değişiklikten sonra cüzdan %1$s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.\n\n %2$s için adres biçimini değiştirdiğinizde, mevcut bakiye ve işlem geçmişi artık bakiye sekmesinde görünmeyecek. Bir önceki ayara geri döndürmek, cüzdan blok zinciriyle kendini yeniden senkronize ettikten sonra her şeyi geri getirecektir. Bunun ne olduğundan emin değilseniz değiştirmemenizi öneririz.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Geri Yükleme Ayarları</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Bu değişiklikten sonra cüzdan %s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">İletişim</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">Bu değişiklikten sonra cüzdan %s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Ayarları</string>
@@ -312,7 +336,6 @@
     <string name="TorPage_Failed">Başarısız</string>
     <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
     <string name="TorPage_Title">Tor Bağlantısı</string>
-    <string name="TorPage_Description">Oluşturmadan veya geri yüklemeden önce ağ ile güvenli bağlantı için Tor özelliğini etkinleştirin. \n\nTor ile cüzdandaki tarama etkinliklerinizi koruyabilirsiniz. Ayarlarda Tor tarayıcıyı kullanmaya izin verin.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->

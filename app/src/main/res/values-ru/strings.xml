@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Ok">Хорошо</string>
+    <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
     <string name="Alert_Share">Переслать</string>
@@ -12,13 +12,14 @@
     <string name="Alert_Restart">Перезапустить</string>
     <string name="Button_Cancel">Отменить</string>
     <string name="Button_Create">Создать</string>
+    <string name="Button_Skip">Пропустить</string>
     <string name="Button_Next">Далее</string>
     <string name="Button_Restore">Восстановить</string>
     <string name="Button_Enable">Активировать</string>
     <string name="Button_Disable">Выкл.</string>
     <string name="Button_Back">Назад</string>
     <string name="Button_Close">Закрыть</string>
-    <string name="Button_Ok">Хорошо</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Done">Готово</string>
     <string name="Button_Retry">Повторить</string>
@@ -26,9 +27,17 @@
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Wallet">%s Кошелек</string>
+    <!--Intro-->
+    <string name="Intro_Independence_Title">Независимость</string>
+    <string name="Intro_Independence_Description">Надежное хранение, невозможно конфисковать, всегда под вашим контролем.</string>
+    <string name="Intro_Knowledge_Title">Знания</string>
+    <string name="Intro_Knowledge_Description">Узнай о новых блокчейн проектах на ранних стадиях. </string>
+    <string name="Intro_Privacy_Title">Приватность</string>
+    <string name="Intro_Privacy_Description">Управляя капиталом сохрани свою приватность.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable \nКошелек</string>
-    <string name="Welcome_SecurityCenter">Безопасность</string>
+    <string name="Welcome_Title">Unstoppable\n Кошелек</string>
+    <string name="Welcome_PrivacySettings">Настройки Конфиденциальности</string>
+
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Rate App-->
@@ -59,7 +68,7 @@
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
     <string name="Backup_Button_Next">Далее</string>
-    <string name="Backup_Button_Submit">Отправить</string>
+    <string name="Backup_Button_Submit">Подтвердить</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_Warning">Копирование ключа с помощью действия «копировать» представляет определенный риск, если вы используете какие-либо приложения для управления буфером обмена или другие приложения, которые могут иметь доступ к данным буфера обмена.</string>
@@ -198,10 +207,22 @@
     <string name="Settings_About">О приложении</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_Report">Сообщить о Проблеме</string>
+    <string name="SettingsOption_Enabled">Вкл.</string>
+    <string name="SettingsOption_Disabled">Выкл.</string>
+    <string name="SettingsPrivacy_Info">Наше приложение не делится информацией ни с кем. Но при взаимодействии с блокчейнами некоторые публичные данные как ваш IP адрес могут фиксироваться в сети.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Соединение с Блокчейном</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в режиме peer-to-peer (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
+    <string name="SettingsPrivacy_WalletRestore">Восстановить через Блокчейн</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Выбрать источник данных для восстановления транзакций кошелька.</string>
+    <string name="SettingsPrivacy_Transactions">Блокчейн транзакции</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Поменять способ оформления транзакций что бы трудно было уследить за вашими BTC, LTC, BCH операциями.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
     <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">Приватность</string>
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
     <string name="SettingsSecurity_EnablePin">Код Доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
@@ -209,8 +230,11 @@
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <string name="SettingsSecurity_EnableTor">Включить Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor может защитить вашу активность в браузере на кошельке. Разрешите использование Tor браузера в настройках.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Полностью анонимизируйте интернет трафик этого приложения. Может замедлить работу.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для Unstoppable Кошелька отключены. Для работы Tor необходимо включить их.</string>
+    <string name="SettingsSecurity_SortingShuffle">Вперемешку</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingOff">Выкл.</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -272,7 +296,7 @@
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Кошельками</string>
-    <string name="ManageKeys_AdvancedSettings">Дополнительные настройки</string>
+    <string name="ManageKeys_AddressFormat">Формат Адреса</string>
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
@@ -290,18 +314,19 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Добавить %s</string>
     <string name="AddCoin_Subtitle">%s Кошелек</string>
-    <string name="AddCoin_Description">У вас нет кошелька, который может хранить %1$s. Приложение может создать для вас новый кошелек. Используйте кнопку \"Создать\" ниже, чтобы создать новый кошелек.\n\nВы сможете использовать новый кошелек для следующих монет: %2$s.\n\nВы также можете использовать существующий ключ кошелька %3$s , если он у вас есть. Используйте кнопку \"Восстановить\" для этого.</string>
+    <string name="AddCoin_Description">Вам нужно настроить кошелек %1$s , чтобы иметь возможность отправлять или получать %2$s.\n\nИспользуйте кнопку \'Создать\', чтобы настроить новый кошелек %3$s или \'Восстановить\', чтобы импортировать существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">Дополнительные настройки</string>
-    <string name="BlockchainSettingsList_Description">Чтобы изменить настройки, вы должны включить перечисленные монеты, другие монеты не имеют настроек</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %1$s .\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Если вернуться к предыдущей настройке, все вернется после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %s.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизировать с блокчейном %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Настройки</string>
@@ -313,7 +338,6 @@
     <string name="TorPage_Failed">Не удалось</string>
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
     <string name="TorPage_Title">Соединение с Tor</string>
-    <string name="TorPage_Description">Before creating or restoring enable Tor for secure connection with network.\n\nTor can safeguard your browsing activities on wallet. Allow permission for using Tor browser in settings.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->

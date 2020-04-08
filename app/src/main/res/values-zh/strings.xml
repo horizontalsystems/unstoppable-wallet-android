@@ -12,6 +12,7 @@
     <string name="Alert_Restart">重新启动</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Create">创建</string>
+    <string name="Button_Skip">跳过</string>
     <string name="Button_Next">继续</string>
     <string name="Button_Restore">恢复</string>
     <string name="Button_Enable">启用</string>
@@ -26,9 +27,16 @@
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
+    <!--Intro-->
+    <string name="Intro_Independence_Title">独立性</string>
+    <string name="Intro_Independence_Description">保持加密货币资产的安全、不可混淆和随时可访问。</string>
+    <string name="Intro_Knowledge_Title">知识</string>
+    <string name="Intro_Knowledge_Description">在早期阶段了解和探索不断发展的区块链项目。</string>
+    <string name="Intro_Privacy_Title">隐私</string>
+    <string name="Intro_Privacy_Description">在增长财富的同时保持隐身状态并避开追踪。</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n钱包</string>
-    <string name="Welcome_SecurityCenter">安全中心</string>
+    <string name="Welcome_PrivacySettings">隐私设置</string>
     <string name="Welcome_CreateWallet">创建钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
     <!--Rate App-->
@@ -198,10 +206,22 @@
     <string name="Settings_About">关于</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_Report">报告问题</string>
+    <string name="SettingsOption_Enabled">已启用</string>
+    <string name="SettingsOption_Disabled">已禁用</string>
+    <string name="SettingsPrivacy_Info">此应用不分享您的任何数据。但是，由于其使用区块链进行通信，所以部分像 IP 地址等公共数据将有可能会泄漏。</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">区块链连接</string>
+    <string name="SettingsPrivacy_CommunicationDescription">部分区块链未为手机应用提供以点对点运行的方法。与BTC、BCH、LTC、DASH 区块链的通信属于完全点对点。</string>
+    <string name="SettingsPrivacy_WalletRestore">区块链恢复</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">通过交易为恢复钱包选择数据源。</string>
+    <string name="SettingsPrivacy_Transactions">区块链交易</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">输入/输出</string>
+    <string name="SettingsPrivacy_TransactionsDescription">通过改变交易结构的方式使您的BTC、LTC、BCH交易更难被追踪。</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指纹未启用</string>
     <string name="Settings_Error_NoFingerprintAddedYet">您未在此设备上启用指纹。前往“设置 &gt; 安全”设置指纹访问。</string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">隐私</string>
     <string name="SettingsSecurity_Fingerprint">指纹</string>
     <string name="SettingsSecurity_EnablePin">密码</string>
     <string name="SettingsSecurity_EditPin">编辑密码</string>
@@ -211,6 +231,9 @@
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
+    <string name="SettingsSecurity_SortingShuffle">随机排序</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingOff">关</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -272,7 +295,7 @@
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用Unstoppable钱包。\n\n只有Unstoppable钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理钱包</string>
-    <string name="ManageKeys_AdvancedSettings">高级设置</string>
+    <string name="ManageKeys_AddressFormat">地址格式</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
@@ -290,18 +313,19 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">添加%s</string>
     <string name="AddCoin_Subtitle">%s钱包</string>
-    <string name="AddCoin_Description">您没有可恢复 %1$s 的钱包。应用可以为您生成新的钱包。使用下方的“创建”按钮生成新钱包。\n\n您将可以为以下代币使用新钱包：%2$s。\n\n如果您已有钱包，那么您也可以使用现有的%3$s钱包。为此使用“恢复”按钮。</string>
+    <string name="AddCoin_Description">您必须创建%1$s钱包才能对%2$s进行转账或收款。\n\n使用下方的“创建”（Create）按钮建立一个新的%3$s钱包，或者使用“恢复”（Restore）按钮导入现有钱包。\n\n您可以对此钱包使用：%4$s。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">高级设置</string>
-    <string name="BlockchainSettingsList_Description">要更改设置，您必须启用上架代币，其他代币不具有设置</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">地址格式</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">地址格式</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">更改为%s</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">此更改后，钱包将必须与 %1$s 区块链重新同步。\n\n当您更改地址格式的 %2$s 时，当前余额和交易历史将不再在余额选项卡上可见。 将其更改为以前的设置将在钱包与区块链重新同步后恢复所有设置。 如果不确定，我们建议不要进行更改。</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s 设置</string>
@@ -313,7 +337,6 @@
     <string name="TorPage_Failed">失败</string>
     <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="TorPage_Title">Tor连接</string>
-    <string name="TorPage_Description">在创建或恢复前启用Tor以便实现网络的安全连接。\n\nTor可以保护您钱包上的浏览活动。在设置中启用权限以使用Tor浏览器。</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->

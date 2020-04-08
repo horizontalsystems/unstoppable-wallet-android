@@ -12,6 +12,7 @@
     <string name="Alert_Restart">Neustart</string>
     <string name="Button_Cancel">Abbrechen</string>
     <string name="Button_Create">Erstellen</string>
+    <string name="Button_Skip">Überspringen</string>
     <string name="Button_Next">Weiter</string>
     <string name="Button_Restore">Wiederherstellen</string>
     <string name="Button_Enable">Aktivieren</string>
@@ -26,9 +27,16 @@
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s wallet</string>
+    <!--Intro-->
+    <string name="Intro_Independence_Title">Unabhängigkeit</string>
+    <string name="Intro_Independence_Description">Verwahren Sie Krypto-Vermögen sicher, uneinziehbar und jederzeit zugänglich.</string>
+    <string name="Intro_Knowledge_Title">Wissen</string>
+    <string name="Intro_Knowledge_Description">Informieren Sie sich und entdecken Sie wachsende Blockchain-Projekte in einem frühen Stadium.</string>
+    <string name="Intro_Privacy_Title">Privatsphäre</string>
+    <string name="Intro_Privacy_Description">Bleiben Sie inkognito und unbemerkt, während Sie Ihr Vermögen vermehren.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable \nWallet</string>
-    <string name="Welcome_SecurityCenter">Sicherheits-Center</string>
+    <string name="Welcome_Title">Unstoppable\nWallet</string>
+    <string name="Welcome_PrivacySettings">Privatsphäre-Einstellungen</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Rate App-->
@@ -198,10 +206,22 @@
     <string name="Settings_About">Info</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_Report">Problem melden</string>
+    <string name="SettingsOption_Enabled">Aktiviert</string>
+    <string name="SettingsOption_Disabled">Deaktiviert</string>
+    <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können bestimmte öffentliche Daten wie die IP-Adresse möglicherweise weitergegeben werden.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain-Verbindung</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Manche Blockchains bieten noch keine Möglichkeit des Peer-to-Peer-Betriebs von mobilen Anwendungen. Die Kommunikation mit BTC-, BCH-, LTC- und DASH-Blockchains erfolgt vollständig über Peer-to-Peer.</string>
+    <string name="SettingsPrivacy_WalletRestore">Blockchain-Wiederherstellung</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Wählen Sie die Datenquelle für die Wiederherstellung des Wallets mit Transaktionen aus.</string>
+    <string name="SettingsPrivacy_Transactions">Blockchain-Transaktionen</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">Ein-/Ausgänge</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Machen Sie Ihre BTC-, LTC- und BCH-Transaktionen schwieriger nachvollziehbar, indem Sie die Transaktionsstruktur verändern.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">Privatsphäre</string>
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
@@ -209,8 +229,11 @@
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_EnableTor">Tor aktivieren</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion wird das Unstoppable Wallet neu starten.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Anonymisieren Sie Ihren Internetverkehr bei der Nutzung dieser App vollständig. Kann langsam sein.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Die Benachrichtigungen für die Unstoppable Wallet-App sind deaktiviert. Sie müssen diese einschalten, damit Tor überhaupt funktionieren kann.</string>
+    <string name="SettingsSecurity_SortingShuffle">Zufällig</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingOff">Aus</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -272,7 +295,7 @@
     <string name="BitcoinHodling_Description">Damit können Sie gesendete Bitcoins sperren, sodass sie bis zu dem festgesetzten Datum nicht ausgegeben werden können.\n\nDer Empfänger einer solchen Transaktion sollte das Unstoppable-Wallet in der Version 0.10 (oder neuer) sowie das Bitcoin-Adressformat BIP44 verwenden.\n\nNur das Unstoppable-Wallet erkennt solche Transaktionen im Bitcoin-Netzwerk korrekt und ermöglicht es dem Empfänger, die Bitcoins nach der Sperrzeit zu auszugeben.\n\nWenn Sie ein HODLer* sind, können Sie diese Funktion auch für sich selbst nutzen, indem Sie sich selbst eine solche Transaktion schicken und so ihre Bitcoin für sich selbst zeitlich sperren.\n\nDa es sich noch um eine experimentelle Funktion handelt, liegt der maximale Betrag bei 0,5 BTC.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Wallets verwalten</string>
-    <string name="ManageKeys_AdvancedSettings">Erweiterte Einstellungen</string>
+    <string name="ManageKeys_AddressFormat">Adressformat</string>
     <string name="ManageKeys_Create">Erstellen</string>
     <string name="ManageKeys_Restore">Wiederherstellen</string>
     <string name="ManageKeys_Delete">Löschen</string>
@@ -293,15 +316,16 @@
     <string name="AddCoin_Description">Sie müssen das %1$s Wallet einrichten, um %2$s senden oder empfangen zu können.\n\nTippen Sie auf den Button „Erstellen“, um ein neues %3$s Wallet zu erstellen. Sie können auch auf den Button „Wiederherstellen“ tippen, um ein bereits bestehendes Wallet zu importieren.\n\nSie können dieses Wallet benutzen für: %4$s.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">Erweiterte Einstellungen</string>
-    <string name="BlockchainSettingsList_Description">Um die Einstellungen zu ändern, müssen Sie die gelisteten Coins aktivieren, andere Coins haben keine Einstellungen</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">Adressformat</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adressformatierung</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Ändern zu %s</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %1$s Blockchain neu synchronisieren.\n\nWenn Sie das Adressformat für %2$s ändern, sind der aktuelle Saldo und die Transaktionshistorie auf der Registerkarte Kontostand nicht mehr sichtbar. Wenn Sie es auf die vorherige Einstellung zurücksetzen, wird alles wieder hergestellt, nachdem sich das Wallet mit der Blockchain synchronisiert hat. Wir empfehlen, dies nicht zu ändern, falls Sie nicht sicher sind, was das ist.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Einstellungen</string>
@@ -313,7 +337,6 @@
     <string name="TorPage_Failed">Fehlgeschlagen</string>
     <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="TorPage_Title">Tor-Verbindung</string>
-    <string name="TorPage_Description">Vor dem Erstellen oder Wiederherstellen aktivieren Sie Tor für eine sichere Verbindung mit dem Netzwerk.\n\nTor kann Ihre Browsingaktivitäten auf der Wallet schützen. Erlauben Sie die Berechtigung zur Verwendung des Tor-Browsers in den Einstellungen.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->

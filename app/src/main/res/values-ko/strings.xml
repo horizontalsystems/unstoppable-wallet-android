@@ -12,6 +12,7 @@
     <string name="Alert_Restart">재시작</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Create">생성하기</string>
+    <string name="Button_Skip">건너뛰기</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_Enable">활성화</string>
@@ -26,9 +27,16 @@
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
+    <!--Intro-->
+    <string name="Intro_Independence_Title">독립</string>
+    <string name="Intro_Independence_Description">암호와 자산을 항상 안전하고, 압수당하지 않으며, 접근 가능한 상태로 유지하세요.</string>
+    <string name="Intro_Knowledge_Title">지식</string>
+    <string name="Intro_Knowledge_Description">정보를 인지하시고 초기단계에서 성장하고 있는 블록체인 프로젝트를 발견하세요.</string>
+    <string name="Intro_Privacy_Title">개인정보</string>
+    <string name="Intro_Privacy_Description">귀하의 재산을 늘리시는 동안 익명을 유지해주시고 눈에 띄이지 않게 하여 주세요.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">언스타퍼블 \n지갑</string>
-    <string name="Welcome_SecurityCenter">보안 센터</string>
+    <string name="Welcome_Title">언스타퍼블\n지갑</string>
+    <string name="Welcome_PrivacySettings">개인 정보 설정</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
     <!--Rate App-->
@@ -198,10 +206,22 @@
     <string name="Settings_About">에 대해</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_Report">문제점 보고</string>
+    <string name="SettingsOption_Enabled">활성화</string>
+    <string name="SettingsOption_Disabled">비활성화</string>
+    <string name="SettingsPrivacy_Info">이 앱은 귀하의 어떠한 정보를 공유하지 않습니다. 그러나 블록체인과의 통신을 위해 IP 주소와 같은 몇몇의 공개 정보가 유출될 수 있습니다.</string>
+    <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">블록체인 연결</string>
+    <string name="SettingsPrivacy_CommunicationDescription">몇몇의 블록체인은 아직 모바일 앱이 P2P 방식으로 작동하는 방법을 제공하지 않습니다. BTC, BCH, LTC, DASH 블록체인과의 통신은 전부 P2P 방식입니다.</string>
+    <string name="SettingsPrivacy_WalletRestore">블록체인 복원</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
+    <string name="SettingsPrivacy_Transactions">블록체인 매매거래</string>
+    <string name="SettingsPrivacy_TransactionsSettingText">입력/출력</string>
+    <string name="SettingsPrivacy_TransactionsDescription">매매거래 구성 방식을 변경하셔서 BTC, LTC, BCH 매매거래를 더 추적하기 어렵게 만들어 주세요.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">지문을 사용할 수 없습니다.</string>
     <string name="Settings_Error_NoFingerprintAddedYet">당신은 이 장치에서 지문을 사용할 수 없습니다. 지문 액세스를 설정하는 보안으로 이동합니다.</string>
     <!--Setting_Security-->
+    <string name="SettingsSecurity_Privacy">개인정보</string>
     <string name="SettingsSecurity_Fingerprint">지문</string>
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
@@ -209,8 +229,11 @@
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
     <string name="SettingsSecurity_EnableTor">토르 활성화</string>
     <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기위한 권한을 허용해 주세요.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷 거래를 전부 익명으로 처리하여 주세요. 느려질 수 있습니다.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
+    <string name="SettingsSecurity_SortingShuffle">셔플</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingOff">끄기</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -273,7 +296,7 @@
 \n\n귀하께서 호들러 이시면, 이 기능을 쓸 수 있고 이러한 거래를 귀하께 보냄으로써 귀하의 비트코인을 강제적으로 호들링 하게 할 수 있습니다.\n\n실험적인 기능의 한번의 최대 거래 양은 0.5 비트코인으로 제한되있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
-    <string name="ManageKeys_AdvancedSettings">고급 설정</string>
+    <string name="ManageKeys_AddressFormat">주소 형식</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
@@ -291,18 +314,19 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">추가하기 %s</string>
     <string name="AddCoin_Subtitle">%s 지갑</string>
-    <string name="AddCoin_Description">귀하께서는 %1$s를 저장할 수 있는 지갑을 가지고 계시지 않습니다. 이 앱은 귀하를 위해 새로운 지갑을 만들어 드릴 수 있습니다. 새로운 지갑을 만들기 위해 밑에있는 생성하기 버튼을 사용하십시오.\n\n귀하께서는 다음 %2$s에 대한 새로운 지갑을 사용 하실 수 있을 것 입니다.\n\n귀하께서는 또한 기존에 가지고 계셨던%3$s 지갑 암호를 사용하실 수 있습니다. 복원하기 버튼을 누르십시오.</string>
+    <string name="AddCoin_Description">귀하께서는 %1$s 을 보내거나 받으시려면 %2$s 지갑을 설정하셔야 합니다.\n\n아래의 생성 버튼을 사용하여 새로운 %3$s 지갑을 설정하거나 복원 버튼을 사용하여 기존 지갑을 가져옵니다.\n\n귀하께서는 이 지갑을 %4$s 를 위해 사용하실 수 있습니다.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
-    <!-- Blockchain Settings List -->
-    <string name="BlockchainSettingsList_Title">고급 설정</string>
-    <string name="BlockchainSettingsList_Description">설정 변경을 위해 귀하께서는 기재된 코인을 활성화시켜야 하며 다른 코인에는 설정을 가지고있지 않습니다.</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Title">주소 형식</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">이 변경 후 지갑은 %1$s 블록체인과 다시 동기화 되어야합니다.\n\n%2$s 의 주소 형식을 변경하실 때에 현재 잔액 및 거래 내역이 더 이상 잔액 탭에 표기되지 않습니다. 이전 설정으로 다시 변경하시면 지갑이 블록체인과 다시 동기화된 후 모든 것을 다시 가져옵니다. 저희는 그것이 확실치 않을시에 변경하지 않는 것을 권장합니다.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">블록 체인</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s 설정</string>
@@ -314,7 +338,6 @@
     <string name="TorPage_Failed">실패</string>
     <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="TorPage_Title">토르 연결</string>
-    <string name="TorPage_Description">네트워크를 안전하게 연결하기 위해서는 토르를 활성화 하거나 복원하기 전에 \n\n토르는 지갑에서 브라우징 활동을 보호할 수 있습니다. 설정에서 토르 브라우저를 사용하기 위한 권한을 허용해 주세요.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
