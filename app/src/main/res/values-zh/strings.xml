@@ -313,7 +313,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">添加%s</string>
     <string name="AddCoin_Subtitle">%s钱包</string>
-    <string name="AddCoin_Description">您没有可恢复 %1$s 的钱包。应用可以为您生成新的钱包。使用下方的“创建”按钮生成新钱包。\n\n您将可以为以下代币使用新钱包：%2$s。\n\n如果您已有钱包，那么您也可以使用现有的%3$s钱包。为此使用“恢复”按钮。</string>
+    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Address Format Settings List -->
