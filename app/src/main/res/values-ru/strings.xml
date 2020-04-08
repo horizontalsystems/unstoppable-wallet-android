@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Ok">Хорошо</string>
+    <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
     <string name="Alert_Share">Переслать</string>
@@ -19,7 +19,7 @@
     <string name="Button_Disable">Выкл.</string>
     <string name="Button_Back">Назад</string>
     <string name="Button_Close">Закрыть</string>
-    <string name="Button_Ok">Хорошо</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Done">Готово</string>
     <string name="Button_Retry">Повторить</string>
@@ -212,7 +212,7 @@
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Соединение с Блокчейном</string>
     <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в режиме peer-to-peer (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
-    <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
+    <string name="SettingsPrivacy_WalletRestore">Восстановить через Блокчейн</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Выбрать источник данных для восстановления транзакций кошелька.</string>
     <string name="SettingsPrivacy_Transactions">Блокчейн транзакции</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
@@ -231,7 +231,7 @@
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Полностью анонимизируйте интернет трафик этого приложения. Может замедлить работу.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для Unstoppable Кошелька отключены. Для работы Tor необходимо включить их.</string>
-    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
+    <string name="SettingsSecurity_SortingShuffle">Вперемешку</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingOff">Выкл.</string>
     <!--Setting_About-->
@@ -324,7 +324,7 @@
     <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %1$s .\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Если вернуться к предыдущей настройке, все вернется после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %s.</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизировать с блокчейном %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
