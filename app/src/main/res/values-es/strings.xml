@@ -320,7 +320,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
     <string name="AddCoin_Subtitle">%s Monedero</string>
-    <string name="AddCoin_Description">Necesita configurar %1$s el monedero para poder enviar o recibir %2$s.\n\n Utilice el botón de crear para configurar un nuevo %3$s monedero, o el botón Restaurar para importar el ya existente.\n\n Podrá usar este monedero para: %4$s.</string>
+    <string name="AddCoin_Description">Necesita configurar %1$s el monedero para poder enviar o recibir %2$s.\n\n Utiliza el botón de crear para configurar un nuevo %3$s monedero, o el botón Restaurar para importar el ya existente.\n\n Podrás usar este monedero para: %4$s.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Address Format Settings List -->
