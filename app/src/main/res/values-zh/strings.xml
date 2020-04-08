@@ -313,7 +313,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">添加%s</string>
     <string name="AddCoin_Subtitle">%s钱包</string>
-    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_Description">您必须创建%1$s钱包才能对%2$s进行转账或收款。\n\n使用下方的“创建”（Create）按钮建立一个新的%3$s钱包，或者使用“恢复”（Restore）按钮导入现有钱包。\n\n您可以对此钱包使用：%4$s。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Address Format Settings List -->
