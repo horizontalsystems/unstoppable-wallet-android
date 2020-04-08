@@ -34,7 +34,7 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
         val recyclerView = view.findViewById<RecyclerView>(R.id.dialogRecyclerView)
         val dialogTitle = view.findViewById<TextView>(R.id.dialogTitle)
 
-        recyclerView.adapter = SelectorAdapter(items, this)
+        recyclerView.adapter = SelectorAdapter(items, this, title != null)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         dialogTitle.visibility = if (title == null) View.GONE else View.VISIBLE
@@ -79,7 +79,8 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
 }
 
 class SelectorAdapter(private val list: List<SelectorItem>,
-                      private val listener: Listener) : RecyclerView.Adapter<SelectorOptionViewHolder>() {
+                      private val listener: Listener,
+                      private val hasTitle: Boolean) : RecyclerView.Adapter<SelectorOptionViewHolder>() {
 
     interface Listener {
         fun onClick(position: Int)
@@ -89,7 +90,7 @@ class SelectorAdapter(private val list: List<SelectorItem>,
             SelectorOptionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_item_selector, parent, false), listener)
 
     override fun onBindViewHolder(holder: SelectorOptionViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position], hasTitle || position > 0)
     }
 
     override fun getItemCount() = list.size
@@ -101,9 +102,10 @@ class SelectorOptionViewHolder(override val containerView: View, private val lis
         containerView.setOnClickListener { listener.onClick(adapterPosition) }
     }
 
-    fun bind(item: SelectorItem) {
+    fun bind(item: SelectorItem, showTopDivider: Boolean) {
         itemTitle.text = item.caption
         itemTitle.isSelected = item.selected
+        topDivider.visibility = if (showTopDivider) View.VISIBLE else View.GONE
     }
 }
 
