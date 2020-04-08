@@ -29,11 +29,11 @@
     <string name="Wallet">%s monedero</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Independencia</string>
-    <string name="Intro_Independence_Description">Mantenga los activos criptográficos seguros, no confiscables y accesibles en todo momento.</string>
+    <string name="Intro_Independence_Description">Mantenga los activos criptográficos seguros, no confiscables y accesibles en todo momento</string>
     <string name="Intro_Knowledge_Title">Conocimiento</string>
-    <string name="Intro_Knowledge_Description">Mantente informado y descubre proyectos de blockchain en las primeras etapas de desarrollo.</string>
+    <string name="Intro_Knowledge_Description">Mantente informado y descubre proyectos de blockchain en las primeras etapas de desarrollo</string>
     <string name="Intro_Privacy_Title">Privacidad</string>
-    <string name="Intro_Privacy_Description">Manténgase incognito y bajo el radar, mientras crece su riqueza.</string>
+    <string name="Intro_Privacy_Description">Manténgase incognito y bajo el radar, mientras crece su riqueza</string>
     <!--Welcome-->
     <string name="Welcome_Title">Monedero\nUnstoppable</string>
     <string name="Welcome_PrivacySettings">Ajustes de privacidad</string>

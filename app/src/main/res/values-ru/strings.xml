@@ -29,14 +29,14 @@
     <string name="Wallet">%s Кошелек</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Независимость</string>
-    <string name="Intro_Independence_Description">Надежное хранение, невозможно конфисковать, всегда под вашим контролем.</string>
+    <string name="Intro_Independence_Description">Надежное хранение, невозможно конфисковать, всегда под вашим контролем</string>
     <string name="Intro_Knowledge_Title">Знания</string>
-    <string name="Intro_Knowledge_Description">Узнай о новых блокчейн проектах на ранних стадиях. </string>
+    <string name="Intro_Knowledge_Description">Узнай о новых блокчейн проектах на ранних стадиях</string>
     <string name="Intro_Privacy_Title">Приватность</string>
-    <string name="Intro_Privacy_Description">Управляя капиталом сохрани свою приватность.</string>
+    <string name="Intro_Privacy_Description">Управляя капиталом сохрани свою приватность</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n Кошелек</string>
-    <string name="Welcome_PrivacySettings">Настройки Конфиденциальности</string>
+    <string name="Welcome_PrivacySettings">Настройки Приватности</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Rate App-->
@@ -83,7 +83,7 @@
     <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
-    <string name="Balance_Sort_24hPriceChange">цене(%) за 24 ч</string>
+    <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s кошелька, прежде чем вы сможете получать %s.</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
@@ -212,9 +212,9 @@
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Соединение с Блокчейном</string>
     <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в режиме peer-to-peer (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
-    <string name="SettingsPrivacy_WalletRestore">Восстановить через Блокчейн</string>
+    <string name="SettingsPrivacy_WalletRestore">Восстановить Блокчейн</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Выбрать источник данных для восстановления транзакций кошелька.</string>
-    <string name="SettingsPrivacy_Transactions">Блокчейн транзакции</string>
+    <string name="SettingsPrivacy_Transactions">Блокчейн Tранзакции</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
     <string name="SettingsPrivacy_TransactionsDescription">Поменять способ оформления транзакций что бы трудно было уследить за вашими BTC, LTC, BCH операциями.</string>
     <!--Settings-->

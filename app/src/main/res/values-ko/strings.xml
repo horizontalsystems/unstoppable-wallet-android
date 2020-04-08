@@ -29,11 +29,11 @@
     <string name="Wallet">%s 지갑</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">독립</string>
-    <string name="Intro_Independence_Description">암호와 자산을 항상 안전하고, 압수당하지 않으며, 접근 가능한 상태로 유지하세요.</string>
+    <string name="Intro_Independence_Description">암호와 자산을 항상 안전하고, 압수당하지 않으며, 접근 가능한 상태로 유지하세요</string>
     <string name="Intro_Knowledge_Title">지식</string>
-    <string name="Intro_Knowledge_Description">정보를 인지하시고 초기단계에서 성장하고 있는 블록체인 프로젝트를 발견하세요.</string>
+    <string name="Intro_Knowledge_Description">정보를 인지하시고 초기단계에서 성장하고 있는 블록체인 프로젝트를 발견하세요</string>
     <string name="Intro_Privacy_Title">개인정보</string>
-    <string name="Intro_Privacy_Description">귀하의 재산을 늘리시는 동안 익명을 유지해주시고 눈에 띄이지 않게 하여 주세요.</string>
+    <string name="Intro_Privacy_Description">귀하의 재산을 늘리시는 동안 익명을 유지해주시고 눈에 띄이지 않게 하여 주세요</string>
     <!--Welcome-->
     <string name="Welcome_Title">언스타퍼블\n지갑</string>
     <string name="Welcome_PrivacySettings">개인 정보 설정</string>

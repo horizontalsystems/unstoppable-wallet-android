@@ -29,11 +29,11 @@
     <string name="Wallet">%s wallet</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Unabhängigkeit</string>
-    <string name="Intro_Independence_Description">Verwahren Sie Krypto-Vermögen sicher, uneinziehbar und jederzeit zugänglich.</string>
+    <string name="Intro_Independence_Description">Verwahren Sie Krypto-Vermögen sicher, uneinziehbar und jederzeit zugänglich</string>
     <string name="Intro_Knowledge_Title">Wissen</string>
-    <string name="Intro_Knowledge_Description">Informieren Sie sich und entdecken Sie wachsende Blockchain-Projekte in einem frühen Stadium.</string>
+    <string name="Intro_Knowledge_Description">Informieren Sie sich und entdecken Sie wachsende Blockchain-Projekte in einem frühen Stadium</string>
     <string name="Intro_Privacy_Title">Privatsphäre</string>
-    <string name="Intro_Privacy_Description">Bleiben Sie inkognito und unbemerkt, während Sie Ihr Vermögen vermehren.</string>
+    <string name="Intro_Privacy_Description">Bleiben Sie inkognito und unbemerkt, während Sie Ihr Vermögen vermehren</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\nWallet</string>
     <string name="Welcome_PrivacySettings">Privatsphäre-Einstellungen</string>

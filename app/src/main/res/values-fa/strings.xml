@@ -29,11 +29,11 @@
     <string name="Wallet">%s کیف پول</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">استقلال</string>
-    <string name="Intro_Independence_Description">ارزهای رمزنگاری شده را همیشه امن، غیرقابل تشخیص و قابل دسترس نگه دارید.</string>
+    <string name="Intro_Independence_Description">ارزهای رمزنگاری شده را همیشه امن، غیرقابل تشخیص و قابل دسترس نگه دارید</string>
     <string name="Intro_Knowledge_Title">دانش</string>
-    <string name="Intro_Knowledge_Description">درباره پروژه های زنجیره بلوکی در حال رشد در مراحل اولیه آن مطلع شوید و کشف کنید.</string>
+    <string name="Intro_Knowledge_Description">درباره پروژه های زنجیره بلوکی در حال رشد در مراحل اولیه آن مطلع شوید و کشف کنید</string>
     <string name="Intro_Privacy_Title">حریم خصوصی</string>
-    <string name="Intro_Privacy_Description">در حالی که ثروت خود را افزایش می دهید، ناشناس و تحت نظر رادار بمانید.</string>
+    <string name="Intro_Privacy_Description">در حالی که ثروت خود را افزایش می دهید، ناشناس و تحت نظر رادار بمانید</string>
     <!--Welcome-->
     <string name="Welcome_Title">غیرقابل توقف \nکیف پول</string>
     <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>

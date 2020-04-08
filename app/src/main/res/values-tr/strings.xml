@@ -29,11 +29,11 @@
     <string name="Wallet">%s cüzdanı</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Bağımsızlık</string>
-    <string name="Intro_Independence_Description">Kripto varlıklarını her zaman güvende, el koyulamaz ve erişilebilir tutun.</string>
+    <string name="Intro_Independence_Description">Kripto varlıklarını her zaman güvende, el koyulamaz ve erişilebilir tutun</string>
     <string name="Intro_Knowledge_Title">Bilgi</string>
-    <string name="Intro_Knowledge_Description">Haberdar olun ve erken aşamalarda büyüyen blockchain projelerini keşfedin.</string>
+    <string name="Intro_Knowledge_Description">Haberdar olun ve erken aşamalarda büyüyen blockchain projelerini keşfedin</string>
     <string name="Intro_Privacy_Title">Gizlilik</string>
-    <string name="Intro_Privacy_Description">Servetinizi büyütürken gizli ve radarın altında kalın.</string>
+    <string name="Intro_Privacy_Description">Servetinizi büyütürken gizli ve radarın altında kalın</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\nCüzdan</string>
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>

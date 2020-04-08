@@ -29,11 +29,11 @@
     <string name="Wallet">%s钱包</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">独立性</string>
-    <string name="Intro_Independence_Description">保持加密货币资产的安全、不可混淆和随时可访问。</string>
+    <string name="Intro_Independence_Description">保持加密货币资产的安全、不可混淆和随时可访问</string>
     <string name="Intro_Knowledge_Title">知识</string>
-    <string name="Intro_Knowledge_Description">在早期阶段了解和探索不断发展的区块链项目。</string>
+    <string name="Intro_Knowledge_Description">在早期阶段了解和探索不断发展的区块链项目</string>
     <string name="Intro_Privacy_Title">隐私</string>
-    <string name="Intro_Privacy_Description">在增长财富的同时保持隐身状态并避开追踪。</string>
+    <string name="Intro_Privacy_Description">在增长财富的同时保持隐身状态并避开追踪</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n钱包</string>
     <string name="Welcome_PrivacySettings">隐私设置</string>
