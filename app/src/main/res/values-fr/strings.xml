@@ -37,7 +37,6 @@
     <!--Welcome-->
     <string name="Welcome_Title">\nPortefeuille Unstoppable</string>
     <string name="Welcome_PrivacySettings">Paramètres de Confidentialité</string>
-
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Rate App-->
