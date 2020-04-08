@@ -13,6 +13,14 @@ object LayoutHelper {
         if (dp == 0f) 0 else Math.ceil((density * dp).toDouble()).toInt()
     } ?: dp.toInt()
 
+    fun spToPx(sp: Float, context: Context): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.resources.displayMetrics)
+    }
+
+    fun dpToPx(dp: Float, context: Context): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
+    }
+
     fun getAttr(attr: Int, theme: Resources.Theme): Int? {
         val typedValue = TypedValue()
         return if (theme.resolveAttribute(attr, typedValue, true))
