@@ -148,12 +148,13 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
 
         viewModel.delegate.willShow(items[position])
 
-        if (payloads.isEmpty()) {
+        val prev = payloads.lastOrNull() as? TransactionViewItem
+
+        if (prev == null) {
             holder.bind(items[position], showBottomShade = (position == itemCount - 1))
         } else {
-            holder.bindUpdate(items[position], payloads)
+            holder.bindUpdate(items[position], prev)
         }
-
     }
 
     override fun onClick(position: Int) {
@@ -207,30 +208,36 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         doubleSpendIcon.visibility = if (transactionRecord.conflictingTxHash == null) View.GONE else View.VISIBLE
     }
 
-    fun bindUpdate(transactionViewItem: TransactionViewItem, payloads: MutableList<Any>) {
-        payloads.forEach {
-            when (it) {
-                TransactionViewItem.UpdateType.RATE -> {
-                    val incoming = transactionViewItem.type == TransactionType.Incoming
+    fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
+        val incoming = current.type == TransactionType.Incoming
 
-                    txValueInFiat.text = transactionViewItem.currencyValue?.let {
-                        App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
-                    }
-                }
-
-                TransactionViewItem.UpdateType.STATUS -> {
-                    val incoming = transactionViewItem.type == TransactionType.Incoming
-                    val time = transactionViewItem.date?.let { DateHelper.getOnlyTime(it) }
-                    txStatusWithTimeView.bind(transactionViewItem.status, incoming, time)
-
-                    val lockIcon = when {
-                        transactionViewItem.lockInfo == null -> 0
-                        transactionViewItem.unlocked -> R.drawable.ic_unlock
-                        else -> R.drawable.ic_lock
-                    }
-                    txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
-                }
+        if (current.currencyValue != prev.currencyValue) {
+            txValueInFiat.text = current.currencyValue?.let {
+                App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
             }
+        }
+
+        if (current.lockInfo != prev.lockInfo || current.unlocked != prev.unlocked) {
+            val lockIcon = when {
+                current.lockInfo == null -> 0
+                current.unlocked -> R.drawable.ic_unlock
+                else -> R.drawable.ic_lock
+            }
+            txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
+        }
+
+        if (current.coinValue != prev.coinValue) {
+            txValueInCoin.text = App.numberFormatter.formatForTransactions(current.coinValue)
+        }
+
+        if (current.status != prev.status || current.date != prev.date) {
+            txDate.text = current.date?.let { DateHelper.shortDate(it) }
+            val time = current.date?.let { DateHelper.getOnlyTime(it) }
+            txStatusWithTimeView.bind(current.status, incoming, time)
+        }
+
+        if (current.conflictingTxHash != prev.conflictingTxHash) {
+            doubleSpendIcon.visibility = if (current.conflictingTxHash == null) View.GONE else View.VISIBLE
         }
     }
 }

@@ -21,7 +21,7 @@ class TransactionViewItemDiff(private val old: List<TransactionViewItem>, privat
     }
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return new[newItemPosition].updateType
+        return old[oldItemPosition]
     }
 
 }
