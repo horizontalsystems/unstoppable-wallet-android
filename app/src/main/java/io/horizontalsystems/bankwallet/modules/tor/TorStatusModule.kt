@@ -40,7 +40,7 @@ object TorStatusModule {
 
             val view = TorStatusView()
             val router = TorStatusRouter()
-            val interactor = TorStatusInteractor(App.netKitManager)
+            val interactor = TorStatusInteractor(App.torKitManager)
             val presenter = TorStatusPresenter(view, router, interactor)
 
             interactor.delegate = presenter

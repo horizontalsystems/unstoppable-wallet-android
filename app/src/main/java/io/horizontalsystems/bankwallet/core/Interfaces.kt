@@ -4,7 +4,7 @@ import android.content.Context
 import android.text.SpannableString
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
-import io.horizontalsystems.bankwallet.core.managers.NetManager
+import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
@@ -451,12 +451,12 @@ interface IBlockedChartCoins {
     var blockedCoins: MutableList<String>
 }
 
-interface INetManager {
+interface ITorManager {
     fun start()
     fun stop(): Single<Boolean>
     fun enableTor()
     fun disableTor()
-    fun setListener(listener: NetManager.Listener)
+    fun setListener(listener: TorManager.Listener)
     val isTorEnabled: Boolean
     val isTorNotificationEnabled: Boolean
     val torObservable: Subject<TorStatus>
