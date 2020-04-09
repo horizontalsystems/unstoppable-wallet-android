@@ -12,6 +12,8 @@ class SendFeeView : SendFeeModule.IView {
     val duration = MutableLiveData<Long>()
     val feePriority = MutableLiveData<FeeRatePriority>()
     val showFeePriorityOptions = MutableLiveData<List<SendFeeModule.FeeRateInfoViewItem>>()
+    val showCustomFeePriority = SingleLiveEvent<Boolean>()
+    val setCustomFeeParams = SingleLiveEvent<Pair<Int, IntRange>>()
     val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
     val setLoading = MutableLiveData<Boolean>()
     val setError = MutableLiveData<Exception>()
@@ -34,6 +36,14 @@ class SendFeeView : SendFeeModule.IView {
 
     override fun showFeeRatePrioritySelector(feeRates: List<SendFeeModule.FeeRateInfoViewItem>) {
         showFeePriorityOptions.value = feeRates
+    }
+
+    override fun showCustomFeePriority(show: Boolean) {
+        showCustomFeePriority.postValue(show)
+    }
+
+    override fun setCustomFeeParams(value: Int, range: IntRange) {
+        setCustomFeeParams.postValue(Pair(value, range))
     }
 
     override fun setLoading(loading: Boolean) {

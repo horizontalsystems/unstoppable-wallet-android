@@ -17,7 +17,7 @@ class FeeRateProvider(appConfig: IAppConfigProvider) {
     )
 
     fun bitcoinFeeRates(): Single<List<FeeRateInfo>> {
-        return feeRateKit.bitcoin().map { feeRates(it) }
+        return feeRateKit.bitcoin().map { feeRates(it, addCustom = true) }
     }
 
     fun litecoinFeeRates(): Single<List<FeeRateInfo>> {
@@ -36,13 +36,16 @@ class FeeRateProvider(appConfig: IAppConfigProvider) {
         return feeRateKit.dash().map { feeRates(it) }
     }
 
-    private fun feeRates(feeRate: FeeRate): List<FeeRateInfo> {
-        val feeRatesInfoList = mutableListOf<FeeRateInfo>()
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, feeRate.mediumPriorityDuration))
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
+    private fun feeRates(feeRate: FeeRate, addCustom: Boolean = false): List<FeeRateInfo> {
+        return mutableListOf<FeeRateInfo>().apply {
+            add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
+            add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, feeRate.mediumPriorityDuration))
+            add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
 
-        return feeRatesInfoList
+            if (addCustom) {
+                add(FeeRateInfo(FeeRatePriority.Custom(1, IntRange(1, 100)), 1, null))
+            }
+        }
     }
 }
 
