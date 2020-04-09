@@ -25,7 +25,6 @@ data class BalanceViewItem(
         val fiatValue: DeemedValue,
         val coinValueLocked: DeemedValue,
         val fiatValueLocked: DeemedValue,
-        val updateType: UpdateType?,
         val expanded: Boolean,
         val sendEnabled: Boolean = false,
         val receiveEnabled: Boolean = false,
@@ -34,16 +33,8 @@ data class BalanceViewItem(
         val coinIconVisible: Boolean,
         val coinTypeLabelVisible: Boolean,
         val blockChart: Boolean,
-        val hideBalance: Boolean
-) {
-    enum class UpdateType {
-        MARKET_INFO,
-        BALANCE,
-        STATE,
-        EXPANDED,
-        TOGGLEBALANCE
-    }
-}
+        var hideBalance: Boolean
+)
 
 data class RateDiff(
         val deemedValue: DeemedValue,
@@ -60,8 +51,8 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 
 }
 
-class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
-class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true)
+data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
+data class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true)
 
 class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) {
 
@@ -116,7 +107,7 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
         return coinType.typeLabel() != null
     }
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, updateType: BalanceViewItem.UpdateType?, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
@@ -139,7 +130,6 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
                 fiatValueLocked = currencyValue(state, item.balanceLocked, currency, marketInfo, balanceLockedVisibility),
                 exchangeValue = rateValue(currency, marketInfo),
                 diff = rateDiff,
-                updateType = updateType,
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,
                 receiveEnabled = state != null,
