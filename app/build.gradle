@@ -22,7 +22,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 29
         versionCode computeVersionCode()
-        versionName "0.13.0"
+        versionName "0.14.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         resValue "string", "localizations", buildProperties.get("localizations")
