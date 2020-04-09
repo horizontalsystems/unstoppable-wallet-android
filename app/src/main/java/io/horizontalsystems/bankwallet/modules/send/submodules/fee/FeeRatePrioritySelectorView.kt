@@ -123,10 +123,8 @@ class ViewHolderFeeRatePriority(override val containerView: View, private val li
     fun bind(priority: FeeRatePriority, duration: Long?, isSelected: Boolean) {
         var priorityString = TextHelper.getFeeRatePriorityString(itemView.context, priority)
         if (duration != null) {
-            val durationString = DateHelper.getTxDurationString(itemView.context, duration)
-            priorityString += " (~$durationString)"
+            priorityString += " (~${DateHelper.getTxDurationString(itemView.context, duration)})"
         }
-
 
         itemTitle.text = priorityString
         itemTitle.isSelected = isSelected
