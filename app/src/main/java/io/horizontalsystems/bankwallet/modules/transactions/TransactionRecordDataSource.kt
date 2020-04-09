@@ -87,12 +87,12 @@ class TransactionRecordDataSource(
         return true
     }
 
-    private fun transactionViewItem(wallet: Wallet, record: TransactionRecord, updateType: TransactionViewItem.UpdateType? = null): TransactionViewItem {
+    private fun transactionViewItem(wallet: Wallet, record: TransactionRecord): TransactionViewItem {
         val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
         val threshold = metadataDataSource.getConfirmationThreshold(wallet)
         val rate = metadataDataSource.getRate(wallet.coin, record.timestamp)
 
-        return viewItemFactory.item(wallet, record, lastBlockInfo, threshold, rate, updateType)
+        return viewItemFactory.item(wallet, record, lastBlockInfo, threshold, rate)
     }
 
     fun setWallets(wallets: List<Wallet>) {
@@ -115,7 +115,7 @@ class TransactionRecordDataSource(
         var hasUpdate = false
         itemsDataSource.items.forEachIndexed { index, item ->
             if (item.wallet.coin == coin && item.record.timestamp == timestamp) {
-                itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record, TransactionViewItem.UpdateType.RATE)
+                itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
 
                 hasUpdate = true
             }
@@ -131,7 +131,7 @@ class TransactionRecordDataSource(
         if (oldBlockInfo == null) {
             itemsDataSource.items.forEachIndexed { index, item ->
                 if (wallet == item.wallet) {
-                    itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record, TransactionViewItem.UpdateType.STATUS)
+                    itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
                 }
             }
 
@@ -141,7 +141,7 @@ class TransactionRecordDataSource(
         var hasUpdate = false
         itemsDataSource.items.forEachIndexed { index, item ->
             if (item.wallet == wallet && (item.isPending || item.becomesUnlocked(oldBlockInfo.timestamp, lastBlockInfo.timestamp))) {
-                itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record, TransactionViewItem.UpdateType.STATUS)
+                itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
 
                 hasUpdate = true
             }

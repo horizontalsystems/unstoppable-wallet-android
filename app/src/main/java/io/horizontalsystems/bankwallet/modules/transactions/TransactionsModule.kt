@@ -26,12 +26,7 @@ data class TransactionViewItem(
         val lockInfo: TransactionLockInfo?,
         val conflictingTxHash: String?,
         val unlocked: Boolean = true,
-        val record: TransactionRecord,
-        var updateType: UpdateType?) : Comparable<TransactionViewItem> {
-
-    enum class UpdateType {
-        RATE, STATUS
-    }
+        val record: TransactionRecord) : Comparable<TransactionViewItem> {
 
     val isPending: Boolean
         get() = status is TransactionStatus.Pending || status is TransactionStatus.Processing
@@ -67,7 +62,6 @@ data class TransactionViewItem(
     fun clearRates() {
         currencyValue = null
         rate = null
-        updateType = UpdateType.RATE
     }
 
     fun becomesUnlocked(oldBlockTimestamp: Long?, lastBlockTimestamp: Long?): Boolean {

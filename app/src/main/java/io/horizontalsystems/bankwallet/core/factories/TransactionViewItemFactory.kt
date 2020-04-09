@@ -7,7 +7,7 @@ import java.util.*
 
 class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
-    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, threshold: Int, rate: CurrencyValue?, updateType: TransactionViewItem.UpdateType?): TransactionViewItem {
+    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
         var status: TransactionStatus = TransactionStatus.Pending
 
         if (record.failed) {
@@ -55,8 +55,7 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 record.lockInfo,
                 record.conflictingTxHash,
                 unlocked,
-                record,
-                updateType
+                record
         )
     }
 

@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -17,8 +15,6 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     val reloadTransactions = SingleLiveEvent<Unit>()
     val showSyncing = SingleLiveEvent<Boolean>()
 
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
-
     fun init() {
         TransactionsModule.initModule(this, this)
         delegate.viewDidLoad()
@@ -29,9 +25,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     }
 
     override fun showTransactions(items: List<TransactionViewItem>) {
-        mainThreadHandler.post {
-            this.items.value = items
-        }
+        this.items.postValue(items)
     }
 
     override fun reloadTransactions() {
@@ -39,9 +33,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     }
 
     override fun showNoTransactions() {
-        mainThreadHandler.post {
-            items.value = listOf()
-        }
+        items.postValue(listOf())
     }
 
     override fun showSyncing() {
