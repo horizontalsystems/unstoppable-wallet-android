@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FeeSeekBar">
+        <attr name="textColor" format="color" />
+        <attr name="textColorSecondary" format="color" />
+        <attr name="controlsColor" format="color" />
+        <attr name="bubbleBackground" format="color" />
+        <attr name="bubbleStroke" format="color" />
+        <attr name="bubbleHint" format="string" />
+    </declare-styleable>
+</resources>
