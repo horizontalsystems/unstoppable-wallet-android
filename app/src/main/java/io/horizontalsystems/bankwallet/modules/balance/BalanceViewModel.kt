@@ -27,8 +27,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val setBalanceHiddenLiveEvent = SingleLiveEvent<Pair<Boolean, Boolean>>()
 
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
-
     fun init() {
         BalanceModule.init(this, this)
 
@@ -72,14 +70,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun set(viewItems: List<BalanceViewItem>) {
-        /**
-         * viewItems are updated very often and partially, using updateType payload for recyclerView adapter.
-         * Since LiveData doesn't handle backpressure and propagates only last item, sometimes view does not receive updates.
-         * As a temporary solution LiveData.setValue() is used instead of postValue(), also it is called in main thread using Handler.
-         */
-        mainThreadHandler.post {
-            setViewItems.value = viewItems
-        }
+        setViewItems.postValue(viewItems)
     }
 
     override fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType) {
