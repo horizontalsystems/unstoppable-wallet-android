@@ -64,8 +64,19 @@ class SendFeePresenter(
     }
 
     private fun syncFeeRateLabels() {
-        view.setDuration(feeRateInfo.duration)
+        if (feeRateInfo.priority is FeeRatePriority.Custom) {
+            view.showCustomFeePriority(true)
+        } else {
+            view.showCustomFeePriority(false)
+            feeRateInfo.duration?.let { view.setDuration(it) }
+        }
+
         view.setFeePriority(feeRateInfo.priority)
+    }
+
+    private fun updateCustomFeeParams(priority: FeeRatePriority.Custom) {
+        val value = Math.min(feeRateInfo.feeRate.toInt(), priority.range.last)
+        view.setCustomFeeParams(value, priority.range)
     }
 
     private fun validate() {
@@ -189,11 +200,23 @@ class SendFeePresenter(
     }
 
     override fun onChangeFeeRate(feeRateInfo: FeeRateInfo) {
+        if (feeRateInfo.priority is FeeRatePriority.Custom) {
+            updateCustomFeeParams(feeRateInfo.priority)
+        }
+
         this.feeRateInfo = feeRateInfo
 
         syncFeeRateLabels()
 
         moduleDelegate?.onUpdateFeeRate()
+    }
+
+    override fun onChangeFeeRateValue(value: Long) {
+        if (feeRateInfo.priority is FeeRatePriority.Custom) {
+            feeRateInfo.feeRate = value
+
+            moduleDelegate?.onUpdateFeeRate()
+        }
     }
 
     // IInteractorDelegate

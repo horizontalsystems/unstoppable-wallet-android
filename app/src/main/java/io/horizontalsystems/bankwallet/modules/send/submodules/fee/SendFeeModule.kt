@@ -26,6 +26,8 @@ object SendFeeModule {
         fun setDuration(duration: Long)
         fun setFeePriority(priority: FeeRatePriority)
         fun showFeeRatePrioritySelector(feeRates: List<FeeRateInfoViewItem>)
+        fun showCustomFeePriority(show: Boolean)
+        fun setCustomFeeParams(value: Int, range: IntRange)
 
         fun setLoading(loading: Boolean)
         fun setFee(fee: AmountInfo, convertedFee: AmountInfo?)
@@ -36,6 +38,7 @@ object SendFeeModule {
     interface IViewDelegate {
         fun onViewDidLoad()
         fun onChangeFeeRate(feeRateInfo: FeeRateInfo)
+        fun onChangeFeeRateValue(value: Long)
         fun onClickFeeRatePriority()
     }
 

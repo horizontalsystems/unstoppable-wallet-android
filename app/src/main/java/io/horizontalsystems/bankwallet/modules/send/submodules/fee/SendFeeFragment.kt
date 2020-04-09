@@ -12,8 +12,9 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
-import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.bankwallet.ui.FeeSeekBar
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.ethereumkit.api.models.ApiError
 import kotlinx.android.synthetic.main.view_send_fee.*
 
@@ -45,6 +46,13 @@ class SendFeeFragment(
         }
         txFeeLoading.visibility = View.GONE
         txFeeLoading.text = getString(R.string.Alert_Loading)
+
+        customFeeSeekBar.setListener(object: FeeSeekBar.Listener {
+            override fun onSelect(value: Int) {
+                presenter?.onChangeFeeRateValue(value.toLong())
+            }
+        })
+
         presenterView.primaryFee.observe(viewLifecycleOwner, Observer { txFeePrimary.text = " $it" })
 
         presenterView.secondaryFee.observe(viewLifecycleOwner, Observer { fiatFee ->
@@ -70,6 +78,21 @@ class SendFeeFragment(
                     .show(this.parentFragmentManager, "fee_rate_priority_selector")
         })
 
+        presenterView.showCustomFeePriority.observe(viewLifecycleOwner, Observer { isVisible ->
+            if (isVisible) {
+                customFeeSeekBar.visibility = View.VISIBLE
+                txDurationLayout.visibility = View.GONE
+            } else {
+                customFeeSeekBar.visibility = View.GONE
+                txDurationLayout.visibility = View.VISIBLE
+            }
+        })
+
+        presenterView.setCustomFeeParams.observe(viewLifecycleOwner, Observer { (value, range) ->
+            customFeeSeekBar.progress = value
+            customFeeSeekBar.min = range.first
+            customFeeSeekBar.max = range.last
+        })
 
         presenterView.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->
             if (error != null) {

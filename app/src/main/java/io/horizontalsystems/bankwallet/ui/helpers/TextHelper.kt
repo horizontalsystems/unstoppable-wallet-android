@@ -52,6 +52,7 @@ object TextHelper : IClipboardManager {
         FeeRatePriority.LOW -> context.getString(R.string.Send_TxSpeed_Low)
         FeeRatePriority.MEDIUM -> context.getString(R.string.Send_TxSpeed_Medium)
         FeeRatePriority.HIGH -> context.getString(R.string.Send_TxSpeed_High)
+        is FeeRatePriority.Custom -> context.getString(R.string.Send_TxSpeed_Custom)
     }
 
     private val clipboard: ClipboardManager?

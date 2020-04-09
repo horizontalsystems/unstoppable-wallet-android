@@ -13,11 +13,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule.FeeRateInfoViewItem
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_item_selector.*
-
 
 class FeeRatePrioritySelector : DialogFragment(), FeeRatesAdapter.Listener {
 
@@ -85,15 +85,16 @@ class FeeRatePrioritySelector : DialogFragment(), FeeRatesAdapter.Listener {
 
 }
 
-class FeeRatesAdapter(private val list: List<FeeRateInfoViewItem>,
-                      private val listener: Listener) : RecyclerView.Adapter<ViewHolderFeeRatePriority>(), ViewHolderFeeRatePriority.ClickListener {
+class FeeRatesAdapter(private val list: List<FeeRateInfoViewItem>, private val listener: Listener)
+    : RecyclerView.Adapter<ViewHolderFeeRatePriority>(), ViewHolderFeeRatePriority.ClickListener {
 
     interface Listener {
         fun onClick(feeRate: FeeRateInfo)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolderFeeRatePriority(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_item_selector, parent, false), this)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderFeeRatePriority {
+        return ViewHolderFeeRatePriority(inflate(parent, R.layout.view_holder_item_selector), this)
+    }
 
     override fun onBindViewHolder(holder: ViewHolderFeeRatePriority, position: Int) {
         val item = list[position].feeRateInfo
@@ -106,11 +107,10 @@ class FeeRatesAdapter(private val list: List<FeeRateInfoViewItem>,
     override fun onClick(position: Int) {
         listener.onClick(list[position].feeRateInfo)
     }
-
 }
 
-class ViewHolderFeeRatePriority(override val containerView: View,
-                                private val listener: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderFeeRatePriority(override val containerView: View, private val listener: ClickListener)
+    : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
         fun onClick(position: Int)
@@ -120,12 +120,15 @@ class ViewHolderFeeRatePriority(override val containerView: View,
         containerView.setOnClickListener { listener.onClick(adapterPosition) }
     }
 
-    fun bind(priority: FeeRatePriority, duration: Long, isSelected: Boolean) {
-        val priorityString = TextHelper.getFeeRatePriorityString(itemView.context, priority)
-        val durationString = DateHelper.getTxDurationString(itemView.context, duration)
+    fun bind(priority: FeeRatePriority, duration: Long?, isSelected: Boolean) {
+        var priorityString = TextHelper.getFeeRatePriorityString(itemView.context, priority)
+        if (duration != null) {
+            val durationString = DateHelper.getTxDurationString(itemView.context, duration)
+            priorityString += " (~$durationString)"
+        }
 
-        itemTitle.text = "$priorityString (~$durationString)"
+
+        itemTitle.text = priorityString
         itemTitle.isSelected = isSelected
     }
-
 }

@@ -471,12 +471,10 @@ interface IRateAppManager {
     fun onAppBecomeActive()
 }
 
-enum class FeeRatePriority(val value: Int) {
-    LOW(1),
-    MEDIUM(2),
-    HIGH(3);
+sealed class FeeRatePriority {
+    object LOW : FeeRatePriority()
+    object MEDIUM : FeeRatePriority()
+    object HIGH : FeeRatePriority()
 
-    companion object {
-        fun valueOf(value: Int): FeeRatePriority = values().find { it.value == value } ?: MEDIUM
-    }
+    class Custom(val value: Int, val range: IntRange) : FeeRatePriority()
 }

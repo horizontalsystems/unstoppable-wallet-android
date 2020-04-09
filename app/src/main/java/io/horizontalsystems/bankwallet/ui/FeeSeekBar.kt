@@ -11,6 +11,10 @@ import io.horizontalsystems.views.helpers.LayoutHelper
 class FeeSeekBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.seekBarStyle)
     : AppCompatSeekBar(context, attrs, defStyleAttr) {
 
+    interface Listener {
+        fun onSelect(value: Int)
+    }
+
     private val bubbleWidth = LayoutHelper.dpToPx(78f, context)
     private val bubbleHeight = LayoutHelper.dpToPx(52f, context)
 
@@ -18,6 +22,7 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private val rect = RectF(0f, 0f, bubbleWidth, bubbleHeight)
 
     private var isTracking = false
+    private var listener: Listener? = null
 
     private val bubbleText = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.parseColor("#EFEFF4")
@@ -50,18 +55,25 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, attrs: AttributeSet
         setPadding(linePadding, 0, linePadding, 0)
 
         setOnSeekBarChangeListener(object: OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (!fromUser) {
+                    listener?.onSelect(progress)
+                }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
                 isTracking = true
             }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
                 isTracking = false
+                listener?.onSelect(progress)
             }
         })
+    }
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
     }
 
     override fun onDraw(canvas: Canvas) {
