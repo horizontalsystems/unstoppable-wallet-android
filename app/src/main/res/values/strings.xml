@@ -155,6 +155,7 @@
     <string name="Send_TxSpeed_Medium">Medium</string>
     <string name="Send_TxSpeed_High">High</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">Duration:</string>
     <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">Total:</string>
