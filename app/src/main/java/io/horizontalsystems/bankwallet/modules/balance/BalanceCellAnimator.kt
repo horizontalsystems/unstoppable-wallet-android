@@ -42,14 +42,12 @@ object BalanceCellAnimator {
     }
 
     private fun getHeight(expanded: Boolean, balanceHidden: Boolean, showLocked: Boolean): Int {
-        if (expanded) {
-            if (balanceHidden) {
-                return expandedHeightBalanceHidden
-            } else {
-                return if (showLocked) expandedHeight else expandedHeight - lockedBalanceWrapperHeight
-            }
-        } else {
-            return if (balanceHidden) collapsedBalanceHiddenHeight else collapsedHeight
+        return when {
+            expanded && balanceHidden -> expandedHeightBalanceHidden
+            expanded && showLocked -> expandedHeight
+            expanded -> expandedHeight - lockedBalanceWrapperHeight
+            balanceHidden -> collapsedBalanceHiddenHeight
+            else -> collapsedHeight
         }
     }
 
