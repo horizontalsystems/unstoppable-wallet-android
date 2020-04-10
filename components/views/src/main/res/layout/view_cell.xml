@@ -53,18 +53,6 @@
         app:layout_constraintTop_toBottomOf="@+id/cellTitle"
         tools:text="Subtitle" />
 
-    <TextView
-        android:id="@+id/coinTypeLabel"
-        style="@style/TextLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/cellSubtitle"
-        app:layout_constraintStart_toEndOf="@+id/cellSubtitle"
-        app:layout_constraintTop_toTopOf="@+id/cellSubtitle"
-        tools:text="ERC20"/>
-
     <!-- Cell Right -->
 
     <TextView
