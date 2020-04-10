@@ -50,13 +50,6 @@ class CellView : ConstraintLayout {
             layoutParams?.height = LayoutHelper.dp(if (value == null) singleLineHeight else doubleLineHeight, context)
         }
 
-    var subtitleLabel: String? = null
-        set(value) {
-            field = value
-            coinTypeLabel.text = value
-            coinTypeLabel.showIf(value != null)
-        }
-
     var rightTitle: String? = null
         set(value) {
             field = value
