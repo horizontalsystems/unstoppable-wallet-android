@@ -104,7 +104,7 @@ class TransactionRecordDataSource(
     }
 
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
-        poolRepo.deactivatePools(wallets)
+        poolRepo.deactivateAllPools()
 
         setWallets(wallets)
     }

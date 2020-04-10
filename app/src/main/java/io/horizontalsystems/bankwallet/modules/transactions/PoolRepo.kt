@@ -23,8 +23,8 @@ class PoolRepo {
         this.activePoolWallets = wallets
     }
 
-    fun deactivatePools(wallets: List<Wallet>) {
-        wallets.forEach { pools.remove(it) }
+    fun deactivateAllPools() {
+        pools.clear()
     }
 
     fun getPool(wallet: Wallet): Pool? {
