@@ -8,10 +8,10 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import java.util.*
 
 class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
-    private val baseUrl = "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz"
+    private val baseApiUrl = if (testMode) "https://btc-testnet.horizontalsystems.xyz/api" else "https://btc.horizontalsystems.xyz/apg"
 
     override val name = "HorizontalSystems.xyz"
-    override val pingUrl = "$baseUrl/apg/block/0"
+    override val pingUrl = "$baseApiUrl/block/0"
     override val isTrusted: Boolean = true
 
     override fun url(hash: String): String? {
@@ -19,7 +19,7 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
     }
 
     override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
-        val url = "$baseUrl/apg/tx/$hash"
+        val url = "$baseApiUrl/tx/$hash"
         return GetRequest(url)
     }
 
