@@ -3,12 +3,9 @@ package io.horizontalsystems.bankwallet.modules.balance
 import android.animation.ValueAnimator
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.core.measureHeight
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
@@ -27,17 +24,17 @@ object BalanceCellAnimator {
 
     private var measured = false
 
-    fun measureHeights(containerView: View) {
+    fun measureHeights(holder: ViewHolderCoin) {
         if (measured) return
 
-        balanceWrapperHeight = containerView.findViewById<FrameLayout>(R.id.balanceWrapper)?.measureHeight() ?: -1
-        lockedBalanceWrapperHeight = containerView.findViewById<FrameLayout>(R.id.lockedBalanceWrapper)?.measureHeight() ?: -1
+        balanceWrapperHeight = holder.balanceWrapper.measureHeight()
+        lockedBalanceWrapperHeight = holder.lockedBalanceWrapper.measureHeight()
 
-        expandedHeight = containerView.measureHeight()
+        expandedHeight = holder.containerView.measureHeight()
         expandedHeightBalanceHidden = expandedHeight - balanceWrapperHeight - lockedBalanceWrapperHeight
 
-        val buttonsWrapperHeight = containerView.findViewById<ConstraintLayout>(R.id.buttonsWrapper)?.measureHeight() ?: -1
-        val borderHeight = containerView.findViewById<FrameLayout>(R.id.border)?.measureHeight() ?: -1
+        val buttonsWrapperHeight = holder.buttonsWrapper.measureHeight()
+        val borderHeight = holder.border.measureHeight() ?: -1
         collapsedHeight = expandedHeight - buttonsWrapperHeight
         collapsedBalanceHiddenHeight = expandedHeight - buttonsWrapperHeight - balanceWrapperHeight - borderHeight
 
