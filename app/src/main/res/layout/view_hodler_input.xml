@@ -40,13 +40,4 @@
         android:src="@drawable/ic_down"
         android:tint="@color/grey" />
 
-    <View
-        android:id="@+id/border2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
