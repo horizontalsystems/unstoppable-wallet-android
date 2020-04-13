@@ -13,16 +13,15 @@ import java.util.*
 object RateListModule {
 
     interface IView {
-        fun showPortfolioItems(items: List<ViewItem>)
-        fun showTopListItems(viewItems: List<ViewItem>)
         fun setDates(date: Date, lastUpdateTime: Long?)
+        fun setViewItems(viewItems: List<ViewItem>)
     }
 
     interface IRouter
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun loadTopList(shownSize: Int)
+        fun loadTopList()
     }
 
     interface IInteractor {
@@ -39,11 +38,13 @@ object RateListModule {
     interface IInteractorDelegate {
         fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>)
         fun didFetchedTopList(items: List<PriceInfo>)
+        fun didFailToFetchTopList()
     }
 
     interface IRateListFactory {
-        fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>): List<ViewItem>
-        fun topListViewItems(priceInfoItems: List<PriceInfo>, currency: Currency): List<ViewItem>
+        fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>): List<ViewItem.CoinViewItem>
+        fun topListViewItems(priceInfoItems: List<PriceInfo>, currency: Currency): List<ViewItem.CoinViewItem>
+        fun getViewItems(portfolioItems: List<ViewItem.CoinViewItem>, topListItems: List<ViewItem.CoinViewItem>, loading: Boolean): List<ViewItem>
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -81,4 +82,12 @@ class RateListSorter {
     }
 }
 
-class ViewItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var rateDimmed: Boolean)
+class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var rateDimmed: Boolean)
+
+sealed class ViewItem{
+    object PortfolioHeader: ViewItem()
+    object TopListHeader: ViewItem()
+    object LoadingSpinner: ViewItem()
+    object SourceText: ViewItem()
+    class CoinViewItem(val coinItem: CoinItem, val last: Boolean): ViewItem()
+}

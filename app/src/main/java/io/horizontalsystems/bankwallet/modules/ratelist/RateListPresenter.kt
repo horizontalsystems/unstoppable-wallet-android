@@ -11,6 +11,10 @@ class RateListPresenter(
         private val factory: RateListModule.IRateListFactory
 ) : ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate {
 
+    private var portfolioItems = mutableListOf<ViewItem.CoinViewItem>()
+    private var topListItems = mutableListOf<ViewItem.CoinViewItem>()
+    private var loading = false
+
     //IViewDelegate
 
     override fun viewDidLoad() {
@@ -19,19 +23,22 @@ class RateListPresenter(
 
         val marketInfos = coins.map { it.code to interactor.getMarketInfo(it.code, currency.code)}.toMap()
 
-        view.setDates(Date(), lastUpdateTimestamp(marketInfos))
+        portfolioItems.addAll(factory.portfolioViewItems(coins, currency, marketInfos))
 
-        val items = factory.portfolioViewItems(coins, currency, marketInfos)
-        view.showPortfolioItems(items)
+        updateViewItems()
+
+        view.setDates(Date(), lastUpdateTimestamp(marketInfos))
 
         val coinCodes = coins.map { it.code }
         interactor.setupXRateManager(coinCodes)
         interactor.subscribeToMarketInfo(currency.code)
     }
 
-    override fun loadTopList(shownSize: Int) {
-        if (shownSize == 0) {
+    override fun loadTopList() {
+        if (topListItems.isEmpty() && !loading) {
+            loading = true
             interactor.getTopList()
+            updateViewItems()
         }
     }
 
@@ -39,20 +46,34 @@ class RateListPresenter(
 
     override fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>) {
         val items = factory.portfolioViewItems(interactor.coins, interactor.currency, marketInfos)
+        portfolioItems.clear()
+        portfolioItems.addAll(items)
+        updateViewItems()
 
         view.setDates(Date(), lastUpdateTimestamp(marketInfos))
-
-        view.showPortfolioItems(items)
     }
 
     override fun didFetchedTopList(items: List<PriceInfo>) {
+        loading = false
         val viewItems =factory.topListViewItems(items, interactor.currency)
-        view.showTopListItems(viewItems)
+        topListItems.addAll(viewItems)
+
+        updateViewItems()
+    }
+
+    override fun didFailToFetchTopList() {
+        loading = false
+        updateViewItems()
     }
 
     override fun onCleared() {
         super.onCleared()
         interactor.clear()
+    }
+
+    private fun updateViewItems() {
+        val viewItems: List<ViewItem> = factory.getViewItems(portfolioItems, topListItems, loading)
+        view.setViewItems(viewItems)
     }
 
     private fun lastUpdateTimestamp(marketInfos: Map<String, MarketInfo?>): Long? {

@@ -38,24 +38,20 @@ class RatesListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        presenter?.loadTopList(adapter.topListItems.size)
+        presenter?.loadTopList()
     }
 
     private fun observeView(view: RateListView?) {
-        view?.datesLiveEvent?.observe(viewLifecycleOwner, Observer { (date, lastUpdateTimestamp)->
+        view?.datesLiveData?.observe(viewLifecycleOwner, Observer { (date, lastUpdateTimestamp)->
             dateText.text = DateHelper.formatDate(date, "MMM dd")
             setLastUpdatedTime(lastUpdateTimestamp)
         })
 
-        view?.portfolioViewItems?.observe(viewLifecycleOwner, Observer { viewItems->
-            adapter.portfolioItems = viewItems
+        view?.viewItemsLiveData?.observe(viewLifecycleOwner, Observer { viewItems->
+            adapter.viewItems = viewItems
             adapter.notifyDataSetChanged()
         })
 
-        view?.topListViewItems?.observe(viewLifecycleOwner, Observer { viewItems ->
-            adapter.topListItems = viewItems
-            adapter.notifyDataSetChanged()
-        })
     }
 
     private fun setLastUpdatedTime(lastUpdateTimestamp: Long?) {
@@ -70,8 +66,7 @@ class RatesListFragment : Fragment() {
 
 class CoinRatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var portfolioItems = listOf<ViewItem>()
-    var topListItems = listOf<ViewItem>()
+    var viewItems = listOf<ViewItem>()
 
     private val portfolioHeader = 0
     private val coinViewItem = 1
@@ -79,24 +74,15 @@ class CoinRatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val loadingSpinner = 3
     private val sourceView = 4
 
-    override fun getItemCount(): Int {
-        var otherViewsCount = 1 //for loading spinner or for topListHeader
-        if (portfolioItems.isNotEmpty()){
-            otherViewsCount++
-        }
-        if (topListItems.isNotEmpty()){
-            otherViewsCount++
-        }
-        return portfolioItems.size + topListItems.size + otherViewsCount
-    }
+    override fun getItemCount(): Int = viewItems.size
 
     override fun getItemViewType(position: Int): Int {
-        return when {
-            position == 0 -> portfolioHeader
-            topListItems.isEmpty() && position == portfolioItems.size + 1 -> loadingSpinner
-            position == portfolioItems.size + 1 -> topListHeader
-            topListItems.isNotEmpty() && position == itemCount - 1 -> sourceView
-            else -> coinViewItem
+        return when(viewItems[position]) {
+            is ViewItem.CoinViewItem -> coinViewItem
+            ViewItem.PortfolioHeader -> portfolioHeader
+            ViewItem.TopListHeader -> topListHeader
+            ViewItem.LoadingSpinner -> loadingSpinner
+            ViewItem.SourceText -> sourceView
         }
     }
 
@@ -112,12 +98,9 @@ class CoinRatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ViewHolderCoin) {
-            if (position <= portfolioItems.size) {
-                holder.bind(portfolioItems[position-1], position == portfolioItems.size)
-            } else if(topListItems.isNotEmpty()){
-                holder.bind(topListItems[position - portfolioItems.size - 2], position == itemCount - 2)
-            }
+        val item = viewItems[position]
+        if (item is ViewItem.CoinViewItem) {
+            (holder as? ViewHolderCoin)?.bind(item.coinItem, item.last)
         }
     }
 
@@ -130,17 +113,17 @@ class ViewHolderSource(override val containerView: View) : RecyclerView.ViewHold
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(viewItem: ViewItem, isLast: Boolean) {
-        coinIcon.isVisible = viewItem.coin != null
-        viewItem.coin?.code?.let { coinIcon.bind(it) }
-        titleText.text = viewItem.coinName
-        subtitleText.text = viewItem.coinCode
+    fun bind(coinItem: CoinItem, isLast: Boolean) {
+        coinIcon.isVisible = coinItem.coin != null
+        coinItem.coin?.code?.let { coinIcon.bind(it) }
+        titleText.text = coinItem.coinName
+        subtitleText.text = coinItem.coinCode
 
-        txValueInFiat.isActivated = !viewItem.rateDimmed //change color via state: activated/not activated
-        txValueInFiat.text = viewItem.rate ?: containerView.context.getString(R.string.NotAvailable)
+        txValueInFiat.isActivated = !coinItem.rateDimmed //change color via state: activated/not activated
+        txValueInFiat.text = coinItem.rate ?: containerView.context.getString(R.string.NotAvailable)
 
-        if (viewItem.diff != null){
-            txDiff.diff = viewItem.diff
+        if (coinItem.diff != null){
+            txDiff.diff = coinItem.diff
             txDiff.visibility = View.VISIBLE
             txDiffNa.visibility = View.GONE
         } else {
