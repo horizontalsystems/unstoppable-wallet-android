@@ -38,10 +38,18 @@ class RatesInteractor(
     override fun subscribeToMarketInfo(currencyCode: String) {
         xRateManager.marketInfoObservable(currencyCode)
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
                 .subscribe({ marketInfo ->
                     delegate?.didUpdateMarketInfo(marketInfo)
                 }, { /*throwable*/ })
+                .let { disposables.add(it) }
+    }
+
+    override fun getTopList() {
+        xRateManager.getTopList(currency.code)
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    delegate?.didFetchedTopList(it)
+                }, { /*throwable*/ } )
                 .let { disposables.add(it) }
     }
 

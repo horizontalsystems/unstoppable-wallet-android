@@ -4,23 +4,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.core.CurrentDateProvider
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.PriceInfo
 import java.math.BigDecimal
 import java.util.*
 
 object RateListModule {
 
     interface IView {
-        fun show(item: RateListViewItem)
+        fun showPortfolioItems(items: List<ViewItem>)
+        fun showTopListItems(viewItems: List<ViewItem>)
+        fun setDates(date: Date, lastUpdateTime: Long?)
     }
 
     interface IRouter
 
     interface IViewDelegate {
         fun viewDidLoad()
+        fun loadTopList(shownSize: Int)
     }
 
     interface IInteractor {
@@ -31,14 +33,17 @@ object RateListModule {
         fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun subscribeToMarketInfo(currencyCode: String)
         fun setupXRateManager(coinCodes: List<String>)
+        fun getTopList()
     }
 
     interface IInteractorDelegate {
         fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>)
+        fun didFetchedTopList(items: List<PriceInfo>)
     }
 
     interface IRateListFactory {
-        fun rateListViewItem(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>): RateListViewItem
+        fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>): List<ViewItem>
+        fun topListViewItems(priceInfoItems: List<PriceInfo>, currency: Currency): List<ViewItem>
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -51,7 +56,7 @@ object RateListModule {
                     App.walletStorage,
                     App.appConfigProvider,
                     RateListSorter())
-            val presenter = RateListPresenter(view, interactor, RateListFactory(CurrentDateProvider()))
+            val presenter = RateListPresenter(view, interactor, RateListFactory(App.numberFormatter))
 
             interactor.delegate = presenter
 
@@ -76,5 +81,4 @@ class RateListSorter {
     }
 }
 
-class RateListViewItem(val currentDate: Date, val lastUpdateTimestamp: Long?, val rateViewItems: List<RateViewItem>)
-class RateViewItem(val coin: Coin, var rateExpired: Boolean?, var rate: CurrencyValue?, var diff: BigDecimal?)
+class ViewItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var rateDimmed: Boolean)

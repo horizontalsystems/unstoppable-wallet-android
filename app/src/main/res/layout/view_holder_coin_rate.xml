@@ -11,71 +11,74 @@
         android:id="@+id/coinIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/coin_ada" />
 
     <TextView
-        android:id="@+id/txCoinCode"
+        android:id="@+id/titleText"
         style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="7dp"
-        android:textAllCaps="true"
         android:textColor="?ColorOz"
-        app:layout_constraintBottom_toTopOf="@+id/txCoinName"
+        app:layout_constraintBottom_toTopOf="@+id/subtitleText"
         app:layout_constraintStart_toEndOf="@+id/coinIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="BTC" />
 
     <TextView
-        android:id="@+id/txCoinName"
+        android:id="@+id/subtitleText"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="7dp"
+        android:textAllCaps="true"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txCoinCode"
-        app:layout_constraintTop_toBottomOf="@+id/txCoinCode"
+        app:layout_constraintStart_toStartOf="@+id/titleText"
+        app:layout_constraintTop_toBottomOf="@+id/titleText"
         tools:text="Bitcoin" />
-
-    <TextView
-        android:id="@+id/txValueInFiat"
-        style="@style/Headline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:textColor="?ColorLeah"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txCoinCode"
-        tools:text="$400" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
         android:id="@+id/txDiff"
+        style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/txCoinName"
-        app:layout_constraintEnd_toEndOf="@+id/txValueInFiat"
+        android:layout_marginEnd="16dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/titleText"
         app:negativeColor="?ColorLucian"
         app:positiveColor="?ColorRemus"
         tools:text="+ 0.87%" />
-
+¬
     <TextView
         android:id="@+id/txDiffNa"
-        style="@style/Subhead1"
+        style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="----"
         android:textColor="@color/grey_50"
+        android:layout_marginEnd="16dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/txCoinName"
-        app:layout_constraintEnd_toEndOf="@+id/txValueInFiat" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/titleText" />
+
+    <TextView
+        android:id="@+id/txValueInFiat"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/stateful_expirable_rate_text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/subtitleText"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="$400" />
 
     <View
         android:id="@+id/divider"
@@ -90,6 +93,6 @@
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

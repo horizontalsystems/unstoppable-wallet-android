@@ -7,10 +7,7 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CryptoNews
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -99,6 +96,10 @@ class RateManager(
 
     override fun getCryptoNews(coinCode: String): Single<List<CryptoNews>> {
         return kit.cryptoNews(coinCode)
+    }
+
+    override fun getTopList(currency: String): Single<List<PriceInfo>> {
+        return kit.getTopList(currency)
     }
 
     override fun refresh() {

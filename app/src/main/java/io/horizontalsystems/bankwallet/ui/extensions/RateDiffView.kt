@@ -3,14 +3,13 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.views.helpers.LayoutHelper
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class RateDiffView : TextView {
+class RateDiffView : androidx.appcompat.widget.AppCompatTextView {
 
     var diff: BigDecimal? = null
         set(value) {
