@@ -49,7 +49,9 @@ class RatesInteractor(
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     delegate?.didFetchedTopList(it)
-                }, { /*throwable*/ } )
+                }, {
+                    delegate?.didFailToFetchTopList()
+                } )
                 .let { disposables.add(it) }
     }
 
