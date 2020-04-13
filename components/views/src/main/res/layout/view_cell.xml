@@ -71,12 +71,14 @@
         android:id="@+id/cellLabel"
         style="@style/Body"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingStart="0dp"
         android:paddingEnd="16dp"
         android:textColor="@color/grey"
         app:layout_constraintEnd_toStartOf="@id/lightModeIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Label" />
 
     <ImageView
@@ -93,41 +95,49 @@
         android:id="@+id/dropdownValue"
         style="@style/Subhead1"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginEnd="16dp"
         android:textColor="?TextColorBarsToDark"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/dropDownIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Label" />
 
     <ImageView
         android:id="@+id/dropDownIcon"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:tint="@color/grey"
         app:layout_constraintEnd_toStartOf="@+id/arrowIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_down" />
 
     <ImageView
         android:id="@+id/badgeImage"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_attention"
         android:tint="?ColorLucian"
         android:layout_marginEnd="16dp"
         android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/arrowIcon" />
 
     <ImageView
         android:id="@+id/arrowIcon"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:tint="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_arrow_right" />
 
     <ImageView
@@ -143,13 +153,15 @@
     <Switch
         android:id="@+id/switchView"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:checked="true"
         android:saveEnabled="false"
         android:theme="@style/SwitchTheme"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <View
         android:id="@+id/bottomShade"
