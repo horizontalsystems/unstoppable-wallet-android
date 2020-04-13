@@ -65,7 +65,7 @@ dependencies {
     implementation project(':core')
     implementation project(':components:views')
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
