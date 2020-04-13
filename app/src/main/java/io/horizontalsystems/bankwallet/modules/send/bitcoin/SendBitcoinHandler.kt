@@ -93,9 +93,9 @@ class SendBitcoinHandler(
             mutableListOf<SendModule.Input>().apply {
                 add(SendModule.Input.Amount)
                 add(SendModule.Input.Address())
+                add(SendModule.Input.Fee(true))
                 if (coinType is CoinType.Bitcoin && interactor.isLockTimeEnabled)
                     add(SendModule.Input.Hodler)
-                add(SendModule.Input.Fee(true))
                 add(SendModule.Input.ProceedButton)
             }
 
