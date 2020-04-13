@@ -4,6 +4,7 @@ import android.app.ActivityOptions
 import android.os.Bundle
 import android.transition.Fade
 import android.view.Window
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
@@ -49,13 +50,16 @@ class IntroActivity : BaseActivity() {
             override fun onPageScrollStateChanged(state: Int) = Unit
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                root.progress = (position + positionOffset) / (pagesCount - 1)
+                motionLayout.progress = (position + positionOffset) / (pagesCount - 1)
             }
 
             override fun onPageSelected(position: Int) {
                 imageSwitcher.setImageResource(images[position])
             }
         })
+
+        imageSwitcher.setFactory { ImageView(applicationContext) }
+        imageSwitcher.setImageResource(R.drawable.ic_independence)
 
         circleIndicator.setViewPager(viewPager)
 
