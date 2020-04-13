@@ -6,7 +6,7 @@ import android.os.Bundle
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
-import io.horizontalsystems.bankwallet.modules.ratelist.RatesFragment
+import io.horizontalsystems.bankwallet.modules.ratelist.RatesListFragment
 import io.horizontalsystems.pin.PinFragment
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
@@ -23,7 +23,7 @@ class LockScreenActivity : BaseActivity() {
             arguments = intent.extras
         }
 
-        val fragments = listOf(pinFragment, RatesFragment())
+        val fragments = listOf(pinFragment, RatesListFragment())
 
         viewPager.adapter = LockScreenViewPagerAdapter(fragments, supportFragmentManager)
 

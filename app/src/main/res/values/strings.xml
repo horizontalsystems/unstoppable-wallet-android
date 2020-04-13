@@ -503,5 +503,7 @@
     <!--Rate list-->
 
     <string name="RateList_updated">updated\n%s</string>
+    <string name="RateList_portfolio">Portfolio</string>
+    <string name="RateList_top100">Top 100</string>
 
 </resources>
