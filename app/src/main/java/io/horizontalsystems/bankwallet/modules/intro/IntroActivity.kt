@@ -3,7 +3,13 @@ package io.horizontalsystems.bankwallet.modules.intro
 import android.app.ActivityOptions
 import android.os.Bundle
 import android.transition.Fade
+import android.view.View
 import android.view.Window
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -47,14 +53,21 @@ class IntroActivity : BaseActivity() {
 
         val images = arrayOf(R.drawable.ic_independence, R.drawable.ic_knowledge, R.drawable.ic_privacy)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            private var skipButtonVisible = true
+
             override fun onPageScrollStateChanged(state: Int) = Unit
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                motionLayout.progress = (position + positionOffset) / (pagesCount - 1)
-            }
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
                 imageSwitcher.setImageResource(images[position])
+                if (position == pagesCount - 1) {
+                    skipButtonVisible = false
+                    fadeOutAnimation(btnSkip)
+                } else if (!skipButtonVisible) {
+                    skipButtonVisible = true
+                    fadeInAnimation(btnSkip)
+                }
             }
         })
 
@@ -80,6 +93,38 @@ class IntroActivity : BaseActivity() {
                 WelcomeModule.start(this, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
             })
         }
+    }
+
+    private fun fadeOutAnimation(view: View) {
+        val fadeOut: Animation = AlphaAnimation(1.0f, 0.0f)
+        fadeOut.interpolator = AccelerateInterpolator()
+        fadeOut.duration = 300
+
+        fadeOut.setAnimationListener(object : AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                view.visibility = View.INVISIBLE
+            }
+            override fun onAnimationRepeat(animation: Animation?) {}
+        })
+
+        view.startAnimation(fadeOut)
+    }
+
+    private fun fadeInAnimation(view: View) {
+        val fadeIn: Animation = AlphaAnimation(0.0f, 1.0f)
+        fadeIn.interpolator = DecelerateInterpolator()
+        fadeIn.duration = 300
+
+        fadeIn.setAnimationListener(object : AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                view.visibility = View.VISIBLE
+            }
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+
+        view.startAnimation(fadeIn)
     }
 
     override fun onBackPressed() {
