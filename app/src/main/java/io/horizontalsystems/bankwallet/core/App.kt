@@ -122,7 +122,12 @@ class App : CoreApp() {
             themeStorage = this
         }
 
-        torKitManager = TorManager(instance, localStorage)
+        val communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
+        derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
+        val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
+        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
+
+        torKitManager = TorManager(instance, localStorage, blockchainSettingsManager)
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()
@@ -152,11 +157,6 @@ class App : CoreApp() {
         numberFormatter = NumberFormatter(languageManager)
 
         connectivityManager = ConnectivityManager()
-
-        derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
-        val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
-        val communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
-        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
 
         val adapterFactory = AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)

@@ -8,7 +8,7 @@ enum class CommunicationMode(val value: String) : Parcelable {
     Infura("Infura"),
     Incubed("Incubed"),
     Greymass("GreyMass"),
-    BinanceDex("BinaceDex");
+    BinanceDex("BinanceDex");
 
     val title: String
         get() = when (this) {
