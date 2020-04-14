@@ -24,12 +24,9 @@ class BitcoinHodlingActivity : BaseActivity() {
         view = presenter.view as BitcoinHodlingView
 
         view.lockTimeEnabledLiveEvent.observe(this, Observer { enabled ->
-            switchLockTime.apply {
-                switchIsChecked = enabled
-                switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    presenter.onSwitchLockTime(isChecked)
-                }
-            }
+            switchLockTime.showSwitch(enabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                presenter.onSwitchLockTime(isChecked)
+            })
         })
 
         switchLockTime.setOnClickListener {

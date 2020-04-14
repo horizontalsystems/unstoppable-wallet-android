@@ -50,13 +50,6 @@ class CellView : ConstraintLayout {
             layoutParams?.height = LayoutHelper.dp(if (value == null) singleLineHeight else doubleLineHeight, context)
         }
 
-    var rightTitle: String? = null
-        set(value) {
-            field = value
-            cellLabel.text = value
-            cellLabel.showIf(value != null)
-        }
-
     var dropDownText: String? = null
         set(value) {
             field = value
@@ -80,12 +73,6 @@ class CellView : ConstraintLayout {
         set(value) {
             field = value
             enableIcon(if (value) dropDownIcon else null)
-        }
-
-    var badge: Boolean = false
-        set(value) {
-            field = value
-            badgeImage.showIf(value)
         }
 
     var rightArrow: Boolean = false
@@ -140,7 +127,6 @@ class CellView : ConstraintLayout {
         try {
             title = ta.getString(R.styleable.CellView_title)
             subtitle = ta.getString(R.styleable.CellView_subtitle)
-            rightTitle = ta.getString(R.styleable.CellView_rightTitle)
             imageDrawable = ta.getDrawable(R.styleable.CellView_imageDrawable)
             imageTint = ta.getColorStateList(R.styleable.CellView_imageTint)
             rightArrow = ta.getBoolean(R.styleable.CellView_rightArrow, false)
