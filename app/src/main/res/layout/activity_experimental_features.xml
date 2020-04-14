@@ -27,7 +27,7 @@
                 android:text="@string/ExperimentalFeatures_Description"
                 android:textColor="@color/grey" />
 
-            <io.horizontalsystems.views.CellView
+            <io.horizontalsystems.views.SettingsView
                 android:id="@+id/bitcoinHodling"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:rightArrow="true"
+                app:iconRight="@drawable/ic_arrow_right"
                 app:title="@string/ExperimentalFeatures_BitcoinHodling" />
 
         </LinearLayout>

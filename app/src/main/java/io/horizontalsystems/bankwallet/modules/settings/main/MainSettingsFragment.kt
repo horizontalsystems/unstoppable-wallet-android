@@ -87,31 +87,21 @@ class MainSettingsFragment : Fragment() {
 
     private fun subscribeToViewEvents(presenterView: MainSettingsView, presenter: MainSettingsPresenter) {
         presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
-            currency?.let {
-                baseCurrency.rightTitle = it
-            }
+            baseCurrency.showRightLabel(currency)
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            manageKeys.badge = !wordListBackedUp
+            manageKeys.showAttention(!wordListBackedUp)
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
-            languageCode?.let {
-                language.rightTitle = it
-            }
+            language.showRightLabel(languageCode)
         })
 
-        presenterView.lightMode.observe(viewLifecycleOwner, Observer { lightModeValue ->
-            lightModeValue?.let {
-                lightMode.apply {
-                    switchIsChecked = it
-
-                    switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                        presenter.didSwitchLightMode(isChecked)
-                    }
-                }
-            }
+        presenterView.lightMode.observe(viewLifecycleOwner, Observer {
+            lightMode.showSwitch(it, CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                presenter.didSwitchLightMode(isChecked)
+            })
         })
 
         presenterView.appVersion.observe(viewLifecycleOwner, Observer { version ->

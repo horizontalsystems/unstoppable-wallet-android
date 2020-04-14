@@ -27,45 +27,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.views.CellView
+            <io.horizontalsystems.views.SettingsView
                 android:id="@+id/privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:bottomBorder="true"
-                app:rightArrow="true"
-                app:imageDrawable="@drawable/ic_settings_privacy"
+                app:icon="@drawable/ic_settings_privacy"
+                app:iconRight="@drawable/ic_arrow_right"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="@string/SettingsSecurity_Privacy" />
 
-            <io.horizontalsystems.views.CellView
+            <io.horizontalsystems.views.SettingsView
                 android:id="@+id/enablePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                app:imageDrawable="@drawable/ic_passcode"
+                app:icon="@drawable/ic_passcode"
                 app:layout_constraintTop_toBottomOf="@+id/privacy"
                 app:title="@string/SettingsSecurity_EnablePin" />
 
-            <io.horizontalsystems.views.CellView
+            <io.horizontalsystems.views.SettingsView
                 android:id="@+id/changePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:bottomBorder="true"
+                app:iconRight="@drawable/ic_arrow_right"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/enablePin"
-                app:rightArrow="true"
                 app:title="@string/SettingsSecurity_EditPin" />
 
-            <io.horizontalsystems.views.CellView
+            <io.horizontalsystems.views.SettingsView
                 android:id="@+id/fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:bottomBorder="true"
-                app:imageDrawable="@drawable/ic_fingerprint"
+                app:icon="@drawable/ic_fingerprint"
                 app:layout_constraintTop_toBottomOf="@+id/changePin"
                 app:title="@string/SettingsSecurity_Fingerprint" />
 

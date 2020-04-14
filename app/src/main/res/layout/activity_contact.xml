@@ -35,19 +35,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mail"
-        app:rightArrow="true"
         app:title="@string/SettingsContact_Telegram" />
 
-    <io.horizontalsystems.views.CellView
+    <io.horizontalsystems.views.SettingsView
         android:id="@+id/appStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         app:bottomBorder="true"
+        app:iconRight="@drawable/ic_arrow_right"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/walletHelpTelegramGroup"
-        app:rightArrow="true"
         app:title="@string/SettingsContact_AppStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

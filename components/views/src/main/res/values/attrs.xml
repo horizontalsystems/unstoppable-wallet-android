@@ -3,11 +3,17 @@
     <declare-styleable name="CellView">
         <attr name="title" />
         <attr name="subtitle" />
-        <attr name="rightTitle" format="string" />
         <attr name="bottomBorder" format="boolean" />
         <attr name="rightArrow" format="boolean" />
         <attr name="imageDrawable" format="integer" />
         <attr name="imageTint" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="SettingsView">
+        <attr name="title" />
+        <attr name="value" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="iconRight" format="reference" />
+        <attr name="bottomBorder" />
     </declare-styleable>
     <declare-styleable name="MultipleInputEditTextView">
         <attr name="inputFromQRCode" format="boolean" />

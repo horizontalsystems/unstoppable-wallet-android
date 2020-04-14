@@ -45,11 +45,8 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
             viewModel.delegate.didSwitchTorEnabled(isChecked)
         }
 
-        transactionsOrderSetting.apply {
-            dropDownArrow = true
-            setOnClickListener {
-                viewModel.delegate.onTransactionOrderSettingTap()
-            }
+        transactionsOrderSetting.setOnClickListener {
+            viewModel.delegate.onTransactionOrderSettingTap()
         }
 
         // IView
@@ -89,7 +86,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         })
 
         viewModel.transactionOrderingLiveData.observe(this, Observer { ordering ->
-            transactionsOrderSetting.dropDownText = getSortingLocalized(ordering)
+            transactionsOrderSetting.showRightLabel(getSortingLocalized(ordering))
         })
 
         viewModel.showAppRestartAlertForTor.observe(this, Observer { checked ->

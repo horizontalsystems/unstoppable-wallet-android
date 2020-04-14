@@ -86,13 +86,9 @@ class NotificationsActivity : BaseActivity() {
         })
 
         view.notificationIsOn.observe(this, Observer { enabled ->
-            switchNotification.apply {
-                switchIsChecked = enabled
-
-                switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    presenter.didSwitchAlertNotification(isChecked)
-                }
-            }
+            switchNotification.showSwitch(enabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                presenter.didSwitchAlertNotification(isChecked)
+            })
 
             notifications.alpha = if (enabled) 1f else 0.5f
             deactivateAll.alpha = if (enabled) 1f else 0.5f

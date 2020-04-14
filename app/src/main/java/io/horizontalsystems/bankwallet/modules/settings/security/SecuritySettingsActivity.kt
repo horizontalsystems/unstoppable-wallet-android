@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.TopMenuItem
+import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity() {
@@ -32,16 +32,8 @@ class SecuritySettingsActivity : BaseActivity() {
             viewModel.delegate.didTapPrivacy()
         }
 
-        fingerprint.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            viewModel.delegate.didSwitchBiometricEnabled(isChecked)
-        }
-
         fingerprint.setOnClickListener {
             fingerprint.switchToggle()
-        }
-
-        enablePin.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            viewModel.delegate.didSwitchPinSet(isChecked)
         }
 
         enablePin.setOnClickListener {
@@ -51,20 +43,24 @@ class SecuritySettingsActivity : BaseActivity() {
         //  Handling view model live events
 
         viewModel.pinSetLiveData.observe(this, Observer { pinEnabled ->
-            enablePin.switchIsChecked = pinEnabled
+            enablePin.showSwitch(pinEnabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                viewModel.delegate.didSwitchPinSet(isChecked)
+            })
         })
 
         viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->
-            changePin.visibility = if (pinEnabled) View.VISIBLE else View.GONE
-            enablePin.bottomBorder = !pinEnabled
+            changePin.showIf(pinEnabled)
+            enablePin.showBottomBorder(!pinEnabled)
         })
 
         viewModel.biometricSettingsVisibleLiveData.observe(this, Observer { enabled ->
-            fingerprint.visibility = if (enabled) View.VISIBLE else View.GONE
+            fingerprint.showIf(enabled)
         })
 
         viewModel.biometricEnabledLiveData.observe(this, Observer {
-            fingerprint.switchIsChecked = it
+            fingerprint.showSwitch(it, CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                viewModel.delegate.didSwitchBiometricEnabled(isChecked)
+            })
         })
 
         //router
