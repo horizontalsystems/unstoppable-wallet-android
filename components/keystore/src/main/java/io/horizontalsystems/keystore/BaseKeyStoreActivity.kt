@@ -1,11 +1,10 @@
 package io.horizontalsystems.keystore
 
-import android.app.Activity
-import android.app.KeyguardManager
-import android.content.Context
-import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricConstants
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_keystore.*
@@ -15,21 +14,6 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
     abstract var viewModel: KeyStoreViewModel
 
     abstract fun openMainModule()
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE_AUTHENTICATION) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    viewModel.delegate.onAuthenticationSuccess()
-                }
-                Activity.RESULT_CANCELED -> {
-                    viewModel.delegate.onAuthenticationCanceled()
-                }
-            }
-        }
-    }
 
     fun observeEvents() {
         viewModel.showNoSystemLockWarning.observe(this, Observer {
@@ -52,13 +36,7 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
         })
 
         viewModel.promptUserAuthentication.observe(this, Observer {
-            val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val intent: Intent? = keyguardManager.createConfirmDeviceCredentialIntent(
-                    getString(R.string.OSPin_Confirm_Title),
-                    getString(R.string.OSPin_Prompt_Desciption)
-            )
-
-            startActivityForResult(intent, REQUEST_CODE_AUTHENTICATION)
+            showBiometricPrompt()
         })
 
         viewModel.openLaunchModule.observe(this, Observer {
@@ -70,8 +48,33 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
         })
     }
 
-    companion object {
-        const val REQUEST_CODE_AUTHENTICATION = 1
+    private fun showBiometricPrompt() {
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle(getString(R.string.OSPin_Confirm_Title))
+                .setDescription(getString(R.string.OSPin_Prompt_Desciption))
+                .setDeviceCredentialAllowed(true)
+                .build()
+
+        val executor = ContextCompat.getMainExecutor(this)
+
+        val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                viewModel.delegate.onAuthenticationSuccess()
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+
+                if (errorCode == BiometricConstants.ERROR_USER_CANCELED
+                        || errorCode == BiometricConstants.ERROR_NEGATIVE_BUTTON
+                        || errorCode == BiometricConstants.ERROR_CANCELED) {
+                    viewModel.delegate.onAuthenticationCanceled()
+                }
+            }
+        })
+
+        biometricPrompt.authenticate(promptInfo)
     }
 
 }

@@ -58,6 +58,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
+    implementation "androidx.biometric:biometric:1.0.1"
+
     implementation project(':core')
     implementation project(':components:views')
 
