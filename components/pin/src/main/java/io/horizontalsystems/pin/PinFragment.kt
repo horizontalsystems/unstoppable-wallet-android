@@ -95,13 +95,6 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
                 viewDelegate = setPresenter
 
                 setRouter.dismissWithSuccess.observe(viewLifecycleOwner, Observer { dismissWithSuccess() })
-
-                setRouter.navigateToMain.observe(viewLifecycleOwner, Observer {
-                    context?.let { ctx ->
-                        // MainModule.start(ctx)
-                    }
-                    activity?.finish()
-                })
             }
         }
 

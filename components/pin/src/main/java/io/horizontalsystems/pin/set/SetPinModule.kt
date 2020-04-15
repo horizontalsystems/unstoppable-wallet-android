@@ -9,7 +9,6 @@ import io.horizontalsystems.pin.PinView
 object SetPinModule {
 
     interface IRouter {
-        fun navigateToMain()
         fun dismissModuleWithSuccess()
     }
 
