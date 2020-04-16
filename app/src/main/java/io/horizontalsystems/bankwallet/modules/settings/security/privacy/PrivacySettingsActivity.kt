@@ -97,6 +97,10 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
             showNotificationsNotEnabledAlert()
         })
 
+        viewModel.showTorPrerequisitesAlert.observe(this, Observer {
+            showTorPrerequisitesAlert()
+        })
+
         viewModel.communicationSettingsViewItems.observe(this, Observer {
             communicationSettingsAdapter.items = it
             communicationSettingsAdapter.notifyDataSetChanged()
@@ -218,6 +222,21 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                     }
                 }).show(supportFragmentManager, "alert_dialog_notification")
     }
+
+    private fun showTorPrerequisitesAlert() {
+        AlertDialogFragment.newInstance(
+                descriptionString = getString(R.string.Tor_PrerequisitesAlert_Content),
+                buttonText = R.string.Button_Ok,
+                cancelable = true,
+                listener = object : AlertDialogFragment.Listener {
+                    override fun onButtonClick() {
+                    }
+
+                    override fun onCancel() {
+                    }
+                }).show(supportFragmentManager, "alert_dialog")
+    }
+
 
     private fun openAppNotificationSettings() {
         val intent = Intent()

@@ -11,6 +11,7 @@ object PrivacySettingsModule {
     interface IPrivacySettingsView {
 
         fun showNotificationsNotEnabledAlert()
+        fun showTorPrerequisitesAlert()
         fun showRestartAlert(checked: Boolean)
         fun toggleTorEnabled(torEnabled: Boolean)
         fun setCommunicationSettingsViewItems(items: List<PrivacySettingsViewItem>)
