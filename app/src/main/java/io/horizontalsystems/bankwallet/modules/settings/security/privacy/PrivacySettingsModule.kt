@@ -46,6 +46,7 @@ object PrivacySettingsModule {
         fun disableTor()
         fun subscribeToTorStatus()
 
+        fun isTorPrerequisitesRequired(): Boolean
         fun communicationSetting(coinType: CoinType): CommunicationSetting?
         fun saveCommunicationSetting(communicationSetting: CommunicationSetting)
         fun syncModeSetting(coinType: CoinType): SyncModeSetting?
