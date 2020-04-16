@@ -16,6 +16,7 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
     val transactionOrderingLiveData = MutableLiveData<TransactionDataSortingType>()
     val showAppRestartAlertForTor = SingleLiveEvent<Boolean>()
     val showNotificationsNotEnabledAlert = SingleLiveEvent<Unit>()
+    val showTorPrerequisitesAlert = SingleLiveEvent<Unit>()
     val communicationSettingsViewItems = SingleLiveEvent<List<PrivacySettingsViewItem>>()
     val restoreWalletSettingsViewItems = SingleLiveEvent<List<PrivacySettingsViewItem>>()
     val showSyncModeSelectorDialog = SingleLiveEvent<Pair<List<SyncMode>, SyncMode>>()
@@ -36,6 +37,10 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
 
     override fun showNotificationsNotEnabledAlert() {
         showNotificationsNotEnabledAlert.call()
+    }
+
+    override fun showTorPrerequisitesAlert() {
+        showTorPrerequisitesAlert.call()
     }
 
     override fun toggleTorEnabled(torEnabled: Boolean) {

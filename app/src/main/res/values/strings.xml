@@ -447,6 +447,8 @@
     <string name="TorPage_Failed">Failed</string>
     <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="TorPage_Title">TOR Network</string>
+    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
+
 
     <!-- Account Types -->
 
