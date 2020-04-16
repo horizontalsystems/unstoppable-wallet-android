@@ -23,6 +23,14 @@
         android:background="#99000000"
         />
 
+    <View
+        android:id="@+id/screenSecureDim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="?ColorGwen"
+        />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/transactionInfoNestedScrollView"
         android:layout_width="match_parent"

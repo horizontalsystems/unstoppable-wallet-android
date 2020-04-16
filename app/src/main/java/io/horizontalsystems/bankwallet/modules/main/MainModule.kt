@@ -9,11 +9,13 @@ object MainModule {
 
     interface IView {
         fun showRateApp()
+        fun hideContent(hide: Boolean)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun onClear()
+        fun onResume()
     }
 
     interface IInteractor {
@@ -29,7 +31,7 @@ object MainModule {
 
     fun init(view: MainViewModel, router: IRouter) {
         val interactor = MainInteractor(App.accountManager, App.walletManager, App.adapterManager, App.rateAppManager)
-        val presenter = MainPresenter(interactor, router)
+        val presenter = MainPresenter(App.pinComponent, interactor, router)
 
         view.delegate = presenter
         presenter.view = view
