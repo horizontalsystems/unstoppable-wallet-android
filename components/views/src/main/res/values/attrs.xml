@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CellView">
-        <attr name="title" />
-        <attr name="subtitle" />
-        <attr name="bottomBorder" format="boolean" />
-        <attr name="rightArrow" format="boolean" />
-        <attr name="imageDrawable" format="integer" />
-        <attr name="imageTint" format="integer" />
-    </declare-styleable>
     <declare-styleable name="SettingsView">
         <attr name="icon" format="reference" />
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="value" format="string" />
-        <attr name="bottomBorder" />
+        <attr name="bottomBorder" format="boolean" />
     </declare-styleable>
     <declare-styleable name="SettingsViewDropdown">
         <attr name="icon" />

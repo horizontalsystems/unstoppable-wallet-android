@@ -77,7 +77,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textDescription"
                 tools:itemCount="1"
-                tools:listitem="@layout/view_cell" />
+                tools:listitem="@layout/view_settings_dropdown" />
 
             <io.horizontalsystems.views.SettingsView
                 android:id="@+id/deactivateAll"
