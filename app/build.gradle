@@ -173,7 +173,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:df6a85e'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:a9c8931'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:d9995e6'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:4159cc1'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
