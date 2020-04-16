@@ -87,7 +87,6 @@
         android:gravity="center"
         android:layout_marginEnd="16dp"
         android:textColor="?TextColorBarsToDark"
-        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/dropDownIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

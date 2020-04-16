@@ -34,12 +34,11 @@
                 android:layout_marginTop="12dp"
                 app:bottomBorder="true"
                 app:icon="@drawable/ic_settings_privacy"
-                app:iconRight="@drawable/ic_arrow_right"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="@string/SettingsSecurity_Privacy" />
 
-            <io.horizontalsystems.views.SettingsView
+            <io.horizontalsystems.views.SettingsViewSwitch
                 android:id="@+id/enablePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,13 +52,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:bottomBorder="true"
-                app:iconRight="@drawable/ic_arrow_right"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/enablePin"
                 app:title="@string/SettingsSecurity_EditPin" />
 
-            <io.horizontalsystems.views.SettingsView
+            <io.horizontalsystems.views.SettingsViewSwitch
                 android:id="@+id/fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

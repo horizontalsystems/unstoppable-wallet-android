@@ -27,11 +27,11 @@ class ContactActivity : BaseActivity() {
         val router = presenter.router as ContactRouter
 
         presenterView.emailLiveData.observe(this, Observer {
-            mail.subtitle = it
+            mail.showSubtitle(it)
         })
 
         presenterView.walletHelpTelegramGroupLiveData.observe(this, Observer {
-            walletHelpTelegramGroup.subtitle = it
+            walletHelpTelegramGroup.showSubtitle(it)
         })
 
         presenterView.showCopiedLiveEvent.observe(this, Observer {

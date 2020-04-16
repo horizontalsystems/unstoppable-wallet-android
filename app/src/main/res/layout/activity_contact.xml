@@ -14,24 +14,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <io.horizontalsystems.views.CellView
+    <io.horizontalsystems.views.SettingsView
         android:id="@+id/mail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:imageDrawable="@drawable/ic_email"
+        app:icon="@drawable/ic_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
-        app:rightArrow="true"
         app:title="@string/SettingsContact_Email" />
 
-    <io.horizontalsystems.views.CellView
+    <io.horizontalsystems.views.SettingsView
         android:id="@+id/walletHelpTelegramGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:bottomBorder="true"
-        app:imageDrawable="@drawable/ic_telegram"
+        app:icon="@drawable/ic_telegram"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mail"
@@ -43,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         app:bottomBorder="true"
-        app:iconRight="@drawable/ic_arrow_right"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/walletHelpTelegramGroup"

@@ -9,10 +9,23 @@
         <attr name="imageTint" format="integer" />
     </declare-styleable>
     <declare-styleable name="SettingsView">
-        <attr name="title" />
-        <attr name="value" format="string" />
         <attr name="icon" format="reference" />
-        <attr name="iconRight" format="reference" />
+        <attr name="title" />
+        <attr name="subtitle" />
+        <attr name="value" format="string" />
+        <attr name="bottomBorder" />
+    </declare-styleable>
+    <declare-styleable name="SettingsViewDropdown">
+        <attr name="icon" />
+        <attr name="title" />
+        <attr name="subtitle" />
+        <attr name="value" />
+        <attr name="bottomBorder" />
+    </declare-styleable>
+    <declare-styleable name="SettingsViewSwitch">
+        <attr name="icon" />
+        <attr name="title" />
+        <attr name="subtitle" />
         <attr name="bottomBorder" />
     </declare-styleable>
     <declare-styleable name="MultipleInputEditTextView">
