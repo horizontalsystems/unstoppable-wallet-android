@@ -204,7 +204,7 @@ dependencies {
     // optional - Test helpers for LiveData
     testImplementation 'junit:junit:4.13'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation 'org.mockito:mockito-core'
+    testImplementation "org.mockito:mockito-core:2.28.2"
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.7'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.7'
