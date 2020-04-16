@@ -23,7 +23,7 @@ class WalletStorage(
 
     override fun wallet(account: Account, coin: Coin): Wallet? {
         val enabledWallets = storage.enabledWallets
-        enabledWallets.firstOrNull { it.coinId == coin.coinId && it.accountId == account.id }?.let { enabledWallet ->
+        enabledWallets.firstOrNull { it.coinId == coin.coinId && it.accountId == account.id }?.let { _ ->
             return Wallet(coin, account)
         }
         return null

@@ -80,8 +80,8 @@ class HorsysBTCResponse(
         @SerializedName("confirmations") override val confirmations: String) : BitcoinResponse() {
 
     override val date get() = Date(time * 1000)
-    override val inputs get() = vin as ArrayList<Input>
-    override val outputs get() = vout as ArrayList<Output>
+    override val inputs get() = vin
+    override val outputs get() = vout
     override val feePerByte get() = rate.toDouble() / 1000
     override val fee: Double get() = fees / btcRate
     override val size: Int? get() = ((fee / feePerByte) * btcRate).toInt()
@@ -110,8 +110,8 @@ class HorsysLitecoinResponse(
         @SerializedName("confirmations") override val confirmations: String) : BitcoinResponse() {
 
     override val date get() = Date(time * 1000)
-    override val inputs get() = vin.filter { it.coin != null } as ArrayList<Input>
-    override val outputs get() = vout as ArrayList<Output>
+    override val inputs get() = vin.filter { it.coin != null }
+    override val outputs get() = vout
     override val feePerByte: Double?
         get() = rateString.toDoubleOrNull()?.let {
             it * btcRate / 1000

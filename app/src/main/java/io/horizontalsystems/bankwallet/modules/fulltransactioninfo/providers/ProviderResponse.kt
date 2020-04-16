@@ -14,8 +14,8 @@ abstract class BitcoinResponse : FullTransactionResponse {
     abstract val size: Int?
     abstract val feePerByte: Double?
     abstract val confirmations: String?
-    abstract val inputs: ArrayList<Input>
-    abstract val outputs: ArrayList<Output>
+    abstract val inputs: List<Input>
+    abstract val outputs: List<Output>
 
     abstract class Input {
         abstract val value: Double

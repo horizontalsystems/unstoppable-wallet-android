@@ -61,6 +61,7 @@ class TransactionsInteractor(
                 .let { disposables.add(it) }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>, initial: Boolean) {
         if (fetchDataList.isEmpty()) {
             delegate?.didFetchRecords(mapOf(), initial)

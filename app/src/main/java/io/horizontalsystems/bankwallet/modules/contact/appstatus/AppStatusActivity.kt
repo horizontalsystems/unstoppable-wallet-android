@@ -55,6 +55,7 @@ class AppStatusActivity : BaseActivity() {
         })
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun formatMapToString(status: Map<String, Any>?, indentation: String = "", bullet: String = "", level: Int = 0): String? {
         if (status == null)
             return null

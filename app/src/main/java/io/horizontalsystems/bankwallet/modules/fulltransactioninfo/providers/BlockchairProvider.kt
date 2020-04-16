@@ -139,8 +139,8 @@ class BlockchairBTCResponse(@SerializedName("data") val data: Map<String, Data>)
         override val size get() = transaction.size
         override val feePerByte: Double? get() = null
         override val confirmations: String? = null
-        override val inputs get() = vin as ArrayList<Input>
-        override val outputs get() = vout as ArrayList<Output>
+        override val inputs get() = vin
+        override val outputs get() = vout
         override val date: Date?
             get() {
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())

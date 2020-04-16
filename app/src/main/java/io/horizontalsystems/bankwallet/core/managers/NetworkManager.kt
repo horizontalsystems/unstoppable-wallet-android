@@ -116,7 +116,7 @@ object APIClient {
             sslContext.init(null, trustAllCerts, SecureRandom())
             val sslSocketFactory = sslContext.socketFactory
             builder.sslSocketFactory(sslSocketFactory, (trustAllCerts[0] as X509TrustManager))
-            builder.hostnameVerifier(HostnameVerifier { hostname, session -> true })
+            builder.hostnameVerifier(HostnameVerifier { _, _ -> true })
             builder.connectTimeout(5000, TimeUnit.MILLISECONDS)
             builder.readTimeout(60000, TimeUnit.MILLISECONDS)
 

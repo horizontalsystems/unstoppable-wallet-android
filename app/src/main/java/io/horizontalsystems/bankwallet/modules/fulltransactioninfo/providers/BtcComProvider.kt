@@ -60,8 +60,8 @@ class BtcComResponse(
     override val fee get() = fees.toDouble() / btcRate
     override val feePerByte: Double? get() = null
     override val date get() = Date(time * 1000)
-    override val inputs get() = vin as ArrayList<Input>
-    override val outputs get() = vout as ArrayList<Output>
+    override val inputs get() = vin
+    override val outputs get() = vout
 
     class Vin(@SerializedName("prev_value") val amount: Long, @SerializedName("prev_addresses") val addresses: ArrayList<String>) : Input() {
         override val value: Double get() = amount / btcRate

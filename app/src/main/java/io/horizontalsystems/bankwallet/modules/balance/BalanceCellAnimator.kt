@@ -34,7 +34,7 @@ object BalanceCellAnimator {
         expandedHeightBalanceHidden = expandedHeight - balanceWrapperHeight - lockedBalanceWrapperHeight
 
         val buttonsWrapperHeight = holder.buttonsWrapper.measureHeight()
-        val borderHeight = holder.border.measureHeight() ?: -1
+        val borderHeight = holder.border.measureHeight()
         collapsedHeight = expandedHeight - buttonsWrapperHeight
         collapsedBalanceHiddenHeight = expandedHeight - buttonsWrapperHeight - balanceWrapperHeight - borderHeight
 
