@@ -3,12 +3,8 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.content.Context
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
-import io.horizontalsystems.bankwallet.core.ICommunicationSettingsManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITorManager
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.CommunicationMode
-import io.horizontalsystems.bankwallet.entities.CommunicationSetting
 import io.horizontalsystems.tor.ConnectionStatus
 import io.horizontalsystems.tor.Tor
 import io.horizontalsystems.tor.TorKit
@@ -44,9 +40,6 @@ class TorManager(
     }
 
     override fun start() {
-
-        // Actions taken before tor connection starts
-        doBeforeTorConnected()
 
         disposables.add(kit.torInfoSubject
                 .observeOn(AndroidSchedulers.mainThread())
@@ -86,11 +79,6 @@ class TorManager(
             ConnectionStatus.CLOSED ->TorStatus.Closed
             ConnectionStatus.FAILED ->TorStatus.Failed
         }
-    }
-
-    private fun doBeforeTorConnected(){
-        // Set Ethereum to Infura communication mode (In3 doesnt connect through proxy)
-        blockchainSettingsManager.saveSetting(CommunicationSetting(CoinType.Ethereum,CommunicationMode.Infura))
     }
 }
 
