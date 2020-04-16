@@ -28,7 +28,7 @@ class PrivacySettingsPresenter(
         return when (coin.type) {
             is CoinType.Ethereum -> {
                 interactor.communicationSetting(coin.type)?.communicationMode?.let { communicationMode ->
-                    PrivacySettingsViewItem(coin, Communication(communicationMode), enabled = true)
+                    PrivacySettingsViewItem(coin, Communication(communicationMode), !interactor.isTorEnabled)
                 }
             }
             is CoinType.Eos -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.Greymass), enabled = false)
