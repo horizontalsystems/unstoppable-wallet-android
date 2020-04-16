@@ -10,6 +10,7 @@ import android.view.ViewStub
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
@@ -52,6 +53,10 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
             RateAppDialogFragment.show(this, this)
         })
 
+        viewModel.hideContentLiveData.observe(this, Observer { hide ->
+            screenSecureDim.isVisible = hide
+        })
+
         adapter = MainTabsAdapter(supportFragmentManager)
 
         findViewById<ViewStub>(R.id.viewPagerStub)?.let {
@@ -72,6 +77,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
 
     override fun onResume() {
         super.onResume()
+        viewModel.delegate.onResume()
         collapseBottomSheetsOnActivityRestore()
     }
 

@@ -58,6 +58,7 @@ interface ISecuredStorage {
 interface IPinComponent {
     var isFingerprintEnabled: Boolean
     val isPinSet: Boolean
+    val isLocked: Boolean
 
     fun updateLastExitDateBeforeRestart()
     fun store(pin: String)

@@ -24,6 +24,9 @@ class PinComponent(
     private val pinManager = PinManager(securedStorage)
     private val appLockManager = LockManager(pinManager, application.applicationContext)
 
+    override val isLocked: Boolean
+        get() = appLockManager.isLocked
+
     //IPinComponent
 
     override var isFingerprintEnabled: Boolean
