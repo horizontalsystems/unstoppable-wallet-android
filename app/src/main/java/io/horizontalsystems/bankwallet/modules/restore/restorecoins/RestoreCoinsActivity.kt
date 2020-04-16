@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
-import kotlinx.android.synthetic.main.activity_create_wallet.*
+import kotlinx.android.synthetic.main.activity_restore_coins.*
 
 class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     private lateinit var presenter: RestoreCoinsPresenter
