@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <io.horizontalsystems.views.SettingsView
+            <io.horizontalsystems.views.SettingsViewSwitch
                 android:id="@+id/switchNotification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

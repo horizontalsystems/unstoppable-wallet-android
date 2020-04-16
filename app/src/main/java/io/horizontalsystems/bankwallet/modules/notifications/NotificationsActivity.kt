@@ -12,7 +12,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.views.CellView
+import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.views.SettingsViewDropdown
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_alerts.*
 
@@ -124,12 +125,14 @@ class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationItemViewHolder {
-        val cellView = CellView(parent.context)
-        cellView.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        return NotificationItemViewHolder(cellView, presenter)
+        val settingsView = SettingsViewDropdown(parent.context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        return NotificationItemViewHolder(settingsView, presenter)
     }
 
     override fun getItemCount(): Int {
@@ -141,21 +144,18 @@ class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : 
     }
 }
 
-class NotificationItemViewHolder(override val containerView: CellView, private val presenter: NotificationsPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class NotificationItemViewHolder(override val containerView: SettingsViewDropdown, private val presenter: NotificationsPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(coinViewItem: NotificationsModule.PriceAlertViewItem, lastElement: Boolean, clickable: Boolean) {
-        containerView.coinIcon = coinViewItem.code
-        containerView.title = coinViewItem.title
-        containerView.subtitle = coinViewItem.code
-        containerView.dropDownText = coinViewItem.state.value?.let { "$it%" }
-                ?: itemView.context.getString(R.string.SettingsNotifications_Off)
-        containerView.dropDownArrow = true
-        containerView.bottomBorder = lastElement
+        containerView.showIcon(coinViewItem.code)
+        containerView.showTitle(coinViewItem.title)
+        containerView.showSubtitle(coinViewItem.code)
+        containerView.showDropdownValue(coinViewItem.state.value?.let { "$it%" } ?: itemView.context.getString(R.string.SettingsNotifications_Off))
+        containerView.showBottomBorder(lastElement)
+        containerView.isEnabled = clickable
 
         containerView.setOnClickListener {
             presenter.didTapItem(adapterPosition)
         }
-        containerView.isEnabled = clickable
     }
-
 }

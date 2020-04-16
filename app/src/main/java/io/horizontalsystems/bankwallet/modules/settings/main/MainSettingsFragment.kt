@@ -87,7 +87,7 @@ class MainSettingsFragment : Fragment() {
 
     private fun subscribeToViewEvents(presenterView: MainSettingsView, presenter: MainSettingsPresenter) {
         presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
-            baseCurrency.showRightLabel(currency)
+            baseCurrency.showValue(currency)
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
@@ -95,7 +95,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
-            language.showRightLabel(languageCode)
+            language.showValue(languageCode)
         })
 
         presenterView.lightMode.observe(viewLifecycleOwner, Observer {

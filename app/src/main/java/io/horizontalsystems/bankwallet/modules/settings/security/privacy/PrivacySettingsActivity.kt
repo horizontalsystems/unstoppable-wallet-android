@@ -86,7 +86,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         })
 
         viewModel.transactionOrderingLiveData.observe(this, Observer { ordering ->
-            transactionsOrderSetting.showRightLabel(getSortingLocalized(ordering))
+            transactionsOrderSetting.showDropdownValue(getSortingLocalized(ordering))
         })
 
         viewModel.showAppRestartAlertForTor.observe(this, Observer { checked ->

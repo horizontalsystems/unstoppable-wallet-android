@@ -36,7 +36,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:iconRight="@drawable/ic_arrow_right"
                 app:title="@string/ExperimentalFeatures_BitcoinHodling" />
 
         </LinearLayout>

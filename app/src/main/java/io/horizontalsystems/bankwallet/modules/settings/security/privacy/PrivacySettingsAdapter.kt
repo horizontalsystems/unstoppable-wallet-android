@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule.IPrivacySettingsViewDelegate
-import io.horizontalsystems.views.CellView
+import io.horizontalsystems.views.SettingsViewDropdown
 import kotlinx.android.extensions.LayoutContainer
 
 sealed class PrivacySettingsType {
@@ -27,12 +27,10 @@ data class PrivacySettingsViewItem(
         val coin: Coin,
         val settingType: PrivacySettingsType,
         val enabled: Boolean = true
-
 )
 
-class PrivacySettingsAdapter(
-        private val delegate: IPrivacySettingsViewDelegate
-) : RecyclerView.Adapter<PrivacySettingsItemViewHolder>() {
+class PrivacySettingsAdapter(private val delegate: IPrivacySettingsViewDelegate)
+    : RecyclerView.Adapter<PrivacySettingsItemViewHolder>() {
 
     var items = listOf<PrivacySettingsViewItem>()
 
@@ -45,12 +43,14 @@ class PrivacySettingsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrivacySettingsItemViewHolder {
-        val cellView = CellView(parent.context)
-        cellView.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        return PrivacySettingsItemViewHolder(cellView, delegate)
+        val settingsView = SettingsViewDropdown(parent.context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        return PrivacySettingsItemViewHolder(settingsView, delegate)
     }
 
     override fun getItemCount(): Int {
@@ -62,25 +62,21 @@ class PrivacySettingsAdapter(
     }
 }
 
-
-class PrivacySettingsItemViewHolder(
-        override val containerView: CellView,
-        private val viewDelegate: IPrivacySettingsViewDelegate
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class PrivacySettingsItemViewHolder(override val containerView: SettingsViewDropdown, private val viewDelegate: IPrivacySettingsViewDelegate)
+    : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(viewItem: PrivacySettingsViewItem, lastElement: Boolean) {
-        containerView.coinIcon = viewItem.coin.code
-        containerView.title = viewItem.coin.title
-        containerView.subtitle = null
-        containerView.dropDownText = viewItem.settingType.selectedTitle
-        containerView.dropDownArrow = viewItem.enabled
-        containerView.bottomBorder = lastElement
+        containerView.showIcon(viewItem.coin.code)
+        containerView.showTitle(viewItem.coin.title)
+        containerView.showBottomBorder(lastElement)
+
+        containerView.showDropdownValue(viewItem.settingType.selectedTitle)
+        containerView.showDropdownIcon(viewItem.enabled)
+
+        containerView.isEnabled = viewItem.enabled
 
         containerView.setOnClickListener {
             viewDelegate.didTapItem(viewItem.settingType, adapterPosition)
         }
-        containerView.isEnabled = viewItem.enabled
     }
-
 }
-

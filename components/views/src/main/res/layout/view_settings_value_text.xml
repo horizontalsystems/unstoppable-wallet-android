@@ -1,8 +1,11 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cellLabel"
+    android:id="@+id/settingsValueRight"
     style="@style/Body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textColor="?TextColorBarsToDark"
-    tools:text="Label" />
+    android:gravity="center"
+    android:paddingStart="0dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/grey"
+    tools:text="Value" />
