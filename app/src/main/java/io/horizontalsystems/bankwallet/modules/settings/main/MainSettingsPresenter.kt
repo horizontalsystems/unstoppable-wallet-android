@@ -31,10 +31,6 @@ class MainSettingsPresenter(
         router.showSecuritySettings()
     }
 
-    override fun didManageCoins() {
-        router.showManageCoins()
-    }
-
     override fun didTapExperimentalFeatures() {
         router.showExperimentalFeatures()
     }

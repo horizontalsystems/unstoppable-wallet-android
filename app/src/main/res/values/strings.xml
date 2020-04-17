@@ -267,7 +267,6 @@
     <string name="Settings_Title">Settings</string>
     <string name="Settings_SecurityCenter">Security Center</string>
     <string name="Settings_Notifications">Notifications</string>
-    <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>

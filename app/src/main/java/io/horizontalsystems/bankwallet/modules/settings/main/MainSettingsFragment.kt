@@ -66,8 +66,6 @@ class MainSettingsFragment : Fragment() {
 
         notifications.setOnClickListener { presenter.didTapNotifications() }
 
-        manageCoins.setOnClickListener { presenter.didManageCoins() }
-
         experimentalFeatures.setOnClickListener { presenter.didTapExperimentalFeatures() }
 
         baseCurrency.setOnClickListener { presenter.didTapBaseCurrency() }
@@ -152,10 +150,6 @@ class MainSettingsFragment : Fragment() {
             activity?.let {
                 SecuritySettingsModule.start(it)
             }
-        })
-
-        router.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ManageWalletsModule.start(it, false) }
         })
 
         router.showExperimentalFeaturesLiveEvent.observe(viewLifecycleOwner, Observer {
