@@ -62,12 +62,33 @@ class PrivacySettingsPresenter(
     }
 
     override fun didSwitchTorEnabled(checked: Boolean) {
+
         if (checked) {
             if (!interactor.isTorNotificationEnabled) {
                 view?.showNotificationsNotEnabledAlert()
                 return
             }
+
+            // Check if Tor needs to update Blockchain configuration
+            if(interactor.isTorPrerequisitesRequired()){
+                openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
+                openedPrivacySettings?.enabled = !checked
+                onSelectCommunicationMode(interactor.ether(), CommunicationMode.Infura, CommunicationMode.Incubed, true)
+                return
+            }
         }
+
+        updateTorState(checked)
+    }
+
+    override fun updateTorPrerequisitesViews(checked: Boolean){
+
+        openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
+        openedPrivacySettings?.enabled = !checked
+        view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
+    }
+
+    override fun updateTorState(checked: Boolean) {
         if (needToRestartAppForTor) {
             view?.showRestartAlert(checked)
         } else {
@@ -127,10 +148,16 @@ class PrivacySettingsPresenter(
         }
     }
 
-    private fun onSelectCommunicationMode(coin: Coin, selectedValue: CommunicationMode, currentValue: CommunicationMode) {
+    private fun onSelectCommunicationMode( coin: Coin, selectedValue: CommunicationMode, currentValue: CommunicationMode,
+                                           isTorPrerequisites: Boolean = false) {
         if (currentValue != selectedValue && interactor.getWalletsForUpdate(coin.type).count() > 0) {
-            view?.showCommunicationModeChangeAlert(coin, selectedValue)
+            view?.showCommunicationModeChangeAlert(coin, selectedValue, isTorPrerequisites)
         } else {
+
+            if(isTorPrerequisites){
+                view?.showTorPrerequisitesAlert()
+            }
+
             updateCommunicationMode(coin, selectedValue)
         }
     }

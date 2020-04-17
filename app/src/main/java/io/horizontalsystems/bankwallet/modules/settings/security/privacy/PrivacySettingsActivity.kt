@@ -144,20 +144,40 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                         override fun onActionButtonClick() {
                             viewModel.delegate.proceedWithSyncModeChange(coin, syncMode)
                         }
+                        override fun onCancelButtonClick() {
+                        }
                     }
             )
         })
 
-        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
+        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (settings, isTorPrerequisites) ->
+
+            val (coin, communicationMode) = settings
+            var message = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Content, coin.title)
+
+            if(isTorPrerequisites){
+                message =  "${getString(R.string.Tor_PrerequisitesAlert_Content)}\n\n${message}"
+            }
+
             PrivacySettingsAlertDialog.show(
                     title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
                     subtitle = communicationMode.title,
-                    contentText = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Content, coin.title),
+                    contentText = message,
                     actionButtonTitle = getString(R.string.Button_Change),
                     activity = this,
                     listener = object : PrivacySettingsAlertDialog.Listener {
                         override fun onActionButtonClick() {
                             viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
+
+                            if(isTorPrerequisites){
+                                viewModel.delegate.updateTorState(true)
+                            }
+                        }
+
+                        override fun onCancelButtonClick() {
+                            if(isTorPrerequisites){
+                                setTorSwitch(false)
+                            }
                         }
                     }
             )
@@ -183,6 +203,8 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchTorEnabled(isChecked)
         }
+
+        viewModel.delegate.updateTorPrerequisitesViews(checked)
     }
 
     override fun onSelectItem(position: Int) {
@@ -204,6 +226,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                         setTorSwitch(!checked)
                     }
                 }).show(supportFragmentManager, "alert_dialog")
+
     }
 
     private fun showNotificationsNotEnabledAlert() {
@@ -230,13 +253,13 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                 cancelable = true,
                 listener = object : AlertDialogFragment.Listener {
                     override fun onButtonClick() {
+                        viewModel.delegate.updateTorState(true)
                     }
 
                     override fun onCancel() {
                     }
                 }).show(supportFragmentManager, "alert_dialog")
     }
-
 
     private fun openAppNotificationSettings() {
         val intent = Intent()

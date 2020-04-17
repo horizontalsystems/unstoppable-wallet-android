@@ -18,6 +18,7 @@ class PrivacySettingsAlertDialog(
 
     interface Listener {
         fun onActionButtonClick() {}
+        fun onCancelButtonClick() {}
     }
 
     private lateinit var contentTextView: TextView
@@ -53,6 +54,8 @@ class PrivacySettingsAlertDialog(
 
         btnGrey.text = getString(R.string.Alert_Cancel)
         btnGrey.setOnClickListener {
+
+            listener.onCancelButtonClick()
             dismiss()
         }
     }
