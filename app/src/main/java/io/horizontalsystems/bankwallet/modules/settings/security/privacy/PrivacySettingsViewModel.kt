@@ -83,8 +83,8 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
         showRestoreModeChangeAlert.postValue(Pair(coin, selectedSyncMode))
     }
 
-    override fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, isTorPrerequisites: Boolean) {
-        showCommunicationModeChangeAlert.postValue(Pair(Pair(coin, selectedCommunication), isTorPrerequisites))
+    override fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, hasTorPrerequisites: Boolean) {
+        showCommunicationModeChangeAlert.postValue(Pair(Pair(coin, selectedCommunication), hasTorPrerequisites))
     }
 
     // IRouter

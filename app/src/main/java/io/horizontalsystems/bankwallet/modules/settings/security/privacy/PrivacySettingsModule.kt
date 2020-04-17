@@ -19,7 +19,7 @@ object PrivacySettingsModule {
         fun showCommunicationSelectorDialog(communicationModeOptions: List<CommunicationMode>, selected: CommunicationMode)
         fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode)
         fun showRestoreModeChangeAlert(coin: Coin, selectedSyncMode: SyncMode)
-        fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, isTorPrerequisites: Boolean )
+        fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, hasTorPrerequisites: Boolean )
         fun setTransactionsOrdering(transactionsOrdering: TransactionDataSortingType)
         fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType)
         fun setTorConnectionStatus(connectionStatus: TorStatus)
@@ -28,7 +28,7 @@ object PrivacySettingsModule {
     interface IPrivacySettingsViewDelegate {
         fun viewDidLoad()
         fun didSwitchTorEnabled(checked: Boolean)
-        fun updateTorPrerequisitesViews(checked: Boolean)
+        fun onApplyTorPrerequisites(checked: Boolean)
         fun updateTorState(checked: Boolean)
         fun setTorEnabled(checked: Boolean)
         fun didTapItem(settingType: PrivacySettingsType, position: Int)
@@ -49,7 +49,6 @@ object PrivacySettingsModule {
         fun disableTor()
         fun subscribeToTorStatus()
 
-        fun isTorPrerequisitesRequired(): Boolean
         fun communicationSetting(coinType: CoinType): CommunicationSetting?
         fun saveCommunicationSetting(communicationSetting: CommunicationSetting)
         fun syncModeSetting(coinType: CoinType): SyncModeSetting?
