@@ -70,7 +70,8 @@ class PrivacySettingsPresenter(
             }
 
             // Check if Tor needs to update Blockchain configuration
-            if(interactor.isTorPrerequisitesRequired()){
+            if(interactor.communicationSetting(CoinType.Ethereum)?.communicationMode != CommunicationMode.Infura){
+
                 openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
                 openedPrivacySettings?.enabled = !checked
                 onSelectCommunicationMode(interactor.ether(), CommunicationMode.Infura, CommunicationMode.Incubed, true)
@@ -81,7 +82,7 @@ class PrivacySettingsPresenter(
         updateTorState(checked)
     }
 
-    override fun updateTorPrerequisitesViews(checked: Boolean){
+    override fun onApplyTorPrerequisites(checked: Boolean){
 
         openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
         openedPrivacySettings?.enabled = !checked
@@ -149,12 +150,12 @@ class PrivacySettingsPresenter(
     }
 
     private fun onSelectCommunicationMode( coin: Coin, selectedValue: CommunicationMode, currentValue: CommunicationMode,
-                                           isTorPrerequisites: Boolean = false) {
+                                           hasTorPrerequisites: Boolean = false) {
         if (currentValue != selectedValue && interactor.getWalletsForUpdate(coin.type).count() > 0) {
-            view?.showCommunicationModeChangeAlert(coin, selectedValue, isTorPrerequisites)
+            view?.showCommunicationModeChangeAlert(coin, selectedValue, hasTorPrerequisites)
         } else {
 
-            if(isTorPrerequisites){
+            if(hasTorPrerequisites){
                 view?.showTorPrerequisitesAlert()
             }
 

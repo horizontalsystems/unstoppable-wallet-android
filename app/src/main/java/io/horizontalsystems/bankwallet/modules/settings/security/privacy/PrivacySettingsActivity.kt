@@ -150,12 +150,12 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
             )
         })
 
-        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (settings, isTorPrerequisites) ->
+        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (settings, hasTorPrerequisites) ->
 
             val (coin, communicationMode) = settings
             var message = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Content, coin.title)
 
-            if(isTorPrerequisites){
+            if(hasTorPrerequisites){
                 message =  "${getString(R.string.Tor_PrerequisitesAlert_Content)}\n\n${message}"
             }
 
@@ -169,14 +169,15 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                         override fun onActionButtonClick() {
                             viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
 
-                            if(isTorPrerequisites){
+                            if(hasTorPrerequisites){
                                 viewModel.delegate.updateTorState(true)
                             }
                         }
 
                         override fun onCancelButtonClick() {
-                            if(isTorPrerequisites){
+                            if(hasTorPrerequisites){
                                 setTorSwitch(false)
+                                viewModel.delegate.onApplyTorPrerequisites(false)
                             }
                         }
                     }
@@ -203,8 +204,6 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchTorEnabled(isChecked)
         }
-
-        viewModel.delegate.updateTorPrerequisitesViews(checked)
     }
 
     override fun onSelectItem(position: Int) {
@@ -224,6 +223,7 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
 
                     override fun onCancel() {
                         setTorSwitch(!checked)
+                        viewModel.delegate.onApplyTorPrerequisites(!checked)
                     }
                 }).show(supportFragmentManager, "alert_dialog")
 

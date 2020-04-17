@@ -82,12 +82,6 @@ class PrivacySettingsInteractor(
                 }
     }
 
-    override fun isTorPrerequisitesRequired(): Boolean {
-        return blockchainSettingsManager.communicationSetting(CoinType.Ethereum)?.let {
-            it.communicationMode != CommunicationMode.Infura
-        }?: false
-    }
-
     override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
         return blockchainSettingsManager.communicationSetting(coinType)
     }
