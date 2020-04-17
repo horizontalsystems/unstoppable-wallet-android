@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.cryptonews.CryptoNewsFragment
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.views.showIf
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
@@ -95,7 +96,9 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
 
         presenterView.showChartInfo.observe(this, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
+            chartView.post {
+                chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
+            }
 
             coinRateDiff.diff = item.diffValue
         })
@@ -195,11 +198,7 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
     }
 
     private fun setViewVisibility(vararg views: View, isVisible: Boolean) {
-        views.forEach {
-            if (isVisible)
-                it.visibility = View.VISIBLE else
-                it.visibility = View.INVISIBLE
-        }
+        views.forEach { it.showIf(isVisible, hideType = View.INVISIBLE) }
     }
 
     // Need to move this to helpers
