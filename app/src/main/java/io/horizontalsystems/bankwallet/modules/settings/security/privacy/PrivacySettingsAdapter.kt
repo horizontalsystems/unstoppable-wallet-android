@@ -26,7 +26,7 @@ sealed class PrivacySettingsType {
 data class PrivacySettingsViewItem(
         val coin: Coin,
         val settingType: PrivacySettingsType,
-        val enabled: Boolean = true
+        var enabled: Boolean = true
 )
 
 class PrivacySettingsAdapter(private val delegate: IPrivacySettingsViewDelegate)

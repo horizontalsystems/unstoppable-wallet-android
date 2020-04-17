@@ -19,7 +19,7 @@ object PrivacySettingsModule {
         fun showCommunicationSelectorDialog(communicationModeOptions: List<CommunicationMode>, selected: CommunicationMode)
         fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode)
         fun showRestoreModeChangeAlert(coin: Coin, selectedSyncMode: SyncMode)
-        fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode)
+        fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, isTorPrerequisites: Boolean )
         fun setTransactionsOrdering(transactionsOrdering: TransactionDataSortingType)
         fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType)
         fun setTorConnectionStatus(connectionStatus: TorStatus)
@@ -28,6 +28,8 @@ object PrivacySettingsModule {
     interface IPrivacySettingsViewDelegate {
         fun viewDidLoad()
         fun didSwitchTorEnabled(checked: Boolean)
+        fun updateTorPrerequisitesViews(checked: Boolean)
+        fun updateTorState(checked: Boolean)
         fun setTorEnabled(checked: Boolean)
         fun didTapItem(settingType: PrivacySettingsType, position: Int)
         fun onSelectSetting(position: Int)
@@ -75,7 +77,15 @@ object PrivacySettingsModule {
     }
 
     fun init(view: PrivacySettingsViewModel, router: IPrivacySettingsRouter) {
-        val interactor = PrivacySettingsInteractor(App.pinComponent, App.torKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager, App.localStorage, App.adapterManager)
+        val interactor = PrivacySettingsInteractor(
+                App.pinComponent,
+                App.torKitManager,
+                App.blockchainSettingsManager,
+                App.appConfigProvider,
+                App.walletManager,
+                App.localStorage,
+                App.adapterManager)
+
         val presenter = PrivacySettingsPresenter(interactor, router)
         interactor.delegate = presenter
         view.delegate = presenter

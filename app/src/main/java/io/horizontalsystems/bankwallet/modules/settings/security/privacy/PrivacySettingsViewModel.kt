@@ -23,7 +23,7 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
     val showTransactionsSortingSelectorDialog = SingleLiveEvent<Pair<List<TransactionDataSortingType>, TransactionDataSortingType>>()
     val showCommunicationSelectorDialog = SingleLiveEvent<Pair<List<CommunicationMode>, CommunicationMode>>()
     val showRestoreModeChangeAlert = SingleLiveEvent<Pair<Coin, SyncMode>>()
-    val showCommunicationModeChangeAlert = SingleLiveEvent<Pair<Coin, CommunicationMode>>()
+    val showCommunicationModeChangeAlert = SingleLiveEvent<Pair<Pair<Coin, CommunicationMode>, Boolean>>()
     val setTorConnectionStatus = SingleLiveEvent<TorStatus>()
 
     val restartApp = SingleLiveEvent<Unit>()
@@ -83,8 +83,8 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
         showRestoreModeChangeAlert.postValue(Pair(coin, selectedSyncMode))
     }
 
-    override fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode) {
-        showCommunicationModeChangeAlert.postValue(Pair(coin, selectedCommunication))
+    override fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, isTorPrerequisites: Boolean) {
+        showCommunicationModeChangeAlert.postValue(Pair(Pair(coin, selectedCommunication), isTorPrerequisites))
     }
 
     // IRouter
