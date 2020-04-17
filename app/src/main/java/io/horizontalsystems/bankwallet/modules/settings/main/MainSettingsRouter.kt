@@ -5,7 +5,6 @@ import io.horizontalsystems.core.SingleLiveEvent
 class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
 
     val showSecuritySettingsLiveEvent = SingleLiveEvent<Unit>()
-    val showManageCoinsLiveEvent = SingleLiveEvent<Unit>()
     val showExperimentalFeaturesLiveEvent = SingleLiveEvent<Unit>()
     val showBaseCurrencySettingsLiveEvent = SingleLiveEvent<Unit>()
     val showLanguageSettingsLiveEvent = SingleLiveEvent<Unit>()
@@ -23,10 +22,6 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
 
     override fun showSecuritySettings() {
         showSecuritySettingsLiveEvent.call()
-    }
-
-    override fun showManageCoins() {
-        showManageCoinsLiveEvent.call()
     }
 
     override fun showExperimentalFeatures() {

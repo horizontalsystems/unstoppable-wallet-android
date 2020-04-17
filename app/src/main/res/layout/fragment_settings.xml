@@ -68,16 +68,6 @@
                 app:title="@string/Settings_SecurityCenter" />
 
             <io.horizontalsystems.views.SettingsView
-                android:id="@+id/manageCoins"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/ic_manage_coins"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/privacySettings"
-                app:title="@string/Settings_ManageCoins" />
-
-            <io.horizontalsystems.views.SettingsView
                 android:id="@+id/experimentalFeatures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,7 +75,7 @@
                 app:icon="@drawable/ic_experimental"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageCoins"
+                app:layout_constraintTop_toBottomOf="@+id/privacySettings"
                 app:title="@string/Settings_ExperimentalFeatures" />
 
             <io.horizontalsystems.views.SettingsView
