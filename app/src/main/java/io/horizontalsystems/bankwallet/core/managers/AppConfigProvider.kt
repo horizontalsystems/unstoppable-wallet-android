@@ -81,7 +81,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
             Coin("IDEX",      "IDEX",                    "IDEX",        18,      CoinType.Erc20("0xB705268213D593B8FD88d3FDEFF93AFF5CbDcfAE")),
             Coin("IDXM",      "IDEX Membership",         "IDXM",         8,      CoinType.Erc20("0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea")),
             Coin("KCS",       "KuCoin Shares",           "KCS",          6,      CoinType.Erc20("0x039B5649A59967e3e936D7471f9c3700100Ee1ab", minimumRequiredBalance = BigDecimal("0.001"))),
-            Coin("KNC",       "Kyber Network",           "KNC",         18,      CoinType.Erc20("0xdd974D5C2e2928deA5F71b9825b8b646686BD200")),
+            Coin("KNC",       "Kyber Network Crystal",   "KNC",         18,      CoinType.Erc20("0xdd974D5C2e2928deA5F71b9825b8b646686BD200")),
             Coin("LOOM",      "Loom Network",            "LOOM",        18,      CoinType.Erc20("0xA4e8C3Ec456107eA67d3075bF9e3DF3A75823DB0")),
             Coin("LRC",       "Loopring",                "LRC",         18,      CoinType.Erc20("0xEF68e7C694F40c8202821eDF525dE3782458639f")),
             Coin("MKR",       "Maker",                   "MKR",         18,      CoinType.Erc20("0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2")),

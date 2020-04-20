@@ -400,7 +400,7 @@
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
     <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Show">Show Key</string>
     <string name="ManageKeys_Unlink">Unlink</string>
 
     <!--Manage Keys Delete Alert-->
