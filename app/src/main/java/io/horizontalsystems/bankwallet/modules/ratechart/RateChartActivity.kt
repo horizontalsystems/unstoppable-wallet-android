@@ -22,6 +22,7 @@ import java.util.*
 class RateChartActivity : BaseActivity(), ChartView.Listener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
+    private lateinit var coin: Coin
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
@@ -30,7 +31,7 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rate_chart)
 
-        val coin = intent.getParcelableExtra<Coin>("coin") ?: run {
+        coin = intent.getParcelableExtra("coin") ?: run {
             finish()
             return
         }
@@ -49,12 +50,15 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         observeData()
         bindActions()
 
+        presenter.viewDidLoad()
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.cryptoNews, CryptoNewsFragment(coin))
             commit()
         }
-
-        presenter.viewDidLoad()
     }
 
     //  ChartView Listener
