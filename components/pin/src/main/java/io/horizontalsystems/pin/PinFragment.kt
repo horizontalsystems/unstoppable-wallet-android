@@ -2,6 +2,7 @@ package io.horizontalsystems.pin
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.biometric.BiometricConstants
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -156,11 +158,6 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
         })
 
         pinView.showFingerprintInput.observe(viewLifecycleOwner, Observer {
-            setFingerprintInputScreenVisible(true)
-
-            fingerprintCancelButton.setOnClickListener {
-                setFingerprintInputScreenVisible(false)
-            }
             showFingerprintDialog(it)
         })
 
@@ -205,31 +202,20 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 activity?.runOnUiThread {
-                    fingerprintCancelButton.visibility = View.GONE
                     viewDelegate.onFingerprintUnlock()
                 }
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
-
-                if (errorCode == BiometricConstants.ERROR_USER_CANCELED
-                        || errorCode == BiometricConstants.ERROR_NEGATIVE_BUTTON
-                        || errorCode == BiometricConstants.ERROR_CANCELED
-                ) {
-                    activity?.runOnUiThread {
-                        setFingerprintInputScreenVisible(false)
-                    }
+                if (errorCode == BiometricConstants.ERROR_LOCKOUT || errorCode == BiometricConstants.ERROR_LOCKOUT_PERMANENT) {
+                    BiometricScannerDisabledDialogFragment.newInstance()
+                            .show(childFragmentManager, "alert_dialog")
                 }
             }
         })
 
         biometricPrompt.authenticate(promptInfo, cryptoObject)
-    }
-
-    private fun setFingerprintInputScreenVisible(fingerprintVisible: Boolean) {
-        fingerprintInput.visibility = if (fingerprintVisible) View.VISIBLE else View.INVISIBLE
-        pinUnlock.visibility = if (fingerprintVisible) View.INVISIBLE else View.VISIBLE
     }
 
 }
