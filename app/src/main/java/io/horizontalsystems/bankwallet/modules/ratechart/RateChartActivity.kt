@@ -49,16 +49,17 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
 
         observeData()
         bindActions()
-
-        presenter.viewDidLoad()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
+
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.cryptoNews, CryptoNewsFragment(coin))
             commit()
         }
+
+        presenter.viewDidLoad()
     }
 
     //  ChartView Listener
