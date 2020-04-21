@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import android.content.Context
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
@@ -299,10 +300,17 @@ abstract class AppDatabase : RoomDatabase() {
             }
 
             private fun insertIntoBlockchainSetting(database: SupportSQLiteDatabase, coinType: String, key: String, value: String) {
-                database.execSQL("""
+                try {
+                    database.execSQL("""
                                                 INSERT INTO BlockchainSetting (`coinType`,`key`,`value`) 
                                                 VALUES ('$coinType', '$key', '$value')
                                                 """.trimIndent())
+                } catch (ex: SQLiteConstraintException) {
+                    // Primary key violation exception can occur, because settings are inserted for each coin in EnabledWallet for specific Account.
+                    // But since wallets in EnabledWallet are deleted asynchronously on next application start by AccountCleaner, there can be more than one wallet for the same coinId.
+                    // We should ignore such exceptions.
+                }
+
             }
         }
 
