@@ -95,8 +95,8 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         })
 
         presenterView.showChartInfo.observe(this, Observer { item ->
-            chartView.visibility = View.VISIBLE
-            chartView.post {
+            rootView.post {
+                chartView.visibility = View.VISIBLE
                 chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
             }
 
