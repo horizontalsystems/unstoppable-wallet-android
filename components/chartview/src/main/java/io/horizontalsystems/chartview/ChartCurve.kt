@@ -15,7 +15,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private var coordinateLow: Coordinate? = null
 
     private val linePaint = Paint()
-    private val gridPaint = Paint()
+    private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val gradient = Paint()
     private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var isTouchActive = false
