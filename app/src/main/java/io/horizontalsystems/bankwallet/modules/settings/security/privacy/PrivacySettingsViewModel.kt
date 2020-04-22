@@ -19,10 +19,9 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
     val showTorPrerequisitesAlert = SingleLiveEvent<Unit>()
     val communicationSettingsViewItems = SingleLiveEvent<List<PrivacySettingsViewItem>>()
     val restoreWalletSettingsViewItems = SingleLiveEvent<List<PrivacySettingsViewItem>>()
-    val showSyncModeSelectorDialog = SingleLiveEvent<Pair<List<SyncMode>, SyncMode>>()
+    val showSyncModeSelectorDialog = SingleLiveEvent<Triple<List<SyncMode>, SyncMode, Coin>>()
     val showTransactionsSortingSelectorDialog = SingleLiveEvent<Pair<List<TransactionDataSortingType>, TransactionDataSortingType>>()
     val showCommunicationSelectorDialog = SingleLiveEvent<Pair<List<CommunicationMode>, CommunicationMode>>()
-    val showRestoreModeChangeAlert = SingleLiveEvent<Pair<Coin, SyncMode>>()
     val showCommunicationModeChangeAlert = SingleLiveEvent<Pair<Pair<Coin, CommunicationMode>, Boolean>>()
     val setTorConnectionStatus = SingleLiveEvent<TorStatus>()
 
@@ -75,12 +74,8 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
         showCommunicationSelectorDialog.postValue(Pair(communicationModeOptions, selected))
     }
 
-    override fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode) {
-        showSyncModeSelectorDialog.postValue(Pair(syncModeOptions, selected))
-    }
-
-    override fun showRestoreModeChangeAlert(coin: Coin, selectedSyncMode: SyncMode) {
-        showRestoreModeChangeAlert.postValue(Pair(coin, selectedSyncMode))
+    override fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode, coin: Coin) {
+        showSyncModeSelectorDialog.postValue(Triple(syncModeOptions, selected, coin))
     }
 
     override fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, hasTorPrerequisites: Boolean) {

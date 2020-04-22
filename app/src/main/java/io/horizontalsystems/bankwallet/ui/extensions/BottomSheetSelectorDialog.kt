@@ -13,7 +13,8 @@ class BottomSheetSelectorDialog(
         private val icon: Int,
         private val items: List<Pair<String, String>>,
         private val selected: Int,
-        private val listener: OnItemSelectedListener
+        private val listener: OnItemSelectedListener,
+        private val warning: String?
 ) : BaseBottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,17 +28,20 @@ class BottomSheetSelectorDialog(
 
         val itemsAdapter = SelectorItemsAdapter(items, selected)
 
+        textWarning.text = warning
+        textWarning.visibility = if (warning == null) View.GONE else View.VISIBLE
+
         rvItems.adapter = itemsAdapter
 
         btnDone.setOnClickListener {
-            listener.onItemClick(itemsAdapter.selected)
+            listener.onItemSelected(itemsAdapter.selected)
             dismiss()
         }
     }
 
     companion object {
-        fun newInstance(title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, listener: OnItemSelectedListener): BottomSheetSelectorDialog {
-            return BottomSheetSelectorDialog(title, subtitle, icon, items, selected, listener)
+        fun newInstance(title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, listener: OnItemSelectedListener, warning: String? = null): BottomSheetSelectorDialog {
+            return BottomSheetSelectorDialog(title, subtitle, icon, items, selected, listener, warning)
         }
     }
 }
@@ -95,5 +99,5 @@ interface OnItemClickListener {
 }
 
 interface OnItemSelectedListener {
-    fun onItemClick(position: Int)
+    fun onItemSelected(position: Int)
 }

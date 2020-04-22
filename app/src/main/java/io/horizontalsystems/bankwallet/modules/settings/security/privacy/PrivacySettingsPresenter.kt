@@ -122,7 +122,7 @@ class PrivacySettingsPresenter(
             is WalletRestore -> {
                 val item = walletRestoreSettingsViewItems[position]
                 openedPrivacySettings = item
-                view?.showSyncModeSelectorDialog(syncModeOptions, if (settingType.selected == SyncMode.New) SyncMode.Fast else settingType.selected)
+                view?.showSyncModeSelectorDialog(syncModeOptions, if (settingType.selected == SyncMode.New) SyncMode.Fast else settingType.selected, item.coin)
             }
         }
     }
@@ -164,10 +164,11 @@ class PrivacySettingsPresenter(
     }
 
     private fun onSelectSyncMode(coin: Coin, selectedValue: SyncMode, currentValue: SyncMode) {
-        if (currentValue != selectedValue && interactor.getWalletsForUpdate(coin.type).count() > 0) {
-            view?.showRestoreModeChangeAlert(coin, selectedValue)
-        } else {
-            updateSyncMode(coin, selectedValue)
+        updateSyncMode(coin, selectedValue)
+
+        val walletsForUpdate = interactor.getWalletsForUpdate(coin.type)
+        if (walletsForUpdate.count() > 0) {
+            interactor.reSyncWallets(walletsForUpdate)
         }
     }
 
@@ -178,14 +179,6 @@ class PrivacySettingsPresenter(
         view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
 
         openedPrivacySettings = null
-    }
-
-    override fun proceedWithSyncModeChange(coin: Coin, syncMode: SyncMode) {
-        updateSyncMode(coin, syncMode)
-
-        interactor.getWalletsForUpdate(coin.type).let {
-            interactor.reSyncWallets(it)
-        }
     }
 
     private fun updateCommunicationMode(coin: Coin, communicationMode: CommunicationMode) {
