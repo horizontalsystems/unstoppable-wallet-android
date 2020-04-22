@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorDialog
@@ -19,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.OnItemSelectedListener
 import io.horizontalsystems.views.AlertDialogFragment
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
 import kotlin.system.exitProcess
 
@@ -121,38 +123,35 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
                     items.map { getSortingInfo(it) },
                     items.indexOf(selected),
                     object : OnItemSelectedListener {
-                        override fun onItemClick(position: Int) {
+                        override fun onItemSelected(position: Int) {
                             viewModel.delegate.onSelectTransactionSorting(items[position])
                         }
                     }
             ).show(supportFragmentManager, "transactions_sorting_settings_selector")
         })
 
-        viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected) ->
-            SelectorDialog.newInstance(this, items.map { SelectorItem(it.title, it == selected) }, null, false)
-                    .show(supportFragmentManager, "syncmode_settings_selector")
+        viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+            val selectedPosition = items.indexOf(selected)
+            BottomSheetSelectorDialog.newInstance(
+                    getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
+                    coin.title,
+                    LayoutHelper.getCoinDrawableResource(this, coin.code),
+                    items.map { getSyncModeInfo(it) },
+                    selectedPosition,
+                    object : OnItemSelectedListener {
+                        override fun onItemSelected(position: Int) {
+                            if (position != selectedPosition) {
+                                viewModel.delegate.onSelectSetting(position)
+                            }
+                        }
+                    },
+                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
+            ).show(supportFragmentManager, "syncmode_settings_selector")
         })
 
         viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected) ->
             SelectorDialog.newInstance(this, items.map { SelectorItem(it.title, it == selected) }, null, false)
                     .show(supportFragmentManager, "communication_mode_selector")
-        })
-
-        viewModel.showRestoreModeChangeAlert.observe(this, Observer { (coin, syncMode) ->
-            PrivacySettingsAlertDialog.show(
-                    title = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
-                    subtitle = syncMode.title,
-                    contentText = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title),
-                    actionButtonTitle = getString(R.string.Button_Change),
-                    activity = this,
-                    listener = object : PrivacySettingsAlertDialog.Listener {
-                        override fun onActionButtonClick() {
-                            viewModel.delegate.proceedWithSyncModeChange(coin, syncMode)
-                        }
-                        override fun onCancelButtonClick() {
-                        }
-                    }
-            )
         })
 
         viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (settings, hasTorPrerequisites) ->
@@ -214,6 +213,14 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
             TransactionDataSortingType.Off -> {
                 Pair(getString(R.string.SettingsSecurity_SortingOff), getString(R.string.SettingsSecurity_SortingOff))
             }
+        }
+    }
+
+    private fun getSyncModeInfo(syncMode: SyncMode): Pair<String, String> {
+        return when(syncMode) {
+            SyncMode.Fast -> Pair(getString(R.string.SettingsSecurity_SyncModeAPI), getString(R.string.SettingsSecurity_SyncModeAPIDescription))
+            SyncMode.Slow -> Pair(getString(R.string.SettingsSecurity_SyncModeBlockchain), getString(R.string.SettingsSecurity_SyncModeBlockchainDescription))
+            SyncMode.New -> throw Exception("Unsupported syncMode: $syncMode")
         }
     }
 
