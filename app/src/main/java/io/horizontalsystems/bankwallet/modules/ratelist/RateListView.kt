@@ -6,10 +6,10 @@ import java.util.*
 class RateListView : RateListModule.IView {
 
     var viewItemsLiveData = MutableLiveData<List<ViewItem>>()
-    var datesLiveData = MutableLiveData<Pair<Date, Long?>>()
+    var datesLiveData = MutableLiveData<Long>()
 
-    override fun setDates(date: Date, lastUpdateTime: Long?) {
-        datesLiveData.postValue(Pair(date, lastUpdateTime))
+    override fun setDate(lastUpdateTime: Long) {
+        datesLiveData.postValue(lastUpdateTime)
     }
 
     override fun setViewItems(viewItems: List<ViewItem>) {

@@ -13,7 +13,7 @@ import java.util.*
 object RateListModule {
 
     interface IView {
-        fun setDates(date: Date, lastUpdateTime: Long?)
+        fun setDate(lastUpdateTime: Long)
         fun setViewItems(viewItems: List<ViewItem>)
     }
 

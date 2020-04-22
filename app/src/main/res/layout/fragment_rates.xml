@@ -15,38 +15,36 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/app_bar_height_tall"
+            android:layout_height="wrap_content"
             app:elevation="0dp"
             app:layout_scrollFlags="scroll">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/app_bar_height_tall">
+                android:layout_height="45dp">
 
                 <TextView
                     android:id="@+id/dateText"
-                    style="@style/Title1"
-                    android:layout_width="match_parent"
+                    style="@style/Title3"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:includeFontPadding="false"
+                    android:layout_marginStart="16dp"
                     android:textColor="?ColorOz"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:text="Jul 23" />
+                    android:text="@string/RateList_prices" />
 
                 <TextView
                     android:id="@+id/timeAgoText"
                     style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
                     android:textAlignment="textEnd"
                     android:textColor="@color/grey"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="@string/RateList_updated" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -62,11 +60,5 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/view_holder_coin_rate" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_gravity="bottom"
-        android:background="?ShadingBottomGradient" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
