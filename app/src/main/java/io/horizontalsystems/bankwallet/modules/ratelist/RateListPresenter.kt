@@ -27,7 +27,9 @@ class RateListPresenter(
 
         updateViewItems()
 
-        view.setDates(Date(), lastUpdateTimestamp(marketInfos))
+        lastUpdateTimestamp(marketInfos)?.let {
+            view.setDate(it)
+        }
 
         val coinCodes = coins.map { it.code }
         interactor.setupXRateManager(coinCodes)
@@ -35,7 +37,7 @@ class RateListPresenter(
     }
 
     override fun loadTopList() {
-        if (topListItems.isEmpty() && !loading) {
+        if (!loading) {
             loading = true
             interactor.getTopList()
             updateViewItems()
@@ -50,12 +52,15 @@ class RateListPresenter(
         portfolioItems.addAll(items)
         updateViewItems()
 
-        view.setDates(Date(), lastUpdateTimestamp(marketInfos))
+        lastUpdateTimestamp(marketInfos)?.let {
+            view.setDate(it)
+        }
     }
 
     override fun didFetchedTopList(items: List<PriceInfo>) {
         loading = false
         val viewItems =factory.topListViewItems(items, interactor.currency)
+        topListItems.clear()
         topListItems.addAll(viewItems)
 
         updateViewItems()

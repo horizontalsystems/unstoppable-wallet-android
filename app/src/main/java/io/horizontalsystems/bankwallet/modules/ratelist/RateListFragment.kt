@@ -19,7 +19,7 @@ import java.util.*
 class RatesListFragment : Fragment() {
 
     private lateinit var adapter: CoinRatesAdapter
-    private var presenter: RateListPresenter? = null
+    private lateinit var presenter: RateListPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rates, container, false)
@@ -29,8 +29,8 @@ class RatesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         presenter = ViewModelProvider(this, RateListModule.Factory()).get(RateListPresenter::class.java)
-        observeView(presenter?.view)
-        presenter?.viewDidLoad()
+        observeView(presenter.view)
+        presenter.viewDidLoad()
 
         adapter = CoinRatesAdapter()
         coinRatesRecyclerView.adapter = adapter
@@ -38,28 +38,20 @@ class RatesListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        presenter?.loadTopList()
+        presenter.loadTopList()
     }
 
-    private fun observeView(view: RateListView?) {
-        view?.datesLiveData?.observe(viewLifecycleOwner, Observer { (date, lastUpdateTimestamp)->
-            dateText.text = DateHelper.formatDate(date, "MMM dd")
-            setLastUpdatedTime(lastUpdateTimestamp)
+    private fun observeView(view: RateListView) {
+        view.datesLiveData.observe(viewLifecycleOwner, Observer { lastUpdateTimestamp ->
+            val dateAndTime = DateHelper.getDayAndTime(Date(lastUpdateTimestamp * 1000))
+            timeAgoText.text = dateAndTime
         })
 
-        view?.viewItemsLiveData?.observe(viewLifecycleOwner, Observer { viewItems->
+        view.viewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
             adapter.viewItems = viewItems
             adapter.notifyDataSetChanged()
         })
 
-    }
-
-    private fun setLastUpdatedTime(lastUpdateTimestamp: Long?) {
-        if (lastUpdateTimestamp == null)
-            return
-
-        val time = DateHelper.getOnlyTime(Date(lastUpdateTimestamp * 1000))
-        timeAgoText.text = getString(R.string.RateList_updated, time)
     }
 }
 
@@ -77,7 +69,7 @@ class CoinRatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = viewItems.size
 
     override fun getItemViewType(position: Int): Int {
-        return when(viewItems[position]) {
+        return when (viewItems[position]) {
             is ViewItem.CoinViewItem -> coinViewItem
             ViewItem.PortfolioHeader -> portfolioHeader
             ViewItem.TopListHeader -> topListHeader
@@ -122,7 +114,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         txValueInFiat.isActivated = !coinItem.rateDimmed //change color via state: activated/not activated
         txValueInFiat.text = coinItem.rate ?: containerView.context.getString(R.string.NotAvailable)
 
-        if (coinItem.diff != null){
+        if (coinItem.diff != null) {
             txDiff.diff = coinItem.diff
             txDiff.visibility = View.VISIBLE
             txDiffNa.visibility = View.GONE

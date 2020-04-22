@@ -14,6 +14,7 @@ object DateHelper {
         if (is24HourFormat) "HH:mm" else "h:mm a"
     }
 
+    fun getDayAndTime(date: Date): String = formatDate(date, "MMM d, $timeFormat")
     fun getOnlyTime(date: Date): String = formatDate(date, timeFormat)
     fun getFullDate(date: Date): String = formatDate(date, "MMM d, yyyy, $timeFormat")
 
