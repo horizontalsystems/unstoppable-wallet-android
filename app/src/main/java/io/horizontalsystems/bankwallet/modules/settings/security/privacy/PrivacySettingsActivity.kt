@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorDialog
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorItem
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.OnItemSelectedListener
 import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
 import kotlin.system.exitProcess
@@ -112,15 +114,18 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         })
 
         viewModel.showTransactionsSortingSelectorDialog.observe(this, Observer { (items, selected) ->
-            SelectorDialog.newInstance(
-                    items = items.map { SelectorItem(getSortingLocalized(it), it == selected) },
-                    toggleKeyboard = false,
-                    listener = object : SelectorDialog.Listener {
-                        override fun onSelectItem(position: Int) {
+            BottomSheetSelectorDialog.newInstance(
+                    getString(R.string.SettingsPrivacy_Transactions),
+                    getString(R.string.SettingsPrivacy_TransactionsSettingText),
+                    R.drawable.ic_transactions,
+                    items.map { getSortingInfo(it) },
+                    items.indexOf(selected),
+                    object : OnItemSelectedListener {
+                        override fun onItemClick(position: Int) {
                             viewModel.delegate.onSelectTransactionSorting(items[position])
                         }
-                    })
-                    .show(supportFragmentManager, "transactions_sorting_settings_selector")
+                    }
+            ).show(supportFragmentManager, "transactions_sorting_settings_selector")
         })
 
         viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected) ->
@@ -195,6 +200,20 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
             TransactionDataSortingType.Shuffle -> getString(R.string.SettingsSecurity_SortingShuffle)
             TransactionDataSortingType.Bip69 -> getString(R.string.SettingsSecurity_SortingBip69)
             TransactionDataSortingType.Off -> getString(R.string.SettingsSecurity_SortingOff)
+        }
+    }
+
+    private fun getSortingInfo(sortingType: TransactionDataSortingType): Pair<String, String> {
+        return when(sortingType) {
+            TransactionDataSortingType.Shuffle -> {
+                Pair(getString(R.string.SettingsSecurity_SortingShuffle), getString(R.string.SettingsSecurity_SortingShuffleDescription))
+            }
+            TransactionDataSortingType.Bip69 -> {
+                Pair(getString(R.string.SettingsSecurity_SortingBip69), getString(R.string.SettingsSecurity_SortingBip69Description))
+            }
+            TransactionDataSortingType.Off -> {
+                Pair(getString(R.string.SettingsSecurity_SortingOff), getString(R.string.SettingsSecurity_SortingOff))
+            }
         }
     }
 
