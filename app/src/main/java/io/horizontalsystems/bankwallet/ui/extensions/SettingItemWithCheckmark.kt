@@ -13,9 +13,6 @@ class SettingItemWithCheckmark: FrameLayout {
         inflate(context, R.layout.view_setting_item_with_checkmark, this)
     }
 
-    private var title: String = ""
-    private var subtitle: String = ""
-
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
@@ -23,10 +20,10 @@ class SettingItemWithCheckmark: FrameLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
     fun bind(title: String, subtitle: String, onClick: () -> Unit, showBottomBorder: Boolean = false){
-        itemTitle.text = title
-        itemSubtitle.text = subtitle
+        setTitle(title)
+        setSubtitle(subtitle)
+        toggleBottomBorder(showBottomBorder)
         itemWrapper.setOnClickListener { onClick.invoke() }
-        bottomBorderView.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
     }
 
     fun setEnabledState(enabled: Boolean) {
@@ -37,4 +34,17 @@ class SettingItemWithCheckmark: FrameLayout {
     fun setChecked(checked: Boolean){
         checkMark.visibility = if (checked) View.VISIBLE else View.GONE
     }
+
+    fun setTitle(v: CharSequence) {
+        itemTitle.text = v
+    }
+
+    fun setSubtitle(v: CharSequence) {
+        itemSubtitle.text = v
+    }
+
+    fun toggleBottomBorder(visible: Boolean) {
+        bottomBorderView.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
 }
