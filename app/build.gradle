@@ -127,7 +127,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation 'androidx.fragment:fragment-ktx:1.2.4'
-    implementation "androidx.preference:preference-ktx:1.1.0"
+    implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.browser:browser:1.2.0"
 
     // Room
@@ -143,7 +143,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'com.aurelhubert:ahbottomnavigation:2.3.4'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
@@ -173,7 +173,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:3524844'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:35dd81e'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:d9995e6'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:4159cc1'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
@@ -204,7 +204,7 @@ dependencies {
     // optional - Test helpers for LiveData
     testImplementation 'junit:junit:4.13'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation "org.mockito:mockito-core:2.28.2"
+    testImplementation "org.mockito:mockito-core:3.3.3"
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.7'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.7'
