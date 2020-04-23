@@ -130,18 +130,15 @@ class PrivacySettingsActivity : BaseActivity() {
         })
 
         viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-            val selectedPosition = items.indexOf(selected)
             BottomSheetSelectorDialog.newInstance(
                     getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
                     coin.title,
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
                     items.map { getSyncModeInfo(it) },
-                    selectedPosition,
+                    items.indexOf(selected),
                     object : OnItemSelectedListener {
                         override fun onItemSelected(position: Int) {
-                            if (position != selectedPosition) {
-                                viewModel.delegate.onSelectSetting(position)
-                            }
+                            viewModel.delegate.onSelectSetting(position)
                         }
                     },
                     warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
