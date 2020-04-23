@@ -11,11 +11,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorDialog
-import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SelectorItem
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.OnItemSelectedListener
@@ -24,7 +23,7 @@ import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
 import kotlin.system.exitProcess
 
-class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
+class PrivacySettingsActivity : BaseActivity() {
     private lateinit var viewModel: PrivacySettingsViewModel
     private lateinit var communicationSettingsAdapter: PrivacySettingsAdapter
     private lateinit var walletRestoreSettingsAdapter: PrivacySettingsAdapter
@@ -149,9 +148,19 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
             ).show(supportFragmentManager, "syncmode_settings_selector")
         })
 
-        viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected) ->
-            SelectorDialog.newInstance(this, items.map { SelectorItem(it.title, it == selected) }, null, false)
-                    .show(supportFragmentManager, "communication_mode_selector")
+        viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+            BottomSheetSelectorDialog.newInstance(
+                    getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
+                    coin.title,
+                    LayoutHelper.getCoinDrawableResource(this, coin.code),
+                    items.map { getCommunicationModeInfo(it) },
+                    items.indexOf(selected),
+                    object : OnItemSelectedListener {
+                        override fun onItemSelected(position: Int) {
+                            viewModel.delegate.onSelectSetting(position)
+                        }
+                    }
+            ).show(supportFragmentManager, "communication_mode_selector")
         })
 
         viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (settings, hasTorPrerequisites) ->
@@ -224,16 +233,20 @@ class PrivacySettingsActivity : BaseActivity(), SelectorDialog.Listener {
         }
     }
 
+    private fun getCommunicationModeInfo(communicationMode: CommunicationMode): Pair<String, String> {
+        return when(communicationMode) {
+            CommunicationMode.Infura -> Pair(communicationMode.title, "infura.io")
+            CommunicationMode.Incubed -> Pair(communicationMode.title, "slock.it")
+            else -> throw Exception("Unsupported syncMode: $communicationMode")
+        }
+    }
+
     private fun setTorSwitch(checked: Boolean) {
         torConnectionSwitch.setOnCheckedChangeListener(null)
         torConnectionSwitch.isChecked = checked
         torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchTorEnabled(isChecked)
         }
-    }
-
-    override fun onSelectItem(position: Int) {
-        viewModel.delegate.onSelectSetting(position)
     }
 
     private fun showAppRestartAlert(checked: Boolean) {
