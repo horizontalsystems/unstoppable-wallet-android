@@ -1,163 +1,166 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pinUnlock"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtTitle"
-        style="@style/Headline1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="?ColorOz"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:text="@string/SetPin_Title" />
-
-    <TextView
-        android:id="@+id/txtBigError"
-        style="@style/Headline1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="?ColorLucian"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:text="@string/SetPin_Title" />
-
-    <TextView
-        android:id="@+id/txtDescription"
-        style="@style/Subhead2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="15dp"
-        android:ellipsize="end"
-        android:includeFontPadding="false"
-        android:maxLines="3"
-        android:textAlignment="center"
-        android:textColor="@color/grey"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:text="@string/SetPin_Info" />
-
-    <TextView
-        android:id="@+id/txtSmallError"
-        style="@style/Subhead2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:textAlignment="center"
-        android:textColor="?ColorLucian"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:text="@string/SetPin_Info" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/pinCirclesWrapper"
+        android:id="@+id/pinUnlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65">
+        android:layout_gravity="center_vertical">
 
-        <ImageView
-            android:id="@+id/imgPinMaskOne"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/txtTitle"
+            style="@style/Headline1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imgPinMaskTwo"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_pin_ellipse" />
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="?ColorOz"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="@string/SetPin_Title" />
 
-        <ImageView
-            android:id="@+id/imgPinMaskTwo"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/txtBigError"
+            style="@style/Headline1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskOne"
-            app:layout_constraintEnd_toStartOf="@+id/imgPinMaskThree"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskOne"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskOne"
-            app:srcCompat="@drawable/ic_pin_ellipse" />
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="?ColorLucian"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="@string/SetPin_Title" />
 
-        <ImageView
-            android:id="@+id/imgPinMaskThree"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/txtDescription"
+            style="@style/Subhead2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskTwo"
-            app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFour"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskTwo"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskTwo"
-            app:srcCompat="@drawable/ic_pin_ellipse" />
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="3"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="@string/SetPin_Info" />
 
-        <ImageView
-            android:id="@+id/imgPinMaskFour"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/txtSmallError"
+            style="@style/Subhead2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskThree"
-            app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFive"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskThree"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskThree"
-            app:srcCompat="@drawable/ic_pin_ellipse" />
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textAlignment="center"
+            android:textColor="?ColorLucian"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="@string/SetPin_Info" />
 
-        <ImageView
-            android:id="@+id/imgPinMaskFive"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pinCirclesWrapper"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskFour"
-            app:layout_constraintEnd_toStartOf="@+id/imgPinMaskSix"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskFour"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskFour"
-            app:srcCompat="@drawable/ic_pin_ellipse" />
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageView
-            android:id="@+id/imgPinMaskSix"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskFive"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskFive"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskFive"
-            app:srcCompat="@drawable/ic_pin_ellipse" />
+            <ImageView
+                android:id="@+id/imgPinMaskOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imgPinMaskTwo"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_pin_ellipse" />
+
+            <ImageView
+                android:id="@+id/imgPinMaskTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskOne"
+                app:layout_constraintEnd_toStartOf="@+id/imgPinMaskThree"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskOne"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskOne"
+                app:srcCompat="@drawable/ic_pin_ellipse" />
+
+            <ImageView
+                android:id="@+id/imgPinMaskThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskTwo"
+                app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFour"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskTwo"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskTwo"
+                app:srcCompat="@drawable/ic_pin_ellipse" />
+
+            <ImageView
+                android:id="@+id/imgPinMaskFour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskThree"
+                app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFive"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskThree"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskThree"
+                app:srcCompat="@drawable/ic_pin_ellipse" />
+
+            <ImageView
+                android:id="@+id/imgPinMaskFive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskFour"
+                app:layout_constraintEnd_toStartOf="@+id/imgPinMaskSix"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskFour"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskFour"
+                app:srcCompat="@drawable/ic_pin_ellipse" />
+
+            <ImageView
+                android:id="@+id/imgPinMaskSix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskFive"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskFive"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskFive"
+                app:srcCompat="@drawable/ic_pin_ellipse" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
