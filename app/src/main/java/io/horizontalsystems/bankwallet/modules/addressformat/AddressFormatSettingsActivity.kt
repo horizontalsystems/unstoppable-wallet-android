@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
+import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import kotlinx.android.synthetic.main.activity_address_format_settings.*
 
 class AddressFormatSettingsActivity : BaseActivity() {
@@ -90,13 +91,13 @@ class AddressFormatSettingsActivity : BaseActivity() {
         })
         view.showDerivationChangeAlert.observe(this, Observer { (derivationSetting, coinTitle) ->
             val bipVersion = AccountType.getDerivationTitle(derivationSetting.derivation)
-            AddressFormatSettingsAlertDialog.show(
+            ConfirmationDialog.show(
                     title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
                     subtitle = bipVersion,
                     contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content, coinTitle, coinTitle),
                     actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, bipVersion),
                     activity = this,
-                    listener = object : AddressFormatSettingsAlertDialog.Listener {
+                    listener = object : ConfirmationDialog.Listener {
                         override fun onActionButtonClick() {
                             presenter.proceedWithDerivationChange(derivationSetting)
                         }

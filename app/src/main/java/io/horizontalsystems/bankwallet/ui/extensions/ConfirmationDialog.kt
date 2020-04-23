@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.addressformat
+package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.os.Bundle
 import android.view.View
@@ -6,9 +6,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 
-class AddressFormatSettingsAlertDialog(
+class ConfirmationDialog(
         private val listener: Listener,
         private val title: String,
         private val subtitle: String,
@@ -18,6 +17,7 @@ class AddressFormatSettingsAlertDialog(
 
     interface Listener {
         fun onActionButtonClick() {}
+        fun onCancelButtonClick() {}
     }
 
     private lateinit var contentTextView: TextView
@@ -26,7 +26,7 @@ class AddressFormatSettingsAlertDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setContentView(R.layout.fragment_bottom_coin_settings_alert)
+        setContentView(R.layout.fragment_confirmation_dialog)
 
         setTitle(title)
         setSubtitle(subtitle)
@@ -53,13 +53,14 @@ class AddressFormatSettingsAlertDialog(
 
         btnGrey.text = getString(R.string.Alert_Cancel)
         btnGrey.setOnClickListener {
+            listener.onCancelButtonClick()
             dismiss()
         }
     }
 
     companion object {
         fun show(title: String, subtitle: String, contentText: String, actionButtonTitle: String, activity: FragmentActivity, listener: Listener) {
-            val fragment = AddressFormatSettingsAlertDialog(listener, title, subtitle, contentText, actionButtonTitle)
+            val fragment = ConfirmationDialog(listener, title, subtitle, contentText, actionButtonTitle)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_coin_settings_alert_dialog")

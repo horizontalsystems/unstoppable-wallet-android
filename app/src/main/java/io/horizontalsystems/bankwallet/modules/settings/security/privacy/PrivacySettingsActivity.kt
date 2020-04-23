@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
+import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
@@ -166,13 +167,13 @@ class PrivacySettingsActivity : BaseActivity() {
                     "\n\n" +
                     getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Content, coin.title)
 
-            PrivacySettingsAlertDialog.show(
+            ConfirmationDialog.show(
                     title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
                     subtitle = communicationMode.title,
                     contentText = message,
                     actionButtonTitle = getString(R.string.Button_Change),
                     activity = this,
-                    listener = object : PrivacySettingsAlertDialog.Listener {
+                    listener = object : ConfirmationDialog.Listener {
                         override fun onActionButtonClick() {
                             viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
                         }
