@@ -74,7 +74,7 @@ class PrivacySettingsPresenter(
 
                 openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
                 openedPrivacySettings?.enabled = !checked
-                onSelectCommunicationModeByTor(interactor.ether(), CommunicationMode.Infura, CommunicationMode.Incubed, true)
+                onSelectCommunicationModeByTor()
                 return
             }
         }
@@ -149,15 +149,14 @@ class PrivacySettingsPresenter(
         }
     }
 
-    private fun onSelectCommunicationModeByTor(coin: Coin, selectedValue: CommunicationMode, currentValue: CommunicationMode,
-                                           hasTorPrerequisites: Boolean = false) {
-        if (currentValue != selectedValue && interactor.getWalletsForUpdate(coin.type).count() > 0) {
-            view?.showCommunicationModeChangeAlert(coin, selectedValue, hasTorPrerequisites)
-        } else {
+    private fun onSelectCommunicationModeByTor() {
+        val coin = interactor.ether()
+        val selectedValue = CommunicationMode.Infura
 
-            if(hasTorPrerequisites){
-                view?.showTorPrerequisitesAlert()
-            }
+        if (interactor.getWalletsForUpdate(coin.type).isNotEmpty()) {
+            view?.showCommunicationModeChangeAlert(coin, selectedValue)
+        } else {
+            view?.showTorPrerequisitesAlert()
 
             updateCommunicationMode(coin, selectedValue)
         }
@@ -167,7 +166,7 @@ class PrivacySettingsPresenter(
         updateCommunicationMode(coin, selectedValue)
 
         val walletsForUpdate = interactor.getWalletsForUpdate(coin.type)
-        if (walletsForUpdate.count() > 0) {
+        if (walletsForUpdate.isNotEmpty()) {
             interactor.reSyncWallets(walletsForUpdate)
         }
     }
@@ -176,7 +175,7 @@ class PrivacySettingsPresenter(
         updateSyncMode(coin, selectedValue)
 
         val walletsForUpdate = interactor.getWalletsForUpdate(coin.type)
-        if (walletsForUpdate.count() > 0) {
+        if (walletsForUpdate.isNotEmpty()) {
             interactor.reSyncWallets(walletsForUpdate)
         }
     }
@@ -200,11 +199,8 @@ class PrivacySettingsPresenter(
     }
 
     override fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode) {
-        updateCommunicationMode(coin, communicationMode)
-
-        interactor.getWalletsForUpdate(coin.type).let {
-            interactor.reSyncWallets(it)
-        }
+        onSelectCommunicationMode(coin, communicationMode)
+        updateTorState(true)
     }
 
     override fun onSelectTransactionSorting(transactionDataSortingType: TransactionDataSortingType) {
