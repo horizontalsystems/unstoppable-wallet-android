@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.content.Context
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.INetManager
-import io.horizontalsystems.netkit.NetKit
+import io.horizontalsystems.bankwallet.core.ITorManager
+import io.horizontalsystems.tor.TorKit
 import io.horizontalsystems.tor.ConnectionStatus
 import io.horizontalsystems.tor.Tor
 import io.reactivex.Single
@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
-class NetManager(context: Context, val localStorage: ILocalStorage) : INetManager {
+class TorManager(context: Context, val localStorage: ILocalStorage) : ITorManager {
 
     interface Listener{
         fun onStatusChange(torStatus: TorStatus)
@@ -24,8 +24,8 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
 
     private val disposables = CompositeDisposable()
     private var listener: Listener? = null
-    private val kit: NetKit by lazy {
-        NetKit(context)
+    private val kit: TorKit by lazy {
+        TorKit(context)
     }
 
     init {
@@ -41,7 +41,7 @@ class NetManager(context: Context, val localStorage: ILocalStorage) : INetManage
                     listener?.onStatusChange(getStatus(it))
                     torObservable.onNext(getStatus(it))
                 }, {
-                    Log.e("NetManager", "Tor exception", it)
+                    Log.e("TorManager", "Tor exception", it)
                 })
         )
         kit.startTor(false)

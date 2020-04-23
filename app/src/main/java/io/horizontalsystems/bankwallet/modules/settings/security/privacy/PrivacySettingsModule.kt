@@ -73,7 +73,7 @@ object PrivacySettingsModule {
     }
 
     fun init(view: PrivacySettingsViewModel, router: IPrivacySettingsRouter) {
-        val interactor = PrivacySettingsInteractor(App.pinComponent, App.netKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager, App.localStorage, App.adapterManager)
+        val interactor = PrivacySettingsInteractor(App.pinComponent, App.torKitManager, App.blockchainSettingsManager, App.appConfigProvider, App.walletManager, App.localStorage, App.adapterManager)
         val presenter = PrivacySettingsPresenter(interactor, router)
         interactor.delegate = presenter
         view.delegate = presenter

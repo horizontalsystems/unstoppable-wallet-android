@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class PrivacySettingsInteractor(
         private val pinComponent: IPinComponent,
-        private val netManager: INetManager,
+        private val torManager: ITorManager,
         private val blockchainSettingsManager: IBlockchainSettingsManager,
         private val appConfigProvider: IAppConfigProvider,
         private val walletManager: IWalletManager,
@@ -31,22 +31,22 @@ class PrivacySettingsInteractor(
         get() = walletManager.wallets.count()
 
     override var isTorEnabled: Boolean
-        get() = netManager.isTorEnabled
+        get() = torManager.isTorEnabled
         set(value) {
             pinComponent.updateLastExitDateBeforeRestart()
             if (value) {
-                netManager.enableTor()
+                torManager.enableTor()
             } else {
-                netManager.disableTor()
+                torManager.disableTor()
             }
         }
 
     override val isTorNotificationEnabled: Boolean
-        get() = netManager.isTorNotificationEnabled
+        get() = torManager.isTorNotificationEnabled
 
     override fun subscribeToTorStatus() {
         delegate?.onTorConnectionStatusUpdated(TorStatus.Closed)
-        netManager.torObservable
+        torManager.torObservable
                 .subscribe { connectionStatus ->
                     delegate?.onTorConnectionStatusUpdated(connectionStatus)
                 }.let {
@@ -59,7 +59,7 @@ class PrivacySettingsInteractor(
     }
 
     override fun stopTor() {
-        netManager.stop()
+        torManager.stop()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     delegate?.didStopTor()
@@ -71,11 +71,11 @@ class PrivacySettingsInteractor(
     }
 
     override fun enableTor() {
-        netManager.start()
+        torManager.start()
     }
 
     override fun disableTor() {
-        netManager.stop()
+        torManager.stop()
                 .subscribe()
                 .let {
                     disposables.add(it)
