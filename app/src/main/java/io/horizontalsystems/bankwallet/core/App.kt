@@ -32,7 +32,7 @@ class App : CoreApp() {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
-        lateinit var netKitManager: INetManager
+        lateinit var torKitManager: ITorManager
         lateinit var chartTypeStorage: IChartTypeStorage
 
         lateinit var wordsManager: WordsManager
@@ -122,7 +122,7 @@ class App : CoreApp() {
             themeStorage = this
         }
 
-        netKitManager = NetManager(instance, localStorage)
+        torKitManager = TorManager(instance, localStorage)
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()
@@ -202,7 +202,7 @@ class App : CoreApp() {
             AppCompatDelegate.setDefaultNightMode(nightMode)
         }
 
-        registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(netKitManager))
+        registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
     }
 
     override fun attachBaseContext(base: Context) {
