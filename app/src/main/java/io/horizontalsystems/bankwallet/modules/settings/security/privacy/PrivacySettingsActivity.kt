@@ -160,14 +160,11 @@ class PrivacySettingsActivity : BaseActivity() {
             ).show(supportFragmentManager, "communication_mode_selector")
         })
 
-        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (settings, hasTorPrerequisites) ->
+        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
 
-            val (coin, communicationMode) = settings
-            var message = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Content, coin.title)
-
-            if(hasTorPrerequisites){
-                message =  "${getString(R.string.Tor_PrerequisitesAlert_Content)}\n\n${message}"
-            }
+            val message = getString(R.string.Tor_PrerequisitesAlert_Content) +
+                    "\n\n" +
+                    getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Content, coin.title)
 
             PrivacySettingsAlertDialog.show(
                     title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
@@ -178,17 +175,11 @@ class PrivacySettingsActivity : BaseActivity() {
                     listener = object : PrivacySettingsAlertDialog.Listener {
                         override fun onActionButtonClick() {
                             viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
-
-                            if(hasTorPrerequisites){
-                                viewModel.delegate.updateTorState(true)
-                            }
                         }
 
                         override fun onCancelButtonClick() {
-                            if(hasTorPrerequisites){
-                                setTorSwitch(false)
-                                viewModel.delegate.onApplyTorPrerequisites(false)
-                            }
+                            setTorSwitch(false)
+                            viewModel.delegate.onApplyTorPrerequisites(false)
                         }
                     }
             )

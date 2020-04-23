@@ -18,7 +18,7 @@ object PrivacySettingsModule {
         fun setRestoreWalletSettingsViewItems(items: List<PrivacySettingsViewItem>)
         fun showCommunicationSelectorDialog(communicationModeOptions: List<CommunicationMode>, selected: CommunicationMode, coin: Coin)
         fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode, coin: Coin)
-        fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode, hasTorPrerequisites: Boolean )
+        fun showCommunicationModeChangeAlert(coin: Coin, selectedCommunication: CommunicationMode )
         fun setTransactionsOrdering(transactionsOrdering: TransactionDataSortingType)
         fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType)
         fun setTorConnectionStatus(connectionStatus: TorStatus)
