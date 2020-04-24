@@ -115,6 +115,8 @@
     <string name="Send_TxSpeed_Low">پایین</string>
     <string name="Send_TxSpeed_Medium">متوسط</string>
     <string name="Send_TxSpeed_High">بالا</string>
+    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">مدت زمان:</string>
     <string name="Send_DialogFee">قیمت:</string>
     <string name="Send_DialogTotal">مجموع:</string>
@@ -197,7 +199,6 @@
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
-    <string name="Settings_ManageCoins">مدیریت سکه ها</string>
     <string name="Settings_ExperimentalFeatures">آزمایشی</string>
     <string name="Settings_RestoreWallet">بازیابی كيف پول</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
@@ -232,8 +233,13 @@
     <string name="SettingsSecurity_TorConnectionDescription">هنگام استفاده از این برنامه، ترافیک اینترنت خود را کاملاً ناشناس کنید. می تواند آهسته باشد.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
     <string name="SettingsSecurity_SortingShuffle">مخلوط کردن</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingOff">خاموش</string>
+    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
+    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
@@ -324,7 +330,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">بعد از این تغییر، کیف پول باید مجدداً خود را با زنجیره بلوکی %s هماهنگ کند.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s تنظیمات</string>
@@ -336,6 +341,7 @@
     <string name="TorPage_Failed">ناموفق</string>
     <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="TorPage_Title">ارتباط Tor</string>
+    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">غیرقابل توقف</string>
     <!--Coin Option-->
@@ -373,5 +379,7 @@
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
     <string name="Charts_LatestNews">آخرین اخبار</string>
     <!--Rate list-->
-    <string name="RateList_updated">به روز شده \n%s</string>
+    <string name="RateList_portfolio">Portfolio</string>
+    <string name="RateList_top100">Top 100</string>
+    <string name="RateList_prices">Prices</string>
 </resources>
