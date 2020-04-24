@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
@@ -43,8 +44,9 @@ class BottomSheetSelectorDialog(
     }
 
     companion object {
-        fun newInstance(title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, listener: OnItemSelectedListener, warning: String? = null, notifyUnchanged: Boolean = false): BottomSheetSelectorDialog {
-            return BottomSheetSelectorDialog(title, subtitle, icon, items, selected, listener, warning, notifyUnchanged)
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, listener: OnItemSelectedListener, warning: String? = null, notifyUnchanged: Boolean = false) {
+            BottomSheetSelectorDialog(title, subtitle, icon, items, selected, listener, warning, notifyUnchanged)
+                    .show(fragmentManager, "selector_dialog")
         }
     }
 }

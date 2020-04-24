@@ -116,7 +116,8 @@ class PrivacySettingsActivity : BaseActivity() {
         })
 
         viewModel.showTransactionsSortingSelectorDialog.observe(this, Observer { (items, selected) ->
-            BottomSheetSelectorDialog.newInstance(
+            BottomSheetSelectorDialog.show(
+                    supportFragmentManager,
                     getString(R.string.SettingsPrivacy_Transactions),
                     getString(R.string.SettingsPrivacy_TransactionsSettingText),
                     R.drawable.ic_transactions,
@@ -127,11 +128,12 @@ class PrivacySettingsActivity : BaseActivity() {
                             viewModel.delegate.onSelectTransactionSorting(items[position])
                         }
                     }
-            ).show(supportFragmentManager, "transactions_sorting_settings_selector")
+            )
         })
 
         viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-            BottomSheetSelectorDialog.newInstance(
+            BottomSheetSelectorDialog.show(
+                    supportFragmentManager,
                     getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
                     coin.title,
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
@@ -143,11 +145,12 @@ class PrivacySettingsActivity : BaseActivity() {
                         }
                     },
                     warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
-            ).show(supportFragmentManager, "syncmode_settings_selector")
+            )
         })
 
         viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-            BottomSheetSelectorDialog.newInstance(
+            BottomSheetSelectorDialog.show(
+                    supportFragmentManager,
                     getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
                     coin.title,
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
@@ -158,7 +161,7 @@ class PrivacySettingsActivity : BaseActivity() {
                             viewModel.delegate.onSelectSetting(position)
                         }
                     }
-            ).show(supportFragmentManager, "communication_mode_selector")
+            )
         })
 
         viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
