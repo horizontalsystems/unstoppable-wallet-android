@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -23,6 +24,16 @@ class ConfirmationDialog(
     private lateinit var contentTextView: TextView
     private lateinit var btnYellow: Button
     private lateinit var btnGrey: Button
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        listener.onCancelButtonClick()
+    }
+
+    override fun close() {
+        super.close()
+        listener.onCancelButtonClick()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
