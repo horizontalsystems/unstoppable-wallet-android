@@ -10,12 +10,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import kotlinx.android.synthetic.main.view_hodler_input.*
 
 class SendHodlerFragment(
         private val hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate,
         private val sendHandler: SendModule.ISendHandler
-) : SendSubmoduleFragment(), SelectorDialog.Listener {
+) : SendSubmoduleFragment() {
 
     private lateinit var presenter: SendHodlerPresenter
 
@@ -33,7 +35,7 @@ class SendHodlerFragment(
             presenter.onClickLockTimeInterval()
         }
 
-        presenterView.selectedLockTimeInterval.observe(this, Observer {
+        presenterView.selectedLockTimeInterval.observe(viewLifecycleOwner, Observer {
             lockTimeMenu.setText(it.stringResId())
         })
 
@@ -43,14 +45,12 @@ class SendHodlerFragment(
             }
 
             SelectorDialog
-                    .newInstance(this, selectorItems, getString(R.string.Send_DialogLockTime))
+                    .newInstance(selectorItems, getString(R.string.Send_DialogLockTime), { position ->
+                        presenter.onSelectLockTimeInterval(position)
+                    })
                     .show(this.parentFragmentManager, "time_intervals_selector")
 
         })
-    }
-
-    override fun onSelectItem(position: Int) {
-        presenter.onSelectLockTimeInterval(position)
     }
 
     override fun init() {
