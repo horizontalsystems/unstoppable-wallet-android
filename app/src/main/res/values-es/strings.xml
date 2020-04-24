@@ -115,6 +115,8 @@
     <string name="Send_TxSpeed_Low">Bajo</string>
     <string name="Send_TxSpeed_Medium">Medio</string>
     <string name="Send_TxSpeed_High">Alto</string>
+    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">Duración:</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
@@ -197,7 +199,6 @@
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
-    <string name="Settings_ManageCoins">Gestionar monedas</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_RestoreWallet">Restaurar cartera</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
@@ -232,8 +233,13 @@
     <string name="SettingsSecurity_TorConnectionDescription">Puede hacer que su tráfico de internet sea anónimo mientras usa esta aplicación. Puede tornarse lento.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones de la aplicación Monedero Unstoppable están desactivadas. Debe activarlas para que Tor funcione.</string>
     <string name="SettingsSecurity_SortingShuffle">Aleatoriamente</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingOff">Apagar</string>
+    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
+    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -332,7 +338,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Comunicación</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">Después de este cambio el monedero tendrá que resincronizarse con la blockchain %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Ajustes</string>
@@ -344,6 +349,7 @@
     <string name="TorPage_Failed">Falló</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="TorPage_Title">Conexión Tor</string>
+    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Ustoppable</string>
     <!--Coin Option-->
@@ -381,5 +387,7 @@
     <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
     <string name="Charts_LatestNews">Últimas noticias</string>
     <!--Rate list-->
-    <string name="RateList_updated">actualizado\n%s</string>
+    <string name="RateList_portfolio">Portfolio</string>
+    <string name="RateList_top100">Top 100</string>
+    <string name="RateList_prices">Prices</string>
 </resources>
