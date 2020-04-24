@@ -196,7 +196,6 @@ class PrivacySettingsActivity : BaseActivity() {
         return when(sortingType) {
             TransactionDataSortingType.Shuffle -> getString(R.string.SettingsSecurity_SortingShuffle)
             TransactionDataSortingType.Bip69 -> getString(R.string.SettingsSecurity_SortingBip69)
-            TransactionDataSortingType.Off -> getString(R.string.SettingsSecurity_SortingOff)
         }
     }
 
@@ -207,9 +206,6 @@ class PrivacySettingsActivity : BaseActivity() {
             }
             TransactionDataSortingType.Bip69 -> {
                 Pair(getString(R.string.SettingsSecurity_SortingBip69), getString(R.string.SettingsSecurity_SortingBip69Description))
-            }
-            TransactionDataSortingType.Off -> {
-                Pair(getString(R.string.SettingsSecurity_SortingOff), getString(R.string.SettingsSecurity_SortingOff))
             }
         }
     }
