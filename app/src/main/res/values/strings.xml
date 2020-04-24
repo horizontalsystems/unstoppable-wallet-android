@@ -312,7 +312,6 @@
     <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
-    <string name="SettingsSecurity_SortingOff">Off</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
     <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>

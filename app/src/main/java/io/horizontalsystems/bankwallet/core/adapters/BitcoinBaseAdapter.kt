@@ -222,7 +222,6 @@ abstract class BitcoinBaseAdapter(
         const val decimal = 8
 
         fun getTransactionSortingType(sortType: TransactionDataSortingType?): TransactionDataSortType = when(sortType){
-            TransactionDataSortingType.Off -> TransactionDataSortType.None
             TransactionDataSortingType.Bip69 -> TransactionDataSortType.Bip69
             else -> TransactionDataSortType.Shuffle
         }
