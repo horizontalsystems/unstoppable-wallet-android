@@ -294,7 +294,7 @@
     <!--Settings-->
 
     <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings > Security to set up fingerprint access.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">Fingerprint access is not enabled on this device. It can be activated in security section of Android settings.</string>
 
     <!--Setting_Security-->
 
