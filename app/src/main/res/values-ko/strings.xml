@@ -115,6 +115,8 @@
     <string name="Send_TxSpeed_Low">낮음</string>
     <string name="Send_TxSpeed_Medium">보통</string>
     <string name="Send_TxSpeed_High">높음</string>
+    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">기간:</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
@@ -197,7 +199,6 @@
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
-    <string name="Settings_ManageCoins">코인 관리</string>
     <string name="Settings_ExperimentalFeatures">실험적인</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
@@ -232,8 +233,13 @@
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷 거래를 전부 익명으로 처리하여 주세요. 느려질 수 있습니다.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingOff">끄기</string>
+    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
+    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -326,7 +332,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">블록 체인</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s 설정</string>
@@ -338,6 +343,7 @@
     <string name="TorPage_Failed">실패</string>
     <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="TorPage_Title">토르 연결</string>
+    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
@@ -375,5 +381,7 @@
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
     <string name="Charts_LatestNews">최신 뉴스</string>
     <!--Rate list-->
-    <string name="RateList_updated">업데이트되었습니다\n%s</string>
+    <string name="RateList_portfolio">Portfolio</string>
+    <string name="RateList_top100">Top 100</string>
+    <string name="RateList_prices">Prices</string>
 </resources>
