@@ -162,15 +162,10 @@ class PrivacySettingsActivity : BaseActivity() {
         })
 
         viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
-
-            val message = getString(R.string.Tor_PrerequisitesAlert_Content) +
-                    "\n\n" +
-                    getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Content, coin.title)
-
             ConfirmationDialog.show(
                     title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
                     subtitle = communicationMode.title,
-                    contentText = message,
+                    contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
                     actionButtonTitle = getString(R.string.Button_Change),
                     activity = this,
                     listener = object : ConfirmationDialog.Listener {
