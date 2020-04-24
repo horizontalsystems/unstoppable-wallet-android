@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.submodules.hodler
+package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.content.DialogInterface
@@ -15,11 +15,7 @@ import kotlinx.android.synthetic.main.view_holder_item_selector.*
 
 class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
 
-    interface Listener {
-        fun onSelectItem(position: Int)
-    }
-
-    private var listener: Listener? = null
+    private var onSelectItem: ((Int) -> Unit)? = null
     private var items = listOf<SelectorItem>()
     private var title: String? = null
     private var toggleKeyboard: Boolean = true
@@ -51,7 +47,7 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     }
 
     override fun onClick(position: Int) {
-        listener?.onSelectItem(position)
+        onSelectItem?.invoke(position)
         dismiss()
     }
 
@@ -66,9 +62,9 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     }
 
     companion object {
-        fun newInstance(listener: Listener? = null, items: List<SelectorItem>, title: String? = null, toggleKeyboard: Boolean = true): SelectorDialog {
+        fun newInstance(items: List<SelectorItem>, title: String? = null, onSelectItem: ((Int) -> Unit)? = null, toggleKeyboard: Boolean = true): SelectorDialog {
             val dialog = SelectorDialog()
-            dialog.listener = listener
+            dialog.onSelectItem = onSelectItem
             dialog.items = items
             dialog.title = title
             dialog.toggleKeyboard = toggleKeyboard
