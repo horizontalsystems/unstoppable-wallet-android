@@ -115,6 +115,8 @@
     <string name="Send_TxSpeed_Low">低</string>
     <string name="Send_TxSpeed_Medium">中</string>
     <string name="Send_TxSpeed_High">高</string>
+    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">时长:</string>
     <string name="Send_DialogFee">费用：</string>
     <string name="Send_DialogTotal">总额：</string>
@@ -197,7 +199,6 @@
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
     <string name="Settings_Notifications">通知</string>
-    <string name="Settings_ManageCoins">管理代币</string>
     <string name="Settings_ExperimentalFeatures">实验性</string>
     <string name="Settings_RestoreWallet">恢复钱包</string>
     <string name="Settings_BaseCurrency">基础货币</string>
@@ -232,8 +233,13 @@
     <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingOff">关</string>
+    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
+    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -325,7 +331,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s 设置</string>
@@ -337,6 +342,7 @@
     <string name="TorPage_Failed">失败</string>
     <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="TorPage_Title">Tor连接</string>
+    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
@@ -374,5 +380,7 @@
     <string name="Charts_Error_NotAvailable">无可用图表</string>
     <string name="Charts_LatestNews">最新消息</string>
     <!--Rate list-->
-    <string name="RateList_updated">已更新\n%s</string>
+    <string name="RateList_portfolio">Portfolio</string>
+    <string name="RateList_top100">Top 100</string>
+    <string name="RateList_prices">Prices</string>
 </resources>
