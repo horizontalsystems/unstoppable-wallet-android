@@ -184,7 +184,7 @@ dependencies {
     }
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:94b0c61'
+    implementation 'com.github.horizontalsystems:tor-kit-android:7d14887'
 
     // UI modules
 

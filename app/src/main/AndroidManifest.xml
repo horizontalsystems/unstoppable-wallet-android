@@ -131,9 +131,6 @@
             android:name=".modules.restore.restorecoins.RestoreCoinsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.torpage.TorPageActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.ratechart.RateChartActivity"
             android:screenOrientation="portrait" />
         <activity

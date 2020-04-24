@@ -40,7 +40,6 @@ class TorManager(
     }
 
     override fun start() {
-
         disposables.add(kit.torInfoSubject
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -80,6 +79,7 @@ class TorManager(
             ConnectionStatus.FAILED ->TorStatus.Failed
         }
     }
+
 }
 
 enum class TorStatus(val value: String) {
