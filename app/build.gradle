@@ -143,7 +143,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'com.aurelhubert:ahbottomnavigation:2.3.4'
-    implementation 'com.google.android.material:material:1.2.0-alpha06'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
