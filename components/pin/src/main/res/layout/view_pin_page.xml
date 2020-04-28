@@ -5,76 +5,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/topText"
+    <TextView
+        android:id="@+id/txtTitle"
+        style="@style/Headline1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="?ColorOz"
+        android:visibility="visible"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/txtBigError"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
+        tools:text="@string/SetPin_Title" />
 
-        <TextView
-            android:id="@+id/txtTitle"
-            style="@style/Headline1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="?ColorOz"
-            android:visibility="visible"
-            tools:text="@string/SetPin_Title" />
+    <TextView
+        android:id="@+id/txtBigError"
+        style="@style/Headline1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="?ColorLucian"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/txtDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        tools:text="@string/SetPin_Title" />
 
-        <TextView
-            android:id="@+id/txtBigError"
-            style="@style/Headline1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="?ColorLucian"
-            android:visibility="gone"
-            tools:text="@string/SetPin_Title" />
+    <TextView
+        android:id="@+id/txtDescription"
+        style="@style/Subhead2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="3"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/txtSmallError"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtBigError"
+        tools:text="@string/SetPin_Info" />
 
-        <TextView
-            android:id="@+id/txtDescription"
-            style="@style/Subhead2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:includeFontPadding="false"
-            android:maxLines="3"
-            android:textAlignment="center"
-            android:textColor="@color/grey"
-            android:visibility="gone"
-            tools:text="@string/SetPin_Info" />
-
-        <TextView
-            android:id="@+id/txtSmallError"
-            style="@style/Subhead2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:textAlignment="center"
-            android:textColor="?ColorLucian"
-            android:visibility="gone"
-            tools:text="@string/SetPin_Info" />
-    </FrameLayout>
+    <TextView
+        android:id="@+id/txtSmallError"
+        style="@style/Subhead2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textAlignment="center"
+        android:textColor="?ColorLucian"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescription"
+        tools:text="@string/SetPin_Info" />
 
     <LinearLayout
         android:id="@+id/pinCirclesWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topText">
+        app:layout_constraintTop_toBottomOf="@+id/txtSmallError">
 
         <View
             android:layout_width="0dp"
