@@ -40,11 +40,8 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
-    var isBackedUp: Boolean
     var sendInputType: SendModule.InputType?
-    var iUnderstand: Boolean
     var baseCurrencyCode: String?
-    var blockTillDate: Long?
 
     var baseBitcoinProvider: String?
     var baseLitecoinProvider: String?
@@ -149,9 +146,6 @@ interface ITransactionDataProviderManager {
 }
 
 interface IWordsManager {
-    var isBackedUp: Boolean
-    var backedUpSignal: PublishSubject<Unit>
-
     fun validate(words: List<String>)
     fun generateWords(count: Int = 12): List<String>
 }

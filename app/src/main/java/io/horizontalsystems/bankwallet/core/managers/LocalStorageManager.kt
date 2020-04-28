@@ -15,15 +15,11 @@ import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThemeStorage
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
-import java.time.Instant
 
 class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val SEND_INPUT_TYPE = "send_input_type"
-    private val WORDLIST_BACKUP = "wordlist_backup"
-    private val I_UNDERSTAND = "i_understand"
-    private val BLOCK_TILL_DATE = "unblock_date"
     private val BASE_CURRENCY_CODE = "base_currency_code"
     private val FAILED_ATTEMPTS = "failed_attempts"
     private val LOCKOUT_TIMESTAMP = "lockout_timestamp"
@@ -49,12 +45,6 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
 
     val gson by lazy { Gson() }
 
-    override var isBackedUp: Boolean
-        get() = App.preferences.getBoolean(WORDLIST_BACKUP, false)
-        set(backedUp) {
-            App.preferences.edit().putBoolean(WORDLIST_BACKUP, backedUp).apply()
-        }
-
     override var sendInputType: SendModule.InputType?
         get() = App.preferences.getString(SEND_INPUT_TYPE, null)?.let {
             try {
@@ -71,29 +61,10 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
             }
         }
 
-    override var iUnderstand: Boolean
-        get() = App.preferences.getBoolean(I_UNDERSTAND, false)
-        set(value) {
-            App.preferences.edit().putBoolean(I_UNDERSTAND, value).apply()
-        }
-
     override var baseCurrencyCode: String?
         get() = App.preferences.getString(BASE_CURRENCY_CODE, null)
         set(value) {
             App.preferences.edit().putString(BASE_CURRENCY_CODE, value).apply()
-        }
-
-    override var blockTillDate: Long?
-        get() {
-            val date = App.preferences.getLong(BLOCK_TILL_DATE, 0)
-            return if (date > 0) date else null
-        }
-        set(date) {
-            date?.let {
-                App.preferences.edit().putLong(BLOCK_TILL_DATE, date).apply()
-            } ?: run {
-                App.preferences.edit().remove(BLOCK_TILL_DATE).apply()
-            }
         }
 
     override var baseBitcoinProvider: String?
