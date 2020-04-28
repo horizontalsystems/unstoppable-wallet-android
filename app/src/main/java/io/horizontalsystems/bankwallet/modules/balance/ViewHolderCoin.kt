@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.views.setCoinImage
 import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin.*
@@ -51,7 +52,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         item.apply {
             syncSpinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
 
-            iconCoin.bind(coinCode)
+            iconCoin.setCoinImage(coinCode)
 
             coinName.text = coinTitle
             coinLabel.text = coinType

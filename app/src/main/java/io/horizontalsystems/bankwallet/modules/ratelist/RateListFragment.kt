@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.views.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_rates.*
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
@@ -107,7 +108,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
     fun bind(coinItem: CoinItem, isLast: Boolean) {
         coinIcon.isVisible = coinItem.coin != null
-        coinItem.coin?.code?.let { coinIcon.bind(it) }
+        coinItem.coin?.code?.let { coinIcon.setCoinImage(it) }
         titleText.text = coinItem.coinName
         subtitleText.text = coinItem.coinCode
 

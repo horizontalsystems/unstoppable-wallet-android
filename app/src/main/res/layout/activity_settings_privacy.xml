@@ -68,16 +68,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <io.horizontalsystems.views.IconView
+                <ImageView
                     android:id="@+id/controlIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
                     android:layout_marginStart="14dp"
                     android:padding="10dp"
+                    android:src="@drawable/ic_tor_connected"
+                    android:tint="?ColorJacob"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_tor_connected" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ProgressBar
                     android:id="@+id/connectionSpinner"
