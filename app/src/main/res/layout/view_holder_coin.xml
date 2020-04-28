@@ -37,10 +37,11 @@
             app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
             app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
 
-        <io.horizontalsystems.views.IconView
+        <ImageView
             android:id="@+id/iconCoin"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            tools:src="@drawable/coin_btc"
             app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
             app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
             app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"

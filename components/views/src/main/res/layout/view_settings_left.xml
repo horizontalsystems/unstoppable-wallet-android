@@ -13,15 +13,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <io.horizontalsystems.views.IconView
+    <ImageView
         android:id="@+id/settingsIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
+        android:src="@drawable/ic_attention"
+        android:tint="?ColorJacob"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_attention" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/settingsTitle"

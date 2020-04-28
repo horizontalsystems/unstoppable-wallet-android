@@ -63,26 +63,26 @@ class PrivacySettingsActivity : BaseActivity() {
                 when (torStatus) {
                     TorStatus.Connecting -> {
                         connectionSpinner.visibility = View.VISIBLE
-                        controlIcon.setTint(getTint(R.color.grey))
-                        controlIcon.bind(R.drawable.ic_tor_connected)
+                        controlIcon.imageTintList = getTint(R.color.grey)
+                        controlIcon.setImageResource(R.drawable.ic_tor_connected)
                         subtitleText.text = getString(R.string.TorPage_Connecting)
                     }
                     TorStatus.Connected -> {
                         connectionSpinner.visibility = View.GONE
-                        controlIcon.setTint(getTint(R.color.yellow_d))
-                        controlIcon.bind(R.drawable.ic_tor_connected)
+                        controlIcon.imageTintList = getTint(R.color.yellow_d)
+                        controlIcon.setImageResource(R.drawable.ic_tor_connected)
                         subtitleText.text = getString(R.string.TorPage_Connected)
                     }
                     TorStatus.Failed -> {
                         connectionSpinner.visibility = View.GONE
-                        controlIcon.setTint(getTint(R.color.yellow_d))
-                        controlIcon.bind(R.drawable.ic_tor_status_error)
+                        controlIcon.imageTintList = getTint(R.color.yellow_d)
+                        controlIcon.setImageResource(R.drawable.ic_tor_status_error)
                         subtitleText.text = getString(R.string.TorPage_Failed)
                     }
                     TorStatus.Closed -> {
                         connectionSpinner.visibility = View.GONE
-                        controlIcon.setTint(getTint(R.color.yellow_d))
-                        controlIcon.bind(R.drawable.ic_tor)
+                        controlIcon.imageTintList = getTint(R.color.yellow_d)
+                        controlIcon.setImageResource(R.drawable.ic_tor)
                         subtitleText.text = getString(R.string.TorPage_ConnectionClosed)
                     }
                 }
