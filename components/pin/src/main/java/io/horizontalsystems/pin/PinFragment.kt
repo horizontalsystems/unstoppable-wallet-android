@@ -2,17 +2,15 @@ package io.horizontalsystems.pin
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.biometric.BiometricConstants
-import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -257,7 +255,7 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var bigError: TextView = itemView.findViewById(R.id.txtBigError)
     private var txtDesc: TextView = itemView.findViewById(R.id.txtDescription)
     private var smallError: TextView = itemView.findViewById(R.id.txtSmallError)
-    private var pinCirclesWrapper = itemView.findViewById<ConstraintLayout>(R.id.pinCirclesWrapper)
+    private var pinCirclesWrapper = itemView.findViewById<LinearLayout>(R.id.pinCirclesWrapper)
 
     private var imgPinMask1: ImageView = itemView.findViewById(R.id.imgPinMaskOne)
     private var imgPinMask2: ImageView = itemView.findViewById(R.id.imgPinMaskTwo)
