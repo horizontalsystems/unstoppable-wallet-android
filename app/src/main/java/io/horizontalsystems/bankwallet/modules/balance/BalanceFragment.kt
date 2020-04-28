@@ -21,12 +21,14 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.getValueAnimator
 import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDialogFragment.Listener, ReceiveFragment.Listener {
+class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment.Listener {
 
     private lateinit var viewModel: BalanceViewModel
     private val coinAdapter = BalanceCoinAdapter(this)
@@ -68,7 +70,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         setSwipeBackground()
     }
 
-    private fun setOptionsMenuVisible(visible: Boolean){
+    private fun setOptionsMenuVisible(visible: Boolean) {
         if (visible) {
             toolbar.menu.clear()
             toolbar.inflateMenu(R.menu.balance_menu)
@@ -87,12 +89,6 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     override fun onDestroyView() {
         super.onDestroyView()
         recyclerCoins.adapter = null
-    }
-
-    // BalanceSort listener
-
-    override fun onSortItemSelect(sortType: BalanceSortType) {
-        viewModel.delegate.onSortTypeChange(sortType)
     }
 
     private fun setSwipeBackground() {
@@ -181,8 +177,16 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             setHeaderViewItem(it)
         })
 
-        viewModel.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { sortingType ->
-            BalanceSortDialogFragment.newInstance(this, sortingType).also { it.show(childFragmentManager, it.tag) }
+        viewModel.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { selected ->
+            val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
+            val selectorItems = sortTypes.map {
+                SelectorItem(getString(it.getTitleRes()), it == selected)
+            }
+            SelectorDialog
+                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle), { position ->
+                        viewModel.delegate.onSortTypeChange(sortTypes[position])
+                    }, false)
+                    .show(parentFragmentManager, "balance_sort_type_selector")
         })
 
         viewModel.isSortOn.observe(viewLifecycleOwner, Observer { visible ->

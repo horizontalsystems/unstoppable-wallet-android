@@ -12,7 +12,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.views.SettingsViewDropdown
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_alerts.*
@@ -76,13 +77,17 @@ class NotificationsActivity : BaseActivity() {
             }
         })
 
-        view.showStateSelectorLiveEvent.observe(this, Observer { (itemPosition, priceAlert) ->
-            val priceAlertValues = PriceAlert.State.values().toList()
-            PriceAlertStateSelectorDialog.newInstance(object : PriceAlertStateSelectorDialog.Listener {
-                override fun onSelect(position: Int) {
-                    presenter.didSelectState(itemPosition, priceAlertValues[position])
-                }
-            }, priceAlertValues, priceAlert.state)
+        view.showStateSelectorLiveEvent.observe(this, Observer { (itemPosition, selectedPriceAlert) ->
+            val priceAlertValues = PriceAlert.State.values()
+            val selectorItems = priceAlertValues.map { state ->
+                val caption = state.value?.let { "$it%" }
+                        ?: getString(R.string.SettingsNotifications_Off)
+                SelectorItem(caption, state == selectedPriceAlert.state)
+            }
+            SelectorDialog
+                    .newInstance(selectorItems, null, { position ->
+                        presenter.didSelectState(itemPosition, priceAlertValues[position])
+                    }, false)
                     .show(supportFragmentManager, "price_alert_value_selector")
         })
 

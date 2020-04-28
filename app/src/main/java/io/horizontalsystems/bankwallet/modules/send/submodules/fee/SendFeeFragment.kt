@@ -9,13 +9,14 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
-import io.horizontalsystems.seekbar.FeeSeekBar
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.ethereumkit.api.models.ApiError
+import io.horizontalsystems.seekbar.FeeSeekBar
 import kotlinx.android.synthetic.main.view_send_fee.*
 
 class SendFeeFragment(
@@ -23,7 +24,7 @@ class SendFeeFragment(
         private val coin: Coin,
         private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
         private val sendHandler: SendModule.ISendHandler)
-    : SendSubmoduleFragment(), FeeRatePrioritySelector.Listener {
+    : SendSubmoduleFragment() {
 
     private var presenter: SendFeePresenter? = null
 
@@ -47,7 +48,7 @@ class SendFeeFragment(
         txFeeLoading.visibility = View.GONE
         txFeeLoading.text = getString(R.string.Alert_Loading)
 
-        customFeeSeekBar.setListener(object: FeeSeekBar.Listener {
+        customFeeSeekBar.setListener(object : FeeSeekBar.Listener {
             override fun onSelect(value: Int) {
                 presenter?.onChangeFeeRateValue(value.toLong())
             }
@@ -73,9 +74,24 @@ class SendFeeFragment(
         })
 
         presenterView.showFeePriorityOptions.observe(viewLifecycleOwner, Observer { feeRates ->
-            FeeRatePrioritySelector
-                    .newInstance(this, feeRates)
-                    .show(this.parentFragmentManager, "fee_rate_priority_selector")
+            val selectorItems = feeRates.map { feeRateViewItem ->
+                val feeRateInfo = feeRateViewItem.feeRateInfo
+                val selected = feeRateViewItem.selected
+                val caption = context?.let { context ->
+                    var text = TextHelper.getFeeRatePriorityString(context, feeRateInfo.priority)
+                    feeRateInfo.duration?.let {
+                        text += " (~${DateHelper.getTxDurationString(context, feeRateInfo.duration)})"
+                    }
+                    text
+                } ?: ""
+
+                SelectorItem(caption, selected)
+            }
+            SelectorDialog
+                    .newInstance(selectorItems, getString(R.string.Send_DialogSpeed), { position ->
+                        presenter?.onChangeFeeRate(feeRates[position].feeRateInfo)
+                    })
+                    .show(parentFragmentManager, "fee_rate_priority_selector")
         })
 
         presenterView.showCustomFeePriority.observe(viewLifecycleOwner, Observer { isVisible ->
@@ -125,10 +141,6 @@ class SendFeeFragment(
 
     override fun init() {
         presenter?.onViewDidLoad()
-    }
-
-    override fun onSelectFeeRate(feeRate: FeeRateInfo) {
-        presenter?.onChangeFeeRate(feeRate)
     }
 
     private fun setLoading(loading: Boolean) {
