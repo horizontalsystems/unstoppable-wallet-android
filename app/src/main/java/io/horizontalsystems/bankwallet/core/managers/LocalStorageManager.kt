@@ -215,9 +215,12 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
 
     //used only in db migration
     override var syncMode: SyncMode?
-        get() {
-            val syncString = App.preferences.getString(SYNC_MODE, null)
-            return syncString?.let { SyncMode.valueOf(it) }
+        get() = App.preferences.getString(SYNC_MODE, null)?.let {
+            try {
+                SyncMode.valueOf(it)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
         }
         set(syncMode) {
             App.preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
