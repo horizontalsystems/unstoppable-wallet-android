@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menuRestore"
-        android:title="@string/Button_Restore"
+        android:title="@string/Button_Next"
         app:showAsAction="always" />
 
 </menu>
