@@ -18,9 +18,6 @@ class RestoreCoinsPresenter(
     override fun onLoad() {
         syncViewItems()
         syncProceedButton()
-        if (predefinedAccountType != PredefinedAccountType.Standard) {
-            view.setProceedButtonTitleAsDone()
-        }
     }
 
     override fun onEnable(coin: Coin) {

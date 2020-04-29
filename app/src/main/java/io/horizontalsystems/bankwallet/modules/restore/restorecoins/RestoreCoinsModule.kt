@@ -16,7 +16,6 @@ object RestoreCoinsModule {
     interface IView {
         fun setItems(coinViewItems: List<CoinManageViewItem>)
         fun setProceedButton(enabled: Boolean)
-        fun setProceedButtonTitleAsDone()
     }
 
     interface IRouter {

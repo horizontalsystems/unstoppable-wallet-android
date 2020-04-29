@@ -55,10 +55,6 @@
     <string name="RateApp_Button_RateIt">Rate It</string>
     <string name="RateApp_Button_NotNow">Not now</string>
 
-    <!--Create-->
-    <string name="Create_Title">Choose Crypto</string>
-    <string name="Create_Description">Select cryptocurrencies for the wallet. You will be able to add or remove coins later as well.</string>
-
     <!--Restore-->
 
     <string name="Restore_ChooseWallet">Choose Wallet</string>
@@ -72,6 +68,8 @@
 
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
+
+    <string name="Select_Coins">Choose Crypto</string>
 
     <!--Backup-->
 

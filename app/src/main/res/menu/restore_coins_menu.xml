@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuNext"
-        android:title="@string/Button_Next"
+        android:id="@+id/menuRestore"
+        android:title="@string/Button_Restore"
         app:showAsAction="always" />
 
 </menu>
