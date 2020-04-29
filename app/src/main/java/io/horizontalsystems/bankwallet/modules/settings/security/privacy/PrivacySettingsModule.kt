@@ -63,7 +63,7 @@ object PrivacySettingsModule {
         fun reSyncWallets(wallets: List<Wallet>)
 
         fun clear()
-        fun isWalletOriginCreated(): Boolean
+        fun isAccountOriginCreated(): Boolean
     }
 
     interface IPrivacySettingsInteractorDelegate {
@@ -83,7 +83,8 @@ object PrivacySettingsModule {
                 App.appConfigProvider,
                 App.walletManager,
                 App.localStorage,
-                App.adapterManager)
+                App.adapterManager,
+                App.accountManager)
 
         val presenter = PrivacySettingsPresenter(interactor, router)
         interactor.delegate = presenter

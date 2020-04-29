@@ -39,9 +39,7 @@ class PrivacySettingsActivity : BaseActivity() {
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()
 
-        // Always show Communication settings
-        createCommunicationSettingsView(true)
-        // Do not create Wallet restore settings view if Wallet is created or started first time
+        createCommunicationSettingsView()
 
         torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchTorEnabled(isChecked)
@@ -129,57 +127,51 @@ class PrivacySettingsActivity : BaseActivity() {
         })
     }
 
-    private fun createCommunicationSettingsView(doCreate: Boolean){
+    private fun createCommunicationSettingsView(){
 
-        if(doCreate) {
-            communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
-            communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
+        communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
+        communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
 
-            viewModel.communicationSettingsViewItems.observe(this, Observer {
-                communicationSettingsAdapter.items = it
-                communicationSettingsAdapter.notifyDataSetChanged()
-            })
+        viewModel.communicationSettingsViewItems.observe(this, Observer {
+            communicationSettingsAdapter.items = it
+            communicationSettingsAdapter.notifyDataSetChanged()
+        })
 
-            viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-                BottomSheetSelectorDialog.show(
-                        supportFragmentManager,
-                        getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
-                        coin.title,
-                        LayoutHelper.getCoinDrawableResource(this, coin.code),
-                        items.map { getCommunicationModeInfo(it) },
-                        items.indexOf(selected),
-                        object : OnItemSelectedListener {
-                            override fun onItemSelected(position: Int) {
-                                viewModel.delegate.onSelectSetting(position)
-                            }
+        viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+            BottomSheetSelectorDialog.show(
+                    supportFragmentManager,
+                    getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
+                    coin.title,
+                    LayoutHelper.getCoinDrawableResource(this, coin.code),
+                    items.map { getCommunicationModeInfo(it) },
+                    items.indexOf(selected),
+                    object : OnItemSelectedListener {
+                        override fun onItemSelected(position: Int) {
+                            viewModel.delegate.onSelectSetting(position)
                         }
-                )
-            })
+                    }
+            )
+        })
 
-            viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
-                ConfirmationDialog.show(
-                        title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
-                        subtitle = communicationMode.title,
-                        contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
-                        actionButtonTitle = getString(R.string.Button_Change),
-                        activity = this,
-                        listener = object : ConfirmationDialog.Listener {
-                            override fun onActionButtonClick() {
-                                viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
-                            }
-
-                            override fun onCancelButtonClick() {
-                                setTorSwitch(false)
-                                viewModel.delegate.onApplyTorPrerequisites(false)
-                            }
+        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
+            ConfirmationDialog.show(
+                    title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
+                    subtitle = communicationMode.title,
+                    contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
+                    actionButtonTitle = getString(R.string.Button_Change),
+                    activity = this,
+                    listener = object : ConfirmationDialog.Listener {
+                        override fun onActionButtonClick() {
+                            viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
                         }
-                )
-            })
-        }
 
-        communicationSettingsTitle.visibility = if(doCreate) View.VISIBLE else View.GONE
-        communicationSettingsDescription.visibility = if(doCreate) View.VISIBLE else View.GONE
-        communicationSettingsRecyclerview.visibility = if(doCreate) View.VISIBLE else View.GONE
+                        override fun onCancelButtonClick() {
+                            setTorSwitch(false)
+                            viewModel.delegate.onApplyTorPrerequisites(false)
+                        }
+                    }
+            )
+        })
     }
 
     private fun createWalletRestoreSettingsView(doCreate: Boolean){
