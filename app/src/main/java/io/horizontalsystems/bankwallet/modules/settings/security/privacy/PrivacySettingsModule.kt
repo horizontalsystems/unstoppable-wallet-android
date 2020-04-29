@@ -26,6 +26,7 @@ object PrivacySettingsModule {
 
     interface IPrivacySettingsViewDelegate {
         fun viewDidLoad()
+        fun showWalletRestoreSettings(): Boolean
         fun didSwitchTorEnabled(checked: Boolean)
         fun onApplyTorPrerequisites(checked: Boolean)
         fun updateTorState(checked: Boolean)
@@ -62,6 +63,7 @@ object PrivacySettingsModule {
         fun reSyncWallets(wallets: List<Wallet>)
 
         fun clear()
+        fun getStandartWalletOrigin(): AccountOrigin?
     }
 
     interface IPrivacySettingsInteractorDelegate {

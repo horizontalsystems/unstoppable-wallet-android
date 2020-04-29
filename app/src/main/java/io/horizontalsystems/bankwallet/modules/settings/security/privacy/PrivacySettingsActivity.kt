@@ -39,11 +39,10 @@ class PrivacySettingsActivity : BaseActivity() {
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()
 
-        communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
-        walletRestoreSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
-
-        communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
-        walletRestoreSettingsRecyclerview.adapter = walletRestoreSettingsAdapter
+        // Always show Communication settings
+        createCommunicationSettingsView(true)
+        // Do not create Wallet restore settings view if Wallet is created or started first time
+        createWalletRestoreSettingsView(viewModel.delegate.showWalletRestoreSettings())
 
         torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchTorEnabled(isChecked)
@@ -105,16 +104,6 @@ class PrivacySettingsActivity : BaseActivity() {
             showTorPrerequisitesAlert()
         })
 
-        viewModel.communicationSettingsViewItems.observe(this, Observer {
-            communicationSettingsAdapter.items = it
-            communicationSettingsAdapter.notifyDataSetChanged()
-        })
-
-        viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
-            walletRestoreSettingsAdapter.items = it
-            walletRestoreSettingsAdapter.notifyDataSetChanged()
-        })
-
         viewModel.showTransactionsSortingSelectorDialog.observe(this, Observer { (items, selected) ->
             BottomSheetSelectorDialog.show(
                     supportFragmentManager,
@@ -131,63 +120,98 @@ class PrivacySettingsActivity : BaseActivity() {
             )
         })
 
-        viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-            BottomSheetSelectorDialog.show(
-                    supportFragmentManager,
-                    getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
-                    coin.title,
-                    LayoutHelper.getCoinDrawableResource(this, coin.code),
-                    items.map { getSyncModeInfo(it) },
-                    items.indexOf(selected),
-                    object : OnItemSelectedListener {
-                        override fun onItemSelected(position: Int) {
-                            viewModel.delegate.onSelectSetting(position)
-                        }
-                    },
-                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
-            )
-        })
-
-        viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-            BottomSheetSelectorDialog.show(
-                    supportFragmentManager,
-                    getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
-                    coin.title,
-                    LayoutHelper.getCoinDrawableResource(this, coin.code),
-                    items.map { getCommunicationModeInfo(it) },
-                    items.indexOf(selected),
-                    object : OnItemSelectedListener {
-                        override fun onItemSelected(position: Int) {
-                            viewModel.delegate.onSelectSetting(position)
-                        }
-                    }
-            )
-        })
-
-        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
-            ConfirmationDialog.show(
-                    title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
-                    subtitle = communicationMode.title,
-                    contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
-                    actionButtonTitle = getString(R.string.Button_Change),
-                    activity = this,
-                    listener = object : ConfirmationDialog.Listener {
-                        override fun onActionButtonClick() {
-                            viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
-                        }
-
-                        override fun onCancelButtonClick() {
-                            setTorSwitch(false)
-                            viewModel.delegate.onApplyTorPrerequisites(false)
-                        }
-                    }
-            )
-        })
-
         // IRouter
         viewModel.restartApp.observe(this, Observer {
             restartApp()
         })
+    }
+
+    private fun createCommunicationSettingsView(doCreate: Boolean){
+
+        if(doCreate) {
+            communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
+            communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
+
+            viewModel.communicationSettingsViewItems.observe(this, Observer {
+                communicationSettingsAdapter.items = it
+                communicationSettingsAdapter.notifyDataSetChanged()
+            })
+
+            viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+                BottomSheetSelectorDialog.show(
+                        supportFragmentManager,
+                        getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
+                        coin.title,
+                        LayoutHelper.getCoinDrawableResource(this, coin.code),
+                        items.map { getCommunicationModeInfo(it) },
+                        items.indexOf(selected),
+                        object : OnItemSelectedListener {
+                            override fun onItemSelected(position: Int) {
+                                viewModel.delegate.onSelectSetting(position)
+                            }
+                        }
+                )
+            })
+
+            viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
+                ConfirmationDialog.show(
+                        title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
+                        subtitle = communicationMode.title,
+                        contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
+                        actionButtonTitle = getString(R.string.Button_Change),
+                        activity = this,
+                        listener = object : ConfirmationDialog.Listener {
+                            override fun onActionButtonClick() {
+                                viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
+                            }
+
+                            override fun onCancelButtonClick() {
+                                setTorSwitch(false)
+                                viewModel.delegate.onApplyTorPrerequisites(false)
+                            }
+                        }
+                )
+            })
+        }
+
+        communicationSettingsTitle.visibility = if(doCreate) View.VISIBLE else View.GONE
+        communicationSettingsDescription.visibility = if(doCreate) View.VISIBLE else View.GONE
+        communicationSettingsRecyclerview.visibility = if(doCreate) View.VISIBLE else View.GONE
+    }
+
+    private fun createWalletRestoreSettingsView(doCreate: Boolean){
+
+        if(doCreate) {
+
+            walletRestoreSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
+            walletRestoreSettingsRecyclerview.adapter = walletRestoreSettingsAdapter
+
+            viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
+                walletRestoreSettingsAdapter.items = it
+                walletRestoreSettingsAdapter.notifyDataSetChanged()
+            })
+
+            viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+                BottomSheetSelectorDialog.show(
+                        supportFragmentManager,
+                        getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
+                        coin.title,
+                        LayoutHelper.getCoinDrawableResource(this, coin.code),
+                        items.map { getSyncModeInfo(it) },
+                        items.indexOf(selected),
+                        object : OnItemSelectedListener {
+                            override fun onItemSelected(position: Int) {
+                                viewModel.delegate.onSelectSetting(position)
+                            }
+                        },
+                        warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
+                )
+            })
+        }
+
+        walletRestoreTitle.visibility = if(doCreate) View.VISIBLE else View.GONE
+        walletRestoreSettingsDescription.visibility = if(doCreate) View.VISIBLE else View.GONE
+        walletRestoreSettingsRecyclerview.visibility = if(doCreate) View.VISIBLE else View.GONE
     }
 
     private fun getSortingLocalized(sortingType: TransactionDataSortingType): String{
