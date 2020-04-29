@@ -58,6 +58,16 @@ class PrivacySettingsInteractor(
         adapterManager.refreshAdapters(wallets)
     }
 
+    override fun getStandartWalletOrigin(): AccountOrigin? {
+        walletManager.wallets.forEach {
+           if( it.coin.type.predefinedAccountType is PredefinedAccountType.Standard){
+                 return it.account.origin
+           }
+        }
+
+        return null
+    }
+
     override fun stopTor() {
         torManager.stop()
                 .observeOn(AndroidSchedulers.mainThread())
