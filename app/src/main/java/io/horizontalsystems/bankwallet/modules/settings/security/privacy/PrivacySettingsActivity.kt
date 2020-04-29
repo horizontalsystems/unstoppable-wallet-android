@@ -42,7 +42,6 @@ class PrivacySettingsActivity : BaseActivity() {
         // Always show Communication settings
         createCommunicationSettingsView(true)
         // Do not create Wallet restore settings view if Wallet is created or started first time
-        createWalletRestoreSettingsView(viewModel.delegate.showWalletRestoreSettings())
 
         torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.delegate.didSwitchTorEnabled(isChecked)
@@ -55,6 +54,10 @@ class PrivacySettingsActivity : BaseActivity() {
         // IView
         viewModel.torEnabledLiveData.observe(this, Observer { enabled ->
             setTorSwitch(enabled)
+        })
+
+        viewModel.blockchainSettingsVisibilityLiveData.observe(this, Observer { isVisible ->
+            createWalletRestoreSettingsView(isVisible)
         })
 
         viewModel.setTorConnectionStatus.observe(this, Observer { torStatus ->

@@ -58,17 +58,12 @@ class PrivacySettingsPresenter(
         view?.setTransactionsOrdering(interactor.transactionsSortingType)
 
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
-        view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
-    }
 
-    override fun showWalletRestoreSettings(): Boolean {
-        if(interactor.walletsCount <= 0)
-            return true
+        val isBlockchainSettingVisible = !interactor.isWalletOriginCreated()
+        view?.setBlockchainSettingsVisibility(isBlockchainSettingVisible)
 
-        // if AccountOrigin == Restored --> then show BlockchainSettings
-         return interactor.getStandartWalletOrigin()?.let {
-            it == AccountOrigin.Restored
-        }?:true
+        if(isBlockchainSettingVisible)
+            view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
     }
 
     override fun didSwitchTorEnabled(checked: Boolean) {
