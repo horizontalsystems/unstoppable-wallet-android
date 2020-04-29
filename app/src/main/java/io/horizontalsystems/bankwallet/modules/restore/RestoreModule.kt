@@ -26,7 +26,6 @@ object RestoreModule {
 
         fun onLoad()
         fun onSelect(predefinedAccountType: PredefinedAccountType)
-        fun onClickClose()
         fun didEnterValidAccount(accountType: AccountType)
         fun didReturnFromCoinSettings()
         fun didReturnFromRestoreCoins(enabledCoins: List<Coin>?)

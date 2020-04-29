@@ -31,7 +31,7 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
 
         setContentView(R.layout.activity_restore)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val predefinedAccountType: PredefinedAccountType? = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE)
         val mode: RestoreMode = intent.getParcelableExtra(ModuleField.RESTORE_MODE) ?: RestoreMode.FromWelcome
@@ -49,8 +49,6 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
 
     private fun observeView(view: RestoreView) {
         view.reloadLiveEvent.observe(this, Observer {
-            recyclerView.visibility = View.VISIBLE
-            toolbar.setTitle(R.string.Restore_ChooseWallet)
             adapter.items = it
             adapter.notifyDataSetChanged()
         })
@@ -86,21 +84,6 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
             setResult(Activity.RESULT_OK)
             finish()
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.restore_wallet_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuCancel -> {
-                presenter.onClickClose()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

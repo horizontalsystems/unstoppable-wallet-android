@@ -53,10 +53,6 @@ class RestorePresenter(
         enabledCoins?.let { createWallets(it) }
     }
 
-    override fun onClickClose() {
-        router.close()
-    }
-
     override fun onReturnWithCancel() {
         if (restoreMode == RestoreMode.FromManageKeys || restoreMode == RestoreMode.InApp) {
             router.close()
