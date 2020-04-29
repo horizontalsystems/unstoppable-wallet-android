@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.AlertDialogFragment
-import kotlinx.android.synthetic.main.activity_create_wallet.*
+import kotlinx.android.synthetic.main.select_coins.*
 
 class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
     private lateinit var presenter: CreateWalletPresenter
@@ -27,7 +27,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_wallet)
+        setContentView(R.layout.select_coins)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

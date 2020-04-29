@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
-import kotlinx.android.synthetic.main.activity_restore_coins.*
+import kotlinx.android.synthetic.main.select_coins.*
 
 class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     private lateinit var presenter: RestoreCoinsPresenter
@@ -25,7 +25,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_restore_coins)
+        setContentView(R.layout.select_coins)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -49,7 +49,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.menuNext)?.apply {
+        menu?.findItem(R.id.menuRestore)?.apply {
             proceedButtonTitle?.let {
                 setTitle(it)
             }
@@ -60,7 +60,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuNext -> {
+            R.id.menuRestore -> {
                 presenter.onProceedButtonClick()
                 return true
             }
@@ -95,11 +95,6 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
     }
 
     private fun observeView(view: RestoreCoinsView) {
-        view.setProceedButtonAsDone.observe(this, Observer {
-            proceedButtonTitle = R.string.Button_Done
-            invalidateOptionsMenu()
-        })
-
         view.coinsLiveData.observe(this, Observer {viewItems ->
             coinItemsAdapter.viewItems = viewItems
             coinItemsAdapter.notifyDataSetChanged()
