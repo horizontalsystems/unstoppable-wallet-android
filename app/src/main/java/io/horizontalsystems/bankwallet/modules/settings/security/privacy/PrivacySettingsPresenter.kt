@@ -59,7 +59,7 @@ class PrivacySettingsPresenter(
 
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
 
-        val isBlockchainSettingVisible = !interactor.isWalletOriginCreated()
+        val isBlockchainSettingVisible = !interactor.isAccountOriginCreated()
         view?.setBlockchainSettingsVisibility(isBlockchainSettingVisible)
 
         if(isBlockchainSettingVisible)

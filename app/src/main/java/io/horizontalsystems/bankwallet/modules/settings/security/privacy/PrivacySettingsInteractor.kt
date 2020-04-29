@@ -14,7 +14,8 @@ class PrivacySettingsInteractor(
         private val appConfigProvider: IAppConfigProvider,
         private val walletManager: IWalletManager,
         private val localStorageManager: ILocalStorage,
-        private val adapterManager: IAdapterManager
+        private val adapterManager: IAdapterManager,
+        private val accountManager: IAccountManager
 ) : PrivacySettingsModule.IPrivacySettingsInteractor {
 
     var delegate: PrivacySettingsModule.IPrivacySettingsInteractorDelegate? = null
@@ -58,22 +59,23 @@ class PrivacySettingsInteractor(
         adapterManager.refreshAdapters(wallets)
     }
 
-    private fun getStandartWalletOrigin(): AccountOrigin? {
-        walletManager.wallets.forEach {
-           if( it.coin.type.predefinedAccountType is PredefinedAccountType.Standard){
-                 return it.account.origin
-           }
+    private fun getStandartAccountOrigin(): AccountOrigin? {
+
+        // Standart Wallet mnemonic size
+        val STANDART_ACCOUNT_WORDS_COUNT = 12
+
+        accountManager.accounts.forEach {
+            if(it.type is AccountType.Mnemonic && it.type.words.size == STANDART_ACCOUNT_WORDS_COUNT){
+                return it.origin
+            }
         }
 
         return null
     }
 
-    override fun isWalletOriginCreated(): Boolean {
+    override fun isAccountOriginCreated(): Boolean {
 
-        if(walletsCount < 1)
-            return false
-
-        return getStandartWalletOrigin()?.let {
+        return getStandartAccountOrigin()?.let {
             it == AccountOrigin.Created
         }?:false
     }
