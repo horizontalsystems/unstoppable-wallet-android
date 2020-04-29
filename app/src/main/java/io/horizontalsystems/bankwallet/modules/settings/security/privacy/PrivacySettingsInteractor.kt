@@ -58,7 +58,7 @@ class PrivacySettingsInteractor(
         adapterManager.refreshAdapters(wallets)
     }
 
-    override fun getStandartWalletOrigin(): AccountOrigin? {
+    private fun getStandartWalletOrigin(): AccountOrigin? {
         walletManager.wallets.forEach {
            if( it.coin.type.predefinedAccountType is PredefinedAccountType.Standard){
                  return it.account.origin
@@ -66,6 +66,16 @@ class PrivacySettingsInteractor(
         }
 
         return null
+    }
+
+    override fun isWalletOriginCreated(): Boolean {
+
+        if(walletsCount < 1)
+            return false
+
+        return getStandartWalletOrigin()?.let {
+            it == AccountOrigin.Created
+        }?:false
     }
 
     override fun stopTor() {

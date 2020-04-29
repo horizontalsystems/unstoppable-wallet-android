@@ -14,6 +14,7 @@ object PrivacySettingsModule {
         fun showTorPrerequisitesAlert()
         fun showRestartAlert(checked: Boolean)
         fun toggleTorEnabled(torEnabled: Boolean)
+        fun setBlockchainSettingsVisibility(isVisibile: Boolean)
         fun setCommunicationSettingsViewItems(items: List<PrivacySettingsViewItem>)
         fun setRestoreWalletSettingsViewItems(items: List<PrivacySettingsViewItem>)
         fun showCommunicationSelectorDialog(communicationModeOptions: List<CommunicationMode>, selected: CommunicationMode, coin: Coin)
@@ -26,7 +27,6 @@ object PrivacySettingsModule {
 
     interface IPrivacySettingsViewDelegate {
         fun viewDidLoad()
-        fun showWalletRestoreSettings(): Boolean
         fun didSwitchTorEnabled(checked: Boolean)
         fun onApplyTorPrerequisites(checked: Boolean)
         fun updateTorState(checked: Boolean)
@@ -63,7 +63,7 @@ object PrivacySettingsModule {
         fun reSyncWallets(wallets: List<Wallet>)
 
         fun clear()
-        fun getStandartWalletOrigin(): AccountOrigin?
+        fun isWalletOriginCreated(): Boolean
     }
 
     interface IPrivacySettingsInteractorDelegate {
