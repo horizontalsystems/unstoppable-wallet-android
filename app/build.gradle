@@ -11,7 +11,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 25
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 26
     return "$buildNumber".toInteger()
 }
 
