@@ -25,22 +25,26 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
     override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean, trimmable: Boolean): String? {
-        var value = coinValue.value.abs()
+        return format(coinValue.value, coinValue.coin.code, explicitSign, realNumber, trimmable)
+    }
+
+    override fun format(value: BigDecimal, coinCode: String, explicitSign: Boolean, realNumber: Boolean, trimmable: Boolean): String? {
+        var valueAbs = value.abs()
 
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
             trimmable -> customFormatter.maximumFractionDigits = 0
-            !realNumber && value > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
-            value.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.maximumFractionDigits = 0
+            !realNumber && valueAbs > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
+            valueAbs.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.maximumFractionDigits = 0
             else -> customFormatter.maximumFractionDigits = 8
         }
-        value = value.stripTrailingZeros()
-        val formatted = customFormatter.format(value)
-        var result = "$formatted ${coinValue.coin.code}"
+        valueAbs = valueAbs.stripTrailingZeros()
+        val formatted = customFormatter.format(valueAbs)
+        var result = "$formatted ${coinCode}"
 
-        if (explicitSign && coinValue.value.toLong() != 0L) {
-            val sign = if (coinValue.value < BigDecimal.ZERO) "-" else "+"
+        if (explicitSign && value.toLong() != 0L) {
+            val sign = if (value < BigDecimal.ZERO) "-" else "+"
             result = "$sign $result"
         }
 

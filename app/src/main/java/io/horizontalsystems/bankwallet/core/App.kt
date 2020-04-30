@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -188,7 +189,12 @@ class App : CoreApp() {
         pinComponent = PinComponent(
                 application = this,
                 securedStorage = secureStorage,
-                excludedActivityNames = listOf(LockScreenActivity::class.java.name, LauncherActivity::class.java.name, TorConnectionActivity::class.java.name),
+                excludedActivityNames = listOf(
+                        LockScreenActivity::class.java.name,
+                        LauncherActivity::class.java.name,
+                        TorConnectionActivity::class.java.name,
+                        RateChartActivity::class.java.name
+                ),
                 onFire = { activity, requestCode -> LockScreenModule.startForUnlock(activity, requestCode) }
         )
 

@@ -305,7 +305,7 @@ interface IRateManager {
     fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
-    fun getTopList(currency: String): Single<List<PriceInfo>>
+    fun getTopMarketList(currency: String): Single<List<TopMarket>>
     fun refresh()
 }
 
@@ -376,6 +376,7 @@ interface IWalletManager {
 
 interface IAppNumberFormatter {
     fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false, trimmable: Boolean = false): String?
+    fun format(value: BigDecimal, coinCode: String, explicitSign: Boolean = false, realNumber: Boolean = false, trimmable: Boolean = false): String?
     fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
     fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean = false, maxFraction: Int? = null): String?
     fun formatForTransactions(coinValue: CoinValue): String?

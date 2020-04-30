@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
+import java.math.BigDecimal
 
 object RateChartModule {
 
@@ -45,7 +45,7 @@ object RateChartModule {
 
     interface Router
 
-    class Factory(private val coin: Coin) : ViewModelProvider.Factory {
+    class Factory(private val coinCode: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
@@ -53,11 +53,14 @@ object RateChartModule {
 
             val view = RateChartView()
             val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage)
-            val presenter = RateChartPresenter(view, rateFormatter, interactor, coin, currency, RateChartViewFactory())
+            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, currency, RateChartViewFactory())
 
             interactor.delegate = presenter
 
             return presenter as T
         }
     }
+
+    data class CoinCodeWithValue(val coinCode: String, val value: BigDecimal)
+
 }

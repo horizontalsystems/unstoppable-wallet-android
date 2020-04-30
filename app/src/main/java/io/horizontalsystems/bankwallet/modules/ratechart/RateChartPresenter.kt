@@ -17,7 +17,7 @@ class RateChartPresenter(
         val view: View,
         val rateFormatter: RateFormatter,
         private val interactor: Interactor,
-        private val coin: Coin,
+        private val coinCode: String,
         private val currency: Currency,
         private val factory: RateChartViewFactory)
     : ViewModel(), ViewDelegate, InteractorDelegate {
@@ -41,8 +41,8 @@ class RateChartPresenter(
     override fun viewDidLoad() {
         view.setChartType(chartType)
 
-        marketInfo = interactor.getMarketInfo(coin.code, currency.code)
-        interactor.observeMarketInfo(coin.code, currency.code)
+        marketInfo = interactor.getMarketInfo(coinCode, currency.code)
+        interactor.observeMarketInfo(coinCode, currency.code)
 
         fetchChartInfo()
     }
@@ -69,13 +69,13 @@ class RateChartPresenter(
     private fun fetchChartInfo() {
         view.showSpinner()
 
-        chartInfo = interactor.getChartInfo(coin.code, currency.code, chartType)
-        interactor.observeChartInfo(coin.code, currency.code, chartType)
+        chartInfo = interactor.getChartInfo(coinCode, currency.code, chartType)
+        interactor.observeChartInfo(coinCode, currency.code, chartType)
     }
 
     private fun updateMarketInfo() {
         marketInfo?.let {
-            val viewItem = factory.createMarketInfo(it, currency, coin)
+            val viewItem = factory.createMarketInfo(it, currency, coinCode)
             view.showMarketInfo(viewItem)
         }
     }

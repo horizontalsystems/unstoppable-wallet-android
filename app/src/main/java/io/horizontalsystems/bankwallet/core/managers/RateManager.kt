@@ -98,7 +98,7 @@ class RateManager(
         return kit.cryptoNews(coinCode)
     }
 
-    override fun getTopList(currency: String): Single<List<PriceInfo>> {
+    override fun getTopMarketList(currency: String): Single<List<TopMarket>> {
         return kit.getTopList(currency)
     }
 

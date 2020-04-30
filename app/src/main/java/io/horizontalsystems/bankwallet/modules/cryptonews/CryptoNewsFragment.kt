@@ -19,7 +19,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_crypto_news.*
 import kotlinx.android.synthetic.main.view_holder_crypto_news.*
 
-class CryptoNewsFragment(private val coin: Coin? = null) : Fragment() {
+class CryptoNewsFragment(private val coinCode: String) : Fragment() {
 
     private lateinit var presenter: CryptoNewsPresenter
     private lateinit var cryptoNewsView: CryptoNewsView
@@ -32,7 +32,7 @@ class CryptoNewsFragment(private val coin: Coin? = null) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProvider(this, CryptoNewsModule.Factory(coin)).get(CryptoNewsPresenter::class.java)
+        presenter = ViewModelProvider(this, CryptoNewsModule.Factory(coinCode)).get(CryptoNewsPresenter::class.java)
         cryptoNewsView = presenter.view as CryptoNewsView
         adapter = CryptoNewsAdapter()
 

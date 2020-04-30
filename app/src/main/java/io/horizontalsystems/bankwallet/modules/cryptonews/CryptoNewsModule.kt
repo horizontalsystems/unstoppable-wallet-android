@@ -31,12 +31,12 @@ object CryptoNewsModule {
 
     interface Router
 
-    class Factory(private val coin: Coin?) : ViewModelProvider.Factory {
+    class Factory(private val coinCode: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = CryptoNewsView()
             val interactor = CryptoNewsInteractor(App.xRateManager)
-            val presenter = CryptoNewsPresenter(view, coin, interactor)
+            val presenter = CryptoNewsPresenter(view, coinCode, interactor)
 
             interactor.delegate = presenter
 

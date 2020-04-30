@@ -1,22 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.cryptonews
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.xrateskit.entities.CryptoNews
 
 class CryptoNewsPresenter(
         val view: CryptoNewsModule.View,
-        private val coin: Coin?,
+        private val coinCode: String,
         private val interactor: CryptoNewsModule.Interactor)
     : CryptoNewsModule.ViewDelegate, CryptoNewsModule.InteractorDelegate, ViewModel() {
 
     //  ViewDelegate
 
     override fun onLoad() {
-        coin?.let {
-            view.showSpinner()
-            interactor.getPosts(coin.code)
-        }
+        view.showSpinner()
+        interactor.getPosts(coinCode)
     }
 
     //  InteractorDelegate
