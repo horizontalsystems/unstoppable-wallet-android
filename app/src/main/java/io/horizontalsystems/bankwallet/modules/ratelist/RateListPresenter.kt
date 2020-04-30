@@ -2,32 +2,40 @@ package io.horizontalsystems.bankwallet.modules.ratelist
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.xrateskit.entities.MarketInfo
-import io.horizontalsystems.xrateskit.entities.PriceInfo
-import java.util.*
+import io.horizontalsystems.xrateskit.entities.TopMarket
 
 class RateListPresenter(
         val view: RateListView,
+        val router: RateListRouter,
         private val interactor: RateListModule.IInteractor,
         private val factory: RateListModule.IRateListFactory
 ) : ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate {
 
-    private var portfolioItems = mutableListOf<ViewItem.CoinViewItem>()
-    private var topListItems = mutableListOf<ViewItem.CoinViewItem>()
+    private var portfolioViewItems = mutableListOf<ViewItem.CoinViewItem>()
+    private var topViewItems = mutableListOf<ViewItem.CoinViewItem>()
+
+    private var portfolioMarketInfos = mutableMapOf<String, MarketInfo>()
+    private var topMarketInfos = mutableListOf<TopMarket>()
+
     private var loading = false
+
+    private val coins = interactor.coins
+    private val currency = interactor.currency
 
     //IViewDelegate
 
     override fun viewDidLoad() {
-        val coins = interactor.coins
-        val currency = interactor.currency
+        coins.map {coin ->
+            interactor.getMarketInfo(coin.code, currency.code)?.let { marketInfo ->
+                portfolioMarketInfos.put(coin.code, marketInfo)
+            }
+        }
 
-        val marketInfos = coins.map { it.code to interactor.getMarketInfo(it.code, currency.code)}.toMap()
-
-        portfolioItems.addAll(factory.portfolioViewItems(coins, currency, marketInfos))
+        portfolioViewItems.addAll(factory.portfolioViewItems(coins, currency, portfolioMarketInfos))
 
         updateViewItems()
 
-        lastUpdateTimestamp(marketInfos)?.let {
+        lastUpdateTimestamp(portfolioMarketInfos)?.let {
             view.setDate(it)
         }
 
@@ -44,26 +52,26 @@ class RateListPresenter(
         }
     }
 
+    override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
+        router.openChart(coinViewItem.coinItem.coinCode, coinViewItem.coinItem.coinName)
+    }
+
     //IInteractorDelegate
 
     override fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>) {
-        val items = factory.portfolioViewItems(interactor.coins, interactor.currency, marketInfos)
-        portfolioItems.clear()
-        portfolioItems.addAll(items)
-        updateViewItems()
+        portfolioMarketInfos.clear()
+        portfolioMarketInfos.putAll(marketInfos)
 
-        lastUpdateTimestamp(marketInfos)?.let {
-            view.setDate(it)
-        }
+        syncListsAndShow()
     }
 
-    override fun didFetchedTopList(items: List<PriceInfo>) {
+    override fun didFetchedTopMarketList(items: List<TopMarket>) {
         loading = false
-        val viewItems =factory.topListViewItems(items, interactor.currency)
-        topListItems.clear()
-        topListItems.addAll(viewItems)
 
-        updateViewItems()
+        topMarketInfos.clear()
+        topMarketInfos.addAll(items)
+
+        syncListsAndShow()
     }
 
     override fun didFailToFetchTopList() {
@@ -76,8 +84,33 @@ class RateListPresenter(
         interactor.clear()
     }
 
+    private fun syncListsAndShow() {
+        portfolioMarketInfos.forEach { coinCode, portfolioMarketInfo ->
+            topMarketInfos.forEachIndexed { index, topMarket ->
+                if(topMarket.coinCode == coinCode){
+                    if (portfolioMarketInfo.timestamp > topMarket.marketInfo.timestamp){
+                        topMarketInfos[index] = TopMarket(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo)
+                    } else {
+                        portfolioMarketInfos[coinCode] = topMarket.marketInfo
+                    }
+                }
+            }
+        }
+
+        topViewItems.clear()
+        topViewItems.addAll(factory.topListViewItems(topMarketInfos, currency))
+        portfolioViewItems.clear()
+        portfolioViewItems.addAll(factory.portfolioViewItems(coins, currency, portfolioMarketInfos))
+
+        lastUpdateTimestamp(portfolioMarketInfos)?.let {
+            view.setDate(it)
+        }
+
+        updateViewItems()
+    }
+
     private fun updateViewItems() {
-        val viewItems: List<ViewItem> = factory.getViewItems(portfolioItems, topListItems, loading)
+        val viewItems: List<ViewItem> = factory.getViewItems(portfolioViewItems, topViewItems, loading)
         view.setViewItems(viewItems)
     }
 

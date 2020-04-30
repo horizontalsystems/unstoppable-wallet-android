@@ -30,8 +30,8 @@ data class MarketInfoViewItem(
         val rateValue: CurrencyValue,
         val marketCap: CurrencyValue,
         val volume: CurrencyValue,
-        val supply: CoinValue,
-        val maxSupply: CoinValue?,
+        val supply: RateChartModule.CoinCodeWithValue,
+        val maxSupply: RateChartModule.CoinCodeWithValue?,
         val timestamp: Long
 )
 
@@ -63,13 +63,13 @@ class RateChartViewFactory {
         )
     }
 
-    fun createMarketInfo(marketInfo: MarketInfo, currency: Currency, coin: Coin): MarketInfoViewItem {
+    fun createMarketInfo(marketInfo: MarketInfo, currency: Currency, coinCode: String): MarketInfoViewItem {
         return MarketInfoViewItem(
                 CurrencyValue(currency, marketInfo.rate),
                 CurrencyValue(currency, marketInfo.marketCap.toBigDecimal()),
                 CurrencyValue(currency, marketInfo.volume.toBigDecimal()),
-                CoinValue(coin, marketInfo.supply.toBigDecimal()),
-                MaxSupplyMap.maxSupplies[coin.code]?.let { CoinValue(coin, it) },
+                RateChartModule.CoinCodeWithValue(coinCode, marketInfo.supply.toBigDecimal()),
+                MaxSupplyMap.maxSupplies[coinCode]?.let { RateChartModule.CoinCodeWithValue(coinCode, it) },
                 marketInfo.timestamp
         )
     }

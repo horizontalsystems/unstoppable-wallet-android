@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
@@ -212,7 +213,8 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
             startActivity(Intent(activity, RateChartActivity::class.java).apply {
-                putExtra("coin", coin)
+                putExtra(ModuleField.COIN_CODE, coin.code)
+                putExtra(ModuleField.COIN_TITLE, coin.title)
             })
         })
 

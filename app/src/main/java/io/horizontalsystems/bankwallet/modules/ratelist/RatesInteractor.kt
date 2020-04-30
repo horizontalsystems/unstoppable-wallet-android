@@ -45,10 +45,10 @@ class RatesInteractor(
     }
 
     override fun getTopList() {
-        xRateManager.getTopList(currency.code)
+        xRateManager.getTopMarketList(currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    delegate?.didFetchedTopList(it)
+                    delegate?.didFetchedTopMarketList(it)
                 }, {
                     delegate?.didFailToFetchTopList()
                 } )

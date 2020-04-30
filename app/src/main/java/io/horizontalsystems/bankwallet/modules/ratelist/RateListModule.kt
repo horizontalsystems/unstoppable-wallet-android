@@ -6,9 +6,8 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
-import io.horizontalsystems.xrateskit.entities.PriceInfo
+import io.horizontalsystems.xrateskit.entities.TopMarket
 import java.math.BigDecimal
-import java.util.*
 
 object RateListModule {
 
@@ -17,11 +16,14 @@ object RateListModule {
         fun setViewItems(viewItems: List<ViewItem>)
     }
 
-    interface IRouter
+    interface IRouter {
+        fun openChart(coinCode: String, coinTitle: String)
+    }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun loadTopList()
+        fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem)
     }
 
     interface IInteractor {
@@ -37,13 +39,13 @@ object RateListModule {
 
     interface IInteractorDelegate {
         fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>)
-        fun didFetchedTopList(items: List<PriceInfo>)
+        fun didFetchedTopMarketList(items: List<TopMarket>)
         fun didFailToFetchTopList()
     }
 
     interface IRateListFactory {
-        fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo?>): List<ViewItem.CoinViewItem>
-        fun topListViewItems(priceInfoItems: List<PriceInfo>, currency: Currency): List<ViewItem.CoinViewItem>
+        fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<ViewItem.CoinViewItem>
+        fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<ViewItem.CoinViewItem>
         fun getViewItems(portfolioItems: List<ViewItem.CoinViewItem>, topListItems: List<ViewItem.CoinViewItem>, loading: Boolean): List<ViewItem>
     }
 
@@ -51,13 +53,14 @@ object RateListModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateListView()
+            val router = RateListRouter()
             val interactor = RatesInteractor(
                     App.xRateManager,
                     App.currencyManager,
                     App.walletStorage,
                     App.appConfigProvider,
                     RateListSorter())
-            val presenter = RateListPresenter(view, interactor, RateListFactory(App.numberFormatter))
+            val presenter = RateListPresenter(view, router, interactor, RateListFactory(App.numberFormatter))
 
             interactor.delegate = presenter
 
@@ -82,7 +85,7 @@ class RateListSorter {
     }
 }
 
-class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var rateDimmed: Boolean)
+class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, var coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean)
 
 sealed class ViewItem{
     object PortfolioHeader: ViewItem()

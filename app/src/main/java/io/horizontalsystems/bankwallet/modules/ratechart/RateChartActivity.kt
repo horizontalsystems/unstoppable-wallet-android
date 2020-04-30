@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.cryptonews.CryptoNewsFragment
 import io.horizontalsystems.chartview.ChartView
@@ -22,7 +22,7 @@ import java.util.*
 class RateChartActivity : BaseActivity(), ChartView.Listener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
-    private lateinit var coin: Coin
+    private lateinit var coinCode: String
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
@@ -31,16 +31,16 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rate_chart)
 
-        coin = intent.getParcelableExtra("coin") ?: run {
+        coinCode = intent.getStringExtra(ModuleField.COIN_CODE) ?: run {
             finish()
             return
         }
 
-        toolbar.title = coin.title
+        toolbar.title = intent.getStringExtra(ModuleField.COIN_TITLE)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        presenter = ViewModelProvider(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
+        presenter = ViewModelProvider(this, RateChartModule.Factory(coinCode)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         chartView.listener = this
@@ -55,7 +55,7 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         super.onPostCreate(savedInstanceState)
 
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.cryptoNews, CryptoNewsFragment(coin))
+            replace(R.id.cryptoNews, CryptoNewsFragment(coinCode))
             commit()
         }
 
@@ -124,13 +124,13 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
             volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + " " + shortVolumeValue.second
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
-                formatter.format(item.supply, trimmable = true)
+                formatter.format(item.supply.value, item.supply.coinCode, trimmable = true)
             } else {
                 getString(R.string.NotAvailable)
             }
 
             totalSupplyValue.text = item.maxSupply?.let {
-                formatter.format(it, trimmable = true)
+                formatter.format(it.value, it.coinCode, trimmable = true)
             } ?: run {
                 getString(R.string.NotAvailable)
             }
