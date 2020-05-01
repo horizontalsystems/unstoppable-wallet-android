@@ -3,30 +3,48 @@ package io.horizontalsystems.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_manage_account_view.view.*
 
-class ManageAccountView : ConstraintLayout {
+class ManageAccountView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
 
     init {
         inflate(context, R.layout.view_manage_account_view, this)
+
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.ManageAccountView)
+        try {
+            setTitle(attributes.getString(R.styleable.ManageAccountView_title))
+            showRightArrow(attributes.getBoolean(R.styleable.ManageAccountView_arrow, false))
+            showAttentionIcon(attributes.getBoolean(R.styleable.ManageAccountView_attention, false))
+            setBottomRounded(attributes.getBoolean(R.styleable.ManageAccountView_roundBottom, false))
+            setTextColor(attributes.getColor(R.styleable.ManageAccountView_textColor, 0))
+        } finally {
+            attributes.recycle()
+        }
     }
 
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    fun setTitle(@StringRes titleText: Int) {
+        title.setText(titleText)
+    }
 
-    fun bind(titleText: String, type: AccountButtonItemType, showAttentionIcon: Boolean = false, isLast: Boolean = false) {
+    private fun setTitle(titleText: String?) {
         title.text = titleText
+    }
 
-        getTextColorForType(type)?.let {
-            title.setTextColor(it)
-        }
-
-        rightArrow.visibility = if (type == AccountButtonItemType.Regular) View.VISIBLE else View.GONE
+    private fun showAttentionIcon(showAttentionIcon: Boolean) {
         attentionIcon.visibility = if (showAttentionIcon) View.VISIBLE else View.GONE
+    }
 
+    private fun showRightArrow(show: Boolean) {
+        rightArrow.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun setTextColor(type: Int) {
+        title.setTextColor(type)
+    }
+
+    private fun setBottomRounded(isLast: Boolean = false) {
         setBackgroundResource(getBackgroundResource(isLast))
     }
 
@@ -34,20 +52,4 @@ class ManageAccountView : ConstraintLayout {
         isLast -> R.drawable.manage_account_last_button_background
         else -> R.drawable.clickable_background_color_lawrence
     }
-
-    private fun getTextColorForType(type: AccountButtonItemType): Int? {
-        val colorAttr = when (type) {
-            AccountButtonItemType.Regular -> R.attr.ColorOz
-            AccountButtonItemType.DangerAction -> R.attr.ColorLucian
-            AccountButtonItemType.Action -> R.attr.ColorJacob
-        }
-
-        return LayoutHelper.getAttr(colorAttr, context.theme)
-    }
-}
-
-enum class AccountButtonItemType {
-    Regular,
-    Action,
-    DangerAction
 }

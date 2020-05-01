@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
-import io.horizontalsystems.views.AccountButtonItemType
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
+import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_account.*
 
@@ -37,82 +37,55 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
     }
 
     inner class KeysViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        private lateinit var item: ManageAccountItem
 
-        fun bind(item: ManageAccountItem) {
-            val predefinedAccount = item.predefinedAccountType
-            val accountTypeTitle = containerView.resources.getString(predefinedAccount.title)
-
-            titleText.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
-            subtitleText.text = containerView.resources.getString(predefinedAccount.coinCodes)
-
-            advancedSettingsButton.visibility = View.GONE
-            createButton.visibility = View.GONE
-            restoreButton.visibility = View.GONE
-            backupButton.visibility = View.GONE
-            unlinkButton.visibility = View.GONE
-
-            viewHolderRoot.isActivated = item.account != null
-            val padding = if (item.account != null) LayoutHelper.dp(1f, containerView.context) else 0
-            viewHolderRoot.setPadding(padding, 0, padding, padding)
-
-            if (item.account == null) {
-                if (predefinedAccount.isCreationSupported()) {
-                    createButton.visibility = View.VISIBLE
-                    createButton.bind(
-                            titleText = containerView.resources.getString(R.string.ManageKeys_Create),
-                            type = AccountButtonItemType.Action,
-                            showAttentionIcon = false
-                    )
-                    createButton.setOnClickListener {
-                        listener.onClickCreate(item)
-                    }
-                }
-
-                restoreButton.visibility = View.VISIBLE
-                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.Action, false, true)
-                restoreButton.setOnClickListener {
-                    listener.onClickRestore(item)
-                }
-
-                headerIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.grey))
-
-                return
+        init {
+            createButton.setOnClickListener {
+                listener.onClickCreate(item)
             }
 
-            if (predefinedAccount == PredefinedAccountType.Standard) {
-                advancedSettingsButton.visibility = View.VISIBLE
-                advancedSettingsButton.bind(containerView.resources.getString(R.string.ManageKeys_AddressFormat), AccountButtonItemType.Regular, false)
-                advancedSettingsButton.setOnClickListener {
-                    listener.onClickAdvancedSettings(item)
-                }
+            restoreButton.setOnClickListener {
+                listener.onClickRestore(item)
             }
 
-            headerIcon.imageTintList = null
-
-            val account = item.account
-
-            backupButton.visibility = View.VISIBLE
-            unlinkButton.visibility = View.VISIBLE
-
-            val backupStringId = if (account.isBackedUp) R.string.ManageKeys_Show else R.string.ManageKeys_Backup
-            backupButton.bind(
-                    titleText = containerView.resources.getString(backupStringId),
-                    type = AccountButtonItemType.Regular,
-                    showAttentionIcon = !account.isBackedUp)
             backupButton.setOnClickListener {
                 listener.onClickBackup(item)
             }
 
-            unlinkButton.bind(
-                    titleText = containerView.resources.getString(R.string.ManageKeys_Unlink),
-                    type = AccountButtonItemType.DangerAction,
-                    isLast = true)
-
             unlinkButton.setOnClickListener {
                 listener.onClickUnlink(item)
             }
+
+            advancedSettingsButton.setOnClickListener {
+                listener.onClickAdvancedSettings(item)
+            }
         }
 
+        fun bind(item: ManageAccountItem) {
+            this.item = item
+
+            val predefinedAccount = item.predefinedAccountType
+            val hasAccount = item.account != null
+            val isBackedUp = item.account?.isBackedUp == true
+
+            val accountTypeTitle = containerView.resources.getString(predefinedAccount.title)
+            titleText.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
+            subtitleText.text = containerView.resources.getString(predefinedAccount.coinCodes)
+
+            containerView.isActivated = hasAccount
+
+            advancedSettingsButton.showIf(hasAccount && predefinedAccount == PredefinedAccountType.Standard)
+            backupButton.showIf(hasAccount && !isBackedUp)
+            showKeyButton.showIf(hasAccount && isBackedUp)
+            unlinkButton.showIf(hasAccount)
+            createButton.showIf(!hasAccount && predefinedAccount.isCreationSupported())
+            restoreButton.showIf(!hasAccount)
+
+
+            val padding = if (hasAccount) LayoutHelper.dp(1f, containerView.context) else 0
+            containerView.setPadding(padding, 0, padding, padding)
+            headerIcon.imageTintList = if (hasAccount) null else ColorStateList.valueOf(ContextCompat.getColor(containerView.context, R.color.grey))
+        }
     }
 
 }
