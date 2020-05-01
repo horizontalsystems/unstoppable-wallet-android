@@ -60,16 +60,17 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
                     createButton.visibility = View.VISIBLE
                     createButton.bind(
                             titleText = containerView.resources.getString(R.string.ManageKeys_Create),
-                            type = AccountButtonItemType.ActionButton,
-                            showAttentionIcon = false,
-                            onClick = {
-                                listener.onClickCreate(item)
-                            }
+                            type = AccountButtonItemType.Action,
+                            showAttentionIcon = false
                     )
+                    createButton.setOnClickListener {
+                        listener.onClickCreate(item)
+                    }
                 }
 
                 restoreButton.visibility = View.VISIBLE
-                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.ActionButton, false, true) {
+                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.Action, false, true)
+                restoreButton.setOnClickListener {
                     listener.onClickRestore(item)
                 }
 
@@ -80,7 +81,8 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
 
             if (predefinedAccount == PredefinedAccountType.Standard) {
                 advancedSettingsButton.visibility = View.VISIBLE
-                advancedSettingsButton.bind(containerView.resources.getString(R.string.ManageKeys_AddressFormat), AccountButtonItemType.SimpleButton, false) {
+                advancedSettingsButton.bind(containerView.resources.getString(R.string.ManageKeys_AddressFormat), AccountButtonItemType.Regular, false)
+                advancedSettingsButton.setOnClickListener {
                     listener.onClickAdvancedSettings(item)
                 }
             }
@@ -95,19 +97,20 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             val backupStringId = if (account.isBackedUp) R.string.ManageKeys_Show else R.string.ManageKeys_Backup
             backupButton.bind(
                     titleText = containerView.resources.getString(backupStringId),
-                    type = AccountButtonItemType.SimpleButton,
-                    showAttentionIcon = !account.isBackedUp,
-                    onClick = {
-                        listener.onClickBackup(item)
-                    })
+                    type = AccountButtonItemType.Regular,
+                    showAttentionIcon = !account.isBackedUp)
+            backupButton.setOnClickListener {
+                listener.onClickBackup(item)
+            }
 
             unlinkButton.bind(
                     titleText = containerView.resources.getString(R.string.ManageKeys_Unlink),
-                    type = AccountButtonItemType.RedButton,
-                    isLast = true,
-                    onClick = {
-                        listener.onClickUnlink(item)
-                    })
+                    type = AccountButtonItemType.DangerAction,
+                    isLast = true)
+
+            unlinkButton.setOnClickListener {
+                listener.onClickUnlink(item)
+            }
         }
 
     }
