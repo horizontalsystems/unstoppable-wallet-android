@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.OnItemSelectedListener
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.select_coins.*
 
@@ -104,11 +103,12 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
                     items.map { getDerivationInfo(it) },
                     items.indexOf(selected),
-                    object : OnItemSelectedListener {
-                        override fun onItemSelected(position: Int) {
-                            presenter.onSelectDerivationSetting(coin, items[position])
-                        }
-                    }, { presenter.onCancelDerivationSelectorDialog(coin) }
+                    onItemSelected = { position ->
+                        presenter.onSelectDerivationSetting(coin, items[position])
+                    },
+                    onCancelled = {
+                        presenter.onCancelDerivationSelectorDialog(coin)
+                    }
             )
         })
 

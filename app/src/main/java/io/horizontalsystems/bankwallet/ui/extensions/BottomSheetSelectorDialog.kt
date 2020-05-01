@@ -15,7 +15,7 @@ class BottomSheetSelectorDialog(
         private val icon: Int,
         private val items: List<Pair<String, String>>,
         private val selected: Int,
-        private val listener: OnItemSelectedListener,
+        private val onItemSelected: (Int) -> Unit,
         private val onCancelled: (() -> Unit)?,
         private val warning: String?,
         private val notifyUnchanged: Boolean
@@ -39,7 +39,7 @@ class BottomSheetSelectorDialog(
 
         btnDone.setOnClickListener {
             if (notifyUnchanged || itemsAdapter.selected != selected) {
-                listener.onItemSelected(itemsAdapter.selected)
+                onItemSelected(itemsAdapter.selected)
             }
             dismiss()
         }
@@ -56,17 +56,24 @@ class BottomSheetSelectorDialog(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, listener: OnItemSelectedListener, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
-            BottomSheetSelectorDialog(title, subtitle, icon, items, selected, listener, onCancelled, warning, notifyUnchanged)
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
+            BottomSheetSelectorDialog(title, subtitle, icon, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
                     .show(fragmentManager, "selector_dialog")
         }
     }
 }
 
-class SelectorItemsAdapter(private val items: List<Pair<String, String>>, var selected: Int) : RecyclerView.Adapter<ItemViewHolder>(), OnItemClickListener {
+class SelectorItemsAdapter(private val items: List<Pair<String, String>>, var selected: Int) : RecyclerView.Adapter<ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(SettingItemWithCheckmark(parent.context), this)
+        return ItemViewHolder(SettingItemWithCheckmark(parent.context)) { position ->
+            if (selected == position) return@ItemViewHolder
+
+            notifyItemChanged(selected, true)
+            notifyItemChanged(position, true)
+
+            selected = position
+        }
     }
 
     override fun getItemCount() = items.size
@@ -81,21 +88,13 @@ class SelectorItemsAdapter(private val items: List<Pair<String, String>>, var se
         }
     }
 
-    override fun onItemClick(position: Int) {
-        if (selected == position) return
-
-        notifyItemChanged(selected, true)
-        notifyItemChanged(position, true)
-
-        selected = position
-    }
 }
 
-class ItemViewHolder(private val settingItemWithCheckmark: SettingItemWithCheckmark, onClickListener: OnItemClickListener) : RecyclerView.ViewHolder(settingItemWithCheckmark) {
+class ItemViewHolder(private val settingItemWithCheckmark: SettingItemWithCheckmark, val onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(settingItemWithCheckmark) {
 
     init {
         settingItemWithCheckmark.setOnClickListener {
-            onClickListener.onItemClick(adapterPosition)
+            onItemClick(adapterPosition)
         }
     }
 
@@ -109,12 +108,4 @@ class ItemViewHolder(private val settingItemWithCheckmark: SettingItemWithCheckm
     fun bindSelected(selected: Boolean) {
         settingItemWithCheckmark.setChecked(selected)
     }
-}
-
-interface OnItemClickListener {
-    fun onItemClick(position: Int)
-}
-
-interface OnItemSelectedListener {
-    fun onItemSelected(position: Int)
 }
