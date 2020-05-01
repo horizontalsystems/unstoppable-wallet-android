@@ -44,9 +44,6 @@
     <string name="RateApp_Description_Rate_This_App">希望Unstoppable钱包？请抽点时间评价此应用</string>
     <string name="RateApp_Button_RateIt">评价它</string>
     <string name="RateApp_Button_NotNow">暂不</string>
-    <!--Create-->
-    <string name="Create_Title">新的钱包</string>
-    <string name="Create_Description">选择一种加密货币开始使用。您可以在以后添加其他加密货币。</string>
     <!--Restore-->
     <string name="Restore_ChooseWallet">选择钱包</string>
     <string name="Restore_Enter_Key_Title">输入密钥</string>
@@ -55,6 +52,7 @@
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
     <string name="Restore_EosAccountIncorrect">无效账户</string>
     <string name="Restore_EosKeyIncorrect">错误密钥</string>
+    <string name="Select_Coins">Choose Crypto</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
