@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.restore.restorecoins
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,12 +8,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.OnItemSelectedListener
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.select_coins.*
 
 class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
@@ -30,7 +32,8 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val predefinedAccountType: PredefinedAccountType = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE) ?: run { finish(); return }
+        val predefinedAccountType: PredefinedAccountType = intent.getParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE)
+                ?: run { finish(); return }
 
         presenter = ViewModelProvider(this, RestoreCoinsModule.Factory(predefinedAccountType)).get(RestoreCoinsPresenter::class.java)
 
@@ -82,20 +85,8 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
         //not used here
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            ModuleCode.BLOCKCHAIN_SETTINGS_LIST -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    presenter.onReturnFromBlockchainSettingsList()
-                }
-            }
-        }
-    }
-
     private fun observeView(view: RestoreCoinsView) {
-        view.coinsLiveData.observe(this, Observer {viewItems ->
+        view.coinsLiveData.observe(this, Observer { viewItems ->
             coinItemsAdapter.viewItems = viewItems
             coinItemsAdapter.notifyDataSetChanged()
         })
@@ -105,13 +96,25 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
             invalidateOptionsMenu()
         })
 
+        view.showDerivationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+            BottomSheetSelectorDialog.show(
+                    supportFragmentManager,
+                    getString(R.string.AddressFormatSettings_Title),
+                    coin.title,
+                    LayoutHelper.getCoinDrawableResource(this, coin.code),
+                    items.map { getDerivationInfo(it) },
+                    items.indexOf(selected),
+                    object : OnItemSelectedListener {
+                        override fun onItemSelected(position: Int) {
+                            presenter.onSelectDerivationSetting(coin, items[position])
+                        }
+                    }, { presenter.onCancelDerivationSelectorDialog(coin) }
+            )
+        })
+
     }
 
     private fun observeRouter(router: RestoreCoinsRouter) {
-        router.showBlockchainSettingsListEvent.observe(this, Observer { coinTypes ->
-            AddressFormatSettingsModule.startForResult(this, coinTypes, true)
-        })
-
         router.closeWithSelectedCoins.observe(this, Observer { coins ->
             setResult(RESULT_OK, Intent().apply {
                 putParcelableArrayListExtra(ModuleField.COINS, ArrayList(coins))
@@ -119,4 +122,15 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
             finish()
         })
     }
+
+    private fun getDerivationInfo(derivation: Derivation): Pair<String, String> {
+        val title = AccountType.getDerivationLongTitle(derivation)
+        val subtitle = when (derivation) {
+            Derivation.bip44 -> getString(R.string.CoinOption_bip44_Subtitle)
+            Derivation.bip84 -> getString(R.string.CoinOption_bip84_Subtitle)
+            Derivation.bip49 -> getString(R.string.CoinOption_bip49_Subtitle)
+        }
+        return Pair(title, subtitle)
+    }
+
 }

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restore.restorecoins
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewType
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
@@ -23,6 +24,19 @@ class RestoreCoinsPresenter(
     override fun onEnable(coin: Coin) {
         enabledCoins.add(coin)
         syncProceedButton()
+
+        interactor.derivationSettings(coin)?.let { derivationSetting ->
+            view.showDerivationSelectorDialog(Derivation.values().toList(), derivationSetting.derivation, coin)
+        }
+    }
+
+    override fun onCancelDerivationSelectorDialog(coin: Coin) {
+        onDisable(coin)
+        syncViewItems()
+    }
+
+    override fun onSelectDerivationSetting(coin: Coin, derivation: Derivation) {
+        interactor.saveDerivationSetting(DerivationSetting(coin.type, derivation))
     }
 
     override fun onDisable(coin: Coin) {
@@ -31,17 +45,6 @@ class RestoreCoinsPresenter(
     }
 
     override fun onProceedButtonClick() {
-        if (enabledCoins.isNotEmpty()) {
-            if (predefinedAccountType == PredefinedAccountType.Standard) {
-                val coinTypes = enabledCoins.map { it.type }
-                router.showBlockchainSettingsList(coinTypes)
-            } else {
-                router.closeWithSelectedCoins(enabledCoins)
-            }
-        }
-    }
-
-    override fun onReturnFromBlockchainSettingsList() {
         if (enabledCoins.isNotEmpty()) {
             router.closeWithSelectedCoins(enabledCoins)
         }
