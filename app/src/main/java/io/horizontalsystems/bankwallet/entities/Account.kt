@@ -53,32 +53,25 @@ open class AccountType : Parcelable {
         bip44("bip44"),
         bip49("bip49"),
         bip84("bip84");
-
-        val addressType: String
-            get() = when (this) {
-                bip44 -> "Legacy"
-                bip49 -> "SegWit"
-                bip84 -> "Native SegWit"
-            }
-    }
-
-    companion object {
-
-        fun getDerivationLongTitle(derivation: Derivation): String {
-            return "${derivation.addressType} - ${getDerivationTitle(derivation)}"
-        }
-
-        fun getDerivationTitle(derivation: Derivation): String {
-            return when (derivation) {
-                Derivation.bip44 -> "BIP 44"
-                Derivation.bip49 -> "BIP 49"
-                Derivation.bip84 -> "BIP 84"
-            }
-        }
     }
 }
 
-fun AccountType.Derivation.getDescription(): Int = when (this) {
+fun AccountType.Derivation.addressType(): String = when (this) {
+    AccountType.Derivation.bip44 -> "Legacy"
+    AccountType.Derivation.bip49 -> "SegWit"
+    AccountType.Derivation.bip84 -> "Native SegWit"
+}
+
+fun AccountType.Derivation.title(): String = when (this) {
+    AccountType.Derivation.bip44 -> "BIP 44"
+    AccountType.Derivation.bip49 -> "BIP 49"
+    AccountType.Derivation.bip84 -> "BIP 84"
+}
+
+fun AccountType.Derivation.longTitle(): String =
+        "${this.addressType()} - ${this.title()}"
+
+fun AccountType.Derivation.description(): Int = when (this) {
     AccountType.Derivation.bip44 -> R.string.CoinOption_bip44_Subtitle
     AccountType.Derivation.bip84 -> R.string.CoinOption_bip84_Subtitle
     AccountType.Derivation.bip49 -> R.string.CoinOption_bip49_Subtitle

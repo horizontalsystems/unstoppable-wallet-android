@@ -11,10 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.getDescription
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsPresenter
@@ -81,7 +78,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
                     getString(R.string.AddressFormatSettings_Title),
                     coin.title,
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
-                    items.map { derivation -> Pair(AccountType.getDerivationLongTitle(derivation), getString(derivation.getDescription())) },
+                    items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description())) },
                     items.indexOf(selected),
                     notifyUnchanged = true,
                     onItemSelected = { position ->

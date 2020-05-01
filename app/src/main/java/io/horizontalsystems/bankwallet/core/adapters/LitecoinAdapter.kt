@@ -4,10 +4,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
@@ -38,7 +35,7 @@ class LitecoinAdapter(
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     override fun getReceiveAddressType(wallet: Wallet): String? {
-        return derivation?.addressType
+        return derivation?.addressType()
     }
 
     //
