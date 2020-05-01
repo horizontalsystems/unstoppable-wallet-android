@@ -34,12 +34,30 @@ class ManageWalletsPresenter(
 
     override fun onEnable(coin: Coin) {
         val account = account(coin) ?: return
-        if (account.origin == AccountOrigin.Restored && interactor.derivationSetting(coin.type) != null) {
-            walletWithSettings = Wallet(coin, account)
-            router.showSettings(coin.type)
-            return
+        when (account.origin) {
+            AccountOrigin.Restored -> {
+                interactor.derivationSetting(coin.type)?.let { derivationSetting ->
+                    walletWithSettings = Wallet(coin, account)
+                    view.showDerivationSelectorDialog(AccountType.Derivation.values().toList(), derivationSetting.derivation, coin)
+                }
+            }
+            else -> {
+                enableWallet(coin, account)
+            }
         }
-        enableWallet(coin, account)
+    }
+
+    override fun onSelectDerivationSetting(coin: Coin, derivation: AccountType.Derivation) {
+        interactor.saveDerivationSetting(DerivationSetting(coin.type, derivation))
+
+        walletWithSettings?.let {
+            enableWallet(it.coin, it.account)
+            walletWithSettings = null
+        }
+    }
+
+    override fun onCancelDerivationSelectorDialog(coin: Coin) {
+        syncViewItems()
     }
 
     override fun onDisable(coin: Coin) {

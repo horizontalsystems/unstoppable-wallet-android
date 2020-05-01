@@ -10,9 +10,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.getDescription
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -101,7 +101,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
                     getString(R.string.AddressFormatSettings_Title),
                     coin.title,
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
-                    items.map { getDerivationInfo(it) },
+                    items.map { derivation -> Pair(AccountType.getDerivationLongTitle(derivation), getString(derivation.getDescription())) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
                         presenter.onSelectDerivationSetting(coin, items[position])
@@ -121,16 +121,6 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
             })
             finish()
         })
-    }
-
-    private fun getDerivationInfo(derivation: Derivation): Pair<String, String> {
-        val title = AccountType.getDerivationLongTitle(derivation)
-        val subtitle = when (derivation) {
-            Derivation.bip44 -> getString(R.string.CoinOption_bip44_Subtitle)
-            Derivation.bip84 -> getString(R.string.CoinOption_bip84_Subtitle)
-            Derivation.bip49 -> getString(R.string.CoinOption_bip49_Subtitle)
-        }
-        return Pair(title, subtitle)
     }
 
 }

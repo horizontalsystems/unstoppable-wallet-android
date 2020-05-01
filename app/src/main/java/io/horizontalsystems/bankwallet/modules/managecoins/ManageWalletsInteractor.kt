@@ -51,6 +51,10 @@ class ManageWalletsInteractor(
         return blockchainSettingsManager.derivationSetting(coinType)
     }
 
+    override fun saveDerivationSetting(derivationSetting: DerivationSetting) {
+        blockchainSettingsManager.saveSetting(derivationSetting)
+    }
+
     override fun initializeSettingsWithDefault(coinType: CoinType) {
         blockchainSettingsManager.initializeSettingsWithDefault(coinType)
     }
