@@ -59,8 +59,8 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
                 if (predefinedAccount.isCreationSupported()) {
                     createButton.visibility = View.VISIBLE
                     createButton.bind(
-                            title = containerView.resources.getString(R.string.ManageKeys_Create),
-                            type = AccountButtonItemType.SimpleButton,
+                            titleText = containerView.resources.getString(R.string.ManageKeys_Create),
+                            type = AccountButtonItemType.ActionButton,
                             showAttentionIcon = false,
                             onClick = {
                                 listener.onClickCreate(item)
@@ -69,7 +69,7 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
                 }
 
                 restoreButton.visibility = View.VISIBLE
-                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.SimpleButton, false, true) {
+                restoreButton.bind(containerView.resources.getString(R.string.ManageKeys_Restore), AccountButtonItemType.ActionButton, false, true) {
                     listener.onClickRestore(item)
                 }
 
@@ -94,7 +94,7 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
 
             val backupStringId = if (account.isBackedUp) R.string.ManageKeys_Show else R.string.ManageKeys_Backup
             backupButton.bind(
-                    title = containerView.resources.getString(backupStringId),
+                    titleText = containerView.resources.getString(backupStringId),
                     type = AccountButtonItemType.SimpleButton,
                     showAttentionIcon = !account.isBackedUp,
                     onClick = {
@@ -102,7 +102,7 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
                     })
 
             unlinkButton.bind(
-                    title = containerView.resources.getString(R.string.ManageKeys_Unlink),
+                    titleText = containerView.resources.getString(R.string.ManageKeys_Unlink),
                     type = AccountButtonItemType.RedButton,
                     isLast = true,
                     onClick = {
