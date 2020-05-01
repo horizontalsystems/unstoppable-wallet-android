@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.createwallet.view
 
+import android.view.ActionMode
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -81,14 +83,28 @@ class CoinItemWithSwitchViewHolder(
         private val onSwitch: (isChecked: Boolean, position: Int) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
+    // Var to indicate if this is user action
+    var isUserAction = false
+
     init {
         containerView.setOnClickListener {
+            isUserAction = true
             toggleSwitch.isChecked = !toggleSwitch.isChecked
-            onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
         }
 
-        toggleSwitch.setOnClickListener {
-            onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
+        // Catch user action
+        toggleSwitch.setOnTouchListener { v, event ->
+            if(event.action == MotionEvent.ACTION_DOWN){
+                isUserAction = true
+            }
+            v.onTouchEvent(event)
+        }
+
+        toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if(isUserAction){
+               onSwitch.invoke(isChecked, adapterPosition)
+               isUserAction = false
+           }
         }
     }
 
