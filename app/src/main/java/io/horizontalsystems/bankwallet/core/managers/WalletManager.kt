@@ -15,7 +15,7 @@ class WalletManager(private val accountManager: IAccountManager, private val sto
     override val walletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
     private val cache = WalletsCache()
-    private val disposable = accountManager.accountsFlowable
+    private val disposable = accountManager.accountsDeletedFlowable
             .observeOn(Schedulers.io())
             .subscribe {
                 loadWallets()

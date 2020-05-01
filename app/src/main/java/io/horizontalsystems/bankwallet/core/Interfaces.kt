@@ -73,7 +73,7 @@ interface IAccountManager {
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
-    val deleteAccountObservable: Flowable<String>
+    val accountsDeletedFlowable: Flowable<Unit>
 
     fun account(coinType: CoinType): Account?
     fun loadAccounts()
