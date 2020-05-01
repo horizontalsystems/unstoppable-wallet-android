@@ -92,8 +92,9 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             backupButton.visibility = View.VISIBLE
             unlinkButton.visibility = View.VISIBLE
 
+            val backupStringId = if (account.isBackedUp) R.string.ManageKeys_Show else R.string.ManageKeys_Backup
             backupButton.bind(
-                    title = containerView.resources.getString(R.string.ManageKeys_Backup),
+                    title = containerView.resources.getString(backupStringId),
                     type = AccountButtonItemType.SimpleButton,
                     showAttentionIcon = !account.isBackedUp,
                     onClick = {
