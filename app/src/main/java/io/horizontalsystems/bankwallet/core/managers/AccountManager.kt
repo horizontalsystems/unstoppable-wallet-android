@@ -16,7 +16,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
     private val cache = AccountsCache()
     private val accountsSubject = PublishSubject.create<List<Account>>()
-    private val deleteAccountSubject = PublishSubject.create<String>()
+    private val accountsDeletedSubject = PublishSubject.create<Unit>()
 
     override val isAccountsEmpty: Boolean
         get() = storage.isAccountsEmpty
@@ -27,8 +27,8 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     override val accountsFlowable: Flowable<List<Account>>
         get() = accountsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val deleteAccountObservable: Flowable<String>
-        get() = deleteAccountSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val accountsDeletedFlowable: Flowable<Unit>
+        get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override fun account(coinType: CoinType): Account? {
         return accounts.find { account -> coinType.canSupport(account.type) }
@@ -58,13 +58,14 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
         storage.delete(id)
 
         accountsSubject.onNext(accounts)
-        deleteAccountSubject.onNext(id)
+        accountsDeletedSubject.onNext(Unit)
     }
 
     override fun clear() {
         storage.clear()
         cache.set(listOf())
         accountsSubject.onNext(listOf())
+        accountsDeletedSubject.onNext(Unit)
     }
 
     override fun clearAccounts() {

@@ -49,7 +49,6 @@ class App : CoreApp() {
         lateinit var backupManager: IBackupManager
         lateinit var accountCreator: IAccountCreator
         lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
-        lateinit var walletRemover: WalletRemover
 
         lateinit var xRateManager: IRateManager
         lateinit var connectivityManager: ConnectivityManager
@@ -138,7 +137,6 @@ class App : CoreApp() {
         walletManager = WalletManager(accountManager, walletStorage)
         accountCreator = AccountCreator(AccountFactory(), wordsManager)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
-        walletRemover = WalletRemover(accountManager, walletManager)
 
         KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
             keyStoreManager = this
