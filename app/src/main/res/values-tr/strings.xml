@@ -44,9 +44,6 @@
     <string name="RateApp_Description_Rate_This_App">Unstoppable Cüzdandan Yararlanıyor musunuz? Lütfen bu uygulamayı değerlendirmek için bir dakikanızı ayırın</string>
     <string name="RateApp_Button_RateIt">Puanla</string>
     <string name="RateApp_Button_NotNow">Şimdi değil</string>
-    <!--Create-->
-    <string name="Create_Title">Yeni Cüzdan</string>
-    <string name="Create_Description">Başlamak için bir kripto para birimi seçin. Daha sonra başka kripto para birimleri ekleyebileceksiniz.</string>
     <!--Restore-->
     <string name="Restore_ChooseWallet">Cüzdan Seçin</string>
     <string name="Restore_Enter_Key_Title">Anahtarı girin</string>
@@ -55,6 +52,7 @@
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
     <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
+    <string name="Select_Coins">Choose Crypto</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Yedekle</string>
     <string name="Backup_Intro_TitleShow">Anahtarı Göster</string>
