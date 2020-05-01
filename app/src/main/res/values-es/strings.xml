@@ -44,9 +44,6 @@
     <string name="RateApp_Description_Rate_This_App">¿Disfrutas Unstoppable Wallet? Tómese un momento para calificar esta aplicación.</string>
     <string name="RateApp_Button_RateIt">Valóralo</string>
     <string name="RateApp_Button_NotNow">No ahora</string>
-    <!--Create-->
-    <string name="Create_Title">Nueva cartera</string>
-    <string name="Create_Description">Seleccione una criptomoneda para comenzar. Podrá añadir otras criptomonedas posteriormente.</string>
     <!--Restore-->
     <string name="Restore_ChooseWallet">Elegir el monedero</string>
     <string name="Restore_Enter_Key_Title">Coloque la clave</string>
@@ -55,6 +52,7 @@
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountIncorrect">Cuenta incorrecta</string>
     <string name="Restore_EosKeyIncorrect">Clave incorrecta</string>
+    <string name="Select_Coins">Choose Crypto</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Copia de seguridad</string>
     <string name="Backup_Intro_TitleShow">Mostrar clave</string>
