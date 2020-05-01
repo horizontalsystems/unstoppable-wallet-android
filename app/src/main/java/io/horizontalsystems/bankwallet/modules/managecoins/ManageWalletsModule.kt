@@ -16,6 +16,7 @@ object ManageWalletsModule {
         fun showNoAccountDialog(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun showSuccess()
         fun showError(e: Exception)
+        fun showDerivationSelectorDialog(derivationOptions: List<AccountType.Derivation>, selected: AccountType.Derivation, coin: Coin)
         fun setItems(coinViewItems: List<CoinManageViewItem>)
     }
 
@@ -32,6 +33,8 @@ object ManageWalletsModule {
         fun onAccountRestored()
         fun onBlockchainSettingsApproved()
         fun onBlockchainSettingsCancel()
+        fun onSelectDerivationSetting(coin: Coin, derivation: AccountType.Derivation)
+        fun onCancelDerivationSelectorDialog(coin: Coin)
     }
 
     interface IInteractor {
@@ -48,6 +51,7 @@ object ManageWalletsModule {
         fun createAccount(predefinedAccountType: PredefinedAccountType): Account
         fun save(account: Account)
         fun derivationSetting(coinType: CoinType): DerivationSetting?
+        fun saveDerivationSetting(derivationSetting: DerivationSetting)
         fun initializeSettingsWithDefault(coinType: CoinType)
         fun initializeSettings(coinType: CoinType)
     }
@@ -55,7 +59,6 @@ object ManageWalletsModule {
     interface IRouter {
         fun openRestore(predefinedAccountType: PredefinedAccountType)
         fun close()
-        fun showSettings(coinType: CoinType)
     }
 
     fun start(context: Context, showCloseButton: Boolean) {

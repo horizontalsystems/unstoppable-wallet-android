@@ -7,13 +7,14 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
+import io.horizontalsystems.bankwallet.entities.getDescription
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsPresenter
@@ -21,7 +22,9 @@ import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsRouter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsView
 import io.horizontalsystems.bankwallet.modules.restore.RestoreMode
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 
 class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, CoinItemsAdapter.Listener {
@@ -33,10 +36,11 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_coins)
 
-        val showCloseButton = intent?.extras?.getBoolean(ModuleField.SHOW_CLOSE_BUTTON, false) ?: false
+        val showCloseButton = intent?.extras?.getBoolean(ModuleField.SHOW_CLOSE_BUTTON, false)
+                ?: false
         val isColdStart = savedInstanceState != null
 
-        presenter = ViewModelProvider(this, ManageWalletsModule.Factory(showCloseButton, isColdStart ))
+        presenter = ViewModelProvider(this, ManageWalletsModule.Factory(showCloseButton, isColdStart))
                 .get(ManageWalletsPresenter::class.java)
 
         presenter.onLoad()
@@ -71,15 +75,29 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
             HudHelper.showSuccessMessage(this, R.string.Hud_Text_Done)
         })
 
+        view.showDerivationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+            BottomSheetSelectorDialog.show(
+                    supportFragmentManager,
+                    getString(R.string.AddressFormatSettings_Title),
+                    coin.title,
+                    LayoutHelper.getCoinDrawableResource(this, coin.code),
+                    items.map { derivation -> Pair(AccountType.getDerivationLongTitle(derivation), getString(derivation.getDescription())) },
+                    items.indexOf(selected),
+                    notifyUnchanged = true,
+                    onItemSelected = { position ->
+                        presenter.onSelectDerivationSetting(coin, items[position])
+                    },
+                    onCancelled = {
+                        presenter.onCancelDerivationSelectorDialog(coin)
+                    }
+            )
+        })
+
     }
 
     private fun observe(router: ManageWalletsRouter) {
         router.openRestoreModule.observe(this, Observer { predefinedAccountType ->
             RestoreModule.startForResult(this, predefinedAccountType, RestoreMode.InApp)
-        })
-
-        router.showBlockchainSettings.observe(this, Observer { coinType ->
-            AddressFormatSettingsModule.startForResult(this, listOf(coinType), true)
         })
 
         router.closeLiveDate.observe(this, Observer {
@@ -100,8 +118,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.menuClose ->  {
+        when (item.itemId) {
+            R.id.menuClose -> {
                 onBackPressed()
                 return true
             }
@@ -113,7 +131,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            ModuleCode.RESTORE-> {
+            ModuleCode.RESTORE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     presenter.onAccountRestored()
                 }

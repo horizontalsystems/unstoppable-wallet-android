@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
+import io.horizontalsystems.bankwallet.R
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -61,20 +62,26 @@ open class AccountType : Parcelable {
             }
     }
 
-    companion object{
+    companion object {
 
         fun getDerivationLongTitle(derivation: Derivation): String {
             return "${derivation.addressType} - ${getDerivationTitle(derivation)}"
         }
 
         fun getDerivationTitle(derivation: Derivation): String {
-            return when(derivation) {
+            return when (derivation) {
                 Derivation.bip44 -> "BIP 44"
                 Derivation.bip49 -> "BIP 49"
                 Derivation.bip84 -> "BIP 84"
             }
         }
     }
+}
+
+fun AccountType.Derivation.getDescription(): Int = when (this) {
+    AccountType.Derivation.bip44 -> R.string.CoinOption_bip44_Subtitle
+    AccountType.Derivation.bip84 -> R.string.CoinOption_bip84_Subtitle
+    AccountType.Derivation.bip49 -> R.string.CoinOption_bip49_Subtitle
 }
 
 @Parcelize
