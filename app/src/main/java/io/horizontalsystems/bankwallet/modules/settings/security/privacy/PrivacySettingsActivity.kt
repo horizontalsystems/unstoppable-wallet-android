@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.OnItemSelectedListener
 import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
@@ -113,10 +112,8 @@ class PrivacySettingsActivity : BaseActivity() {
                     R.drawable.ic_transactions,
                     items.map { getSortingInfo(it) },
                     items.indexOf(selected),
-                    object : OnItemSelectedListener {
-                        override fun onItemSelected(position: Int) {
-                            viewModel.delegate.onSelectTransactionSorting(items[position])
-                        }
+                    onItemSelected = { position ->
+                        viewModel.delegate.onSelectTransactionSorting(items[position])
                     }
             )
         })
@@ -127,7 +124,7 @@ class PrivacySettingsActivity : BaseActivity() {
         })
     }
 
-    private fun createCommunicationSettingsView(){
+    private fun createCommunicationSettingsView() {
 
         communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
         communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
@@ -145,10 +142,8 @@ class PrivacySettingsActivity : BaseActivity() {
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
                     items.map { getCommunicationModeInfo(it) },
                     items.indexOf(selected),
-                    object : OnItemSelectedListener {
-                        override fun onItemSelected(position: Int) {
-                            viewModel.delegate.onSelectSetting(position)
-                        }
+                    onItemSelected = { position ->
+                        viewModel.delegate.onSelectSetting(position)
                     }
             )
         })
@@ -174,9 +169,9 @@ class PrivacySettingsActivity : BaseActivity() {
         })
     }
 
-    private fun createWalletRestoreSettingsView(doCreate: Boolean){
+    private fun createWalletRestoreSettingsView(doCreate: Boolean) {
 
-        if(doCreate) {
+        if (doCreate) {
 
             walletRestoreSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
             walletRestoreSettingsRecyclerview.adapter = walletRestoreSettingsAdapter
@@ -194,30 +189,28 @@ class PrivacySettingsActivity : BaseActivity() {
                         LayoutHelper.getCoinDrawableResource(this, coin.code),
                         items.map { getSyncModeInfo(it) },
                         items.indexOf(selected),
-                        object : OnItemSelectedListener {
-                            override fun onItemSelected(position: Int) {
-                                viewModel.delegate.onSelectSetting(position)
-                            }
+                        onItemSelected = { position ->
+                            viewModel.delegate.onSelectSetting(position)
                         },
                         warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
                 )
             })
         }
 
-        walletRestoreTitle.visibility = if(doCreate) View.VISIBLE else View.GONE
-        walletRestoreSettingsDescription.visibility = if(doCreate) View.VISIBLE else View.GONE
-        walletRestoreSettingsRecyclerview.visibility = if(doCreate) View.VISIBLE else View.GONE
+        walletRestoreTitle.visibility = if (doCreate) View.VISIBLE else View.GONE
+        walletRestoreSettingsDescription.visibility = if (doCreate) View.VISIBLE else View.GONE
+        walletRestoreSettingsRecyclerview.visibility = if (doCreate) View.VISIBLE else View.GONE
     }
 
-    private fun getSortingLocalized(sortingType: TransactionDataSortingType): String{
-        return when(sortingType) {
+    private fun getSortingLocalized(sortingType: TransactionDataSortingType): String {
+        return when (sortingType) {
             TransactionDataSortingType.Shuffle -> getString(R.string.SettingsSecurity_SortingShuffle)
             TransactionDataSortingType.Bip69 -> getString(R.string.SettingsSecurity_SortingBip69)
         }
     }
 
     private fun getSortingInfo(sortingType: TransactionDataSortingType): Pair<String, String> {
-        return when(sortingType) {
+        return when (sortingType) {
             TransactionDataSortingType.Shuffle -> {
                 Pair(getString(R.string.SettingsSecurity_SortingShuffle), getString(R.string.SettingsSecurity_SortingShuffleDescription))
             }
@@ -228,7 +221,7 @@ class PrivacySettingsActivity : BaseActivity() {
     }
 
     private fun getSyncModeInfo(syncMode: SyncMode): Pair<String, String> {
-        return when(syncMode) {
+        return when (syncMode) {
             SyncMode.Fast -> Pair(getString(R.string.SettingsSecurity_SyncModeAPI), getString(R.string.SettingsSecurity_SyncModeAPIDescription))
             SyncMode.Slow -> Pair(getString(R.string.SettingsSecurity_SyncModeBlockchain), getString(R.string.SettingsSecurity_SyncModeBlockchainDescription))
             SyncMode.New -> throw Exception("Unsupported syncMode: $syncMode")
@@ -236,7 +229,7 @@ class PrivacySettingsActivity : BaseActivity() {
     }
 
     private fun getCommunicationModeInfo(communicationMode: CommunicationMode): Pair<String, String> {
-        return when(communicationMode) {
+        return when (communicationMode) {
             CommunicationMode.Infura -> Pair(communicationMode.title, "infura.io")
             CommunicationMode.Incubed -> Pair(communicationMode.title, "slock.it")
             else -> throw Exception("Unsupported syncMode: $communicationMode")
