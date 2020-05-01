@@ -20,6 +20,13 @@
         <attr name="subtitle" />
         <attr name="bottomBorder" />
     </declare-styleable>
+    <declare-styleable name="ManageAccountView">
+        <attr name="title" />
+        <attr name="arrow" format="boolean" />
+        <attr name="attention" format="boolean" />
+        <attr name="roundBottom" format="boolean" />
+        <attr name="textColor" format="reference|color" />
+    </declare-styleable>
     <declare-styleable name="MultipleInputEditTextView">
         <attr name="inputFromQRCode" format="boolean" />
         <attr name="inputFromClipboard" format="boolean" />

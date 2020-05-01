@@ -2,18 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/viewHolderRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="12dp"
     android:layout_marginStart="16dp"
+    android:layout_marginTop="12dp"
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="8dp"
+    android:background="@drawable/stateful_background_yellow_border"
+    android:orientation="vertical"
     android:paddingStart="1dp"
     android:paddingEnd="1dp"
-    android:paddingBottom="1dp"
-    android:background="@drawable/stateful_background_yellow_border"
-    android:orientation="vertical">
+    android:paddingBottom="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -52,12 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="30dp"
-            android:textColor="@color/grey"
-            android:maxLines="3"
             android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="@id/titleText"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:maxLines="3"
+            android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/titleText"
             app:layout_constraintTop_toBottomOf="@id/titleText"
             tools:text="BTC, LTC, BCH, DASH, ETH, ERC-20 Tokens, and more" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -65,26 +64,48 @@
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/advancedSettingsButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:arrow="true"
+        app:textColor="?ColorOz"
+        app:title="@string/ManageKeys_AddressFormat" />
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/backupButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:arrow="true"
+        app:textColor="?ColorOz"
+        app:title="@string/ManageKeys_Backup" />
+
+    <io.horizontalsystems.views.ManageAccountView
+        android:id="@+id/showKeyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrow="true"
+        app:textColor="?ColorOz"
+        app:title="@string/ManageKeys_Show" />
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/createButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:textColor="?ColorJacob"
+        app:title="@string/ManageKeys_Create" />
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/restoreButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:roundBottom="true"
+        app:textColor="?ColorJacob"
+        app:title="@string/ManageKeys_Restore" />
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/unlinkButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:roundBottom="true"
+        app:textColor="?ColorLucian"
+        app:title="@string/ManageKeys_Unlink" />
 
 </LinearLayout>
