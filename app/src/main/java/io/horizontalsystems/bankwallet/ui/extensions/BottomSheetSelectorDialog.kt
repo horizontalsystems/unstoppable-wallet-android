@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ class BottomSheetSelectorDialog(
         private val items: List<Pair<String, String>>,
         private val selected: Int,
         private val listener: OnItemSelectedListener,
+        private val onCancelled: (() -> Unit)?,
         private val warning: String?,
         private val notifyUnchanged: Boolean
 ) : BaseBottomSheetDialogFragment() {
@@ -43,9 +45,19 @@ class BottomSheetSelectorDialog(
         }
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onCancelled?.invoke()
+    }
+
+    override fun close() {
+        super.close()
+        onCancelled?.invoke()
+    }
+
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, listener: OnItemSelectedListener, warning: String? = null, notifyUnchanged: Boolean = false) {
-            BottomSheetSelectorDialog(title, subtitle, icon, items, selected, listener, warning, notifyUnchanged)
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, listener: OnItemSelectedListener, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
+            BottomSheetSelectorDialog(title, subtitle, icon, items, selected, listener, onCancelled, warning, notifyUnchanged)
                     .show(fragmentManager, "selector_dialog")
         }
     }

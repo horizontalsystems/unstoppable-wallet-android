@@ -27,6 +27,10 @@ class BlockchainSettingsManager(
                 ?: communicationSettingsManager.defaultCommunicationSetting(coinType)
     }
 
+    override fun saveSetting(derivationSetting: DerivationSetting) {
+        derivationSettingsManager.updateSetting(derivationSetting)
+    }
+
     override fun saveSetting(syncModeSetting: SyncModeSetting) {
         syncModeSettingsManager.updateSetting(syncModeSetting)
     }

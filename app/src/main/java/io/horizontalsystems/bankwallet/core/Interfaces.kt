@@ -4,8 +4,8 @@ import android.content.Context
 import android.text.SpannableString
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
-import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
+import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -22,7 +22,6 @@ import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import java.math.BigDecimal
 import java.util.*
@@ -403,6 +402,7 @@ interface IBlockchainSettingsManager {
     fun syncModeSetting(coinType: CoinType): SyncModeSetting?
     fun communicationSetting(coinType: CoinType): CommunicationSetting?
 
+    fun saveSetting(derivationSetting: DerivationSetting)
     fun saveSetting(syncModeSetting: SyncModeSetting)
     fun saveSetting(communicationSetting: CommunicationSetting)
 
