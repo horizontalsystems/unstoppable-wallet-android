@@ -8,9 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.DerivationSetting
+import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import kotlinx.android.synthetic.main.activity_address_format_settings.*
 
@@ -25,7 +24,8 @@ class AddressFormatSettingsActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val coinTypes: List<CoinType> = intent.getParcelableArrayListExtra(ModuleField.COIN_TYPES) ?: listOf()
+        val coinTypes: List<CoinType> = intent.getParcelableArrayListExtra(ModuleField.COIN_TYPES)
+                ?: listOf()
         val showDoneButton: Boolean = intent.getBooleanExtra(ModuleField.SHOW_DONE_BUTTON, false)
 
         presenter = ViewModelProvider(this, AddressFormatSettingsModule.Factory(coinTypes, showDoneButton))
@@ -75,9 +75,9 @@ class AddressFormatSettingsActivity : BaseActivity() {
             btcBip84.setEnabledState(enabled)
         })
         view.btcBipDerivation.observe(this, Observer { derivation ->
-            btcBip44.setChecked(derivation == AccountType.Derivation.bip44)
-            btcBip49.setChecked(derivation == AccountType.Derivation.bip49)
-            btcBip84.setChecked(derivation == AccountType.Derivation.bip84)
+            btcBip44.setChecked(derivation == Derivation.bip44)
+            btcBip49.setChecked(derivation == Derivation.bip49)
+            btcBip84.setChecked(derivation == Derivation.bip84)
         })
         view.ltcBipEnabled.observe(this, Observer { enabled ->
             ltcBip44.setEnabledState(enabled)
@@ -85,12 +85,12 @@ class AddressFormatSettingsActivity : BaseActivity() {
             ltcBip84.setEnabledState(enabled)
         })
         view.ltcBipDerivation.observe(this, Observer { derivation ->
-            ltcBip44.setChecked(derivation == AccountType.Derivation.bip44)
-            ltcBip49.setChecked(derivation == AccountType.Derivation.bip49)
-            ltcBip84.setChecked(derivation == AccountType.Derivation.bip84)
+            ltcBip44.setChecked(derivation == Derivation.bip44)
+            ltcBip49.setChecked(derivation == Derivation.bip49)
+            ltcBip84.setChecked(derivation == Derivation.bip84)
         })
         view.showDerivationChangeAlert.observe(this, Observer { (derivationSetting, coinTitle) ->
-            val bipVersion = AccountType.getDerivationTitle(derivationSetting.derivation)
+            val bipVersion = derivationSetting.derivation.title()
             ConfirmationDialog.show(
                     title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
                     subtitle = bipVersion,
@@ -108,38 +108,38 @@ class AddressFormatSettingsActivity : BaseActivity() {
 
     private fun setBtcItems() {
         btcBip44.bind(
-                AccountType.getDerivationLongTitle(AccountType.Derivation.bip44),
-                getString(R.string.CoinOption_bip44_Subtitle),
-                { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, AccountType.Derivation.bip44)) }
+                Derivation.bip44.longTitle(),
+                getString(Derivation.bip44.description()),
+                { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, Derivation.bip44)) }
         )
         btcBip49.bind(
-                AccountType.getDerivationLongTitle(AccountType.Derivation.bip49),
-                getString(R.string.CoinOption_bip49_Subtitle),
-                { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, AccountType.Derivation.bip49)) }
+                Derivation.bip49.longTitle(),
+                getString(Derivation.bip49.description()),
+                { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, Derivation.bip49)) }
         )
         btcBip84.bind(
-                AccountType.getDerivationLongTitle(AccountType.Derivation.bip84),
-                getString(R.string.CoinOption_bip84_Subtitle),
-                { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, AccountType.Derivation.bip84)) },
+                Derivation.bip84.longTitle(),
+                getString(Derivation.bip84.description()),
+                { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, Derivation.bip84)) },
                 true
         )
     }
 
     private fun setLtcItems() {
         ltcBip44.bind(
-                AccountType.getDerivationLongTitle(AccountType.Derivation.bip44),
-                getString(R.string.CoinOption_bip44_Subtitle),
-                { presenter.onSelect(DerivationSetting(CoinType.Litecoin, AccountType.Derivation.bip44)) }
+                Derivation.bip44.longTitle(),
+                getString(Derivation.bip44.description()),
+                { presenter.onSelect(DerivationSetting(CoinType.Litecoin, Derivation.bip44)) }
         )
         ltcBip49.bind(
-                AccountType.getDerivationLongTitle(AccountType.Derivation.bip49),
-                getString(R.string.CoinOption_bip49_Subtitle),
-                { presenter.onSelect(DerivationSetting(CoinType.Litecoin, AccountType.Derivation.bip49)) }
+                Derivation.bip49.longTitle(),
+                getString(Derivation.bip49.description()),
+                { presenter.onSelect(DerivationSetting(CoinType.Litecoin, Derivation.bip49)) }
         )
         ltcBip84.bind(
-                AccountType.getDerivationLongTitle(AccountType.Derivation.bip84),
-                getString(R.string.CoinOption_bip84_Subtitle),
-                { presenter.onSelect(DerivationSetting(CoinType.Litecoin, AccountType.Derivation.bip84)) },
+                Derivation.bip84.longTitle(),
+                getString(Derivation.bip84.description()),
+                { presenter.onSelect(DerivationSetting(CoinType.Litecoin, Derivation.bip84)) },
                 true
         )
     }
