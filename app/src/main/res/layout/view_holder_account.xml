@@ -63,12 +63,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <io.horizontalsystems.views.ManageAccountView
-        android:id="@+id/backupButton"
+        android:id="@+id/advancedSettingsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <io.horizontalsystems.views.ManageAccountView
-        android:id="@+id/advancedSettingsButton"
+        android:id="@+id/backupButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
