@@ -199,8 +199,6 @@
                 android:layout_height="49dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:paddingTop="7dp"
-                android:paddingBottom="7dp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -214,8 +212,10 @@
                     android:gravity="start"
                     android:textColor="?ColorLeah"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/pointInfoTime"
                     app:layout_constraintEnd_toStartOf="@+id/pointInfoPrice"
                     app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintVertical_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="09/02/2020" />
@@ -228,10 +228,11 @@
                     android:gravity="start"
                     android:textColor="@color/grey"
                     android:textSize="12sp"
+                    app:layout_constraintTop_toBottomOf="@+id/pointInfoDate"
                     app:layout_constraintEnd_toStartOf="@+id/pointInfoPriceTitle"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/pointInfoPrice"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     tools:text="15:21" />
 
                 <TextView
@@ -245,7 +246,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/pointInfoVolume"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@+id/pointInfoDate"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pointInfoDate"
                     tools:text="$10,083.34" />
 
                 <TextView
@@ -274,7 +275,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pointInfoDate"
                     tools:text="$36,166B" />
 
                 <TextView
