@@ -43,7 +43,7 @@ class FeeRateProvider(appConfig: IAppConfigProvider) {
             add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
 
             if (addCustom) {
-                add(FeeRateInfo(FeeRatePriority.Custom(1, IntRange(1, 100)), 1, null))
+                add(FeeRateInfo(FeeRatePriority.Custom(1, IntRange(1, 200)), 1, null))
             }
         }
     }

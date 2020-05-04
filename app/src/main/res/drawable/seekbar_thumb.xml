@@ -2,13 +2,13 @@
     <item android:state_pressed="true">
         <shape android:shape="oval">
             <size android:width="24dp" android:height="24dp" />
-            <solid android:color="?ColorLeah" />
+            <solid android:color="?ColorJacob" />
         </shape>
     </item>
     <item>
         <shape android:shape="oval">
-            <stroke android:width="8dp" android:color="@color/transparent" android:dashWidth="0dp" android:dashGap="0dp" />
-            <solid android:color="?ColorLeah" />
+            <stroke android:width="12dp" android:color="@color/transparent" android:dashWidth="0dp" android:dashGap="0dp" />
+            <solid android:color="@color/grey" />
             <size android:width="24dp" android:height="24dp" />
         </shape>
     </item>
