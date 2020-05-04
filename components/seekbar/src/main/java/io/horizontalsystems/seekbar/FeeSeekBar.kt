@@ -1,11 +1,13 @@
 package io.horizontalsystems.seekbar
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
-import io.horizontalsystems.views.helpers.LayoutHelper
 
 class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.seekBarStyle)
     : AppCompatSeekBar(context, attrs, defStyleAttr) {
@@ -20,18 +22,21 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
     private var listener: Listener? = null
 
     private val rect = RectF(0f, 0f, config.bubbleWidth, config.bubbleHeight)
-    private val bubbleText = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val bubbleTextSecondary = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val bubblePrimaryTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val bubbleSecondaryTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var bubbleBackground = Paint()
     private var bubbleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var seekBarLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var sideSymbolLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var primaryTextHeight = 0f
+    private var secondaryTextHeight = 0f
 
     private fun initialize() {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.FeeSeekBar)
         try {
             ta.getInt(R.styleable.FeeSeekBar_textColor, config.textColor).let { config.textColor = it }
             ta.getInt(R.styleable.FeeSeekBar_textColorSecondary, config.textColorSecondary).let { config.textColorSecondary = it }
-            ta.getInt(R.styleable.FeeSeekBar_controlsColor, config.controlsColor).let { config.controlsColor = it }
+            ta.getInt(R.styleable.FeeSeekBar_controlsColor, config.symbolColor).let { config.symbolColor = it }
             ta.getInt(R.styleable.FeeSeekBar_bubbleBackground, config.bubbleBackground).let { config.bubbleBackground = it }
             ta.getInt(R.styleable.FeeSeekBar_bubbleStroke, config.bubbleStroke).let { config.bubbleStroke = it }
             ta.getString(R.styleable.FeeSeekBar_bubbleHint)?.let { config.bubbleHint = it }
@@ -39,15 +44,15 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
             ta.recycle()
         }
 
-        bubbleText.apply {
+        bubblePrimaryTextPaint.apply {
             color = config.textColor
-            textSize = config.textSize
+            textSize = config.primaryTextSize
             typeface = config.notoSans
         }
 
-        bubbleTextSecondary.apply {
+        bubbleSecondaryTextPaint.apply {
             color = config.textColorSecondary
-            textSize = config.textSizeSecondary
+            textSize = config.secondaryTextSize
             typeface = config.notoSans
         }
 
@@ -62,11 +67,26 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
             strokeWidth = config.strokeWidth
         }
 
-        linePaint.apply {
+        seekBarLinePaint.apply {
             style = Paint.Style.STROKE
-            color = config.controlsColor
+            color = config.mainLineColor
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = config.seekbarLineStrokeWidth
+        }
+
+        sideSymbolLinePaint.apply {
+            style = Paint.Style.STROKE
+            color = config.symbolColor
             strokeWidth = config.strokeWidth
         }
+
+        val primTextBounds = Rect()
+        bubblePrimaryTextPaint.getTextBounds("0", 0, 1, primTextBounds)
+        primaryTextHeight = primTextBounds.height().toFloat()
+
+        val secTextBounds = Rect()
+        bubblePrimaryTextPaint.getTextBounds(config.bubbleHint, 0, config.bubbleHint.length, secTextBounds)
+        secondaryTextHeight = secTextBounds.height().toFloat()
     }
 
     init {
@@ -96,7 +116,6 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
 
         // Bubble
         if (isTracking) {
@@ -105,19 +124,26 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
 
         val bounds = thumb.bounds
 
-        //  controls
-        val controlWidth = LayoutHelper.dpToPx(9f, context)
-        val controlHalf = controlWidth / 2
+        //  symbols
+        val symbolHalf = config.sideSymbolWidth / 2
         val thumbHalf = (bounds.bottom - bounds.top) / 2
         val thumbCenter = (bounds.top + thumbHalf).toFloat()
 
-        canvas.drawLine(0f, thumbCenter, controlWidth, thumbCenter, linePaint)
+        //seekbar line
+        canvas.drawLine(config.sideSymbolWidth + config.seekbarSideMargin, thumbCenter, width.toFloat() - config.sideSymbolWidth - config.seekbarSideMargin , thumbCenter, seekBarLinePaint)
 
-        canvas.drawLine(right - controlWidth, thumbCenter, right.toFloat(), thumbCenter, linePaint)
-        canvas.drawLine(right - controlHalf, thumbCenter - controlHalf, right - controlHalf, thumbCenter + controlHalf, linePaint)
+        //minus symbol
+        canvas.drawLine(0f, thumbCenter, config.sideSymbolWidth, thumbCenter, sideSymbolLinePaint)
+
+        //plus symbol
+        canvas.drawLine(right - config.sideSymbolWidth, thumbCenter, right.toFloat(), thumbCenter, sideSymbolLinePaint)
+        canvas.drawLine(right - symbolHalf, thumbCenter - symbolHalf, right - symbolHalf, thumbCenter + symbolHalf, sideSymbolLinePaint)
+
+        super.onDraw(canvas)
     }
 
     private fun drawBubble(canvas: Canvas) {
+        canvas.save()
         val bounds = thumb.bounds
         var x = bounds.left.toFloat() + config.linePadding
 
@@ -130,20 +156,22 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
 
         rect.offsetTo(x - config.bubbleWidth / 2, -config.bubbleHeight)
 
-        val cornerRadius = LayoutHelper.dpToPx(8f, context)
-        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, bubbleBackground)
-        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, bubbleStrokePaint)
+        canvas.drawRoundRect(rect, config.bubbleCornerRadius, config.bubbleCornerRadius, bubbleBackground)
+        canvas.drawRoundRect(rect, config.bubbleCornerRadius, config.bubbleCornerRadius, bubbleStrokePaint)
 
         //  Text 1
         val firstLine = "${progress}"
-        val firstWidth = bubbleText.measureText(firstLine)
+        val firstWidth = bubblePrimaryTextPaint.measureText(firstLine)
 
-        canvas.drawText(firstLine, x - firstWidth / 2, -65f, bubbleText)
+        canvas.translate(0f, -config.bubbleHeight + primaryTextHeight + config.primaryTextTopMargin)
+        canvas.drawText(firstLine, x - firstWidth / 2, 0f, bubblePrimaryTextPaint)
 
         //  Text 2
         val secondLine = config.bubbleHint
-        val secondWidth = bubbleTextSecondary.measureText(secondLine)
+        val secondWidth = bubbleSecondaryTextPaint.measureText(secondLine)
 
-        canvas.drawText(secondLine, x - secondWidth / 2, -25f, bubbleTextSecondary)
+        canvas.translate(0f, secondaryTextHeight)
+        canvas.drawText(secondLine, x - secondWidth / 2, 0f, bubbleSecondaryTextPaint)
+        canvas.restore()
     }
 }
