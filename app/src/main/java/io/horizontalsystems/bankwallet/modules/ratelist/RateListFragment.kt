@@ -128,7 +128,7 @@ class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapte
     private var coinViewItem: ViewItem.CoinViewItem? = null
 
     init {
-        rootWrapper.setOnClickListener {
+        containerView.setOnClickListener {
             coinViewItem?.let {
                 listener.onCoinClicked(it)
             }
