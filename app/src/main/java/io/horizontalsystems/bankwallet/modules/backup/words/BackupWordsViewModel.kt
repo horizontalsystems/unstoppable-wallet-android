@@ -14,7 +14,6 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     val wordsLiveData = MutableLiveData<Array<String>>()
     val backedUpLiveData = MutableLiveData<Boolean>()
     val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
-    val validateWordsLiveEvent = SingleLiveEvent<Unit>()
     val notifyBackedUpEvent = SingleLiveEvent<Unit>()
     val notifyClosedEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
@@ -39,10 +38,6 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
 
     override fun showConfirmationError() {
         errorLiveData.value = R.string.Backup_Confirmation_FailureAlertText
-    }
-
-    override fun validateWords() {
-        validateWordsLiveEvent.call()
     }
 
     override fun setBackedUp(backedUp: Boolean) {
