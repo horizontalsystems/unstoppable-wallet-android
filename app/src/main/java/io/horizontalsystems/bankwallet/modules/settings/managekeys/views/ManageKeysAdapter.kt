@@ -52,6 +52,10 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
                 listener.onClickBackup(item)
             }
 
+            showKeyButton.setOnClickListener {
+                listener.onClickBackup(item)
+            }
+
             unlinkButton.setOnClickListener {
                 listener.onClickUnlink(item)
             }
