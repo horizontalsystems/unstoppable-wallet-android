@@ -2,13 +2,11 @@ package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import kotlinx.android.synthetic.main.activity_backup_words.*
 
@@ -19,6 +17,8 @@ class BackupWordsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup_words)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val backedUp = intent.getBooleanExtra(ACCOUNT_BACKEDUP, false)
         val backupWords = intent.getStringArrayExtra(WORDS_KEY) ?: arrayOf()
@@ -28,9 +28,6 @@ class BackupWordsActivity : BaseActivity() {
         if (savedInstanceState == null) {
             viewModel.delegate.viewDidLoad()
         }
-
-        buttonBack.setOnSingleClickListener { viewModel.delegate.onBackClick() }
-        buttonNext.setOnSingleClickListener { viewModel.delegate.onNextClick() }
 
         viewModel.loadPageLiveEvent.observe(this, Observer { page ->
             val fragment = when (page) {
@@ -44,21 +41,10 @@ class BackupWordsActivity : BaseActivity() {
                 commit()
             }
 
-            // set buttons
-            when (page) {
-                1 -> {
-                    buttonBack.setText(R.string.Button_Back)
-                    buttonNext.setText(R.string.Backup_Button_Next)
-                }
-                else -> {
-                    buttonBack.setText(R.string.Button_Back)
-                    buttonNext.setText(R.string.Backup_Button_Submit)
-                }
-            }
-
-            if (backedUp) {
-                buttonBack.visibility = View.GONE
-                buttonNext.setText(R.string.Button_Close)
+            collapsingToolbar.title = when (page) {
+                1 -> getString(R.string.Backup_DisplayTitle)
+                2 -> getString(R.string.Backup_Confirmation_CheckTitle)
+                else -> null
             }
         })
 

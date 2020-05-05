@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
@@ -30,6 +31,17 @@ class BackupWordsFragment : Fragment() {
         viewModel.wordsLiveData.observe(viewLifecycleOwner, Observer {
             populateWords(it)
         })
+
+        viewModel.backedUpLiveData.observe(viewLifecycleOwner, Observer { backedUp ->
+            if (backedUp) {
+                buttonNext.setText(R.string.Button_Close)
+            }
+        })
+
+        buttonNext.setOnSingleClickListener {
+            viewModel.delegate.onNextClick()
+        }
+
     }
 
     private fun populateWords(words: Array<String>) {

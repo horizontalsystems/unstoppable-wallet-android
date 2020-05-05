@@ -13,6 +13,7 @@ class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor
 
     override fun viewDidLoad() {
         view?.showWords(state.words)
+        view?.setBackedUp(state.backedUp)
         loadCurrentPage()
     }
 

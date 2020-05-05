@@ -5,19 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
-import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.pin.PinModule
 import kotlinx.android.synthetic.main.activity_backup.*
-import kotlinx.android.synthetic.main.activity_backup_words.buttonBack
-import kotlinx.android.synthetic.main.activity_backup_words.buttonNext
 
 class BackupActivity : BaseActivity() {
 
@@ -26,6 +24,8 @@ class BackupActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val account = intent.getParcelableExtra<Account>(ModuleField.ACCOUNT) ?: run { finish(); return }
         val accountCoins = intent.getStringExtra(ModuleField.ACCOUNT_COINS)
@@ -33,7 +33,6 @@ class BackupActivity : BaseActivity() {
         viewModel = ViewModelProvider(this).get(BackupViewModel::class.java)
         viewModel.init(account)
 
-        buttonBack.setOnSingleClickListener { viewModel.delegate.onClickCancel() }
         buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
 
         viewModel.startPinModule.observe(this, Observer {
@@ -60,8 +59,7 @@ class BackupActivity : BaseActivity() {
         backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
 
         if (account.isBackedUp) {
-            backupTitle.text = getString(R.string.Backup_Intro_TitleShow)
-            buttonBack.text = getString(R.string.Button_Close)
+            collapsingToolbar.title = getString(R.string.Backup_Intro_TitleShow)
             buttonNext.text = getString(R.string.Backup_Button_ShowKey)
         }
     }

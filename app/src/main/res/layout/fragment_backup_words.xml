@@ -6,30 +6,17 @@
     android:layout_height="match_parent"
     android:descendantFocusability="blocksDescendants">
 
-    <TextView
-        android:id="@+id/backupTitle"
-        style="@style/Title2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="49dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/Backup_DisplayTitle"
-        android:textColor="?TitleColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:stretchColumns="*"
-        app:layout_constraintTop_toBottomOf="@+id/backupTitle">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableRow>
+
             <TextView
                 android:id="@+id/topLeft"
                 style="@style/Headline2"
@@ -43,7 +30,9 @@
                 android:gravity="start"
                 tools:text="table\nopen\nsome\nmarket" />
         </TableRow>
+
         <TableRow android:layout_marginTop="0dp">
+
             <TextView
                 android:id="@+id/bottomLeft"
                 style="@style/Headline2"
@@ -59,5 +48,16 @@
         </TableRow>
 
     </TableLayout>
+
+    <Button
+        android:id="@+id/buttonNext"
+        style="@style/ButtonPrimaryYellow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="@string/Backup_Button_Backup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
