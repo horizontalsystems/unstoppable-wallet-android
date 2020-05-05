@@ -15,6 +15,7 @@ object BackupWordsModule {
 
         fun loadPage(page: Int)
         fun validateWords()
+        fun setBackedUp(backedUp: Boolean)
     }
 
     interface IPresenter : IInteractorDelegate, IViewDelegate {

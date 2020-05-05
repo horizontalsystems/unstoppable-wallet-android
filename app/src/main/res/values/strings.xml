@@ -86,7 +86,7 @@
     <string name="Backup_Confirmation_CheckTitle">Check…</string>
 
     <string name="Backup_Button_Confirm">Confirm</string>
-    <string name="Backup_Button_Next">Next</string>
+    <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_Submit">Submit</string>
     <string name="Backup_Button_ShowKey">Show Key</string>
 

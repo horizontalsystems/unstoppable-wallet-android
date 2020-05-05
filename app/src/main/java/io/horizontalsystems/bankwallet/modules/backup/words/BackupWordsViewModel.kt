@@ -12,6 +12,7 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     val loadPageLiveEvent = SingleLiveEvent<Int>()
     val errorLiveData = SingleLiveEvent<Int>()
     val wordsLiveData = MutableLiveData<Array<String>>()
+    val backedUpLiveData = MutableLiveData<Boolean>()
     val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
     val validateWordsLiveEvent = SingleLiveEvent<Unit>()
     val notifyBackedUpEvent = SingleLiveEvent<Unit>()
@@ -42,6 +43,10 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
 
     override fun validateWords() {
         validateWordsLiveEvent.call()
+    }
+
+    override fun setBackedUp(backedUp: Boolean) {
+        backedUpLiveData.postValue(backedUp)
     }
 
     // router

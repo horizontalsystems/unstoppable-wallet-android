@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -24,6 +22,7 @@ class BackupWordsConfirmFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         val wordOne: InputTextView? = view.findViewById(R.id.wordOne)
         val wordTwo: InputTextView? = view.findViewById(R.id.wordTwo)
@@ -53,6 +52,21 @@ class BackupWordsConfirmFragment : Fragment() {
                 )
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.backup_words_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.itemDone ->  {
+                viewModel.delegate.onNextClick()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 }
