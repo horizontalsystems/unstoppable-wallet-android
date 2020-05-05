@@ -14,7 +14,6 @@ object BackupWordsModule {
         fun showConfirmationError()
 
         fun loadPage(page: Int)
-        fun validateWords()
         fun setBackedUp(backedUp: Boolean)
     }
 

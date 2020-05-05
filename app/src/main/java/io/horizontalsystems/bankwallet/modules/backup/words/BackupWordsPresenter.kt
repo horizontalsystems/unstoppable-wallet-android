@@ -29,8 +29,6 @@ class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor
             }
 
             loadCurrentPage()
-        } else {
-            view?.validateWords()
         }
     }
 

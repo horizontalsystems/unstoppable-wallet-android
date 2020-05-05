@@ -7,7 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.InputTextView
+import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
 class BackupWordsConfirmFragment : Fragment() {
 
@@ -24,9 +24,6 @@ class BackupWordsConfirmFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val wordOne: InputTextView? = view.findViewById(R.id.wordOne)
-        val wordTwo: InputTextView? = view.findViewById(R.id.wordTwo)
-
         viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 wordOne?.bindPrefix("${it[0]}.")
@@ -40,18 +37,6 @@ class BackupWordsConfirmFragment : Fragment() {
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             context?.let { context -> HudHelper.showErrorMessage(context, it) }
         })
-
-        viewModel.validateWordsLiveEvent.observe(viewLifecycleOwner, Observer {
-            val wordOneEntry = wordOne?.getEnteredText()?.toLowerCase()
-            val wordTwoEntry = wordTwo?.getEnteredText()?.toLowerCase()
-            if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
-                context?.let { context -> HudHelper.showErrorMessage(context, getString(R.string.Backup_Confirmation_Description)) }
-            } else {
-                viewModel.delegate.validateDidClick(
-                        hashMapOf(wordIndex1 to wordOneEntry, wordIndex2 to wordTwoEntry)
-                )
-            }
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -59,14 +44,23 @@ class BackupWordsConfirmFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.itemDone ->  {
-                viewModel.delegate.onNextClick()
-                return true
+        return when (item.itemId) {
+            R.id.itemDone -> {
+                validateWords()
+                true
+            } else -> {
+                super.onOptionsItemSelected(item)
             }
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
+    private fun validateWords() {
+        val wordOneEntry = wordOne?.getEnteredText()?.toLowerCase()
+        val wordTwoEntry = wordTwo?.getEnteredText()?.toLowerCase()
+        if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
+            context?.let { context -> HudHelper.showErrorMessage(context, getString(R.string.Backup_Confirmation_Description)) }
+        } else {
+            viewModel.delegate.validateDidClick(hashMapOf(wordIndex1 to wordOneEntry, wordIndex2 to wordTwoEntry))
+        }
+    }
 }
