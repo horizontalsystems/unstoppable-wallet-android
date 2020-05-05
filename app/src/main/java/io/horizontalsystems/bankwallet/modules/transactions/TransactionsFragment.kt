@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.nonZero
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -189,7 +188,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val incoming = transactionRecord.type == TransactionType.Incoming
         val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
 
-        txValueInFiat.text = transactionRecord.currencyValue?.nonZero()?.let {
+        txValueInFiat.text = transactionRecord.currencyValue?.let {
             App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
         }
 
@@ -213,7 +212,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val incoming = current.type == TransactionType.Incoming
 
         if (current.currencyValue != prev.currencyValue) {
-            txValueInFiat.text = current.currencyValue?.nonZero()?.let {
+            txValueInFiat.text = current.currencyValue?.let {
                 App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
             }
         }

@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Parcelable
 import android.view.View
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.views.SingleClickListener
-import java.math.BigDecimal
 
 //View
 
@@ -49,8 +47,4 @@ fun LockTimeInterval?.stringResId(): Int {
         LockTimeInterval.year -> R.string.Send_LockTime_Year
         null -> R.string.Send_LockTime_Off
     }
-}
-
-fun CurrencyValue.nonZero(): CurrencyValue?{
-    return if (this.value.compareTo(BigDecimal.ZERO) == 0) null else this
 }

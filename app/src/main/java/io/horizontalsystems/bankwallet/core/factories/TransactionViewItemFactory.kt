@@ -3,12 +3,15 @@ package io.horizontalsystems.bankwallet.core.factories
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import java.math.BigDecimal
 import java.util.*
 
 class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
-    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
+    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, threshold: Int, exchangeRate: CurrencyValue?): TransactionViewItem {
         var status: TransactionStatus = TransactionStatus.Pending
+
+        val rate = if (exchangeRate?.value?.compareTo(BigDecimal.ZERO) == 0) null else exchangeRate
 
         if (record.failed) {
             status = TransactionStatus.Failed
