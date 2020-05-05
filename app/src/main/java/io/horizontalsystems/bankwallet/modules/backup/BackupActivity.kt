@@ -73,6 +73,9 @@ class BackupActivity : BaseActivity() {
                     BackupWordsModule.RESULT_BACKUP -> {
                         viewModel.delegate.didBackup()
                     }
+                    BackupWordsModule.RESULT_SHOW -> {
+                        finish()
+                    }
                 }
             }
             ModuleCode.BACKUP_EOS -> {
