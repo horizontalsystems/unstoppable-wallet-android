@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.nonZero
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionType
@@ -101,7 +102,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     setOnClickListener { viewModel.onClickTransactionId() }
                 }
 
-                val currencyValue = txRec.currencyValue
+                val currencyValue = txRec.currencyValue?.nonZero()
                 if (currencyValue != null) {
                     fiatValueWrapper.visibility = View.VISIBLE
                     fiatName.visibility = View.VISIBLE
@@ -141,7 +142,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemDoubleSpend.visibility = View.GONE
                 }
 
-                val rate = txRec.rate
+                val rate = txRec.rate?.nonZero()
                 if (rate == null) {
                     itemRate.visibility = View.GONE
                 } else {
