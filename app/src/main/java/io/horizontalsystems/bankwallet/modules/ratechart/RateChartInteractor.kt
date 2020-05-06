@@ -8,6 +8,7 @@ import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class RateChartInteractor(private val xRateManager: IRateManager, private val localStorage: IChartTypeStorage)
     : RateChartModule.Interactor {
@@ -34,6 +35,7 @@ class RateChartInteractor(private val xRateManager: IRateManager, private val lo
     override fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType) {
         cInfoDisposable?.dispose()
         cInfoDisposable = xRateManager.chartInfoObservable(coinCode, currencyCode, chartType)
+                .delay(600, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ chartInfo ->

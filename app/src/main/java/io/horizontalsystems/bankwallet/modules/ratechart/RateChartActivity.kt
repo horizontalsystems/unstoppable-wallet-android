@@ -86,13 +86,12 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
 
     private fun observeData() {
         presenterView.showSpinner.observe(this, Observer {
-            setViewVisibility(chartView, chartError, isVisible = false)
-            setViewVisibility(chartViewSpinner, isVisible = true)
+            setViewVisibility(chartError, isVisible = false)
+            setViewVisibility(chartViewSpinner, loadingShade, isVisible = true)
         })
 
         presenterView.hideSpinner.observe(this, Observer {
-            setViewVisibility(chartView, isVisible = true)
-            setViewVisibility(chartViewSpinner, isVisible = false)
+            setViewVisibility(chartViewSpinner, loadingShade, isVisible = false)
         })
 
         presenterView.setDefaultMode.observe(this, Observer { type ->
@@ -158,6 +157,7 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         })
 
         presenterView.showError.observe(this, Observer {
+            chartView.onNoChart()
             chartView.visibility = View.INVISIBLE
             chartError.visibility = View.VISIBLE
             chartError.text = getString(R.string.Charts_Error_NotAvailable)
