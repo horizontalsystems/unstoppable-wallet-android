@@ -1,5 +1,7 @@
 package io.horizontalsystems.chartview
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -44,17 +46,9 @@ class ChartView : View {
     private val chartGrid = ChartGrid(shape, config)
     private val chartVolume = ChartVolume(config, shape)
     private var chartIndicator: ChartIndicator? = null
+    private var postponedJob: Runnable? = null
 
-    // Animator
-    private val animator = ValueAnimator().apply {
-        interpolator = AccelerateInterpolator()
-        duration = 300
-        addUpdateListener { animator ->
-            // Get our float from the animation. This method returns the Interpolated float.
-            config.animatedFraction = animator.animatedFraction
-            invalidate()
-        }
-    }
+    private var animator: ValueAnimator? = null
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -133,16 +127,47 @@ class ChartView : View {
         chartIndicator?.init(config)
     }
 
+    fun onNoChart() {
+        animator = null
+    }
+
     fun setData(points: List<ChartPoint>, chartType: ChartType, startTimestamp: Long, endTimestamp: Long) {
+        if (animator != null) {
+            postponedJob = Runnable {
+                startAnimation(points, endTimestamp, chartType, startTimestamp)
+                postponedJob = null
+            }
+            animator?.reverse()
+        } else {
+            initAnimator()
+            startAnimation(points, endTimestamp, chartType, startTimestamp)
+        }
+    }
+
+    private fun initAnimator() {
+        animator = ValueAnimator().apply {
+            interpolator = AccelerateInterpolator()
+            duration = 300
+            addUpdateListener { animator ->
+                // Get our float from the animation. This method returns the Interpolated float.
+                config.animatedFraction = animator.animatedFraction
+                invalidate()
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    postponedJob?.run()
+                }
+            })
+        }
+    }
+
+    private fun startAnimation(points: List<ChartPoint>, endTimestamp: Long, chartType: ChartType, startTimestamp: Long) {
         setColour(points, endTimestamp)
         setPoints(points, chartType, startTimestamp, endTimestamp)
 
-        if (config.animated) {
-            animator.setFloatValues(0f)
-            animator.start()
-        } else {
-            invalidate()
-        }
+        animator?.setFloatValues(0f)
+        animator?.start()
     }
 
     private fun setColour(points: List<ChartPoint>, endTimestamp: Long) {
