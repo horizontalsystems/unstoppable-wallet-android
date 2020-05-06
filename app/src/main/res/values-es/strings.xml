@@ -60,11 +60,11 @@
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_DisplayTitle">Clave privada</string>
-    <string name="Backup_Confirmation_Description">Ingrese las palabras de su clave privada.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <string name="Backup_Button_Confirm">Confirmar</string>
-    <string name="Backup_Button_Next">Siguiente</string>
+    <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_Submit">Enviar</string>
     <string name="Backup_Button_ShowKey">Mostrar clave</string>
     <!--Backup Eos-->
