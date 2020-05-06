@@ -60,11 +60,11 @@
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_DisplayTitle">Privater Schlüssel</string>
-    <string name="Backup_Confirmation_Description">Geben Sie die Worte Ihres privaten Schlüssels ein.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <string name="Backup_Button_Confirm">Bestätigen</string>
-    <string name="Backup_Button_Next">Weiter</string>
+    <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_Submit">Abschicken</string>
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Backup Eos-->
