@@ -11,6 +11,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 class TransactionsInteractor(
@@ -127,7 +128,10 @@ class TransactionsInteractor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    delegate?.didFetchRate(it, coin, baseCurrency, timestamp)
+                    //kit returns 0 when rate is not available
+                    if (it.compareTo(BigDecimal.ZERO) != 0) {
+                        delegate?.didFetchRate(it, coin, baseCurrency, timestamp)
+                    }
                 }, {
                     requestedTimestamps.remove(composedKey)
                 })
