@@ -24,6 +24,8 @@ class BackupWordsConfirmFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
+        textDescription.text = getString(R.string.Backup_Confirmation_Description, getString(viewModel.accountTypeTitle))
+
         viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 wordOne?.bindPrefix("${it[0]}.")

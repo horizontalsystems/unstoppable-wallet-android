@@ -40,7 +40,7 @@ class BackupActivity : BaseActivity() {
         })
 
         viewModel.startBackupWordsModule.observe(this, Observer {
-            BackupWordsModule.start(this, it, account.isBackedUp)
+            BackupWordsModule.start(this, it.first, account.isBackedUp, it.second)
         })
 
         viewModel.startBackupEosModule.observe(this, Observer {

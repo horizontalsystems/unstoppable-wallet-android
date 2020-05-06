@@ -47,8 +47,8 @@ object BackupWordsModule {
 
     //  helpers
 
-    fun start(context: AppCompatActivity, words: List<String>, backedUp: Boolean) {
-        BackupWordsActivity.start(context, words, backedUp)
+    fun start(context: AppCompatActivity, words: List<String>, backedUp: Boolean, accountTypeTitle: Int) {
+        BackupWordsActivity.start(context, words, backedUp, accountTypeTitle)
     }
 
     fun init(view: BackupWordsViewModel, router: IRouter, words: Array<String>, backedUp: Boolean) {

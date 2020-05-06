@@ -8,6 +8,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsModule.IRouter {
 
     lateinit var delegate: BackupWordsModule.IViewDelegate
+    var accountTypeTitle: Int = 0
 
     val loadPageLiveEvent = SingleLiveEvent<Int>()
     val errorLiveData = SingleLiveEvent<Int>()
