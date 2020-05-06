@@ -60,11 +60,11 @@
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
     <string name="Backup_DisplayTitle">개인 암호</string>
-    <string name="Backup_Confirmation_Description">귀하의 개인 암호에서 글자를 입력 하십시오.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
-    <string name="Backup_Button_Next">다음</string>
+    <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_Submit">제출하기</string>
     <string name="Backup_Button_ShowKey">암호 보이기</string>
     <!--Backup Eos-->
