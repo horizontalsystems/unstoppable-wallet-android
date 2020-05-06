@@ -81,7 +81,7 @@
 
     <string name="Backup_DisplayTitle">Private Key</string>
 
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
     <string name="Backup_Confirmation_CheckTitle">Check…</string>
 

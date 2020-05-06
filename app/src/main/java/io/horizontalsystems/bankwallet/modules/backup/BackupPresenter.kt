@@ -43,7 +43,9 @@ class BackupPresenter(
     private fun startBackup() {
         when (val accountType = account.type) {
             is AccountType.Mnemonic -> {
-                router.startBackupWordsModule(accountType.words)
+                interactor.predefinedAccountType(accountType)?.let {
+                    router.startBackupWordsModule(accountType.words, it.title)
+                }
             }
             is AccountType.Eos -> {
                 router.startBackupEosModule(accountType.account, accountType.activePrivateKey)

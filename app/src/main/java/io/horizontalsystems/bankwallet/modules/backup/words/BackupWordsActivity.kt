@@ -23,6 +23,7 @@ class BackupWordsActivity : BaseActivity() {
         val backedUp = intent.getBooleanExtra(ACCOUNT_BACKEDUP, false)
         val backupWords = intent.getStringArrayExtra(WORDS_KEY) ?: arrayOf()
 
+        viewModel.accountTypeTitle = intent.getIntExtra(ACCOUNT_TYPE_TITLE, R.string.AccountType_Unstoppable)
         viewModel.init(backupWords, backedUp)
 
         if (savedInstanceState == null) {
@@ -70,11 +71,13 @@ class BackupWordsActivity : BaseActivity() {
     companion object {
         const val ACCOUNT_BACKEDUP = "account_backedup"
         const val WORDS_KEY = "words"
+        const val ACCOUNT_TYPE_TITLE = "account_type_title"
 
-        fun start(context: AppCompatActivity, words: List<String>, backedUp: Boolean) {
+        fun start(context: AppCompatActivity, words: List<String>, backedUp: Boolean, accountTypeTitle: Int) {
             val intent = Intent(context, BackupWordsActivity::class.java).apply {
                 putExtra(WORDS_KEY, words.toTypedArray())
                 putExtra(ACCOUNT_BACKEDUP, backedUp)
+                putExtra(ACCOUNT_TYPE_TITLE, accountTypeTitle)
             }
 
             context.startActivityForResult(intent, ModuleCode.BACKUP_WORDS)
