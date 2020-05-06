@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
 class BackupWordsFragment : Fragment() {
@@ -33,13 +34,16 @@ class BackupWordsFragment : Fragment() {
         })
 
         viewModel.backedUpLiveData.observe(viewLifecycleOwner, Observer { backedUp ->
-            if (backedUp) {
-                buttonNext.setText(R.string.Button_Close)
-            }
+            buttonClose.showIf(backedUp)
+            buttonNext.showIf(!backedUp)
         })
 
         buttonNext.setOnSingleClickListener {
             viewModel.delegate.onNextClick()
+        }
+
+        buttonClose.setOnSingleClickListener {
+            viewModel.delegate.onCloseClick()
         }
 
     }
