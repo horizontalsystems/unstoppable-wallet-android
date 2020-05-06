@@ -60,11 +60,11 @@
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_DisplayTitle">私钥</string>
-    <string name="Backup_Confirmation_Description">输入您密钥中的文字。</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText">文字不匹配</string>
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
-    <string name="Backup_Button_Next">下一步</string>
+    <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_Submit">提交</string>
     <string name="Backup_Button_ShowKey">显示密钥</string>
     <!--Backup Eos-->
