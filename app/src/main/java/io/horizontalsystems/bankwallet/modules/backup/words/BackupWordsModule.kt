@@ -25,6 +25,7 @@ object BackupWordsModule {
         fun viewDidLoad()
         fun onNextClick()
         fun onBackClick()
+        fun onCloseClick()
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
     }
 

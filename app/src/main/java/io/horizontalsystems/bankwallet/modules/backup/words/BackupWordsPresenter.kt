@@ -19,17 +19,13 @@ class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor
 
     override fun onNextClick() {
         if (state.canLoadNextPage()) {
-            if (state.currentPage == 2) {
-                if (state.backedUp) {
-                    router.notifyClosed()
-                    return
-                }
-
-                view?.showConfirmationWords(interactor.getConfirmationIndices())
-            }
-
+            view?.showConfirmationWords(interactor.getConfirmationIndices())
             loadCurrentPage()
         }
+    }
+
+    override fun onCloseClick() {
+        router.notifyClosed()
     }
 
     override fun onBackClick() {
