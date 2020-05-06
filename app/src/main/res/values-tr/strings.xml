@@ -60,11 +60,11 @@
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_DisplayTitle">Gizli Anahtar</string>
-    <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <string name="Backup_Button_Confirm">Onayla</string>
-    <string name="Backup_Button_Next">İleri</string>
+    <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_Submit">Onayla</string>
     <string name="Backup_Button_ShowKey">Anahtarı Göster</string>
     <!--Backup Eos-->
