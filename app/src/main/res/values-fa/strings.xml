@@ -60,11 +60,11 @@
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_DisplayTitle">کلید خصوصی</string>
-    <string name="Backup_Confirmation_Description">کلمات را از کلید خصوصی خود وارد کنید.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
     <string name="Backup_Button_Confirm">تاييد</string>
-    <string name="Backup_Button_Next">بعدي</string>
+    <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_Submit">ثبت</string>
     <string name="Backup_Button_ShowKey">نمایش کلید</string>
     <!--Backup Eos-->
