@@ -60,24 +60,18 @@ class CreateWalletPresenter(
         }
     }
 
-    private fun viewItem(coin: Coin): CoinManageViewItem {
-        val type: CoinManageViewType = when {
-            coin.type.predefinedAccountType.isCreationSupported() -> {
-                val enabled = wallets[coin] != null
-                CoinManageViewType.CoinWithSwitch(enabled)
-            }
-            else -> {
-                CoinManageViewType.CoinWithArrow
-            }
+    private fun viewItem(coin: Coin): CoinManageViewItem? {
+        if (coin.type.predefinedAccountType.isCreationSupported()){
+            val enabled = wallets[coin] != null
+            return CoinManageViewItem(CoinManageViewType.CoinWithSwitch(enabled), CoinViewItem(coin))
         }
-
-        return CoinManageViewItem(type, CoinViewItem(coin))
+        return null
     }
 
     private fun syncViewItems() {
         val featuredCoinIds = interactor.featuredCoins.map { it.coinId }
-        val featured = filteredCoins(interactor.featuredCoins).map { viewItem(it) }
-        val others = filteredCoins(interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }).map { viewItem(it) }
+        val featured = filteredCoins(interactor.featuredCoins).mapNotNull { viewItem(it) }
+        val others = filteredCoins(interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }).mapNotNull { viewItem(it) }
         val viewItems = mutableListOf<CoinManageViewItem>()
 
         if (featured.isNotEmpty()) {
