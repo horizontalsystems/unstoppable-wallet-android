@@ -24,13 +24,13 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
-                android:background="@drawable/background_yellow_for_alert_text"
+                android:background="@drawable/background_important_text_for_privacy"
                 android:paddingStart="12dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="12dp"
                 android:paddingBottom="8dp"
                 android:text="@string/SettingsPrivacy_Info"
-                android:textColor="?ColorJacob"
+                android:textColor="?ColorOz"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
