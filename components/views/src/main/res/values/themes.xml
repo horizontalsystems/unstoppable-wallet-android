@@ -28,7 +28,6 @@
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
         <item name="CoinItemBackground">@drawable/coinholder_bg_light</item>
         <item name="PredefinedAccountBackground">@drawable/predefined_account_background_light</item>
-        <item name="FilterButtonBackgroundColor">#efeff4</item>
         <item name="AddWalletIcon">@drawable/stateful_balance_add_icon_light</item>
         <item name="BottomNavigationBackgroundColor">@color/light</item>
         <item name="RippleColor">@color/ripple_black</item>
@@ -45,7 +44,6 @@
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/light</item>
         <item name="AddressBackground">@color/address_background_light</item>
-        <item name="TransactionTagColor">@color/dark</item>
         <item name="ProgressbarSpinnerColor">@color/light</item>
         <item name="SwipeRefreshBackgroundColor">@color/light</item>
         <item name="InputBackground">@color/white</item>

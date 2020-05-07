@@ -288,9 +288,8 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
     }
 
     fun bind(wallet: Wallet?, active: Boolean) {
-        filter_text.text = wallet?.coin?.code
-                ?: containerView.context.getString(R.string.Transactions_FilterAll)
-        filter_text.isActivated = active
-        filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
+        buttonFilter.text = wallet?.coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
+        buttonFilter.isActivated = active
+        buttonFilter.setOnClickListener { l.onClickItem(adapterPosition) }
     }
 }
