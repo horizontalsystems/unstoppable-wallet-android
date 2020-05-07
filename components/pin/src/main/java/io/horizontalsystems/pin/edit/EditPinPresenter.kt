@@ -9,7 +9,8 @@ class EditPinPresenter(
     : ManagePinPresenter(view, interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
-        view.setTitle(R.string.EditPin_Title)
+        view.setToolbar(R.string.EditPin_Title, true)
+        view.enablePinInput()
         val pinPages = mutableListOf<PinPage>()
 
         pages.forEach { page ->
@@ -20,7 +21,6 @@ class EditPinPresenter(
             }
         }
         view.addPages(pinPages)
-        view.showBackButton()
     }
 
     override fun didSavePin() {

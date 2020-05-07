@@ -16,18 +16,17 @@ object PinModule {
     const val keyShowCancel = "show_cancel"
 
     interface IView {
-        fun setTitle(title: Int)
+        fun setToolbar(title: Int, showBackButton: Boolean)
         fun addPages(pages: List<PinPage>)
         fun showPage(index: Int)
         fun updateTopTextForPage(text: TopText, pageIndex: Int)
         fun showError(error: Int)
         fun showPinWrong(pageIndex: Int)
-        fun showBackButton()
+        fun showCancelButton()
         fun fillCircles(length: Int, pageIndex: Int)
-        fun hideToolbar()
         fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject)
         fun showLockView(until: Date)
-        fun showPinInput()
+        fun enablePinInput()
         fun showFingerprintButton()
     }
 

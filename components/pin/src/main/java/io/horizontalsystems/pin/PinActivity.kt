@@ -30,7 +30,7 @@ class PinActivity : CoreActivity() {
 
     companion object {
 
-        fun startForResult(context: AppCompatActivity, interactionType: PinInteractionType, requestCode: Int = 0, showCancel: Boolean = true) {
+        fun startForResult(context: AppCompatActivity, interactionType: PinInteractionType, requestCode: Int = 0, showCancel: Boolean = false) {
             val intent = Intent(context, PinActivity::class.java)
             intent.putParcelableExtra(PinModule.keyInteractionType, interactionType)
             intent.putExtra(PinModule.keyShowCancel, showCancel)

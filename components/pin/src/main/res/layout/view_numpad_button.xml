@@ -18,8 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:duplicateParentState="true"
         android:includeFontPadding="false"
-        android:textColor="?ColorLeah"
+        android:textColor="@color/stateful_numpad_number_color"
         app:layout_constraintBottom_toTopOf="@+id/txtNumPadText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,8 +32,9 @@
         style="@style/Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:duplicateParentState="true"
         android:fontFamily="@font/noto_sans"
-        android:textColor="@color/grey_50"
+        android:textColor="@color/stateful_numpad_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNumPadNumber"
@@ -42,23 +44,26 @@
         android:id="@+id/imgBackSpace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:duplicateParentState="true"
         android:src="@drawable/ic_backspace"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/stateful_numpad_icon_tint_color" />
 
     <ImageView
         android:id="@+id/imgFingerprint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:duplicateParentState="true"
         android:src="@drawable/ic_fingerprint"
-        android:tint="@color/grey"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/stateful_numpad_icon_tint_color" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
