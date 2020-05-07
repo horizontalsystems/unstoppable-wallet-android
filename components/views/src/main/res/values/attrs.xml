@@ -50,7 +50,6 @@
     <attr name="RippleColor" format="reference|color" />
     <attr name="RoundRippleColor" format="reference|color" />
     <attr name="BottomNavBackground" format="reference" />
-    <attr name="BlockScreenLockIcon" format="reference" />
     <attr name="HudTextColor" format="reference|color" />
     <attr name="TransactionDetailBackground" format="reference|color" />
     <attr name="TransactionDetailValueTextColor" format="reference|color" />

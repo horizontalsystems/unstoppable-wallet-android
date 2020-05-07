@@ -7,27 +7,22 @@ import java.util.*
 
 class PinView : PinModule.IView {
 
-    val title = MutableLiveData<Int>()
+    val toolbar = MutableLiveData<Pair<Int, Boolean>>()
     val addPages = MutableLiveData<List<PinPage>>()
     val showPageAtIndex = MutableLiveData<Int>()
     val showError = MutableLiveData<Int>()
     val updateTopTextForPage = MutableLiveData<Pair<TopText, Int>>()
     val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
-    val hideToolbar = SingleLiveEvent<Unit>()
-    val showBackButton = SingleLiveEvent<Unit>()
+    val showCancelButton = MutableLiveData<Boolean>()
     val showFingerprintButton = SingleLiveEvent<Unit>()
     val showFingerprintInput = SingleLiveEvent<BiometricPrompt.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val showLockedView = SingleLiveEvent<Date>()
-    val showPinInput = SingleLiveEvent<Unit>()
+    val enablePinInput = SingleLiveEvent<Unit>()
 
 
-    override fun setTitle(title: Int) {
-        this.title.value = title
-    }
-
-    override fun hideToolbar() {
-        hideToolbar.call()
+    override fun setToolbar(title: Int, showBackButton: Boolean) {
+        this.toolbar.value = Pair(title, showBackButton)
     }
 
     override fun addPages(pages: List<PinPage>) {
@@ -58,8 +53,8 @@ class PinView : PinModule.IView {
         showFingerprintInput.postValue(cryptoObject)
     }
 
-    override fun showBackButton() {
-        showBackButton.call()
+    override fun showCancelButton() {
+        showCancelButton.postValue(true)
     }
 
     override fun fillCircles(length: Int, pageIndex: Int) {
@@ -70,7 +65,7 @@ class PinView : PinModule.IView {
         showLockedView.postValue(until)
     }
 
-    override fun showPinInput() {
-        showPinInput.call()
+    override fun enablePinInput() {
+        enablePinInput.call()
     }
 }

@@ -22,9 +22,7 @@ class UnlockPinPresenter(
         view.addPages(listOf(PinPage(TopText.Title(R.string.Unlock_Page_EnterYourPin))))
 
         if (showCancelButton) {
-            view.showBackButton()
-        } else {
-            view.hideToolbar()
+            view.showCancelButton()
         }
 
         interactor.updateLockoutState()
@@ -85,7 +83,7 @@ class UnlockPinPresenter(
 
     override fun updateLockoutState(state: LockoutState) {
         when (state) {
-            is LockoutState.Unlocked -> view.showPinInput()
+            is LockoutState.Unlocked -> view.enablePinInput()
             is LockoutState.Locked -> view.showLockView(state.until)
         }
     }

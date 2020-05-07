@@ -33,7 +33,6 @@
         <item name="RippleColor">@color/ripple_white</item>
         <item name="RoundRippleColor">@color/white_50</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
-        <item name="BlockScreenLockIcon">@drawable/ic_blocked_dark</item>
         <item name="HudTextColor">@color/white</item>
         <item name="TransactionDetailBackground">@color/steel_dark</item>
         <item name="TransactionDetailValueTextColor">@color/light</item>

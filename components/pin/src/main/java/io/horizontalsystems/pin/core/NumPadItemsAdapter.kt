@@ -43,9 +43,15 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
             notifyDataSetChanged()
         }
 
+    var numpadEnabled = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder is NumPadItemViewHolder) {
-            holder.bind(numPadItems[position], showFingerPrintButton, showLetters) { listener.onItemClick(numPadItems[position]) }
+            holder.bind(numPadItems[position], numpadEnabled, showFingerPrintButton, showLetters) { listener.onItemClick(numPadItems[position]) }
         }
     }
 
@@ -66,15 +72,17 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
     private var imgFingerprint: ImageView = itemView.findViewById(R.id.imgFingerprint)
 
 
-    fun bind(item: NumPadItem, isFingerprintEnabled: Boolean, showLetters: Boolean, onClick: () -> (Unit)) {
+    fun bind(item: NumPadItem, isEnabled: Boolean, isFingerprintEnabled: Boolean, showLetters: Boolean, onClick: () -> (Unit)) {
+
+        itemView.isEnabled = isEnabled
 
         itemView.setOnTouchListener { v, event ->
-            when {
-                event.action == MotionEvent.ACTION_DOWN -> {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
                     v.isPressed = true
                     true
                 }
-                event.action == MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP -> {
                     onClick.invoke()
                     v.isPressed = false
                     true
