@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -37,7 +38,7 @@ class ManageWalletsDialog(
         setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
         context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, coin.code)) }
 
-        btnYellow.isEnabled = predefinedAccountType.isCreationSupported()
+        btnYellow.isVisible = predefinedAccountType.isCreationSupported()
 
         addKeyInfo = view.findViewById(R.id.addKeyInfo)
         btnCreateKey = view.findViewById(R.id.btnYellow)
