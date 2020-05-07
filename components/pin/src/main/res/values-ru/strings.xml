@@ -19,7 +19,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Код Доступа</string>
-    <string name="SetPin_Info">Ваш код будет использоваться для разблокировки вашего кошелька и отправки денег</string>
+    <string name="SetPin_Info">Passcode will be used to unlock</string>
     <string name="SetPin_ErrorShortPin">Пожалуйста, введите только символы цифр.</string>
     <string name="SetPin_ConfirmInfo">Подтвердить</string>
     <string name="SetPin_Success">Код доступа успешно установлен!</string>
