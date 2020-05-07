@@ -19,7 +19,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Kod</string>
-    <string name="SetPin_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
+    <string name="SetPin_Info">Passcode will be used to unlock</string>
     <string name="SetPin_ErrorShortPin">Lütfen bütün rakamları giriniz.</string>
     <string name="SetPin_ConfirmInfo">Onayla</string>
     <string name="SetPin_Success">Kilit şifresi başarıyla oluşturuldu!</string>
