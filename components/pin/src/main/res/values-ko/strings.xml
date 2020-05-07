@@ -19,7 +19,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
     <!--Set Pin-->
     <string name="SetPin_Title">비밀번호</string>
-    <string name="SetPin_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>
+    <string name="SetPin_Info">Passcode will be used to unlock</string>
     <string name="SetPin_ErrorShortPin">모든 숫자를 입력하세요.</string>
     <string name="SetPin_ConfirmInfo">확인</string>
     <string name="SetPin_Success">비밀번호 장금이 성공적으로 설정되었습니다!</string>
