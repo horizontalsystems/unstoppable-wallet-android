@@ -316,7 +316,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">اضافه کردن %s</string>
     <string name="AddCoin_Subtitle">%s کیف پول</string>
-    <string name="AddCoin_Description">برای اینکه بتوانید %2$s ارسال یا دریافت کنید ، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
+    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Address Format Settings List -->
