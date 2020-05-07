@@ -45,8 +45,9 @@ class ManageWalletsDialog(
         btnRestoreKey = view.findViewById(R.id.btnGrey)
 
         val walletName = getString(predefinedAccountType.title)
+        val descriptionText = if (predefinedAccountType.isCreationSupported()) R.string.AddCoin_Description else R.string.AddCoin_CreationNotSupportedDescription
         addKeyInfo.text = getString(
-                R.string.AddCoin_Description,
+                descriptionText,
                 walletName,
                 coin.title,
                 walletName,
