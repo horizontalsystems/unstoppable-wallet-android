@@ -70,6 +70,8 @@
         <item name="ColorClaude">@color/white</item>
         <item name="ColorGwen">@drawable/light_gradient_background</item>
         <item name="ColorNina">@color/black_50</item>
+        <!--  Gradient colors-->
+        <item name="ColorGradientWhite">@color/white</item>
     </style>
 
     <style name="LauncherTheme" parent="Theme.AppTheme">

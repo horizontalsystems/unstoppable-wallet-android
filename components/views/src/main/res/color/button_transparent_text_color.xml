@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="?ColorOz" android:state_enabled="true" />
+    <item android:color="@color/grey_50" android:state_enabled="false" />
+    <item android:color="?ColorNina" android:state_pressed="true" />
+    <item android:color="?ColorOz" android:state_activated="true" />
+</selector>
