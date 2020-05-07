@@ -70,6 +70,15 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="ButtonTransparent" parent="ButtonSecondary">
+        <item name="android:background">@drawable/button_transparent_background</item>
+        <item name="android:textColor">@color/button_transparent_text_color</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
     <style name="ButtonPrivacySettings">
         <item name="android:background">@drawable/button_privacy_settings_background</item>
         <item name="android:fontFamily">@font/noto_sans_medium</item>
