@@ -19,7 +19,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Código</string>
-    <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
+    <string name="SetPin_Info">Passcode will be used to unlock</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
     <string name="SetPin_ConfirmInfo">Confirmar</string>
     <string name="SetPin_Success">¡Tu contraseña se ha establecido correctamente!</string>
