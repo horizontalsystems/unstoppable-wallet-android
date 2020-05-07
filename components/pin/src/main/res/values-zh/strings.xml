@@ -19,7 +19,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
-    <string name="SetPin_Info">您的密码将用于解锁钱包和发送资金</string>
+    <string name="SetPin_Info">Passcode will be used to unlock</string>
     <string name="SetPin_ErrorShortPin">请输入全部数字。</string>
     <string name="SetPin_ConfirmInfo">确认</string>
     <string name="SetPin_Success">锁定密码设置成功！</string>
