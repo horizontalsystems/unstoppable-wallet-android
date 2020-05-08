@@ -19,7 +19,7 @@ class ChartConfig(private val context: Context) {
     var textPriceColor = context.getColor(R.color.light_grey)
     var growColor = context.getColor(R.color.green_d)
     var fallColor = context.getColor(R.color.red_d)
-    var indicatorColor = context.getColor(R.color.light)
+    var cursorColor = context.getColor(R.color.light)
     var partialChartColor = context.getColor(R.color.grey_50)
     var volumeRectangleColor = context.getColor(R.color.steel_20)
 

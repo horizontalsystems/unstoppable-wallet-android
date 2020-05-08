@@ -7,10 +7,10 @@ import android.util.AttributeSet
 import android.view.View
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartIndicator : View {
+class ChartCursor : View {
 
     private val touchPoint = TouchPoint(0f, 0f, 0f)
-    private val indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var config: ChartConfig? = null
 
     constructor(context: Context) : super(context)
@@ -19,8 +19,8 @@ class ChartIndicator : View {
 
     fun init(config: ChartConfig) {
         this.config = config
-        indicatorPaint.apply {
-            color = config.indicatorColor
+        linePaint.apply {
+            color = config.cursorColor
             style = Paint.Style.FILL
             strokeWidth = config.strokeWidth
         }
@@ -32,8 +32,10 @@ class ChartIndicator : View {
 
     override fun onDraw(canvas: Canvas) {
         val bottom = height - (config?.offsetBottom ?: 0f)
-        canvas.drawLine(touchPoint.x, 0f, touchPoint.x, bottom, indicatorPaint)
-        canvas.drawRoundRect(touchPoint.x - 15, touchPoint.y - 15, touchPoint.x + 15, touchPoint.y + 15, 20f, 20f, indicatorPaint)
+
+        //  vertical line  draw
+        canvas.drawLine(touchPoint.x, 0f, touchPoint.x, bottom, linePaint)
+        canvas.drawRoundRect(touchPoint.x - 15, touchPoint.y - 15, touchPoint.x + 15, touchPoint.y + 15, 20f, 20f, linePaint)
     }
 
     fun onMove(coordinate: ChartCurve.Coordinate?, listener: ChartView.Listener?) {

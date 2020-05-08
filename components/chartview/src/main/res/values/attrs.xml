@@ -13,6 +13,6 @@
         <attr name="gridColor" format="color" />
         <attr name="gridDottedColor" format="color" />
         <attr name="partialChartColor" format="color" />
-        <attr name="indicatorColor" format="color" />
+        <attr name="cursorColor" format="color" />
     </declare-styleable>
 </resources>

@@ -45,7 +45,7 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
 
         chartView.listener = this
         chartView.setFormatter(presenter.rateFormatter)
-        chartView.setIndicator(chartViewIndicator)
+        chartView.setCursor(chartCursor)
 
         observeData()
         bindActions()
@@ -67,14 +67,14 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
     override fun onTouchDown() {
         scroller.setScrollingEnabled(false)
 
-        setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = true)
+        setViewVisibility(chartPointsInfo, chartCursor, isVisible = true)
         setViewVisibility(chartActions, isVisible = false)
     }
 
     override fun onTouchUp() {
         scroller.setScrollingEnabled(true)
 
-        setViewVisibility(chartPointsInfo, chartViewIndicator, isVisible = false)
+        setViewVisibility(chartPointsInfo, chartCursor, isVisible = false)
         setViewVisibility(chartActions, isVisible = true)
     }
 
