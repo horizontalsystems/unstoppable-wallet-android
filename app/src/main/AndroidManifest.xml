@@ -136,6 +136,9 @@
         <activity
             android:name=".modules.settings.security.privacy.PrivacySettingsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.settings.security.privacy.PrivacySettingsInfoActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"

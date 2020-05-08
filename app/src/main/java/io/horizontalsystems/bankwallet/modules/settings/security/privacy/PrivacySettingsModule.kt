@@ -10,6 +10,7 @@ object PrivacySettingsModule {
 
     interface IPrivacySettingsView {
 
+        fun showPrivacySettingsInfo()
         fun showNotificationsNotEnabledAlert()
         fun showTorPrerequisitesAlert()
         fun showRestartAlert(checked: Boolean)
@@ -36,6 +37,7 @@ object PrivacySettingsModule {
         fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode)
         fun onTransactionOrderSettingTap()
         fun onSelectTransactionSorting(transactionDataSortingType: TransactionDataSortingType)
+        fun onShowPrivacySettingsInfoClick()
     }
 
     interface IPrivacySettingsInteractor {

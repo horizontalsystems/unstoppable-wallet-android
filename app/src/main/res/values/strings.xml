@@ -288,6 +288,29 @@
     <string name="SettingsPrivacy_TransactionsSettingText">Inputs/Outputs</string>
     <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
 
+    <string name="SettingsPrivacy_Info_Details">Below you will detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
+        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that to the receiver and the other is the change output that\'s returned to the sender. The way most wallets construct transactions these days makes it easy for a third party to monitoring the public Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender which in turn can be used in future transactions.
+        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where.
+        \n\na) Shuffle
+        \nThe order of transaction outputs are randomized on every transactions. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of app, then this is the recommended option at present.
+        \n\nb) Deterministic
+        \nThere is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app have implemented the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Connection</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending transaction, receiving transaction etc). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes, finds several of them online and communicates with them. Potentially these nodes can record your IP and data requested. But since they are chosen almost randomly, each time app connects to different node.
+        \n\nIn case of Ethereum, until recently there was no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. Cumulatively that information can reveal location, balance, transactions etc. Moreover, in such communication mode the wallet has to trust that information returned is correct.
+        \n\nThere is a an alternative known as Incubed which in essence is a network of Ethereum nodes. These nodes can also potentially record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned by Incubed servers is correct (not fake).
+        \n\nWhen it comes to other blockchains like EOS and Binance Chain, at this point they only provide centralized servers, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin transactions so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet.
+        \n\nAt this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\na) from API Server
+        \nThere is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested.
+        \n\nThis option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\nb) from Blockchain
+        \nIn this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP addresses and requests made. While doing restore the app can switch between nodes as well. There are close to 10,000 Bitcoin nodes on the network at any given time.
+        \nThis option is very slow, it can easily take 2-3 hours, app needs to be open while restore is happening</string>
 
     <!--Settings-->
 

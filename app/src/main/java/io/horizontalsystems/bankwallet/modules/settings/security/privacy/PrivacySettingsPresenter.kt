@@ -213,6 +213,10 @@ class PrivacySettingsPresenter(
         view?.setTransactionsOrdering(interactor.transactionsSortingType)
     }
 
+    override fun onShowPrivacySettingsInfoClick() {
+        view?.showPrivacySettingsInfo()
+    }
+
     override fun setTorEnabled(checked: Boolean) {
         interactor.isTorEnabled = checked
         if (checked) {
