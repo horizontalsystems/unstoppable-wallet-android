@@ -45,7 +45,7 @@ class ChartView : View {
     private val chartCurve = ChartCurve(shape, config)
     private val chartGrid = ChartGrid(shape, config)
     private val chartVolume = ChartVolume(config, shape)
-    private var chartIndicator: ChartIndicator? = null
+    private var chartCursor: ChartCursor? = null
     private var postponedJob: Runnable? = null
 
     private var animator: ValueAnimator? = null
@@ -72,7 +72,7 @@ class ChartView : View {
             ta.getInt(R.styleable.ChartView_textPriceColor, context.getColor(R.color.light_grey)).let { config.textPriceColor = it }
             ta.getInt(R.styleable.ChartView_gridColor, context.getColor(R.color.steel_20)).let { config.gridColor = it }
             ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.light)).let { config.touchColor = it }
-            ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.light)).let { config.indicatorColor = it }
+            ta.getInt(R.styleable.ChartView_cursorColor, context.getColor(R.color.light)).let { config.cursorColor = it }
             ta.getInt(R.styleable.ChartView_gridDottedColor, context.getColor(R.color.white_50)).let { config.gridDottedColor = it }
             ta.getInt(R.styleable.ChartView_partialChartColor, context.getColor(R.color.light)).let { config.partialChartColor = it }
         } finally {
@@ -99,12 +99,12 @@ class ChartView : View {
             MotionEvent.ACTION_DOWN -> {
                 chartCurve.onTouchActive()
                 eventListener.onTouchDown()
-                chartIndicator?.onMove(chartCurve.find(event.x), eventListener)
+                chartCursor?.onMove(chartCurve.find(event.x), eventListener)
                 invalidate()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                chartIndicator?.onMove(chartCurve.find(event.x), eventListener)
+                chartCursor?.onMove(chartCurve.find(event.x), eventListener)
             }
 
             MotionEvent.ACTION_UP,
@@ -122,9 +122,9 @@ class ChartView : View {
         chartCurve.formatter = formatter
     }
 
-    fun setIndicator(indicator: ChartIndicator) {
-        chartIndicator = indicator
-        chartIndicator?.init(config)
+    fun setCursor(cursor: ChartCursor) {
+        chartCursor = cursor
+        chartCursor?.init(config)
     }
 
     fun onNoChart() {

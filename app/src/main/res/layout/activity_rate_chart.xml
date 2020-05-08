@@ -313,8 +313,8 @@
                     android:gravity="center"
                     android:textColor="@color/red_d" />
 
-                <io.horizontalsystems.chartview.ChartIndicator
-                    android:id="@+id/chartViewIndicator"
+                <io.horizontalsystems.chartview.ChartCursor
+                    android:id="@+id/chartCursor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="invisible" />
@@ -326,7 +326,7 @@
                     app:fallColor="@color/red_d"
                     app:gridDottedColor="?ColorNina"
                     app:growColor="@color/green_d"
-                    app:indicatorColor="?ColorOz"
+                    app:cursorColor="?ColorOz"
                     app:partialChartColor="@color/grey_50"
                     app:textColor="@color/grey"
                     app:textPriceColor="?ColorLeah"
