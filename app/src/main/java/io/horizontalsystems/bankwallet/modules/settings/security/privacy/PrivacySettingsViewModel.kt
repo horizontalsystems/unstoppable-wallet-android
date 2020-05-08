@@ -12,6 +12,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySettingsView, PrivacySettingsModule.IPrivacySettingsRouter {
     lateinit var delegate: PrivacySettingsModule.IPrivacySettingsViewDelegate
 
+    val showPrivacySettingsInfo = MutableLiveData<Unit>()
     val torEnabledLiveData = MutableLiveData<Boolean>()
     val blockchainSettingsVisibilityLiveData = MutableLiveData<Boolean>()
     val transactionOrderingLiveData = MutableLiveData<TransactionDataSortingType>()
@@ -34,6 +35,9 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
     }
 
     // IView
+    override fun showPrivacySettingsInfo() {
+        showPrivacySettingsInfo.postValue(Unit)
+    }
 
     override fun showNotificationsNotEnabledAlert() {
         showNotificationsNotEnabledAlert.call()

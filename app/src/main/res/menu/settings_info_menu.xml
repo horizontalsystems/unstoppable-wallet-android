@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuClose"
-        android:title="@string/Alert_Close"
+        android:id="@+id/menuShowInfo"
+        android:title="@string/ManageKeys_Show"
+        android:icon="@drawable/ic_info"
         app:showAsAction="always" />
 
 </menu>

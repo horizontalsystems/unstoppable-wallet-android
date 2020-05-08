@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -49,6 +51,10 @@ class PrivacySettingsActivity : BaseActivity() {
         }
 
         // IView
+        viewModel.showPrivacySettingsInfo.observe(this, Observer { enabled ->
+            openPrivacySettingsInfo()
+        })
+
         viewModel.torEnabledLiveData.observe(this, Observer { enabled ->
             setTorSwitch(enabled)
         })
@@ -313,4 +319,22 @@ class PrivacySettingsActivity : BaseActivity() {
 
     private fun getTint(color: Int) = ColorStateList.valueOf(ContextCompat.getColor(this, color))
 
+    private fun openPrivacySettingsInfo() {
+        PrivacySettingsInfoActivity.start(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.settings_info_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuShowInfo -> {
+                viewModel.delegate.onShowPrivacySettingsInfoClick()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

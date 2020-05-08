@@ -71,7 +71,7 @@ class InfoActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuCopy -> {
+            R.id.menuClose -> {
                 presenter.onClickClose()
                 return true
             }
