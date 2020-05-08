@@ -18,19 +18,11 @@
 
             <TextView
                 android:id="@+id/privacyInfo"
-                style="@style/Subhead2"
+                style="@style/ImportantText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/background_important_text_for_privacy"
-                android:paddingStart="12dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="8dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/SettingsPrivacy_Info"
-                android:textColor="?ColorOz"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
