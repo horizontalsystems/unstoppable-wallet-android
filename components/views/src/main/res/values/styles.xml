@@ -120,6 +120,19 @@
         <item name="android:background">@drawable/button_red_background</item>
     </style>
 
+    <style name="ImportantText">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/background_important_text</item>
+        <item name="android:textColor">?ColorOz</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
     <!--Text Button Styles-->
 
     <style name="TextButton">

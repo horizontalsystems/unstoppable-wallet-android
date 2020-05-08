@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.fragment_bottom_manage_keys.*
+import kotlinx.android.synthetic.main.fragment_bottom_manage_wallets.*
 
 class ManageWalletsDialog(
         private val listener: Listener,
@@ -32,7 +32,7 @@ class ManageWalletsDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setContentView(R.layout.fragment_bottom_manage_keys)
+        setContentView(R.layout.fragment_bottom_manage_wallets)
 
         setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
         setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))

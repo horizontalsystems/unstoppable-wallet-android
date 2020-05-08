@@ -14,16 +14,11 @@
 
         <TextView
             android:id="@+id/backupIntro"
-            style="@style/Body"
+            style="@style/ImportantText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/background_important_text_for_backup"
-            android:padding="12dp"
+            android:layout_marginTop="12dp"
             android:text="@string/Backup_Intro_Subtitle"
-            android:textColor="?ColorJacob"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
