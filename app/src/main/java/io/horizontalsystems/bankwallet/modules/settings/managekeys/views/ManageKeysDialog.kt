@@ -20,9 +20,9 @@ class ManageKeysDialog(
         fun onClickBackupKey() {}
     }
 
-    private lateinit var addKeyInfo: TextView
-    private lateinit var btnYellow: Button
-    private lateinit var btnGrey: Button
+    private lateinit var alertText: TextView
+    private lateinit var primaryActionButton: Button
+    private lateinit var secondaryActionButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,22 +33,22 @@ class ManageKeysDialog(
         val icon = if (action == ManageAction.CREATE) R.drawable.ic_manage_keys else R.drawable.ic_attention_red
         setHeaderIcon(icon)
 
-        addKeyInfo = view.findViewById(R.id.addKeyInfo)
-        btnYellow = view.findViewById(R.id.btnYellow)
-        btnGrey = view.findViewById(R.id.btnGrey)
+        alertText = view.findViewById(R.id.alertText)
+        primaryActionButton = view.findViewById(R.id.primaryActionBtn)
+        secondaryActionButton = view.findViewById(R.id.secondaryActionBtn)
 
-        addKeyInfo.text = content
+        alertText.text = content
 
         bindActions()
     }
 
     private fun bindActions() {
-        btnGrey.visibility = View.GONE
-        btnYellow.visibility = View.VISIBLE
+        secondaryActionButton.visibility = View.GONE
+        primaryActionButton.visibility = View.VISIBLE
 
         if (action == ManageAction.BACKUP) {
-            btnYellow.text = getString(R.string.ManageKeys_Backup)
-            btnYellow.setOnClickListener {
+            primaryActionButton.text = getString(R.string.ManageKeys_Backup)
+            primaryActionButton.setOnClickListener {
                 listener.onClickBackupKey()
                 dismiss()
             }

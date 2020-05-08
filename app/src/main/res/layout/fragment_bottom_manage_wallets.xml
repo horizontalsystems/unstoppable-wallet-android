@@ -19,11 +19,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnYellow"
+        app:layout_constraintBottom_toTopOf="@+id/primaryActionBtn"
         tools:text="@string/AddCoin_Description" />
 
     <Button
-        android:id="@+id/btnYellow"
+        android:id="@+id/primaryActionBtn"
         style="@style/ButtonPrimaryYellow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,13 +31,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/AddCoin_CreateKey"
-        app:layout_constraintBottom_toTopOf="@+id/btnGrey"
+        app:layout_constraintBottom_toTopOf="@+id/secondaryActionBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addKeyInfo" />
 
     <Button
-        android:id="@+id/btnGrey"
+        android:id="@+id/secondaryActionBtn"
         style="@style/ButtonPrimarySteel"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -48,6 +48,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnYellow" />
+        app:layout_constraintTop_toBottomOf="@+id/primaryActionBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
