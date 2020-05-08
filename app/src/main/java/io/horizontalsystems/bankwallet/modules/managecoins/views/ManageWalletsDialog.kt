@@ -38,11 +38,11 @@ class ManageWalletsDialog(
         setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
         context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, coin.code)) }
 
-        btnYellow.isVisible = predefinedAccountType.isCreationSupported()
-
         addKeyInfo = view.findViewById(R.id.addKeyInfo)
-        btnCreateKey = view.findViewById(R.id.btnYellow)
-        btnRestoreKey = view.findViewById(R.id.btnGrey)
+        btnCreateKey = view.findViewById(R.id.primaryActionBtn)
+        btnRestoreKey = view.findViewById(R.id.secondaryActionBtn)
+
+        btnCreateKey.isVisible = predefinedAccountType.isCreationSupported()
 
         val walletName = getString(predefinedAccountType.title)
         val descriptionText = if (predefinedAccountType.isCreationSupported()) R.string.AddCoin_Description else R.string.AddCoin_CreationNotSupportedDescription
@@ -84,7 +84,7 @@ class ManageWalletsDialog(
             val fragment = ManageWalletsDialog(listener, coin, predefinedAccountType)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
-            transaction.add(fragment, "bottom_manage_keys_dialog")
+            transaction.add(fragment, "bottom_manage_wallets_dialog")
             transaction.commitAllowingStateLoss()
         }
     }
