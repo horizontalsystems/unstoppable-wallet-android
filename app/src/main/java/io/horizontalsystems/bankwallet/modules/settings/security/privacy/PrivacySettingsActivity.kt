@@ -251,22 +251,25 @@ class PrivacySettingsActivity : BaseActivity() {
     }
 
     private fun showAppRestartAlert(checked: Boolean) {
-        AlertDialogFragment.newInstance(
-                descriptionString = getString(R.string.SettingsSecurity_AppRestartWarning),
-                buttonText = R.string.Alert_Restart,
-                cancelButtonText = R.string.Alert_Cancel,
-                cancelable = true,
-                listener = object : AlertDialogFragment.Listener {
-                    override fun onButtonClick() {
+        ConfirmationDialog.show(
+                icon = R.drawable.ic_tor,
+                title = getString(R.string.SettingsPrivacy_ConnectionSettingsTitle),
+                subtitle = getString(R.string.SettingsSecurity_EnableTor),
+                contentText = getString(R.string.SettingsSecurity_AppRestartWarning),
+                actionButtonTitle = getString(R.string.Alert_Restart),
+                cancelButtonTitle = null, // Do not show cancel button
+                activity = this,
+                listener = object : ConfirmationDialog.Listener {
+                    override fun onActionButtonClick() {
                         viewModel.delegate.setTorEnabled(checked)
                     }
 
-                    override fun onCancel() {
+                    override fun onCancelButtonClick() {
                         setTorSwitch(!checked)
                         viewModel.delegate.onApplyTorPrerequisites(!checked)
                     }
-                }).show(supportFragmentManager, "alert_dialog")
-
+                }
+        )
     }
 
     private fun showNotificationsNotEnabledAlert() {
@@ -297,6 +300,7 @@ class PrivacySettingsActivity : BaseActivity() {
                     }
 
                     override fun onCancel() {
+                        setTorSwitch(false)
                     }
                 }).show(supportFragmentManager, "alert_dialog")
     }
