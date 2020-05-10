@@ -12,8 +12,10 @@ class ConfirmationDialog(
         private val listener: Listener,
         private val title: String,
         private val subtitle: String,
+        private val icon: Int?,
         private val contentText: String,
-        private val actionButtonTitle: String)
+        private val actionButtonTitle: String?,
+        private val cancelButtonTitle: String?)
     : BaseBottomSheetDialogFragment() {
 
     interface Listener {
@@ -22,8 +24,8 @@ class ConfirmationDialog(
     }
 
     private lateinit var contentTextView: TextView
-    private lateinit var btnYellow: Button
-    private lateinit var btnGrey: Button
+    private lateinit var btnAction: Button
+    private lateinit var btnCancel: Button
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
@@ -41,11 +43,15 @@ class ConfirmationDialog(
 
         setTitle(title)
         setSubtitle(subtitle)
-        setHeaderIcon(R.drawable.ic_attention_yellow)
+
+        // if null set default "Attention" ICON
+        icon?.let {
+          setHeaderIcon(it)
+        }?:setHeaderIcon(R.drawable.ic_attention_yellow)
 
         contentTextView = view.findViewById(R.id.contentText)
-        btnYellow = view.findViewById(R.id.btnYellow)
-        btnGrey = view.findViewById(R.id.btnGrey)
+        btnAction = view.findViewById(R.id.btnYellow)
+        btnCancel = view.findViewById(R.id.btnGrey)
 
         contentTextView.text = contentText
 
@@ -53,25 +59,38 @@ class ConfirmationDialog(
     }
 
     private fun bindActions() {
-        btnYellow.visibility = View.VISIBLE
-        btnGrey.visibility = View.VISIBLE
 
-        btnYellow.text = actionButtonTitle
-        btnYellow.setOnClickListener {
-            listener.onActionButtonClick()
-            dismiss()
+        // Set Visibility based on title is NULL or not
+        btnAction.visibility = if(actionButtonTitle == null) View.GONE else View.VISIBLE
+        btnCancel.visibility = if(cancelButtonTitle == null) View.GONE else View.VISIBLE
+
+        actionButtonTitle?.let {
+
+            // if title is empty set Default "Ok" text.
+            btnAction.text = if(!actionButtonTitle.isEmpty()) actionButtonTitle else getString(R.string.Button_Ok)
+            btnAction.setOnClickListener {
+                listener.onActionButtonClick()
+                dismiss()
+            }
         }
 
-        btnGrey.text = getString(R.string.Alert_Cancel)
-        btnGrey.setOnClickListener {
-            listener.onCancelButtonClick()
-            dismiss()
+        cancelButtonTitle?.let {
+
+            // if title is empty set Default "Cancel" text.
+            btnCancel.text = if(!cancelButtonTitle.isEmpty()) cancelButtonTitle else getString(R.string.Alert_Cancel)
+            btnCancel.setOnClickListener {
+                listener.onCancelButtonClick()
+                dismiss()
+            }
         }
     }
 
     companion object {
-        fun show(title: String, subtitle: String, contentText: String, actionButtonTitle: String, activity: FragmentActivity, listener: Listener) {
-            val fragment = ConfirmationDialog(listener, title, subtitle, contentText, actionButtonTitle)
+
+        fun show(icon: Int? = null, title: String, subtitle: String, contentText: String,
+                 actionButtonTitle: String? = "", cancelButtonTitle: String? = "", activity: FragmentActivity, listener: Listener) {
+
+            val fragment = ConfirmationDialog(listener, title, subtitle, icon, contentText, actionButtonTitle, cancelButtonTitle)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_coin_settings_alert_dialog")
