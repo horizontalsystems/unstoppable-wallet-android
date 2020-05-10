@@ -122,12 +122,12 @@ class App : CoreApp() {
             themeStorage = this
         }
 
+        torKitManager = TorManager(instance, localStorage)
+
         val communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
         derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
         val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
         blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
-
-        torKitManager = TorManager(instance, localStorage, blockchainSettingsManager)
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager()

@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.tor.ConnectionStatus
@@ -15,8 +14,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class TorManager(
         context: Context,
-        val localStorage: ILocalStorage,
-        val blockchainSettingsManager: IBlockchainSettingsManager)
+        val localStorage: ILocalStorage)
     : ITorManager {
 
     interface Listener{
