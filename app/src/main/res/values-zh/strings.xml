@@ -87,7 +87,7 @@
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址</string>
     <string name="Send_Hint_Amount">金额</string>
-    <string name="Send_Fee">费用：</string>
+    <string name="Send_Fee">Fee</string>
     <string name="Send_Button_Paste">粘帖</string>
     <string name="Send_Button_Next">下一步</string>
     <string name="Send_Button_Max">最多</string>
@@ -109,13 +109,13 @@
     <string name="Send_Error_WrongParameters">错误参数</string>
     <string name="Send_DialogTitle">确认</string>
     <string name="Send_DialogAvailableBalance">可用余额</string>
-    <string name="Send_DialogSpeed">交易速度:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_TxSpeed_Low">低</string>
     <string name="Send_TxSpeed_Medium">中</string>
     <string name="Send_TxSpeed_High">高</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">时长:</string>
+    <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">费用：</string>
     <string name="Send_DialogTotal">总额：</string>
     <string name="Send_DialogProceed">继续</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">全部</string>
-    <string name="Transactions_EmptyList">您尚无任何交易</string>
+    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Receiving">正在接收</string>
     <string name="Transactions_Sending">正在发送</string>
     <string name="Transactions_Failed">失败</string>
@@ -197,7 +197,7 @@
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
     <string name="Settings_Notifications">通知</string>
-    <string name="Settings_ExperimentalFeatures">实验性</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">恢复钱包</string>
     <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
@@ -257,13 +257,13 @@
     <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">条款和隐私：</string>
-    <string name="SettingsAbout_TermsPrivacyText">此应用是一款点对点应用。其运作不依赖于任何网络服务器或技术支持人员。
-\n\n应用能在任何有网络的地方工作。没有实体能够阻止此应用工作或者阻止任何人使用它。
-\n\n控制着您资金的加密密钥安全地保存在电话上，而不是其他地方。
-\n\n您的职责是备份加密密钥并保证其私密性。绝不要向任何人展示密钥。如果密钥丢失、遗忘或被盗，您的资金将会被拥有密钥的人使用。
-\n\n不要对您的电话进行越狱，不要安装来源不明（不可靠）的应用，不要把您的电话交给不可靠的人，保证电话的操作系统是最新版本。您钱包的安全将取决于此。
-\n\n支持此应用的完整代码对公众监督开放。尽管我们相信比市面上任何智能手机钱包应用都安全得多，但这不保证其中不会存在意外的软件问题。
-\n\n像交易、余额等所有数据将仅保存在您的钱包应用且绝不会从您的设备上外泄。</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
@@ -320,7 +320,7 @@
     <string name="ManageKeys_Delete">删除</string>
     <string name="ManageKeys_Backup">备份</string>
     <string name="ManageKeys_Show">显示</string>
-    <string name="ManageKeys_Unlink">取消链接</string>
+    <string name="ManageKeys_Unlink">Delete</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">删除钱包</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">该操作将从此设备删除%s 钱包。</string>
