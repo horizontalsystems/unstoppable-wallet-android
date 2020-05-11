@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Account
@@ -26,6 +24,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val setBalanceHiddenLiveEvent = SingleLiveEvent<Pair<Boolean, Boolean>>()
+    val showSyncError = SingleLiveEvent<Coin>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -83,6 +82,10 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun setBalanceHidden(hidden: Boolean, animate: Boolean) {
         setBalanceHiddenLiveEvent.postValue(Pair(hidden, animate))
+    }
+
+    override fun showSyncErrorDialog(coin: Coin) {
+        showSyncError.postValue(coin)
     }
 
     // ViewModel

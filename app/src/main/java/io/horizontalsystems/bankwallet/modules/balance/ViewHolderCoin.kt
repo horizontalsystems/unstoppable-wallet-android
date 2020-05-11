@@ -41,6 +41,12 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
         }
 
+        iconNotSynced.setOnSingleClickListener {
+            balanceViewItem?.let {
+                listener.onSyncErrorClicked(it)
+            }
+        }
+
         BalanceCellAnimator.measureHeights(this)
     }
 

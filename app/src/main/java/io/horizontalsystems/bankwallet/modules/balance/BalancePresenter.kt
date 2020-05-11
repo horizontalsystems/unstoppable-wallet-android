@@ -164,6 +164,10 @@ class BalancePresenter(
         interactor.notifyPageInactive()
     }
 
+    override fun onSyncErrorClick(viewItem: BalanceViewItem) {
+        view?.showSyncErrorDialog(viewItem.wallet.coin)
+    }
+
     // IInteractorDelegate
 
     override fun didUpdateWallets(wallets: List<Wallet>) {
