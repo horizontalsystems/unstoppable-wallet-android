@@ -88,7 +88,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse</string>
     <string name="Send_Hint_Amount">Montant</string>
-    <string name="Send_Fee">Frais:</string>
+    <string name="Send_Fee">Fee</string>
     <string name="Send_Button_Paste">Coller</string>
     <string name="Send_Button_Next">Suivant</string>
     <string name="Send_Button_Max">Max</string>
@@ -110,13 +110,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Error_WrongParameters">Paramètres erronés</string>
     <string name="Send_DialogTitle">Confirmer</string>
     <string name="Send_DialogAvailableBalance">Solde disponible</string>
-    <string name="Send_DialogSpeed">Vitesse de transaction :</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_TxSpeed_Low">Faible</string>
     <string name="Send_TxSpeed_Medium">Moyenne</string>
     <string name="Send_TxSpeed_High">Élevée</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Durée :</string>
+    <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogProceed">Continuer</string>
@@ -136,7 +136,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
-    <string name="Transactions_EmptyList">Vous n’avez aucune transaction</string>
+    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Receiving">En réception</string>
     <string name="Transactions_Sending">En attente</string>
     <string name="Transactions_Failed">Échec</string>
@@ -198,7 +198,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
     <string name="Settings_Notifications">Notifications</string>
-    <string name="Settings_ExperimentalFeatures">Expérimental</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">Restaurer le porte-monnaie</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
@@ -258,13 +258,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Cette application est de type peer-to-peer. Elle ne dépend pas d\'un serveur web ou du support des techniciens pour fonctionner.
-\n\nIt fonctionne partout tant qu\'il y a une connexion internet. Aucune entité ne peut empêcher cette application de fonctionner ou censurer quelqu\'un qui voudrait l\'utiliser.
-\n\nLes clés cryptographiques secrètes qui contrôlent vos fonds cryptographiques sont stockées en toute sécurité sur le téléphone lui-même, et nulle part ailleurs.
-\n\nSauvegarder vos clés cryptographiques secrètes et les garder privées est de votre responsabilité. Ne montrez jamais vos clés à qui que ce soit. Si les clés sont perdues, oubliées ou volées, vos fonds pourront être utilisés par la personne qui trouvera votre clé.
-\n\nNe débridez pas votre téléphone, n\'installez pas d\'applications provenant de sources inconnues (non fiables), ne donnez pas votre appareil à des personnes non fiables, et gardez le système d\'exploitation de votre téléphone à jour. La sécurité de votre portefeuille en dépend.
-\n\nL\'ensemble du code qui alimente cette application est ouvert au regard du public. Bien que nous soyons convaincus que cette application est bien plus sûre que toutes les autres applications pour smartphones, il n\'y a aucune garantie qu\'il n\'y ait pas de problèmes logiciels fortuits.
-\n\nToutes vos données, c\'est-à-dire vos transactions, votre solde, etc. ne sont accessibles que par votre application portefeuille et ne quittent jamais votre appareil.</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
@@ -321,7 +321,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="ManageKeys_Delete">Supprimer</string>
     <string name="ManageKeys_Backup">Sauvegarde</string>
     <string name="ManageKeys_Show">Afficher</string>
-    <string name="ManageKeys_Unlink">Délier</string>
+    <string name="ManageKeys_Unlink">Delete</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Supprimer le portefeuille</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Cette action supprimera le portefeuille %s de cet appareil.</string>
