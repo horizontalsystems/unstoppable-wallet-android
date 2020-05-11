@@ -87,7 +87,7 @@
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres</string>
     <string name="Send_Hint_Amount">Tutar</string>
-    <string name="Send_Fee">Ücret:</string>
+    <string name="Send_Fee">Fee</string>
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_Next">İleri</string>
     <string name="Send_Button_Max">Azami</string>
@@ -109,13 +109,13 @@
     <string name="Send_Error_WrongParameters">Yanlış parametreler</string>
     <string name="Send_DialogTitle">Onayla</string>
     <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
-    <string name="Send_DialogSpeed">İşlem hızı:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_TxSpeed_Low">Yavaş</string>
     <string name="Send_TxSpeed_Medium">Ortadüzey</string>
     <string name="Send_TxSpeed_High">Hızlı</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Süre:</string>
+    <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogTotal">Toplam:</string>
     <string name="Send_DialogProceed">Devam</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
-    <string name="Transactions_EmptyList">Henüz hesap işlemi bulunmuyor</string>
+    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Receiving">Alınıyor</string>
     <string name="Transactions_Sending">Gönderiliyor</string>
     <string name="Transactions_Failed">Başarısız</string>
@@ -197,7 +197,7 @@
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
     <string name="Settings_Notifications">Bildirimler</string>
-    <string name="Settings_ExperimentalFeatures">Deneysel</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">Cüzdanı Geri Yükle</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
@@ -257,12 +257,13 @@
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Şartlar &amp; Gizlilik Politikası:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Bu uygulama peer-to-peer uygulamasıdır. Çalışması için herhangi bir web sunucusu veya teknik personeli gerektirmiyor. \n\nInternet olduğu sürece her yerde çalışır. Hiçkimse bu uygulamanın çalışmasını engelleyemez veya birisinin onu kullanmasını sansürleyemez.
-\n\nKripto paranızı kontrol eden gizli şifreleme anahtarları sadece telefonun kendisinde güvenle saklanır, başka hiçbir yerde saklanmaz.
- \n\nGizli şifreleme anahtarlarınızı yedeklemek ve gizli tutmak sizin sorumluluğunuzdur. Anahtarlarınızı asla kimseye göstermeyin. Anahtarlar kaybolur, unutulur veya çalınırsa, paranızı anahtarınızı bulan kişi kullanabilir.
-\n\nTelefonunuzu kesinlikte jailbreak etmeyin, bilinmeyen (güvenilmeyen) kaynaklardan uygulama yüklemeyin, cihazınızı güvenilmeyen kişilere vermeyin ve telefonunuzdaki işletim sistemini güncel tutun. Cüzdanınızın güvenliği buna bağlıdır.
-\n\nBu uygulamayı destekleyen kodun tamamı kamu incelemesine açıktır. Herhangi bir akıllı telefon cüzdan uygulamasından önemli ölçüde daha güvenli olduğuna inanmamıza rağmen, istenmeyen yazılım sorunlarının olmadığının garantisi yoktur.
-\n\nTüm verileriniz, yani işlemler, bakiye vb. yalnızca cüzdan uygulamanız tarafından kullanılabilir ve cihazınızdan asla ayrılmaz.</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
@@ -319,7 +320,7 @@
     <string name="ManageKeys_Delete">Sil</string>
     <string name="ManageKeys_Backup">Yedekle</string>
     <string name="ManageKeys_Show">Göster</string>
-    <string name="ManageKeys_Unlink">Ayır</string>
+    <string name="ManageKeys_Unlink">Delete</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Cüzdanı Sil</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Bu işlem %s Cüzdanını bu cihazdan kaldıracak.</string>
