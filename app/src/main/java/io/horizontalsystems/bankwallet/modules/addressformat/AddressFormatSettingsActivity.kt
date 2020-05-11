@@ -96,6 +96,7 @@ class AddressFormatSettingsActivity : BaseActivity() {
                     subtitle = bipVersion,
                     contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content, coinTitle, coinTitle),
                     actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, bipVersion),
+                    cancelButtonTitle = getString(R.string.Alert_Cancel),
                     activity = this,
                     listener = object : ConfirmationDialog.Listener {
                         override fun onActionButtonClick() {

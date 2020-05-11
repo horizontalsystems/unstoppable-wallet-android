@@ -160,6 +160,7 @@ class PrivacySettingsActivity : BaseActivity() {
                     subtitle = communicationMode.title,
                     contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
                     actionButtonTitle = getString(R.string.Button_Change),
+                    cancelButtonTitle = getString(R.string.Alert_Cancel),
                     activity = this,
                     listener = object : ConfirmationDialog.Listener {
                         override fun onActionButtonClick() {
