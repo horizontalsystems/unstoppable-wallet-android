@@ -87,7 +87,7 @@
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소</string>
     <string name="Send_Hint_Amount">양</string>
-    <string name="Send_Fee">수수료:</string>
+    <string name="Send_Fee">Fee</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Next">다음</string>
     <string name="Send_Button_Max">최대</string>
@@ -109,13 +109,13 @@
     <string name="Send_Error_WrongParameters">잘못된 매개 변수</string>
     <string name="Send_DialogTitle">확인</string>
     <string name="Send_DialogAvailableBalance">사용 가능한 잔액</string>
-    <string name="Send_DialogSpeed">거래 속도:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_TxSpeed_Low">낮음</string>
     <string name="Send_TxSpeed_Medium">보통</string>
     <string name="Send_TxSpeed_High">높음</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">기간:</string>
+    <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
     <string name="Send_DialogProceed">진행</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
-    <string name="Transactions_EmptyList">당신은 아직 거래를 하지 않았습니다.</string>
+    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Receiving">수신 중</string>
     <string name="Transactions_Sending">전송중</string>
     <string name="Transactions_Failed">실패</string>
@@ -197,7 +197,7 @@
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
-    <string name="Settings_ExperimentalFeatures">실험적인</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
@@ -257,13 +257,13 @@
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">용어 및 정책:</string>
-    <string name="SettingsAbout_TermsPrivacyText">이 앱은 피어투피어(P2P) 방식입니다. 어떠한 웹 서버 나 기술 지원 담당자에게 의존하지 않습니다.
-\n\n인터넷이 있는 한 어디에서나 작동합니다. 어떠한 독립체도 이 앱의 작동을 차단하거나 누군가가 사용함에 있어 검열할 수 없습니다. 
-\n\n귀하의 크립토 자금을 통제하는 비밀 암호화 키는 다른 곳이 아닌 휴대폰 자체에서 안전하게 저장됩니다.
-\n\n귀하의 비밀 암호화 키를 백업하는 것은 귀하의 책임입니다. 누구에게도 귀하의 암호화 키를 보여주지 마세요. 암호와 키를 잃어버리거나 잊어버리거나 또는 도난당했을 경우 귀하의 자금은 귀하의 암호화 키를 찾은 다른사람에 의해 사용이될 수 있습니다.
-\n\n휴대 전화에서 벗어나거나 알 수 없는 (신뢰할 수 없는) 출처의 앱을 설치하지 마시고, 신뢰할 수 없는 사람들에게 귀하의 기기를 건내주지 마시고, 휴대 전화의 운영체제를 최신 상태로 유지하여 주세요. 지갑의 보안은 여기에 의존하고 있습니다.
-\n\n이 앱을 작동하는 전체 코드는 공개 조사로 오픈이 됩니다. 저희는 스마트폰 지갑 앱 보다 훨씬 더 안전하다고 생각하지만 의도치 않은 소프트웨어 문제가 없을거라고 보장하지는 않습니다.
-\n\n모든 데이터, 즉 거래, 잔액 등은 오직 귀하의 지갑 앱에서만 사용하실 수 있으며 절때 귀하의 기기에서 벗어나지 말아주세요.</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
@@ -321,7 +321,7 @@
     <string name="ManageKeys_Delete">삭제</string>
     <string name="ManageKeys_Backup">백업</string>
     <string name="ManageKeys_Show">표시</string>
-    <string name="ManageKeys_Unlink">연결되지 않은</string>
+    <string name="ManageKeys_Unlink">Delete</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">지갑 삭제하기</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">이 행동은 %s 지갑을 장치에서 삭제합니다.</string>
