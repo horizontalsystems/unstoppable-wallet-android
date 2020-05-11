@@ -87,7 +87,7 @@
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dirección</string>
     <string name="Send_Hint_Amount">Importe</string>
-    <string name="Send_Fee">Comisión:</string>
+    <string name="Send_Fee">Fee</string>
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_Next">Siguiente</string>
     <string name="Send_Button_Max">Máx.</string>
@@ -109,13 +109,13 @@
     <string name="Send_Error_WrongParameters">Parámetros incorrectos</string>
     <string name="Send_DialogTitle">Confirmar</string>
     <string name="Send_DialogAvailableBalance">Saldo disponible</string>
-    <string name="Send_DialogSpeed">Velocidad de transacción:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_TxSpeed_Low">Bajo</string>
     <string name="Send_TxSpeed_Medium">Medio</string>
     <string name="Send_TxSpeed_High">Alto</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Duración:</string>
+    <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogProceed">Continuar</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
-    <string name="Transactions_EmptyList">Aún no tiene ninguna transacción</string>
+    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Receiving">Recibiendo</string>
     <string name="Transactions_Sending">Enviando</string>
     <string name="Transactions_Failed">Falla</string>
@@ -197,7 +197,7 @@
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
-    <string name="Settings_ExperimentalFeatures">Experimental</string>
+    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_RestoreWallet">Restaurar cartera</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
@@ -257,20 +257,13 @@
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Términos &amp; privacidad:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Esta aplicación es de servidor a servidor. No depende de ningún servidor web o personal de soporte técnico para funcionar.
-
-\n\nFunciona en cualquier lugar siempre que haya conexión a internet. Ninguna entidad puede bloquear el funcionamiento de esta aplicación o impedir el acceso de un usuario.
-
-\n\nLas claves secretas criptográficas que controlan sus fondos de criptomonedas están almacenados de forma en el propio teléfono y en ningún otro lugar.
-
-\n\nEs su responsabilidad recordar su clave secreta y mantenerla en privado. Nunca la muestre a nadie. Si la pierde, la olvida o es sustraída, sus fondos pueden ser utilizados por la persona que consiga su clave secreta.
-
-\n\nNo modifique la seguridad del software de su teléfono, no instale aplicaciones de orígenes desconocidos (no confiable), no entregue su dispositivo a desconocidos y mantenga actualizado el sistema operativo de tu teléfono. La seguridad de su monedero depende de ello.
-
-\n\nLa totalidad del código que soporta esta aplicación está abierta al escrutinio público desde el inicio de la aplicación. Creemos que 
- nuestra aplicación es significativamente más segura que cualquier otra aplicación de monedero para teléfonos inteligente en el mercado; sin embargo, no hay ninguna garantía de que no se produzca algún problema de software no deseado.
-
-\n\nToda su información, por ejemplo transacciones, balances, etc., están disponibles solo dentro de su aplicación de monedero y nunca abandona su dispositivo.</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
+\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
+\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
@@ -327,7 +320,7 @@
     <string name="ManageKeys_Delete">Eliminar</string>
     <string name="ManageKeys_Backup">Copia de seguridad</string>
     <string name="ManageKeys_Show">Mostrar</string>
-    <string name="ManageKeys_Unlink">Desvincular</string>
+    <string name="ManageKeys_Unlink">Delete</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Eliminar Monedero</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Esta acción eliminará los monederos %s de este dispositivo.</string>
