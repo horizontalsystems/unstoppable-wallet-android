@@ -66,8 +66,7 @@ class ConfirmationDialog(
 
         actionButtonTitle?.let {
 
-            // if title is empty set Default "Ok" text.
-            btnAction.text = if(!actionButtonTitle.isEmpty()) actionButtonTitle else getString(R.string.Button_Ok)
+            btnAction.text = actionButtonTitle
             btnAction.setOnClickListener {
                 listener.onActionButtonClick()
                 dismiss()
@@ -76,8 +75,7 @@ class ConfirmationDialog(
 
         cancelButtonTitle?.let {
 
-            // if title is empty set Default "Cancel" text.
-            btnCancel.text = if(!cancelButtonTitle.isEmpty()) cancelButtonTitle else getString(R.string.Alert_Cancel)
+            btnCancel.text = cancelButtonTitle
             btnCancel.setOnClickListener {
                 listener.onCancelButtonClick()
                 dismiss()
