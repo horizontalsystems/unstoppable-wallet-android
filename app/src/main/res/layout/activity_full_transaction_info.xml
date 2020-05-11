@@ -21,13 +21,12 @@
 
     <TextView
         android:id="@+id/transactionIdView"
-        style="@style/TextButtonWithIcon"
+        style="@style/ButtonSecondary"
         android:layout_width="0dp"
         android:layout_height="28dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:drawableStart="@drawable/hash"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"

@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/receiveAddressView"
-        style="@style/TextButtonWithIcon"
+        style="@style/ButtonSecondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"

@@ -34,6 +34,7 @@ object FullTransactionInfoModule {
         val providerName: String?
         val sectionCount: Int
         fun getSection(row: Int): FullTransactionSection?
+        fun onTapId()
         fun onTapItem(item: FullTransactionItem)
         fun onTapProvider()
         fun onTapResource()

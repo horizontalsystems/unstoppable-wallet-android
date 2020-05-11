@@ -83,7 +83,7 @@
 
     <TextView
         android:id="@+id/receiverView"
-        style="@style/TextButton"
+        style="@style/ButtonSecondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

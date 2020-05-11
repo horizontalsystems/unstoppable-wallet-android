@@ -65,7 +65,6 @@ class TransactionInfoItemView : ConstraintLayout {
         txtTitle.text = title
         decoratedText.text = address
         decoratedText.visibility = View.VISIBLE
-        decoratedText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.hash, 0, 0, 0)
         bindBottomBorder()
 
         invalidate()

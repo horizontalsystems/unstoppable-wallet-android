@@ -13,8 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
@@ -45,6 +45,10 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         setContentView(R.layout.activity_full_transaction_info)
 
         transactionIdView.text = transactionHash
+
+        transactionIdView.setOnClickListener {
+            viewModel.delegate.onTapId()
+        }
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Title),
