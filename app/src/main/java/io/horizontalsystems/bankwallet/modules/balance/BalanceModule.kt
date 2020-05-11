@@ -17,6 +17,7 @@ object BalanceModule {
         fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun didRefresh()
         fun setBalanceHidden(hidden: Boolean, animate: Boolean)
+        fun showSyncErrorDialog(coin: Coin)
     }
 
     interface IViewDelegate {
@@ -40,6 +41,7 @@ object BalanceModule {
         fun onPause()
         fun onHideBalanceClick()
         fun onShowBalanceClick()
+        fun onSyncErrorClick(viewItem: BalanceViewItem)
     }
 
     interface IInteractor {

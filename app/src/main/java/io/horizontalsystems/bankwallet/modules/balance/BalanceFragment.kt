@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
@@ -132,6 +133,10 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
         viewModel.delegate.onChart(viewItem)
     }
 
+    override fun onSyncErrorClicked(viewItem: BalanceViewItem) {
+        viewModel.delegate.onSyncErrorClick(viewItem)
+    }
+
     override fun onAddCoinClicked() {
         viewModel.delegate.onAddCoinClick()
     }
@@ -227,6 +232,28 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
                 animator.start()
             } else {
                 setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, if (hideBalance) 0f else 1f)
+            }
+        })
+
+        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { coin ->
+            activity?.let{ fragmentActivity ->
+                SyncErrorDialog.show(fragmentActivity, coin, object : SyncErrorDialog.Listener{
+                    override fun onClickRetry() {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onClickChangeSource() {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onClickReport() {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onCancel() {
+                        TODO("Not yet implemented")
+                    }
+                })
             }
         })
     }

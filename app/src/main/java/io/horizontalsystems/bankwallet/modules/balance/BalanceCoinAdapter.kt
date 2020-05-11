@@ -17,6 +17,7 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
         fun onReceiveClicked(viewItem: BalanceViewItem)
         fun onChartClicked(viewItem: BalanceViewItem)
         fun onItemClicked(viewItem: BalanceViewItem)
+        fun onSyncErrorClicked(viewItem: BalanceViewItem)
         fun onAddCoinClicked()
     }
 

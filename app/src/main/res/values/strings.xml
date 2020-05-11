@@ -526,4 +526,12 @@
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_prices">Prices</string>
 
+    <!-- Balance Sync Error -->
+
+    <string name="BalanceSyncError_Title">Sync Error</string>
+    <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_ButtonRetry">Retry</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
+    <string name="BalanceSyncError_ButtonReport">Report</string>
+
 </resources>
