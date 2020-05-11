@@ -84,12 +84,6 @@ class CoinItemWithSwitchViewHolder(
     init {
         containerView.setOnClickListener {
             toggleSwitch.isChecked = !toggleSwitch.isChecked
-            onSwitch.invoke(toggleSwitch.isChecked, adapterPosition)
-        }
-
-        toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if(toggleSwitch.isPressed)
-                onSwitch.invoke(isChecked, adapterPosition)
         }
     }
 
@@ -105,9 +99,17 @@ class CoinItemWithSwitchViewHolder(
         coinTypeLabel.text = coin.type.typeLabel()
         coinTypeLabel.visibility = if (coin.type.typeLabel() != null) View.VISIBLE else View.GONE
 
+        // Disable listener when setting default values
+        toggleSwitch.setOnCheckedChangeListener(null)
+
         val checked = (item.type as? CoinManageViewType.CoinWithSwitch)?.enabled ?: false
         toggleSwitch.isChecked = checked
         toggleSwitch.visibility = View.VISIBLE
+
+        // Enable listener
+        toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
+            onSwitch.invoke(isChecked, adapterPosition)
+        }
     }
 }
 
