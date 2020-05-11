@@ -41,6 +41,11 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         }
     }
 
+    override fun onTapId() {
+        interactor.copyToClipboard(state.transactionHash)
+        view?.showCopied()
+    }
+
     override fun onTapItem(item: FullTransactionItem) {
         if (item.clickable) {
             if (item.url != null) {

@@ -68,6 +68,8 @@
         <item name="android:paddingBottom">7dp</item>
         <item name="android:textColor">@color/button_secondary_text_color_selector</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:ellipsize">middle</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="ButtonTransparent" parent="ButtonSecondary">
@@ -131,31 +133,6 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
-    </style>
-
-    <!--Text Button Styles-->
-
-    <style name="TextButton">
-        <item name="android:fontFamily">@font/noto_sans_regular</item>
-        <item name="android:textSize">14sp</item>
-
-        <item name="android:background">@drawable/address_background_themed</item>
-        <item name="android:ellipsize">middle</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:paddingStart">8dp</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingEnd">8dp</item>
-        <item name="android:paddingBottom">3dp</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textAlignment">textStart</item>
-        <item name="android:textColor">?TransactionDetailValueTextColor</item>
-    </style>
-
-    <style name="TextButtonWithIcon" parent="TextButton">
-        <item name="android:drawableStart">@drawable/round_person_18px</item>
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:drawablePadding">8dp</item>
-        <item name="android:drawableTint">@color/grey</item>
     </style>
 
     <style name="TextFlatButton">
