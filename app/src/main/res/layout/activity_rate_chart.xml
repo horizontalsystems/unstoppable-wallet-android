@@ -215,9 +215,9 @@
                     app:layout_constraintBottom_toTopOf="@+id/pointInfoTime"
                     app:layout_constraintEnd_toStartOf="@+id/pointInfoPrice"
                     app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintVertical_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
                     tools:text="09/02/2020" />
 
                 <TextView
@@ -228,11 +228,11 @@
                     android:gravity="start"
                     android:textColor="@color/grey"
                     android:textSize="12sp"
-                    app:layout_constraintTop_toBottomOf="@+id/pointInfoDate"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/pointInfoPriceTitle"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pointInfoDate"
                     tools:text="15:21" />
 
                 <TextView
@@ -295,64 +295,21 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <RelativeLayout
-                android:id="@+id/coinChartView"
+            <io.horizontalsystems.chartview.Chart
+                android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="213dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:layout_height="235dp"
+                app:cursorColor="?ColorOz"
+                app:fallColor="@color/red_d"
+                app:gridDottedColor="?ColorNina"
+                app:growColor="@color/green_d"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo">
-
-                <TextView
-                    android:id="@+id/chartError"
-                    style="@style/Headline2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@color/red_d" />
-
-                <io.horizontalsystems.chartview.ChartCursor
-                    android:id="@+id/chartCursor"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible" />
-
-                <io.horizontalsystems.chartview.ChartView
-                    android:id="@+id/chartView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:fallColor="@color/red_d"
-                    app:gridDottedColor="?ColorNina"
-                    app:growColor="@color/green_d"
-                    app:cursorColor="?ColorOz"
-                    app:partialChartColor="@color/grey_50"
-                    app:textColor="@color/grey"
-                    app:textPriceColor="?ColorLeah"
-                    app:touchColor="?ColorOz" />
-
-                <View
-                    android:id="@+id/loadingShade"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible"
-                    android:alpha="0.5"
-                    android:background="?ColorGwen"/>
-
-                <ProgressBar
-                    android:id="@+id/chartViewSpinner"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/grey"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/grey"
-                    android:indeterminateTintMode="src_atop" />
-
-            </RelativeLayout>
+                app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
+                app:partialChartColor="@color/grey_50"
+                app:textColor="@color/grey"
+                app:textPriceColor="?ColorLeah"
+                app:touchColor="?ColorOz" />
 
             <View
                 android:id="@+id/border3"
@@ -364,7 +321,7 @@
                 android:background="@color/steel_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/coinChartView" />
+                app:layout_constraintTop_toBottomOf="@+id/chart" />
 
             <TextView
                 android:id="@+id/volumeTitle"

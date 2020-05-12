@@ -3,45 +3,35 @@ package io.horizontalsystems.chartview
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
-import io.horizontalsystems.chartview.models.ChartPoint
 
-class ChartVolume(private val config: ChartConfig, private val shape: RectF) {
+class ChartVolume(private val config: ChartConfig, private val animator: ChartAnimator) : ChartDraw {
+
+    private var shape = RectF(0f, 0f, 0f, 0f)
 
     private var bars = listOf<VolumeBar>()
 
-    private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-
-    fun init(points: List<ChartPoint>, startTimestamp: Long, endTimestamp: Long) {
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.color = config.volumeRectangleColor
-
-        val volumeMax = points.mapNotNull { it.volume }.max() ?: 1f
-
-        val deltaX = shape.width() / (endTimestamp - startTimestamp)
-        val deltaY = shape.height() * config.volumeMaximumHeightRatio / volumeMax
-
-        val chunks = mutableListOf<VolumeBar>()
-
-        for (point in points) {
-            val volume = point.volume ?: continue
-
-            val y = shape.height() - volume * deltaY
-            val x = (point.timestamp - startTimestamp) * deltaX
-
-            chunks.add(VolumeBar(x, y))
-        }
-
-        bars = chunks
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = config.volumeRectangleColor
     }
 
-    fun draw(canvas: Canvas) {
+    fun setShape(rect: RectF) {
+        shape = rect
+    }
+
+    fun setBars(volumeBars: List<VolumeBar>) {
+        bars = volumeBars
+    }
+
+    override fun draw(canvas: Canvas) {
         bars.forEach { bar ->
-            val barY = config.getAnimatedY(bar.y, shape.height())
+            val barY = animator.getAnimatedY(bar.y, shape.height())
             val barX = bar.x - config.volumeBarWidth
             val rect = RectF(barX, barY, bar.x, shape.height())
 
-            canvas.drawRect(rect, fillPaint)
+            canvas.drawRect(rect, paint)
         }
     }
 

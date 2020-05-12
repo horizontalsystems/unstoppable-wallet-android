@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.cryptonews.CryptoNewsFragment
-import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.showIf
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartActivity : BaseActivity(), ChartView.Listener {
+class RateChartActivity : BaseActivity(), Chart.Listener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
     private lateinit var coinCode: String
@@ -43,9 +43,8 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         presenter = ViewModelProvider(this, RateChartModule.Factory(coinCode)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
-        chartView.listener = this
-        chartView.setFormatter(presenter.rateFormatter)
-        chartView.setCursor(chartCursor)
+        chart.setListener(this)
+        chart.setFormatter(presenter.rateFormatter)
 
         observeData()
         bindActions()
@@ -67,14 +66,14 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
     override fun onTouchDown() {
         scroller.setScrollingEnabled(false)
 
-        setViewVisibility(chartPointsInfo, chartCursor, isVisible = true)
+        setViewVisibility(chartPointsInfo, isVisible = true)
         setViewVisibility(chartActions, isVisible = false)
     }
 
     override fun onTouchUp() {
         scroller.setScrollingEnabled(true)
 
-        setViewVisibility(chartPointsInfo, chartCursor, isVisible = false)
+        setViewVisibility(chartPointsInfo, isVisible = false)
         setViewVisibility(chartActions, isVisible = true)
     }
 
@@ -86,12 +85,11 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
 
     private fun observeData() {
         presenterView.showSpinner.observe(this, Observer {
-            setViewVisibility(chartError, isVisible = false)
-            setViewVisibility(chartViewSpinner, loadingShade, isVisible = true)
+            chart.showSinner()
         })
 
         presenterView.hideSpinner.observe(this, Observer {
-            setViewVisibility(chartViewSpinner, loadingShade, isVisible = false)
+            chart.hideSinner()
         })
 
         presenterView.setDefaultMode.observe(this, Observer { type ->
@@ -100,8 +98,8 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
 
         presenterView.showChartInfo.observe(this, Observer { item ->
             rootView.post {
-                chartView.visibility = View.VISIBLE
-                chartView.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
+                chart.visibility = View.VISIBLE
+                chart.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
             }
 
             coinRateDiff.diff = item.diffValue
@@ -157,10 +155,7 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         })
 
         presenterView.showError.observe(this, Observer {
-            chartView.onNoChart()
-            chartView.visibility = View.INVISIBLE
-            chartError.visibility = View.VISIBLE
-            chartError.text = getString(R.string.Charts_Error_NotAvailable)
+            chart.showError(getString(R.string.Charts_Error_NotAvailable))
         })
     }
 
@@ -187,16 +182,16 @@ class RateChartActivity : BaseActivity(), ChartView.Listener {
         actions.values.forEach { it.isActivated = false }
         current.isActivated = true
 
-        val inLeftSide = chartView.width / 2 < current.left
+        val inLeftSide = chart.width / 2 < current.left
         if (setDefault) {
-            chartWrap.scrollTo(if (inLeftSide) chartView.width else 0, 0)
+            chartWrap.scrollTo(if (inLeftSide) chart.width else 0, 0)
             return
         }
 
         val by = if (inLeftSide) {
-            chartView.scrollX + current.width
+            chart.scrollX + current.width
         } else {
-            chartView.scrollX - current.width
+            chart.scrollX - current.width
         }
 
         chartWrap.smoothScrollBy(by, 0)
