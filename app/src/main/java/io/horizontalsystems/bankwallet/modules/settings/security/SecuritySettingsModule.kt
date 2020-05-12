@@ -26,9 +26,9 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsInteractor {
-        val biometricAuthSupported: Boolean
+        val isBiometricAuthSupported: Boolean
         val isPinSet: Boolean
-        var isBiometricEnabled: Boolean
+        var isBiometricAuthEnabled: Boolean
 
         fun disablePin()
     }

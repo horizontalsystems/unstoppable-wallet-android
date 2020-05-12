@@ -312,7 +312,8 @@
     <!--Setting_Security-->
 
     <string name="SettingsSecurity_Privacy">Privacy</string>
-    <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
     <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>

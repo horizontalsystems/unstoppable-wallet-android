@@ -8,13 +8,13 @@ class SecuritySettingsInteractor(
         private val pinComponent: IPinComponent
 ) : SecuritySettingsModule.ISecuritySettingsInteractor {
 
-    override val biometricAuthSupported: Boolean
+    override val isBiometricAuthSupported: Boolean
         get() = systemInfoManager.biometricAuthSupported
 
-    override var isBiometricEnabled: Boolean
-        get() = pinComponent.isFingerprintEnabled
+    override var isBiometricAuthEnabled: Boolean
+        get() = pinComponent.isBiometricAuthEnabled
         set(value) {
-            pinComponent.isFingerprintEnabled = value
+            pinComponent.isBiometricAuthEnabled = value
         }
 
     override val isPinSet: Boolean
