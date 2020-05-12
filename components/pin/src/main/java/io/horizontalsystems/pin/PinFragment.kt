@@ -199,6 +199,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle(getString(R.string.BiometricAuth_DialogTitle))
                 .setNegativeButtonText(getString(R.string.Button_Cancel))
+                .setConfirmationRequired(false)
                 .build()
 
         val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
@@ -218,7 +219,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
             }
         })
 
-        biometricPrompt.authenticate(promptInfo, cryptoObject)
+        biometricPrompt.authenticate(promptInfo)
     }
 
 }
