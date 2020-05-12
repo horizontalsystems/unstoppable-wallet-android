@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ChartView">
-        <attr name="showGrid" format="boolean" />
-        <attr name="width" format="dimension" />
-        <attr name="height" format="dimension" />
-        <attr name="animated" format="boolean" />
+    <declare-styleable name="Chart">
         <attr name="growColor" format="color" />
         <attr name="fallColor" format="color" />
         <attr name="touchColor" format="color" />
