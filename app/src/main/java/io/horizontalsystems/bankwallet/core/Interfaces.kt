@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.SpannableString
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
-import io.horizontalsystems.bankwallet.core.managers.RateDirectionMap
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
@@ -434,14 +433,8 @@ interface IAccountCleaner {
 }
 
 interface IRateCoinMapper {
-    var convertedCoinMap: MutableMap<String, String>
-    var unconvertedCoinMap: MutableMap<String, String>
-
-    fun addCoin(direction: RateDirectionMap, from: String, to: String?)
-}
-
-interface IBlockedChartCoins {
-    var blockedCoins: MutableList<String>
+    fun convert(coinCode: String): String?
+    fun unconvert(coinCode: String): String
 }
 
 interface ITorManager {

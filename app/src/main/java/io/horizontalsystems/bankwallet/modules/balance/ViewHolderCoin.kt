@@ -25,9 +25,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
         rateDiffWrapper.setOnClickListener {
             balanceViewItem?.let {
-                if (!it.blockChart) {
-                    listener.onChartClicked(it)
-                }
+                listener.onChartClicked(it)
             }
         }
 
