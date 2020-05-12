@@ -17,6 +17,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val openSortingTypeDialogLiveEvent = SingleLiveEvent<BalanceSortType>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
+    val openContactPage = SingleLiveEvent<Void>()
 
     val isSortOn = SingleLiveEvent<Boolean>()
     val setHeaderViewItem = SingleLiveEvent<BalanceHeaderViewItem>()
@@ -24,7 +25,9 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val setBalanceHiddenLiveEvent = SingleLiveEvent<Pair<Boolean, Boolean>>()
-    val showSyncError = SingleLiveEvent<Coin>()
+    val showSyncError = SingleLiveEvent<Pair<Wallet, String>>()
+    val networkNotAvailable = SingleLiveEvent<Void>()
+    val showErrorMessageCopied = SingleLiveEvent<Void>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -58,6 +61,10 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         openChartModule.postValue(coin)
     }
 
+    override fun openContactPage() {
+        openContactPage.call()
+    }
+
     // IView
 
     override fun set(sortIsOn: Boolean) {
@@ -84,8 +91,16 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         setBalanceHiddenLiveEvent.postValue(Pair(hidden, animate))
     }
 
-    override fun showSyncErrorDialog(coin: Coin) {
-        showSyncError.postValue(coin)
+    override fun showSyncErrorDialog(wallet: Wallet, errorMessage: String) {
+        showSyncError.postValue(Pair(wallet, errorMessage))
+    }
+
+    override fun showNetworkNotAvailable() {
+        networkNotAvailable.call()
+    }
+
+    override fun showErrorMessageCopied() {
+        showErrorMessageCopied.call()
     }
 
     // ViewModel

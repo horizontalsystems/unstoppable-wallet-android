@@ -165,7 +165,25 @@ class BalancePresenter(
     }
 
     override fun onSyncErrorClick(viewItem: BalanceViewItem) {
-        view?.showSyncErrorDialog(viewItem.wallet.coin)
+        val state = items.firstOrNull { it.wallet == viewItem.wallet }?.state ?: return
+        val nonSyncedState = (state as? AdapterState.NotSynced) ?: return
+        val errorMessage = nonSyncedState.error.message ?: ""
+
+        if (interactor.networkAvailable){
+            view?.showSyncErrorDialog(viewItem.wallet, errorMessage)
+        } else {
+            view?.showNetworkNotAvailable()
+        }
+    }
+
+    override fun onReportClick(errorMessage: String) {
+        interactor.saveToClipboard(errorMessage)
+        view?.showErrorMessageCopied()
+        router.openContactPage()
+    }
+
+    override fun refreshByWallet(wallet: Wallet) {
+        interactor.refreshByWallet(wallet)
     }
 
     // IInteractorDelegate

@@ -44,8 +44,8 @@ class BinanceAdapter(
     override val state: AdapterState
         get() = when (binanceKit.syncState) {
             BinanceChainKit.SyncState.Synced -> AdapterState.Synced
-            BinanceChainKit.SyncState.NotSynced -> AdapterState.NotSynced
             BinanceChainKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+            BinanceChainKit.SyncState.NotSynced -> AdapterState.NotSynced(Throwable())
         }
 
     override val stateUpdatedFlowable: Flowable<Unit>

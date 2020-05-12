@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -17,7 +18,9 @@ object BalanceModule {
         fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun didRefresh()
         fun setBalanceHidden(hidden: Boolean, animate: Boolean)
-        fun showSyncErrorDialog(coin: Coin)
+        fun showSyncErrorDialog(wallet: Wallet, errorMessage: String)
+        fun showNetworkNotAvailable()
+        fun showErrorMessageCopied()
     }
 
     interface IViewDelegate {
@@ -42,6 +45,8 @@ object BalanceModule {
         fun onHideBalanceClick()
         fun onShowBalanceClick()
         fun onSyncErrorClick(viewItem: BalanceViewItem)
+        fun onReportClick(errorMessage: String)
+        fun refreshByWallet(wallet: Wallet)
     }
 
     interface IInteractor {
@@ -49,6 +54,7 @@ object BalanceModule {
         val baseCurrency: Currency
         val sortType: BalanceSortType
         var balanceHidden: Boolean
+        val networkAvailable: Boolean
 
         fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun chartInfo(coinCode: String, currencyCode: String): ChartInfo?
@@ -71,6 +77,8 @@ object BalanceModule {
 
         fun notifyPageActive()
         fun notifyPageInactive()
+        fun saveToClipboard(message: String)
+        fun refreshByWallet(wallet: Wallet)
     }
 
     interface IInteractorDelegate {
@@ -92,6 +100,7 @@ object BalanceModule {
         fun openSortTypeDialog(sortingType: BalanceSortType)
         fun openBackup(account: Account, coinCodesStringRes: Int)
         fun openChart(coin: Coin)
+        fun openContactPage()
     }
 
     interface IBalanceSorter {
@@ -128,7 +137,9 @@ object BalanceModule {
                 App.localStorage,
                 App.xRateManager,
                 App.predefinedAccountTypeManager,
-                App.rateAppManager)
+                App.rateAppManager,
+                App.connectivityManager,
+                TextHelper)
 
         val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager,
                                          BalanceViewItemFactory())

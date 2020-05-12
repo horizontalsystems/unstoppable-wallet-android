@@ -35,6 +35,7 @@ interface IAdapterManager {
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)
+    fun refreshByWallet(wallet: Wallet)
 }
 
 interface ILocalStorage {
@@ -151,8 +152,7 @@ interface IWordsManager {
 sealed class AdapterState {
     object Synced : AdapterState()
     class Syncing(val progress: Int, val lastBlockDate: Date?) : AdapterState()
-    object NotSynced : AdapterState()
-    object NotReady : AdapterState()
+    class NotSynced(val error: Throwable) : AdapterState()
 }
 
 interface IEthereumKitManager {

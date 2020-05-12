@@ -58,7 +58,7 @@ class DashAdapter(
             }
             is BitcoinCore.KitState.NotSynced -> {
                 if (this.state !is AdapterState.NotSynced) {
-                    this.state = AdapterState.NotSynced
+                    this.state = AdapterState.NotSynced(Throwable())
                 }
             }
             is BitcoinCore.KitState.Syncing -> {

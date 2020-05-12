@@ -33,7 +33,7 @@ class Erc20Adapter(
     override val state: AdapterState
         get() = when (erc20Kit.syncState) {
             is SyncState.Synced -> AdapterState.Synced
-            is SyncState.NotSynced -> AdapterState.NotSynced
+            is SyncState.NotSynced -> AdapterState.NotSynced(Throwable())
             is SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 

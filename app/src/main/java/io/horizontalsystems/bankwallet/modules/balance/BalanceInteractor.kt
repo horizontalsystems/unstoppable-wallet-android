@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
@@ -19,7 +20,9 @@ class BalanceInteractor(
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
-        private val rateAppManager: IRateAppManager)
+        private val rateAppManager: IRateAppManager,
+        private val connectivityManager: ConnectivityManager,
+        private var clipboardManager: IClipboardManager)
     : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
@@ -42,6 +45,9 @@ class BalanceInteractor(
         set(value) {
             localStorage.balanceHidden = value
         }
+
+    override val networkAvailable: Boolean
+        get() = connectivityManager.isConnected
 
     override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
         return rateManager.marketInfo(coinCode, currencyCode)
@@ -157,6 +163,14 @@ class BalanceInteractor(
 
     override fun notifyPageInactive() {
         rateAppManager.onBalancePageInactive()
+    }
+
+    override fun saveToClipboard(message: String) {
+        clipboardManager.copyText(message)
+    }
+
+    override fun refreshByWallet(wallet: Wallet) {
+        adapterManager.refreshByWallet(wallet)
     }
 
     private fun onUpdateCurrency() {

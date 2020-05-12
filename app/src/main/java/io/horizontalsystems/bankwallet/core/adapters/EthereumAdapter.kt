@@ -17,7 +17,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     override val state: AdapterState
         get() = when (ethereumKit.syncState) {
             is EthereumKit.SyncState.Synced -> AdapterState.Synced
-            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced
+            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(Throwable())
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 

@@ -83,7 +83,7 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
     override val state: AdapterState
         get() = when (token.syncState) {
             EosKit.SyncState.Synced -> AdapterState.Synced
-            EosKit.SyncState.NotSynced -> AdapterState.NotSynced
+            EosKit.SyncState.NotSynced -> AdapterState.NotSynced(Throwable())
             EosKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
