@@ -108,7 +108,9 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
             Coin("TUSD",      "TrueUSD",                 "TUSD",        18,      CoinType.Erc20("0x0000000000085d4780B73119b644AE5ecd22b376")),
             Coin("USDT",      "Tether USD",              "USDT",         6,      CoinType.Erc20("0xdAC17F958D2ee523a2206206994597C13D831ec7")),
             Coin("USDC",      "USD Coin",                "USDC",         6,      CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
-            Coin("WTC",       "Waltonchain",             "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74"))
+            Coin("WTC",       "Waltonchain",             "WTC",         18,      CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74")),
+            Coin("WBTC",      "Wrapped Bitcoin",         "WBTC",         8,      CoinType.Erc20("0x2260fac5e5542a773aa44fbcfedf7c193bc2c599")),
+            Coin("WETH",      "Wrapped Ethereum",        "WETH",        18,      CoinType.Erc20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"))
     )
 
     override val derivationSettings: List<DerivationSetting>
