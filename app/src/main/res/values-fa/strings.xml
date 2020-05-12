@@ -236,7 +236,8 @@
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است. به تنظيمات برويد&gt; قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">حریم خصوصی</string>
-    <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
     <string name="SettingsSecurity_EnablePin">رمز عبور</string>
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
