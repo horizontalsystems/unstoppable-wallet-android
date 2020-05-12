@@ -14,7 +14,6 @@ object MaxSupplyMap {
             "ZRX" to BigDecimal(1_000_000_000),
             "ELF" to BigDecimal(880_000_000),
             "ANKR" to BigDecimal(10_000_000_000),
-            "AURA" to BigDecimal(1_000_000_000),
             "BNT" to BigDecimal(67_721_371),
             "BAT" to BigDecimal(1_500_000_000),
             "BUSD" to BigDecimal(28_603_822),
@@ -49,6 +48,5 @@ object MaxSupplyMap {
             "SNT" to BigDecimal(6_804_870_174),
             "SNX" to BigDecimal(174_648_076),
             "WTC" to BigDecimal(70_000_000),
-            "ZIL" to BigDecimal(21_000_000_000)
     )
 }
