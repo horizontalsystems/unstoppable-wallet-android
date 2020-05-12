@@ -5,7 +5,6 @@ import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IBlockedChartCoins
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -32,7 +31,6 @@ data class BalanceViewItem(
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
         val coinTypeLabelVisible: Boolean,
-        val blockChart: Boolean,
         var hideBalance: Boolean
 )
 
@@ -54,7 +52,7 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 data class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true)
 
-class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) {
+class BalanceViewItemFactory {
 
     private val diffScale = 2
 
@@ -137,7 +135,6 @@ class BalanceViewItemFactory(private val blockedChartCoins: IBlockedChartCoins) 
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
-                blockChart = blockedChartCoins.blockedCoins.contains(coin.code),
                 hideBalance = hideBalance
         )
     }

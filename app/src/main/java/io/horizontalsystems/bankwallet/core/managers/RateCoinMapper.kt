@@ -1,27 +1,26 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IBlockedChartCoins
 import io.horizontalsystems.bankwallet.core.IRateCoinMapper
 
-class RateCoinMapper : IRateCoinMapper, IBlockedChartCoins {
+class RateCoinMapper : IRateCoinMapper {
+    private val disabledCoins = setOf("SAI", "PGL", "PPT", "EOSDT", "WBTC", "WETH")
+    private val convertedCoins = mapOf("HOT" to "HOLO")
 
-    private val nonExistCoin = "AI-DAI"
-    override var blockedCoins = mutableListOf<String>()
-    override var convertedCoinMap: MutableMap<String, String> = mutableMapOf()
-    override var unconvertedCoinMap: MutableMap<String, String> = mutableMapOf()
-
-    override fun addCoin(direction: RateDirectionMap, from: String, to: String?) {
-        if (to == null) {
-            blockedCoins.add(from)
-        }
-        when (direction) {
-            RateDirectionMap.Convert -> convertedCoinMap[from] = to ?: nonExistCoin
-            RateDirectionMap.Unconvert -> unconvertedCoinMap[from] = to ?: nonExistCoin
+    override fun convert(coinCode: String): String? {
+        return if (disabledCoins.contains(coinCode)) {
+            null
+        } else {
+            convertedCoins.getOrDefault(coinCode, coinCode)
         }
     }
-}
 
-enum class RateDirectionMap {
-    Convert,
-    Unconvert
+    override fun unconvert(coinCode: String): String {
+        convertedCoins.forEach { (from, to) ->
+            if (to == coinCode) {
+                return from
+            }
+        }
+        return coinCode
+    }
+
 }

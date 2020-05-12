@@ -129,7 +129,7 @@ object BalanceModule {
                 App.rateAppManager)
 
         val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager,
-                                         BalanceViewItemFactory(App.rateCoinMapper))
+                                         BalanceViewItemFactory())
 
         presenter.view = view
         interactor.delegate = presenter

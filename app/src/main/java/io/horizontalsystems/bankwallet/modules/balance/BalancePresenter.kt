@@ -72,7 +72,10 @@ class BalancePresenter(
     }
 
     override fun onChart(viewItem: BalanceViewItem) {
-        router.openChart(viewItem.wallet.coin)
+        val balanceItem = items.firstOrNull { it.wallet == viewItem.wallet }
+        if (balanceItem?.marketInfo != null) {
+            router.openChart(viewItem.wallet.coin)
+        }
     }
 
     private var expandedViewItem: BalanceViewItem? = null
@@ -125,7 +128,7 @@ class BalancePresenter(
         setBalanceHidden(hidden = false)
     }
 
-    private fun setBalanceHidden(hidden: Boolean){
+    private fun setBalanceHidden(hidden: Boolean) {
         interactor.balanceHidden = hidden
         hideBalance = hidden
         view?.setBalanceHidden(hidden, true)
@@ -269,7 +272,7 @@ class BalancePresenter(
         view?.set(viewItemsCopy)
     }
 
-    private fun toggleBalanceVisibility(){
+    private fun toggleBalanceVisibility() {
         viewItems.forEach {
             it.hideBalance = hideBalance
         }

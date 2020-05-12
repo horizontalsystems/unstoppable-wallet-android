@@ -50,17 +50,15 @@ class RateManager(
                 }.let {
                     disposables.add(it)
                 }
-
-        initMapper()
     }
 
     override fun set(coins: List<String>) {
-        val convertedCoins = coins.map { converted(it) }
+        val convertedCoins = coins.mapNotNull { rateCoinMapper.convert(it) }
         kit.set(convertedCoins)
     }
 
     override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
-        return kit.getMarketInfo(converted(coinCode), currencyCode)
+        return rateCoinMapper.convert(coinCode)?.let { kit.getMarketInfo(it, currencyCode) }
     }
 
     override fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal? {
@@ -75,30 +73,32 @@ class RateManager(
     }
 
     override fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo> {
-        return kit.marketInfoObservable(converted(coinCode), currencyCode)
+        return rateCoinMapper.convert(coinCode)?.let { kit.marketInfoObservable(it, currencyCode) }
+                ?: Observable.error(RateError.DisabledCoin())
     }
 
     override fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>> {
         return kit.marketInfoMapObservable(currencyCode)
                 .map { marketInfo ->
-                    marketInfo.map { unconverted(it.key) to it.value }.toMap()
+                    marketInfo.map { rateCoinMapper.unconvert(it.key) to it.value }.toMap()
                 }
     }
 
     override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        kit.historicalRate(converted(coinCode), currencyCode, timestamp)?.let {
-            return Single.just(it)
-        }
+        val convertedCoinCode = rateCoinMapper.convert(coinCode)
+                ?: return Single.error(RateError.DisabledCoin())
 
-        return kit.historicalRateFromApi(converted(coinCode), currencyCode, timestamp)
+        return kit.historicalRate(convertedCoinCode, currencyCode, timestamp)?.let { Single.just(it) }
+                ?: kit.historicalRateFromApi(convertedCoinCode, currencyCode, timestamp)
     }
 
     override fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
-        return kit.getChartInfo(converted(coinCode), currencyCode, chartType)
+        return rateCoinMapper.convert(coinCode)?.let { kit.getChartInfo(it, currencyCode, chartType) }
     }
 
     override fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
-        return kit.chartInfoObservable(converted(coinCode), currencyCode, chartType)
+        return rateCoinMapper.convert(coinCode)?.let { kit.chartInfoObservable(it, currencyCode, chartType) }
+                ?: Observable.error(RateError.DisabledCoin())
     }
 
     override fun getCryptoNews(coinCode: String): Single<List<CryptoNews>> {
@@ -114,37 +114,16 @@ class RateManager(
     }
 
     private fun onWalletsUpdated(wallets: List<Wallet>) {
-        kit.set(wallets.map { converted(it.coin.code) })
+        kit.set(wallets.mapNotNull { rateCoinMapper.convert(it.coin.code) })
     }
 
     private fun onBaseCurrencyUpdated() {
         kit.set(currencyManager.baseCurrency.code)
     }
 
-    private fun converted(coinCode: String): String {
-        return rateCoinMapper.convertedCoinMap[coinCode] ?: coinCode
-    }
 
-    private fun unconverted(coinCode: String): String {
-        return rateCoinMapper.unconvertedCoinMap[coinCode] ?: coinCode
-    }
-
-    private fun initMapper() {
-        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "HOT", to = "HOLO")
-        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "HOLO", to = "HOT")
-
-        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "SAI", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "PGL", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "PPT", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "EOSDT", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "WBTC", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Convert, from = "WETH", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "SAI", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "PGL", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "PPT", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "EOSDT", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "WBTC", to = null)
-        rateCoinMapper.addCoin(RateDirectionMap.Unconvert, from = "WETH", to = null)
+    sealed class RateError : Exception() {
+        class DisabledCoin : RateError()
     }
 
 }
