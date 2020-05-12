@@ -236,7 +236,8 @@
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Privacidad</string>
-    <string name="SettingsSecurity_Fingerprint">Huella digital</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
