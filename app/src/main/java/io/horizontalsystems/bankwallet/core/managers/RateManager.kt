@@ -99,7 +99,7 @@ class RateManager(
     }
 
     override fun getTopMarketList(currency: String): Single<List<TopMarket>> {
-        return kit.getTopList(currency)
+        return kit.getTopMarkets(currency)
     }
 
     override fun refresh() {

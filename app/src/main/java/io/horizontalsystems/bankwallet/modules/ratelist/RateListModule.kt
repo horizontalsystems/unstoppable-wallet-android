@@ -22,7 +22,6 @@ object RateListModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun loadTopList()
         fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem)
     }
 

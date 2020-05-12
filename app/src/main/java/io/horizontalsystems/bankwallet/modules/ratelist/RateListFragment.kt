@@ -41,11 +41,6 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
         coinRatesRecyclerView.adapter = adapter
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.loadTopList()
-    }
-
     override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
         presenter.onCoinClicked(coinViewItem)
     }
@@ -73,7 +68,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
 }
 
 
-class CoinRatesAdapter(private val listener: CoinRatesAdapter.Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
         fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem)
