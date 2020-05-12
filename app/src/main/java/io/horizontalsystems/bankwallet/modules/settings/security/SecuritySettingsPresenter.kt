@@ -9,16 +9,16 @@ class SecuritySettingsPresenter(
 
     override fun viewDidLoad() {
         syncPinSet(interactor.isPinSet)
-        view?.toggleBiometricEnabled(interactor.isBiometricEnabled)
+        view?.toggleBiometricEnabled(interactor.isBiometricAuthEnabled)
     }
 
     override fun didSwitchBiometricEnabled(enable: Boolean) {
-        interactor.isBiometricEnabled = enable
+        interactor.isBiometricAuthEnabled = enable
     }
 
     override fun didSetPin() {
         syncPinSet(true)
-        view?.toggleBiometricEnabled(interactor.isBiometricEnabled)
+        view?.toggleBiometricEnabled(interactor.isBiometricAuthEnabled)
     }
 
     override fun didCancelSetPin() {
@@ -37,7 +37,7 @@ class SecuritySettingsPresenter(
     private fun syncPinSet(pinSet: Boolean) {
         view?.togglePinSet(pinSet)
         view?.setEditPinVisible(pinSet)
-        view?.setBiometricSettingsVisible(pinSet && interactor.biometricAuthSupported)
+        view?.setBiometricSettingsVisible(pinSet && interactor.isBiometricAuthSupported)
     }
 
     override fun didSwitchPinSet(enable: Boolean) {

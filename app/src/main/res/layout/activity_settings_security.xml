@@ -58,14 +58,28 @@
                 app:title="@string/SettingsSecurity_EditPin" />
 
             <io.horizontalsystems.views.SettingsViewSwitch
-                android:id="@+id/fingerprint"
+                android:id="@+id/biometricAuth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:bottomBorder="true"
                 app:icon="@drawable/ic_fingerprint"
                 app:layout_constraintTop_toBottomOf="@+id/changePin"
-                app:title="@string/SettingsSecurity_Fingerprint" />
+                app:title="@string/SettingsSecurity_Biometric_Authentication" />
+
+            <TextView
+                android:id="@+id/txtBiometricAuthInfo"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsSecurity_Info_Biometric_Authentication"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/biometricAuth" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -32,8 +32,8 @@ class SecuritySettingsActivity : BaseActivity() {
             viewModel.delegate.didTapPrivacy()
         }
 
-        fingerprint.setOnClickListener {
-            fingerprint.switchToggle()
+        biometricAuth.setOnClickListener {
+            biometricAuth.switchToggle()
         }
 
         enablePin.setOnClickListener {
@@ -54,11 +54,12 @@ class SecuritySettingsActivity : BaseActivity() {
         })
 
         viewModel.biometricSettingsVisibleLiveData.observe(this, Observer { enabled ->
-            fingerprint.showIf(enabled)
+            biometricAuth.showIf(enabled)
+            txtBiometricAuthInfo.showIf(enabled)
         })
 
         viewModel.biometricEnabledLiveData.observe(this, Observer {
-            fingerprint.showSwitch(it, CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            biometricAuth.showSwitch(it, CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 viewModel.delegate.didSwitchBiometricEnabled(isChecked)
             })
         })
