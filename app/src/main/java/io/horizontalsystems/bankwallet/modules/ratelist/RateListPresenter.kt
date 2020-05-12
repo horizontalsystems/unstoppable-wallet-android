@@ -25,7 +25,7 @@ class RateListPresenter(
     //IViewDelegate
 
     override fun viewDidLoad() {
-        coins.map {coin ->
+        coins.map { coin ->
             interactor.getMarketInfo(coin.code, currency.code)?.let { marketInfo ->
                 portfolioMarketInfos.put(coin.code, marketInfo)
             }
@@ -42,9 +42,10 @@ class RateListPresenter(
         val coinCodes = coins.map { it.code }
         interactor.setupXRateManager(coinCodes)
         interactor.subscribeToMarketInfo(currency.code)
+        loadTopList()
     }
 
-    override fun loadTopList() {
+    private fun loadTopList() {
         if (!loading) {
             loading = true
             interactor.getTopList()
@@ -63,6 +64,7 @@ class RateListPresenter(
         portfolioMarketInfos.putAll(marketInfos)
 
         syncListsAndShow()
+        loadTopList()
     }
 
     override fun didFetchedTopMarketList(items: List<TopMarket>) {
@@ -85,10 +87,10 @@ class RateListPresenter(
     }
 
     private fun syncListsAndShow() {
-        portfolioMarketInfos.forEach { coinCode, portfolioMarketInfo ->
+        portfolioMarketInfos.forEach { (coinCode, portfolioMarketInfo) ->
             topMarketInfos.forEachIndexed { index, topMarket ->
-                if(topMarket.coinCode == coinCode){
-                    if (portfolioMarketInfo.timestamp > topMarket.marketInfo.timestamp){
+                if (topMarket.coinCode == coinCode) {
+                    if (portfolioMarketInfo.timestamp > topMarket.marketInfo.timestamp) {
                         topMarketInfos[index] = TopMarket(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo)
                     } else {
                         portfolioMarketInfos[coinCode] = topMarket.marketInfo
