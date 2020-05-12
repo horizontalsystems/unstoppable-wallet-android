@@ -2,19 +2,18 @@ package io.horizontalsystems.chartview.models
 
 import android.content.Context
 import android.graphics.Paint
+import android.util.AttributeSet
 import androidx.core.content.res.ResourcesCompat
 import io.horizontalsystems.chartview.R
 
-class ChartConfig(private val context: Context) {
-    var showGrid = true
-    var animated = true
+class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     //  colors
+    var textFont = ResourcesCompat.getFont(context, R.font.noto_sans_medium)
     var curveColor = context.getColor(R.color.red_d)
     var touchColor = context.getColor(R.color.light)
     var gridColor = context.getColor(R.color.steel_20)
     var gridDottedColor = context.getColor(R.color.white_50)
-    var textFont = ResourcesCompat.getFont(context, R.font.noto_sans_medium)
     var textColor = context.getColor(R.color.grey)
     var textPriceColor = context.getColor(R.color.light_grey)
     var growColor = context.getColor(R.color.green_d)
@@ -23,31 +22,50 @@ class ChartConfig(private val context: Context) {
     var partialChartColor = context.getColor(R.color.grey_50)
     var volumeRectangleColor = context.getColor(R.color.steel_20)
 
-    var textSize = dp2px(12f)
+    init {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.Chart)
+        try {
+            growColor = ta.getInt(R.styleable.Chart_growColor, growColor)
+            fallColor = ta.getInt(R.styleable.Chart_fallColor, fallColor)
+            textColor = ta.getInt(R.styleable.Chart_textColor, textColor)
+            textPriceColor = ta.getInt(R.styleable.Chart_textPriceColor, textPriceColor)
+            gridColor = ta.getInt(R.styleable.Chart_gridColor, gridColor)
+            touchColor = ta.getInt(R.styleable.Chart_touchColor, touchColor)
+            cursorColor = ta.getInt(R.styleable.Chart_cursorColor, cursorColor)
+            gridDottedColor = ta.getInt(R.styleable.Chart_gridDottedColor, gridDottedColor)
+            partialChartColor = ta.getInt(R.styleable.Chart_partialChartColor, partialChartColor)
+        } finally {
+            ta.recycle()
+        }
+    }
+
     var textPricePT = dp2px(4f)
     var textPricePB = dp2px(8f)
     var textPricePL = dp2px(16f)
     var textPriceSize = dp2px(14f)
+    var timelineTextSize = dp2px(12f)
+    var timelineTextPadding = timelineTextSize + dp2px(2f)
 
     //  dimens
-    var width = 0f
-    var height = 0f
     var strokeWidth = 2f
+    var strokeDotted = dp2px(2f)
     var strokeWidthDotted = 1F
-    var offsetBottom = 0f
+    var curveVerticalOffset = dp2px(18f)
     var gridEdgeOffset = dp2px(5f)
-    var volumeMaximumHeightRatio = 0.4f // 40% of height
+    var volumeMaxHeightRatio = 0.8f // 40% of height
     var volumeBarWidth = dp2px(2f)
 
-    //  grid dimens
-    var valueLow = 0f
-    var valueTop = 0f
-    var valueScale = 0
-
-    //  Animation
-    var animatedFraction = 0f
-
     //  Helper methods
+    fun setTrendColour(startPoint: ChartPoint?, endPoint: ChartPoint?, endTimestamp: Long) {
+        if (startPoint == null || endPoint == null) return
+        if (endPoint.timestamp < endTimestamp) {
+            curveColor = partialChartColor
+        } else if (startPoint.value > endPoint.value) {
+            curveColor = fallColor
+        } else {
+            curveColor = growColor
+        }
+    }
 
     fun xAxisPrice(x: Float, maxX: Float, text: String): Float {
         val width = measureTextWidth(text)
@@ -67,19 +85,11 @@ class ChartConfig(private val context: Context) {
         return y + textPriceSize + textBoxOffset
     }
 
-    fun dp2px(dps: Float): Float {
+    private fun dp2px(dps: Float): Float {
         //  Get the screen's density scale
         val scale = context.resources.displayMetrics.density
         //  Convert the dps to pixels, based on density scale
         return dps * scale + 0.5f
-    }
-
-    fun getAnimatedY(y: Float, yMax: Float): Float {
-        if (!animated) return y
-
-        // Figure out top of column based on INVERSE of percentage. Bigger the percentage,
-        // the smaller top is, since 100% goes to 0.
-        return yMax - (yMax - y) * animatedFraction
     }
 
     private fun measureTextWidth(text: String): Float {
