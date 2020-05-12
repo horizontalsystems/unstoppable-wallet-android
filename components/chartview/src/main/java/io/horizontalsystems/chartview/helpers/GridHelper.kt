@@ -1,18 +1,16 @@
-package io.horizontalsystems.chartview
+package io.horizontalsystems.chartview.helpers
 
-import android.graphics.RectF
 import android.text.format.DateFormat.getBestDateTimePattern
 import io.horizontalsystems.chartview.ChartView.ChartType
-import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.GridColumn
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GridHelper(private val shape: RectF, private val config: ChartConfig) {
+object GridHelper {
 
-    fun setGridColumns(chartType: ChartType, startTimestamp: Long, endTimestamp: Long): List<GridColumn> {
-        val start = startTimestamp * 1000
-        val end = endTimestamp * 1000
+    fun mapColumns(chartType: ChartType, startTime: Long, endTime: Long, width: Float): List<GridColumn> {
+        val start = startTime * 1000
+        val end = endTime * 1000
 
         val calendar = Calendar.getInstance().apply { time = Date() }
         var columnLabel = columnLabel(calendar, chartType)
@@ -37,7 +35,7 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
             }
         }
 
-        val delta = (end - start) / shape.right
+        val delta = (end - start) / width
         val columns = mutableListOf<GridColumn>()
 
         while (true) {
