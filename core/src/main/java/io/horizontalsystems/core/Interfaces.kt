@@ -48,7 +48,7 @@ interface ISystemInfoManager {
 }
 
 interface ISecuredStorage {
-    var isFingerprintEnabled: Boolean
+    var isBiometricAuthEnabled: Boolean
     val savedPin: String?
     fun savePin(pin: String)
     fun removePin()
@@ -56,7 +56,7 @@ interface ISecuredStorage {
 }
 
 interface IPinComponent {
-    var isFingerprintEnabled: Boolean
+    var isBiometricAuthEnabled: Boolean
     val isPinSet: Boolean
     val isLocked: Boolean
 

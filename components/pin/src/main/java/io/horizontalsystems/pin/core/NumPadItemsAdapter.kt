@@ -37,7 +37,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
 
     override fun getItemCount() = numPadItems.count()
 
-    var showFingerPrintButton = false
+    var showBiometricAuthButton = false
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -51,7 +51,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder is NumPadItemViewHolder) {
-            holder.bind(numPadItems[position], numpadEnabled, showFingerPrintButton, showLetters) { listener.onItemClick(numPadItems[position]) }
+            holder.bind(numPadItems[position], numpadEnabled, showBiometricAuthButton, showLetters) { listener.onItemClick(numPadItems[position]) }
         }
     }
 
@@ -61,7 +61,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
 data class NumPadItem(val type: NumPadItemType, val number: Int, val letters: String)
 
 enum class NumPadItemType {
-    NUMBER, DELETE, FINGER
+    NUMBER, DELETE, BIOMETRIC
 }
 
 class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
@@ -72,7 +72,7 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
     private var imgFingerprint: ImageView = itemView.findViewById(R.id.imgFingerprint)
 
 
-    fun bind(item: NumPadItem, isEnabled: Boolean, isFingerprintEnabled: Boolean, showLetters: Boolean, onClick: () -> (Unit)) {
+    fun bind(item: NumPadItem, isEnabled: Boolean, isBiometricAuthEnabled: Boolean, showLetters: Boolean, onClick: () -> (Unit)) {
 
         itemView.isEnabled = isEnabled
 
@@ -110,9 +110,9 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
                 itemView.setBackgroundResource(R.drawable.numpad_circle)
             }
 
-            NumPadItemType.FINGER -> {
+            NumPadItemType.BIOMETRIC -> {
                 itemView.background = null
-                imgFingerprint.visibility = if (isFingerprintEnabled) View.VISIBLE else View.GONE
+                imgFingerprint.visibility = if (isBiometricAuthEnabled) View.VISIBLE else View.GONE
             }
 
         }

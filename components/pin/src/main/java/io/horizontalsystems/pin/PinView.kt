@@ -14,8 +14,8 @@ class PinView : PinModule.IView {
     val updateTopTextForPage = MutableLiveData<Pair<TopText, Int>>()
     val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
     val showCancelButton = MutableLiveData<Boolean>()
-    val showFingerprintButton = SingleLiveEvent<Unit>()
-    val showFingerprintInput = SingleLiveEvent<BiometricPrompt.CryptoObject>()
+    val showBiometricAuthButton = SingleLiveEvent<Unit>()
+    val showBiometricAuthInput = SingleLiveEvent<BiometricPrompt.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val showLockedView = SingleLiveEvent<Date>()
     val enablePinInput = SingleLiveEvent<Unit>()
@@ -45,12 +45,12 @@ class PinView : PinModule.IView {
         resetCirclesWithShakeAndDelayForPage.value = pageIndex
     }
 
-    override fun showFingerprintButton() {
-        showFingerprintButton.call()
+    override fun showBiometricAuthButton() {
+        showBiometricAuthButton.call()
     }
 
-    override fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject) {
-        showFingerprintInput.postValue(cryptoObject)
+    override fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject) {
+        showBiometricAuthInput.postValue(cryptoObject)
     }
 
     override fun showCancelButton() {

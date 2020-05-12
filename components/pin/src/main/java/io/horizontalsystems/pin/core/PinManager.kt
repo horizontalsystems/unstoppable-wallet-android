@@ -8,10 +8,10 @@ class PinManager(private val securedStorage: ISecuredStorage) {
     val isPinSet: Boolean
         get() = !securedStorage.pinIsEmpty()
 
-    var isFingerprintEnabled: Boolean
-        get() = securedStorage.isFingerprintEnabled
+    var isBiometricAuthEnabled: Boolean
+        get() = securedStorage.isBiometricAuthEnabled
         set(value) {
-            securedStorage.isFingerprintEnabled = value
+            securedStorage.isBiometricAuthEnabled = value
         }
 
     @Throws(UserNotAuthenticatedException::class)
@@ -25,6 +25,6 @@ class PinManager(private val securedStorage: ISecuredStorage) {
 
     fun clear() {
         securedStorage.removePin()
-        securedStorage.isFingerprintEnabled = false
+        securedStorage.isBiometricAuthEnabled = false
     }
 }

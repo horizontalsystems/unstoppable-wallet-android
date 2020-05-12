@@ -8,12 +8,12 @@ import io.horizontalsystems.core.ISecuredStorage
 class SecureStorage(private val encryptionManager: IEncryptionManager) : ISecuredStorage {
 
     private val lockPin = "lock_pin"
-    private val fingerprintEnabled = "fingerprint_enabled"
+    private val biometricAuthEnabled = "biometric_auth_enabled"
 
-    override var isFingerprintEnabled: Boolean
-        get() = CoreApp.preferences.getBoolean(fingerprintEnabled, false)
+    override var isBiometricAuthEnabled: Boolean
+        get() = CoreApp.preferences.getBoolean(biometricAuthEnabled, false)
         set(enabled) {
-            CoreApp.preferences.edit().putBoolean(fingerprintEnabled, enabled).apply()
+            CoreApp.preferences.edit().putBoolean(biometricAuthEnabled, enabled).apply()
         }
 
     override val savedPin: String?
