@@ -11,9 +11,9 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Title">Fingerprint Scanner</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrics Scanner</string>
     <string name="UnlockPin_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Info">Fingerprint disabled</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
     <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
 
     <!--Set Pin-->
