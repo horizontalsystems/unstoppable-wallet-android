@@ -17,15 +17,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
+import io.horizontalsystems.bankwallet.modules.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.getValueAnimator
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
@@ -223,6 +226,12 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
             })
         })
 
+        viewModel.openContactPage.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                ContactModule.start(it)
+            }
+        })
+
         viewModel.setBalanceHiddenLiveEvent.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
             setOptionsMenuVisible(hideBalance)
 
@@ -235,25 +244,34 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
             }
         })
 
-        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { coin ->
+        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage) ->
             activity?.let{ fragmentActivity ->
-                SyncErrorDialog.show(fragmentActivity, coin, object : SyncErrorDialog.Listener{
+                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, object : SyncErrorDialog.Listener{
                     override fun onClickRetry() {
-                        TODO("Not yet implemented")
+                        viewModel.delegate.refreshByWallet(wallet)
                     }
 
                     override fun onClickChangeSource() {
-                        TODO("Not yet implemented")
+                        PrivacySettingsModule.start(fragmentActivity)
                     }
 
                     override fun onClickReport() {
-                        TODO("Not yet implemented")
+                        viewModel.delegate.onReportClick(errorMessage)
                     }
 
-                    override fun onCancel() {
-                        TODO("Not yet implemented")
-                    }
                 })
+            }
+        })
+
+        viewModel.networkNotAvailable.observe(viewLifecycleOwner, Observer {
+            activity?.let { fragmentActivity ->
+                HudHelper.showErrorMessage(fragmentActivity, R.string.Hud_Text_NoInternet)
+            }
+        })
+
+        viewModel.showErrorMessageCopied.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                HudHelper.showSuccessMessage(it, R.string.Hud_Text_Copied)
             }
         })
     }

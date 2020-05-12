@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.BackpressureStrategy
@@ -111,6 +112,18 @@ class AdapterManager(
 
             adaptersReadySubject.onNext(Unit)
         }
+    }
+
+    override fun refreshByWallet(wallet: Wallet) {
+        val adapter = adaptersMap[wallet] ?: return
+
+        when (adapter) {
+            is BinanceAdapter -> binanceKitManager.binanceKit?.refresh()
+            is EthereumAdapter, is Erc20Adapter -> ethereumKitManager.ethereumKit?.refresh()
+            is EosAdapter -> eosKitManager.eosKit?.refresh()
+            else -> adapter.refresh()
+        }
+
     }
 
     override fun stopKits() {
