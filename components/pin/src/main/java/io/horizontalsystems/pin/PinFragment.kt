@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -102,7 +101,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
 
         viewDelegate.viewDidLoad()
 
-        numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
+        numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.BIOMETRIC)
 
         numPadItemsRecyclerView.adapter = numpadAdapter
         numPadItemsRecyclerView.layoutManager = GridLayoutManager(context, 3)
@@ -118,7 +117,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         when (item.type) {
             NumPadItemType.NUMBER -> viewDelegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
             NumPadItemType.DELETE -> viewDelegate.onDelete(layoutManager.findFirstVisibleItemPosition())
-            NumPadItemType.FINGER -> viewDelegate.showFingerprintInput()
+            NumPadItemType.BIOMETRIC -> viewDelegate.showBiometricAuthInput()
         }
     }
 
@@ -166,12 +165,12 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
             pinPagesAdapter.setEnteredPinLength(pageIndex, length)
         })
 
-        pinView.showFingerprintButton.observe(viewLifecycleOwner, Observer {
-            numpadAdapter.showFingerPrintButton = true
+        pinView.showBiometricAuthButton.observe(viewLifecycleOwner, Observer {
+            numpadAdapter.showBiometricAuthButton = true
         })
 
-        pinView.showFingerprintInput.observe(viewLifecycleOwner, Observer {
-            showFingerprintDialog(it)
+        pinView.showBiometricAuthInput.observe(viewLifecycleOwner, Observer {
+            showBiometricAuthDialog(it)
         })
 
         pinView.resetCirclesWithShakeAndDelayForPage.observe(viewLifecycleOwner, Observer { pageIndex ->
@@ -196,9 +195,9 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         })
     }
 
-    private fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject) {
+    private fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject) {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle(getString(R.string.Fingerprint_DialogTitle))
+                .setTitle(getString(R.string.BiometricAuth_DialogTitle))
                 .setNegativeButtonText(getString(R.string.Button_Cancel))
                 .build()
 
@@ -206,7 +205,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 activity?.runOnUiThread {
-                    viewDelegate.onFingerprintUnlock()
+                    viewDelegate.onBiometricsUnlock()
                 }
             }
 

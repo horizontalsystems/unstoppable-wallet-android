@@ -24,19 +24,19 @@ object PinModule {
         fun showPinWrong(pageIndex: Int)
         fun showCancelButton()
         fun fillCircles(length: Int, pageIndex: Int)
-        fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject)
+        fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject)
         fun showLockView(until: Date)
         fun enablePinInput()
-        fun showFingerprintButton()
+        fun showBiometricAuthButton()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun onEnter(pin: String, pageIndex: Int)
         fun onDelete(pageIndex: Int)
-        fun onFingerprintUnlock() {}
-        fun showFingerprintButton() {}
-        fun showFingerprintInput() {}
+        fun onBiometricsUnlock() {}
+        fun showBiometricAuthButton() {}
+        fun showBiometricAuthInput() {}
         fun resetPin()
     }
 

@@ -27,7 +27,7 @@ class UnlockPinPresenter(
 
         interactor.updateLockoutState()
 
-        showFingerprintButton()
+        showBiometricAuthButton()
     }
 
     override fun onEnter(pin: String, pageIndex: Int) {
@@ -67,17 +67,17 @@ class UnlockPinPresenter(
         view.updateTopTextForPage(TopText.BigError(R.string.UnlockPin_Error_PinIncorrect), unlockPageIndex)
     }
 
-    override fun showFingerprintButton() {
-        if (interactor.isFingerprintEnabled && interactor.biometricAuthSupported) {
-            view.showFingerprintButton()
+    override fun showBiometricAuthButton() {
+        if (interactor.isBiometricAuthEnabled && interactor.isBiometricAuthSupported) {
+            view.showBiometricAuthButton()
         }
     }
 
-    override fun showFingerprintInput() {
-        interactor.cryptoObject?.let { view.showFingerprintDialog(it) }
+    override fun showBiometricAuthInput() {
+        interactor.cryptoObject?.let { view.showBiometricAuthDialog(it) }
     }
 
-    override fun onFingerprintUnlock() {
+    override fun onBiometricsUnlock() {
         interactor.onUnlock()
     }
 

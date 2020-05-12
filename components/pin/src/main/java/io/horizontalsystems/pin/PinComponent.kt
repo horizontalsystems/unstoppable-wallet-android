@@ -29,10 +29,10 @@ class PinComponent(
 
     //IPinComponent
 
-    override var isFingerprintEnabled: Boolean
-        get() = pinManager.isFingerprintEnabled
+    override var isBiometricAuthEnabled: Boolean
+        get() = pinManager.isBiometricAuthEnabled
         set(value) {
-            pinManager.isFingerprintEnabled = value
+            pinManager.isBiometricAuthEnabled = value
         }
 
     override val isPinSet: Boolean

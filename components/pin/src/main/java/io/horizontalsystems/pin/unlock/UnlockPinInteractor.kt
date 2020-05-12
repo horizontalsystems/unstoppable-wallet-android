@@ -23,10 +23,10 @@ class UnlockPinInteractor(
         timer.delegate = this
     }
 
-    override val isFingerprintEnabled: Boolean
-        get() = pinComponent.isFingerprintEnabled
+    override val isBiometricAuthEnabled: Boolean
+        get() = pinComponent.isBiometricAuthEnabled
 
-    override val biometricAuthSupported: Boolean
+    override val isBiometricAuthSupported: Boolean
         get() = systemInfoManager.biometricAuthSupported
 
     override val cryptoObject: BiometricPrompt.CryptoObject?
