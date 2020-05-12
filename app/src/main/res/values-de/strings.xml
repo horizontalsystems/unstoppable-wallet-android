@@ -236,7 +236,8 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Privatsphäre</string>
-    <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
