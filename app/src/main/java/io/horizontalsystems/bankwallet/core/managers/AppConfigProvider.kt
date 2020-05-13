@@ -134,7 +134,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
 
     override val localizations: List<String>
         get() {
-            val coinsString = App.instance.getString(R.string.localizations)
+            val coinsString = "de,en,es,fa,fr,ko,ru,tr,zh"
             return coinsString.split(",")
         }
 

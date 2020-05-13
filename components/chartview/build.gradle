@@ -16,10 +16,6 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
 
-    signingConfigs {
-        hockeyApp {}
-    }
-
     buildTypes {
         debug {
             debuggable true
@@ -29,11 +25,6 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        hockeyApp {
-            signingConfig signingConfigs.hockeyApp
-            debuggable false
-            minifyEnabled false
         }
     }
 }

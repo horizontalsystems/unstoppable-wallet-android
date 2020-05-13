@@ -5,22 +5,12 @@ platform :android do
     reset_git_repo(force: true, skip_clean: true)
   end
 
-  desc "Submit a new Version Build"
-  lane :dev_version_build do |options|
+  desc "Submit a new Build"
+  lane :app_build do |options|
     commit = last_git_commit
 
     gradle(task: "clean")
-    gradle(task: "assembleDevMainnetVersionHockeyApp", flags: "--stacktrace --no-daemon")
-
-    upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
-  end
-
-  desc "Submit a new Master Build"
-  lane :dev_master_build do |options|
-    commit = last_git_commit
-
-    gradle(task: "clean")
-    gradle(task: "assembleDevMainnetMasterHockeyApp", flags: "--stacktrace --no-daemon")
+    gradle(task: "assembleModeMainnetDebug", flags: "--stacktrace --no-daemon")
 
     upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
