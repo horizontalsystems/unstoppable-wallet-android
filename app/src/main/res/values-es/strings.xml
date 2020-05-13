@@ -209,7 +209,7 @@
     <string name="SettingsOption_Disabled">Desabilitado</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte su información de forma alguna. Sin embargo, mientras se comunica con blockchains es potencialmente posible que cierta información pública como la dirección IP pueda filtrarse.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Conexión blockchain</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
     <string name="SettingsPrivacy_CommunicationDescription">Algunos blockchains aún no brindan medios para poder usarse en aplicaciones móviles de modo peer-to-peer. Las comunicaciones con las blockchains BTC, BCH, LTC, DASH son completamente peer-to-peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Restaurar blockchain</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Seleccione la fuente de información para restaurar el monedero con las transacciones.</string>
@@ -223,7 +223,7 @@
         \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
         \n\na) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
         \n\nb) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Connection</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
         \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
         \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
@@ -398,4 +398,10 @@
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_prices">Prices</string>
+    <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_Title">Sync Error</string>
+    <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_ButtonRetry">Retry</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
+    <string name="BalanceSyncError_ButtonReport">Report</string>
 </resources>
