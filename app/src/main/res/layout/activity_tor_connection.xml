@@ -67,9 +67,9 @@
 
     <TextView
         android:id="@+id/txDisableTor"
-        style="@style/Subhead1"
+        style="@style/ButtonTransparent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="28dp"
         android:layout_marginTop="40dp"
         android:autoLink="all"
         android:clickable="true"
