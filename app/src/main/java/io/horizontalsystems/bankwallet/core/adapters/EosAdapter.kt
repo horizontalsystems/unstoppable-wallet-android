@@ -81,9 +81,9 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
     // IBalanceAdapter
 
     override val state: AdapterState
-        get() = when (token.syncState) {
+        get() = when (val kitSyncState = token.syncState) {
             EosKit.SyncState.Synced -> AdapterState.Synced
-            EosKit.SyncState.NotSynced -> AdapterState.NotSynced(Throwable())
+            is EosKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
             EosKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
