@@ -77,8 +77,7 @@
         <item name="android:textColor">@color/button_transparent_text_color</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">12dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="ButtonPrivacySettings">
