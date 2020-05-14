@@ -4,11 +4,10 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.IPinComponent
 
 class MainPresenter(private val pinComponent: IPinComponent,
-                    private val interactor: MainModule.IInteractor,
-                    private val router: MainModule.IRouter) : MainModule.IViewDelegate, MainModule.IInteractorDelegate {
+                    private val interactor: MainModule.IInteractor) : MainModule.IViewDelegate, MainModule.IInteractorDelegate {
 
     var view: MainModule.IView? = null
-    var contentHidden = App.pinComponent.isLocked
+    private var contentHidden = App.pinComponent.isLocked
 
     override fun viewDidLoad() {
         interactor.onStart()

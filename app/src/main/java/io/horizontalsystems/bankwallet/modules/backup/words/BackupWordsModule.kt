@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.backup.words
 
 import androidx.appcompat.app.AppCompatActivity
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.RandomProvider
 import java.util.*
 
 object BackupWordsModule {
@@ -52,7 +52,7 @@ object BackupWordsModule {
     }
 
     fun init(view: BackupWordsViewModel, router: IRouter, words: Array<String>, backedUp: Boolean) {
-        val interactor = BackupWordsInteractor(App.randomManager, words)
+        val interactor = BackupWordsInteractor(RandomProvider(), words)
         val presenter = BackupWordsPresenter(interactor, router, State(words, backedUp))
 
         view.delegate = presenter

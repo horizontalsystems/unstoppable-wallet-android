@@ -21,8 +21,13 @@ class PinComponent(
 
     private var refs: Int = 0
     private var foregroundActivity: Activity? = null
-    private val pinManager = PinManager(securedStorage)
-    private val appLockManager = LockManager(pinManager, application.applicationContext)
+    private val pinManager: PinManager by lazy {
+        PinManager(securedStorage)
+    }
+
+    private val appLockManager: LockManager by lazy {
+        LockManager(pinManager, application.applicationContext)
+    }
 
     override val isLocked: Boolean
         get() = appLockManager.isLocked

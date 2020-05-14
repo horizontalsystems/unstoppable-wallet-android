@@ -37,7 +37,6 @@ class App : CoreApp() {
         lateinit var chartTypeStorage: IChartTypeStorage
 
         lateinit var wordsManager: WordsManager
-        lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var backgroundManager: BackgroundManager
         lateinit var keyStoreChangeListener: KeyStoreChangeListener
@@ -115,7 +114,7 @@ class App : CoreApp() {
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(appConfigProvider, enabledWalletsStorage)
 
-        LocalStorageManager().apply {
+        LocalStorageManager(preferences).apply {
             localStorage = this
             chartTypeStorage = this
             pinStorage = this
@@ -129,7 +128,7 @@ class App : CoreApp() {
         val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
         blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
 
-        wordsManager = WordsManager(localStorage)
+        wordsManager = WordsManager()
         networkManager = NetworkManager()
         accountCleaner = AccountCleaner(appConfigTestMode.testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
@@ -146,7 +145,6 @@ class App : CoreApp() {
         encryptionManager = EncryptionManager(keyProvider)
         secureStorage = SecureStorage(encryptionManager)
 
-        randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
@@ -180,7 +178,7 @@ class App : CoreApp() {
             backgroundManager.registerListener(this)
         }
 
-        appStatusManager = AppStatusManager(systemInfoManager, localStorage, accountManager, predefinedAccountTypeManager, walletManager, adapterManager, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager)
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
@@ -207,6 +205,8 @@ class App : CoreApp() {
         }
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
+
+        startManagers()
     }
 
     override fun attachBaseContext(base: Context) {
@@ -216,5 +216,19 @@ class App : CoreApp() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         localeAwareContext(this)
+    }
+
+    private fun startManagers() {
+        Thread(Runnable {
+            rateAppManager.onAppLaunch()
+            accountManager.loadAccounts()
+            walletManager.loadWallets()
+            adapterManager.preloadAdapters()
+            accountManager.clearAccounts()
+            priceAlertManager.onAppLaunch()
+            backgroundPriceAlertManager.onAppLaunch()
+        }).start()
+
+        rateAppManager.onAppBecomeActive()
     }
 }

@@ -35,9 +35,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
 
         val showCloseButton = intent?.extras?.getBoolean(ModuleField.SHOW_CLOSE_BUTTON, false)
                 ?: false
-        val isColdStart = savedInstanceState != null
 
-        presenter = ViewModelProvider(this, ManageWalletsModule.Factory(showCloseButton, isColdStart))
+        presenter = ViewModelProvider(this, ManageWalletsModule.Factory(showCloseButton))
                 .get(ManageWalletsPresenter::class.java)
 
         presenter.onLoad()

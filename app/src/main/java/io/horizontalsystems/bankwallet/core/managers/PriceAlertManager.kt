@@ -7,8 +7,8 @@ import io.reactivex.schedulers.Schedulers
 
 class PriceAlertManager(private val walletManager: IWalletManager, private val priceAlertsStorage: IPriceAlertsStorage) {
 
-    init {
-        walletManager.walletsUpdatedObservable
+    fun onAppLaunch(){
+        val disposable = walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { wallets ->

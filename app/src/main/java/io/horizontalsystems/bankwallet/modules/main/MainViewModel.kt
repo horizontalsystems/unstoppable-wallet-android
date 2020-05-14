@@ -4,14 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent
 
-class MainViewModel : ViewModel(), MainModule.IView, MainModule.IRouter {
+class MainViewModel : ViewModel(), MainModule.IView {
 
     lateinit var delegate: MainModule.IViewDelegate
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
 
     fun init() {
-        MainModule.init(this, this)
+        MainModule.init(this)
         delegate.viewDidLoad()
     }
 

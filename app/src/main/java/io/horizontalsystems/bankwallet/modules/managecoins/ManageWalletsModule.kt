@@ -43,8 +43,6 @@ object ManageWalletsModule {
         val accounts: List<Account>
         val wallets: List<Wallet>
 
-        fun loadAccounts()
-        fun loadWallets()
         fun save(wallet: Wallet)
         fun delete(wallet: Wallet)
 
@@ -67,13 +65,13 @@ object ManageWalletsModule {
         context.startActivity(intent)
     }
 
-    class Factory(private val showCloseButton: Boolean, private val isColdStart: Boolean) : ViewModelProvider.Factory {
+    class Factory(private val showCloseButton: Boolean) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageWalletsView()
             val router = ManageWalletsRouter()
             val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.blockchainSettingsManager)
-            val presenter = ManageWalletsPresenter(interactor, isColdStart, showCloseButton, router, view)
+            val presenter = ManageWalletsPresenter(interactor, showCloseButton, router, view)
 
             return presenter as T
         }

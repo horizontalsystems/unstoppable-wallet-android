@@ -11,7 +11,9 @@ import io.reactivex.subjects.PublishSubject
 
 class ConnectivityManager {
 
-    private val connectivityManager = App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connectivityManager: ConnectivityManager by lazy {
+        App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
 
     var isConnected = false
     val networkAvailabilitySignal = PublishSubject.create<Unit>()

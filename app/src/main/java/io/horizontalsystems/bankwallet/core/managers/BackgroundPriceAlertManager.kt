@@ -5,8 +5,8 @@ import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Single
 
 class BackgroundPriceAlertManager(
-        localStorage: ILocalStorage,
-        backgroundRateAlertScheduler: IBackgroundRateAlertScheduler,
+        private val localStorage: ILocalStorage,
+        private val backgroundRateAlertScheduler: IBackgroundRateAlertScheduler,
         private val priceAlertsStorage: IPriceAlertsStorage,
         private val rateManager: IRateManager,
         private val walletStorage: IWalletStorage,
@@ -16,7 +16,8 @@ class BackgroundPriceAlertManager(
         private val notificationManager: INotificationManager)
     : IBackgroundPriceAlertManager, BackgroundManager.Listener {
 
-    init {
+
+    override fun onAppLaunch() {
         if (notificationManager.isEnabled && localStorage.isAlertNotificationOn) {
             backgroundRateAlertScheduler.startPeriodicWorker()
         } else {

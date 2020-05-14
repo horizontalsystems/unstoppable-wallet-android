@@ -5,11 +5,14 @@ import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
 
-    private val executor = Executors.newSingleThreadExecutor()
+    private val executor: ExecutorService by lazy {
+        Executors.newSingleThreadExecutor()
+    }
 
     override fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
         return appDatabase.ratesDao().getLatestRateFlowable(coinCode, currencyCode).distinctUntilChanged()

@@ -12,7 +12,6 @@ import kotlin.collections.LinkedHashMap
 class AppStatusManager(
         private val systemInfoManager: ISystemInfoManager,
         private val localStorage: ILocalStorage,
-        private val accountManager: IAccountManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
