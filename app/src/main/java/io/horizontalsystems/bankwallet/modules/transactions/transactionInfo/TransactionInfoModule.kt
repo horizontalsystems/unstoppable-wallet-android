@@ -21,11 +21,14 @@ object TransactionInfoModule {
 
     interface ViewDelegate {
         fun viewDidLoad()
-        fun onCopy(value: String)
-        fun onShare(value: String)
-        fun openFullInfo(transactionHash: String, wallet: Wallet)
-        fun onClickLockInfo(lockDate: Date)
-        fun onClickDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
+        fun onShare()
+        fun openFullInfo()
+        fun onClickLockInfo()
+        fun onClickDoubleSpendInfo()
+        fun onClickRecipientHash()
+        fun onClickTo()
+        fun onClickFrom()
+        fun onClickTransactionId()
     }
 
     interface Interactor {
