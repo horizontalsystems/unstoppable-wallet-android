@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -13,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 class ManageKeysInteractor(
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
+        private val blockchainSettingsManager: IBlockchainSettingsManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
     : ManageKeysModule.Interactor {
 
@@ -53,7 +55,20 @@ class ManageKeysInteractor(
 
     private fun mapAccounts(): List<ManageAccountItem> {
         return predefinedAccountTypes.map {
-            ManageAccountItem(it, account = predefinedAccountTypeManager.account(it))
+
+            val account = predefinedAccountTypeManager.account(it)
+            ManageAccountItem(it, account , hasDerivationSettings(account))
         }
+    }
+
+    private fun hasDerivationSettings(account: Account?): Boolean {
+
+        account?.let {
+            return getWallets().find {
+                it.account.id == account.id && blockchainSettingsManager.derivationSetting(it.coin.type) != null
+            } != null
+        }
+
+        return false
     }
 }

@@ -78,7 +78,7 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
 
             containerView.isActivated = hasAccount
 
-            advancedSettingsButton.showIf(hasAccount && predefinedAccount == PredefinedAccountType.Standard)
+            advancedSettingsButton.showIf(hasAccount && predefinedAccount == PredefinedAccountType.Standard && item.hasDerivationSetting)
             backupButton.showIf(hasAccount && !isBackedUp)
             showKeyButton.showIf(hasAccount && isBackedUp)
             unlinkButton.showIf(hasAccount)

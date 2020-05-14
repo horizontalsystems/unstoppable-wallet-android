@@ -5,10 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysActivity
 
 object ManageKeysModule {
@@ -59,7 +56,7 @@ object ManageKeysModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageKeysView()
             val router = ManageKeysRouter()
-            val interactor = ManageKeysInteractor(App.accountManager, App.walletManager, App.predefinedAccountTypeManager)
+            val interactor = ManageKeysInteractor(App.accountManager, App.walletManager, App.blockchainSettingsManager, App.predefinedAccountTypeManager)
             val presenter = ManageKeysPresenter(view, router, interactor)
 
             interactor.delegate = presenter
@@ -73,4 +70,7 @@ object ManageKeysModule {
     }
 }
 
-data class ManageAccountItem(val predefinedAccountType: PredefinedAccountType, val account: Account?)
+data class ManageAccountItem(
+        val predefinedAccountType: PredefinedAccountType,
+        val account: Account?,
+        val hasDerivationSetting: Boolean = false )
