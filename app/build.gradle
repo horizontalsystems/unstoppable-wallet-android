@@ -35,15 +35,40 @@ android {
         }
     }
 
+    signingConfigs {
+        appCenter {
+            storeFile file("./test.keystore")
+            storePassword "testKeystore123"
+
+            keyAlias "testKeystore"
+            keyPassword "testKeystore123"
+        }
+    }
+
     buildTypes {
         debug {
-            applicationIdSuffix ".dev"
             debuggable true
             minifyEnabled false
+            applicationIdSuffix ".dev"
+            buildConfigField "boolean", "testMode", "false"
             resValue "string", "infuraProjectId", "2a1306f1d12f4c109a4d4fb9be46b02e"
             resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "is_release", "false"
+        }
+
+        apptestnet {
+            initWith debug
+            applicationIdSuffix ".dev.testnet"
+            buildConfigField "boolean", "testMode", "true"
+            matchingFallbacks = ['debug']
+        }
+
+        appcenter {
+            initWith debug
+            applicationIdSuffix ".dev.appcenter"
+            signingConfig signingConfigs.appCenter
+            matchingFallbacks = ['debug']
         }
 
         release {
@@ -55,16 +80,7 @@ android {
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "is_release", "true"
         }
-    }
 
-    flavorDimensions "network"
-    productFlavors {
-        modeTestnet {
-            buildConfigField "boolean", "testMode", "true"
-        }
-        modeMainnet {
-            buildConfigField "boolean", "testMode", "false"
-        }
     }
 
     compileOptions {
