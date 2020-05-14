@@ -97,10 +97,6 @@ class BitcoinCashAdapter(
         // ignored for now
     }
 
-    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
-    }
-
     companion object {
 
         private fun getNetworkType(testMode: Boolean) =

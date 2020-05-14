@@ -17,8 +17,9 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
 
-    fun init() {
-        TransactionInfoModule.init(this, this)
+    fun init(transactionHash: String, wallet: Wallet) {
+        TransactionInfoModule.init(this, this, transactionHash, wallet)
+        delegate.viewDidLoad()
     }
 
     // IView
@@ -29,6 +30,10 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
 
     override fun share(value: String) {
         showShareLiveEvent.value = value
+    }
+
+    override fun showTransaction(item: TransactionViewItem) {
+        transactionLiveData.postValue(item)
     }
 
     // IRouter
@@ -43,10 +48,6 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
 
     override fun openDoubleSpendInfo(transactionHash: String, conflictingTxHash: String) {
         showDoubleSpendInfo.postValue(Pair(transactionHash, conflictingTxHash))
-    }
-
-    fun setViewItem(transactionViewItem: TransactionViewItem) {
-        transactionLiveData.postValue(transactionViewItem)
     }
 
     fun onClickTransactionId() {

@@ -68,6 +68,10 @@ class Erc20Adapter(
         }
     }
 
+    override fun getTransaction(transactionHash: String): TransactionRecord? {
+        TODO("not implemented")
+    }
+
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = erc20Kit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 

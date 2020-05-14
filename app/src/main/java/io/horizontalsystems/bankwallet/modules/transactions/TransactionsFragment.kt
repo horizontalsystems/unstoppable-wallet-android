@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -77,8 +78,8 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         })
 
         viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, Observer { transactionViewItem ->
-            transactionViewItem?.let {
-                (activity as? MainActivity)?.openTransactionInfo(it)
+            activity?.let {
+                TransactionInfoModule.start(it, transactionViewItem.transactionHash, transactionViewItem.wallet)
             }
         })
 

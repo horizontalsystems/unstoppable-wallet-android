@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -97,8 +96,8 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     TransactionInfo bottomsheet
      */
 
-    fun openTransactionInfo(txInfoItem: TransactionViewItem) {
-        transInfoViewModel?.setViewItem(txInfoItem)
+    fun openTransactionInfo(transactionHash: String, wallet: Wallet) {
+        transInfoViewModel?.init(transactionHash, wallet)
     }
 
     override fun openFullTransactionInfo(transactionHash: String, wallet: Wallet) {
@@ -199,7 +198,6 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
             transInfoViewModel = ViewModelProvider(this).get(TransactionInfoViewModel::class.java)
 
             transInfoViewModel?.let {
-                it.init()
                 transactionInfoView.bind(it, this, this)
             }
         }, 200)
