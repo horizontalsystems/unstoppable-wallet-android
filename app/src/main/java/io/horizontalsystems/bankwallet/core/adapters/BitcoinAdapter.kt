@@ -12,7 +12,6 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.horizontalsystems.core.helpers.DateHelper
-import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
@@ -96,10 +95,6 @@ class BitcoinAdapter(
 
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
-    }
-
-    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
     companion object {

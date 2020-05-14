@@ -85,6 +85,14 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
+    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+        return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
+    }
+
+    override fun getTransaction(transactionHash: String) : TransactionRecord? {
+        return kit.getTransaction(transactionHash)?.let { tx -> transactionRecord(tx) }
+    }
+
     fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->

@@ -1,6 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
+import androidx.fragment.app.FragmentActivity
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.main.MainActivity
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import java.util.*
 
@@ -8,9 +16,11 @@ object TransactionInfoModule {
     interface View {
         fun showCopied()
         fun share(value: String)
+        fun showTransaction(item: TransactionViewItem)
     }
 
     interface ViewDelegate {
+        fun viewDidLoad()
         fun onCopy(value: String)
         fun onShare(value: String)
         fun openFullInfo(transactionHash: String, wallet: Wallet)
@@ -20,6 +30,10 @@ object TransactionInfoModule {
 
     interface Interactor {
         fun onCopy(value: String)
+        fun getTransactionRecord(wallet: Wallet, transactionHash: String): TransactionRecord?
+        fun getLastBlockInfo(wallet: Wallet): LastBlockInfo?
+        fun getThreshold(wallet: Wallet): Int
+        fun getRate(code: String, timestamp: Long): CurrencyValue?
     }
 
     interface InteractorDelegate
@@ -30,13 +44,17 @@ object TransactionInfoModule {
         fun openDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
     }
 
-    fun init(view: TransactionInfoViewModel, router: Router) {
-        val interactor = TransactionInfoInteractor(TextHelper)
-        val presenter = TransactionInfoPresenter(interactor, router)
+    fun init(view: TransactionInfoViewModel, router: Router, transactionHash: String, wallet: Wallet) {
+        val interactor = TransactionInfoInteractor(TextHelper, App.adapterManager, App.xRateManager, App.currencyManager)
+        val presenter = TransactionInfoPresenter(interactor, router, transactionHash, wallet, TransactionViewItemFactory(App.feeCoinProvider))
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
+    }
+
+    fun start(activity: FragmentActivity, transactionHash: String, wallet: Wallet) {
+        (activity as? MainActivity)?.openTransactionInfo(transactionHash, wallet)
     }
 
 }
