@@ -1,8 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule.TitleViewItem
+import java.util.*
 
 class TransactionInfoPresenter(
         private val interactor: TransactionInfoModule.Interactor,
@@ -14,21 +19,37 @@ class TransactionInfoPresenter(
 
     var view: TransactionInfoModule.View? = null
 
-    private val transactionRecord: TransactionRecord
-
-    init {
-        transactionRecord = interactor.getTransactionRecord(wallet, transactionHash) ?: throw IllegalStateException("Transaction Not Found")
-    }
-
+    private lateinit var transactionRecord: TransactionRecord
 
     // IViewDelegate methods
 
     override fun viewDidLoad() {
+        transactionRecord = interactor.getTransactionRecord(wallet, transactionHash) ?: throw IllegalStateException("Transaction Not Found")
+
         val threshold = interactor.getThreshold(wallet)
         val lastBlockInfo = interactor.getLastBlockInfo(wallet)
         val rate = interactor.getRate(wallet.coin.code, transactionRecord.timestamp)
 
         val item = transactionViewItemFactory.item(wallet, transactionRecord, lastBlockInfo, threshold, rate)
+
+        val coin = wallet.coin
+
+        val primaryAmountInfo: SendModule.AmountInfo
+        val secondaryAmountInfo: SendModule.AmountInfo?
+
+        val coinValue = CoinValue(coin, transactionRecord.amount)
+        if (rate != null) {
+            primaryAmountInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(rate.currency, rate.value * transactionRecord.amount))
+            secondaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
+        } else {
+            primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
+            secondaryAmountInfo = null
+        }
+
+        val date = if (transactionRecord.timestamp == 0L) null else Date(transactionRecord.timestamp * 1000)
+
+        view?.showTitle(TitleViewItem(date, primaryAmountInfo, secondaryAmountInfo, transactionRecord.type,true))
+
         view?.showTransaction(item)
     }
 

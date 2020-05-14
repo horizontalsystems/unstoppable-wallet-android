@@ -3,11 +3,9 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import java.util.*
@@ -17,6 +15,7 @@ object TransactionInfoModule {
         fun showCopied()
         fun share(value: String)
         fun showTransaction(item: TransactionViewItem)
+        fun showTitle(titleViewItem: TitleViewItem)
     }
 
     interface ViewDelegate {
@@ -60,4 +59,5 @@ object TransactionInfoModule {
         (activity as? MainActivity)?.openTransactionInfo(transactionHash, wallet)
     }
 
+    data class TitleViewItem(val date: Date?, val primaryAmountInfo: SendModule.AmountInfo, val secondaryAmountInfo: SendModule.AmountInfo?, val type: TransactionType, val locked: Boolean?)
 }
