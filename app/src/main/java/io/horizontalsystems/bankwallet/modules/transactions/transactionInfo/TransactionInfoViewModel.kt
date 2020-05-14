@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import java.util.*
 
@@ -11,8 +10,8 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
 
     lateinit var delegate: TransactionInfoModule.ViewDelegate
 
-    val transactionLiveData = SingleLiveEvent<TransactionViewItem>()
     val titleLiveData = MutableLiveData<TransactionInfoModule.TitleViewItem>()
+    val detailsLiveData = MutableLiveData<List<TransactionDetailViewItem>>()
     val showFullInfoLiveEvent = SingleLiveEvent<Pair<String, Wallet>>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val showLockInfo = SingleLiveEvent<Date>()
@@ -34,12 +33,12 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         showShareLiveEvent.value = value
     }
 
-    override fun showTransaction(item: TransactionViewItem) {
-        transactionLiveData.postValue(item)
-    }
-
     override fun showTitle(titleViewItem: TransactionInfoModule.TitleViewItem) {
         titleLiveData.postValue(titleViewItem)
+    }
+
+    override fun showDetails(items: List<TransactionDetailViewItem>) {
+        detailsLiveData.postValue(items)
     }
 
     // IRouter
