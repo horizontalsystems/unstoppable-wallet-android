@@ -10,10 +10,18 @@ class AddressFormatSettingsView : AddressFormatSettingsModule.IView {
     val showDerivationChangeAlert = SingleLiveEvent<Pair<DerivationSetting, String>>()
     val btcBipTitle = MutableLiveData<String>()
     val ltcBipTitle = MutableLiveData<String>()
-    val btcBipEnabled = MutableLiveData<Boolean>()
-    val ltcBipEnabled = MutableLiveData<Boolean>()
+    val btcBipVisibility = MutableLiveData<Boolean>()
+    val ltcBipVisibility = MutableLiveData<Boolean>()
     val btcBipDerivation = MutableLiveData<AccountType.Derivation>()
     val ltcBipDerivation = MutableLiveData<AccountType.Derivation>()
+
+    override fun setBtcBipVisibility(isVisible: Boolean) {
+        btcBipVisibility.postValue(isVisible)
+    }
+
+    override fun setLtcBipVisibility(isVisible: Boolean) {
+        ltcBipVisibility.postValue(isVisible)
+    }
 
     override fun setBtcTitle(title: String) {
         btcBipTitle.postValue(title)
@@ -23,16 +31,8 @@ class AddressFormatSettingsView : AddressFormatSettingsModule.IView {
         ltcBipTitle.postValue(title)
     }
 
-    override fun setBtcBipsEnabled(enabled: Boolean) {
-        btcBipEnabled.postValue(enabled)
-    }
-
     override fun setBtcBipSelection(selectedBip: AccountType.Derivation) {
         btcBipDerivation.postValue(selectedBip)
-    }
-
-    override fun setLtcBipsEnabled(enabled: Boolean) {
-        ltcBipEnabled.postValue(enabled)
     }
 
     override fun setLtcBipSelection(selectedBip: AccountType.Derivation) {

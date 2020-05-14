@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
+import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.activity_address_format_settings.*
 
 class AddressFormatSettingsActivity : BaseActivity() {
@@ -69,20 +70,22 @@ class AddressFormatSettingsActivity : BaseActivity() {
         view.ltcBipTitle.observe(this, Observer { title ->
             ltcHeader.text = title
         })
-        view.btcBipEnabled.observe(this, Observer { enabled ->
-            btcBip44.setEnabledState(enabled)
-            btcBip49.setEnabledState(enabled)
-            btcBip84.setEnabledState(enabled)
+        view.btcBipVisibility.observe(this, Observer { isVisible ->
+            btcHeader.showIf(isVisible)
+            btcBip44.showIf(isVisible)
+            btcBip49.showIf(isVisible)
+            btcBip84.showIf(isVisible)
         })
         view.btcBipDerivation.observe(this, Observer { derivation ->
             btcBip44.setChecked(derivation == Derivation.bip44)
             btcBip49.setChecked(derivation == Derivation.bip49)
             btcBip84.setChecked(derivation == Derivation.bip84)
         })
-        view.ltcBipEnabled.observe(this, Observer { enabled ->
-            ltcBip44.setEnabledState(enabled)
-            ltcBip49.setEnabledState(enabled)
-            ltcBip84.setEnabledState(enabled)
+        view.ltcBipVisibility.observe(this, Observer { isVisible ->
+            ltcHeader.showIf(isVisible)
+            ltcBip44.showIf(isVisible)
+            ltcBip49.showIf(isVisible)
+            ltcBip84.showIf(isVisible)
         })
         view.ltcBipDerivation.observe(this, Observer { derivation ->
             ltcBip44.setChecked(derivation == Derivation.bip44)

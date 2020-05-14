@@ -50,25 +50,31 @@ class AddressFormatSettingsPresenter(
     }
 
     private fun setBtcBip() {
-        val title = interactor.getCoin(CoinType.Bitcoin).title
-        view.setBtcTitle(title)
+        if(coinTypes.contains(CoinType.Bitcoin)){
+            val title = interactor.getCoin(CoinType.Bitcoin).title
+            view.setBtcTitle(title)
 
-        val selectedBip = interactor.derivation(CoinType.Bitcoin)
-        view.setBtcBipSelection(selectedBip)
+            val selectedBip = interactor.derivation(CoinType.Bitcoin)
+            view.setBtcBipSelection(selectedBip)
 
-        derivations.add(DerivationSetting(CoinType.Bitcoin, selectedBip))
-        view.setBtcBipsEnabled(coinTypes.contains(CoinType.Bitcoin))
+            derivations.add(DerivationSetting(CoinType.Bitcoin, selectedBip))
+        }
+
+        view.setBtcBipVisibility(coinTypes.contains(CoinType.Bitcoin))
     }
 
     private fun setLtcBip() {
-        val title = interactor.getCoin(CoinType.Litecoin).title
-        view.setLtcTitle(title)
+        if(coinTypes.contains(CoinType.Litecoin)){
+            val title = interactor.getCoin(CoinType.Litecoin).title
+            view.setLtcTitle(title)
 
-        val selectedBip = interactor.derivation(CoinType.Litecoin)
-        view.setLtcBipSelection(selectedBip)
+            val selectedBip = interactor.derivation(CoinType.Litecoin)
+            view.setLtcBipSelection(selectedBip)
 
-        derivations.add(DerivationSetting(CoinType.Litecoin, selectedBip))
-        view.setLtcBipsEnabled(coinTypes.contains(CoinType.Litecoin))
+            derivations.add(DerivationSetting(CoinType.Litecoin, selectedBip))
+        }
+
+        view.setLtcBipVisibility(coinTypes.contains(CoinType.Litecoin))
     }
 
 }

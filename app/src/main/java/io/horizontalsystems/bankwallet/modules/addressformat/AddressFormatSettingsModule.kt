@@ -16,13 +16,13 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 object AddressFormatSettingsModule {
 
     interface IView {
-        fun setBtcBipsEnabled(enabled: Boolean)
-        fun setLtcBipsEnabled(enabled: Boolean)
         fun setBtcBipSelection(selectedBip: Derivation)
         fun setLtcBipSelection(selectedBip: Derivation)
         fun setBtcTitle(title: String)
         fun setLtcTitle(title: String)
         fun showDerivationChangeAlert(derivationSetting: DerivationSetting, coinTitle: String)
+        fun setLtcBipVisibility(isVisible: Boolean)
+        fun setBtcBipVisibility(isVisible: Boolean)
     }
 
     interface IViewDelegate {
