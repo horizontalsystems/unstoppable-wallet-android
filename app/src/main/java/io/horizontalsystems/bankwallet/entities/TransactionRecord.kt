@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
 import java.math.BigDecimal
 
 data class TransactionRecord(
@@ -17,7 +19,8 @@ data class TransactionRecord(
         val type: TransactionType,
         val lockInfo: TransactionLockInfo? = null,
         val failed: Boolean = false,
-        val conflictingTxHash: String? = null)
+        val conflictingTxHash: String? = null,
+        val showRawTransaction: Boolean = false)
     : Comparable<TransactionRecord> {
 
     override fun compareTo(other: TransactionRecord): Int {
@@ -37,6 +40,34 @@ data class TransactionRecord(
 
     override fun hashCode(): Int {
         return uid.hashCode()
+    }
+
+    fun status(lastBlockHeight: Int?, threshold: Int): TransactionStatus {
+        var status: TransactionStatus = TransactionStatus.Pending
+
+        if (failed) {
+            status = TransactionStatus.Failed
+        } else if (blockHeight != null && lastBlockHeight != null) {
+            val confirmations = lastBlockHeight - blockHeight.toInt() + 1
+            if (confirmations >= 0) {
+                status = when {
+                    confirmations >= threshold -> TransactionStatus.Completed
+                    else -> TransactionStatus.Processing(confirmations.toDouble() / threshold.toDouble())
+                }
+            }
+        }
+
+        return status
+    }
+
+    fun lockState(lastBlockTimestamp: Long?): TransactionLockState? {
+        if (lockInfo == null) return null
+
+        val locked = lastBlockTimestamp?.let {
+            lastBlockTimestamp < (lockInfo.lockedUntil.time / 1000)
+        } ?: true
+
+        return TransactionLockState(locked, lockInfo.lockedUntil)
     }
 }
 

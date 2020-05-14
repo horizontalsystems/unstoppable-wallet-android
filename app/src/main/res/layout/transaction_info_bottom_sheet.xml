@@ -69,6 +69,25 @@
         app:layout_constraintTop_toBottomOf="@+id/fiatValueWrapper"
         tools:text="US Dollar" />
 
+    <View
+        android:id="@+id/border2"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/steel_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coinValue" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/border2" />
+
     <TextView
         android:id="@+id/txtFullInfo"
         style="@style/Headline2"
@@ -83,124 +102,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemDoubleSpend" />
-
-    <View
-        android:id="@+id/border2"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinValue" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemRate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border2" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemFee"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemRate" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemFee" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemFrom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemStatus" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemTo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemFrom" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemRecipientHash"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemTo" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:paddingEnd="-8dp"
-        app:bottomBorder="false"
-        app:layout_constraintEnd_toStartOf="@+id/btnShare"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemRecipientHash" />
-
-    <ImageButton
-        android:id="@+id/btnShare"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="-8dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/share_icon"
-        android:tint="?ColorLeah"
-        app:layout_constraintBottom_toBottomOf="@+id/itemId"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/itemId"
-        app:layout_constraintTop_toTopOf="@id/itemId" />
-
-    <View
-        android:id="@+id/ItemIdBorder"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintTop_toBottomOf="@+id/itemId"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemLockTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ItemIdBorder" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemSentToSelf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemLockTime" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemDoubleSpend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemSentToSelf" />
+        app:layout_constraintTop_toBottomOf="@+id/rvDetails" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

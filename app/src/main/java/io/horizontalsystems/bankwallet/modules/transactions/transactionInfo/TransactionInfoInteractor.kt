@@ -3,17 +3,16 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.ICurrencyManager
 
 class TransactionInfoInteractor(
         private var clipboardManager: IClipboardManager,
         private val adapterManager: IAdapterManager,
         private val xRateManager: IRateManager,
-        private val currencyManager: ICurrencyManager
+        private val currencyManager: ICurrencyManager,
+        private val feeCoinProvider: FeeCoinProvider
 ) : TransactionInfoModule.Interactor {
     var delegate: TransactionInfoModule.InteractorDelegate? = null
 
@@ -41,5 +40,9 @@ class TransactionInfoInteractor(
         } catch (e: Exception) {
             null
         }
+    }
+
+    override fun feeCoin(coin: Coin): Coin? {
+        return feeCoinProvider.feeCoinData(coin)?.first
     }
 }

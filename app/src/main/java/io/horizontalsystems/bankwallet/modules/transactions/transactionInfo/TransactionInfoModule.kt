@@ -14,8 +14,8 @@ object TransactionInfoModule {
     interface View {
         fun showCopied()
         fun share(value: String)
-        fun showTransaction(item: TransactionViewItem)
         fun showTitle(titleViewItem: TitleViewItem)
+        fun showDetails(items: List<TransactionDetailViewItem>)
     }
 
     interface ViewDelegate {
@@ -36,6 +36,7 @@ object TransactionInfoModule {
         fun getLastBlockInfo(wallet: Wallet): LastBlockInfo?
         fun getThreshold(wallet: Wallet): Int
         fun getRate(code: String, timestamp: Long): CurrencyValue?
+        fun feeCoin(coin: Coin): Coin?
     }
 
     interface InteractorDelegate
@@ -47,7 +48,7 @@ object TransactionInfoModule {
     }
 
     fun init(view: TransactionInfoViewModel, router: Router, transactionHash: String, wallet: Wallet) {
-        val interactor = TransactionInfoInteractor(TextHelper, App.adapterManager, App.xRateManager, App.currencyManager)
+        val interactor = TransactionInfoInteractor(TextHelper, App.adapterManager, App.xRateManager, App.currencyManager, App.feeCoinProvider)
         val presenter = TransactionInfoPresenter(interactor, router, transactionHash, wallet, TransactionViewItemFactory(App.feeCoinProvider))
 
         view.delegate = presenter

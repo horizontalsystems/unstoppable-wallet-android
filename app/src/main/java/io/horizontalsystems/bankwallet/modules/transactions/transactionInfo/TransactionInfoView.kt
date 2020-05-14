@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -54,9 +53,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         txtFullInfo.setOnSingleClickListener {
             viewModel.delegate.openFullInfo()
         }
-        btnShare.setOnSingleClickListener {
-            viewModel.delegate.onShare()
-        }
+
+        val transactionDetailsAdapter = TransactionDetailsAdapter(viewModel)
+        rvDetails.adapter = transactionDetailsAdapter
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
             HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied)
@@ -123,95 +122,8 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             }
         })
 
-
-        viewModel.transactionLiveData.observe(lifecycleOwner, Observer { txRec ->
-            val incoming = txRec.type == TransactionType.Incoming
-            val sentToSelf = txRec.type == TransactionType.SentToSelf
-
-            itemId.apply {
-                bindHashId(context.getString(R.string.TransactionInfo_Id), txRec.transactionHash)
-                setOnClickListener {
-                    viewModel.delegate.onClickTransactionId()
-                }
-            }
-
-            if (txRec.lockInfo != null) {
-                itemLockTime.visibility = View.VISIBLE
-                itemLockTime.bindInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(txRec.lockInfo.lockedUntil)}", R.drawable.ic_lock)
-                itemLockTime.setOnClickListener {
-                    viewModel.delegate.onClickLockInfo()
-                }
-
-            } else {
-                itemLockTime.visibility = View.GONE
-            }
-
-            if (txRec.conflictingTxHash != null) {
-                itemDoubleSpend.visibility = View.VISIBLE
-                itemDoubleSpend.bindInfo(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_doublespend)
-                itemDoubleSpend.setOnClickListener {
-                    viewModel.delegate.onClickDoubleSpendInfo()
-                }
-            } else {
-                itemDoubleSpend.visibility = View.GONE
-            }
-
-            val rate = txRec.rate
-            if (rate == null) {
-                itemRate.visibility = View.GONE
-            } else {
-                itemRate.visibility = View.VISIBLE
-                val rateValue = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.formatForRates(rate), txRec.wallet.coin.code)
-                itemRate.bind(context.getString(R.string.TransactionInfo_HistoricalRate), rateValue)
-            }
-
-            itemFee.visibility = View.GONE
-            txRec.feeCoinValue?.let {feeCoinValue ->
-                getFeeText(feeCoinValue, txRec)?.let{ fee->
-                    itemFee.bind(title = context.getString(R.string.TransactionInfo_Fee), value = fee)
-                    itemFee.visibility = View.VISIBLE
-                }
-            }
-
-            itemStatus.bindStatus(txRec.status, incoming)
-
-            if (txRec.from.isNullOrEmpty() || !txRec.showFromAddress) {
-                itemFrom.visibility = View.GONE
-            } else {
-                itemFrom.visibility = View.VISIBLE
-                itemFrom.setOnClickListener {
-                    viewModel.delegate.onClickFrom()
-                }
-                itemFrom.bindAddress(context.getString(R.string.TransactionInfo_From), txRec.from)
-            }
-
-            if (txRec.to.isNullOrEmpty()) {
-                itemTo.visibility = View.GONE
-            } else {
-                itemTo.visibility = View.VISIBLE
-                itemTo.setOnClickListener {
-                    viewModel.delegate.onClickTo()
-                }
-                itemTo.bindAddress(context.getString(R.string.TransactionInfo_To), txRec.to)
-            }
-
-            if (incoming || txRec.lockInfo == null) {
-                itemRecipientHash.visibility = View.GONE
-            } else {
-                itemRecipientHash.visibility = View.VISIBLE
-                itemRecipientHash.setOnClickListener {
-                    viewModel.delegate.onClickRecipientHash()
-                }
-                itemRecipientHash.bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), txRec.lockInfo.originalAddress)
-            }
-
-            if (sentToSelf) {
-                itemSentToSelf.bindSentToSelfNote()
-                itemSentToSelf.visibility = View.VISIBLE
-            } else {
-                itemSentToSelf.visibility = View.GONE
-            }
-
+        viewModel.detailsLiveData.observe(lifecycleOwner, Observer {
+            transactionDetailsAdapter.setItems(it)
             listener?.openTransactionInfo()
         })
     }
