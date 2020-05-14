@@ -50,8 +50,12 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
     private fun setTransactionInfoDialog() {
         setOnCloseCallback { listener?.closeTransactionInfo() }
 
-        txtFullInfo.setOnSingleClickListener { viewModel.onClickOpenFullInfo() }
-        btnShare.setOnSingleClickListener{ viewModel.onClickShareId() }
+        txtFullInfo.setOnSingleClickListener {
+            viewModel.delegate.openFullInfo()
+        }
+        btnShare.setOnSingleClickListener {
+            viewModel.delegate.onShare()
+        }
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
             HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied)
@@ -99,7 +103,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
                 itemId.apply {
                     bindHashId(context.getString(R.string.TransactionInfo_Id), txRec.transactionHash)
-                    setOnClickListener { viewModel.onClickTransactionId() }
+                    setOnClickListener {
+                        viewModel.delegate.onClickTransactionId()
+                    }
                 }
 
                 val currencyValue = txRec.currencyValue
@@ -128,7 +134,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 if (txRec.lockInfo != null) {
                     itemLockTime.visibility = View.VISIBLE
                     itemLockTime.bindInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(txRec.lockInfo.lockedUntil)}", R.drawable.ic_lock)
-                    itemLockTime.setOnClickListener { viewModel.onClickLockInfo() }
+                    itemLockTime.setOnClickListener {
+                        viewModel.delegate.onClickLockInfo()
+                    }
 
                 } else {
                     itemLockTime.visibility = View.GONE
@@ -137,7 +145,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                 if (txRec.conflictingTxHash != null) {
                     itemDoubleSpend.visibility = View.VISIBLE
                     itemDoubleSpend.bindInfo(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_doublespend)
-                    itemDoubleSpend.setOnClickListener { viewModel.onClickDoubleSpendInfo() }
+                    itemDoubleSpend.setOnClickListener {
+                        viewModel.delegate.onClickDoubleSpendInfo()
+                    }
                 } else {
                     itemDoubleSpend.visibility = View.GONE
                 }
@@ -165,7 +175,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemFrom.visibility = View.GONE
                 } else {
                     itemFrom.visibility = View.VISIBLE
-                    itemFrom.setOnClickListener { viewModel.onClickFrom() }
+                    itemFrom.setOnClickListener {
+                        viewModel.delegate.onClickFrom()
+                    }
                     itemFrom.bindAddress(context.getString(R.string.TransactionInfo_From), txRec.from)
                 }
 
@@ -173,7 +185,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemTo.visibility = View.GONE
                 } else {
                     itemTo.visibility = View.VISIBLE
-                    itemTo.setOnClickListener { viewModel.onClickTo() }
+                    itemTo.setOnClickListener {
+                        viewModel.delegate.onClickTo()
+                    }
                     itemTo.bindAddress(context.getString(R.string.TransactionInfo_To), txRec.to)
                 }
 
@@ -181,7 +195,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
                     itemRecipientHash.visibility = View.GONE
                 } else {
                     itemRecipientHash.visibility = View.VISIBLE
-                    itemRecipientHash.setOnClickListener { viewModel.onClickRecipientHash() }
+                    itemRecipientHash.setOnClickListener {
+                        viewModel.delegate.onClickRecipientHash()
+                    }
                     itemRecipientHash.bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), txRec.lockInfo.originalAddress)
                 }
 

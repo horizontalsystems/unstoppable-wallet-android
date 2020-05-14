@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
-import java.util.*
 
 class TransactionInfoPresenter(
         private val interactor: TransactionInfoModule.Interactor,
@@ -14,10 +14,16 @@ class TransactionInfoPresenter(
 
     var view: TransactionInfoModule.View? = null
 
+    private val transactionRecord: TransactionRecord
+
+    init {
+        transactionRecord = interactor.getTransactionRecord(wallet, transactionHash) ?: throw IllegalStateException("Transaction Not Found")
+    }
+
+
     // IViewDelegate methods
 
     override fun viewDidLoad() {
-        val transactionRecord = interactor.getTransactionRecord(wallet, transactionHash) ?: return
         val threshold = interactor.getThreshold(wallet)
         val lastBlockInfo = interactor.getLastBlockInfo(wallet)
         val rate = interactor.getRate(wallet.coin.code, transactionRecord.timestamp)
@@ -26,25 +32,46 @@ class TransactionInfoPresenter(
         view?.showTransaction(item)
     }
 
-    override fun onCopy(value: String) {
-        interactor.onCopy(value)
-        view?.showCopied()
+    override fun onShare() {
+        view?.share(transactionRecord.transactionHash)
     }
 
-    override fun onShare(value: String) {
-        view?.share(value)
+    override fun openFullInfo() {
+        router.openFullInfo(transactionRecord.transactionHash, wallet)
     }
 
-    override fun openFullInfo(transactionHash: String, wallet: Wallet) {
-        router.openFullInfo(transactionHash, wallet)
+    override fun onClickLockInfo() {
+        transactionRecord.lockInfo?.lockedUntil?.let {
+            router.openLockInfo(it)
+        }
     }
 
-    override fun onClickLockInfo(lockDate: Date) {
-        router.openLockInfo(lockDate)
+    override fun onClickDoubleSpendInfo() {
+        transactionRecord.conflictingTxHash?.let { conflictingTxHash ->
+            router.openDoubleSpendInfo(transactionRecord.transactionHash, conflictingTxHash)
+        }
     }
 
-    override fun onClickDoubleSpendInfo(transactionHash: String, conflictingTxHash: String) {
-        router.openDoubleSpendInfo(transactionHash, conflictingTxHash)
+    override fun onClickRecipientHash() {
+        onCopy(transactionRecord.lockInfo?.originalAddress)
     }
 
+    override fun onClickTo() {
+        onCopy(transactionRecord.to)
+    }
+
+    override fun onClickFrom() {
+        onCopy(transactionRecord.from)
+    }
+
+    override fun onClickTransactionId() {
+        onCopy(transactionRecord.transactionHash)
+    }
+
+    private fun onCopy(value: String?) {
+        value?.let {
+            interactor.onCopy(value)
+            view?.showCopied()
+        }
+    }
 }
