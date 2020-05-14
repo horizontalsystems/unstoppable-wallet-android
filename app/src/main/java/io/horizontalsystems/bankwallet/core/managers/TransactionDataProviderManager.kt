@@ -15,53 +15,67 @@ import io.reactivex.subjects.PublishSubject
 class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val localStorage: ILocalStorage)
     : ITransactionDataProviderManager {
 
-    private val bitcoinProviders = when {
-        appConfig.testMode -> listOf(HorsysBitcoinProvider(testMode = true))
-        else -> listOf(
-                HorsysBitcoinProvider(testMode = false),
-                BlockChairBitcoinProvider(),
-                BtcComBitcoinProvider())
+    private val bitcoinProviders: List<BitcoinForksProvider> by lazy {
+        when {
+            appConfig.testMode -> listOf(HorsysBitcoinProvider(testMode = true))
+            else -> listOf(
+                    HorsysBitcoinProvider(testMode = false),
+                    BlockChairBitcoinProvider(),
+                    BtcComBitcoinProvider())
+        }
     }
 
-    private val litecoinProviders = when {
-        appConfig.testMode -> listOf()
-        else -> listOf(
-                HorsysLitecoinProvider(testMode = false),
-                BlockChairLitecoinProvider()
-        )
+    private val litecoinProviders: List<BitcoinForksProvider> by lazy {
+        when {
+            appConfig.testMode -> listOf()
+            else -> listOf(
+                    HorsysLitecoinProvider(testMode = false),
+                    BlockChairLitecoinProvider()
+            )
+        }
     }
 
-    private val bitcoinCashProviders = when {
-        appConfig.testMode -> listOf(CashexplorerBitcoinCashProvider())
-        else -> listOf(
-                CashexplorerBitcoinCashProvider(),
-                BlockChairBitcoinCashProvider(),
-                BtcComBitcoinCashProvider())
+    private val bitcoinCashProviders: List<BitcoinForksProvider> by lazy {
+        when {
+            appConfig.testMode -> listOf(CashexplorerBitcoinCashProvider())
+            else -> listOf(
+                    CashexplorerBitcoinCashProvider(),
+                    BlockChairBitcoinCashProvider(),
+                    BtcComBitcoinCashProvider())
+        }
     }
 
-    private val ethereumProviders = when {
-        appConfig.testMode -> listOf(
-                EtherscanEthereumProvider(testMode = true))
-        else -> listOf(
-                EtherscanEthereumProvider(testMode = false),
-                BlockChairEthereumProvider())
+    private val ethereumProviders: List<EthereumForksProvider> by lazy {
+        when {
+            appConfig.testMode -> listOf(
+                    EtherscanEthereumProvider(testMode = true))
+            else -> listOf(
+                    EtherscanEthereumProvider(testMode = false),
+                    BlockChairEthereumProvider())
+        }
     }
 
-    private val dashProviders = when {
-        appConfig.testMode -> listOf(HorsysDashProvider(true))
-        else -> listOf(
-                HorsysDashProvider(false),
-                BlockChairDashProvider(),
-                InsightDashProvider()
-        )
+    private val dashProviders: List<BitcoinForksProvider> by lazy {
+        when {
+            appConfig.testMode -> listOf(HorsysDashProvider(true))
+            else -> listOf(
+                    HorsysDashProvider(false),
+                    BlockChairDashProvider(),
+                    InsightDashProvider()
+            )
+        }
     }
 
-    private val binanceProviders = when {
-        appConfig.testMode -> listOf(BinanceChainProvider(true))
-        else -> listOf(BinanceChainProvider(false))
+    private val binanceProviders: List<FullTransactionInfoModule.BinanceProvider> by lazy {
+        when {
+            appConfig.testMode -> listOf(BinanceChainProvider(true))
+            else -> listOf(BinanceChainProvider(false))
+        }
     }
 
-    private val eosProviders = listOf(EosGreymassProvider())
+    private val eosProviders: List<FullTransactionInfoModule.EosProvider> by lazy {
+        listOf(EosGreymassProvider())
+    }
 
     override val baseProviderUpdatedSignal = PublishSubject.create<Unit>()
 

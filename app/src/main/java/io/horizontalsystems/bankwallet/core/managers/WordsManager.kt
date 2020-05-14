@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.reactivex.subjects.PublishSubject
 
-class WordsManager(private val localStorage: ILocalStorage) : IWordsManager {
+class WordsManager : IWordsManager {
 
     @Throws(Mnemonic.MnemonicException::class)
     override fun validate(words: List<String>) {

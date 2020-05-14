@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -16,7 +16,8 @@ import io.horizontalsystems.core.IThemeStorage
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
 
-class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
+class LocalStorageManager(private val preferences: SharedPreferences) 
+    : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -46,7 +47,7 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
     val gson by lazy { Gson() }
 
     override var sendInputType: SendModule.InputType?
-        get() = App.preferences.getString(SEND_INPUT_TYPE, null)?.let {
+        get() = preferences.getString(SEND_INPUT_TYPE, null)?.let {
             try {
                 SendModule.InputType.valueOf(it)
             } catch (e: IllegalArgumentException) {
@@ -54,7 +55,7 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
             }
         }
         set(value) {
-            val editor = App.preferences.edit()
+            val editor = preferences.edit()
             when (value) {
                 null -> editor.remove(SEND_INPUT_TYPE).apply()
                 else -> editor.putString(SEND_INPUT_TYPE, value.name).apply()
@@ -62,103 +63,103 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         }
 
     override var baseCurrencyCode: String?
-        get() = App.preferences.getString(BASE_CURRENCY_CODE, null)
+        get() = preferences.getString(BASE_CURRENCY_CODE, null)
         set(value) {
-            App.preferences.edit().putString(BASE_CURRENCY_CODE, value).apply()
+            preferences.edit().putString(BASE_CURRENCY_CODE, value).apply()
         }
 
     override var baseBitcoinProvider: String?
-        get() = App.preferences.getString(BASE_BITCOIN_PROVIDER, null)
+        get() = preferences.getString(BASE_BITCOIN_PROVIDER, null)
         set(value) {
-            App.preferences.edit().putString(BASE_BITCOIN_PROVIDER, value).apply()
+            preferences.edit().putString(BASE_BITCOIN_PROVIDER, value).apply()
         }
 
     override var baseLitecoinProvider: String?
-        get() = App.preferences.getString(BASE_LITECOIN_PROVIDER, null)
+        get() = preferences.getString(BASE_LITECOIN_PROVIDER, null)
         set(value) {
-            App.preferences.edit().putString(BASE_LITECOIN_PROVIDER, value).apply()
+            preferences.edit().putString(BASE_LITECOIN_PROVIDER, value).apply()
         }
 
     override var baseEthereumProvider: String?
-        get() = App.preferences.getString(BASE_ETHEREUM_PROVIDER, null)
+        get() = preferences.getString(BASE_ETHEREUM_PROVIDER, null)
         set(value) {
-            App.preferences.edit().putString(BASE_ETHEREUM_PROVIDER, value).apply()
+            preferences.edit().putString(BASE_ETHEREUM_PROVIDER, value).apply()
         }
 
     override var baseDashProvider: String?
-        get() = App.preferences.getString(BASE_DASH_PROVIDER, null)
+        get() = preferences.getString(BASE_DASH_PROVIDER, null)
         set(value) {
-            App.preferences.edit().putString(BASE_DASH_PROVIDER, value).apply()
+            preferences.edit().putString(BASE_DASH_PROVIDER, value).apply()
         }
 
     override var baseBinanceProvider: String?
-        get() = App.preferences.getString(BASE_BINANCE_PROVIDER, null)
+        get() = preferences.getString(BASE_BINANCE_PROVIDER, null)
         set(value) {
-            App.preferences.edit().putString(BASE_BINANCE_PROVIDER, value).apply()
+            preferences.edit().putString(BASE_BINANCE_PROVIDER, value).apply()
         }
 
     override var baseEosProvider: String?
-        get() = App.preferences.getString(BASE_EOS_PROVIDER, null)
+        get() = preferences.getString(BASE_EOS_PROVIDER, null)
         set(value) {
-            App.preferences.edit().putString(BASE_EOS_PROVIDER, value).apply()
+            preferences.edit().putString(BASE_EOS_PROVIDER, value).apply()
         }
 
     override var sortType: BalanceSortType
         get() {
-            val sortString = App.preferences.getString(SORT_TYPE, null)
+            val sortString = preferences.getString(SORT_TYPE, null)
                     ?: BalanceSortType.Name.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {
-            App.preferences.edit().putString(SORT_TYPE, sortType.getAsString()).apply()
+            preferences.edit().putString(SORT_TYPE, sortType.getAsString()).apply()
         }
 
     override var appVersions: List<AppVersion>
         get() {
-            val versionsString = App.preferences.getString(APP_VERSIONS, null) ?: return listOf()
+            val versionsString = preferences.getString(APP_VERSIONS, null) ?: return listOf()
             val type = object : TypeToken<ArrayList<AppVersion>>() {}.type
             return gson.fromJson(versionsString, type)
         }
         set(value) {
             val versionsString = gson.toJson(value)
-            App.preferences.edit().putString(APP_VERSIONS, versionsString).apply()
+            preferences.edit().putString(APP_VERSIONS, versionsString).apply()
         }
 
     override var isAlertNotificationOn: Boolean
-        get() = App.preferences.getBoolean(ALERT_NOTIFICATION_ENABLED, true)
+        get() = preferences.getBoolean(ALERT_NOTIFICATION_ENABLED, true)
         set(enabled) {
-            App.preferences.edit().putBoolean(ALERT_NOTIFICATION_ENABLED, enabled).apply()
+            preferences.edit().putBoolean(ALERT_NOTIFICATION_ENABLED, enabled).apply()
         }
 
     override var isLockTimeEnabled: Boolean
-        get() = App.preferences.getBoolean(LOCK_TIME_ENABLED, false)
+        get() = preferences.getBoolean(LOCK_TIME_ENABLED, false)
         set(enabled) {
-            App.preferences.edit().putBoolean(LOCK_TIME_ENABLED, enabled).apply()
+            preferences.edit().putBoolean(LOCK_TIME_ENABLED, enabled).apply()
         }
 
     override var encryptedSampleText: String?
-        get() = App.preferences.getString(ENCRYPTION_CHECKER_TEXT, null)
+        get() = preferences.getString(ENCRYPTION_CHECKER_TEXT, null)
         set(encryptedText) {
-            App.preferences.edit().putString(ENCRYPTION_CHECKER_TEXT, encryptedText).apply()
+            preferences.edit().putString(ENCRYPTION_CHECKER_TEXT, encryptedText).apply()
         }
 
     override fun clear() {
-        App.preferences.edit().clear().apply()
+        preferences.edit().clear().apply()
     }
 
     //  IThemeStorage
 
     override var isLightModeOn: Boolean
-        get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
+        get() = preferences.getBoolean(LIGHT_MODE_ENABLED, false)
         set(enabled) {
-            App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
+            preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
         }
 
     //  IPinStorage
 
     override var failedAttempts: Int?
         get() {
-            val attempts = App.preferences.getInt(FAILED_ATTEMPTS, 0)
+            val attempts = preferences.getInt(FAILED_ATTEMPTS, 0)
             return when (attempts) {
                 0 -> null
                 else -> attempts
@@ -166,13 +167,13 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         }
         set(value) {
             value?.let {
-                App.preferences.edit().putInt(FAILED_ATTEMPTS, it).apply()
-            } ?: App.preferences.edit().remove(FAILED_ATTEMPTS).apply()
+                preferences.edit().putInt(FAILED_ATTEMPTS, it).apply()
+            } ?: preferences.edit().remove(FAILED_ATTEMPTS).apply()
         }
 
     override var lockoutUptime: Long?
         get() {
-            val timestamp = App.preferences.getLong(LOCKOUT_TIMESTAMP, 0L)
+            val timestamp = preferences.getLong(LOCKOUT_TIMESTAMP, 0L)
             return when (timestamp) {
                 0L -> null
                 else -> timestamp
@@ -180,13 +181,13 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
         }
         set(value) {
             value?.let {
-                App.preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
-            } ?: App.preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
+                preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
+            } ?: preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
         }
 
     //used only in db migration
     override var syncMode: SyncMode?
-        get() = App.preferences.getString(SYNC_MODE, null)?.let {
+        get() = preferences.getString(SYNC_MODE, null)?.let {
             try {
                 SyncMode.valueOf(it)
             } catch (e: IllegalArgumentException) {
@@ -194,61 +195,61 @@ class LocalStorageManager : ILocalStorage, IThemeStorage, IPinStorage, IChartTyp
             }
         }
         set(syncMode) {
-            App.preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
+            preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
         }
 
     //used only in db migration
     override var bitcoinDerivation: AccountType.Derivation?
         get() {
-            val derivationString = App.preferences.getString(BITCOIN_DERIVATION, null)
+            val derivationString = preferences.getString(BITCOIN_DERIVATION, null)
             return derivationString?.let { AccountType.Derivation.valueOf(it) }
         }
         set(derivation) {
-            App.preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()
+            preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()
         }
 
     //  IChartTypeStorage
 
     override var chartType: ChartType?
         get() {
-            return ChartType.fromString(App.preferences.getString(CHART_TYPE, null))
+            return ChartType.fromString(preferences.getString(CHART_TYPE, null))
         }
         set(mode) {
-            App.preferences.edit().putString(CHART_TYPE, mode?.name).apply()
+            preferences.edit().putString(CHART_TYPE, mode?.name).apply()
         }
 
     override var torEnabled: Boolean
-        get() = App.preferences.getBoolean(TOR_ENABLED, false)
+        get() = preferences.getBoolean(TOR_ENABLED, false)
         @SuppressLint("ApplySharedPref")
         set(enabled) {
             //keep using commit() for synchronous storing
-            App.preferences.edit().putBoolean(TOR_ENABLED, enabled).commit()
+            preferences.edit().putBoolean(TOR_ENABLED, enabled).commit()
         }
 
     override var appLaunchCount: Int
-        get() = App.preferences.getInt(APP_LAUNCH_COUNT, 0 )
+        get() = preferences.getInt(APP_LAUNCH_COUNT, 0 )
         set(value) {
-            App.preferences.edit().putInt(APP_LAUNCH_COUNT, value).apply()
+            preferences.edit().putInt(APP_LAUNCH_COUNT, value).apply()
         }
 
     override var rateAppLastRequestTime: Long
-        get() = App.preferences.getLong(RATE_APP_LAST_REQ_TIME, 0)
+        get() = preferences.getLong(RATE_APP_LAST_REQ_TIME, 0)
         set(value) {
-            App.preferences.edit().putLong(RATE_APP_LAST_REQ_TIME, value).apply()
+            preferences.edit().putLong(RATE_APP_LAST_REQ_TIME, value).apply()
         }
 
     override var transactionSortingType: TransactionDataSortingType
         get() {
-            val txSortingTypeString = App.preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
+            val txSortingTypeString = preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
             return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) } ?: TransactionDataSortingType.Shuffle
         }
         set(sortingType) {
-            App.preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
+            preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
         }
 
     override var balanceHidden: Boolean
-        get() = App.preferences.getBoolean(BALANCE_HIDDEN, false)
+        get() = preferences.getBoolean(BALANCE_HIDDEN, false)
         set(value) {
-            App.preferences.edit().putBoolean(BALANCE_HIDDEN, value).apply()
+            preferences.edit().putBoolean(BALANCE_HIDDEN, value).apply()
         }
 }

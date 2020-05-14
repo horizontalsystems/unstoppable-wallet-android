@@ -10,7 +10,9 @@ class PriceAlertsStorage(private val appConfigProvider: IAppConfigProvider, appD
     override val priceAlertCount: Int
         get() = dao.count()
 
-    private val dao = appDatabase.priceAlertsDao()
+    private val dao: PriceAlertsDao by lazy {
+        appDatabase.priceAlertsDao()
+    }
 
     override fun all(): List<PriceAlert> {
         return dao.all().mapNotNull { priceAlertRecord ->

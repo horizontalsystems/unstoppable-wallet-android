@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
 
 class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
-        private val isColdStart: Boolean,
         val showCloseButton: Boolean,
         val router: ManageWalletsModule.IRouter,
         val view: ManageWalletsModule.IView
@@ -20,11 +19,6 @@ class ManageWalletsPresenter(
     //  ViewDelegate
 
     override fun onLoad() {
-        if (isColdStart) {
-            interactor.loadAccounts()
-            interactor.loadWallets()
-        }
-
         interactor.wallets.forEach { wallet ->
             wallets[wallet.coin] = wallet
         }

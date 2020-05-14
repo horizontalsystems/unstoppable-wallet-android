@@ -27,11 +27,9 @@ object MainModule {
         fun didShowRateApp()
     }
 
-    interface IRouter
-
-    fun init(view: MainViewModel, router: IRouter) {
-        val interactor = MainInteractor(App.accountManager, App.walletManager, App.adapterManager, App.rateAppManager)
-        val presenter = MainPresenter(App.pinComponent, interactor, router)
+    fun init(view: MainViewModel) {
+        val interactor = MainInteractor(App.rateAppManager)
+        val presenter = MainPresenter(App.pinComponent, interactor)
 
         view.delegate = presenter
         presenter.view = view

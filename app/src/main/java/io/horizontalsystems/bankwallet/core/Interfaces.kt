@@ -341,6 +341,7 @@ interface IPriceAlertHandler {
 
 interface IBackgroundPriceAlertManager {
     fun fetchRates(): Single<Unit>
+    fun onAppLaunch()
 }
 
 interface INotificationFactory {

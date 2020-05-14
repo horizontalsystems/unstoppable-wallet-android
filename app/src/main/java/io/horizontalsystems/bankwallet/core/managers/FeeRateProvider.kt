@@ -11,10 +11,10 @@ import io.reactivex.Single
 
 class FeeRateProvider(appConfig: IAppConfigProvider) {
 
-    private val feeRateKit = FeeRateKit(
-            FeeProviderConfig(infuraProjectId = appConfig.infuraProjectId,
-                    infuraProjectSecret = appConfig.infuraProjectSecret)
-    )
+    private val feeRateKit: FeeRateKit by lazy {
+        FeeRateKit(FeeProviderConfig(infuraProjectId = appConfig.infuraProjectId,
+                        infuraProjectSecret = appConfig.infuraProjectSecret))
+    }
 
     fun bitcoinFeeRates(): Single<List<FeeRateInfo>> {
         return feeRateKit.bitcoin().map { feeRates(it, addCustom = true) }

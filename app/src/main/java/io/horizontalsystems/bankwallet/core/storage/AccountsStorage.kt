@@ -10,7 +10,9 @@ import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
-    private val dao = appDatabase.accountsDao()
+    private val dao: AccountsDao by lazy {
+        appDatabase.accountsDao()
+    }
 
     companion object {
         // account type codes stored in db
