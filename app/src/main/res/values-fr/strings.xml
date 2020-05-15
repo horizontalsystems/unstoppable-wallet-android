@@ -136,7 +136,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
-    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
+    <string name="Transactions_EmptyList">Vous n\'avez encore aucune transaction en cours ou passée</string>
     <string name="Transactions_Receiving">En réception</string>
     <string name="Transactions_Sending">En attente</string>
     <string name="Transactions_Failed">Échec</string>
@@ -322,7 +322,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="ManageKeys_Delete">Supprimer</string>
     <string name="ManageKeys_Backup">Sauvegarde</string>
     <string name="ManageKeys_Show">Afficher</string>
-    <string name="ManageKeys_Unlink">Delete</string>
+    <string name="ManageKeys_Unlink">Supprimer</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Supprimer le portefeuille</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Cette action supprimera le portefeuille %s de cet appareil.</string>
@@ -334,7 +334,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Ajouter %s</string>
     <string name="AddCoin_Subtitle">%s Portefeuille</string>
-    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_Description">Vous devez créer un portefeuille%1$s pour envoyer ou recevoir des %2$s.\n\nUtilisez le bouton Créer ci-dessous pour créer un nouveau portefeuille%3$s , ou le bouton Restaurer pour importer le portefeuille existant.\n\nVous pourrez utiliser ce portefeuille pour : %4$s.</string>
     <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
@@ -365,7 +365,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast_Subtitle">0-2 heures (Recommandé)</string>
     <string name="CoinOption_RestoreSource">Lien source API : \n%s</string>
-    <string name="CoinOption_Slow_Subtitle">1 - 12 heures</string>
+    <string name="CoinOption_Slow_Subtitle">1 - 24 heures</string>
     <string name="CoinOption_AddressFormatTitle">Format de l\'adresse</string>
     <string name="CoinOption_SyncModeTitle">Restaurer les paramètres</string>
     <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par 1...)</string>
@@ -398,11 +398,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
-    <string name="RateList_prices">Prices</string>
+    <string name="RateList_prices">Tarifs</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync Error</string>
     <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
-    <string name="BalanceSyncError_ButtonRetry">Retry</string>
-    <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
+    <string name="BalanceSyncError_ButtonRetry">Réessayer</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Changer la Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
 </resources>
