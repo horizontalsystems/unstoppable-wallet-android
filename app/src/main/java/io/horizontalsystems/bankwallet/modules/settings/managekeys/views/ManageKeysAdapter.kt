@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -40,27 +41,27 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
         private lateinit var item: ManageAccountItem
 
         init {
-            createButton.setOnClickListener {
+            createButton.setOnSingleClickListener {
                 listener.onClickCreate(item)
             }
 
-            restoreButton.setOnClickListener {
+            restoreButton.setOnSingleClickListener {
                 listener.onClickRestore(item)
             }
 
-            backupButton.setOnClickListener {
+            backupButton.setOnSingleClickListener {
                 listener.onClickBackup(item)
             }
 
-            showKeyButton.setOnClickListener {
+            showKeyButton.setOnSingleClickListener {
                 listener.onClickBackup(item)
             }
 
-            unlinkButton.setOnClickListener {
+            unlinkButton.setOnSingleClickListener {
                 listener.onClickUnlink(item)
             }
 
-            advancedSettingsButton.setOnClickListener {
+            advancedSettingsButton.setOnSingleClickListener {
                 listener.onClickAdvancedSettings(item)
             }
         }

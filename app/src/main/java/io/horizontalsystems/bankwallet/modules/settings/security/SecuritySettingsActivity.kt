@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.TopMenuItem
@@ -26,9 +27,9 @@ class SecuritySettingsActivity : BaseActivity() {
 
         shadowlessToolbar.bind(getString(R.string.Settings_SecurityCenter), TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() }))
 
-        changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
+        changePin.setOnSingleClickListener { viewModel.delegate.didTapEditPin() }
 
-        privacy.setOnClickListener {
+        privacy.setOnSingleClickListener {
             viewModel.delegate.didTapPrivacy()
         }
 
