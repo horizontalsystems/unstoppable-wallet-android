@@ -38,6 +38,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         private val context get() = itemView.context
 
         fun bind(detail: TransactionDetailViewItem) {
+            txtTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             decoratedText.visibility = View.GONE
             btnShare.visibility = View.GONE
             valueText.visibility = View.GONE
@@ -169,6 +170,10 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             txtTitle.visibility = View.VISIBLE
             txtTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_incoming_16, 0, 0, 0)
             txtTitle.compoundDrawablePadding = LayoutHelper.dp(11f, itemView.context)
+
+            // need to have a view in the right of the title to have title to be aligned to the left
+            valueText.text = null
+            valueText.visibility = View.VISIBLE
         }
     }
 }
