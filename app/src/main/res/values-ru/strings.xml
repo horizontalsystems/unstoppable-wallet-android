@@ -233,11 +233,11 @@
         \n\nb) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">Fingerprint access is not enabled on this device. It can be activated in security section of Android settings.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">На этом устройстве не активирован доступ к отпечаткам пальцев. Его можно активировать в разделе безопасности настроек Android.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Приватность</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
-    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Биометрическая аутентификация</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Активация Биометрической аутентификации может потенциально ослабить безопасность вашего устройства по сравнению с простым PIN-кодом.</string>
     <string name="SettingsSecurity_EnablePin">Код Доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
@@ -357,7 +357,7 @@
     <string name="TorPage_Failed">Не удалось</string>
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
     <string name="TorPage_Title">Соединение с TOR</string>
-    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
+    <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Standard</string>
     <!--Coin Option-->
@@ -399,9 +399,9 @@
     <string name="RateList_top100">Топ-100</string>
     <string name="RateList_prices">Цены</string>
     <!-- Balance Sync Error -->
-    <string name="BalanceSyncError_Title">Sync Error</string>
-    <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_Title">Ошибка синхронизации</string>
+    <string name="BalanceSyncError_Description">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
     <string name="BalanceSyncError_ButtonRetry">Повторить</string>
     <string name="BalanceSyncError_ButtonChangeSource">Сменить Источник</string>
-    <string name="BalanceSyncError_ButtonReport">Report</string>
+    <string name="BalanceSyncError_ButtonReport">Пожаловаться</string>
 </resources>
