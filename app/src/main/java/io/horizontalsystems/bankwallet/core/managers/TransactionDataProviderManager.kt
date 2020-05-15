@@ -13,14 +13,15 @@ import io.reactivex.subjects.PublishSubject
 
 class TransactionDataProviderManager(
         private val testMode: Boolean,
+        private val etherscanApiKey: String,
         private val localStorage: ILocalStorage
 ) : ITransactionDataProviderManager {
 
     private val bitcoinProviders: List<BitcoinForksProvider> by lazy {
         when {
-            testMode -> listOf(HorsysBitcoinProvider(testMode = true))
+            testMode -> listOf(HorsysBitcoinProvider(testMode))
             else -> listOf(
-                    HorsysBitcoinProvider(testMode = false),
+                    HorsysBitcoinProvider(testMode),
                     BlockChairBitcoinProvider(),
                     BtcComBitcoinProvider())
         }
@@ -30,7 +31,7 @@ class TransactionDataProviderManager(
         when {
             testMode -> listOf()
             else -> listOf(
-                    HorsysLitecoinProvider(testMode = false),
+                    HorsysLitecoinProvider(testMode),
                     BlockChairLitecoinProvider()
             )
         }
@@ -49,18 +50,18 @@ class TransactionDataProviderManager(
     private val ethereumProviders: List<EthereumForksProvider> by lazy {
         when {
             testMode -> listOf(
-                    EtherscanEthereumProvider(testMode = true))
+                    EtherscanProvider(testMode, etherscanApiKey))
             else -> listOf(
-                    EtherscanEthereumProvider(testMode = false),
+                    EtherscanProvider(testMode, etherscanApiKey),
                     BlockChairEthereumProvider())
         }
     }
 
     private val dashProviders: List<BitcoinForksProvider> by lazy {
         when {
-            testMode -> listOf(HorsysDashProvider(true))
+            testMode -> listOf(HorsysDashProvider(testMode))
             else -> listOf(
-                    HorsysDashProvider(false),
+                    HorsysDashProvider(testMode),
                     BlockChairDashProvider(),
                     InsightDashProvider()
             )
@@ -69,8 +70,8 @@ class TransactionDataProviderManager(
 
     private val binanceProviders: List<FullTransactionInfoModule.BinanceProvider> by lazy {
         when {
-            testMode -> listOf(BinanceChainProvider(true))
-            else -> listOf(BinanceChainProvider(false))
+            testMode -> listOf(BinanceChainProvider(testMode))
+            else -> listOf(BinanceChainProvider(testMode))
         }
     }
 
