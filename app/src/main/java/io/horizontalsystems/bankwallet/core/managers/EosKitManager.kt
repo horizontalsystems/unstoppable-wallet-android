@@ -5,13 +5,13 @@ import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.core.IAppConfigTestMode
 import io.horizontalsystems.eoskit.EosKit
 
-class EosKitManager(appConfig: IAppConfigTestMode) : IEosKitManager {
+class EosKitManager(
+        private val testMode: Boolean
+) : IEosKitManager {
     private var kit: EosKit? = null
     private var useCount = 0
-    private val testMode = appConfig.testMode
 
     override val eosKit: EosKit?
         get() = kit

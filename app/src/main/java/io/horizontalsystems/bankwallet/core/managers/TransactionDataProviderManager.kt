@@ -9,15 +9,16 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.EthereumForksProvider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Provider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.*
-import io.horizontalsystems.core.IAppConfigTestMode
 import io.reactivex.subjects.PublishSubject
 
-class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val localStorage: ILocalStorage)
-    : ITransactionDataProviderManager {
+class TransactionDataProviderManager(
+        private val testMode: Boolean,
+        private val localStorage: ILocalStorage
+) : ITransactionDataProviderManager {
 
     private val bitcoinProviders: List<BitcoinForksProvider> by lazy {
         when {
-            appConfig.testMode -> listOf(HorsysBitcoinProvider(testMode = true))
+            testMode -> listOf(HorsysBitcoinProvider(testMode = true))
             else -> listOf(
                     HorsysBitcoinProvider(testMode = false),
                     BlockChairBitcoinProvider(),
@@ -27,7 +28,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
 
     private val litecoinProviders: List<BitcoinForksProvider> by lazy {
         when {
-            appConfig.testMode -> listOf()
+            testMode -> listOf()
             else -> listOf(
                     HorsysLitecoinProvider(testMode = false),
                     BlockChairLitecoinProvider()
@@ -37,7 +38,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
 
     private val bitcoinCashProviders: List<BitcoinForksProvider> by lazy {
         when {
-            appConfig.testMode -> listOf(CashexplorerBitcoinCashProvider())
+            testMode -> listOf(CashexplorerBitcoinCashProvider())
             else -> listOf(
                     CashexplorerBitcoinCashProvider(),
                     BlockChairBitcoinCashProvider(),
@@ -47,7 +48,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
 
     private val ethereumProviders: List<EthereumForksProvider> by lazy {
         when {
-            appConfig.testMode -> listOf(
+            testMode -> listOf(
                     EtherscanEthereumProvider(testMode = true))
             else -> listOf(
                     EtherscanEthereumProvider(testMode = false),
@@ -57,7 +58,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
 
     private val dashProviders: List<BitcoinForksProvider> by lazy {
         when {
-            appConfig.testMode -> listOf(HorsysDashProvider(true))
+            testMode -> listOf(HorsysDashProvider(true))
             else -> listOf(
                     HorsysDashProvider(false),
                     BlockChairDashProvider(),
@@ -68,7 +69,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigTestMode, private val 
 
     private val binanceProviders: List<FullTransactionInfoModule.BinanceProvider> by lazy {
         when {
-            appConfig.testMode -> listOf(BinanceChainProvider(true))
+            testMode -> listOf(BinanceChainProvider(true))
             else -> listOf(BinanceChainProvider(false))
         }
     }
