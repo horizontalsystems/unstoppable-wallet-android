@@ -100,23 +100,22 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             setHeaderIcon(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
 
             sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
-
             titleViewItem.lockState?.let {
                 val lockIcon = if (it.locked) R.drawable.ic_lock else R.drawable.ic_unlock
-                fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
+                primaryValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
             }
 
-            titleViewItem.primaryAmountInfo.let {
-                fiatName.text = it.getAmountName()
-                fiatValue.text = it.getFormattedXxx()
+            val amountTextColor = if (incoming) R.color.green_d else R.color.yellow_d
+            primaryValue.setTextColor(resources.getColor(amountTextColor, null))
 
-                val amountTextColor = if (incoming) R.color.green_d else R.color.yellow_d
-                fiatValue.setTextColor(resources.getColor(amountTextColor, null))
+            titleViewItem.primaryAmountInfo.let {
+                primaryName.text = it.getAmountName()
+                primaryValue.text = it.getFormattedXxx()
             }
 
             titleViewItem.secondaryAmountInfo.let {
-                coinValue.text = it?.getFormattedXxx()
-                txInfoCoinName.text = it?.getAmountName()
+                secondaryName.text = it?.getAmountName()
+                secondaryValue.text = it?.getFormattedXxx()
             }
         })
 
