@@ -274,6 +274,7 @@ interface IAppConfigProvider {
     val ipfsFallbackGateway: String
     val infuraProjectId: String?
     val infuraProjectSecret: String?
+    val etherscanApiKey: String?
     val fiatDecimal: Int
     val maxDecimal: Int
     val currencies: List<Currency>

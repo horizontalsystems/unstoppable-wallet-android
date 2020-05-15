@@ -103,7 +103,7 @@ class App : CoreApp() {
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
 
-        ethereumKitManager = EthereumKitManager(appConfigTestMode)
+        ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode)
         eosKitManager = EosKitManager(appConfigTestMode)
         binanceKitManager = BinanceKitManager(appConfigTestMode)
 
