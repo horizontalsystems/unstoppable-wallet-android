@@ -84,6 +84,12 @@ class RateManager(
                 }
     }
 
+    override fun historicalRateCached(coinCode: String, currencyCode: String, timestamp: Long): BigDecimal? {
+        val convertedCoinCode = rateCoinMapper.convert(coinCode) ?: return null
+
+        return kit.historicalRate(convertedCoinCode, currencyCode, timestamp)
+    }
+
     override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
         val convertedCoinCode = rateCoinMapper.convert(coinCode)
                 ?: return Single.error(RateError.DisabledCoin())
