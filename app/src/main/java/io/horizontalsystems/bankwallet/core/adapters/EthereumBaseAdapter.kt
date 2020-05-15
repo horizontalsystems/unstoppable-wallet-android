@@ -15,20 +15,6 @@ abstract class EthereumBaseAdapter(
         val decimal: Int)
     : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
-    // IAdapter
-
-    override fun start() {
-        // started via EthereumKitManager
-    }
-
-    override fun stop() {
-        // stopped via EthereumKitManager
-    }
-
-    override fun refresh() {
-        // refreshed via EthereumKitManager
-    }
-
     override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     override val debugInfo: String = ethereumKit.debugInfo()
