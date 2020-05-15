@@ -9,13 +9,21 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import java.math.BigInteger
 import java.util.*
 
-class EtherscanEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.EthereumForksProvider {
+class EtherscanProvider(
+        val testMode: Boolean,
+        apiKey: String
+) : FullTransactionInfoModule.EthereumForksProvider {
 
     private val url = if (testMode) "https://ropsten.etherscan.io/tx/" else "https://etherscan.io/tx/"
-    private val apiUrl = if (testMode) "https://api-ropsten.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=" else "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash="
-
+    private val apiUrl = if (testMode)
+        "https://api-ropsten.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash="
+    else
+        "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&apikey=$apiKey&txhash="
     override val name = "Etherscan.io"
-    override val pingUrl = if (testMode) "https://api-ropsten.etherscan.io/api?module=stats&action=ethprice" else "https://api.etherscan.io/api?module=stats&action=ethprice"
+    override val pingUrl = if (testMode)
+        "https://api-ropsten.etherscan.io/api?module=stats&action=ethprice"
+    else
+        "https://api.etherscan.io/api?module=stats&action=ethprice"
     override val isTrusted: Boolean = true
 
     override fun url(hash: String): String = "$url$hash"

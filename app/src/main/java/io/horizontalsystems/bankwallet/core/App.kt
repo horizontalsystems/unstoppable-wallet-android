@@ -161,7 +161,7 @@ class App : CoreApp() {
         rateCoinMapper = RateCoinMapper()
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
 
-        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode.testMode, localStorage)
+        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode.testMode, appConfigProvider.etherscanApiKey, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
