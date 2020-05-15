@@ -38,7 +38,6 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         private val context get() = itemView.context
 
         fun bind(detail: TransactionDetailViewItem) {
-            statusIcon.visibility = View.GONE
             decoratedText.visibility = View.GONE
             btnShare.visibility = View.GONE
             valueText.visibility = View.GONE
