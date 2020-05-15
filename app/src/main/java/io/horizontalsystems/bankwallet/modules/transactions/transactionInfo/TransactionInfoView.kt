@@ -101,12 +101,10 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
             sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
 
-            val lockIcon = when (titleViewItem.locked) {
-                true -> R.drawable.ic_lock
-                false -> R.drawable.ic_unlock
-                null -> 0
+            titleViewItem.lockState?.let {
+                val lockIcon = if (it.locked) R.drawable.ic_lock else R.drawable.ic_unlock
+                fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
             }
-            fiatValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
 
             titleViewItem.primaryAmountInfo.let {
                 fiatName.text = it.getAmountName()

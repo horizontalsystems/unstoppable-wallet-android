@@ -42,9 +42,9 @@
             style="@style/Headline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_lock"
             android:drawablePadding="4dp"
             android:textColor="?ColorJacob"
+            tools:drawableEnd="@drawable/ic_lock"
             tools:text="$992" />
 
         <ImageView
