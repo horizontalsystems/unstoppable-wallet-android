@@ -21,7 +21,7 @@ class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         MONTHLY24;
     }
 
-    val shape = RectF()
+    val shape = RectF(0f,0f,0f,0f)
 
     private val curves = mutableListOf<ChartDraw>()
 
