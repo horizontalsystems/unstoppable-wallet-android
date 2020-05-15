@@ -197,7 +197,7 @@
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
     <string name="Settings_Notifications">Benachrichtigungen</string>
-    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
+    <string name="Settings_ExperimentalFeatures">Experimentelles Feature</string>
     <string name="Settings_RestoreWallet">Wallet Wiederherstellen</string>
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
