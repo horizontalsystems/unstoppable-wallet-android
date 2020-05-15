@@ -29,11 +29,11 @@
     <string name="Wallet">%s Кошелек</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Независимость</string>
-    <string name="Intro_Independence_Description">Надежное хранение, невозможно конфисковать, всегда под вашим контролем</string>
+    <string name="Intro_Independence_Description">Надежно храните криптоактивы, их невозможно конфисковать и они всегда в вашем распоряжении</string>
     <string name="Intro_Knowledge_Title">Знания</string>
-    <string name="Intro_Knowledge_Description">Узнай о новых блокчейн проектах на ранних стадиях</string>
+    <string name="Intro_Knowledge_Description">Оставайтесь в курсе новостей и узнавайте о растущих блокчейн-проектах на ранних стадиях</string>
     <string name="Intro_Privacy_Title">Приватность</string>
-    <string name="Intro_Privacy_Description">Управляя капиталом сохрани свою приватность</string>
+    <string name="Intro_Privacy_Description">Увеличивайте свой капитал, оставаясь инкогнито и действуя анонимно</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n Кошелек</string>
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
@@ -64,7 +64,7 @@
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
-    <string name="Backup_Button_Backup">Записать ключ</string>
+    <string name="Backup_Button_Backup">Резервная копия</string>
     <string name="Backup_Button_Submit">Подтвердить</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Backup Eos-->
@@ -125,8 +125,8 @@
     <string name="Send_LockTime_HalfYear">6 месяцев</string>
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
-    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взымается в ETH. Необходимо %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s (%s) взымается в %s. Необходимо %s.</string>
+    <string name="Send_ERC_Alert">Комиссии за транзакцию %s (ERC20) взимаются в ETH. Вам нужно %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -178,9 +178,9 @@
     <string name="FullInfo_Status">Статус</string>
     <string name="FullInfo_Source_Title">Источник</string>
     <string name="FullInfo_Source_Online">Доступен</string>
-    <string name="FullInfo_Source_Offline">Недоступен</string>
-    <string name="FullInfo_Error_ProviderOffline">Недоступен</string>
-    <string name="FullInfo_Error_TransactionNotFound">Транзакция не может быть найдена в блокчейне</string>
+    <string name="FullInfo_Source_Offline">Не доступен</string>
+    <string name="FullInfo_Error_ProviderOffline">Не доступен</string>
+    <string name="FullInfo_Error_TransactionNotFound">Транзакция не найдена в блокчейне</string>
     <string name="FullInfo_Error_Retry">Повторить</string>
     <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
@@ -258,13 +258,13 @@
     <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Условия &amp; Политика конфиденциальности:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">Это приложение полностью децентрализованно. Работоспособность этого приложения не зависит от сторонних серверов или какой-либо команды тех поддержки.
+\n\nПриложение работает везде, пока есть интернет. Этот кошелек или его пользователи не могут быть заблокированы кем-либо.
+\n\nВаши средства хранятся только на вашем телефоне.
+\n\nВы несëте полную ответственность за безопасное хранение секретного ключа. Никогда никому не показывайте ваш ключ. Если ключ будет утерян, украден или забыт то контроль над вашими средствами попадет к тому у кого окажется ваш  ключ.
+\n\nНе взламывайте ваш телефон, не устанавливайте приложения из неофициальных источников и никогда не предоставляйте ваше устройство другим лицам. Безопасность вашего кошелька напрямую зависит от этого.
+\n\nВесь программный код этого приложения является бесплатным и открытым для общественности. Мы старались сделать самый безопасный и в то же время децентрализованный кошелек, но нет гарантий, что в коде приложения не имеется ошибок. Тем не менее, мы верим что по уровню безопасности этот кошелек значительно превосходит почти все доступные мобильные криптокошельки на сегодня.
+\n\nНекоторые публичные данные используемые приложением такие, как обменные курсы валют хранятся в децентрализованном хранилище (IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - криптокошелек, который я рекомендую</string>
@@ -289,8 +289,8 @@
     <string name="Eos_Backend_Error_SelfTransfer">Не удается отправить токен на свой аккаунт</string>
     <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
     <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
-    <string name="Binance_Backend_Error_MemoRequired">Получатель требует ввести memo в переводе транзакции</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Необходимо, чтобы memo содержало только цифры</string>
+    <string name="Binance_Backend_Error_MemoRequired">Получателю нужно заполненное поле мемо при отправке транзакции</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Необходимо, чтобы мемо содержало только цифры</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
@@ -302,13 +302,13 @@
     <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Выберите монеты</string>
+    <string name="ManageCoins_title">Выберите Токены</string>
     <string name="ManageCoins_save">Сохранить</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Кошелек</string>
-    <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек не может создать новые учетные записи %s. Вы можете восстановить только существующий.</string>
+    <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек Unstoppable не может создавать новый %s кошелек. Вы можете восстановить только существующий.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Функции</string>
-    <string name="ExperimentalFeatures_Description">Ниже приведены экспериментальные функции. Несмотря на то, что мы протестировали эти функции, мы не можем гарантировать, что они будут работать так, как ожидалось во всех возможных случаях. По этому, просим вас пользоваться ими с осторожностью.</string>
+    <string name="ExperimentalFeatures_Description">Ниже приведены пробные функции. Несмотря на то, что мы детально протестировали эти функции, используя наши собственные криптосредства, мы не можем гарантировать, что они всегда будут работать так, как предусмотрено.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
@@ -321,7 +321,7 @@
     <string name="ManageKeys_Delete">Удалить</string>
     <string name="ManageKeys_Backup">Резервная копия</string>
     <string name="ManageKeys_Show">Показать</string>
-    <string name="ManageKeys_Unlink">Delete</string>
+    <string name="ManageKeys_Unlink">Удалить</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Удалить Кошелек</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
@@ -344,7 +344,7 @@
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
     <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %1$s .\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Если вернуться к предыдущей настройке, все вернется после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %s.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
@@ -356,7 +356,7 @@
     <string name="TorPage_Connected">Подключен</string>
     <string name="TorPage_Failed">Не удалось</string>
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
-    <string name="TorPage_Title">Соединение с Tor</string>
+    <string name="TorPage_Title">Соединение с TOR</string>
     <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
@@ -395,13 +395,13 @@
     <string name="Charts_Error_NotAvailable">График недоступен</string>
     <string name="Charts_LatestNews">Последние Новости</string>
     <!--Rate list-->
-    <string name="RateList_portfolio">Portfolio</string>
-    <string name="RateList_top100">Top 100</string>
-    <string name="RateList_prices">Prices</string>
+    <string name="RateList_portfolio">Портфель</string>
+    <string name="RateList_top100">Топ-100</string>
+    <string name="RateList_prices">Цены</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync Error</string>
     <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
-    <string name="BalanceSyncError_ButtonRetry">Retry</string>
-    <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
+    <string name="BalanceSyncError_ButtonRetry">Повторить</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Сменить Источник</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
 </resources>
