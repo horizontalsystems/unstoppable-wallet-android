@@ -407,7 +407,7 @@
     <string name="RateList_prices">Precios</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Error de sincronización</string>
-    <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_Description">El texto de error se copiará al portapapeles si decides reportarlo.</string>
     <string name="BalanceSyncError_ButtonRetry">Reintentar</string>
     <string name="BalanceSyncError_ButtonChangeSource">Cambiar Origen</string>
     <string name="BalanceSyncError_ButtonReport">Reportar</string>
