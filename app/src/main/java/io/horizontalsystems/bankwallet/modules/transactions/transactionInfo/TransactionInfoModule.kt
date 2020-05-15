@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import java.util.*
 
@@ -28,6 +27,7 @@ object TransactionInfoModule {
         fun onClickTo()
         fun onClickFrom()
         fun onClickTransactionId()
+        fun onRawTransaction()
     }
 
     interface Interactor {
@@ -37,6 +37,7 @@ object TransactionInfoModule {
         fun getThreshold(wallet: Wallet): Int
         fun getRate(code: String, timestamp: Long): CurrencyValue?
         fun feeCoin(coin: Coin): Coin?
+        fun getRaw(transactionHash: String, wallet: Wallet): String?
     }
 
     interface InteractorDelegate

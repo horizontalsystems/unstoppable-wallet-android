@@ -139,6 +139,10 @@ class TransactionInfoPresenter(
         onCopy(transaction.transactionHash)
     }
 
+    override fun onRawTransaction() {
+        onCopy(interactor.getRaw(transaction.transactionHash, wallet))
+    }
+
     private fun onCopy(value: String?) {
         value?.let {
             interactor.onCopy(value)

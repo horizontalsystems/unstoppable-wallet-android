@@ -45,4 +45,8 @@ class TransactionInfoInteractor(
     override fun feeCoin(coin: Coin): Coin? {
         return feeCoinProvider.feeCoinData(coin)?.first
     }
+
+    override fun getRaw(transactionHash: String, wallet: Wallet): String? {
+        return adapterManager.getTransactionsAdapterForWallet(wallet)?.getRawTransaction(transactionHash)
+    }
 }

@@ -93,6 +93,10 @@ abstract class BitcoinBaseAdapter(
         return kit.getTransaction(transactionHash)?.let { tx -> transactionRecord(tx) }
     }
 
+    override fun getRawTransaction(transactionHash: String): String? {
+        return kit.getRawTransaction(transactionHash)
+    }
+
     fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
@@ -210,7 +214,8 @@ abstract class BitcoinBaseAdapter(
                 type = type,
                 failed = transaction.status == TransactionStatus.INVALID,
                 lockInfo = transactionLockInfo,
-                conflictingTxHash = transaction.conflictingTxHash
+                conflictingTxHash = transaction.conflictingTxHash,
+                showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID
         )
     }
 

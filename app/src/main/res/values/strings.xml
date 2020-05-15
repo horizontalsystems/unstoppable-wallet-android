@@ -192,6 +192,7 @@
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>

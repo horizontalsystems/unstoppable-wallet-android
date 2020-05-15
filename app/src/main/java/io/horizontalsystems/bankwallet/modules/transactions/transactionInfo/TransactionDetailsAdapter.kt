@@ -40,7 +40,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         fun bind(detail: TransactionDetailViewItem) {
             txtTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             decoratedText.visibility = View.GONE
-            btnShare.visibility = View.GONE
+            btnAction.visibility = View.GONE
             valueText.visibility = View.GONE
             transactionStatusView.visibility = View.GONE
 
@@ -54,9 +54,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
                 is TransactionDetailViewItem.Status -> bindStatus(detail)
                 is TransactionDetailViewItem.DoubleSpend -> bindDoubleSpend()
                 is TransactionDetailViewItem.SentToSelf -> bindSentToSelfNote()
-                is TransactionDetailViewItem.RawTransaction -> {
-
-                }
+                is TransactionDetailViewItem.RawTransaction -> bindRaw()
                 is TransactionDetailViewItem.LockInfo -> bindLockInfo(detail)
             }
         }
@@ -87,8 +85,17 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             itemView.setOnClickListener {
                 viewModel.delegate.onClickTransactionId()
             }
-            btnShare.setOnClickListener {
+            btnAction.setOnClickListener {
                 viewModel.delegate.onShare()
+            }
+        }
+
+        private fun bindRaw() {
+            txtTitle.text = itemView.context.getString(R.string.TransactionInfo_RawTransaction)
+            btnAction.setImageResource(R.drawable.ic_copy)
+            btnAction.visibility = View.VISIBLE
+            btnAction.setOnClickListener {
+                viewModel.delegate.onRawTransaction()
             }
         }
 
@@ -150,7 +157,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             txtTitle.text = title
             decoratedText.text = address
             decoratedText.visibility = View.VISIBLE
-            btnShare.visibility = View.VISIBLE
+            btnAction.visibility = View.VISIBLE
         }
 
         fun bindInfo(info: String, @DrawableRes infoIcon: Int) {
