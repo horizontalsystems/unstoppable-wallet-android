@@ -254,7 +254,7 @@ abstract class AppDatabase : RoomDatabase() {
                     if (coinIdColumnIndex >= 0) {
                         val coinId = walletsCursor.getString(coinIdColumnIndex)
                         val syncMode = App.localStorage.syncMode ?: SyncMode.Fast
-                        var syncModeStr = dbConverter.fromSyncMode(syncMode)
+                        var syncModeStr: String? = syncMode.value
                         var coinTypeStr: String? = null
                         var derivationStr: String? = null
                         var communicationStr: String? = null
@@ -262,8 +262,7 @@ abstract class AppDatabase : RoomDatabase() {
                         when (coinId) {
                             "BTC" -> {
                                 coinTypeStr = dbConverter.fromCoinType(CoinType.Bitcoin)
-                                derivationStr = dbConverter.fromDerivation(App.localStorage.bitcoinDerivation
-                                        ?: AccountType.Derivation.bip49)
+                                derivationStr = (App.localStorage.bitcoinDerivation ?: AccountType.Derivation.bip49).value
 
                             }
                             "BCH" -> {
