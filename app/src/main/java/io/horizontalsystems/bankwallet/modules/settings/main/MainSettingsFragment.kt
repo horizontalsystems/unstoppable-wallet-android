@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.settings.experimental.Experimenta
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
 import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.currencyswitcher.CurrencySwitcherModule
 import io.horizontalsystems.languageswitcher.LanguageSwitcherModule
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -60,27 +61,27 @@ class MainSettingsFragment : Fragment() {
 
     private fun bindViewListeners(presenter: MainSettingsPresenter) {
 
-        manageKeys.setOnClickListener { presenter.didTapManageKeys() }
+        manageKeys.setOnSingleClickListener { presenter.didTapManageKeys() }
 
-        privacySettings.setOnClickListener { presenter.didTapSecurity() }
+        privacySettings.setOnSingleClickListener { presenter.didTapSecurity() }
 
-        notifications.setOnClickListener { presenter.didTapNotifications() }
+        notifications.setOnSingleClickListener { presenter.didTapNotifications() }
 
-        experimentalFeatures.setOnClickListener { presenter.didTapExperimentalFeatures() }
+        experimentalFeatures.setOnSingleClickListener { presenter.didTapExperimentalFeatures() }
 
-        baseCurrency.setOnClickListener { presenter.didTapBaseCurrency() }
+        baseCurrency.setOnSingleClickListener { presenter.didTapBaseCurrency() }
 
-        language.setOnClickListener { presenter.didTapLanguage() }
+        language.setOnSingleClickListener { presenter.didTapLanguage() }
 
-        lightMode.setOnClickListener { lightMode.switchToggle() }
+        lightMode.setOnSingleClickListener { lightMode.switchToggle() }
 
-        about.setOnClickListener { presenter.didTapAbout() }
+        about.setOnSingleClickListener { presenter.didTapAbout() }
 
-        report.setOnClickListener { presenter.didTapReportProblem() }
+        report.setOnSingleClickListener { presenter.didTapReportProblem() }
 
-        shareApp.setOnClickListener { presenter.didTapTellFriends() }
+        shareApp.setOnSingleClickListener { presenter.didTapTellFriends() }
 
-        companyLogo.setOnClickListener { presenter.didTapCompanyLogo() }
+        companyLogo.setOnSingleClickListener { presenter.didTapCompanyLogo() }
     }
 
     private fun subscribeToViewEvents(presenterView: MainSettingsView, presenter: MainSettingsPresenter) {

@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionType
@@ -49,8 +50,8 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
     private fun setTransactionInfoDialog() {
         setOnCloseCallback { listener?.closeTransactionInfo() }
 
-        txtFullInfo.setOnClickListener { viewModel.onClickOpenFullInfo() }
-        btnShare.setOnClickListener{ viewModel.onClickShareId() }
+        txtFullInfo.setOnSingleClickListener { viewModel.onClickOpenFullInfo() }
+        btnShare.setOnSingleClickListener{ viewModel.onClickShareId() }
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
             HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied)
