@@ -207,12 +207,12 @@
     <string name="Settings_Report">Сообщить о Проблеме</string>
     <string name="SettingsOption_Enabled">Вкл.</string>
     <string name="SettingsOption_Disabled">Выкл.</string>
-    <string name="SettingsPrivacy_Info">Наше приложение не делится информацией ни с кем. Но при взаимодействии с блокчейнами некоторые публичные данные как ваш IP адрес могут фиксироваться в сети.</string>
+    <string name="SettingsPrivacy_Info">Наше приложение не делится никакой информацией ни с кем. Но при взаимодействии с блокчейнами некоторые публичные данные, такие как ваш IP адрес, могут фиксироваться в сети.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Синхронизация Блокчейна</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в режиме peer-to-peer (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в пиринговом режиме (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
     <string name="SettingsPrivacy_WalletRestore">Восстановить Блокчейн</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Выбрать источник данных для восстановления транзакций кошелька.</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Выберите источник данных для восстановления кошелька с транзакциями.</string>
     <string name="SettingsPrivacy_Transactions">Блокчейн Tранзакции</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
     <string name="SettingsPrivacy_TransactionsDescription">Поменять способ оформления транзакций что бы трудно было уследить за вашими BTC, LTC, BCH операциями.</string>
@@ -325,7 +325,7 @@
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Удалить Кошелек</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
-    <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">Токены, которые будут отключены: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
     <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
@@ -359,14 +359,14 @@
     <string name="TorPage_Title">Соединение с TOR</string>
     <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Unstoppable">Standard</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
     <string name="CoinOption_RestoreSource">Ссылка на источник API: \n%s</string>
-    <string name="CoinOption_Slow_Subtitle">1–12 часов</string>
+    <string name="CoinOption_Slow_Subtitle">1–24 часа</string>
     <string name="CoinOption_AddressFormatTitle">Формат адреса</string>
-    <string name="CoinOption_SyncModeTitle">Опции восстановления</string>
+    <string name="CoinOption_SyncModeTitle">Опции Восстановления</string>
     <string name="CoinOption_bip44_Subtitle">Старый (начинается с 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Популярный (начинается с 3...)</string>
     <string name="CoinOption_bip84_Subtitle">Новый (начинается с bc1...)</string>
@@ -384,7 +384,7 @@
     <string name="Charts_Rate_Low">Низкая</string>
     <string name="Charts_MarketCap">Рын. Кап.</string>
     <string name="Charts_Volume24">Объем (24 ч)</string>
-    <string name="Charts_inCirculation">Выпущено </string>
+    <string name="Charts_inCirculation">В обороте</string>
     <string name="Charts_TotalSupply">Макс.выпуск</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
