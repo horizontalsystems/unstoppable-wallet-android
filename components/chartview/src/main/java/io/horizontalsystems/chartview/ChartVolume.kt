@@ -14,7 +14,7 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = config.volumeRectangleColor
+        color = config.volumeColor
     }
 
     fun setShape(rect: RectF) {
@@ -28,7 +28,7 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
     override fun draw(canvas: Canvas) {
         bars.forEach { bar ->
             val barY = animator.getAnimatedY(bar.y, shape.height())
-            val barX = bar.x - config.volumeBarWidth
+            val barX = bar.x - config.volumeWidth
             val rect = RectF(barX, barY, bar.x, shape.height())
 
             canvas.drawRect(rect, paint)

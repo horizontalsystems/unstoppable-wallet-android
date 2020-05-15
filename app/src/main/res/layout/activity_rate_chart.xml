@@ -300,16 +300,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="235dp"
                 app:cursorColor="?ColorOz"
-                app:fallColor="@color/red_d"
-                app:gridDottedColor="?ColorNina"
-                app:growColor="@color/green_d"
+                app:curvePressedColor="?ColorOz"
+                app:gridDashColor="?ColorNina"
+                app:gridTextColor="?ColorNina"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
                 app:partialChartColor="@color/grey_50"
-                app:textColor="@color/grey"
-                app:textPriceColor="?ColorLeah"
-                app:touchColor="?ColorOz" />
+                app:timelineTextColor="?ColorNina"
+                app:trendDownColor="@color/red_d"
+                app:trendUpColor="@color/green_d" />
 
             <View
                 android:id="@+id/border3"
