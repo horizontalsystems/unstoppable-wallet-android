@@ -20,7 +20,7 @@ class Erc20Adapter(
         kit: EthereumKit,
         decimal: Int,
         private val fee: BigDecimal,
-        val contractAddress: String,
+        private val contractAddress: String,
         gasLimit: Long,
         override val minimumRequiredBalance: BigDecimal,
         override val minimumSendAmount: BigDecimal
@@ -31,9 +31,9 @@ class Erc20Adapter(
     // IBalanceAdapter
 
     override val state: AdapterState
-        get() = when (erc20Kit.syncState) {
+        get() = when (val kitSyncState = erc20Kit.syncState) {
             is SyncState.Synced -> AdapterState.Synced
-            is SyncState.NotSynced -> AdapterState.NotSynced(Throwable())
+            is SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
             is SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
@@ -170,7 +171,7 @@ class BalancePresenter(
         val errorMessage = nonSyncedState.error.message ?: ""
 
         if (interactor.networkAvailable){
-            view?.showSyncErrorDialog(viewItem.wallet, errorMessage)
+            view?.showSyncErrorDialog(viewItem.wallet, errorMessage, sourceChangeable(viewItem.wallet.coin.type))
         } else {
             view?.showNetworkNotAvailable()
         }
@@ -253,6 +254,13 @@ class BalancePresenter(
 
     override fun didRefresh() {
         view?.didRefresh()
+    }
+
+    private fun sourceChangeable(coinType: CoinType): Boolean {
+        return when(coinType) {
+            is CoinType.Binance, is CoinType.Eos -> false
+            else -> true
+        }
     }
 
     private fun handleUpdate(wallets: List<Wallet>) {
