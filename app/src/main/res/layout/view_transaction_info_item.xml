@@ -30,13 +30,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnShare"
+        app:layout_constraintEnd_toStartOf="@+id/btnAction"
         app:layout_constraintStart_toEndOf="@+id/txtTitle"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="address" />
 
     <ImageButton
-        android:id="@+id/btnShare"
+        android:id="@+id/btnAction"
         style="@style/ImageButtonSecondary"
         android:layout_width="28dp"
         android:layout_height="28dp"
@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/transactionStatusView"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnShare"
+        app:layout_constraintStart_toEndOf="@+id/btnAction"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="June 6" />
 
