@@ -270,7 +270,7 @@
     <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contacto</string>
-    <string name="SettingsContact_Email">Correo electrónico</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <string name="SettingsContact_AppStatus">Estado de la aplicación</string>
     <!--Setting_Notifications-->
@@ -359,19 +359,19 @@
     <string name="TorPage_Title">Conexión Tor</string>
     <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Ustoppable</string>
+    <string name="AccountType_Unstoppable">Estándar</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
     <string name="CoinOption_Fast_Subtitle">0-2 horas (Recomendado)</string>
     <string name="CoinOption_RestoreSource">Enlace de la fuente API: \n%s</string>
-    <string name="CoinOption_Slow_Subtitle">1-12 horas</string>
+    <string name="CoinOption_Slow_Subtitle">1-24 horas</string>
     <string name="CoinOption_AddressFormatTitle">Formato de dirección</string>
     <string name="CoinOption_SyncModeTitle">Restaurar los parámetros</string>
     <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Popular (comenzar con 3...)</string>
     <string name="CoinOption_bip84_Subtitle">Más nuevo (comenzar con bc1...)</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1 D</string>
+    <string name="Charts_TimeDuration_Day">1D</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
     <string name="Charts_TimeDuration_Month3">3M</string>
