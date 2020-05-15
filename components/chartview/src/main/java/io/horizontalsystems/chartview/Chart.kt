@@ -108,7 +108,8 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         val columns = GridHelper.mapColumns(chartType, startTimestamp, endTimestamp, shapeMain.right)
         val (top, low) = PointHelper.getTopLow(coordinates)
 
-        chartTouch.set(coordinates, config)
+        chartTouch.configure(config, shapeTimeline.bottom)
+        chartTouch.set(coordinates)
 
         mainCurve.setShape(shapeMain)
         mainCurve.setPoints(coordinates)

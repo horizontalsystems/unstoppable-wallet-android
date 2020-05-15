@@ -19,15 +19,18 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
     private var offsetBottom = 0f
     private var coordinates = listOf<Coordinate>()
 
-    fun set(points: List<Coordinate>, config: ChartConfig) {
-        coordinates = points
-        offsetBottom = config.curveVerticalOffset
+    fun configure(config: ChartConfig, bottomOffset: Float) {
+        offsetBottom = bottomOffset
 
         linePaint.apply {
             color = config.cursorColor
             style = Paint.Style.FILL
             strokeWidth = config.strokeWidth
         }
+    }
+
+    fun set(points: List<Coordinate>) {
+        coordinates = points
     }
 
     fun onUpdate(eventListener: Chart.Listener) {
@@ -42,7 +45,6 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
         val touch = touchPoint ?: return
         val bottom = height - offsetBottom
 
-        //  vertical line  draw
         canvas.drawLine(touch.x, 0f, touch.x, bottom, linePaint)
         canvas.drawRoundRect(touch.x - 15, touch.y - 15, touch.x + 15, touch.y + 15, 20f, 20f, linePaint)
     }
@@ -53,11 +55,11 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 listener.onTouchDown()
-                onMove(find(event.x), listener)
+                onMove(findNearest(event.x), listener)
             }
 
             MotionEvent.ACTION_MOVE -> {
-                onMove(find(event.x), listener)
+                onMove(findNearest(event.x), listener)
             }
 
             MotionEvent.ACTION_UP,
@@ -81,17 +83,33 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    private fun find(value: Float): Coordinate? {
-        if (coordinates.size < 2) return null
-        if (coordinates.last().x <= value) {
-            return coordinates.last()
+    private fun findNearest(point: Float): Coordinate? {
+        for ((index, currPoint) in coordinates.withIndex()) {
+            if (currPoint.x == point) {
+                return currPoint
+            }
+
+            if (point < currPoint.x) {
+                if (index - 1 < 0) {
+                    return currPoint
+                }
+
+                val prevPoint = coordinates[index - 1]
+                val halfInterval = (currPoint.x - prevPoint.x) / 2
+                val nearPrevious = (prevPoint.x + halfInterval) > point
+                if (nearPrevious) {
+                    return prevPoint
+                } else {
+                    return currPoint
+                }
+            }
+
+            if (index + 1 > coordinates.size) {
+                return currPoint
+            }
         }
 
-        val interval = coordinates[1].x - coordinates[0].x
-        val lower = value - interval
-        val upper = value + interval
-
-        return coordinates.find { it.x > lower && it.x < upper }
+        return null
     }
 
     class TouchPoint(var x: Float, var y: Float, var last: Float)
