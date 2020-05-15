@@ -21,18 +21,6 @@ class DatabaseConverters {
         return bigDecimal?.toPlainString()
     }
 
-    // List<String>
-
-    @TypeConverter
-    fun toStringList(value: String?): List<String>? {
-        return value?.split(",")
-    }
-
-    @TypeConverter
-    fun toString(value: List<String>?): String? {
-        return value?.joinToString(separator = ",")
-    }
-
     // SecretString
 
     @TypeConverter
@@ -69,28 +57,6 @@ class DatabaseConverters {
         return secretList?.list?.joinToString(separator = ",")?.let {
             App.encryptionManager.encrypt(it)
         }
-    }
-
-    @TypeConverter
-    fun fromSyncMode(syncMode: SyncMode?): String? {
-        return syncMode?.value
-    }
-
-    @TypeConverter
-    fun toSyncMode(value: String?): SyncMode? {
-        return value?.let { SyncMode.valueOf(it) }
-    }
-
-    @TypeConverter
-    fun fromDerivation(derivation: AccountType.Derivation?): String? {
-        return derivation?.value
-    }
-
-    @TypeConverter
-    fun toDerivation(value: String?): AccountType.Derivation? {
-        if (value == null) return null
-
-        return AccountType.Derivation.valueOf(value)
     }
 
     @TypeConverter
