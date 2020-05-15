@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.IAppConfigTestMode
@@ -18,9 +20,9 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
     override val ipfsMainGateway = "ipfs-ext.horizontalsystems.xyz"
     override val ipfsFallbackGateway = "ipfs.io"
 
-    override val infuraProjectId = "2a1306f1d12f4c109a4d4fb9be46b02e"
-    override val infuraProjectSecret = "fc479a9290b64a84a15fa6544a130218"
-
+    override val infuraProjectId = App.instance.getString(R.string.infuraProjectId)
+    override val infuraProjectSecret = App.instance.getString(R.string.infuraSecretKey)
+    override val etherscanApiKey = App.instance.getString(R.string.etherscanKey)
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
 
