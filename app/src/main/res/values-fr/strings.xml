@@ -237,8 +237,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Confidentialité</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
-    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Authentification biométrique</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">L\'activation de l\'authentification biométrique peut potentiellement affaiblir la sécurité de votre appareil par rapport à un simple code de verrouillage PIN.</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
@@ -335,7 +335,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddCoin_Title">Ajouter %s</string>
     <string name="AddCoin_Subtitle">%s Portefeuille</string>
     <string name="AddCoin_Description">Vous devez créer un portefeuille%1$s pour envoyer ou recevoir des %2$s.\n\nUtilisez le bouton Créer ci-dessous pour créer un nouveau portefeuille%3$s , ou le bouton Restaurer pour importer le portefeuille existant.\n\nVous pourrez utiliser ce portefeuille pour : %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_CreationNotSupportedDescription">Vous devez créer un portefeuille %1$s pour envoyer ou recevoir des %2$s.\n\nÀ ce stade, Unstoppable n\'est pas en mesure de créer de nouveaux portefeuilles %3$s.. Vous ne pouvez restaurer que celui déjà existant.\n\nVous pourrez utiliser ce portefeuille pour: %4$s.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Address Format Settings List -->
@@ -358,7 +358,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TorPage_Failed">Échec</string>
     <string name="TorPage_ConnectionClosed">Déconnecté</string>
     <string name="TorPage_Title">Connection Tor</string>
-    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
+    <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
@@ -400,9 +400,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_prices">Tarifs</string>
     <!-- Balance Sync Error -->
-    <string name="BalanceSyncError_Title">Sync Error</string>
-    <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_Title">Erreur de synchronisation</string>
+    <string name="BalanceSyncError_Description">Le texte de l\'erreur sera copié dans votre presse-papiers si vous décidez de le signaler.</string>
     <string name="BalanceSyncError_ButtonRetry">Réessayer</string>
     <string name="BalanceSyncError_ButtonChangeSource">Changer la Source</string>
-    <string name="BalanceSyncError_ButtonReport">Report</string>
+    <string name="BalanceSyncError_ButtonReport">Signaler</string>
 </resources>
