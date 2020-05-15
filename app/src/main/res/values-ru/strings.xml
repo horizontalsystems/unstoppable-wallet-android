@@ -236,8 +236,8 @@
     <string name="Settings_Error_NoFingerprintAddedYet">На этом устройстве не активирован доступ к отпечаткам пальцев. Его можно активировать в разделе безопасности настроек Android.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Приватность</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Биометрическая аутентификация</string>
-    <string name="SettingsSecurity_Info_Biometric_Authentication">Активация Биометрической аутентификации может потенциально ослабить безопасность вашего устройства по сравнению с простым PIN-кодом.</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Биометрическая Aутентификация</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Активация Биометрической Аутентификации может потенциально ослабить безопасность вашего устройства по сравнению с простым PIN-кодом.</string>
     <string name="SettingsSecurity_EnablePin">Код Доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
@@ -399,7 +399,7 @@
     <string name="RateList_top100">Топ-100</string>
     <string name="RateList_prices">Цены</string>
     <!-- Balance Sync Error -->
-    <string name="BalanceSyncError_Title">Ошибка синхронизации</string>
+    <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
     <string name="BalanceSyncError_Description">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
     <string name="BalanceSyncError_ButtonRetry">Повторить</string>
     <string name="BalanceSyncError_ButtonChangeSource">Сменить Источник</string>
