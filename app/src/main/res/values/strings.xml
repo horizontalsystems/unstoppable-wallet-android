@@ -94,7 +94,7 @@
 
     <string name="Backup_Eos_AccountName" translatable="false">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey" translatable="false">Private Key</string>
-    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
+    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may have access to clipboard data.</string>
 
     <!--Balance-->
 
@@ -404,7 +404,7 @@
     <!-- Experimental Feature -->
 
     <string name="ExperimentalFeatures_Title">Experimental</string>
-    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we can not guarantee they work as expected in all possible cases.</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we cannot guarantee they work as expected in all possible cases.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
 
     <!-- Bitcoin Hodling -->
@@ -451,7 +451,7 @@
 
     <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible on balance tab. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
