@@ -298,7 +298,7 @@
             <io.horizontalsystems.chartview.Chart
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="235dp"
+                android:layout_height="232dp"
                 app:cursorColor="?ColorOz"
                 app:curvePressedColor="?ColorOz"
                 app:gridDashColor="?ColorNina"
