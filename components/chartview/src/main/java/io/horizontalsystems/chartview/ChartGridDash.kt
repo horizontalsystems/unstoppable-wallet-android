@@ -13,14 +13,14 @@ class ChartGridDash(private val config: ChartConfig) : ChartDraw {
 
     private val dashPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = config.gridDottedColor
-        strokeWidth = config.strokeWidthDotted
-        pathEffect = DashPathEffect(floatArrayOf(config.strokeDotted, config.strokeDotted), 0f)
+        color = config.gridDashColor
+        strokeWidth = config.strokeDashWidth
+        pathEffect = DashPathEffect(floatArrayOf(config.strokeDash, config.strokeDash), 0f)
     }
 
     private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = config.textPriceSize
-        color = config.textPriceColor
+        textSize = config.gridTextSize
+        color = config.gridTextColor
         typeface = Typeface.create(config.textFont, Typeface.BOLD)
     }
 
@@ -44,7 +44,7 @@ class ChartGridDash(private val config: ChartConfig) : ChartDraw {
     private fun Canvas.drawTopLow() {
         val path = Path()
 
-        val topY = offset
+        val topY = shape.top + offset
         val bottomY = shape.bottom - offset
 
         path.moveTo(shape.left, topY)
@@ -56,7 +56,15 @@ class ChartGridDash(private val config: ChartConfig) : ChartDraw {
         drawPath(path, dashPaint)
 
         // Texts
-        drawText(top, shape.left + config.textPricePL, config.yAxisPrice(topY, isTop = true), textPaint)
-        drawText(low, shape.left + config.textPricePL, config.yAxisPrice(bottomY, isTop = false), textPaint)
+        drawText(top, shape.left + config.gridTextPadding, textPosition(topY, isTop = true), textPaint)
+        drawText(low, shape.left + config.gridTextPadding, textPosition(bottomY, isTop = false), textPaint)
+    }
+
+    private fun textPosition(y: Float, isTop: Boolean): Float {
+        if (isTop) {
+            return y - config.gridTextPadding
+        }
+
+        return y + config.gridTextSize
     }
 }

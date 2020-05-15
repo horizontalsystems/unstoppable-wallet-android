@@ -12,7 +12,7 @@ class ChartGrid(private val config: ChartConfig) : ChartDraw {
     private var columns = listOf<GridColumn>()
 
     private val linePaint = Paint().apply {
-        color = config.gridColor
+        color = config.gridLineColor
         strokeWidth = config.strokeWidth
     }
 
