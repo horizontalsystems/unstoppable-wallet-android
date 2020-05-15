@@ -244,9 +244,9 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
             }
         })
 
-        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage) ->
+        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage, sourceChangeable) ->
             activity?.let{ fragmentActivity ->
-                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, object : SyncErrorDialog.Listener{
+                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, sourceChangeable, object : SyncErrorDialog.Listener{
                     override fun onClickRetry() {
                         viewModel.delegate.refreshByWallet(wallet)
                     }

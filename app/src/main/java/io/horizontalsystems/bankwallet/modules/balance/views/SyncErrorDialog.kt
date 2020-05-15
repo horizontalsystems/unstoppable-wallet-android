@@ -2,12 +2,16 @@ package io.horizontalsystems.bankwallet.modules.balance.views
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_bottom_sync_error.*
 
-class SyncErrorDialog(private val listener: Listener, private val coinName: String) : BaseBottomSheetDialogFragment() {
+class SyncErrorDialog(
+        private val listener: Listener,
+        private val coinName: String,
+        private val sourceChangeable: Boolean) : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onClickRetry()
@@ -23,6 +27,8 @@ class SyncErrorDialog(private val listener: Listener, private val coinName: Stri
         setSubtitle(coinName)
         setHeaderIcon(R.drawable.ic_attention_red)
 
+        changeSourceBtn.isVisible = sourceChangeable
+
         bindActions()
     }
 
@@ -32,9 +38,11 @@ class SyncErrorDialog(private val listener: Listener, private val coinName: Stri
             dismiss()
         }
 
-        changeSourceBtn.setOnClickListener {
-            listener.onClickChangeSource()
-            dismiss()
+        if (sourceChangeable) {
+            changeSourceBtn.setOnClickListener {
+                listener.onClickChangeSource()
+                dismiss()
+            }
         }
 
         reportBtn.setOnClickListener {
@@ -44,8 +52,8 @@ class SyncErrorDialog(private val listener: Listener, private val coinName: Stri
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coinName: String, listener: Listener) {
-            val fragment = SyncErrorDialog(listener, coinName)
+        fun show(activity: FragmentActivity, coinName: String, sourceChangeable: Boolean, listener: Listener) {
+            val fragment = SyncErrorDialog(listener, coinName, sourceChangeable)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_sync_error")

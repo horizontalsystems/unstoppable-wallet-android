@@ -15,9 +15,9 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     // IBalanceAdapter
 
     override val state: AdapterState
-        get() = when (ethereumKit.syncState) {
+        get() = when (val kitSyncState = ethereumKit.syncState) {
             is EthereumKit.SyncState.Synced -> AdapterState.Synced
-            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(Throwable())
+            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 

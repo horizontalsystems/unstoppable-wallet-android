@@ -18,7 +18,7 @@ object BalanceModule {
         fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
         fun didRefresh()
         fun setBalanceHidden(hidden: Boolean, animate: Boolean)
-        fun showSyncErrorDialog(wallet: Wallet, errorMessage: String)
+        fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean)
         fun showNetworkNotAvailable()
         fun showErrorMessageCopied()
     }
