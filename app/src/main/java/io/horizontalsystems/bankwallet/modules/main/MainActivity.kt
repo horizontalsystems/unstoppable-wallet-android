@@ -213,7 +213,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     }
 
     private fun collapseBottomSheetsOnActivityRestore() {
-        if (txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.txInfoCoinName)?.text?.isEmpty() == true) {
+        if (txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.secondaryName)?.text?.isEmpty() == true) {
             txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
