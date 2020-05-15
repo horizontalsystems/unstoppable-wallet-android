@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?TransactionDetailBackground"
-    >
+    android:background="?TransactionDetailBackground">
 
     <TextView
         android:id="@+id/txtTitle"
@@ -19,82 +17,71 @@
         android:includeFontPadding="false"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/decoratedText"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="From" />
 
-    <ImageView
-        android:id="@+id/statusIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="4dp"
-        android:src="@drawable/ic_checkmark"
-        android:tint="?ColorRemus"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
     <TextView
         android:id="@+id/decoratedText"
         style="@style/ButtonSecondary"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:visibility="gone"
-        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnShare"
-        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintEnd_toStartOf="@+id/btnShare"
         app:layout_constraintStart_toEndOf="@+id/txtTitle"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="address"
-        />
+        tools:text="address" />
 
     <ImageButton
         android:id="@+id/btnShare"
         style="@style/ImageButtonSecondary"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginStart="-8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/share_icon"
-        android:visibility="gone"
         android:tint="?ColorLeah"
-        app:layout_constraintBottom_toBottomOf="@+id/decoratedText"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/valueText"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/decoratedText"
-        app:layout_constraintTop_toTopOf="@id/decoratedText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/valueText"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="16dp"
-        android:textColor="?BottomDialogTextColor"
-        android:visibility="gone"
         android:gravity="center"
+        android:textColor="?BottomDialogTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/transactionStatusView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnShare"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="June 6, 2019, 15:02" />
+        tools:text="June 6" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoStatusView
         android:id="@+id/transactionStatusView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="4dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/valueText"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintGuide_end="16dp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/transactionStatusView" />
 
     <View
         android:id="@+id/border"
@@ -103,7 +90,6 @@
         android:background="@color/steel_20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
