@@ -217,7 +217,7 @@
     <string name="SettingsPrivacy_TransactionsSettingText">Ein-/Ausgänge</string>
     <string name="SettingsPrivacy_TransactionsDescription">Machen Sie Ihre BTC-, LTC- und BCH-Transaktionen schwieriger nachvollziehbar, indem Sie die Transaktionsstruktur verändern.</string>
     <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
-    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain-Transaktionen</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
         \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
         \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
