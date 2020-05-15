@@ -26,11 +26,9 @@ class TransactionInfoInteractor(
 
     override fun getRate(code: String, timestamp: Long): CurrencyValue? {
         val baseCurrency = currencyManager.baseCurrency
-        return try {
-            val rateValue = xRateManager.historicalRate(code, baseCurrency.code, timestamp).blockingGet()
-            CurrencyValue(baseCurrency, rateValue)
-        } catch (e: Exception) {
-            null
+
+        return xRateManager.historicalRateCached(code, baseCurrency.code, timestamp)?.let {
+            CurrencyValue(baseCurrency, it)
         }
     }
 
