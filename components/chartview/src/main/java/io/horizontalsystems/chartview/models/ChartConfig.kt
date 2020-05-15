@@ -9,80 +9,70 @@ import io.horizontalsystems.chartview.R
 class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     //  colors
-    var textFont = ResourcesCompat.getFont(context, R.font.noto_sans_medium)
+    var textFont = ResourcesCompat.getFont(context, R.font.noto_sans)
+    var timelineTextColor = context.getColor(R.color.grey)
+    var timelineTextSize = dp2px(12f)
+    var timelineTextPadding = dp2px(4f)
+
+    var gridTextColor = context.getColor(R.color.light_grey)
+    var gridLineColor = context.getColor(R.color.steel_20)
+    var gridDashColor = context.getColor(R.color.white_50)
+    var gridTextSize = dp2px(12f)
+    var gridTextPadding = dp2px(4f)
+    var gridEdgeOffset = dp2px(5f)
+
     var curveColor = context.getColor(R.color.red_d)
-    var touchColor = context.getColor(R.color.light)
-    var gridColor = context.getColor(R.color.steel_20)
-    var gridDottedColor = context.getColor(R.color.white_50)
-    var textColor = context.getColor(R.color.grey)
-    var textPriceColor = context.getColor(R.color.light_grey)
-    var growColor = context.getColor(R.color.green_d)
-    var fallColor = context.getColor(R.color.red_d)
+    var curvePressedColor = context.getColor(R.color.light)
+    var curveOutdatedColor = context.getColor(R.color.grey_50)
+    var curveVerticalOffset = dp2px(18f)
+
     var cursorColor = context.getColor(R.color.light)
-    var partialChartColor = context.getColor(R.color.grey_50)
-    var volumeRectangleColor = context.getColor(R.color.steel_20)
+
+    var trendUpColor = context.getColor(R.color.green_d)
+    var trendDownColor = context.getColor(R.color.red_d)
+
+    var volumeColor = context.getColor(R.color.steel_20)
+    var volumeWidth = dp2px(2f)
+    var volumeMaxHeightRatio = 0.8f // 80% of height
+
+    var strokeWidth = dp2px(0.5f)
+    var strokeDash = dp2px(2f)
+    var strokeDashWidth = dp2px(0.5f)
 
     init {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.Chart)
         try {
-            growColor = ta.getInt(R.styleable.Chart_growColor, growColor)
-            fallColor = ta.getInt(R.styleable.Chart_fallColor, fallColor)
-            textColor = ta.getInt(R.styleable.Chart_textColor, textColor)
-            textPriceColor = ta.getInt(R.styleable.Chart_textPriceColor, textPriceColor)
-            gridColor = ta.getInt(R.styleable.Chart_gridColor, gridColor)
-            touchColor = ta.getInt(R.styleable.Chart_touchColor, touchColor)
+            trendUpColor = ta.getInt(R.styleable.Chart_trendUpColor, trendUpColor)
+            trendDownColor = ta.getInt(R.styleable.Chart_trendDownColor, trendDownColor)
+            timelineTextColor = ta.getInt(R.styleable.Chart_timelineTextColor, timelineTextColor)
+            gridTextColor = ta.getInt(R.styleable.Chart_gridTextColor, gridTextColor)
+            gridLineColor = ta.getInt(R.styleable.Chart_gridColor, gridLineColor)
+            gridDashColor = ta.getInt(R.styleable.Chart_gridDashColor, gridDashColor)
+            curvePressedColor = ta.getInt(R.styleable.Chart_curvePressedColor, curvePressedColor)
+            curveOutdatedColor = ta.getInt(R.styleable.Chart_partialChartColor, curveOutdatedColor)
             cursorColor = ta.getInt(R.styleable.Chart_cursorColor, cursorColor)
-            gridDottedColor = ta.getInt(R.styleable.Chart_gridDottedColor, gridDottedColor)
-            partialChartColor = ta.getInt(R.styleable.Chart_partialChartColor, partialChartColor)
         } finally {
             ta.recycle()
         }
     }
 
-    var textPricePT = dp2px(4f)
-    var textPricePB = dp2px(8f)
-    var textPricePL = dp2px(16f)
-    var textPriceSize = dp2px(14f)
-    var timelineTextSize = dp2px(12f)
-    var timelineTextPadding = timelineTextSize + dp2px(2f)
-
-    //  dimens
-    var strokeWidth = 2f
-    var strokeDotted = dp2px(2f)
-    var strokeWidthDotted = 1F
-    var curveVerticalOffset = dp2px(18f)
-    var gridEdgeOffset = dp2px(5f)
-    var volumeMaxHeightRatio = 0.8f // 40% of height
-    var volumeBarWidth = dp2px(2f)
-
     //  Helper methods
-    fun setTrendColour(startPoint: ChartPoint?, endPoint: ChartPoint?, endTimestamp: Long) {
-        if (startPoint == null || endPoint == null) return
+    fun setTrendColor(startPoint: ChartPoint?, endPoint: ChartPoint?, endTimestamp: Long) {
+        if (endPoint == null || startPoint == null) return
         if (endPoint.timestamp < endTimestamp) {
-            curveColor = partialChartColor
+            curveColor = curveOutdatedColor
         } else if (startPoint.value > endPoint.value) {
-            curveColor = fallColor
+            curveColor = trendDownColor
         } else {
-            curveColor = growColor
+            curveColor = trendUpColor
         }
     }
 
-    fun xAxisPrice(x: Float, maxX: Float, text: String): Float {
-        val width = measureTextWidth(text)
-        if (width + x >= maxX) {
-            return maxX - (width + textPricePT)
-        }
+    fun measureTextWidth(text: String): Float {
+        val paint = Paint()
+        val width = paint.measureText(text)
 
-        return x
-    }
-
-    fun yAxisPrice(y: Float, isTop: Boolean): Float {
-        val textBoxOffset = 7
-        if (isTop) {
-            return y - textPricePB + textBoxOffset
-        }
-
-        return y + textPriceSize + textBoxOffset
+        return dp2px(width)
     }
 
     private fun dp2px(dps: Float): Float {
@@ -90,12 +80,5 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
         val scale = context.resources.displayMetrics.density
         //  Convert the dps to pixels, based on density scale
         return dps * scale + 0.5f
-    }
-
-    private fun measureTextWidth(text: String): Float {
-        val paint = Paint()
-        val width = paint.measureText(text)
-
-        return dp2px(width)
     }
 }
