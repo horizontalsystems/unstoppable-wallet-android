@@ -12,6 +12,20 @@ import java.math.BigDecimal
 
 class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
+    // IAdapter
+
+    override fun start() {
+        // started via EthereumKitManager
+    }
+
+    override fun stop() {
+        // stopped via EthereumKitManager
+    }
+
+    override fun refresh() {
+        // refreshed via EthereumKitManager
+    }
+
     // IBalanceAdapter
 
     override val state: AdapterState
@@ -76,7 +90,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
                 from = transaction.from,
                 to = transaction.to,
                 type = type,
-                failed = transaction.isError?.let { it != 0 }?: false
+                failed = transaction.isError?.let { it != 0 } ?: false
         )
     }
 

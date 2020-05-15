@@ -28,6 +28,20 @@ class Erc20Adapter(
 
     private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress, gasLimit)
 
+    // IAdapter
+
+    override fun start() {
+        erc20Kit.refresh()
+    }
+
+    override fun stop() {
+        // stopped via EthereumKitManager
+    }
+
+    override fun refresh() {
+        erc20Kit.refresh()
+    }
+
     // IBalanceAdapter
 
     override val state: AdapterState
