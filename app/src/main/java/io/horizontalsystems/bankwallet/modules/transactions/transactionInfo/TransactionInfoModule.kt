@@ -61,5 +61,5 @@ object TransactionInfoModule {
         (activity as? MainActivity)?.openTransactionInfo(transactionRecord, wallet)
     }
 
-    data class TitleViewItem(val date: Date?, val primaryAmountInfo: SendModule.AmountInfo, val secondaryAmountInfo: SendModule.AmountInfo?, val type: TransactionType, val locked: Boolean?)
+    data class TitleViewItem(val date: Date?, val primaryAmountInfo: SendModule.AmountInfo, val secondaryAmountInfo: SendModule.AmountInfo?, val type: TransactionType, val lockState: TransactionLockState?)
 }

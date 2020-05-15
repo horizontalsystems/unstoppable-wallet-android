@@ -17,9 +17,13 @@ class TransactionInfoPresenter(
     // IViewDelegate methods
 
     override fun viewDidLoad() {
-        val rate = interactor.getRate(wallet.coin.code, transaction.timestamp)
-
         val coin = wallet.coin
+        val lastBlockInfo = interactor.lastBlockInfo
+
+        val status = transaction.status(lastBlockInfo?.height, interactor.threshold)
+        val lockState = transaction.lockState(lastBlockInfo?.timestamp)
+
+        val rate = interactor.getRate(wallet.coin.code, transaction.timestamp)
 
         val primaryAmountInfo: SendModule.AmountInfo
         val secondaryAmountInfo: SendModule.AmountInfo?
@@ -35,9 +39,7 @@ class TransactionInfoPresenter(
 
         val date = if (transaction.timestamp == 0L) null else Date(transaction.timestamp * 1000)
 
-        view?.showTitle(TitleViewItem(date, primaryAmountInfo, secondaryAmountInfo, transaction.type, true))
-
-        val lastBlockInfo = interactor.lastBlockInfo
+        view?.showTitle(TitleViewItem(date, primaryAmountInfo, secondaryAmountInfo, transaction.type, lockState))
 
         val viewItems = mutableListOf<TransactionDetailViewItem>()
 
@@ -72,16 +74,14 @@ class TransactionInfoPresenter(
             viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
         }
 
-        val status = transaction.status(lastBlockInfo?.height, interactor.threshold)
-
         viewItems.add(TransactionDetailViewItem.Status(status, transaction.type == TransactionType.Incoming))
 
         if (transaction.conflictingTxHash != null) {
             viewItems.add(TransactionDetailViewItem.DoubleSpend())
         }
 
-        transaction.lockState(lastBlockInfo?.timestamp)?.let { lockState ->
-            viewItems.add(TransactionDetailViewItem.LockInfo(lockState))
+        lockState?.let {
+            viewItems.add(TransactionDetailViewItem.LockInfo(it))
         }
 
         if (transaction.type == TransactionType.SentToSelf) {
