@@ -19,6 +19,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
@@ -96,8 +97,8 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     TransactionInfo bottomsheet
      */
 
-    fun openTransactionInfo(transactionHash: String, wallet: Wallet) {
-        transInfoViewModel?.init(transactionHash, wallet)
+    fun openTransactionInfo(transactionRecord: TransactionRecord, wallet: Wallet) {
+        transInfoViewModel?.init(transactionRecord, wallet)
     }
 
     override fun openFullTransactionInfo(transactionHash: String, wallet: Wallet) {

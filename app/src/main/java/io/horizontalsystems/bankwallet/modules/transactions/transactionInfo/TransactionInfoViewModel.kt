@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.SingleLiveEvent
 import java.util.*
@@ -18,8 +19,8 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
 
-    fun init(transactionHash: String, wallet: Wallet) {
-        TransactionInfoModule.init(this, this, transactionHash, wallet)
+    fun init(transactionRecord: TransactionRecord, wallet: Wallet) {
+        TransactionInfoModule.init(this, this, transactionRecord, wallet)
         delegate.viewDidLoad()
     }
 

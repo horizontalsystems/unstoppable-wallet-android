@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
-import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule.TitleViewItem
@@ -9,21 +8,15 @@ import java.util.*
 class TransactionInfoPresenter(
         private val interactor: TransactionInfoModule.Interactor,
         private val router: TransactionInfoModule.Router,
-        private val transactionHash: String,
-        private val wallet: Wallet,
-        private val transactionViewItemFactory: TransactionViewItemFactory
+        private val transaction: TransactionRecord,
+        private val wallet: Wallet
 ) : TransactionInfoModule.ViewDelegate, TransactionInfoModule.InteractorDelegate {
 
     var view: TransactionInfoModule.View? = null
 
-    private lateinit var transaction: TransactionRecord
-
     // IViewDelegate methods
 
     override fun viewDidLoad() {
-        transaction = interactor.getTransactionRecord(wallet, transactionHash)
-                ?: throw IllegalStateException("Transaction Not Found")
-
         val rate = interactor.getRate(wallet.coin.code, transaction.timestamp)
 
         val coin = wallet.coin
@@ -44,7 +37,7 @@ class TransactionInfoPresenter(
 
         view?.showTitle(TitleViewItem(date, primaryAmountInfo, secondaryAmountInfo, transaction.type, true))
 
-        val lastBlockInfo = interactor.getLastBlockInfo(wallet)
+        val lastBlockInfo = interactor.lastBlockInfo
 
         val viewItems = mutableListOf<TransactionDetailViewItem>()
 
@@ -79,7 +72,7 @@ class TransactionInfoPresenter(
             viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
         }
 
-        val status = transaction.status(lastBlockInfo?.height, interactor.getThreshold(wallet))
+        val status = transaction.status(lastBlockInfo?.height, interactor.threshold)
 
         viewItems.add(TransactionDetailViewItem.Status(status, transaction.type == TransactionType.Incoming))
 
@@ -140,12 +133,12 @@ class TransactionInfoPresenter(
     }
 
     override fun onRawTransaction() {
-        onCopy(interactor.getRaw(transaction.transactionHash, wallet))
+        onCopy(interactor.getRaw(transaction.transactionHash))
     }
 
     private fun onCopy(value: String?) {
         value?.let {
-            interactor.onCopy(value)
+            interactor.copyToClipboard(value)
             view?.showCopied()
         }
     }
