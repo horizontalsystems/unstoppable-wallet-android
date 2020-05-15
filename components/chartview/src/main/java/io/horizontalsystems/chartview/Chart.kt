@@ -56,8 +56,8 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     fun setListener(listener: Listener) {
         chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {
-                mainCurve.setColor(config.touchColor)
-                mainGradient.setShader(config.touchColor)
+                mainCurve.setColor(config.curvePressedColor)
+                mainGradient.setShader(config.curvePressedColor)
                 chartMain.invalidate()
                 listener.onTouchDown()
             }
@@ -97,7 +97,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     }
 
     fun setData(points: List<ChartPoint>, chartType: ChartView.ChartType, startTimestamp: Long, endTimestamp: Long) {
-        config.setTrendColour(points.firstOrNull(), points.lastOrNull(), endTimestamp)
+        config.setTrendColor(points.firstOrNull(), points.lastOrNull(), endTimestamp)
 
         val shapeMain = chartMain.shape
         val shapeBottom = chartBottom.shape
