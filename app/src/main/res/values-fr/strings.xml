@@ -35,7 +35,7 @@
     <string name="Intro_Privacy_Title">Confidentialité</string>
     <string name="Intro_Privacy_Description">Gardez l\'anonymat et restez discret tout en augmentant votre capital</string>
     <!--Welcome-->
-    <string name="Welcome_Title">\nPortefeuille Unstoppable</string>
+    <string name="Welcome_Title">Portefeuille\nUnstoppable</string>
     <string name="Welcome_PrivacySettings">Paramètres de Confidentialité</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
@@ -114,9 +114,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_TxSpeed_Low">Faible</string>
     <string name="Send_TxSpeed_Medium">Moyenne</string>
     <string name="Send_TxSpeed_High">Élevée</string>
-    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_Custom">Personnalisé</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogDuration">Durée </string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogProceed">Continuer</string>
@@ -163,7 +163,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx conflictuelle</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Transactions</string>
     <string name="FullInfo_Time">Heure</string>
     <string name="FullInfo_Block">Bloc</string>
     <string name="FullInfo_Confirmations">Confirmation</string>
@@ -198,7 +198,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
     <string name="Settings_Notifications">Notifications</string>
-    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
+    <string name="Settings_ExperimentalFeatures">Fonctionnalités expérimentales</string>
     <string name="Settings_RestoreWallet">Restaurer le porte-monnaie</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
@@ -210,7 +210,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsOption_Disabled">Désactivé</string>
     <string name="SettingsPrivacy_Info">Cette application ne partage aucune de vos données. Cependant, comme elle communique avec des blockchains, certaines données publiques comme l\'adresse IP peuvent potentiellement être divulguées.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Sync Blockchain</string>
     <string name="SettingsPrivacy_CommunicationDescription">Certaines blockchains ne permettent pas encore aux applications mobiles de fonctionner en mode peer to peer. Les communications avec les blockchains BTC, BCH, LTC, DASH sont entièrement de type peer to peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Restauration blockchain</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
@@ -218,17 +218,17 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsPrivacy_TransactionsSettingText">Entrées/Sorties</string>
     <string name="SettingsPrivacy_TransactionsDescription">Rendez vos transactions BTC, LTC, BCH plus difficiles à détecter en modifiant la structure des transactions.</string>
     <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
-    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Transactions blockchain</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
         \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
         \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
         \n\na) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
         \n\nb) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Sync Blockchain</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
         \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
         \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Restauration Blockchain</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
         \n\na) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
         \n\nb) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
@@ -248,24 +248,24 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisez complètement votre trafic Internet en utilisant cette application. Peut être lent.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Les notifications de l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour que Tor puisse fonctionner.</string>
     <string name="SettingsSecurity_SortingShuffle">Mélanger</string>
-    <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Indexation aléatoire</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
+    <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">Recommandé</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">De la Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">Cette application est de type peer-to-peer. Elle ne dépend pas d\'un serveur web ou du support des techniciens pour fonctionner.
+\n\nIt fonctionne partout tant qu\'il y a une connexion internet. Aucune entité ne peut empêcher cette application de fonctionner ou censurer quelqu\'un qui voudrait l\'utiliser.
+\n\nLes clés cryptographiques secrètes qui contrôlent vos fonds cryptographiques sont stockées en toute sécurité sur le téléphone lui-même, et nulle part ailleurs.
+\n\nSauvegarder vos clés cryptographiques secrètes et les garder privées est de votre responsabilité. Ne montrez jamais vos clés à qui que ce soit. Si les clés sont perdues, oubliées ou volées, vos fonds pourront être utilisés par la personne qui trouvera votre clé.
+\n\nNe débridez pas votre téléphone, n\'installez pas d\'applications provenant de sources inconnues (non fiables), ne donnez pas votre appareil à des personnes non fiables, et gardez le système d\'exploitation de votre téléphone à jour. La sécurité de votre portefeuille en dépend.
+\n\nL\'ensemble du code qui alimente cette application est ouvert au regard du public. Bien que nous soyons convaincus que cette application est bien plus sûre que toutes les autres applications pour smartphones, il n\'y a aucune garantie qu\'il n\'y ait pas de problèmes logiciels fortuits.
+\n\nToutes vos données, c\'est-à-dire vos transactions, votre solde, etc. ne sont accessibles que par votre application portefeuille et ne quittent jamais votre appareil.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
