@@ -52,19 +52,19 @@
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountIncorrect">Ungültiger Account</string>
     <string name="Restore_EosKeyIncorrect">Falscher Schlüssel</string>
-    <string name="Select_Coins">Choose Crypto</string>
+    <string name="Select_Coins">Krypto auswählen</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
     <string name="Backup_Intro_TitleShow">Schlüssel anzeigen</string>
     <string name="Backup_Intro_Subtitle">Der private Schlüssel, der als nächstes angezeigt wird, ist die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, wenn Ihr Telefon verloren geht, gestohlen wird oder beschädigt wird. \n\nAchten Sie darauf, dass niemand Ihren Bildschirm sieht.\n\nDie Coins, die von diesem Schlüssel kontrolliert werden: %s</string>
     <string name="Backup_Intro_Later">Später</string>
-    <string name="Backup_Intro_BackupNow">Backup</string>
+    <string name="Backup_Intro_BackupNow">Sicherung</string>
     <string name="Backup_DisplayTitle">Privater Schlüssel</string>
-    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
+    <string name="Backup_Confirmation_Description">Geben Sie die Worte Ihres %s Schlüssels ein</string>
     <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <string name="Backup_Button_Confirm">Bestätigen</string>
-    <string name="Backup_Button_Backup">Backup</string>
+    <string name="Backup_Button_Backup">Sicherung</string>
     <string name="Backup_Button_Submit">Abschicken</string>
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Backup Eos-->
@@ -87,7 +87,7 @@
     <string name="Send_Title">%s senden</string>
     <string name="Send_Hint_Address">Adresse</string>
     <string name="Send_Hint_Amount">Betrag</string>
-    <string name="Send_Fee">Fee</string>
+    <string name="Send_Fee">Gebühr</string>
     <string name="Send_Button_Paste">Einfügen</string>
     <string name="Send_Button_Next">Weiter</string>
     <string name="Send_Button_Max">Max.</string>
@@ -109,13 +109,13 @@
     <string name="Send_Error_WrongParameters">Falsche Parameter</string>
     <string name="Send_DialogTitle">Bestätigen</string>
     <string name="Send_DialogAvailableBalance">Verfügbares Guthaben</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_DialogSpeed">Transaktionsgeschwindigkeit</string>
     <string name="Send_TxSpeed_Low">Niedrig</string>
     <string name="Send_TxSpeed_Medium">Mittel</string>
     <string name="Send_TxSpeed_High">Hoch</string>
-    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_Custom">Benutzerdefiniert</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogDuration">Dauer</string>
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogTotal">Insgesamt:</string>
     <string name="Send_DialogProceed">Fortfahren</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">Transaktionen</string>
     <string name="Transactions_FilterAll">ALLE</string>
-    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
+    <string name="Transactions_EmptyList">Sie haben noch keine offenen oder früheren Transaktionen</string>
     <string name="Transactions_Receiving">Empfangen</string>
     <string name="Transactions_Sending">Wird gesendet</string>
     <string name="Transactions_Failed">Fehlgeschlagen</string>
@@ -143,7 +143,7 @@
     <string name="TransactionInfo_Title">Transaktion</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Bestätigt</string>
-    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_Id">Transaktion ID</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
     <string name="TransactionInfo_Time">Zeit</string>
@@ -184,7 +184,7 @@
     <string name="FullInfo_Error_Retry">Wiederholen</string>
     <string name="FullInfo_Error_ChangeSource">Quelle ändern</string>
     <!--no used-->
-    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Id">Transaktion ID</string>
     <string name="FullInfo_TotalInput">Insgesamt Eingang</string>
     <string name="FullInfo_TotalOutput">Insgesamte Ausgänge</string>
     <string name="FullInfo_FeePerByte">Gebühr pro byte</string>
@@ -258,13 +258,13 @@
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">ANB &amp; Datenschutz:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">Diese App basiert auf dem Peer-to-Peer-Prinzip. Das bietet den Vorteil, dass die App zum Funktionieren nicht auf bestimmte Webserver oder technischem Supportpersonal abhängig ist.
+\n\nDie App funktioniert überall. Sie benötigen nur einen Internetzugang. Niemand kann die App stoppen oder jemanden zensieren, sie zu nutzen.
+\n\nDie geheimen kryptographischen Key, die Ihr kryptographisches Guthaben verwalten, werden sicher auf dem Mobiltelefon gespeichert, nirgendwo sonst.
+\n\nEs liegt in Ihrer Verantwortung, den geheimen kryptographischen Key zu sichern und ihn gut aufzubewahren. Zeigen Sie ihn niemandem. Wenn ein Key verloren geht, Sie ihn vergessen oder dieser gestohlen wird, kann Ihr Guthaben von demjenigen ausgegeben werden, der den Key besitzt.
+\n\nFühren Sie auf Ihrem Telefon keinen Jailbreak durch. Installieren Sie keine Apps aus unbekannten (nicht vertrauenswürdigen) Quellen. Geben Sie das Mobiltelefon keiner nicht vertrauenswürdigen Person und aktualisieren Sie das Betriebssystem Ihres Mobiltelefons regelmäßig. Die Sicherheit Ihres Wallets hängt davon ab.
+\n\nDer gesamte Code dieser App ist öffentlich einsehbar. Obwohl wir glauben, dass diese App wesentlich sicherer als jede andere Smartphone Wallet App ist, gibt es keine Garantie, dass es keine unbeabsichtigten Softwareprobleme gibt.
+\n\nAlle Ihre Daten, d.h. Transaktionen, Guthaben usw., sind nur für Ihre Wallet-App verfügbar und verlassen niemals Ihr Gerät.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - eine krypto Wallet, die ich empfehle</string>
@@ -304,7 +304,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coins auswählen</string>
     <string name="ManageCoins_save">Speichern</string>
-    <string name="ManageCoins_Alert_CantCreateTitle">%s Wallet</string>
+    <string name="ManageCoins_Alert_CantCreateTitle">%s wallet</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Im Moment kann das Wallet keine neuen %s Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimentell</string>
