@@ -104,8 +104,8 @@ class App : CoreApp() {
         backgroundManager = BackgroundManager(this)
 
         ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode)
-        eosKitManager = EosKitManager(appConfigTestMode)
-        binanceKitManager = BinanceKitManager(appConfigTestMode)
+        eosKitManager = EosKitManager(appConfigTestMode.testMode)
+        binanceKitManager = BinanceKitManager(appConfigTestMode.testMode)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
@@ -155,13 +155,13 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager()
 
-        val adapterFactory = AdapterFactory(instance, appConfigTestMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager)
+        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
 
         rateCoinMapper = RateCoinMapper()
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
 
-        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode, localStorage)
+        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode.testMode, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
