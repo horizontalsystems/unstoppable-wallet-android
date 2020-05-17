@@ -38,10 +38,12 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         private val context get() = itemView.context
 
         fun bind(detail: TransactionDetailViewItem) {
+            itemView.setOnClickListener(null)
             txtTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             decoratedText.visibility = View.GONE
             btnAction.visibility = View.GONE
             valueText.visibility = View.GONE
+            valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             transactionStatusView.visibility = View.GONE
 
             when (detail) {
