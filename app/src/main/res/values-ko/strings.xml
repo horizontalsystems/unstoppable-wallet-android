@@ -60,7 +60,7 @@
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
     <string name="Backup_DisplayTitle">개인 암호</string>
-    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
+    <string name="Backup_Confirmation_Description">귀하의 %s 키에서 단어를 입력하십시오</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
@@ -236,7 +236,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">당신은 이 장치에서 지문을 사용할 수 없습니다. 지문 액세스를 설정하는 보안으로 이동합니다.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">개인정보</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Biometric_Authentication">생체정보 인증</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
@@ -334,7 +334,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">추가하기 %s</string>
     <string name="AddCoin_Subtitle">%s 지갑</string>
-    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_Description">귀하께서는 %1$s 을 보내거나 받으시려면 %2$s 지갑을 설정하셔야 합니다.\n\n아래의 생성 버튼을 사용하여 새로운 %3$s 지갑을 설정하거나 복원 버튼을 사용하여 기존 지갑을 가져옵니다.\n\n귀하께서는 이 지갑을 %4$s 를 위해 사용하실 수 있습니다.</string>
     <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
