@@ -22,7 +22,8 @@ class ConnectivityManager {
         listenNetworkViaConnectivityManager()
     }
 
-    private fun onUpdateStatus(stateIsConnected: Boolean) {
+    private fun onUpdateStatus() {
+        val stateIsConnected = currentlyConnected()
         if (isConnected != stateIsConnected) {
             isConnected = stateIsConnected
             networkAvailabilitySignal.onNext(Unit)
@@ -37,15 +38,28 @@ class ConnectivityManager {
 
         connectivityManager.registerNetworkCallback(request, object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                onUpdateStatus(true)
+                onUpdateStatus()
             }
 
             override fun onLost(network: Network?) {
-                onUpdateStatus(false)
+                onUpdateStatus()
             }
 
         })
 
+    }
+
+    private fun currentlyConnected(): Boolean {
+        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.let {
+            if (it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)){
+
+                return true
+            }
+        }
+
+        return false
     }
 
 }
