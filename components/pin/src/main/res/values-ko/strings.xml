@@ -5,17 +5,17 @@
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">비밀번호</string>
     <!--Biometric Auth texts-->
-    <string name="BiometricAuth_DialogTitle">Biometrics Scanner</string>
+    <string name="BiometricAuth_DialogTitle">생체정보 스캐너</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
     <string name="UnlockPin_Error_PinIncorrect">틀림</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrics Scanner</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">생체정보 스캐너</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Description">비밀번호를 입력하거나 나중에 다시 시도하십시오</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">생체정보 인증 비활성화</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">비밀번호</string>
     <!--Set Pin-->
     <string name="SetPin_Title">비밀번호</string>
-    <string name="SetPin_Info">Passcode will be used to unlock</string>
+    <string name="SetPin_Info">비밀번호는 잠금을 해제하는 데 사용됩니다</string>
     <string name="SetPin_ErrorShortPin">모든 숫자를 입력하세요.</string>
     <string name="SetPin_ConfirmInfo">확인</string>
     <string name="SetPin_Success">비밀번호 장금이 성공적으로 설정되었습니다!</string>
