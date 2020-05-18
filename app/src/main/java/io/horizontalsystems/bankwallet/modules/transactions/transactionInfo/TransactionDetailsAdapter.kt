@@ -40,6 +40,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
         fun bind(detail: TransactionDetailViewItem) {
             itemView.setOnClickListener(null)
+            itemView.isClickable = false
             txtTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             decoratedText.visibility = View.GONE
             btnAction.visibility = View.GONE
@@ -63,8 +64,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         }
 
         private fun bindRecipient(detail: TransactionDetailViewItem.Recipient) {
-            bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), detail.recipient)
-            itemView.setOnSingleClickListener {
+            bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), detail.recipient) {
                 viewModel.delegate.onClickRecipientHash()
             }
         }
@@ -89,7 +89,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
         private fun bindId(detail: TransactionDetailViewItem.Id) {
             bindHashId(itemView.context.getString(R.string.TransactionInfo_Id), detail.id)
-            itemView.setOnSingleClickListener {
+            decoratedText.setOnSingleClickListener {
                 viewModel.delegate.onClickTransactionId()
             }
             btnAction.setOnSingleClickListener {
@@ -107,15 +107,13 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         }
 
         private fun bindTo(detail: TransactionDetailViewItem.To) {
-            bindAddress(itemView.context.getString(R.string.TransactionInfo_To), detail.to)
-            itemView.setOnSingleClickListener {
+            bindAddress(itemView.context.getString(R.string.TransactionInfo_To), detail.to) {
                 viewModel.delegate.onClickTo()
             }
         }
 
         private fun bindFrom(detail: TransactionDetailViewItem.From) {
-            bindAddress(itemView.context.getString(R.string.TransactionInfo_From), detail.from)
-            itemView.setOnSingleClickListener {
+            bindAddress(itemView.context.getString(R.string.TransactionInfo_From), detail.from) {
                 viewModel.delegate.onClickFrom()
             }
         }
@@ -153,10 +151,11 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             valueText.visibility = View.VISIBLE
         }
 
-        fun bindAddress(title: String, address: String) {
+        fun bindAddress(title: String, address: String, l: ((v: View) -> Unit)) {
             txtTitle.text = title
             decoratedText.text = address
             decoratedText.visibility = View.VISIBLE
+            decoratedText.setOnSingleClickListener(l)
         }
 
 
