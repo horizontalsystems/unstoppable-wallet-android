@@ -52,7 +52,7 @@
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
     <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
-    <string name="Select_Coins">Choose Crypto</string>
+    <string name="Select_Coins">Kripto Parayi Seç</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Yedekle</string>
     <string name="Backup_Intro_TitleShow">Anahtarı Göster</string>
@@ -197,7 +197,7 @@
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
     <string name="Settings_Notifications">Bildirimler</string>
-    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
+    <string name="Settings_ExperimentalFeatures">Deneysel Özellikler</string>
     <string name="Settings_RestoreWallet">Cüzdanı Geri Yükle</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
@@ -209,7 +209,7 @@
     <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
     <string name="SettingsPrivacy_Info">Bu uygulama verilerinizden hiçbirini paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Senk.</string>
     <string name="SettingsPrivacy_CommunicationDescription">Bazı blok zincirler, mobil uygulamaların peer to peer şekilde çalışması için henüz bir araç sağlamamaktadır. BTC, BCH, LTC, DASH blok zincirleriyle iletişim tamamen peer to peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Blockchain Geri Yükleme</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
