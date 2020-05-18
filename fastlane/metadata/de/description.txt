@@ -26,7 +26,7 @@ You’re the only person with control and access to your crypto finances. The Se
 
 (2) GENUINE PRIVACY
 
-  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
+  Stay truly private without revealing any personal data.   
 
 Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
 
@@ -54,7 +54,7 @@ Deal with crypto without complexitites. You don’t need to understand technical
 
 This wallet keeps complexities under the hood giving you a straightforward user interface to the world of blockchains.
 
-It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   Don’t take our word for it, give it a try yourself.  
+It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   
 
 (7) OPEN & PUBLIC 
 
