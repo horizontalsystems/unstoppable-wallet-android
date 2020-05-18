@@ -247,7 +247,7 @@
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷 거래를 전부 익명으로 처리하여 주세요. 느려질 수 있습니다.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
-    <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
@@ -322,7 +322,7 @@
     <string name="ManageKeys_Delete">삭제</string>
     <string name="ManageKeys_Backup">백업</string>
     <string name="ManageKeys_Show">표시</string>
-    <string name="ManageKeys_Unlink">Delete</string>
+    <string name="ManageKeys_Unlink">삭제</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">지갑 삭제하기</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">이 행동은 %s 지갑을 장치에서 삭제합니다.</string>
@@ -396,13 +396,13 @@
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
     <string name="Charts_LatestNews">최신 뉴스</string>
     <!--Rate list-->
-    <string name="RateList_portfolio">Portfolio</string>
-    <string name="RateList_top100">Top 100</string>
-    <string name="RateList_prices">Prices</string>
+    <string name="RateList_portfolio">포트폴리오</string>
+    <string name="RateList_top100">상위 100</string>
+    <string name="RateList_prices">가격</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync Error</string>
     <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
-    <string name="BalanceSyncError_ButtonRetry">Retry</string>
-    <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
+    <string name="BalanceSyncError_ButtonRetry">재시도</string>
+    <string name="BalanceSyncError_ButtonChangeSource">출처를 변경하다</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
 </resources>
