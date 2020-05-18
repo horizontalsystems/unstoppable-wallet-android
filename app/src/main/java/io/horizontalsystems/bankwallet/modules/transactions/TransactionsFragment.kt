@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -192,12 +193,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
         }
 
-        val lockIcon = when {
-            transactionRecord.lockInfo == null -> 0
-            transactionRecord.unlocked -> R.drawable.ic_unlock
-            else -> R.drawable.ic_lock
-        }
-        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
+        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, getLockIcon(transactionRecord.lockState), 0)
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
         directionIcon.setImageResource(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
         txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
@@ -205,7 +201,13 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txStatusWithTimeView.bind(transactionRecord.status, incoming, time)
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
         sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
-        doubleSpendIcon.visibility = if (transactionRecord.conflictingTxHash == null) View.GONE else View.VISIBLE
+        doubleSpendIcon.visibility = if (transactionRecord.doubleSpend) View.VISIBLE else View.GONE
+    }
+
+    private fun getLockIcon(lockState: TransactionLockState?) = when {
+        lockState == null -> 0
+        lockState.locked -> R.drawable.ic_lock
+        else -> R.drawable.ic_unlock
     }
 
     fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
@@ -217,13 +219,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
         }
 
-        if (current.lockInfo != prev.lockInfo || current.unlocked != prev.unlocked) {
-            val lockIcon = when {
-                current.lockInfo == null -> 0
-                current.unlocked -> R.drawable.ic_unlock
-                else -> R.drawable.ic_lock
-            }
-            txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
+        if (current.lockState != prev.lockState) {
+            txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, getLockIcon(current.lockState), 0)
         }
 
         if (current.coinValue != prev.coinValue) {
@@ -236,8 +233,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             txStatusWithTimeView.bind(current.status, incoming, time)
         }
 
-        if (current.conflictingTxHash != prev.conflictingTxHash) {
-            doubleSpendIcon.visibility = if (current.conflictingTxHash == null) View.GONE else View.VISIBLE
+        if (current.doubleSpend != prev.doubleSpend) {
+            doubleSpendIcon.visibility = if (current.doubleSpend) View.VISIBLE else View.GONE
         }
     }
 }

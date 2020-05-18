@@ -42,7 +42,7 @@ class TransactionsPresenter(
     }
 
     override fun willShow(transactionViewItem: TransactionViewItem) {
-        if (transactionViewItem.rate == null) {
+        if (transactionViewItem.currencyValue == null) {
             transactionViewItem.date?.let {
                 interactor.fetchRate(transactionViewItem.wallet.coin, it.time / 1000)
             }
