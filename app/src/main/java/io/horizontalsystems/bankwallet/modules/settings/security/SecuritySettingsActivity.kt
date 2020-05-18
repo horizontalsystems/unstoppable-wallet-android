@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
 import io.horizontalsystems.pin.PinModule
+import io.horizontalsystems.views.SingleSwitchListener
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.activity_settings_security.*
@@ -37,15 +38,17 @@ class SecuritySettingsActivity : BaseActivity() {
             biometricAuth.switchToggle()
         }
 
-        enablePin.setOnClickListener {
+        enablePin.setOnSingleClickListener {
             enablePin.switchToggle()
         }
 
         //  Handling view model live events
 
         viewModel.pinSetLiveData.observe(this, Observer { pinEnabled ->
-            enablePin.showSwitch(pinEnabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                viewModel.delegate.didSwitchPinSet(isChecked)
+            enablePin.showSwitch(pinEnabled, object: SingleSwitchListener(){
+                override fun onSingleSwitch(buttonView: CompoundButton?, isChecked: Boolean) {
+                    viewModel.delegate.didSwitchPinSet(isChecked)
+                }
             })
         })
 
