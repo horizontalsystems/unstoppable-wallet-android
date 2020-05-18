@@ -5,17 +5,17 @@
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">رمز عبور</string>
     <!--Biometric Auth texts-->
-    <string name="BiometricAuth_DialogTitle">Biometrics Scanner</string>
+    <string name="BiometricAuth_DialogTitle">اسکنر بیومتریک</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:٪؜s</string>
     <string name="UnlockPin_Error_PinIncorrect">نادرست</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrics Scanner</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">اسکنر بیومتریک</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Description">کد عبور را وارد کنید یا بعدا دوباره امتحان کنید</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">بیومتریک auth. غیرفعال شد</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">کد عبور</string>
     <!--Set Pin-->
     <string name="SetPin_Title">رمز عبور</string>
-    <string name="SetPin_Info">Passcode will be used to unlock</string>
+    <string name="SetPin_Info">برای باز کردن قفل از کد عبور استفاده خواهد شد</string>
     <string name="SetPin_ErrorShortPin">لطفا تمام ارقام را وارد كنيد.</string>
     <string name="SetPin_ConfirmInfo">تاييد</string>
     <string name="SetPin_Success">رمز عبور قفل با موفقیت تنظیم شد!</string>
