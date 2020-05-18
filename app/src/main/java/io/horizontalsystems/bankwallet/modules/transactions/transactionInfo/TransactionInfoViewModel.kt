@@ -12,7 +12,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     lateinit var delegate: TransactionInfoModule.ViewDelegate
 
     val titleLiveData = MutableLiveData<TransactionInfoModule.TitleViewItem>()
-    val detailsLiveData = MutableLiveData<List<TransactionDetailViewItem>>()
+    val detailsLiveData = SingleLiveEvent<List<TransactionDetailViewItem>>()
     val showFullInfoLiveEvent = SingleLiveEvent<Pair<String, Wallet>>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val showLockInfo = SingleLiveEvent<Date>()
