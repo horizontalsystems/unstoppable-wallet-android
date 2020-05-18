@@ -241,7 +241,7 @@
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
-    <string name="SettingsSecurity_BackupWallet">Crear copia de seguridad del Monedero</string>
+    <string name="SettingsSecurity_BackupWallet">Backup del Monedero</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Puede hacer que su tráfico de internet sea anónimo mientras usa esta aplicación. Puede tornarse lento.</string>
