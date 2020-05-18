@@ -221,7 +221,7 @@
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">not</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">not</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">not</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">not</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">not</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">اثر انگشت فعال نشده است</string>
@@ -348,7 +348,7 @@
     <string name="TorPage_Failed">ناموفق</string>
     <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="TorPage_Title">ارتباط Tor</string>
-    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
+    <string name="Tor_PrerequisitesAlert_Content">با فعال کردن TOR، اتصال Ethereum زنجیره بلوکی به Infura بازمی گردد.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">غیرقابل توقف</string>
     <!--Coin Option-->
