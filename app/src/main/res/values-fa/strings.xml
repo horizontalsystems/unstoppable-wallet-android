@@ -113,8 +113,8 @@
     <string name="Send_TxSpeed_Low">پایین</string>
     <string name="Send_TxSpeed_Medium">متوسط</string>
     <string name="Send_TxSpeed_High">بالا</string>
-    <string name="Send_TxSpeed_Custom">Custom</string>
-    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
+    <string name="Send_TxSpeed_Custom">شخصی سازی</string>
+    <string name="Send_TxSpeed_CustomFeeHint">شنبه/بایت</string>
     <string name="Send_DialogDuration">مدت زمان</string>
     <string name="Send_DialogFee">قیمت:</string>
     <string name="Send_DialogTotal">مجموع:</string>
@@ -228,8 +228,8 @@
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است. به تنظيمات برويد&gt; قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">حریم خصوصی</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
-    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
+    <string name="SettingsSecurity_Biometric_Authentication">احراز هویت بیومتریک</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">فعال کردن تأیید هویت بیومتریک به طور بالقوه می تواند امنیت دستگاه شما را در مقایسه با کد قفل پین ساده تضعیف کند.</string>
     <string name="SettingsSecurity_EnablePin">رمز عبور</string>
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
@@ -239,13 +239,13 @@
     <string name="SettingsSecurity_TorConnectionDescription">هنگام استفاده از این برنامه، ترافیک اینترنت خود را کاملاً ناشناس کنید. می تواند آهسته باشد.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
     <string name="SettingsSecurity_SortingShuffle">مخلوط کردن</string>
-    <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">فهرست بندی تصادفی</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
+    <string name="SettingsSecurity_SortingBip69Description">فهرست بندی فهرستشناختی</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">توصیه شده</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">از زنجیره بلوکی</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">خصوصی تر</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -324,8 +324,8 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">اضافه کردن %s</string>
     <string name="AddCoin_Subtitle">%s کیف پول</string>
-    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_Description">برای اینکه بتوانید %2$s ارسال یا دریافت کنید، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
+    <string name="AddCoin_CreationNotSupportedDescription">برای اینکه بتوانید %2$s ارسال یا دریافت کنید، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Address Format Settings List -->
@@ -386,13 +386,13 @@
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
     <string name="Charts_LatestNews">آخرین اخبار</string>
     <!--Rate list-->
-    <string name="RateList_portfolio">Portfolio</string>
-    <string name="RateList_top100">Top 100</string>
-    <string name="RateList_prices">Prices</string>
+    <string name="RateList_portfolio">نمونه کار</string>
+    <string name="RateList_top100">۱۰۰ برتر</string>
+    <string name="RateList_prices">قیمت‌ها</string>
     <!-- Balance Sync Error -->
-    <string name="BalanceSyncError_Title">Sync Error</string>
-    <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
-    <string name="BalanceSyncError_ButtonRetry">Retry</string>
+    <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>
+    <string name="BalanceSyncError_Description">در صورت تصمیم به گزارش آن ، متن خطا در کلیپ بورد شما کپی خواهد شد.</string>
+    <string name="BalanceSyncError_ButtonRetry">دوباره تلاش کنید</string>
     <string name="BalanceSyncError_ButtonChangeSource">تغییر منبع</string>
-    <string name="BalanceSyncError_ButtonReport">Report</string>
+    <string name="BalanceSyncError_ButtonReport">گزارش</string>
 </resources>
