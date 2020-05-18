@@ -47,7 +47,7 @@
     <!--Restore-->
     <string name="Restore_ChooseWallet">Elegir el monedero</string>
     <string name="Restore_Enter_Key_Title">Coloque la clave</string>
-    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Introduzca su clave privada para el monedero %1s, la cual consta de %2s palabras. Las palabras deben ser introducidas en orden correcto y separadas por espacios.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountIncorrect">Cuenta incorrecta</string>
