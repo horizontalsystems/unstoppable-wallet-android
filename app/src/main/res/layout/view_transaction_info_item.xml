@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?TransactionDetailBackground">
+    android:background="@drawable/transaction_info_detail_background">
 
     <TextView
         android:id="@+id/txtTitle"
