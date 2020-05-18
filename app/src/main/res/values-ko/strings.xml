@@ -52,7 +52,7 @@
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountIncorrect">계정이 존재하지 않습니다</string>
     <string name="Restore_EosKeyIncorrect">틀린 암호 입니다</string>
-    <string name="Select_Coins">Choose Crypto</string>
+    <string name="Select_Coins">암호화를 선택해 주세요</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">백업</string>
     <string name="Backup_Intro_TitleShow">암호 보이기</string>
@@ -64,7 +64,7 @@
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
-    <string name="Backup_Button_Backup">Backup</string>
+    <string name="Backup_Button_Backup">백업</string>
     <string name="Backup_Button_Submit">제출하기</string>
     <string name="Backup_Button_ShowKey">암호 보이기</string>
     <!--Backup Eos-->
@@ -87,7 +87,7 @@
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소</string>
     <string name="Send_Hint_Amount">양</string>
-    <string name="Send_Fee">Fee</string>
+    <string name="Send_Fee">수수료</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Next">다음</string>
     <string name="Send_Button_Max">최대</string>
@@ -109,13 +109,13 @@
     <string name="Send_Error_WrongParameters">잘못된 매개 변수</string>
     <string name="Send_DialogTitle">확인</string>
     <string name="Send_DialogAvailableBalance">사용 가능한 잔액</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_DialogSpeed">거래 속도</string>
     <string name="Send_TxSpeed_Low">낮음</string>
     <string name="Send_TxSpeed_Medium">보통</string>
     <string name="Send_TxSpeed_High">높음</string>
-    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_Custom">사용자 지정</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogDuration">기간</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
     <string name="Send_DialogProceed">진행</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
-    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
+    <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
     <string name="Transactions_Receiving">수신 중</string>
     <string name="Transactions_Sending">전송중</string>
     <string name="Transactions_Failed">실패</string>
@@ -143,7 +143,7 @@
     <string name="TransactionInfo_Title">거래기록</string>
     <string name="TransactionInfo_Status">상태</string>
     <string name="TransactionInfo_Status_Confirmed">확인</string>
-    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_Id">거래 ID</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
     <string name="TransactionInfo_Time">시간</string>
@@ -184,7 +184,7 @@
     <string name="FullInfo_Error_Retry">재시도</string>
     <string name="FullInfo_Error_ChangeSource">출처를 변경하다</string>
     <!--no used-->
-    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Id">거래 ID</string>
     <string name="FullInfo_TotalInput">입력값</string>
     <string name="FullInfo_TotalOutput">산출값</string>
     <string name="FullInfo_FeePerByte">byte 당 이용요금</string>
@@ -197,7 +197,7 @@
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
-    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
+    <string name="Settings_ExperimentalFeatures">실험적 기능</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
@@ -209,14 +209,14 @@
     <string name="SettingsOption_Disabled">비활성화</string>
     <string name="SettingsPrivacy_Info">이 앱은 귀하의 어떠한 정보를 공유하지 않습니다. 그러나 블록체인과의 통신을 위해 IP 주소와 같은 몇몇의 공개 정보가 유출될 수 있습니다.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">블록체인 동기화</string>
     <string name="SettingsPrivacy_CommunicationDescription">몇몇의 블록체인은 아직 모바일 앱이 P2P 방식으로 작동하는 방법을 제공하지 않습니다. BTC, BCH, LTC, DASH 블록체인과의 통신은 전부 P2P 방식입니다.</string>
     <string name="SettingsPrivacy_WalletRestore">블록체인 복원</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
     <string name="SettingsPrivacy_Transactions">블록체인 매매거래</string>
     <string name="SettingsPrivacy_TransactionsSettingText">입력/출력</string>
     <string name="SettingsPrivacy_TransactionsDescription">매매거래 구성 방식을 변경하셔서 BTC, LTC, BCH 매매거래를 더 추적하기 어렵게 만들어 주세요.</string>
-    <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
+    <string name="SettingsPrivacy_Info_Details">다음은 앱에서 사용할 수 있는 개인정보 설정에 관한 자세한 설명입니다. 강화된 개인정보 보호를 원하는 사용자를 위한 설정이라고 생각하시면 됩니다.</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
         \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
@@ -227,7 +227,7 @@
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
         \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
         \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">블록체인 복원</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
         \n\na) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
         \n\nb) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
@@ -249,22 +249,22 @@
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
+    <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">권장</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 부터</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">더 개인</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">용어 및 정책:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">이 앱은 피어투피어(P2P) 방식입니다. 어떠한 웹 서버 나 기술 지원 담당자에게 의존하지 않습니다.
+\n\n인터넷이 있는 한 어디에서나 작동합니다. 어떠한 독립체도 이 앱의 작동을 차단하거나 누군가가 사용함에 있어 검열할 수 없습니다. 
+\n\n귀하의 크립토 자금을 통제하는 비밀 암호화 키는 다른 곳이 아닌 휴대폰 자체에서 안전하게 저장됩니다.
+\n\n귀하의 비밀 암호화 키를 백업하는 것은 귀하의 책임입니다. 누구에게도 귀하의 암호화 키를 보여주지 마세요. 암호와 키를 잃어버리거나 잊어버리거나 또는 도난당했을 경우 귀하의 자금은 귀하의 암호화 키를 찾은 다른사람에 의해 사용이될 수 있습니다.
+\n\n휴대 전화에서 벗어나거나 알 수 없는 (신뢰할 수 없는) 출처의 앱을 설치하지 마시고, 신뢰할 수 없는 사람들에게 귀하의 기기를 건내주지 마시고, 휴대 전화의 운영체제를 최신 상태로 유지하여 주세요. 지갑의 보안은 여기에 의존하고 있습니다.
+\n\n이 앱을 작동하는 전체 코드는 공개 조사로 오픈이 됩니다. 저희는 스마트폰 지갑 앱 보다 훨씬 더 안전하다고 생각하지만 의도치 않은 소프트웨어 문제가 없을거라고 보장하지는 않습니다.
+\n\n모든 데이터, 즉 거래, 잔액 등은 오직 귀하의 지갑 앱에서만 사용하실 수 있으며 절때 귀하의 기기에서 벗어나지 말아주세요.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
