@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.util.*
@@ -12,21 +13,14 @@ typealias CoinCode = String
 
 data class TransactionViewItem(
         val wallet: Wallet,
-        val transactionHash: String,
+        val record: TransactionRecord,
         val coinValue: CoinValue,
         var currencyValue: CurrencyValue?,
-        val feeCoinValue: CoinValue?,
-        val from: String?,
-        val to: String?,
         val type: TransactionType,
-        val showFromAddress: Boolean,
         val date: Date?,
         val status: TransactionStatus,
-        var rate: CurrencyValue?,
-        val lockInfo: TransactionLockInfo?,
-        val conflictingTxHash: String?,
-        val unlocked: Boolean = true,
-        val record: TransactionRecord) : Comparable<TransactionViewItem> {
+        val lockState: TransactionLockState?,
+        val doubleSpend: Boolean) : Comparable<TransactionViewItem> {
 
     val isPending: Boolean
         get() = status is TransactionStatus.Pending || status is TransactionStatus.Processing
@@ -54,14 +48,12 @@ data class TransactionViewItem(
         return currencyValue == other.currencyValue
                 && date == other.date
                 && status == other.status
-                && rate == other.rate
-                && unlocked == other.unlocked
-                && conflictingTxHash == other.conflictingTxHash
+                && lockState == other.lockState
+                && doubleSpend == other.doubleSpend
     }
 
     fun clearRates() {
         currencyValue = null
-        rate = null
     }
 
     fun becomesUnlocked(oldBlockTimestamp: Long?, lastBlockTimestamp: Long?): Boolean {
