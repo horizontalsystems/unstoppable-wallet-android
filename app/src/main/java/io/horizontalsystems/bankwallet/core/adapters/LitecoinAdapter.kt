@@ -12,7 +12,6 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.litecoinkit.LitecoinKit
 import io.horizontalsystems.litecoinkit.LitecoinKit.NetworkType
-import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 

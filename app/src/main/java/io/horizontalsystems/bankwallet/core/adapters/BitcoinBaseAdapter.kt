@@ -89,10 +89,6 @@ abstract class BitcoinBaseAdapter(
         return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
-    override fun getTransaction(transactionHash: String) : TransactionRecord? {
-        return kit.getTransaction(transactionHash)?.let { tx -> transactionRecord(tx) }
-    }
-
     override fun getRawTransaction(transactionHash: String): String? {
         return kit.getRawTransaction(transactionHash)
     }

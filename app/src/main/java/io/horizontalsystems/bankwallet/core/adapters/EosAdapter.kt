@@ -53,10 +53,6 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
         }
     }
 
-    override fun getTransaction(transactionHash: String): TransactionRecord? {
-        TODO("not implemented")
-    }
-
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
         val myAddress = eosKit.account
         val fromMine = transaction.from == myAddress

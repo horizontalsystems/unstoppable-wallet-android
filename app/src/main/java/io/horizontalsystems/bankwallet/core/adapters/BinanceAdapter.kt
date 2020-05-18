@@ -77,10 +77,6 @@ class BinanceAdapter(
         }
     }
 
-    override fun getTransaction(transactionHash: String): TransactionRecord? {
-        TODO("not implemented")
-    }
-
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
         val myAddress = binanceKit.receiveAddress()
         val fromMine = transaction.from == myAddress

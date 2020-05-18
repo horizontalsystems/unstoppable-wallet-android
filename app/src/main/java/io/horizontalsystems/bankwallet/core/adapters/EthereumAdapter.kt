@@ -62,10 +62,6 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         }
     }
 
-    override fun getTransaction(transactionHash: String): TransactionRecord? {
-        TODO("not implemented")
-    }
-
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = ethereumKit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
