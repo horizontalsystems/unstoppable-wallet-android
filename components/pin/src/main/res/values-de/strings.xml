@@ -5,17 +5,17 @@
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Biometric Auth texts-->
-    <string name="BiometricAuth_DialogTitle">Biometrics Scanner</string>
+    <string name="BiometricAuth_DialogTitle">Biometrie-Scanner</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <string name="UnlockPin_Error_PinIncorrect">Falsch</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrics Scanner</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrie-Scanner</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Description">Code eingeben oder später erneut versuchen</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometrische Auth. deaktiviert</string>
     <string name="UnlockPin_BiometricScannerDisabled_Button">Code</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Passcode will be used to unlock</string>
+    <string name="SetPin_Info">Code wird zum Entsperren verwendet</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
     <string name="SetPin_ConfirmInfo">Bestätigen</string>
     <string name="SetPin_Success">Lock code wurde erfolgreich gesetzt!</string>
