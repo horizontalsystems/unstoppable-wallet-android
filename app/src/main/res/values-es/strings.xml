@@ -38,10 +38,10 @@
     <string name="Welcome_Title">Monedero\nUnstoppable</string>
     <string name="Welcome_PrivacySettings">Ajustes de privacidad</string>
     <string name="Welcome_CreateWallet">Crear Monedero</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_RestoreWallet">Restaurar Monedero</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Valorar app</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
+    <string name="RateApp_Description_Rate_This_App">¿Disfrutas Unstoppable Wallet? Por favor, ten un momento para calificar la aplicación</string>
     <string name="RateApp_Button_RateIt">Valóralo</string>
     <string name="RateApp_Button_NotNow">No ahora</string>
     <!--Restore-->
@@ -198,7 +198,7 @@
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
     <string name="Settings_ExperimentalFeatures">Características experimentales</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
+    <string name="Settings_RestoreWallet">Restaurar Monedero</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_LightMode">Modo ligero</string>
@@ -241,7 +241,7 @@
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
-    <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
+    <string name="SettingsSecurity_BackupWallet">Crear copia de seguridad del Monedero</string>
     <string name="SettingsSecurity_EnableTor">Activar Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Puede hacer que su tráfico de internet sea anónimo mientras usa esta aplicación. Puede tornarse lento.</string>
