@@ -60,11 +60,11 @@
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_DisplayTitle">Gizli Anahtar</string>
-    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
+    <string name="Backup_Confirmation_Description">%s Anahtarınızda ki kelimeleri girin</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <string name="Backup_Button_Confirm">Onayla</string>
-    <string name="Backup_Button_Backup">Backup</string>
+    <string name="Backup_Button_Backup">Yedekle</string>
     <string name="Backup_Button_Submit">Onayla</string>
     <string name="Backup_Button_ShowKey">Anahtarı Göster</string>
     <!--Backup Eos-->
@@ -87,7 +87,7 @@
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres</string>
     <string name="Send_Hint_Amount">Tutar</string>
-    <string name="Send_Fee">Fee</string>
+    <string name="Send_Fee">Masraf</string>
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_Next">İleri</string>
     <string name="Send_Button_Max">Azami</string>
@@ -109,13 +109,13 @@
     <string name="Send_Error_WrongParameters">Yanlış parametreler</string>
     <string name="Send_DialogTitle">Onayla</string>
     <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_DialogSpeed">İşlem hızı</string>
     <string name="Send_TxSpeed_Low">Yavaş</string>
     <string name="Send_TxSpeed_Medium">Ortadüzey</string>
     <string name="Send_TxSpeed_High">Hızlı</string>
-    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_Custom">Özel</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogDuration">Süre</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogTotal">Toplam:</string>
     <string name="Send_DialogProceed">Devam</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
-    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
+    <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
     <string name="Transactions_Receiving">Alınıyor</string>
     <string name="Transactions_Sending">Gönderiliyor</string>
     <string name="Transactions_Failed">Başarısız</string>
@@ -236,8 +236,8 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Gizlilik</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
-    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biyometrik doğrulama</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Biyometrik Kimlik Doğrulamanın etkinleştirilmesi, düz PIN kilit koduna kıyasla cihazınızın güvenliğini zayıflatabilir.</string>
     <string name="SettingsSecurity_EnablePin">Kod</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
@@ -258,13 +258,12 @@
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Şartlar &amp; Gizlilik Politikası:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">Bu uygulama peer-to-peer uygulamasıdır. Çalışması için herhangi bir web sunucusu veya teknik personeli gerektirmiyor. \n\nInternet olduğu sürece her yerde çalışır. Hiçkimse bu uygulamanın çalışmasını engelleyemez veya birisinin onu kullanmasını sansürleyemez.
+\n\nKripto paranızı kontrol eden gizli şifreleme anahtarları sadece telefonun kendisinde güvenle saklanır, başka hiçbir yerde saklanmaz.
+ \n\nGizli şifreleme anahtarlarınızı yedeklemek ve gizli tutmak sizin sorumluluğunuzdur. Anahtarlarınızı asla kimseye göstermeyin. Anahtarlar kaybolur, unutulur veya çalınırsa, paranızı anahtarınızı bulan kişi kullanabilir.
+\n\nTelefonunuzu kesinlikte jailbreak etmeyin, bilinmeyen (güvenilmeyen) kaynaklardan uygulama yüklemeyin, cihazınızı güvenilmeyen kişilere vermeyin ve telefonunuzdaki işletim sistemini güncel tutun. Cüzdanınızın güvenliği buna bağlıdır.
+\n\nBu uygulamayı destekleyen kodun tamamı kamu incelemesine açıktır. Herhangi bir akıllı telefon cüzdan uygulamasından önemli ölçüde daha güvenli olduğuna inanmamıza rağmen, istenmeyen yazılım sorunlarının olmadığının garantisi yoktur.
+\n\nTüm verileriniz, yani işlemler, bakiye vb. yalnızca cüzdan uygulamanız tarafından kullanılabilir ve cihazınızdan asla ayrılmaz.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
@@ -321,7 +320,7 @@
     <string name="ManageKeys_Delete">Sil</string>
     <string name="ManageKeys_Backup">Yedekle</string>
     <string name="ManageKeys_Show">Göster</string>
-    <string name="ManageKeys_Unlink">Delete</string>
+    <string name="ManageKeys_Unlink">Sil</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Cüzdanı Sil</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Bu işlem %s Cüzdanını bu cihazdan kaldıracak.</string>
@@ -333,7 +332,7 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Subtitle">%s cüzdanı</string>
-    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_Description">Öncelikle %1$s cüzdanınızı yedeklemeniz gerekiyor daha sonra %2$s kripto parasını alabilirsiniz.\n\nYeni bir %3$s cüzdanı oluşturmak için aşağıdaki Oluştur düğmesini veya mevcut olanı geri yükleme için Geri Yükle düğmesini kullanın.\n\nBu cüzdanı %4$s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
@@ -357,7 +356,7 @@
     <string name="TorPage_Failed">Başarısız</string>
     <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
     <string name="TorPage_Title">Tor Bağlantısı</string>
-    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
+    <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
@@ -402,6 +401,6 @@
     <string name="BalanceSyncError_Title">Senk. hatası</string>
     <string name="BalanceSyncError_Description">Bildirmeye karar verirseniz hata metni clipboardnıza kopyalanır.</string>
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
-    <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
-    <string name="BalanceSyncError_ButtonReport">Report</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Kaynağı Değiştir</string>
+    <string name="BalanceSyncError_ButtonReport">Şikayet Et</string>
 </resources>
