@@ -197,7 +197,8 @@
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
-    <string name="TransactionInfo_LockedUntil">Locked until</string>
+    <string name="TransactionInfo_LockedUntil">Locked until %s</string>
+    <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>

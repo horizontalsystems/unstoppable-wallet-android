@@ -70,7 +70,11 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         }
 
         private fun bindLockInfo(detail: TransactionDetailViewItem.LockInfo) {
-            bindInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(detail.lockState.date)}", R.drawable.ic_lock)
+            if (detail.lockState.locked) {
+                bindInfo(context.getString(R.string.TransactionInfo_LockedUntil, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_lock)
+            } else {
+                bindInfo(context.getString(R.string.TransactionInfo_UnlockedAt, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_unlock)
+            }
             itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickLockInfo()
             }
