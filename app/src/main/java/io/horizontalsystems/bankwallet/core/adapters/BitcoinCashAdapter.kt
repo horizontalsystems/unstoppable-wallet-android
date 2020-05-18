@@ -15,7 +15,6 @@ import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.core.helpers.DateHelper
-import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
