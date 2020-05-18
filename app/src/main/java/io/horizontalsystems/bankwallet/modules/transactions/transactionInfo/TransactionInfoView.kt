@@ -7,14 +7,10 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.info.InfoModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -110,12 +106,12 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
             titleViewItem.primaryAmountInfo.let {
                 primaryName.text = it.getAmountName()
-                primaryValue.text = it.getFormattedXxx()
+                primaryValue.text = it.getFormattedForTxInfo()
             }
 
             titleViewItem.secondaryAmountInfo.let {
                 secondaryName.text = it?.getAmountName()
-                secondaryValue.text = it?.getFormattedXxx()
+                secondaryValue.text = it?.getFormattedForTxInfo()
             }
         })
 
@@ -123,13 +119,6 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             transactionDetailsAdapter.setItems(it)
             listener?.openTransactionInfo()
         })
-    }
-
-    private fun getFeeText(feeCoinValue: CoinValue, txRec: TransactionViewItem): String? {
-        val coinFee = App.numberFormatter.format(feeCoinValue, explicitSign = false, realNumber = true) ?: return null
-        val rate = txRec.rate ?: return coinFee
-        val fiatFee = App.numberFormatter.format(CurrencyValue(rate.currency, value = rate.value.times(feeCoinValue.value))) ?: return coinFee
-        return "$coinFee | $fiatFee"
     }
 
 }

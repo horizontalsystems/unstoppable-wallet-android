@@ -269,17 +269,8 @@ object SendModule {
     }
 
     sealed class AmountInfo {
-        data class CoinValueInfo(val coinValue: CoinValue) : AmountInfo() {
-            override fun getFormattedXxx(): String? {
-                return App.numberFormatter.format(coinValue, explicitSign = true, realNumber = true)
-            }
-        }
-
-        data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo() {
-            override fun getFormattedXxx(): String? {
-                return App.numberFormatter.format(currencyValue, showNegativeSign = false, trimmable = false, canUseLessSymbol = false)
-            }
-        }
+        data class CoinValueInfo(val coinValue: CoinValue) : AmountInfo()
+        data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
 
         fun getAmountName(): String = when (this) {
             is CoinValueInfo -> this.coinValue.coin.title
@@ -295,7 +286,14 @@ object SendModule {
             }
         }
 
-        abstract fun getFormattedXxx(): String?
+        fun getFormattedForTxInfo(): String? = when(this) {
+            is CoinValueInfo -> {
+                App.numberFormatter.format(coinValue, explicitSign = true, realNumber = true)
+            }
+            is CurrencyValueInfo -> {
+                App.numberFormatter.format(currencyValue, showNegativeSign = false, trimmable = false, canUseLessSymbol = false)
+            }
+        }
     }
 
 }
