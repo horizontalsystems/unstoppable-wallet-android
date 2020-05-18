@@ -237,7 +237,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">개인정보</string>
     <string name="SettingsSecurity_Biometric_Authentication">생체정보 인증</string>
-    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">생체정보 인증은 PIN 잠금 코드에 비해 장치의 보안을 약화시킬 가능성이 더 큽니다.</string>
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
@@ -335,7 +335,7 @@
     <string name="AddCoin_Title">추가하기 %s</string>
     <string name="AddCoin_Subtitle">%s 지갑</string>
     <string name="AddCoin_Description">귀하께서는 %1$s 을 보내거나 받으시려면 %2$s 지갑을 설정하셔야 합니다.\n\n아래의 생성 버튼을 사용하여 새로운 %3$s 지갑을 설정하거나 복원 버튼을 사용하여 기존 지갑을 가져옵니다.\n\n귀하께서는 이 지갑을 %4$s 를 위해 사용하실 수 있습니다.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
+    <string name="AddCoin_CreationNotSupportedDescription">%2$s을(를) 보내거나 받으려면 %1$s 지갑을 설정해야 합니다.\n\n현재 Ustoppable은 신규 %3$s 지갑을 생성할 수 없으며, 기존의 지갑을 복원하는 것만 가능합니다.\n\n귀하는 이 지갑을 다음 용도를 위해 사용할 수 있습니다: %4$s</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Address Format Settings List -->
@@ -358,7 +358,7 @@
     <string name="TorPage_Failed">실패</string>
     <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="TorPage_Title">토르 연결</string>
-    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
+    <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
@@ -400,9 +400,9 @@
     <string name="RateList_top100">상위 100</string>
     <string name="RateList_prices">가격</string>
     <!-- Balance Sync Error -->
-    <string name="BalanceSyncError_Title">Sync Error</string>
-    <string name="BalanceSyncError_Description">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_Title">동기화 오류</string>
+    <string name="BalanceSyncError_Description">나중에 보고할 수 있도록 에러 텍스트가 클립보드에 복사됩니다.</string>
     <string name="BalanceSyncError_ButtonRetry">재시도</string>
     <string name="BalanceSyncError_ButtonChangeSource">출처를 변경하다</string>
-    <string name="BalanceSyncError_ButtonReport">Report</string>
+    <string name="BalanceSyncError_ButtonReport">보고</string>
 </resources>
