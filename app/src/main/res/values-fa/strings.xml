@@ -258,13 +258,12 @@
     <string name="SettingsAbout_Title">درباره</string>
     <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">شرايط &amp; حريم خصوصي:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or censor someone from using it.
-\n\nThe secret cryptographic keys which control your crypto funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your secret cryptographic keys and keep them private. Never show your keys to anyone. If keys are lost, forgotten or stollen your funds can be used by the person who finds your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the operating system on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app is open to the public scrutiny. While we believe to be significantly more secure than any smartphone wallet app out there are no guarantees that there are no software issues.
-\n\nAll of your data i.e. transactions, balance etc available only to your wallet app and never leaves your device.</string>
+    <string name="SettingsAbout_TermsPrivacyText">این برنامه به صورت همتا به همتا است. کارکرد این برنامه به عملکرد سرور وب یا پرسنل پشتیبانی فنی بستگی ندارد. \n\n تا زمانی که اینترنت وجود داشته باشد ، در همه جا کار می کند. هیچ نهادی نمی تواند این برنامه را از کار بیندازد یا کسی را از استفاده از آن بازدارد.
+\n\nکلیدهای رمزنگاری محرمانه که سرمایه رمزنگاری شده شما را کنترل می کنند ، کاملا مطمین در گوشی ذخیره می شوند ، و نه در هیچ جای دیگر.
+\n\nمسئولیت تهیه نسخه پشتیبان از کلیدهای رمزنگاری محرمانه و خصوصی نگه داشتن آنها با شما است. هرگز کلیدهای خود را به کسی نشان ندهید. در صورت گم شدن، فراموش کردن یا دزدیده شدن کلید ها، سرمایه شما توسط شخصی که کلید شما را پیدا می کند قابل استفاده است.
+\n\nتلفن خود را جیلبریک نکنید ، برنامه ای را از منابع ناشناخته (غیر قابل اعتماد) نصب نکنید ، موبایل خود را به افراد غیرقابل اعتماد ندهید و سیستم عامل تلفن خود را به روز نگه دارید. امنیت کیف پول شما به اینها بستگی دارد.
+\n\n کل کد قدرت این برنامه در معرض بررسی عموم قرار دارد. در حالی که ما اعتقاد داریم که این برنامه به طور قابل توجهی از دیگر برنامه های کیف پول گوشی های هوشمند ایمن تر است ، هیچ تضمینی برای عدم وجود مشکلات نرم افزاری ناخواسته وجود ندارد.
+\n\nتمام داده های شما برای مثال تراکنش ها ، موجودی و غیره فقط در برنامه کیف پول شما موجود است و هرگز دستگاه شما را ترک نمی کند.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
@@ -321,7 +320,7 @@
     <string name="ManageKeys_Delete">پاک کردن</string>
     <string name="ManageKeys_Backup">پيشتيباني</string>
     <string name="ManageKeys_Show">نشان دادن</string>
-    <string name="ManageKeys_Unlink">Delete</string>
+    <string name="ManageKeys_Unlink">پاک کردن</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">پاک کردن کیف پول</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
