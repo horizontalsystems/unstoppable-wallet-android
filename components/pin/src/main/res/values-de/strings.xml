@@ -12,7 +12,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrics Scanner</string>
     <string name="UnlockPin_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
     <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">Code</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Passcode will be used to unlock</string>
