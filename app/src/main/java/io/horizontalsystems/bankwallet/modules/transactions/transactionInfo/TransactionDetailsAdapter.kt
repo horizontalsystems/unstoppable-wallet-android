@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.helpers.DateHelper
@@ -63,31 +64,31 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
         private fun bindRecipient(detail: TransactionDetailViewItem.Recipient) {
             bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), detail.recipient)
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickRecipientHash()
             }
         }
 
         private fun bindLockInfo(detail: TransactionDetailViewItem.LockInfo) {
             bindInfo("${context.getString(R.string.TransactionInfo_LockedUntil)} ${DateHelper.getFullDate(detail.lockState.date)}", R.drawable.ic_lock)
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickLockInfo()
             }
         }
 
         private fun bindDoubleSpend() {
             bindInfo(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_doublespend)
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickDoubleSpendInfo()
             }
         }
 
         private fun bindId(detail: TransactionDetailViewItem.Id) {
             bindHashId(itemView.context.getString(R.string.TransactionInfo_Id), detail.id)
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickTransactionId()
             }
-            btnAction.setOnClickListener {
+            btnAction.setOnSingleClickListener {
                 viewModel.delegate.onShare()
             }
         }
@@ -96,21 +97,21 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             txtTitle.text = itemView.context.getString(R.string.TransactionInfo_RawTransaction)
             btnAction.setImageResource(R.drawable.ic_copy)
             btnAction.visibility = View.VISIBLE
-            btnAction.setOnClickListener {
+            btnAction.setOnSingleClickListener {
                 viewModel.delegate.onRawTransaction()
             }
         }
 
         private fun bindTo(detail: TransactionDetailViewItem.To) {
             bindAddress(itemView.context.getString(R.string.TransactionInfo_To), detail.to)
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickTo()
             }
         }
 
         private fun bindFrom(detail: TransactionDetailViewItem.From) {
             bindAddress(itemView.context.getString(R.string.TransactionInfo_From), detail.from)
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickFrom()
             }
         }
