@@ -11,11 +11,11 @@
     <string name="UnlockPin_Error_PinIncorrect">Yanlış</string>
     <string name="UnlockPin_BiometricScannerDisabled_Title">Biyometri Tarayıcı</string>
     <string name="UnlockPin_BiometricScannerDisabled_Description">Parolayı girin veya daha sonra tekrar deneyin</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">Biyometrik kimlik. etkisizleştirildi</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">Şifre</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Kod</string>
-    <string name="SetPin_Info">Passcode will be used to unlock</string>
+    <string name="SetPin_Info">Şifre kilidini açmak için kullanılacak</string>
     <string name="SetPin_ErrorShortPin">Lütfen bütün rakamları giriniz.</string>
     <string name="SetPin_ConfirmInfo">Onayla</string>
     <string name="SetPin_Success">Kilit şifresi başarıyla oluşturuldu!</string>
