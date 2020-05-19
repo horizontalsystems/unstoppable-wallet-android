@@ -29,11 +29,11 @@
     <string name="Wallet">%s Кошелек</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Независимость</string>
-    <string name="Intro_Independence_Description">Надежное хранение, невозможно конфисковать, всегда под вашим контролем</string>
+    <string name="Intro_Independence_Description">Надежно храните криптоактивы, их невозможно конфисковать и они всегда в вашем распоряжении</string>
     <string name="Intro_Knowledge_Title">Знания</string>
-    <string name="Intro_Knowledge_Description">Узнай о новых блокчейн проектах на ранних стадиях</string>
+    <string name="Intro_Knowledge_Description">Оставайтесь в курсе новостей и узнавайте о растущих блокчейн-проектах на ранних стадиях</string>
     <string name="Intro_Privacy_Title">Приватность</string>
-    <string name="Intro_Privacy_Description">Управляя капиталом сохрани свою приватность</string>
+    <string name="Intro_Privacy_Description">Увеличивайте свой капитал, оставаясь инкогнито и действуя анонимно</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n Кошелек</string>
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
@@ -44,29 +44,27 @@
     <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable Wallet? Пожалуйста, найдите минутку, чтобы оценить это приложение</string>
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
-    <!--Create-->
-    <string name="Create_Title">Новый кошелек</string>
-    <string name="Create_Description">Выберите одну криптовалюту для начала. Вы сможете добавить другие криптовалюты позже.</string>
     <!--Restore-->
     <string name="Restore_ChooseWallet">Выберите Кошелек</string>
     <string name="Restore_Enter_Key_Title">Введите ключ</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Введите ваш приватный ключ для %1s кошелька, который состоит из %2s слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
-    <string name="Restore_ValidationFailed">Неверный ключ</string>
+    <string name="Restore_ValidationFailed">Неверный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
     <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
+    <string name="Select_Coins">Выберите Валюту</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Резервная Копия</string>
     <string name="Backup_Intro_TitleShow">Показать Ключ</string>
-    <string name="Backup_Intro_Subtitle">Приватный Ключ, который будет показан далее, - это единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и т.д. Убедитесь, что никто не смотрит на ваш экран.\n\nМонеты, контролируемые этим ключом: %s.</string>
+    <string name="Backup_Intro_Subtitle">Приватный Ключ, который будет показан далее, - это единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и т.д. Убедитесь, что никто не смотрит на ваш экран.\n\nТокены, контролируемые этим ключом: %s.</string>
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная Копия</string>
     <string name="Backup_DisplayTitle">Приватный Ключ</string>
-    <string name="Backup_Confirmation_Description">Введите слова из вашего приватного ключа.</string>
+    <string name="Backup_Confirmation_Description">Введите слова из вашего %s ключа</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
-    <string name="Backup_Button_Next">Далее</string>
+    <string name="Backup_Button_Backup">Резервная копия</string>
     <string name="Backup_Button_Submit">Подтвердить</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Backup Eos-->
@@ -84,19 +82,19 @@
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
     <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
-    <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s кошелька, прежде чем вы сможете получать %s.</string>
+    <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
     <string name="Send_Hint_Amount">Сумма</string>
-    <string name="Send_Fee">Комиссия:</string>
+    <string name="Send_Fee">Комиссия</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Next">Далее</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_To">Кому: </string>
     <string name="Send_Confirmation_Total">Итого:</string>
-    <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
+    <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
@@ -111,11 +109,13 @@
     <string name="Send_Error_WrongParameters">Неверные параметры</string>
     <string name="Send_DialogTitle">Подтвердить</string>
     <string name="Send_DialogAvailableBalance">Доступный Баланс</string>
-    <string name="Send_DialogSpeed">Скорость транзакции:</string>
+    <string name="Send_DialogSpeed">Скорость Транзакции</string>
     <string name="Send_TxSpeed_Low">Низкая</string>
     <string name="Send_TxSpeed_Medium">Средняя</string>
     <string name="Send_TxSpeed_High">Высокая</string>
-    <string name="Send_DialogDuration">Продолжительность:</string>
+    <string name="Send_TxSpeed_Custom">Индивидуальная</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
+    <string name="Send_DialogDuration">Продолжительность</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
     <string name="Send_DialogProceed">Продолжить</string>
@@ -125,8 +125,8 @@
     <string name="Send_LockTime_HalfYear">6 месяцев</string>
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
-    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взымается в ETH. Необходимо %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s (%s) взымается в %s. Необходимо %s.</string>
+    <string name="Send_ERC_Alert">Комиссии за транзакцию %s (ERC20) взимаются в ETH. Вам нужно %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
-    <string name="Transactions_EmptyList">У Вас нет транзакций!</string>
+    <string name="Transactions_EmptyList">У Вас ещё нет ожидаемых или прошлых транзакций </string>
     <string name="Transactions_Receiving">Получение</string>
     <string name="Transactions_Sending">Отправка</string>
     <string name="Transactions_Failed">Не удалось</string>
@@ -143,7 +143,7 @@
     <string name="TransactionInfo_Title">Транзакция</string>
     <string name="TransactionInfo_Status">Статус</string>
     <string name="TransactionInfo_Status_Confirmed">Подтверждено</string>
-    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_Id">ID Транзакции</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
@@ -178,13 +178,13 @@
     <string name="FullInfo_Status">Статус</string>
     <string name="FullInfo_Source_Title">Источник</string>
     <string name="FullInfo_Source_Online">Доступен</string>
-    <string name="FullInfo_Source_Offline">Недоступен</string>
-    <string name="FullInfo_Error_ProviderOffline">Недоступен</string>
-    <string name="FullInfo_Error_TransactionNotFound">Транзакция не может быть найдена в блокчейне</string>
+    <string name="FullInfo_Source_Offline">Не доступен</string>
+    <string name="FullInfo_Error_ProviderOffline">Не доступен</string>
+    <string name="FullInfo_Error_TransactionNotFound">Транзакция не найдена в блокчейне</string>
     <string name="FullInfo_Error_Retry">Повторить</string>
     <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
-    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Id">ID Транзакции</string>
     <string name="FullInfo_TotalInput">Всего Входов</string>
     <string name="FullInfo_TotalOutput">Всего Выходов</string>
     <string name="FullInfo_FeePerByte">Комиссия за байт</string>
@@ -197,8 +197,7 @@
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
     <string name="Settings_Notifications">Уведомления </string>
-    <string name="Settings_ManageCoins">Управление Токенами</string>
-    <string name="Settings_ExperimentalFeatures">Функции</string>
+    <string name="Settings_ExperimentalFeatures">Экспериментальные Функции</string>
     <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
@@ -208,32 +207,53 @@
     <string name="Settings_Report">Сообщить о Проблеме</string>
     <string name="SettingsOption_Enabled">Вкл.</string>
     <string name="SettingsOption_Disabled">Выкл.</string>
-    <string name="SettingsPrivacy_Info">Наше приложение не делится информацией ни с кем. Но при взаимодействии с блокчейнами некоторые публичные данные как ваш IP адрес могут фиксироваться в сети.</string>
+    <string name="SettingsPrivacy_Info">Наше приложение не делится никакой информацией ни с кем. Но при взаимодействии с блокчейнами некоторые публичные данные, такие как ваш IP адрес, могут фиксироваться в сети.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Соединение с Блокчейном</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в режиме peer-to-peer (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Синхронизация Блокчейна</string>
+    <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в пиринговом режиме (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
     <string name="SettingsPrivacy_WalletRestore">Восстановить Блокчейн</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Выбрать источник данных для восстановления транзакций кошелька.</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Выберите источник данных для восстановления кошелька с транзакциями.</string>
     <string name="SettingsPrivacy_Transactions">Блокчейн Tранзакции</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
-    <string name="SettingsPrivacy_TransactionsDescription">Поменять способ оформления транзакций что бы трудно было уследить за вашими BTC, LTC, BCH операциями.</string>
+    <string name="SettingsPrivacy_TransactionsDescription">Поменяйте способ структурирования транзакций, чтобы затруднить отслеживание ваших BTC, LTC, BCH операций.</string>
+    <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Блокчейн Tранзакции</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
+        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
+        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
+        \n\na) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
+        \n\nb) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
+        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
+        \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\na) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\nb) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
+    <string name="Settings_Error_NoFingerprintAddedYet">На этом устройстве не активирован доступ к отпечаткам пальцев. Его можно активировать в разделе безопасности настроек Android.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Приватность</string>
-    <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Биометрическая Aутентификация</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">Активация Биометрической Аутентификации может потенциально ослабить безопасность вашего устройства по сравнению с простым PIN-кодом.</string>
     <string name="SettingsSecurity_EnablePin">Код Доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <string name="SettingsSecurity_EnableTor">Включить Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Полностью анонимизируйте интернет трафик этого приложения. Может замедлить работу.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Полностью анонимизируйте интернет трафик этого приложения. Может замедлить работу</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для Unstoppable Кошелька отключены. Для работы Tor необходимо включить их.</string>
-    <string name="SettingsSecurity_SortingShuffle">Вперемешку</string>
+    <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Случайное Индексирование</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingOff">Выкл.</string>
+    <string name="SettingsSecurity_SortingBip69Description">Лексикографическая Индексация</string>
+    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">Рекомендовано</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Из Блокчейна</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Более Приватно</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -251,11 +271,11 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Kонтакты</string>
     <string name="SettingsContact_Email">Эл. почта</string>
-    <string name="SettingsContact_Telegram">Telegram (Разработчики)</string>
+    <string name="SettingsContact_Telegram">Telegram </string>
     <string name="SettingsContact_AppStatus">Статус Приложения</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Уведомления </string>
-    <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для монет, за которыми вы бы хотели следить.\n\nВы будете предупреждены, когда изменение цены за последние 24 часа превысят выбранный порог.</string>
+    <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для токенов, которые вы бы хотели отслеживать.\n\nВы будете предупреждены, когда ценовое изменение за последние 24 часа превысит выбранный порог.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Кошелек отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
     <string name="SettingsNotifications_TurnOn">Включить в настройках</string>
     <string name="SettingsNotifications_Off">Выкл.</string>
@@ -269,8 +289,8 @@
     <string name="Eos_Backend_Error_SelfTransfer">Не удается отправить токен на свой аккаунт</string>
     <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
     <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
-    <string name="Binance_Backend_Error_MemoRequired">Получатель требует ввести memo в переводе транзакции</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Необходимо, чтобы memo содержало только цифры</string>
+    <string name="Binance_Backend_Error_MemoRequired">Получателю нужно заполненное поле мемо при отправке транзакции</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Необходимо, чтобы мемо содержало только цифры</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
@@ -282,13 +302,13 @@
     <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Выберите монеты</string>
+    <string name="ManageCoins_title">Выберите Токены</string>
     <string name="ManageCoins_save">Сохранить</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Кошелек</string>
-    <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек не может создать новые учетные записи %s. Вы можете восстановить только существующий.</string>
+    <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек Unstoppable не может создавать новый %s кошелек. Вы можете восстановить только существующий.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Функции</string>
-    <string name="ExperimentalFeatures_Description">Ниже приведены экспериментальные функции. Несмотря на то, что мы протестировали эти функции, мы не можем гарантировать, что они будут работать так, как ожидалось во всех возможных случаях. По этому, просим вас пользоваться ими с осторожностью.</string>
+    <string name="ExperimentalFeatures_Description">Ниже приведены пробные функции. Несмотря на то, что мы детально протестировали эти функции, используя наши собственные криптосредства, мы не можем гарантировать, что они всегда будут работать так, как предусмотрено.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
@@ -300,12 +320,12 @@
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
     <string name="ManageKeys_Backup">Резервная копия</string>
-    <string name="ManageKeys_Show">Показать</string>
-    <string name="ManageKeys_Unlink">Отсоединить</string>
+    <string name="ManageKeys_Show">Показать Ключ</string>
+    <string name="ManageKeys_Unlink">Удалить</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Удалить Кошелек</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
-    <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">Токены, которые будут отключены: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
     <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
@@ -313,7 +333,8 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Добавить %s</string>
     <string name="AddCoin_Subtitle">%s Кошелек</string>
-    <string name="AddCoin_Description">Вам нужно настроить кошелек %1$s , чтобы иметь возможность отправлять или получать %2$s.\n\nИспользуйте кнопку \'Создать\', чтобы настроить новый кошелек %3$s или \'Восстановить\', чтобы импортировать существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
+    <string name="AddCoin_Description">Вам нужно настроить кошелек %1$s, чтобы иметь возможность отправлять или получать %2$s.\n\nИспользуйте кнопку \'Создать\', чтобы настроить новый кошелек %3$s или \'Восстановить\', чтобы импортировать существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
+    <string name="AddCoin_CreationNotSupportedDescription">Вам нужно настроить кошелек %1$s, чтобы иметь возможность отправлять или получать %2$s.\n\nВ данный момент кошелек Unstoppable не может создавать новый %3$s кошелек. Вы можете восстановить только существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Address Format Settings List -->
@@ -321,11 +342,10 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %1$s .\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Если вернуться к предыдущей настройке, все вернется после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если не уверены, что это такое.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизироваться с блокчейном %1$s.\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Вернув предыдущую настройку, вы вернете все после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если вы не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет пересинхронизироваться с блокчейном %s.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизировать с блокчейном %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Настройки</string>
@@ -336,16 +356,17 @@
     <string name="TorPage_Connected">Подключен</string>
     <string name="TorPage_Failed">Не удалось</string>
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
-    <string name="TorPage_Title">Соединение с Tor</string>
+    <string name="TorPage_Title">Соединение с TOR</string>
+    <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Unstoppable">Standard</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
     <string name="CoinOption_RestoreSource">Ссылка на источник API: \n%s</string>
-    <string name="CoinOption_Slow_Subtitle">1–12 часов</string>
+    <string name="CoinOption_Slow_Subtitle">1–24 часа</string>
     <string name="CoinOption_AddressFormatTitle">Формат адреса</string>
-    <string name="CoinOption_SyncModeTitle">Опции восстановления</string>
+    <string name="CoinOption_SyncModeTitle">Опции Восстановления</string>
     <string name="CoinOption_bip44_Subtitle">Старый (начинается с 1...)</string>
     <string name="CoinOption_bip49_Subtitle">Популярный (начинается с 3...)</string>
     <string name="CoinOption_bip84_Subtitle">Новый (начинается с bc1...)</string>
@@ -363,7 +384,7 @@
     <string name="Charts_Rate_Low">Низкая</string>
     <string name="Charts_MarketCap">Рын. Кап.</string>
     <string name="Charts_Volume24">Объем (24 ч)</string>
-    <string name="Charts_inCirculation">Выпущено </string>
+    <string name="Charts_inCirculation">В обороте</string>
     <string name="Charts_TotalSupply">Макс.выпуск</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
@@ -374,5 +395,13 @@
     <string name="Charts_Error_NotAvailable">График недоступен</string>
     <string name="Charts_LatestNews">Последние Новости</string>
     <!--Rate list-->
-    <string name="RateList_updated">обновлено\n%s</string>
+    <string name="RateList_portfolio">Портфель</string>
+    <string name="RateList_top100">Топ-100</string>
+    <string name="RateList_prices">Цены</string>
+    <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
+    <string name="BalanceSyncError_Description">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
+    <string name="BalanceSyncError_ButtonRetry">Повторить</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Сменить Источник</string>
+    <string name="BalanceSyncError_ButtonReport">Пожаловаться</string>
 </resources>

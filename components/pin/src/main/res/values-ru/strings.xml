@@ -4,18 +4,18 @@
     <string name="Button_Cancel">Отменить</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Код Доступа</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Отпечаток пальца для входа</string>
-    <string name="Fingerprint_Hint">Коснитесь датчика</string>
-    <string name="Fingerprint_EnterPin">Код Доступа</string>
-    <string name="Fingerprint_NotRecognized">Отпечаток не распознан. Повторите ещё раз</string>
-    <string name="Fingerprint_Success">Успешно!</string>
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Биометрический Сканер</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <string name="UnlockPin_Error_PinIncorrect">Неправильно</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">Биометрический Сканер</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Description">Введите код доступа или повторите попытку позже</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">Биометрическая аутентификация отключена</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">Код Доступа</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Код Доступа</string>
-    <string name="SetPin_Info">Ваш код будет использоваться для разблокировки вашего кошелька и отправки денег</string>
+    <string name="SetPin_Info">Код доступа будет использован для разблокировки</string>
     <string name="SetPin_ErrorShortPin">Пожалуйста, введите только символы цифр.</string>
     <string name="SetPin_ConfirmInfo">Подтвердить</string>
     <string name="SetPin_Success">Код доступа успешно установлен!</string>

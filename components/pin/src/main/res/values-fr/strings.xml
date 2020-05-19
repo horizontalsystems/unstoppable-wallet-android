@@ -4,18 +4,18 @@
     <string name="Button_Cancel">Annuler</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Code</string>
-    <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Prise d\'empreintes digitales</string>
-    <string name="Fingerprint_Hint">Détecteur tactile</string>
-    <string name="Fingerprint_EnterPin">Code</string>
-    <string name="Fingerprint_NotRecognized">Empreinte digitale non reconnue. Réessayez</string>
-    <string name="Fingerprint_Success">Effectué!</string>
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">Scanner biométrique</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Description">Entrez le code d\'accès ou réessayez plus tard</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">Autorisation biométrique désactivée</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">Code</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Votre code secret sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
+    <string name="SetPin_Info">Le code d\'accès sera utilisé pour déverrouiller</string>
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
     <string name="SetPin_ConfirmInfo">Confirmer</string>
     <string name="SetPin_Success">Votre code a été défini avec succès!</string>

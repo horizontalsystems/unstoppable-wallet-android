@@ -44,9 +44,6 @@
     <string name="RateApp_Description_Rate_This_App">از کیف پول غیر قابل توقف لذت می برید؟ لطفاً برای امتیاز دادن به این این برنامه یک لحظه وقت بگذارید</string>
     <string name="RateApp_Button_RateIt">امتیاز بدهید</string>
     <string name="RateApp_Button_NotNow">الان نه</string>
-    <!--Create-->
-    <string name="Create_Title">کیف پول جدید</string>
-    <string name="Create_Description">برای شروع ، یک ارز رمزگذاری شده انتخاب کنید. بعداً می توانید ارزهای رمزنگاری شده دیگری را اضافه کنید.</string>
     <!--Restore-->
     <string name="Restore_ChooseWallet">انتخاب کیف پول</string>
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
@@ -55,6 +52,7 @@
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountIncorrect">حساب نادرست</string>
     <string name="Restore_EosKeyIncorrect">کلید نادرست</string>
+    <string name="Select_Coins">کیف پول جدید</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">پيشتيباني</string>
     <string name="Backup_Intro_TitleShow">نمایش کلید</string>
@@ -62,11 +60,11 @@
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_DisplayTitle">کلید خصوصی</string>
-    <string name="Backup_Confirmation_Description">کلمات را از کلید خصوصی خود وارد کنید.</string>
+    <string name="Backup_Confirmation_Description">کلمات را از %s خود وارد کنید.</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
     <string name="Backup_Button_Confirm">تاييد</string>
-    <string name="Backup_Button_Next">بعدي</string>
+    <string name="Backup_Button_Backup">پيشتيباني</string>
     <string name="Backup_Button_Submit">ثبت</string>
     <string name="Backup_Button_ShowKey">نمایش کلید</string>
     <!--Backup Eos-->
@@ -89,7 +87,7 @@
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس</string>
     <string name="Send_Hint_Amount">مقدار</string>
-    <string name="Send_Fee">قیمت:</string>
+    <string name="Send_Fee">هزينه</string>
     <string name="Send_Button_Paste">چسباندن</string>
     <string name="Send_Button_Next">بعدی</string>
     <string name="Send_Button_Max">حداکثر</string>
@@ -111,11 +109,13 @@
     <string name="Send_Error_WrongParameters">پارامتر های اشتباه</string>
     <string name="Send_DialogTitle">تاييد</string>
     <string name="Send_DialogAvailableBalance">موجودی در دسترس</string>
-    <string name="Send_DialogSpeed">سرعت تراکنش:</string>
+    <string name="Send_DialogSpeed">سرعت تراکنش</string>
     <string name="Send_TxSpeed_Low">پایین</string>
     <string name="Send_TxSpeed_Medium">متوسط</string>
     <string name="Send_TxSpeed_High">بالا</string>
-    <string name="Send_DialogDuration">مدت زمان:</string>
+    <string name="Send_TxSpeed_Custom">شخصی سازی</string>
+    <string name="Send_TxSpeed_CustomFeeHint">شنبه/بایت</string>
+    <string name="Send_DialogDuration">مدت زمان</string>
     <string name="Send_DialogFee">قیمت:</string>
     <string name="Send_DialogTotal">مجموع:</string>
     <string name="Send_DialogProceed">پردازش</string>
@@ -135,7 +135,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">تراکنش ها</string>
     <string name="Transactions_FilterAll">همه</string>
-    <string name="Transactions_EmptyList">شما هنوز تراکنشی نداشته ايد</string>
+    <string name="Transactions_EmptyList">شما هيچ گونه معاملات يا قرارداد نداريد تا هنوز</string>
     <string name="Transactions_Receiving">در حال دریافت</string>
     <string name="Transactions_Sending">در حال ارسال</string>
     <string name="Transactions_Failed">ناموفق</string>
@@ -197,8 +197,7 @@
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
-    <string name="Settings_ManageCoins">مدیریت سکه ها</string>
-    <string name="Settings_ExperimentalFeatures">آزمایشی</string>
+    <string name="Settings_ExperimentalFeatures">ویژگی های تجربی</string>
     <string name="Settings_RestoreWallet">بازیابی كيف پول</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
@@ -210,19 +209,42 @@
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
     <string name="SettingsPrivacy_Info">این برنامه هیچکدام از داده های شما را به اشتراک نمی گذارد. با این وجود، از آنجا که با زنجیره های بلوکی ارتباط دارد، برخی از داده های عمومی مانند آدرس IP می توانند به صورت بالقوه فاش شوند.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">ارتباط زنجیره بلوکی</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
     <string name="SettingsPrivacy_CommunicationDescription">بعضی از زنجیره های بلوکی هنوز وسیله ای برای برنامه های تلفن همراه برای کار به روش همتا به همتا ارائه نمی دهند. ارتباطات با زنجیره های بلوکی BTC ، BCH ، LTC ، DASH کاملاً همتا به همتا است.</string>
     <string name="SettingsPrivacy_WalletRestore">بازیابی زنجیره بلوکی</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">منبع داده را برای بازیابی کیف پول با تراکنش ها انتخاب کنید.</string>
     <string name="SettingsPrivacy_Transactions">تراکنش های زنجیره بلوکی</string>
     <string name="SettingsPrivacy_TransactionsSettingText">ورودی/خروجی</string>
     <string name="SettingsPrivacy_TransactionsDescription">با تغییر در نحوه ساخت تراکنش ها، ردیابی تراکنش های BTC, LTC, BCH را دشوارتر کنید.</string>
+    <string name="SettingsPrivacy_Info_Details">not</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
+        \n\n
+Most Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.        \n\n
+Unstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
+        \n\n
+a) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
+        \n\n
+b) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
+        \n\n
+In case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
+        \n\n
+When it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\n
+a) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\n
+b) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">اثر انگشت فعال نشده است</string>
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است. به تنظيمات برويد&gt; قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">حریم خصوصی</string>
-    <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
+    <string name="SettingsSecurity_Biometric_Authentication">احراز هویت بیومتریک</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">فعال کردن تأیید هویت بیومتریک به طور بالقوه می تواند امنیت دستگاه شما را در مقایسه با کد قفل پین ساده تضعیف کند.</string>
     <string name="SettingsSecurity_EnablePin">رمز عبور</string>
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
@@ -232,11 +254,16 @@
     <string name="SettingsSecurity_TorConnectionDescription">هنگام استفاده از این برنامه، ترافیک اینترنت خود را کاملاً ناشناس کنید. می تواند آهسته باشد.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
     <string name="SettingsSecurity_SortingShuffle">مخلوط کردن</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">فهرست بندی تصادفی</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingOff">خاموش</string>
+    <string name="SettingsSecurity_SortingBip69Description">فهرست بندی فهرستشناختی</string>
+    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">توصیه شده</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">از زنجیره بلوکی</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">خصوصی تر</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
-    <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">شرايط &amp; حريم خصوصي:</string>
     <string name="SettingsAbout_TermsPrivacyText">این برنامه به صورت همتا به همتا است. کارکرد این برنامه به عملکرد سرور وب یا پرسنل پشتیبانی فنی بستگی ندارد. \n\n تا زمانی که اینترنت وجود داشته باشد ، در همه جا کار می کند. هیچ نهادی نمی تواند این برنامه را از کار بیندازد یا کسی را از استفاده از آن بازدارد.
 \n\nکلیدهای رمزنگاری محرمانه که سرمایه رمزنگاری شده شما را کنترل می کنند ، کاملا مطمین در گوشی ذخیره می شوند ، و نه در هیچ جای دیگر.
@@ -300,7 +327,7 @@
     <string name="ManageKeys_Delete">پاک کردن</string>
     <string name="ManageKeys_Backup">پيشتيباني</string>
     <string name="ManageKeys_Show">نشان دادن</string>
-    <string name="ManageKeys_Unlink">جدا کردن</string>
+    <string name="ManageKeys_Unlink">پاک کردن</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">پاک کردن کیف پول</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
@@ -312,7 +339,8 @@
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">اضافه کردن %s</string>
     <string name="AddCoin_Subtitle">%s کیف پول</string>
-    <string name="AddCoin_Description">برای اینکه بتوانید %2$s ارسال یا دریافت کنید ، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
+    <string name="AddCoin_Description">برای اینکه بتوانید %2$s ارسال یا دریافت کنید، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
+    <string name="AddCoin_CreationNotSupportedDescription">برای اینکه بتوانید %2$s ارسال یا دریافت کنید، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Address Format Settings List -->
@@ -324,7 +352,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">بعد از این تغییر، کیف پول باید مجدداً خود را با زنجیره بلوکی %s هماهنگ کند.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">زنجیره بلوکی</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s تنظیمات</string>
@@ -336,6 +363,7 @@
     <string name="TorPage_Failed">ناموفق</string>
     <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="TorPage_Title">ارتباط Tor</string>
+    <string name="Tor_PrerequisitesAlert_Content">با فعال کردن TOR، اتصال Ethereum زنجیره بلوکی به Infura بازمی گردد.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">غیرقابل توقف</string>
     <!--Coin Option-->
@@ -373,5 +401,13 @@
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
     <string name="Charts_LatestNews">آخرین اخبار</string>
     <!--Rate list-->
-    <string name="RateList_updated">به روز شده \n%s</string>
+    <string name="RateList_portfolio">نمونه کار</string>
+    <string name="RateList_top100">۱۰۰ برتر</string>
+    <string name="RateList_prices">قیمت‌ها</string>
+    <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>
+    <string name="BalanceSyncError_Description">در صورت تصمیم به گزارش آن ، متن خطا در کلیپ بورد شما کپی خواهد شد.</string>
+    <string name="BalanceSyncError_ButtonRetry">دوباره تلاش کنید</string>
+    <string name="BalanceSyncError_ButtonChangeSource">تغییر منبع</string>
+    <string name="BalanceSyncError_ButtonReport">گزارش</string>
 </resources>

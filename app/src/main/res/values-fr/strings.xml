@@ -35,7 +35,7 @@
     <string name="Intro_Privacy_Title">Confidentialité</string>
     <string name="Intro_Privacy_Description">Gardez l\'anonymat et restez discret tout en augmentant votre capital</string>
     <!--Welcome-->
-    <string name="Welcome_Title">\nPortefeuille Unstoppable</string>
+    <string name="Welcome_Title">Portefeuille\nUnstoppable</string>
     <string name="Welcome_PrivacySettings">Paramètres de Confidentialité</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
@@ -44,9 +44,6 @@
     <string name="RateApp_Description_Rate_This_App">Vous aimez Unstoppable Wallet ? Merci de prendre un moment pour évaluer cette application.</string>
     <string name="RateApp_Button_RateIt">Evaluez-là</string>
     <string name="RateApp_Button_NotNow">Plus tard</string>
-    <!--Create-->
-    <string name="Create_Title">Nouveau portefeuille</string>
-    <string name="Create_Description">Sélectionnez une cryptomonnaie pour commencer. Vous pourrez ajouter d\'autres cryptomonnaies plus tard.</string>
     <!--Restore-->
     <string name="Restore_ChooseWallet">Choisissez le portefeuille</string>
     <string name="Restore_Enter_Key_Title">Entrez la clé</string>
@@ -56,6 +53,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountIncorrect">Compte incorrect</string>
     <string name="Restore_EosKeyIncorrect">Clé Incorrect</string>
+    <string name="Select_Coins">Choisissez la Crypto</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
     <string name="Backup_Intro_TitleShow">Voir la clé</string>
@@ -63,11 +61,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_DisplayTitle">Clé privée</string>
-    <string name="Backup_Confirmation_Description">Entrez les mots de votre clé privée.</string>
+    <string name="Backup_Confirmation_Description">Entrez les mots de votre clé %s</string>
     <string name="Backup_Confirmation_FailureAlertText"> Les mots ne correspondent pas</string>
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
     <string name="Backup_Button_Confirm">Confirmer</string>
-    <string name="Backup_Button_Next">Suivant</string>
+    <string name="Backup_Button_Backup">Sauvegarde</string>
     <string name="Backup_Button_Submit">Soumettre</string>
     <string name="Backup_Button_ShowKey">Voir la clé</string>
     <!--Backup Eos-->
@@ -90,7 +88,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse</string>
     <string name="Send_Hint_Amount">Montant</string>
-    <string name="Send_Fee">Frais:</string>
+    <string name="Send_Fee">Frais</string>
     <string name="Send_Button_Paste">Coller</string>
     <string name="Send_Button_Next">Suivant</string>
     <string name="Send_Button_Max">Max</string>
@@ -112,11 +110,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Error_WrongParameters">Paramètres erronés</string>
     <string name="Send_DialogTitle">Confirmer</string>
     <string name="Send_DialogAvailableBalance">Solde disponible</string>
-    <string name="Send_DialogSpeed">Vitesse de transaction :</string>
+    <string name="Send_DialogSpeed">Vitesse de transaction </string>
     <string name="Send_TxSpeed_Low">Faible</string>
     <string name="Send_TxSpeed_Medium">Moyenne</string>
     <string name="Send_TxSpeed_High">Élevée</string>
-    <string name="Send_DialogDuration">Durée :</string>
+    <string name="Send_TxSpeed_Custom">Personnalisé</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
+    <string name="Send_DialogDuration">Durée </string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogProceed">Continuer</string>
@@ -136,7 +136,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
-    <string name="Transactions_EmptyList">Vous n’avez aucune transaction</string>
+    <string name="Transactions_EmptyList">Vous n\'avez encore aucune transaction en cours ou passée</string>
     <string name="Transactions_Receiving">En réception</string>
     <string name="Transactions_Sending">En attente</string>
     <string name="Transactions_Failed">Échec</string>
@@ -163,7 +163,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx conflictuelle</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Transactions</string>
     <string name="FullInfo_Time">Heure</string>
     <string name="FullInfo_Block">Bloc</string>
     <string name="FullInfo_Confirmations">Confirmation</string>
@@ -198,8 +198,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
     <string name="Settings_Notifications">Notifications</string>
-    <string name="Settings_ManageCoins">Gérer les coins</string>
-    <string name="Settings_ExperimentalFeatures">Expérimental</string>
+    <string name="Settings_ExperimentalFeatures">Fonctionnalités expérimentales</string>
     <string name="Settings_RestoreWallet">Restaurer le porte-monnaie</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
@@ -211,19 +210,35 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsOption_Disabled">Désactivé</string>
     <string name="SettingsPrivacy_Info">Cette application ne partage aucune de vos données. Cependant, comme elle communique avec des blockchains, certaines données publiques comme l\'adresse IP peuvent potentiellement être divulguées.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Connection blockchain</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">Sync Blockchain</string>
     <string name="SettingsPrivacy_CommunicationDescription">Certaines blockchains ne permettent pas encore aux applications mobiles de fonctionner en mode peer to peer. Les communications avec les blockchains BTC, BCH, LTC, DASH sont entièrement de type peer to peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Restauration blockchain</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
     <string name="SettingsPrivacy_Transactions">Transactions blockchain</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Entrées/Sorties</string>
     <string name="SettingsPrivacy_TransactionsDescription">Rendez vos transactions BTC, LTC, BCH plus difficiles à détecter en modifiant la structure des transactions.</string>
+    <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Transactions Blockchain</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
+        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
+        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
+        \n\na) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
+        \n\nb) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
+        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
+        \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\na) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\nb) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Empreinte digitale n\'est pas activé</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Confidentialité</string>
-    <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Authentification biométrique</string>
+    <string name="SettingsSecurity_Info_Biometric_Authentication">L\'activation de l\'authentification biométrique peut potentiellement affaiblir la sécurité de votre appareil par rapport à un simple code de verrouillage PIN.</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
@@ -233,8 +248,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisez complètement votre trafic Internet en utilisant cette application. Peut être lent.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Les notifications de l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour que Tor puisse fonctionner.</string>
     <string name="SettingsSecurity_SortingShuffle">Mélanger</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Indexation aléatoire</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
-    <string name="SettingsSecurity_SortingOff">Désactivé</string>
+    <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
+    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPIDescription">Recommandé</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">De la Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
@@ -302,7 +322,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="ManageKeys_Delete">Supprimer</string>
     <string name="ManageKeys_Backup">Sauvegarde</string>
     <string name="ManageKeys_Show">Afficher</string>
-    <string name="ManageKeys_Unlink">Délier</string>
+    <string name="ManageKeys_Unlink">Supprimer</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Supprimer le portefeuille</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Cette action supprimera le portefeuille %s de cet appareil.</string>
@@ -314,7 +334,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Ajouter %s</string>
     <string name="AddCoin_Subtitle">%s Portefeuille</string>
-    <string name="AddCoin_Description">Vous devez configurer le portefeuille %1$s pour pouvoir envoyer ou recevoir des %2$s.\n\nUtilisez le bouton Créer ci-dessous pour configurer un nouveau portefeuille %3$s, ou le bouton Restaurer pour importer le portefeuille existant.\n\nVous pourrez utiliser ce portefeuille pour %4$s.</string>
+    <string name="AddCoin_Description">Vous devez créer un portefeuille%1$s pour envoyer ou recevoir des %2$s.\n\nUtilisez le bouton Créer ci-dessous pour créer un nouveau portefeuille%3$s , ou le bouton Restaurer pour importer le portefeuille existant.\n\nVous pourrez utiliser ce portefeuille pour : %4$s.</string>
+    <string name="AddCoin_CreationNotSupportedDescription">Vous devez créer un portefeuille %1$s pour envoyer ou recevoir des %2$s.\n\nÀ ce stade, Unstoppable n\'est pas en mesure de créer de nouveaux portefeuilles %3$s.. Vous ne pouvez restaurer que celui déjà existant.\n\nVous pourrez utiliser ce portefeuille pour: %4$s.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Address Format Settings List -->
@@ -326,7 +347,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">Paramètres %s</string>
@@ -338,13 +358,14 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TorPage_Failed">Échec</string>
     <string name="TorPage_ConnectionClosed">Déconnecté</string>
     <string name="TorPage_Title">Connection Tor</string>
+    <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast_Subtitle">0-2 heures (Recommandé)</string>
     <string name="CoinOption_RestoreSource">Lien source API : \n%s</string>
-    <string name="CoinOption_Slow_Subtitle">1 - 12 heures</string>
+    <string name="CoinOption_Slow_Subtitle">1 - 24 heures</string>
     <string name="CoinOption_AddressFormatTitle">Format de l\'adresse</string>
     <string name="CoinOption_SyncModeTitle">Restaurer les paramètres</string>
     <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par 1...)</string>
@@ -375,5 +396,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Charts_Error_NotAvailable">Graphique non disponible</string>
     <string name="Charts_LatestNews">Dernières nouvelles</string>
     <!--Rate list-->
-    <string name="RateList_updated">mis à jour\n%s</string>
+    <string name="RateList_portfolio">Portfolio</string>
+    <string name="RateList_top100">Top 100</string>
+    <string name="RateList_prices">Tarifs</string>
+    <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_Title">Erreur de synchronisation</string>
+    <string name="BalanceSyncError_Description">Le texte de l\'erreur sera copié dans votre presse-papiers si vous décidez de le signaler.</string>
+    <string name="BalanceSyncError_ButtonRetry">Réessayer</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Changer la Source</string>
+    <string name="BalanceSyncError_ButtonReport">Signaler</string>
 </resources>
