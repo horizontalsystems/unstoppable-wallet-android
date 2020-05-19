@@ -54,7 +54,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
         balanceViewItem = item
 
         item.apply {
-            syncSpinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
+            syncingData.spinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
 
             iconCoin.setCoinImage(coinCode)
 
@@ -90,7 +90,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
 
             iconCoin.showIf(coinIconVisible)
             iconNotSynced.showIf(failedIconVisible)
-            iconProgress.showIf(syncSpinnerProgress != null)
+            iconProgress.showIf(syncingData.spinnerProgress != null)
 
             coinLabel.showIf(coinTypeLabelVisible)
         }
@@ -104,8 +104,8 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
         }
 
         current.apply {
-            if (prev.syncSpinnerProgress != syncSpinnerProgress) {
-                syncSpinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
+            if (prev.syncingData.spinnerProgress != syncingData.spinnerProgress) {
+                syncingData.spinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
             }
 
             if (coinValue.text != prev.coinValue.text) {
@@ -181,8 +181,8 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             if (failedIconVisible != prev.failedIconVisible) {
                 iconNotSynced.showIf(failedIconVisible)
             }
-            if (syncSpinnerProgress != prev.syncSpinnerProgress) {
-                iconProgress.showIf(syncSpinnerProgress != null)
+            if (syncingData.spinnerProgress != prev.syncingData.spinnerProgress) {
+                iconProgress.showIf(syncingData.spinnerProgress != null)
             }
         }
     }
