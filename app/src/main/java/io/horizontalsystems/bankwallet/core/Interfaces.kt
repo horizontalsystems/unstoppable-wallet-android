@@ -151,9 +151,9 @@ interface IWordsManager {
 
 sealed class AdapterState {
     object Synced : AdapterState()
-    class Syncing(val progress: Int, val lastBlockDate: Date?) : AdapterState()
-    class SyncingApi(val txCount: Int) : AdapterState()
-    class NotSynced(val error: Throwable) : AdapterState()
+    data class Syncing(val progress: Int, val lastBlockDate: Date?) : AdapterState()
+    data class SyncingApi(val txCount: Int) : AdapterState()
+    data class NotSynced(val error: Throwable) : AdapterState()
 }
 
 interface IEthereumKitManager {
