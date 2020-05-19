@@ -10,7 +10,7 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 
-class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BalanceItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
         fun onSendClicked(viewItem: BalanceViewItem)
@@ -46,19 +46,19 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            addCoinType -> ViewHolderAddCoin(inflate(parent, R.layout.view_holder_add_coin))
-            else -> ViewHolderCoin(inflate(parent, R.layout.view_holder_coin), listener)
+            addCoinType -> AddCoinViewHolder(inflate(parent, R.layout.view_holder_add_coin))
+            else -> BalanceItemViewHolder(inflate(parent, R.layout.view_holder_balance_item), listener)
         }
     }
 
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {}
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
-        if (holder is ViewHolderAddCoin) {
+        if (holder is AddCoinViewHolder) {
             holder.manageCoins.setOnSingleClickListener { listener.onAddCoinClicked() }
         }
 
-        if (holder !is ViewHolderCoin) return
+        if (holder !is BalanceItemViewHolder) return
 
         val item = items[position]
         val prev = payloads.lastOrNull() as? BalanceViewItem
@@ -71,4 +71,4 @@ class BalanceCoinAdapter(private val listener: Listener) : RecyclerView.Adapter<
     }
 }
 
-class ViewHolderAddCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+class AddCoinViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer

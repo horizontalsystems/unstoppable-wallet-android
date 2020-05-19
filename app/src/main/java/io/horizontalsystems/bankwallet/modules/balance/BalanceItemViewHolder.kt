@@ -10,9 +10,9 @@ import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.setCoinImage
 import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_coin.*
+import kotlinx.android.synthetic.main.view_holder_balance_item.*
 
-class ViewHolderCoin(override val containerView: View, private val listener: BalanceCoinAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class BalanceItemViewHolder(override val containerView: View, private val listener: BalanceItemsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var balanceViewItem: BalanceViewItem? = null
 

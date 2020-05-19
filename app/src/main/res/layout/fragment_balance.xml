@@ -20,7 +20,7 @@
             android:paddingBottom="18dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:itemCount="1"
-            tools:listitem="@layout/view_holder_coin" />
+            tools:listitem="@layout/view_holder_balance_item" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
