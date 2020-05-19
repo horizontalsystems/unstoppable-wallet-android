@@ -7,28 +7,15 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlin.math.max
 
-
 class RotatingCircleProgressView : View {
 
-    init {
-        mThickness = LayoutHelper.dp(2f, context).toFloat()
-        lastUpdateTime = System.currentTimeMillis()
-        mCircleColor = ContextCompat.getColor(context, R.color.grey)
-        setPaints()
-    }
+    private val mCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mThickness: Float = LayoutHelper.dp(2f, context).toFloat()
 
-    private lateinit var mCirclePaint: Paint
-    private var mThickness: Float = 0.toFloat()
-
-    private var mCircleRect: RectF = RectF()
-    @ColorInt
-    private var mCircleColor: Int = 0
+    private val mCircleRect: RectF = RectF()
     private var mSize: Int = 0
     private var circlePadding = 0
 
@@ -41,6 +28,13 @@ class RotatingCircleProgressView : View {
 
     private var decelerateInterpolator: DecelerateInterpolator = DecelerateInterpolator()
 
+    init {
+        lastUpdateTime = System.currentTimeMillis()
+
+        mCirclePaint.style = Paint.Style.STROKE
+        mCirclePaint.strokeCap = Paint.Cap.BUTT
+        mCirclePaint.strokeWidth = mThickness
+    }
 
     constructor(context: Context) : super(context)
 
@@ -48,10 +42,13 @@ class RotatingCircleProgressView : View {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun setProgress(value: Float) {
+    fun setProgressColored(value: Int, color: Int) {
+        mCirclePaint.color = color
+
         if (value > 10) {
-            currentProgress = value/100
+            currentProgress = value.toFloat() / 100
         }
+
         if (animatedProgressValue > currentProgress) {
             animatedProgressValue = currentProgress
         }
@@ -60,15 +57,6 @@ class RotatingCircleProgressView : View {
 
         invalidate()
     }
-
-    private fun setPaints() {
-        mCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mCirclePaint.color = mCircleColor
-        mCirclePaint.style = Paint.Style.STROKE
-        mCirclePaint.strokeWidth = mThickness
-        mCirclePaint.strokeCap = Paint.Cap.BUTT
-    }
-
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
