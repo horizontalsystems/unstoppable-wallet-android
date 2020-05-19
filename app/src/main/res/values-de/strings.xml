@@ -68,7 +68,7 @@
     <string name="Backup_Button_Submit">Abschicken</string>
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Den Key einfach mit „Kopieren“ zu kopieren, ist riskant, da Sie womöglich Zwischenablage-Management-Apps oder andere Apps nutzen, die Zugriff auf die Daten in der Zwischenablage haben. Ein Hacker könnte so heimlich auf Ihre Zwischenablage zugreifen und Ihre Coins stehlen. Das gilt es natürlich zu vermeiden.</string>
+    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may have access to clipboard data.</string>
     <!--Balance-->
     <string name="Balance_Title">Guthaben</string>
     <string name="Balance_Deposit">Anfordern</string>
@@ -144,11 +144,13 @@
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Bestätigt</string>
     <string name="TransactionInfo_Id">Transaktion ID</string>
+    <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
     <string name="TransactionInfo_Time">Zeit</string>
     <string name="TransactionInfo_ButtonVerify">Prüfen</string>
-    <string name="TransactionInfo_LockedUntil">Gesperrt bis</string>
+    <string name="TransactionInfo_LockedUntil">Locked until %s</string>
+    <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
     <string name="TransactionInfo_RecipientHash">Empfänger</string>
     <string name="TransactionInfo_HistoricalRate">Historischer Rate</string>
     <string name="TransactionInfo_Fee">Gebühr</string>
@@ -308,7 +310,7 @@
     <string name="ManageCoins_Alert_CantCreateDescription">Im Moment kann das Wallet keine neuen %s Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimentell</string>
-    <string name="ExperimentalFeatures_Description">Die unten aufgeführten Funktionen sind experimentell und sollten mit Vorsicht eingesetzt werden. Wir haben sie zwar ausführlich mit unserem eigenen Kryptoguthaben getestet, aber wir können noch nicht garantieren, dass sie in allen denkbaren Fällen funktionieren.</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds we cannot guarantee they work as expected in all possible cases.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
@@ -342,7 +344,7 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adressformatierung</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Ändern zu %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %1$s Blockchain neu synchronisieren.\n\nWenn Sie das Adressformat für %2$s ändern, sind der aktuelle Saldo und die Transaktionshistorie auf der Registerkarte Kontostand nicht mehr sichtbar. Wenn Sie es auf die vorherige Einstellung zurücksetzen, wird alles wieder hergestellt, nachdem sich das Wallet mit der Blockchain synchronisiert hat. Wir empfehlen, dies nicht zu ändern, falls Sie nicht sicher sind, was das ist.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
