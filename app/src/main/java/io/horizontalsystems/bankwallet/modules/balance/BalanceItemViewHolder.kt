@@ -199,7 +199,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
     private fun setTextSyncing(syncingData: SyncingData?) {
         when (syncingData) {
             is SyncingData.Blockchain -> {
-                iconProgress.setProgress(syncingData.spinnerProgress.toFloat())
+                iconProgress.setProgressColored(syncingData.spinnerProgress, itemView.context.getColor(R.color.grey))
                 iconProgress.visibility = View.VISIBLE
 
                 textSyncing.showIf(syncingData.syncingTextVisible)
@@ -219,7 +219,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
                 }
             }
             is SyncingData.SearchingTxs -> {
-                iconProgress.setProgress(100f)
+                iconProgress.setProgressColored(100, itemView.context.getColor(R.color.grey_50))
                 iconProgress.visibility = View.VISIBLE
 
                 textSyncing.showIf(syncingData.syncingTextVisible)
