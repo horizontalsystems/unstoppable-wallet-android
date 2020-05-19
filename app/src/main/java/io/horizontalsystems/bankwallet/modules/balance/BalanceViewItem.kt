@@ -18,7 +18,6 @@ data class BalanceViewItem(
         val coinTitle: String,
         val coinType: String?,
         val coinValue: DeemedValue,
-        val syncSpinnerProgress: Int?,
         val exchangeValue: DeemedValue,
         val diff: RateDiff,
         val fiatValue: DeemedValue,
@@ -50,7 +49,7 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 }
 
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
-data class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true, val txCount: Int? = null)
+data class SyncingData(val progress: Int?, val spinnerProgress: Int?, val until: String?, val txCount: Int?, val syncingTextVisible: Boolean)
 
 class BalanceViewItemFactory {
 
@@ -90,16 +89,16 @@ class BalanceViewItemFactory {
         return when (state) {
             is AdapterState.Syncing -> {
                 if (state.lastBlockDate != null) {
-                    SyncingData(state.progress, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"), !expanded)
+                    SyncingData(state.progress, state.progress, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"), null, !expanded)
                 } else {
-                    SyncingData(null, null, !expanded)
+                    SyncingData(null, state.progress, null, null, !expanded)
                 }
             }
             is AdapterState.SyncingApi -> {
-                SyncingData(null, null, !expanded, state.txCount)
+                SyncingData(null, 100, null, state.txCount, !expanded)
             }
             else -> {
-                SyncingData(null, null, false)
+                SyncingData(null, null, null, null, false)
             }
         }
 
@@ -127,7 +126,6 @@ class BalanceViewItemFactory {
                 coinTitle = coin.title,
                 coinType = coin.type.typeLabel(),
                 coinValue = coinValue(state, item.balanceTotal, coin, balanceTotalVisibility),
-                syncSpinnerProgress = setSyncSpinnerProgress(state),
                 coinValueLocked = coinValue(state, item.balanceLocked, coin, balanceLockedVisibility),
                 fiatValue = currencyValue(state, item.balanceTotal, currency, marketInfo, balanceTotalVisibility),
                 fiatValueLocked = currencyValue(state, item.balanceLocked, currency, marketInfo, balanceLockedVisibility),
@@ -142,12 +140,6 @@ class BalanceViewItemFactory {
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
                 hideBalance = hideBalance
         )
-    }
-
-    private fun setSyncSpinnerProgress(state: AdapterState?) = when (state) {
-        is AdapterState.Syncing -> state.progress
-        is AdapterState.SyncingApi -> 100
-        else -> null
     }
 
     private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {
