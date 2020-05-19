@@ -49,22 +49,22 @@
     <string name="Restore_Enter_Key_Title">Introduza a Chave or Introduza a Key</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Digite a sua chave secreta para a Carteira %1s que contém %2s de palavras. As palavras precisam ser inseridas na ordem correta e separadas por espaços.</string>
     <string name="Restore_ValidationFailed">Chave incorreta</string>
-    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
-    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
-    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
+    <string name="Restore_RestoreFailed">Falha ao restaurar a Carteira</string>
+    <string name="Restore_EosAccountIncorrect">Conta incorreta</string>
+    <string name="Restore_EosKeyIncorrect">Chave incorreta</string>
     <string name="Select_Coins">Escolha a Criptomoeda</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_TitleShow">Show Key</string>
+    <string name="Backup_Intro_Title">Cópia de segurança</string>
+    <string name="Backup_Intro_TitleShow">Mostrar chave</string>
     <string name="Backup_Intro_Subtitle">Guarde num local seguro a chave privada apresentada no próximo passo. \n\nÉ a única forma de recuperar o seu dinheiro se perder/partir/for roubado o seu telemóvel. Certifique-se que ninguém está a ver o seu ecrã.\n\nTodas as moedas são controladas apenas com esta chave privada: %s.</string>
-    <string name="Backup_Intro_Later">Later</string>
-    <string name="Backup_Intro_BackupNow">Backup</string>
+    <string name="Backup_Intro_Later">Mais tarde</string>
+    <string name="Backup_Intro_BackupNow">Cópia de segurança</string>
     <string name="Backup_DisplayTitle">Chave Privada</string>
-    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
-    <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
-    <string name="Backup_Confirmation_CheckTitle">Check…</string>
-    <string name="Backup_Button_Confirm">Confirm</string>
-    <string name="Backup_Button_Backup">Backup</string>
+    <string name="Backup_Confirmation_Description">Digite as palavras da sua chave %s</string>
+    <string name="Backup_Confirmation_FailureAlertText"> Palavras não conferem</string>
+    <string name="Backup_Confirmation_CheckTitle">Verificar…</string>
+    <string name="Backup_Button_Confirm">Confirmar</string>
+    <string name="Backup_Button_Backup">Cópia de segurança</string>
     <string name="Backup_Button_Submit">Submit</string>
     <string name="Backup_Button_ShowKey">Show Key</string>
     <!--Backup Eos-->
