@@ -50,33 +50,7 @@ class BitcoinAdapter(
     }
 
     override fun onKitStateUpdate(state: BitcoinCore.KitState) {
-        when (state) {
-            is BitcoinCore.KitState.Synced -> {
-                if (this.state !is AdapterState.Synced) {
-                    this.state = AdapterState.Synced
-                }
-            }
-            is BitcoinCore.KitState.NotSynced -> {
-                if (this.state !is AdapterState.NotSynced) {
-                    this.state = AdapterState.NotSynced(state.exception)
-                }
-            }
-            is BitcoinCore.KitState.Syncing -> {
-                this.state.let { currentState ->
-                    val newProgress = (state.progress * 100).toInt()
-                    val newDate = kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
-
-                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress) {
-                        val currentDate = currentState.lastBlockDate
-                        if (newDate != null && currentDate != null && DateHelper.isSameDay(newDate, currentDate)) {
-                            return
-                        }
-                    }
-
-                    this.state = AdapterState.Syncing(newProgress, newDate)
-                }
-            }
-        }
+        setState(state)
     }
 
     override fun onTransactionsUpdate(inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
