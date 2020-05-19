@@ -31,24 +31,24 @@
     <string name="Intro_Independence_Title">Independência</string>
     <string name="Intro_Independence_Description">Mantenha as suas criptomoedas seguras e inconfiscáveis, a toda a hora</string>
     <string name="Intro_Knowledge_Title">Conhecimento</string>
-    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages</string>
-    <string name="Intro_Privacy_Title">Privacy</string>
-    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth</string>
+    <string name="Intro_Knowledge_Description">Informe-se e descubra projetos de blockchain em crescimento nos estágios iniciais</string>
+    <string name="Intro_Privacy_Title">Privacidade</string>
+    <string name="Intro_Privacy_Description">Mantenha-se anônimo e sob o radar enquanto aumenta suas riqueza</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\nWallet</string>
-    <string name="Welcome_PrivacySettings">Privacy Settings</string>
-    <string name="Welcome_CreateWallet">Create Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_PrivacySettings">Configurações de Privacidade</string>
+    <string name="Welcome_CreateWallet">Criar Carteira</string>
+    <string name="Welcome_RestoreWallet">Restaurar Carteira</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
-    <string name="RateApp_Button_RateIt">Rate It</string>
-    <string name="RateApp_Button_NotNow">Not now</string>
+    <string name="RateApp_Title_Rate_This_App">Avalie este aplicativo</string>
+    <string name="RateApp_Description_Rate_This_App">Gostando da Unstoppable Wallet? Por favor, reserve um momento para avaliar este aplicativo</string>
+    <string name="RateApp_Button_RateIt">Avalie</string>
+    <string name="RateApp_Button_NotNow">Agora não</string>
     <!--Restore-->
-    <string name="Restore_ChooseWallet">Choose Wallet</string>
+    <string name="Restore_ChooseWallet">Escolher Carteira</string>
     <string name="Restore_Enter_Key_Title">Introduza a Chave or Introduza a Key</string>
-    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Digite a sua chave secreta para a Carteira %1s que contém %2s de palavras. As palavras precisam ser inseridas na ordem correta e separadas por espaços.</string>
+    <string name="Restore_ValidationFailed">Chave incorreta</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
