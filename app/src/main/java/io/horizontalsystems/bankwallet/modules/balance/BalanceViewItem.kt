@@ -26,7 +26,7 @@ data class BalanceViewItem(
         val expanded: Boolean,
         val sendEnabled: Boolean = false,
         val receiveEnabled: Boolean = false,
-        val syncingData: SyncingData,
+        val syncingData: SyncingData?,
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
         val coinTypeLabelVisible: Boolean,
@@ -49,7 +49,10 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 }
 
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
-data class SyncingData(val progress: Int?, val spinnerProgress: Int?, val until: String?, val txCount: Int?, val syncingTextVisible: Boolean)
+sealed class SyncingData {
+    data class Blockchain(val progress: Int?, val spinnerProgress: Int, val until: String?, val syncingTextVisible: Boolean) : SyncingData()
+    data class SearchingTxs(val txCount: Int, val syncingTextVisible: Boolean) : SyncingData()
+}
 
 class BalanceViewItemFactory {
 
@@ -85,21 +88,17 @@ class BalanceViewItemFactory {
         return DeemedValue(value, dimmed = dimmed)
     }
 
-    private fun syncingData(state: AdapterState?, expanded: Boolean): SyncingData {
+    private fun syncingData(state: AdapterState?, expanded: Boolean): SyncingData? {
         return when (state) {
             is AdapterState.Syncing -> {
                 if (state.lastBlockDate != null) {
-                    SyncingData(state.progress, state.progress, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"), null, !expanded)
+                    SyncingData.Blockchain(state.progress, state.progress, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"), !expanded)
                 } else {
-                    SyncingData(null, state.progress, null, null, !expanded)
+                    SyncingData.Blockchain(null, state.progress, null, !expanded)
                 }
             }
-            is AdapterState.SyncingApi -> {
-                SyncingData(null, 100, null, state.txCount, !expanded)
-            }
-            else -> {
-                SyncingData(null, null, null, null, false)
-            }
+            is AdapterState.SyncingApi -> SyncingData.SearchingTxs(state.txCount, !expanded)
+            else -> null
         }
 
     }

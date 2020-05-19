@@ -54,7 +54,6 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
         balanceViewItem = item
 
         item.apply {
-            syncingData.spinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
 
             iconCoin.setCoinImage(coinCode)
 
@@ -80,8 +79,6 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             balanceFiat.showIf(fiatValue.visible)
             balanceCoinLocked.showIf(coinValueLocked.visible)
             balanceFiatLocked.showIf(fiatValueLocked.visible)
-            textSyncing.showIf(syncingData.syncingTextVisible)
-            textSyncedUntil.showIf(syncingData.syncingTextVisible)
 
             balanceCoin.dimIf(coinValue.dimmed, 0.3f)
             balanceFiat.dimIf(fiatValue.dimmed)
@@ -90,7 +87,6 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
 
             iconCoin.showIf(coinIconVisible)
             iconNotSynced.showIf(failedIconVisible)
-            iconProgress.showIf(syncingData.spinnerProgress != null)
 
             coinLabel.showIf(coinTypeLabelVisible)
         }
@@ -104,10 +100,6 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
         }
 
         current.apply {
-            if (prev.syncingData.spinnerProgress != syncingData.spinnerProgress) {
-                syncingData.spinnerProgress?.let { iconProgress.setProgress(it.toFloat()) }
-            }
-
             if (coinValue.text != prev.coinValue.text) {
                 balanceCoin.text = coinValue.text
             }
@@ -157,10 +149,6 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             if (fiatValueLocked.visible != prev.fiatValueLocked.visible) {
                 balanceFiatLocked.showIf(fiatValueLocked.visible)
             }
-            if (syncingData.syncingTextVisible != prev.syncingData.syncingTextVisible) {
-                textSyncing.showIf(syncingData.syncingTextVisible)
-                textSyncedUntil.showIf(syncingData.syncingTextVisible)
-            }
 
             if (coinValue.dimmed != prev.coinValue.dimmed) {
                 balanceCoin.dimIf(coinValue.dimmed, 0.3f)
@@ -180,9 +168,6 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
             if (failedIconVisible != prev.failedIconVisible) {
                 iconNotSynced.showIf(failedIconVisible)
-            }
-            if (syncingData.spinnerProgress != prev.syncingData.spinnerProgress) {
-                iconProgress.showIf(syncingData.spinnerProgress != null)
             }
         }
     }
@@ -211,21 +196,51 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
         return null
     }
 
-    private fun setTextSyncing(syncingData: SyncingData) {
-        textSyncing.text = if (syncingData.progress != null) {
-            containerView.context.getString(R.string.Balance_Syncing_WithProgress, syncingData.progress.toString())
-        } else if (syncingData.txCount != null) {
-            containerView.context.getString(R.string.Balance_SearchingTransactions)
-        } else {
-            containerView.context.getString(R.string.Balance_Syncing)
-        }
+    private fun setTextSyncing(syncingData: SyncingData?) {
+        when (syncingData) {
+            is SyncingData.Blockchain -> {
+                iconProgress.setProgress(syncingData.spinnerProgress.toFloat())
+                iconProgress.visibility = View.VISIBLE
 
-        textSyncedUntil.text = if (syncingData.until != null) {
-            containerView.context.getString(R.string.Balance_SyncedUntil, syncingData.until)
-        } else if (syncingData.txCount != null) {
-            containerView.context.getString(R.string.Balance_FoundTx, syncingData.txCount)
-        } else {
-            ""
+                textSyncing.showIf(syncingData.syncingTextVisible)
+                textSyncedUntil.showIf(syncingData.syncingTextVisible)
+
+
+                textSyncing.text = if (syncingData.progress != null) {
+                    containerView.context.getString(R.string.Balance_Syncing_WithProgress, syncingData.progress.toString())
+                } else {
+                    containerView.context.getString(R.string.Balance_Syncing)
+                }
+
+                textSyncedUntil.text = if (syncingData.until != null) {
+                    containerView.context.getString(R.string.Balance_SyncedUntil, syncingData.until)
+                } else {
+                    null
+                }
+            }
+            is SyncingData.SearchingTxs -> {
+                iconProgress.setProgress(100f)
+                iconProgress.visibility = View.VISIBLE
+
+                textSyncing.showIf(syncingData.syncingTextVisible)
+                textSyncedUntil.showIf(syncingData.syncingTextVisible)
+
+                textSyncing.text = containerView.context.getString(R.string.Balance_SearchingTransactions)
+                textSyncedUntil.text = if (syncingData.txCount > 0) {
+                    containerView.context.getString(R.string.Balance_FoundTx, syncingData.txCount.toString())
+                } else {
+                    null
+                }
+            }
+            null -> {
+                iconProgress.visibility = View.GONE
+
+                textSyncing.visibility = View.GONE
+                textSyncedUntil.visibility = View.GONE
+
+                textSyncing.text = null
+                textSyncedUntil.text = null
+            }
         }
     }
 
