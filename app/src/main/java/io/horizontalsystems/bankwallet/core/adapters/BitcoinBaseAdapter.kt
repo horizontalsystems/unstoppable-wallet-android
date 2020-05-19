@@ -10,7 +10,6 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoincore.models.TransactionStatus
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.reactivex.BackpressureStrategy
@@ -70,8 +69,10 @@ abstract class BitcoinBaseAdapter(
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
-            field = value
-            adapterStateUpdatedSubject.onNext(Unit)
+            if (value != field) {
+                field = value
+                adapterStateUpdatedSubject.onNext(Unit)
+            }
         }
 
     override fun start() {
@@ -95,34 +96,20 @@ abstract class BitcoinBaseAdapter(
     }
 
     protected fun setState(kitState: BitcoinCore.KitState) {
-        when (kitState) {
+        state = when (kitState) {
             is BitcoinCore.KitState.Synced -> {
-                if (this.state !is AdapterState.Synced) {
-                    this.state = AdapterState.Synced
-                }
+                AdapterState.Synced
             }
             is BitcoinCore.KitState.NotSynced -> {
-                if (this.state !is AdapterState.NotSynced) {
-                    this.state = AdapterState.NotSynced(kitState.exception)
-                }
+                AdapterState.NotSynced(kitState.exception)
             }
             is BitcoinCore.KitState.Syncing -> {
-                this.state.let { currentState ->
-                    val newProgress = (kitState.progress * 100).toInt()
-                    val newDate = kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
+                val progress = (kitState.progress * 100).toInt()
+                val lastBlockDate = kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
-                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress) {
-                        val currentDate = currentState.lastBlockDate
-                        if (newDate != null && currentDate != null && DateHelper.isSameDay(newDate, currentDate)) {
-                            return
-                        }
-                    }
-
-                    this.state = AdapterState.Syncing(newProgress, newDate)
-                }
+                AdapterState.Syncing(progress, lastBlockDate)
             }
         }
-
     }
 
     fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit> {
