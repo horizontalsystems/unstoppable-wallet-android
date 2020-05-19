@@ -86,11 +86,11 @@
     <!--Send-->
     <string name="Send_Title">Send %s</string>
     <string name="Send_Hint_Address">Address</string>
-    <string name="Send_Hint_Amount">Amount</string>
-    <string name="Send_Fee">Fee</string>
-    <string name="Send_Button_Paste">Paste</string>
-    <string name="Send_Button_Next">Next</string>
-    <string name="Send_Button_Max">Max</string>
+    <string name="Send_Hint_Amount">Montante</string>
+    <string name="Send_Fee">Taxa</string>
+    <string name="Send_Button_Paste">Colar</string>
+    <string name="Send_Button_Next">Próximo or Próximo Passo</string>
+    <string name="Send_Button_Max">Máximo</string>
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_To">To: </string>
     <string name="Send_Confirmation_Total">Total:</string>
