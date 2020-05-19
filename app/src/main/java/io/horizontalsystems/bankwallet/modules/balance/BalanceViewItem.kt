@@ -50,7 +50,7 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 }
 
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
-data class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true)
+data class SyncingData(val progress: Int?, val until: String?, val syncingTextVisible: Boolean = true, val txCount: Int? = null)
 
 class BalanceViewItemFactory {
 
@@ -87,18 +87,22 @@ class BalanceViewItemFactory {
     }
 
     private fun syncingData(state: AdapterState?, expanded: Boolean): SyncingData {
-
-        if (state !is AdapterState.Syncing) {
-            return SyncingData(null, null, false)
+        return when (state) {
+            is AdapterState.Syncing -> {
+                if (state.lastBlockDate != null) {
+                    SyncingData(state.progress, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"), !expanded)
+                } else {
+                    SyncingData(null, null, !expanded)
+                }
+            }
+            is AdapterState.SyncingApi -> {
+                SyncingData(null, null, !expanded, state.txCount)
+            }
+            else -> {
+                SyncingData(null, null, false)
+            }
         }
 
-        val dateFormatted = state.lastBlockDate?.let { until ->
-            DateHelper.formatDate(until, "MMM d, yyyy")
-        } ?: run {
-            return SyncingData(null, null, !expanded)
-        }
-
-        return SyncingData(state.progress, dateFormatted, !expanded)
     }
 
     private fun coinTypeLabelVisible(coinType: CoinType): Boolean {
@@ -111,7 +115,8 @@ class BalanceViewItemFactory {
         val state = item.state
         val marketInfo = item.marketInfo
 
-        val balanceTotalVisibility = item.balanceTotal != null && (state !is AdapterState.Syncing || expanded)
+        val syncing = state is AdapterState.Syncing || state is AdapterState.SyncingApi
+        val balanceTotalVisibility = item.balanceTotal != null && (!syncing || expanded)
         val balanceLockedVisibility = item.balanceLocked != null
 
         val rateDiff = getRateDiff(item)
@@ -139,11 +144,10 @@ class BalanceViewItemFactory {
         )
     }
 
-    private fun setSyncSpinnerProgress(state: AdapterState?): Int? {
-        if (state is AdapterState.Syncing){
-            return state.progress
-        }
-        return null
+    private fun setSyncSpinnerProgress(state: AdapterState?) = when (state) {
+        is AdapterState.Syncing -> state.progress
+        is AdapterState.SyncingApi -> 100
+        else -> null
     }
 
     private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {

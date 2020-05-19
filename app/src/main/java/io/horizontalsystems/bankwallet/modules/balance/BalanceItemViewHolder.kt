@@ -212,16 +212,20 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
     }
 
     private fun setTextSyncing(syncingData: SyncingData) {
-        textSyncing.text = if (syncingData.progress == null) {
-            containerView.context.getString(R.string.Balance_Syncing)
-        } else {
+        textSyncing.text = if (syncingData.progress != null) {
             containerView.context.getString(R.string.Balance_Syncing_WithProgress, syncingData.progress.toString())
+        } else if (syncingData.txCount != null) {
+            containerView.context.getString(R.string.Balance_SearchingTransactions)
+        } else {
+            containerView.context.getString(R.string.Balance_Syncing)
         }
 
-        if (syncingData.until != null) {
-            textSyncedUntil.text = containerView.context.getString(R.string.Balance_SyncedUntil, syncingData.until)
+        textSyncedUntil.text = if (syncingData.until != null) {
+            containerView.context.getString(R.string.Balance_SyncedUntil, syncingData.until)
+        } else if (syncingData.txCount != null) {
+            containerView.context.getString(R.string.Balance_FoundTx, syncingData.txCount)
         } else {
-            textSyncedUntil.text = ""
+            ""
         }
     }
 

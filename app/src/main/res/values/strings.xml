@@ -104,6 +104,8 @@
     <string name="Balance_RatePerCoin">%s per %s</string>
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
+    <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Add Coins</string>
     <string name="Balance_Sort_Balance">Balance</string>
