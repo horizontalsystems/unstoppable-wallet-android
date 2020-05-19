@@ -33,10 +33,10 @@ import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment.Listener {
+class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener {
 
     private lateinit var viewModel: BalanceViewModel
-    private val coinAdapter = BalanceCoinAdapter(this)
+    private val balanceItemsAdapter = BalanceItemsAdapter(this)
     private var totalBalanceTabHeight: Int = 0
     private val animationPlaybackSpeed: Double = 1.3
     private val expandDuration: Long get() = (300L / animationPlaybackSpeed).toLong()
@@ -57,7 +57,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
 
         totalBalanceTabHeight = balanceTabWrapper.measureHeight()
 
-        recyclerCoins.adapter = coinAdapter
+        recyclerCoins.adapter = balanceItemsAdapter
         recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
@@ -179,7 +179,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, ReceiveFragment
         })
 
         viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
-            coinAdapter.setItems(it)
+            balanceItemsAdapter.setItems(it)
         })
 
         viewModel.setHeaderViewItem.observe(viewLifecycleOwner, Observer {

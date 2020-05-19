@@ -7,7 +7,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
 import io.horizontalsystems.core.measureHeight
-import kotlinx.android.synthetic.main.view_holder_coin.*
+import kotlinx.android.synthetic.main.view_holder_balance_item.*
 
 object BalanceCellAnimator {
 
@@ -24,7 +24,7 @@ object BalanceCellAnimator {
 
     private var measured = false
 
-    fun measureHeights(holder: ViewHolderCoin) {
+    fun measureHeights(holder: BalanceItemViewHolder) {
         if (measured) return
 
         balanceWrapperHeight = holder.balanceWrapper.measureHeight()
@@ -51,7 +51,7 @@ object BalanceCellAnimator {
         }
     }
 
-    fun toggleBalanceAndButtons(holder: ViewHolderCoin, viewItem: BalanceViewItem) {
+    fun toggleBalanceAndButtons(holder: BalanceItemViewHolder, viewItem: BalanceViewItem) {
         val smallHeight = getHeight(false, true, viewItem.coinValueLocked.visible)
         val bigHeight = getHeight(viewItem.expanded, viewItem.hideBalance, viewItem.coinValueLocked.visible)
 
@@ -64,7 +64,7 @@ object BalanceCellAnimator {
         setExpandProgress(holder.rootWrapper, smallHeight, bigHeight, if (forwardAnimation) 1f else 0f)
     }
 
-    fun toggleBalanceAndButtonsAnimate(holder: ViewHolderCoin, current: BalanceViewItem, prev: BalanceViewItem) {
+    fun toggleBalanceAndButtonsAnimate(holder: BalanceItemViewHolder, current: BalanceViewItem, prev: BalanceViewItem) {
         val toggleBalance = current.hideBalance != prev.hideBalance
         val toggleActions = !toggleBalance && current.expanded != prev.expanded
 
