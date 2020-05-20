@@ -2,13 +2,14 @@ package io.horizontalsystems.chartview.helpers
 
 import android.text.format.DateFormat.getBestDateTimePattern
 import io.horizontalsystems.chartview.ChartView.ChartType
+import io.horizontalsystems.chartview.Coordinate
 import io.horizontalsystems.chartview.models.GridColumn
 import java.text.SimpleDateFormat
 import java.util.*
 
 object GridHelper {
 
-    fun mapColumns(chartType: ChartType, startTime: Long, endTime: Long, width: Float): List<GridColumn> {
+    fun map(chartType: ChartType, startTime: Long, endTime: Long, width: Float): List<GridColumn> {
         val start = startTime * 1000
         val end = endTime * 1000
 
