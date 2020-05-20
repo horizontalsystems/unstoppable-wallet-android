@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
@@ -74,9 +73,15 @@ class RateChartPresenter(
     }
 
     private fun updateMarketInfo() {
-        marketInfo?.let {
-            val viewItem = factory.createMarketInfo(it, currency, coinCode)
-            view.showMarketInfo(viewItem)
+        val market = marketInfo ?: return
+
+        view.showMarketInfo(factory.createMarketInfo(market, currency, coinCode))
+
+        val info = chartInfo ?: return
+        try {
+            view.showChartInfo(factory.createChartInfo(chartType, info, market))
+        } catch (e: Exception) {
+            view.showError(e)
         }
     }
 
@@ -86,8 +91,7 @@ class RateChartPresenter(
         view.hideSpinner()
 
         try {
-            val viewItem = factory.createChartInfo(chartType, info)
-            view.showChartInfo(viewItem)
+            view.showChartInfo(factory.createChartInfo(chartType, info, marketInfo))
         } catch (e: Exception) {
             view.showError(e)
         }

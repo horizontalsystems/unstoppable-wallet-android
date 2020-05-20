@@ -7,15 +7,20 @@ import android.graphics.RectF
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartVolume(private val config: ChartConfig, private val animator: ChartAnimator) : ChartDraw {
+class ChartHistogram(private val config: ChartConfig, private val animator: ChartAnimator) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
 
     private var bars = listOf<PointF>()
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val paintUp = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = config.volumeColor
+        color = config.macdHistogramUpColor
+    }
+
+    private val paintDown = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = config.macdHistogramDownColor
     }
 
     fun setShape(rect: RectF) {
@@ -27,11 +32,11 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
     }
 
     override fun draw(canvas: Canvas) {
-        val height = shape.height()
+        val middle = shape.height() / 2
         var prevEnd = -100f
 
         bars.forEach { bar ->
-            val barTop = animator.getAnimatedY(bar.y, height)
+            val barTop = animator.getAnimatedY(bar.y, middle)
             var barStart = bar.x - config.volumeWidth
             var barEnd = bar.x
 
@@ -40,9 +45,15 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
                 barEnd = bar.x + config.volumeWidth
             }
 
+            val paint = if (bar.y > middle) {
+                paintDown
+            } else {
+                paintUp
+            }
+
             prevEnd = barEnd
 
-            canvas.drawRect(RectF(barStart, barTop, barEnd, height), paint)
+            canvas.drawRect(RectF(barStart, barTop, barEnd, middle), paint)
         }
     }
 }

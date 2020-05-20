@@ -1,16 +1,13 @@
 package io.horizontalsystems.chartview
 
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.RectF
+import android.graphics.*
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
 
 class ChartCurve(private val config: ChartConfig, private val animator: ChartAnimator) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
-    private var points = listOf<Coordinate>()
+    private var points = listOf<PointF>()
 
     private val paint = Paint().apply {
         style = Paint.Style.STROKE
@@ -19,8 +16,8 @@ class ChartCurve(private val config: ChartConfig, private val animator: ChartAni
         isAntiAlias = true
     }
 
-    fun setPoints(coordinates: List<Coordinate>) {
-        points = coordinates
+    fun setPoints(list: List<PointF>) {
+        points = list
     }
 
     fun setShape(rect: RectF) {
