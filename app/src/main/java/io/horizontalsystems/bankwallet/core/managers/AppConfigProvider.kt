@@ -125,7 +125,6 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
         get() = listOf(
                 SyncModeSetting(CoinType.Bitcoin, SyncMode.Fast),
                 SyncModeSetting(CoinType.Litecoin, SyncMode.Fast),
-                SyncModeSetting(CoinType.BitcoinCash, SyncMode.Fast),
                 SyncModeSetting(CoinType.Dash, SyncMode.Fast)
         )
 
