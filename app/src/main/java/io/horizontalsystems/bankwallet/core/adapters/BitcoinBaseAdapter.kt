@@ -103,6 +103,9 @@ abstract class BitcoinBaseAdapter(
             is BitcoinCore.KitState.NotSynced -> {
                 AdapterState.NotSynced(kitState.exception)
             }
+            is BitcoinCore.KitState.ApiSyncing -> {
+                AdapterState.SearchingTxs(kitState.transactions)
+            }
             is BitcoinCore.KitState.Syncing -> {
                 val progress = (kitState.progress * 100).toInt()
                 val lastBlockDate = kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
@@ -249,7 +252,7 @@ abstract class BitcoinBaseAdapter(
         const val defaultConfirmationsThreshold = 3
         const val decimal = 8
 
-        fun getTransactionSortingType(sortType: TransactionDataSortingType?): TransactionDataSortType = when(sortType){
+        fun getTransactionSortingType(sortType: TransactionDataSortingType?): TransactionDataSortType = when (sortType) {
             TransactionDataSortingType.Bip69 -> TransactionDataSortType.Bip69
             else -> TransactionDataSortType.Shuffle
         }
