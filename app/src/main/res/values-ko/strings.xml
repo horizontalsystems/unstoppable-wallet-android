@@ -209,7 +209,7 @@
     <string name="Settings_Report">문제점 보고</string>
     <string name="SettingsOption_Enabled">활성화</string>
     <string name="SettingsOption_Disabled">비활성화</string>
-    <string name="SettingsPrivacy_Info">이 앱은 귀하의 어떠한 정보를 공유하지 않습니다. 그러나 블록체인과의 통신을 위해 IP 주소와 같은 몇몇의 공개 정보가 유출될 수 있습니다.</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">블록체인 동기화</string>
     <string name="SettingsPrivacy_CommunicationDescription">몇몇의 블록체인은 아직 모바일 앱이 P2P 방식으로 작동하는 방법을 제공하지 않습니다. BTC, BCH, LTC, DASH 블록체인과의 통신은 전부 P2P 방식입니다.</string>
