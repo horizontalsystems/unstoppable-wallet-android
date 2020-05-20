@@ -65,7 +65,7 @@
     <string name="Backup_Confirmation_CheckTitle">Verificar…</string>
     <string name="Backup_Button_Confirm">Confirmar</string>
     <string name="Backup_Button_Backup">Cópia de segurança</string>
-    <string name="Backup_Button_Submit">Submit</string>
+    <string name="Backup_Button_Submit">Submeter</string>
     <string name="Backup_Button_ShowKey">Show Key</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may have access to clipboard data.</string>
