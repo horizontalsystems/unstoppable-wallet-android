@@ -96,10 +96,13 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             setHeaderIcon(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
 
             sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
-            titleViewItem.lockState?.let {
-                val lockIcon = if (it.locked) R.drawable.ic_lock else R.drawable.ic_unlock
-                primaryValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
+
+            val lockIcon = when {
+                titleViewItem.lockState == null -> 0
+                titleViewItem.lockState.locked -> R.drawable.ic_lock
+                else -> R.drawable.ic_unlock
             }
+            primaryValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
 
             val amountTextColor = if (incoming) R.color.green_d else R.color.yellow_d
             primaryValue.setTextColor(resources.getColor(amountTextColor, null))
