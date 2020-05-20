@@ -209,7 +209,7 @@
     <string name="Settings_Report">Sorunu Bildir</string>
     <string name="SettingsOption_Enabled">Etkinleştirildi</string>
     <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
-    <string name="SettingsPrivacy_Info">Bu uygulama verilerinizden hiçbirini paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir.</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Senk.</string>
     <string name="SettingsPrivacy_CommunicationDescription">Bazı blok zincirler, mobil uygulamaların peer to peer şekilde çalışması için henüz bir araç sağlamamaktadır. BTC, BCH, LTC, DASH blok zincirleriyle iletişim tamamen peer to peer.</string>
