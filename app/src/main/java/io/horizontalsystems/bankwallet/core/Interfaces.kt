@@ -152,7 +152,7 @@ interface IWordsManager {
 sealed class AdapterState {
     object Synced : AdapterState()
     data class Syncing(val progress: Int, val lastBlockDate: Date?) : AdapterState()
-    data class SyncingApi(val txCount: Int) : AdapterState()
+    data class SearchingTxs(val count: Int) : AdapterState()
     data class NotSynced(val error: Throwable) : AdapterState()
 }
 
