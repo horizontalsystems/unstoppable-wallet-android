@@ -57,7 +57,9 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
                 is TransactionDetailViewItem.Id -> bindId(detail)
                 is TransactionDetailViewItem.Status -> bindStatus(detail)
                 is TransactionDetailViewItem.DoubleSpend -> bindDoubleSpend()
-                is TransactionDetailViewItem.SentToSelf -> bindSentToSelfNote()
+                is TransactionDetailViewItem.SentToSelf -> {
+                    bindHint(context.getString(R.string.TransactionInfo_SentToSelfNote), iconStart = R.drawable.ic_incoming_16)
+                }
                 is TransactionDetailViewItem.RawTransaction -> bindRaw()
                 is TransactionDetailViewItem.LockInfo -> bindLockInfo(detail)
             }
@@ -71,17 +73,17 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
         private fun bindLockInfo(detail: TransactionDetailViewItem.LockInfo) {
             if (detail.lockState.locked) {
-                bindInfo(context.getString(R.string.TransactionInfo_LockedUntil, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_lock)
+                bindHint(context.getString(R.string.TransactionInfo_LockedUntil, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_lock, R.drawable.ic_info)
+                itemView.setOnSingleClickListener {
+                    viewModel.delegate.onClickLockInfo()
+                }
             } else {
-                bindInfo(context.getString(R.string.TransactionInfo_UnlockedAt, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_unlock)
-            }
-            itemView.setOnSingleClickListener {
-                viewModel.delegate.onClickLockInfo()
+                bindHint(context.getString(R.string.TransactionInfo_UnlockedAt, DateHelper.getFullDate(detail.lockState.date)), iconStart = R.drawable.ic_unlock)
             }
         }
 
         private fun bindDoubleSpend() {
-            bindInfo(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_doublespend)
+            bindHint(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_doublespend, R.drawable.ic_info)
             itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickDoubleSpendInfo()
             }
@@ -166,27 +168,17 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             btnAction.visibility = View.VISIBLE
         }
 
-        fun bindInfo(info: String, @DrawableRes infoIcon: Int) {
-            txtTitle.text = info
+        private fun bindHint(hintText: String, @DrawableRes iconStart: Int = 0, @DrawableRes iconEnd: Int = 0) {
+            txtTitle.text = hintText
             txtTitle.visibility = View.VISIBLE
-            txtTitle.setCompoundDrawablesWithIntrinsicBounds(infoIcon, 0, 0, 0)
-            txtTitle.compoundDrawablePadding = LayoutHelper.dp(11f, itemView.context)
-
-            valueText.text = null
-            valueText.visibility = View.VISIBLE
-            valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info, 0)
-            valueText.compoundDrawablePadding = LayoutHelper.dp(16f, itemView.context)
-        }
-
-        fun bindSentToSelfNote() {
-            txtTitle.setText(R.string.TransactionInfo_SentToSelfNote)
-            txtTitle.visibility = View.VISIBLE
-            txtTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_incoming_16, 0, 0, 0)
+            txtTitle.setCompoundDrawablesWithIntrinsicBounds(iconStart, 0, 0, 0)
             txtTitle.compoundDrawablePadding = LayoutHelper.dp(11f, itemView.context)
 
             // need to have a view in the right of the title to have title to be aligned to the left
             valueText.text = null
             valueText.visibility = View.VISIBLE
+            valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, iconEnd, 0)
+            valueText.compoundDrawablePadding = LayoutHelper.dp(16f, itemView.context)
         }
     }
 }
