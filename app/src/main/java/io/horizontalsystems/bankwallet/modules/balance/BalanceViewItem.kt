@@ -97,7 +97,7 @@ class BalanceViewItemFactory {
                     SyncingData.Blockchain(null, state.progress, null, !expanded)
                 }
             }
-            is AdapterState.SyncingApi -> SyncingData.SearchingTxs(state.txCount, !expanded)
+            is AdapterState.SearchingTxs -> SyncingData.SearchingTxs(state.count, !expanded)
             else -> null
         }
 
@@ -113,7 +113,7 @@ class BalanceViewItemFactory {
         val state = item.state
         val marketInfo = item.marketInfo
 
-        val syncing = state is AdapterState.Syncing || state is AdapterState.SyncingApi
+        val syncing = state is AdapterState.Syncing || state is AdapterState.SearchingTxs
         val balanceTotalVisibility = item.balanceTotal != null && (!syncing || expanded)
         val balanceLockedVisibility = item.balanceLocked != null
 
