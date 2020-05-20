@@ -105,7 +105,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             primaryValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
 
             val amountTextColor = if (incoming) R.color.green_d else R.color.yellow_d
-            primaryValue.setTextColor(resources.getColor(amountTextColor, null))
+            primaryValue.setTextColor(context.getColor(amountTextColor))
 
             titleViewItem.primaryAmountInfo.let {
                 primaryName.text = it.getAmountName()
