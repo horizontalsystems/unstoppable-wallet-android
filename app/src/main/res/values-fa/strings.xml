@@ -209,7 +209,7 @@
     <string name="Settings_Report">گزارش مشکل</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
-    <string name="SettingsPrivacy_Info">این برنامه هیچکدام از داده های شما را به اشتراک نمی گذارد. با این وجود، از آنجا که با زنجیره های بلوکی ارتباط دارد، برخی از داده های عمومی مانند آدرس IP می توانند به صورت بالقوه فاش شوند.</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
     <string name="SettingsPrivacy_CommunicationDescription">بعضی از زنجیره های بلوکی هنوز وسیله ای برای برنامه های تلفن همراه برای کار به روش همتا به همتا ارائه نمی دهند. ارتباطات با زنجیره های بلوکی BTC ، BCH ، LTC ، DASH کاملاً همتا به همتا است.</string>
