@@ -209,7 +209,7 @@
     <string name="Settings_Report">Reportar un problema</string>
     <string name="SettingsOption_Enabled">Habilitado</string>
     <string name="SettingsOption_Disabled">Desabilitado</string>
-    <string name="SettingsPrivacy_Info">Esta aplicación no comparte su información de forma alguna. Sin embargo, mientras se comunica con blockchains es potencialmente posible que cierta información pública como la dirección IP pueda filtrarse.</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Sincronización de Blockchain</string>
     <string name="SettingsPrivacy_CommunicationDescription">Algunos blockchains aún no brindan medios para poder usarse en aplicaciones móviles de modo peer-to-peer. Las comunicaciones con las blockchains BTC, BCH, LTC, DASH son completamente peer-to-peer.</string>
