@@ -108,7 +108,7 @@ class BitcoinCashAdapter(
                 return BitcoinCashKit(context = App.instance,
                         words = accountType.words,
                         walletId = account.id,
-                        syncMode = getSyncMode(syncMode),
+                        syncMode = getSyncMode(syncMode ?: SyncMode.Slow),
                         networkType = getNetworkType(testMode),
                         confirmationsThreshold = defaultConfirmationsThreshold)
             }

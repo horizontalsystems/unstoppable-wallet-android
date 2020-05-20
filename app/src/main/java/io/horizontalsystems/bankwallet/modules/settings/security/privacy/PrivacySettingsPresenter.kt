@@ -43,10 +43,21 @@ class PrivacySettingsPresenter(
             interactor.bitcoinCash(),
             interactor.dash())
             .mapNotNull { coin ->
+                getSyncModeSettingViewItem(coin)
+            }
+
+    private fun getSyncModeSettingViewItem(coin: Coin): PrivacySettingsViewItem? {
+        return when (coin.type) {
+            is CoinType.BitcoinCash -> {
+                PrivacySettingsViewItem(coin, WalletRestore(SyncMode.Slow), enabled = false)
+            }
+            else -> {
                 interactor.syncModeSetting(coin.type)?.syncMode?.let { selected ->
                     PrivacySettingsViewItem(coin, WalletRestore(selected))
                 }
             }
+        }
+    }
 
     private val communicationModeOptions = listOf(CommunicationMode.Infura, CommunicationMode.Incubed)
     private val syncModeOptions = listOf(SyncMode.Fast, SyncMode.Slow)
