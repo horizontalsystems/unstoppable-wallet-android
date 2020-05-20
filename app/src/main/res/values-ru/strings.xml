@@ -209,7 +209,7 @@
     <string name="Settings_Report">Сообщить о Проблеме</string>
     <string name="SettingsOption_Enabled">Вкл.</string>
     <string name="SettingsOption_Disabled">Выкл.</string>
-    <string name="SettingsPrivacy_Info">Наше приложение не делится никакой информацией ни с кем. Но при взаимодействии с блокчейнами некоторые публичные данные, такие как ваш IP адрес, могут фиксироваться в сети.</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Синхронизация Блокчейна</string>
     <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в пиринговом режиме (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
