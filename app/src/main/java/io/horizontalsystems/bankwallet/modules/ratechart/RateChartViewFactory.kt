@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.*
+import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
@@ -12,11 +11,9 @@ import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 
 data class ChartInfoViewItem(
+        val chartData: ChartData,
         val chartType: ChartView.ChartType,
-        val chartPoints: List<ChartPoint>,
-        val diffValue: BigDecimal,
-        val startTimestamp: Long,
-        val endTimestamp: Long
+        val diffValue: BigDecimal
 )
 
 data class ChartPointViewItem(
@@ -36,12 +33,8 @@ data class MarketInfoViewItem(
 )
 
 class RateChartViewFactory {
-    fun createChartInfo(type: ChartType, chartInfo: ChartInfo): ChartInfoViewItem {
-        val chartPoints = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }
-
-        val startValue = chartPoints.firstOrNull()?.value ?: 0f
-        val endValue = chartPoints.lastOrNull()?.value ?: 0f
-
+    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, marketInfo: MarketInfo?): ChartInfoViewItem {
+        val chartData = prepareChartData(chartInfo, marketInfo, type)
         val chartType = when (type) {
             ChartType.DAILY -> ChartView.ChartType.DAILY
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
@@ -52,15 +45,7 @@ class RateChartViewFactory {
             ChartType.MONTHLY24 -> ChartView.ChartType.MONTHLY24
         }
 
-        val diffValue = ((endValue - startValue) / startValue * 100).toBigDecimal()
-
-        return ChartInfoViewItem(
-                chartType,
-                chartPoints,
-                diffValue,
-                chartInfo.startTimestamp,
-                chartInfo.endTimestamp
-        )
+        return ChartInfoViewItem(chartData, chartType, chartData.diff())
     }
 
     fun createMarketInfo(marketInfo: MarketInfo, currency: Currency, coinCode: String): MarketInfoViewItem {
@@ -74,4 +59,22 @@ class RateChartViewFactory {
         )
     }
 
+    private fun prepareChartData(chartInfo: ChartInfo, marketInfo: MarketInfo?, chartType: ChartType): ChartData {
+        val points = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }
+        var startTime = chartInfo.startTimestamp
+
+        if (marketInfo == null) {
+            return PointConverter.convert(points, startTime, chartInfo.endTimestamp, startDayPoint = null)
+        }
+
+        val pointsWithMarketPrice = points + ChartPoint(marketInfo.rate.toFloat(), null, marketInfo.timestamp)
+        var startDayPoint: ChartPoint? = null
+
+        if (chartType == ChartType.DAILY) {
+            startTime = marketInfo.timestamp - chartType.rangeInterval
+            startDayPoint = ChartPoint(marketInfo.rateOpen24Hour.toFloat(), null, startTime)
+        }
+
+        return PointConverter.convert(pointsWithMarketPrice, startTime, marketInfo.timestamp, startDayPoint)
+    }
 }

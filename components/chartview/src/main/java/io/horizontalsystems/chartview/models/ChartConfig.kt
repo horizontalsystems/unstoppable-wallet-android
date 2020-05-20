@@ -1,10 +1,13 @@
 package io.horizontalsystems.chartview.models
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import androidx.core.content.res.ResourcesCompat
+import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.R
+import java.math.BigDecimal
 
 class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
@@ -25,6 +28,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var curvePressedColor = context.getColor(R.color.light)
     var curveOutdatedColor = context.getColor(R.color.grey_50)
     var curveVerticalOffset = dp2px(18f)
+    var curveFastColor = Color.parseColor("#1A60FF")
+    var curveSlowColor = context.getColor(R.color.yellow_d)
 
     var cursorColor = context.getColor(R.color.light)
 
@@ -32,8 +37,13 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var trendDownColor = context.getColor(R.color.red_d)
 
     var volumeColor = context.getColor(R.color.steel_20)
-    var volumeWidth = dp2px(2f)
-    var volumeMaxHeightRatio = 0.8f // 80% of height
+    var volumeWidth = dp2px(4f)
+    var volumeOffset = dp2px(8f)
+
+    var macdHistogramUpColor = Color.parseColor("#8013D670")
+    var macdHistogramDownColor = Color.parseColor("#80FF4820")
+    var macdLineOffset = dp2px(2f)
+    var macdHistogramOffset = dp2px(4f)
 
     var strokeWidth = dp2px(0.5f)
     var strokeDash = dp2px(2f)
@@ -57,11 +67,11 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     }
 
     //  Helper methods
-    fun setTrendColor(startPoint: ChartPoint?, endPoint: ChartPoint?, endTimestamp: Long) {
-        if (endPoint == null || startPoint == null) return
-        if (endPoint.timestamp < endTimestamp) {
+    fun setTrendColor(chartData: ChartData) {
+        val lastPoint = chartData.items.lastOrNull() ?: return
+        if (lastPoint.timestamp < chartData.endTimestamp) {
             curveColor = curveOutdatedColor
-        } else if (startPoint.value > endPoint.value) {
+        } else if (chartData.diff() < BigDecimal.ZERO) {
             curveColor = trendDownColor
         } else {
             curveColor = trendUpColor

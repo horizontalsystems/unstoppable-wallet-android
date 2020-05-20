@@ -3,6 +3,7 @@ package io.horizontalsystems.chartview
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -13,24 +14,22 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private var listener: Chart.Listener? = null
 
-    private var touchPoint: TouchPoint? = null
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-
+    private var touchPoint: PointF? = null
     private var offsetBottom = 0f
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var coordinates = listOf<Coordinate>()
 
     fun configure(config: ChartConfig, bottomOffset: Float) {
         offsetBottom = bottomOffset
 
-        linePaint.apply {
-            color = config.cursorColor
-            style = Paint.Style.FILL
-            strokeWidth = config.strokeWidth
-        }
+        paint.color = config.cursorColor
+        paint.style = Paint.Style.FILL
+        paint.strokeWidth = config.strokeWidth
     }
 
-    fun set(points: List<Coordinate>) {
-        coordinates = points
+    fun setCoordinates(list: List<Coordinate>) {
+        coordinates = list
     }
 
     fun onUpdate(eventListener: Chart.Listener) {
@@ -42,11 +41,10 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     override fun onDraw(canvas: Canvas) {
-        val touch = touchPoint ?: return
-        val bottom = height - offsetBottom
+        val point = touchPoint ?: return
 
-        canvas.drawLine(touch.x, 0f, touch.x, bottom, linePaint)
-        canvas.drawRoundRect(touch.x - 15, touch.y - 15, touch.x + 15, touch.y + 15, 20f, 20f, linePaint)
+        canvas.drawLine(point.x, 0f, point.x, height - offsetBottom, paint)
+        canvas.drawRoundRect(point.x - 15, point.y - 15, point.x + 15, point.y + 15, 20f, 20f, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -75,10 +73,10 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private fun onMove(coordinate: Coordinate?, listener: Chart.Listener) {
         if (coordinate == null) return
-        if (coordinate.x != touchPoint?.last) {
+        if (coordinate.x != touchPoint?.x) {
             listener.onTouchSelect(coordinate.point)
 
-            touchPoint = TouchPoint(coordinate.x, coordinate.y, coordinate.x)
+            touchPoint = PointF(coordinate.x, coordinate.y)
             invalidate()
         }
     }
@@ -111,6 +109,4 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
 
         return null
     }
-
-    class TouchPoint(var x: Float, var y: Float, var last: Float)
 }

@@ -3,21 +3,19 @@ package io.horizontalsystems.chartview
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.chartview.helpers.ChartAnimator
-import io.horizontalsystems.chartview.models.ChartConfig
 
 class ChartGradient(private val animator: ChartAnimator) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
-    private var points = listOf<Coordinate>()
+    private var points = listOf<PointF>()
 
-    private var shadeMaxY = 0f
     private val paint = Paint().apply {
         isAntiAlias = true
         style = Paint.Style.FILL
     }
 
-    fun setPoints(coordinates: List<Coordinate>) {
-        points = coordinates
+    fun setPoints(list: List<PointF>) {
+        points = list
     }
 
     fun setShader(color: Int) {
