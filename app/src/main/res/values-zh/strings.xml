@@ -209,7 +209,7 @@
     <string name="Settings_Report">报告问题</string>
     <string name="SettingsOption_Enabled">已启用</string>
     <string name="SettingsOption_Disabled">已禁用</string>
-    <string name="SettingsPrivacy_Info">此应用不分享您的任何数据。但是，由于其使用区块链进行通信，所以部分像 IP 地址等公共数据将有可能会泄漏。</string>
+    <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">同步区块链</string>
     <string name="SettingsPrivacy_CommunicationDescription">部分区块链未为手机应用提供以点对点运行的方法。与BTC、BCH、LTC、DASH 区块链的通信属于完全点对点。</string>
