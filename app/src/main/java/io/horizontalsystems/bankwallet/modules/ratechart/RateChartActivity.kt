@@ -44,7 +44,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         presenterView = presenter.view as RateChartView
 
         chart.setListener(this)
-        chart.setFormatter(presenter.rateFormatter)
+        chart.rateFormatter = presenter.rateFormatter
 
         observeData()
         bindActions()
@@ -99,7 +99,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         presenterView.showChartInfo.observe(this, Observer { item ->
             rootView.post {
                 chart.visibility = View.VISIBLE
-                chart.setData(item.chartPoints, item.chartType, item.startTimestamp, item.endTimestamp)
+                chart.setData(item.chartData, item.chartType)
             }
 
             coinRateDiff.diff = item.diffValue
