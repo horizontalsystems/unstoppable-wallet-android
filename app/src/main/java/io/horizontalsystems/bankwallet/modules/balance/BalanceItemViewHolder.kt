@@ -219,7 +219,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
                 }
             }
             is SyncingData.SearchingTxs -> {
-                iconProgress.setProgressColored(100, itemView.context.getColor(R.color.grey_50))
+                iconProgress.setProgressColored(10, itemView.context.getColor(R.color.grey_50))
                 iconProgress.visibility = View.VISIBLE
 
                 textSyncing.showIf(syncingData.syncingTextVisible)
