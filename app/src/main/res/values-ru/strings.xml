@@ -146,7 +146,7 @@
     <string name="TransactionInfo_Status">Статус</string>
     <string name="TransactionInfo_Status_Confirmed">Подтверждено</string>
     <string name="TransactionInfo_Id">ID Транзакции</string>
-    <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
+    <string name="TransactionInfo_RawTransaction">Неподтвержденная Транзакция</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
