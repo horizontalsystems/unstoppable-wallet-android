@@ -267,6 +267,11 @@
     <string name="FullInfoEth_Nonce" translatable="false">Nonce</string>
     <string name="FullInfoEth_Amount">Amount</string>
 
+
+    <!--Guides-->
+
+    <string name="Guides_Title">Guides</string>
+
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>
