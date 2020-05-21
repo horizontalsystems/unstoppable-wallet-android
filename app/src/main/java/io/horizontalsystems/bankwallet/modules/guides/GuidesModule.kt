@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 object GuidesModule {
 
     interface View {
+        fun open(item: GuideItem)
 
     }
 
     interface ViewDelegate {
         fun onLoad()
+        fun onGuideClick(item: GuideItem)
     }
 
     interface Interactor {
