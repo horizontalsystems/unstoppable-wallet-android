@@ -9,6 +9,7 @@
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/guideWrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/ColorLawrence">

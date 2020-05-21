@@ -145,6 +145,9 @@
         <activity
             android:name=".modules.addErc20token.AddErc20TokenActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.guideview.GuideViewerActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

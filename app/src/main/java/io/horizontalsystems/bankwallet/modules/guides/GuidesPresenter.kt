@@ -12,6 +12,10 @@ class GuidesPresenter(
     override fun onLoad() {
     }
 
+    override fun onGuideClick(item: GuideItem) {
+        view.open(item)
+    }
+
     //  InteractorDelegate
 
 
