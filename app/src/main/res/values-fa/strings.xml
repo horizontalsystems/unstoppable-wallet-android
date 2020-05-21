@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
     <string name="Balance_SyncedUntil">تا: %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
+    <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
     <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
     <string name="Balance_Sort_Balance">مانده حساب</string>
