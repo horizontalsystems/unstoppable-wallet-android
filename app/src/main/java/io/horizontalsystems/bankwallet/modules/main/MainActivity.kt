@@ -158,9 +158,10 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
         LayoutHelper.getAttr(R.attr.BottomNavigationBackgroundColor, theme)
                 ?.let { ahBottomNavigation.defaultBackgroundColor = it }
 
-        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Balance_Title, R.drawable.bank_icon, 0))
-        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Transactions_Title, R.drawable.transactions, 0))
-        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Settings_Title, R.drawable.settings, 0))
+        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Balance_Title, R.drawable.ic_balance, 0))
+        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Transactions_Title, R.drawable.ic_transactions, 0))
+        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Guides_Title, R.drawable.ic_guide, 0))
+        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Settings_Title, R.drawable.ic_settings, 0))
 
         ahBottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_d)
         ahBottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
