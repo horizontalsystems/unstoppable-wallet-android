@@ -157,7 +157,7 @@
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <string name="TransactionInfo_Fee">Комиссия</string>
     <string name="TransactionInfo_SentToSelfNote">Эта транзакция отправлена на свой адрес</string>
-    <string name="TransactionInfo_DoubleSpendNote">Двойные Трата Риск!</string>
+    <string name="TransactionInfo_DoubleSpendNote">Риск Двойной Траты!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
