@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%s 당 %s</string>
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
+    <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_Sort_Balance">잔액</string>
