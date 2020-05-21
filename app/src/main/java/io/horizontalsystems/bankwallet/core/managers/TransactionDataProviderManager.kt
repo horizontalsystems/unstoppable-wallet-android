@@ -39,9 +39,8 @@ class TransactionDataProviderManager(
 
     private val bitcoinCashProviders: List<BitcoinForksProvider> by lazy {
         when {
-            testMode -> listOf(CashexplorerBitcoinCashProvider())
+            testMode -> listOf()
             else -> listOf(
-                    CashexplorerBitcoinCashProvider(),
                     BlockChairBitcoinCashProvider(),
                     BtcComBitcoinCashProvider())
         }
