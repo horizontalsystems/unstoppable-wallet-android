@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%s / %s</string>
     <string name="Balance_SyncedUntil">直至：%s</string>
     <string name="Balance_Syncing">正在同步...</string>
+    <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
     <string name="Balance_Sort_Balance">余额</string>
