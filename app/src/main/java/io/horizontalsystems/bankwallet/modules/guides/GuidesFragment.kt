@@ -1,23 +1,28 @@
 package io.horizontalsystems.bankwallet.modules.guides
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.guideview.GuideViewerActivity
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_guides.*
 import kotlinx.android.synthetic.main.view_holder_guide_preview.*
 
 
-class GuidesFragment : Fragment() {
+class GuidesFragment : Fragment(), GuidesAdapter.Listener {
 
     private lateinit var presenter: GuidesPresenter
+    private lateinit var guidesView: GuidesView
     private lateinit var adapter: GuidesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -28,8 +33,9 @@ class GuidesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         presenter = ViewModelProvider(this, GuidesModule.Factory()).get(GuidesPresenter::class.java)
+        guidesView = presenter.view as GuidesView
         presenter.onLoad()
-        adapter = GuidesAdapter()
+        adapter = GuidesAdapter(this)
 
         adapter.items = listOf(GuideItem("Libra and its hidden secrets", "Guide", 30),
                 GuideItem("Bitcoin full truth guide", "Guide", 15),
@@ -50,13 +56,23 @@ class GuidesFragment : Fragment() {
         observeLiveData()
     }
 
-    private fun observeLiveData() {
+    override fun onItemClick(item: GuideItem) {
+        presenter.onGuideClick(item)
+    }
 
+    private fun observeLiveData() {
+        guidesView.openGuide.observe(viewLifecycleOwner, Observer { guideItem ->
+            startActivity(Intent(activity, GuideViewerActivity::class.java))
+        })
     }
 
 }
 
-class GuidesAdapter : RecyclerView.Adapter<ViewHolderNews>() {
+class GuidesAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewHolderGuide>(), ViewHolderGuide.ClickListener {
+
+    interface Listener {
+        fun onItemClick(item: GuideItem)
+    }
 
     var items = listOf<GuideItem>()
 
@@ -64,16 +80,29 @@ class GuidesAdapter : RecyclerView.Adapter<ViewHolderNews>() {
         return items.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderNews {
-        return ViewHolderNews(inflate(parent, R.layout.view_holder_guide_preview))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderGuide {
+        return ViewHolderGuide(inflate(parent, R.layout.view_holder_guide_preview), this)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderNews, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolderGuide, position: Int) {
         holder.bind(items[position])
+    }
+
+    override fun onClick(position: Int) {
+        listener.onItemClick(items[position])
     }
 }
 
-class ViewHolderNews(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderGuide(override val containerView: View, private val listener: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    interface ClickListener {
+        fun onClick(position: Int)
+    }
+
+    init {
+        guideWrapper.setOnSingleClickListener { listener.onClick(adapterPosition) }
+    }
+
     fun bind(item: GuideItem) {
         titleText.text = item.title
         categoryText.text = item.category
