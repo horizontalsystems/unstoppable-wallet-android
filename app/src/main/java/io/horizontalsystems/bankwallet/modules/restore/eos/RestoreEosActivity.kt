@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.restore.eos
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
+import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.MultipleInputEditTextView
 import kotlinx.android.synthetic.main.activity_restore_eos.*
@@ -45,7 +45,7 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         })
 
         viewModel.startQRScanner.observe(this, Observer {
-            QRScannerModule.start(this)
+            QRScannerActivity.start(this)
         })
 
         viewModel.finishLiveEvent.observe(this, Observer { pair ->
@@ -86,9 +86,10 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
-            viewModel.delegate.onQRCodeScan(scanResult.contents)
+        if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                viewModel.delegate.onQRCodeScan(it)
+            }
         }
     }
 

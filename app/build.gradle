@@ -161,6 +161,9 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
+    //permission
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:1fa1afa'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:034cfce'
