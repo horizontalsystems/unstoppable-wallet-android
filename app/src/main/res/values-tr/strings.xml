@@ -76,7 +76,7 @@
     <string name="Balance_RatePerCoin">%s = 1 %s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
-    <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
