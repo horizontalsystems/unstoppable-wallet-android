@@ -76,7 +76,7 @@
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
     <string name="Balance_SyncedUntil">تا: %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
-    <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
     <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
@@ -146,13 +146,13 @@
     <string name="TransactionInfo_Status">وضعیت</string>
     <string name="TransactionInfo_Status_Confirmed">تاييد شد</string>
     <string name="TransactionInfo_Id">شناسه</string>
-    <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
+    <string name="TransactionInfo_RawTransaction">تراکنش خام</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
     <string name="TransactionInfo_Time">زمان</string>
     <string name="TransactionInfo_ButtonVerify">تایید</string>
-    <string name="TransactionInfo_LockedUntil">Locked until %s</string>
-    <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
+    <string name="TransactionInfo_LockedUntil">قفل شده تا %s</string>
+    <string name="TransactionInfo_UnlockedAt">باز شده در %s</string>
     <string name="TransactionInfo_RecipientHash">گیرنده</string>
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
