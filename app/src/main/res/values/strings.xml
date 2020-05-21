@@ -138,6 +138,8 @@
     <string name="Send_ScanQrCode">Scan QR Code</string>
     <string name="Send_Success">\u2713 Sent</string>
 
+    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>

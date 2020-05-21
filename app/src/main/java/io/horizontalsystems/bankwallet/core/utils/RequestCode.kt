@@ -27,4 +27,5 @@ object ModuleField {
     const val COIN_TYPES = "COIN_TYPES"
     const val SHOW_CLOSE_BUTTON = "SHOW_CLOSE_BUTTON"
     const val SHOW_DONE_BUTTON = "SHOW_DONE_BUTTON"
+    const val SCAN_ADDRESS = "SCAN_ADDRESS"
 }
