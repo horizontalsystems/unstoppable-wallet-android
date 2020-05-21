@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -7,8 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
+import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
@@ -57,7 +59,7 @@ class SendActivity : BaseActivity() {
         })
 
         router.scanQrCode.observe(this, Observer {
-            QRScannerModule.start(this)
+            QRScannerActivity.start(this)
         })
     }
 
@@ -86,9 +88,10 @@ class SendActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        scanResult?.contents?.let {
-            mainPresenter.onAddressScan(it)
+        if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                mainPresenter.onAddressScan(it)
+            }
         }
     }
 
