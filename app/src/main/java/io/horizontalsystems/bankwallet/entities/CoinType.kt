@@ -49,16 +49,6 @@ sealed class CoinType : Parcelable {
         }
     }
 
-    fun restoreUrl(): String {
-        return when (this) {
-            is Bitcoin -> "btc.horizontalsystems.xyz/apg"
-            is Litecoin -> "ltc.horizontalsystems.xyz/api"
-            is BitcoinCash -> "cashexplorer.bitcoin.com/api"
-            is Dash -> "dash.horizontalsystems.xyz/apg"
-            else -> ""
-        }
-    }
-
     val predefinedAccountType: PredefinedAccountType
         get() = when (this) {
             is Bitcoin,
