@@ -77,6 +77,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Balance_RatePerCoin">%s par %s</string>
     <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
     <string name="Balance_Syncing">Synchronisation…</string>
+    <string name="Balance_SearchingTransactions">Recherche des transactions…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Synchronisation... %s%%</string>
     <string name="Balance_AddCoins">Ajouter des coins</string>
     <string name="Balance_Sort_Balance">Balance</string>
@@ -145,11 +147,13 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_Status">Statut</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
     <string name="TransactionInfo_Id">Identifiant</string>
+    <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
     <string name="TransactionInfo_Time">Heure</string>
     <string name="TransactionInfo_ButtonVerify">Vérifiez</string>
-    <string name="TransactionInfo_LockedUntil">Verrouillé jusqu\'au</string>
+    <string name="TransactionInfo_LockedUntil">Verrouillé jusqu\'au %s</string>
+    <string name="TransactionInfo_UnlockedAt">Déverrouillé à %s</string>
     <string name="TransactionInfo_RecipientHash">Destinataire</string>
     <string name="TransactionInfo_HistoricalRate">Taux historique</string>
     <string name="TransactionInfo_Fee">Frais</string>
@@ -208,7 +212,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_Report">Signaler un problème</string>
     <string name="SettingsOption_Enabled">Activé</string>
     <string name="SettingsOption_Disabled">Désactivé</string>
-    <string name="SettingsPrivacy_Info">Cette application ne partage aucune de vos données. Cependant, comme elle communique avec des blockchains, certaines données publiques comme l\'adresse IP peuvent potentiellement être divulguées.</string>
+    <string name="SettingsPrivacy_Info">Cette application ne partage aucune de vos données. Cependant, comme elle communique avec des blockchains, certaines données publiques comme l\'adresse IP peuvent potentiellement être divulguées. Utilisez le bouton \"info\" en haut à droite pour obtenir des informations détaillées sur chaque section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Sync Blockchain</string>
     <string name="SettingsPrivacy_CommunicationDescription">Certaines blockchains ne permettent pas encore aux applications mobiles de fonctionner en mode peer to peer. Les communications avec les blockchains BTC, BCH, LTC, DASH sont entièrement de type peer to peer.</string>
@@ -343,7 +347,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Format de l\'adresse</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Changer en %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">Après ce changement, le portefeuille devra se resynchroniser avec la blockchain %1$s .\n\nSi vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel et des transactions ne sera plus visible dans l\'onglet solde. Si vous revenez au paramètre précédent, tout sera remis en place une fois que le portefeuille se sera resynchronisé avec la blockchain. Nous vous recommandons de ne pas faire de modification si vous n\'êtes pas sûr de vous.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">Après ce changement, le portefeuille devra se resynchroniser avec la blockchain %1$s.\n\n
+Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel et des transactions ne sera plus visible. Si vous revenez au paramètre précédent, tout sera remis en place une fois que le portefeuille se sera resynchronisé avec la blockchain. Nous vous recommandons de ne pas faire de modification si vous n\'êtes pas sûr de vous.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>

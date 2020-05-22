@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%s por %s</string>
     <string name="Balance_SyncedUntil">hasta: %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
+    <string name="Balance_SearchingTransactions">Buscando transacciones…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando... %s%%</string>
     <string name="Balance_AddCoins">Añadir Monedas</string>
     <string name="Balance_Sort_Balance">Saldo</string>
@@ -144,11 +146,13 @@
     <string name="TransactionInfo_Status">Estado</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_RawTransaction">Transacción sin procesar</string>
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">Desde </string>
     <string name="TransactionInfo_Time">Hora</string>
     <string name="TransactionInfo_ButtonVerify">Verificar</string>
-    <string name="TransactionInfo_LockedUntil">Bloqueado hasta</string>
+    <string name="TransactionInfo_LockedUntil">Bloqueado hasta %s</string>
+    <string name="TransactionInfo_UnlockedAt">Desbloqueado en %s</string>
     <string name="TransactionInfo_RecipientHash">Destinatario</string>
     <string name="TransactionInfo_HistoricalRate">Estado histórico</string>
     <string name="TransactionInfo_Fee">Comisión</string>
@@ -207,7 +211,7 @@
     <string name="Settings_Report">Reportar un problema</string>
     <string name="SettingsOption_Enabled">Habilitado</string>
     <string name="SettingsOption_Disabled">Desabilitado</string>
-    <string name="SettingsPrivacy_Info">Esta aplicación no comparte su información de forma alguna. Sin embargo, mientras se comunica con blockchains es potencialmente posible que cierta información pública como la dirección IP pueda filtrarse.</string>
+    <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Sincronización de Blockchain</string>
     <string name="SettingsPrivacy_CommunicationDescription">Algunos blockchains aún no brindan medios para poder usarse en aplicaciones móviles de modo peer-to-peer. Las comunicaciones con las blockchains BTC, BCH, LTC, DASH son completamente peer-to-peer.</string>
@@ -349,7 +353,7 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Formato de Dirección</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Cambiar a %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %1$s.\n\nCuando cambie el formato de dirección para %2$s, el saldo actual y el historial de transacciones dejarán de ser visibles en la pestaña de saldo. Cambiarlo de vuelta a la configuración anterior traerá todo de vuelta después de que el monedero se resincronice a sí mismo con el blockchain. Recomendamos no cambiarlo si no está seguro de lo que es.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %1$s.\n\nCuando cambie el formato de dirección para %2$s, el saldo actual y el historial de transacciones dejarán de ser visibles. Cambiarlo de vuelta a la configuración anterior traerá todo de vuelta después de que el monedero se resincronice a sí mismo con el blockchain. Recomendamos no cambiarlo si no está seguro de lo que es.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Comunicación</string>

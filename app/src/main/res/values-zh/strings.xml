@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%s / %s</string>
     <string name="Balance_SyncedUntil">直至：%s</string>
     <string name="Balance_Syncing">正在同步...</string>
+    <string name="Balance_SearchingTransactions">正在搜索交易…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
     <string name="Balance_Sort_Balance">余额</string>
@@ -144,11 +146,13 @@
     <string name="TransactionInfo_Status">状态</string>
     <string name="TransactionInfo_Status_Confirmed">已确认</string>
     <string name="TransactionInfo_Id">交易ID</string>
+    <string name="TransactionInfo_RawTransaction">原始交易</string>
     <string name="TransactionInfo_To">接收人</string>
     <string name="TransactionInfo_From">发送人</string>
     <string name="TransactionInfo_Time">时间</string>
     <string name="TransactionInfo_ButtonVerify">验证</string>
-    <string name="TransactionInfo_LockedUntil">锁定至</string>
+    <string name="TransactionInfo_LockedUntil">锁定至 %s</string>
+    <string name="TransactionInfo_UnlockedAt">在 %s 解锁了</string>
     <string name="TransactionInfo_RecipientHash">收款人</string>
     <string name="TransactionInfo_HistoricalRate">历史价格</string>
     <string name="TransactionInfo_Fee">费用</string>
@@ -207,7 +211,7 @@
     <string name="Settings_Report">报告问题</string>
     <string name="SettingsOption_Enabled">已启用</string>
     <string name="SettingsOption_Disabled">已禁用</string>
-    <string name="SettingsPrivacy_Info">此应用不分享您的任何数据。但是，由于其使用区块链进行通信，所以部分像 IP 地址等公共数据将有可能会泄漏。</string>
+    <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">同步区块链</string>
     <string name="SettingsPrivacy_CommunicationDescription">部分区块链未为手机应用提供以点对点运行的方法。与BTC、BCH、LTC、DASH 区块链的通信属于完全点对点。</string>
@@ -342,7 +346,8 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">地址格式</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">更改为%s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">此更改后，钱包将必须与 %1$s 区块链重新同步。\n\n当您更改地址格式的 %2$s 时，当前余额和交易历史将不再在余额选项卡上可见。 将其更改为以前的设置将在钱包与区块链重新同步后恢复所有设置。 如果不确定，我们建议不要进行更改。</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">此更改后，钱包将必须与 %1$s 区块链重新同步。\n\n
+当您更改地址格式的 %2$s 时，当前余额和交易历史将不再可见。 将其更改为以前的设置将在钱包与区块链重新同步后恢复所有设置。 如果不确定，我们建议不要进行更改。</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>

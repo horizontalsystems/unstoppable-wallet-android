@@ -68,7 +68,7 @@
     <string name="Backup_Button_Submit">Подтвердить</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Копирование ключа с помощью действия «копировать» представляет определенный риск, если вы используете какие-либо приложения для управления буфером обмена или другие приложения, которые могут иметь доступ к данным буфера обмена.</string>
+    <string name="Backup_Eos_Warning">Копирование ключа с помощью действия «копировать» представляет определенный риск, если вы используете какие-либо приложения для управления буфером обмена, или другие приложения, которые могут иметь доступ к данным буфера обмена.</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Deposit">Получить</string>
@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
+    <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_AddCoins">Добавить Токен</string>
     <string name="Balance_Sort_Balance">Балансу</string>
@@ -144,23 +146,25 @@
     <string name="TransactionInfo_Status">Статус</string>
     <string name="TransactionInfo_Status_Confirmed">Подтверждено</string>
     <string name="TransactionInfo_Id">ID Транзакции</string>
+    <string name="TransactionInfo_RawTransaction">Неподтвержденная Транзакция</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonVerify">Проверить</string>
-    <string name="TransactionInfo_LockedUntil">Заблокировано до </string>
+    <string name="TransactionInfo_LockedUntil">Заблокировано до %s</string>
+    <string name="TransactionInfo_UnlockedAt">Разблокировано %s</string>
     <string name="TransactionInfo_RecipientHash">Получатель</string>
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <string name="TransactionInfo_Fee">Комиссия</string>
     <string name="TransactionInfo_SentToSelfNote">Эта транзакция отправлена на свой адрес</string>
-    <string name="TransactionInfo_DoubleSpendNote">Двойные Трата Риск!</string>
+    <string name="TransactionInfo_DoubleSpendNote">Риск Двойной Траты!</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <string name="Info_DoubleSpend_Title">Двойная Трата</string>
     <string name="Info_DoubleSpend_Description">Двойная Трата! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью.</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
-    <string name="Info_DoubleSpend_ConflictingTx">Конфликтная транзакция</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Конфликтующая транзакция</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -207,7 +211,7 @@
     <string name="Settings_Report">Сообщить о Проблеме</string>
     <string name="SettingsOption_Enabled">Вкл.</string>
     <string name="SettingsOption_Disabled">Выкл.</string>
-    <string name="SettingsPrivacy_Info">Наше приложение не делится никакой информацией ни с кем. Но при взаимодействии с блокчейнами некоторые публичные данные, такие как ваш IP адрес, могут фиксироваться в сети.</string>
+    <string name="SettingsPrivacy_Info">Это приложение не передает ваши данные. Однако, поскольку оно связывается с блокчейнами, возможна потенциальная утечка некоторых общедоступных данных, таких как IP-адрес. Используйте кнопку \"Информация\" в правом верхнем углу для получения более подробной информации о каждом разделе.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Синхронизация Блокчейна</string>
     <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны не имеют инфраструктуру для работы мобильных приложений в пиринговом режиме (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>

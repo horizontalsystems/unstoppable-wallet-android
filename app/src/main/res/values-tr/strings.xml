@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%s = 1 %s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
+    <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
     <string name="Balance_Sort_Balance">Bakiye</string>
@@ -144,11 +146,13 @@
     <string name="TransactionInfo_Status">Durum</string>
     <string name="TransactionInfo_Status_Confirmed">Onaylandı</string>
     <string name="TransactionInfo_Id">Kimlik</string>
+    <string name="TransactionInfo_RawTransaction">Ham işlem</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
     <string name="TransactionInfo_Time">Tarih</string>
     <string name="TransactionInfo_ButtonVerify">Doğrula</string>
-    <string name="TransactionInfo_LockedUntil">Şu zamana kadar kitlendi</string>
+    <string name="TransactionInfo_LockedUntil">Şu zamana kadar kitlendi %s</string>
+    <string name="TransactionInfo_UnlockedAt">Kilid açıldı %s</string>
     <string name="TransactionInfo_RecipientHash">Alıcı</string>
     <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
     <string name="TransactionInfo_Fee">Masraf</string>
@@ -207,7 +211,7 @@
     <string name="Settings_Report">Sorunu Bildir</string>
     <string name="SettingsOption_Enabled">Etkinleştirildi</string>
     <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
-    <string name="SettingsPrivacy_Info">Bu uygulama verilerinizden hiçbirini paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir.</string>
+    <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Senk.</string>
     <string name="SettingsPrivacy_CommunicationDescription">Bazı blok zincirler, mobil uygulamaların peer to peer şekilde çalışması için henüz bir araç sağlamamaktadır. BTC, BCH, LTC, DASH blok zincirleriyle iletişim tamamen peer to peer.</string>
@@ -341,7 +345,7 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adres Formatı</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s\'e değiştir</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">Bu değişiklikten sonra cüzdan %1$s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.\n\n %2$s için adres biçimini değiştirdiğinizde, mevcut bakiye ve işlem geçmişi artık bakiye sekmesinde görünmeyecek. Bir önceki ayara geri döndürmek, cüzdan blok zinciriyle kendini yeniden senkronize ettikten sonra her şeyi geri getirecektir. Bunun ne olduğundan emin değilseniz değiştirmemenizi öneririz.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">Bu değişiklikten sonra cüzdan %1$s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.\n\n%2$s için adres biçimini değiştirdiğinizde, mevcut bakiye ve işlem geçmişi artık bakiye sekmesinde görünmeyecek. Bir önceki ayara geri döndürmek, cüzdan blok zinciriyle kendini yeniden senkronize ettikten sonra her şeyi geri getirecektir. Bunun ne olduğundan emin değilseniz değiştirmemenizi öneririz.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Geri Yükleme Ayarları</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Bu değişiklikten sonra cüzdan %s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">İletişim</string>

@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%s 당 %s</string>
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
+    <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_Sort_Balance">잔액</string>
@@ -144,11 +146,13 @@
     <string name="TransactionInfo_Status">상태</string>
     <string name="TransactionInfo_Status_Confirmed">확인</string>
     <string name="TransactionInfo_Id">거래 ID</string>
+    <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
     <string name="TransactionInfo_Time">시간</string>
     <string name="TransactionInfo_ButtonVerify">확인</string>
-    <string name="TransactionInfo_LockedUntil">까지 잠그기</string>
+    <string name="TransactionInfo_LockedUntil">까지 잠그기 %s</string>
+    <string name="TransactionInfo_UnlockedAt">%s에서 잠금 해제됨</string>
     <string name="TransactionInfo_RecipientHash">수령인</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
     <string name="TransactionInfo_Fee">수수료</string>
@@ -207,7 +211,7 @@
     <string name="Settings_Report">문제점 보고</string>
     <string name="SettingsOption_Enabled">활성화</string>
     <string name="SettingsOption_Disabled">비활성화</string>
-    <string name="SettingsPrivacy_Info">이 앱은 귀하의 어떠한 정보를 공유하지 않습니다. 그러나 블록체인과의 통신을 위해 IP 주소와 같은 몇몇의 공개 정보가 유출될 수 있습니다.</string>
+    <string name="SettingsPrivacy_Info">이 앱은 귀하의 데이터를 공유하지 않습니다. 하지만 앱이 블록체인과 통신할 때 IP 주소와 같은 일부 공개 데이터가 유출 될 수도 있습니다. 각 섹션에 대한 자세한 정보를 확인하려면 오른쪽 상단의 정보 버튼을 누르십시오.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">블록체인 동기화</string>
     <string name="SettingsPrivacy_CommunicationDescription">몇몇의 블록체인은 아직 모바일 앱이 P2P 방식으로 작동하는 방법을 제공하지 않습니다. BTC, BCH, LTC, DASH 블록체인과의 통신은 전부 P2P 방식입니다.</string>
@@ -308,7 +312,7 @@
     <string name="ManageCoins_Alert_CantCreateDescription">언스탑퍼블은 현재 새로운 %s 지갑을 만들 수 없습니다. 귀하께서는 기존 항목만 복원이 가능합니다.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">실험적인</string>
-    <string name="ExperimentalFeatures_Description">아래의 특징들은 실험적인 것이므로 주의해서 사용해 주십시오. 저희는 자체 암호화 자금을 쓰면서 이러한 특징들을 실험해보고 있기때문에 모든 경우들이 다 예상대로 작동 한다는 보장을 할 수 없습니다.</string>
+    <string name="ExperimentalFeatures_Description">아래 기능은 실험용이므로 주의해서 사용해 주세요. 자체 암호화된 자금을 사용하여 이러한 기능을 철저히 실험하였지만 가능한 모든 경우에 예상대로 작독한다고 보장 드릴 수는 없습니다.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">시간 자물쇠</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">시간 자물쇠</string>
@@ -343,7 +347,8 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">이 변경 후 지갑은 %1$s 블록체인과 다시 동기화 되어야합니다.\n\n%2$s 의 주소 형식을 변경하실 때에 현재 잔액 및 거래 내역이 더 이상 잔액 탭에 표기되지 않습니다. 이전 설정으로 다시 변경하시면 지갑이 블록체인과 다시 동기화된 후 모든 것을 다시 가져옵니다. 저희는 그것이 확실치 않을시에 변경하지 않는 것을 권장합니다.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">이 변경 후 지갑은 %1$s 블록체인과 다시 동기화 되어야합니다.\n\n
+%2$s 의 주소 형식을 변경하실 때에 현재 잔액 및 거래 내역이 더 이상 잔액 탭에 표기되지 않습니다. 이전 설정으로 다시 변경하시면 지갑이 블록체인과 다시 동기화된 후 모든 것을 다시 가져옵니다. 저희는 그것이 확실치 않을시에 변경하지 않는 것을 권장합니다.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>

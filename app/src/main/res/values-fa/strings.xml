@@ -76,6 +76,8 @@
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
     <string name="Balance_SyncedUntil">تا: %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
+    <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
     <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
     <string name="Balance_Sort_Balance">مانده حساب</string>
@@ -144,11 +146,13 @@
     <string name="TransactionInfo_Status">وضعیت</string>
     <string name="TransactionInfo_Status_Confirmed">تاييد شد</string>
     <string name="TransactionInfo_Id">شناسه</string>
+    <string name="TransactionInfo_RawTransaction">تراکنش خام</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
     <string name="TransactionInfo_Time">زمان</string>
     <string name="TransactionInfo_ButtonVerify">تایید</string>
-    <string name="TransactionInfo_LockedUntil">قفل زمان</string>
+    <string name="TransactionInfo_LockedUntil">قفل شده تا %s</string>
+    <string name="TransactionInfo_UnlockedAt">باز شده در %s</string>
     <string name="TransactionInfo_RecipientHash">گیرنده</string>
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
@@ -207,7 +211,7 @@
     <string name="Settings_Report">گزارش مشکل</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
-    <string name="SettingsPrivacy_Info">این برنامه هیچکدام از داده های شما را به اشتراک نمی گذارد. با این وجود، از آنجا که با زنجیره های بلوکی ارتباط دارد، برخی از داده های عمومی مانند آدرس IP می توانند به صورت بالقوه فاش شوند.</string>
+    <string name="SettingsPrivacy_Info">این برنامه هیچ یک از داده های شما را به اشتراک نمی گذارد. با این حال، بخاطر ارتباط با زنجیره های بلوکی، برخی از داده های عمومی مانند آدرس آی پی می توانند به طور بالقوه فاش شوند. برای کسب اطلاعات دقیق در مورد هر بخش از دکمه اطلاعات در سمت راست بالا استفاده کنید.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
     <string name="SettingsPrivacy_CommunicationDescription">بعضی از زنجیره های بلوکی هنوز وسیله ای برای برنامه های تلفن همراه برای کار به روش همتا به همتا ارائه نمی دهند. ارتباطات با زنجیره های بلوکی BTC ، BCH ، LTC ، DASH کاملاً همتا به همتا است.</string>
