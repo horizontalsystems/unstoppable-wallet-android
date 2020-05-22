@@ -164,7 +164,7 @@
     <string name="Info_DoubleSpend_Title">Двойная Трата</string>
     <string name="Info_DoubleSpend_Description">Двойная Трата! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью.</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
-    <string name="Info_DoubleSpend_ConflictingTx">Конфликтная транзакция</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Конфликтующая транзакция</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
