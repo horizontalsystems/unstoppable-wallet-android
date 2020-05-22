@@ -143,6 +143,7 @@ class TransactionsInteractor(
         lastBlockHeightDisposables.clear()
         ratesDisposables.clear()
         transactionUpdatesDisposables.clear()
+        adapterStateUpdatesDisposables.clear()
     }
 
     private fun onUpdateLastBlock(wallet: Wallet, adapter: ITransactionsAdapter) {
