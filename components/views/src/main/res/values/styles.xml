@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="ToolbarStyle">
         <item name="colorControlNormal">?ColorJacob</item>
+    </style>
+
+    <!-- Override Snackbar default style -->
+    <style name="TextAppearance.Design.Snackbar.Message" parent="android:TextAppearance" tools:override="true">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@drawable/button_secondary_background</item>
+    </style>
+
+    <style name="Widget.Design.Snackbar" parent="android:Widget" tools:override="true">
+        <item name="android:background">@drawable/button_green_background</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>animationMode
     </style>
 
     <style name="BottomDialog" parent="Theme.AppCompat.Light.Dialog">
