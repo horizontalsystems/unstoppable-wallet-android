@@ -52,7 +52,7 @@ class BackupActivity : BaseActivity() {
         })
 
         viewModel.showSuccessAndFinishEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Done, HudHelper.ToastDuration.LONG)
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Done, HudHelper.SnackbarDuration.LONG)
             finish()
         })
 

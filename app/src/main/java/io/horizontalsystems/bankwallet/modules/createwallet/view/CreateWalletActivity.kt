@@ -109,7 +109,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
             finishAffinity()
         })
         router.showSuccessAndClose.observe(this, Observer {
-            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Done, HudHelper.ToastDuration.LONG)
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Done, HudHelper.SnackbarDuration.LONG)
             finish()
         })
     }

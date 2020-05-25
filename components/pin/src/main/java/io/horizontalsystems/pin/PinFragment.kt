@@ -158,7 +158,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         })
 
         pinView.showError.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> HudHelper.showErrorMessage(context, it) }
+            HudHelper.showErrorMessage(this.requireView(), it)
         })
 
         pinView.fillPinCircles.observe(viewLifecycleOwner, Observer { (length, pageIndex) ->
