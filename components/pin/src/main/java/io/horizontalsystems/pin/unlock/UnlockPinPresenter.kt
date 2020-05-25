@@ -74,7 +74,9 @@ class UnlockPinPresenter(
     }
 
     override fun showBiometricAuthInput() {
-        interactor.cryptoObject?.let { view.showBiometricAuthDialog(it) }
+        if(interactor.isBiometricAuthEnabled){
+            interactor.cryptoObject?.let { view.showBiometricAuthDialog(it) }
+        }
     }
 
     override fun onBiometricsUnlock() {
