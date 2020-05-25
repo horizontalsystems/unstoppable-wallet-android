@@ -20,6 +20,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var gridTextColor = context.getColor(R.color.light_grey)
     var gridLineColor = context.getColor(R.color.steel_20)
     var gridDashColor = context.getColor(R.color.white_50)
+    var gridLabelColor = context.getColor(R.color.grey_50)
+
     var gridTextSize = dp2px(12f)
     var gridTextPadding = dp2px(4f)
     var gridEdgeOffset = dp2px(5f)
