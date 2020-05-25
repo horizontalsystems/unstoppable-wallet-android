@@ -2,44 +2,55 @@ package io.horizontalsystems.core.helpers
 
 import android.content.Context
 import android.view.Gravity
-import android.widget.LinearLayout
+import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.core.R
 
 object HudHelper {
 
-    private var toast: Toast? = null
-
-    enum class ToastDuration(val duration: Int) {
-        SHORT(Toast.LENGTH_SHORT), LONG(Toast.LENGTH_LONG)
+    enum class SnackbarDuration(val duration: Int) {
+        SHORT(Snackbar.LENGTH_SHORT), LONG(Snackbar.LENGTH_LONG)
     }
 
-    fun showSuccessMessage(context: Context, resId: Int, duration: ToastDuration = ToastDuration.SHORT) {
-        showHudNotification(context, context.getString(resId), R.color.green_d, duration)
+    // Snackbar placement on screen
+    enum class SnackbarGravity {
+        TOP,
+        BOTTOM,
+        TOP_OF_VIEW,
+        BOTTOM_OF_VIEW
     }
 
-    fun showErrorMessage(context: Context, textRes: Int) {
-        showErrorMessage(context, context.getString(textRes))
+    fun showSuccessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT,
+                           gravity: SnackbarGravity = SnackbarGravity.BOTTOM) {
+        showHudNotification(contenView, contenView.context.getString(resId), R.color.green_d, duration, gravity)
     }
 
-    fun showErrorMessage(context: Context, text: String) {
-        showHudNotification(context, text, R.color.red_d, ToastDuration.LONG)
+    fun showErrorMessage(contenView: View, textRes: Int, gravity: SnackbarGravity = SnackbarGravity.BOTTOM) {
+        showErrorMessage(contenView, contenView.context.getString(textRes), gravity)
     }
 
-    private fun showHudNotification(context: Context, text: String, backgroundColor: Int, toastDuration: ToastDuration) {
-        this.toast?.cancel()
+    fun showErrorMessage(contenView: View, text: String, gravity: SnackbarGravity = SnackbarGravity.BOTTOM) {
+        showHudNotification(contenView, text, R.color.red_d, SnackbarDuration.LONG, gravity)
+    }
 
-        val toast = Toast.makeText(context, text, toastDuration.duration)
-        (toast.view as? LinearLayout)?.gravity = Gravity.CENTER // to align text in center for Xiaomi Mi Mix 2
-        val toastText = toast.view.findViewById(android.R.id.message) as TextView
-        toastText.setTextColor(getColor(toast.view.context, R.color.white))
-        toast.view.background.setTint(getColor(toast.view.context, backgroundColor))
-        toast.setGravity(Gravity.TOP, 0, 120)
-        toast.show()
+    private fun showHudNotification(contenView: View, text: String, backgroundColor: Int, duration: SnackbarDuration, gravity: SnackbarGravity) {
 
-        this.toast = toast
+        Snackbar.make(contenView, text, duration.duration).apply {
+
+            if(gravity == SnackbarGravity.TOP_OF_VIEW)
+                this.anchorView = contenView
+
+            val textView = this.view.findViewById(R.id.snackbar_text) as TextView
+            textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            textView.gravity  = Gravity.CENTER_HORIZONTAL
+
+            this.view.background.setTint(getColor(this.view.context, backgroundColor))
+            this.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+
+        }.show()
     }
 
     private fun getColor(context: Context, colorId: Int) = ContextCompat.getColor(context, colorId)
