@@ -11,7 +11,7 @@ class SecureStorage(private val encryptionManager: IEncryptionManager) : ISecure
     private val biometricAuthEnabled = "biometric_auth_enabled"
 
     override var isBiometricAuthEnabled: Boolean
-        get() = CoreApp.preferences.getBoolean(biometricAuthEnabled, false)
+        get() = CoreApp.preferences.getBoolean(biometricAuthEnabled, CoreApp.preferences.getBoolean("fingerprint_enabled", false))
         set(enabled) {
             CoreApp.preferences.edit().putBoolean(biometricAuthEnabled, enabled).apply()
         }
