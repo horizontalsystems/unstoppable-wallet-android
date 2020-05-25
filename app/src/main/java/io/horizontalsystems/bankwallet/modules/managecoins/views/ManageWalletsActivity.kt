@@ -68,7 +68,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         })
 
         view.showSuccessEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Done)
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Done)
         })
 
         view.showDerivationSelectorDialog.observe(this, Observer { (items, selected, coin) ->

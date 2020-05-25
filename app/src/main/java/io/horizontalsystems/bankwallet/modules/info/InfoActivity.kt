@@ -53,7 +53,7 @@ class InfoActivity : BaseActivity() {
         })
 
         view.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Copied)
         })
 
         router.goBackLiveEvent.observe(this, Observer {

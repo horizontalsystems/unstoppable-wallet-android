@@ -264,15 +264,11 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.networkNotAvailable.observe(viewLifecycleOwner, Observer {
-            activity?.let { fragmentActivity ->
-                HudHelper.showErrorMessage(fragmentActivity, R.string.Hud_Text_NoInternet)
-            }
+            HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
         })
 
         viewModel.showErrorMessageCopied.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                HudHelper.showSuccessMessage(it, R.string.Hud_Text_Copied)
-            }
+            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied)
         })
     }
 

@@ -70,12 +70,14 @@ class ReceiveFragment: BaseBottomSheetDialogFragment() {
         })
 
         view.showError.observe(viewLifecycleOwner, Observer { error ->
-            error?.let { context?.let { context -> HudHelper.showErrorMessage(context, it) } }
+            error?.let {
+                HudHelper.showErrorMessage(this.requireView(), it, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
+            }
             dismiss()
         })
 
         view.showCopied.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied) }
+            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
         })
     }
 
