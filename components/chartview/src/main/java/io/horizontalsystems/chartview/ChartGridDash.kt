@@ -21,7 +21,7 @@ class ChartGridDash(private val config: ChartConfig) : ChartDraw {
     private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = config.gridTextSize
         color = config.gridTextColor
-        typeface = Typeface.create(config.textFont, Typeface.BOLD)
+        typeface = Typeface.create(config.textFont, Typeface.NORMAL)
     }
 
     fun setShape(rect: RectF) {
