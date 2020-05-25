@@ -52,7 +52,7 @@ class SendActivity : BaseActivity() {
 
     private fun subscribeToRouterEvents(router: SendRouter) {
         router.closeWithSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(this, R.string.Send_Success, HudHelper.ToastDuration.LONG)
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Send_Success, HudHelper.SnackbarDuration.LONG)
             finish()
         })
 

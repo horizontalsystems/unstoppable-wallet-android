@@ -54,7 +54,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         rvDetails.adapter = transactionDetailsAdapter
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(context, R.string.Hud_Text_Copied)
+            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
         })
 
         viewModel.showShareLiveEvent.observe(lifecycleOwner, Observer { url ->
