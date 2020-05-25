@@ -45,6 +45,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val mainCurve = ChartCurve(config, animator)
     private val mainGradient = ChartGradient(animator)
     private val bottomVolume = ChartVolume(config, animator)
+
     private val gridMain = ChartGrid(config)
     private val gridBottom = ChartGrid(config)
     private val gridDashMain = ChartGridDash(config)
@@ -53,10 +54,12 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
     private val emaFastCurve = ChartCurve(config, animator)
     private val emaSlowCurve = ChartCurve(config, animator)
+    private val emaLabel = ChartGridLabel(config)
 
     private val macdCurve = ChartCurve(config, animator)
     private val macdSignalCurve = ChartCurve(config, animator)
     private val macdHistogram = ChartHistogram(config, animator)
+    private val marcLabel = ChartGridLabel(config)
 
     private val rsiCurve = ChartCurve(config, animator)
 
@@ -130,6 +133,11 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         emaSlowCurve.setPoints(emaSlow)
         emaSlowCurve.setColor(config.curveSlowColor)
 
+        emaLabel.setShape(shapeMain)
+        emaLabel.setValues(mapOf(
+                "50" to config.curveSlowColor,
+                "25" to config.curveFastColor))
+
         // macd
         rsiCurve.setShape(shapeBottom)
         rsiCurve.setPoints(rsi)
@@ -146,6 +154,13 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         macdHistogram.setShape(shapeBottom)
         macdHistogram.setPoints(histogram)
+
+        marcLabel.setShape(shapeBottom)
+        marcLabel.setOffset(shapeBottom.height() * 0.3f)
+        marcLabel.setValues(mapOf(
+                "9" to config.gridLabelColor,
+                "26" to config.gridLabelColor,
+                "12" to config.gridLabelColor))
 
         mainCurve.setShape(shapeMain)
         mainCurve.setPoints(points)
@@ -181,13 +196,13 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         chartMain.clear()
         chartMain.add(mainCurve, mainGradient)
-        chartMain.add(gridMain, gridDashMain)
+        chartMain.add(gridMain, gridDashMain, emaLabel)
         chartMain.add(emaFastCurve, emaSlowCurve)
 
         chartBottom.clear()
         chartBottom.add(gridBottom)
-        chartBottom.add(bottomVolume)
-//        chartBottom.add(macdHistogram, macdCurve, macdSignalCurve)
+        // chartBottom.add(bottomVolume)
+        chartBottom.add(macdHistogram, macdCurve, macdSignalCurve, marcLabel)
 //        chartBottom.add(rsiCurve, gridDashBottom)
 
         chartTimeline.clear()
