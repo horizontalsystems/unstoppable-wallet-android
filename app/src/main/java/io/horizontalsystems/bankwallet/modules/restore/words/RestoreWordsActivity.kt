@@ -41,7 +41,7 @@ class RestoreWordsActivity : BaseActivity() {
         viewModel.init(wordsCount)
 
         viewModel.errorLiveData.observe(this, Observer {
-            HudHelper.showErrorMessage(this, it)
+            HudHelper.showErrorMessage(findViewById(android.R.id.content), it)
         })
 
         viewModel.notifyRestored.observe(this, Observer {

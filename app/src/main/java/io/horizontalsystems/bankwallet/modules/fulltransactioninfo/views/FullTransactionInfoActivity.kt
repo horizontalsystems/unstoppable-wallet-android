@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
@@ -32,7 +33,12 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
     private val transactionRecordAdapter = SectionViewAdapter(this)
     private lateinit var viewModel: FullTransactionInfoViewModel
+    private var snackbar: Snackbar? = null
 
+    override fun onDestroy() {
+        snackbar?.dismiss()
+        super.onDestroy()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,7 +86,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Copied)
         })
 
         viewModel.openLinkLiveEvent.observe(this, Observer { url ->

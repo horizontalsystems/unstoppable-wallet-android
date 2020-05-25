@@ -54,7 +54,7 @@ class RestoreActivity : BaseActivity(), RestoreNavigationAdapter.Listener {
         })
 
         view.showErrorLiveEvent.observe(this, Observer {
-            HudHelper.showErrorMessage(this, R.string.Restore_RestoreFailed)
+            HudHelper.showErrorMessage(findViewById(android.R.id.content), R.string.Restore_RestoreFailed)
         })
     }
 

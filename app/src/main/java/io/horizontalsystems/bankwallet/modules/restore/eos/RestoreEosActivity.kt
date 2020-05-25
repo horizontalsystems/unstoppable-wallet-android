@@ -57,7 +57,7 @@ class RestoreEosActivity : BaseActivity(), MultipleInputEditTextView.Listener {
         })
 
         viewModel.errorLiveEvent.observe(this, Observer { resId ->
-            HudHelper.showErrorMessage(this, resId)
+            HudHelper.showErrorMessage(findViewById(android.R.id.content), resId)
         })
 
         eosAccount.setListenerForTextInput(this)
