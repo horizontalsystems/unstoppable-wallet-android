@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.*
-import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
@@ -64,7 +63,7 @@ class RateChartViewFactory {
         var startTime = chartInfo.startTimestamp
 
         if (marketInfo == null) {
-            return PointConverter.convert(points, startTime, chartInfo.endTimestamp, startDayPoint = null)
+            return ChartDataFactory.build(points, startTime, chartInfo.endTimestamp, startDayPoint = null)
         }
 
         val pointsWithMarketPrice = points + ChartPoint(marketInfo.rate.toFloat(), null, marketInfo.timestamp)
@@ -75,6 +74,6 @@ class RateChartViewFactory {
             startDayPoint = ChartPoint(marketInfo.rateOpen24Hour.toFloat(), null, startTime)
         }
 
-        return PointConverter.convert(pointsWithMarketPrice, startTime, marketInfo.timestamp, startDayPoint)
+        return ChartDataFactory.build(pointsWithMarketPrice, startTime, marketInfo.timestamp, startDayPoint)
     }
 }
