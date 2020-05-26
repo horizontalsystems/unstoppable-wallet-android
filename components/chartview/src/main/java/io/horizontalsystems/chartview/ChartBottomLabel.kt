@@ -3,7 +3,7 @@ package io.horizontalsystems.chartview
 import android.graphics.*
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartGridLabel(private val config: ChartConfig) : ChartDraw {
+class ChartBottomLabel(private val config: ChartConfig, override var isVisible: Boolean = false) : ChartDraw {
 
     private var offset = config.curveVerticalOffset
 
@@ -34,6 +34,7 @@ class ChartGridLabel(private val config: ChartConfig) : ChartDraw {
     }
 
     override fun draw(canvas: Canvas) {
+        if (!isVisible) return
         canvas.drawTopLow()
     }
 
