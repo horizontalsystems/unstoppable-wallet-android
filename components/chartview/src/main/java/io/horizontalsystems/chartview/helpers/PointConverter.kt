@@ -3,8 +3,8 @@ package io.horizontalsystems.chartview.helpers
 import android.graphics.PointF
 import android.graphics.RectF
 import io.horizontalsystems.chartview.*
+import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.models.ChartPoint
-import java.util.*
 
 object PointConverter {
     fun coordinates(data: ChartData, shape: RectF, verticalPadding: Float): List<Coordinate> {
@@ -14,8 +14,8 @@ object PointConverter {
         val coordinates = mutableListOf<Coordinate>()
 
         for (item in data.items) {
-            val value = item.values[Indicator.Candle] ?: continue
-            val volume = item.values[Indicator.Volume]
+            val value = item.values[Candle] ?: continue
+            val volume = item.values[Volume]
             val point = value.point
             val x = point.x * width
             val y = point.y * height
@@ -70,31 +70,31 @@ object PointConverter {
             values.add(point.value)
 
             val item = ChartData.Item(point.timestamp)
-            item.values[Indicator.Candle] = ChartData.Value(point.value)
-            item.values[Indicator.Volume] = point.volume?.let { ChartData.Value(it) }
+            item.values[Candle] = ChartData.Value(point.value)
+            item.values[Volume] = point.volume?.let { ChartData.Value(it) }
 
             items.add(item)
         }
 
         val chartData = ChartData(items, startTime, endTime)
 
-        val emaFast = IndicatorHelper.ema(values, 25)
-        val emaSlow = IndicatorHelper.ema(values, 50)
+        val emaFast = IndicatorHelper.ema(values, EmaFast.period)
+        val emaSlow = IndicatorHelper.ema(values, EmaSlow.period)
 
-        val rsi = IndicatorHelper.rsi(values, 14)
-        val (macd, signal, histogram) = IndicatorHelper.macd(values, fastPeriods = 12, slowPeriods = 26, signalPeriods = 9)
+        val rsi = IndicatorHelper.rsi(values, Rsi.period)
+        val (macd, signal, histogram) = IndicatorHelper.macd(values, Macd.fastPeriod, Macd.slowPeriod, Macd.signalPeriod)
 
         // EMA
-        chartData.add(emaFast.map { ChartData.Value(it) }, Indicator.EmaFast)
-        chartData.add(emaSlow.map { ChartData.Value(it) }, Indicator.EmaSlow)
+        chartData.add(emaFast.map { ChartData.Value(it) }, EmaFast)
+        chartData.add(emaSlow.map { ChartData.Value(it) }, EmaSlow)
 
         // RSI
-        chartData.add(rsi.map { ChartData.Value(it) }, Indicator.Rsi)
+        chartData.add(rsi.map { ChartData.Value(it) }, Rsi)
 
         // MACD
-        chartData.add(macd.map { ChartData.Value(it) }, Indicator.Macd)
-        chartData.add(signal.map { ChartData.Value(it) }, Indicator.MacdSignal)
-        chartData.add(histogram.map { ChartData.Value(it) }, Indicator.MacdHistogram)
+        chartData.add(macd.map { ChartData.Value(it) }, Macd)
+        chartData.add(signal.map { ChartData.Value(it) }, MacdSignal)
+        chartData.add(histogram.map { ChartData.Value(it) }, MacdHistogram)
         addStartPoint(chartData, points, startDayPoint)
 
         return convertVisible(chartData)
@@ -105,19 +105,19 @@ object PointConverter {
         val list = points.filter { it.timestamp < startDayPoint.timestamp } + startDayPoint
         val prevValues = list.map { it.value }
 
-        val prevEmaFast = IndicatorHelper.ema(prevValues, 25)
-        val prevEmaSlow = IndicatorHelper.ema(prevValues, 50)
-        val prevRsi = IndicatorHelper.rsi(prevValues, 14)
-        val (prevMacd, prevSignal, prevHistogram) = IndicatorHelper.macd(prevValues, fastPeriods = 12, slowPeriods = 26, signalPeriods = 9)
+        val prevEmaFast = IndicatorHelper.ema(prevValues, EmaFast.period)
+        val prevEmaSlow = IndicatorHelper.ema(prevValues, EmaSlow.period)
+        val prevRsi = IndicatorHelper.rsi(prevValues, Rsi.period)
+        val (prevMacd, prevSignal, prevHistogram) = IndicatorHelper.macd(prevValues, Macd.fastPeriod, Macd.slowPeriod, Macd.signalPeriod)
 
-        val item: EnumMap<Indicator, ChartData.Value> = EnumMap(Indicator::class.java)
-        item[Indicator.Candle] = ChartData.Value(startDayPoint.value)
-        item[Indicator.EmaFast] = ChartData.Value(prevEmaFast.last())
-        item[Indicator.EmaSlow] = ChartData.Value(prevEmaSlow.last())
-        item[Indicator.Rsi] = ChartData.Value(prevRsi.last())
-        item[Indicator.Macd] = ChartData.Value(prevMacd.last())
-        item[Indicator.MacdSignal] = ChartData.Value(prevSignal.last())
-        item[Indicator.MacdHistogram] = ChartData.Value(prevHistogram.last())
+        val item = mutableMapOf<Indicator, ChartData.Value?>()
+        item[Candle] = ChartData.Value(startDayPoint.value)
+        item[EmaFast] = ChartData.Value(prevEmaFast.last())
+        item[EmaSlow] = ChartData.Value(prevEmaSlow.last())
+        item[Rsi] = ChartData.Value(prevRsi.last())
+        item[Macd] = ChartData.Value(prevMacd.last())
+        item[MacdSignal] = ChartData.Value(prevSignal.last())
+        item[MacdHistogram] = ChartData.Value(prevHistogram.last())
 
         chartData.insert(ChartData.Item(startDayPoint.timestamp, item))
     }
@@ -132,11 +132,11 @@ object PointConverter {
 
             visibleData.items.add(item)
 
-            visibleData.range(item, Indicator.Candle)
-            visibleData.range(item, Indicator.Volume)
-            visibleData.range(item, Indicator.Macd)
-            visibleData.range(item, Indicator.MacdSignal)
-            visibleData.range(item, Indicator.MacdHistogram)
+            visibleData.range(item, Candle)
+            visibleData.range(item, Volume)
+            visibleData.range(item, Macd)
+            visibleData.range(item, MacdSignal)
+            visibleData.range(item, MacdHistogram)
         }
 
         val visibleTimeInterval = visibleData.endTimestamp - visibleData.startTimestamp
@@ -148,14 +148,14 @@ object PointConverter {
 
             val x = (timestamp.toFloat() / visibleTimeInterval)
 
-            item.setPoint(x, Indicator.Candle, visibleData.valueRange)
-            item.setPoint(x, Indicator.Volume, visibleData.volumeRange)
-            item.setPoint(x, Indicator.EmaFast, visibleData.valueRange)
-            item.setPoint(x, Indicator.EmaSlow, visibleData.valueRange)
-            item.setPoint(x, Indicator.Rsi, visibleData.rsiRange)
-            item.setPoint(x, Indicator.Macd, visibleData.macdRange)
-            item.setPoint(x, Indicator.MacdSignal, visibleData.macdRange)
-            item.setPoint(x, Indicator.MacdHistogram, visibleData.histogramRange)
+            item.setPoint(x, Candle, visibleData.valueRange)
+            item.setPoint(x, Volume, visibleData.volumeRange)
+            item.setPoint(x, EmaFast, visibleData.valueRange)
+            item.setPoint(x, EmaSlow, visibleData.valueRange)
+            item.setPoint(x, Rsi, visibleData.rsiRange)
+            item.setPoint(x, Macd, visibleData.macdRange)
+            item.setPoint(x, MacdSignal, visibleData.macdRange)
+            item.setPoint(x, MacdHistogram, visibleData.histogramRange)
         }
 
         return visibleData
