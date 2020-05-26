@@ -1,21 +1,18 @@
 package io.horizontalsystems.chartview
 
 import android.content.Context
-import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.chartview.helpers.*
+import io.horizontalsystems.chartview.Indicator.*
+import io.horizontalsystems.chartview.helpers.ChartAnimator
+import io.horizontalsystems.chartview.helpers.GridHelper
+import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.view_chart.view.*
 import java.math.BigDecimal
-
-interface ChartDraw {
-    var isVisible: Boolean
-    fun draw(canvas: Canvas)
-}
 
 class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -127,17 +124,17 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     fun setData(data: ChartData, chartType: ChartView.ChartType) {
         config.setTrendColor(data)
 
-        val emaFast = PointConverter.curve(data.values(Indicator.EmaFast), chartMain.shape, config.curveVerticalOffset)
-        val emaSlow = PointConverter.curve(data.values(Indicator.EmaSlow), chartMain.shape, config.curveVerticalOffset)
-        val rsi = PointConverter.curve(data.values(Indicator.Rsi), chartBottom.shape, 0f)
+        val emaFast = PointConverter.curve(data.values(EmaFast), chartMain.shape, config.curveVerticalOffset)
+        val emaSlow = PointConverter.curve(data.values(EmaSlow), chartMain.shape, config.curveVerticalOffset)
+        val rsi = PointConverter.curve(data.values(Rsi), chartBottom.shape, 0f)
 
-        val macd = PointConverter.curve(data.values(Indicator.Macd), chartBottom.shape, config.macdLineOffset)
-        val signal = PointConverter.curve(data.values(Indicator.MacdSignal), chartBottom.shape, config.macdLineOffset)
-        val histogram = PointConverter.histogram(data.values(Indicator.MacdHistogram), chartBottom.shape, config.macdHistogramOffset)
+        val macd = PointConverter.curve(data.values(Macd), chartBottom.shape, config.macdLineOffset)
+        val signal = PointConverter.curve(data.values(MacdSignal), chartBottom.shape, config.macdLineOffset)
+        val histogram = PointConverter.histogram(data.values(MacdHistogram), chartBottom.shape, config.macdHistogramOffset)
 
         val coordinates = PointConverter.coordinates(data, chartMain.shape, config.curveVerticalOffset)
-        val points = PointConverter.curve(data.values(Indicator.Candle), chartMain.shape, config.curveVerticalOffset)
-        val volumes = PointConverter.volume(data.values(Indicator.Volume), chartBottom.shape, config.volumeOffset)
+        val points = PointConverter.curve(data.values(Candle), chartMain.shape, config.curveVerticalOffset)
+        val volumes = PointConverter.volume(data.values(Volume), chartBottom.shape, config.volumeOffset)
         val timeline = GridHelper.map(chartType, data.startTimestamp, data.endTimestamp, chartMain.shape.right)
 
         chartTouch.configure(config, chartTimeline.shape.height())
@@ -154,8 +151,8 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         emaLabel.setShape(chartMain.shape)
         emaLabel.setValues(mapOf(
-                "50" to config.curveSlowColor,
-                "25" to config.curveFastColor))
+                EmaSlow.period.toString() to config.curveSlowColor,
+                EmaFast.period.toString() to config.curveFastColor))
 
         // RSI
         rsiCurve.setShape(chartBottom.shape)
@@ -164,7 +161,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         rsiRange.setShape(chartBottom.shape)
         rsiRange.setOffset(chartBottom.shape.height() * 0.3f)
-        rsiRange.setValues("70", "30")
+        rsiRange.setValues(Rsi.max.toString(), Rsi.min.toString())
 
         // MACD
         macdCurve.setShape(chartBottom.shape)
@@ -181,9 +178,9 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         macdLabel.setShape(chartBottom.shape)
         macdLabel.setOffset(chartBottom.shape.height() * 0.3f)
         macdLabel.setValues(mapOf(
-                "9" to config.gridLabelColor,
-                "26" to config.gridLabelColor,
-                "12" to config.gridLabelColor))
+                Macd.signalPeriod.toString() to config.gridLabelColor,
+                Macd.slowPeriod.toString() to config.gridLabelColor,
+                Macd.fastPeriod.toString() to config.gridLabelColor))
 
         // Candles
         mainCurve.setShape(chartMain.shape)

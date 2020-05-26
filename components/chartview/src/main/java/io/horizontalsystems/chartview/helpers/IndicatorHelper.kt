@@ -85,7 +85,7 @@ object IndicatorHelper {
         return rsi
     }
 
-    fun macd(values: List<Float>, slowPeriods: Int = 26, fastPeriods: Int = 12, signalPeriods: Int = 9): Triple<List<Float>, List<Float>, List<Float>> {
+    fun macd(values: List<Float>, fastPeriods: Int = 12, slowPeriods: Int = 26, signalPeriods: Int = 9): Triple<List<Float>, List<Float>, List<Float>> {
         val emaFast = ema(values, fastPeriods)
         val emaSlow = ema(values, slowPeriods)
 
