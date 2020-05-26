@@ -3,27 +3,13 @@ package io.horizontalsystems.chartview
 import android.graphics.PointF
 import android.util.Range
 import java.math.BigDecimal
-import java.util.*
 import kotlin.math.abs
-
-enum class Indicator(val key: String) {
-    Candle("candle"),
-    Volume("volume"),
-    EmaFast("emaFast"),
-    EmaSlow("emaSlow"),
-    Rsi("rsi"),
-    Macd("macd"),
-    MacdSignal("macdSignal"),
-    MacdHistogram("macdHistogram")
-}
 
 class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endTimestamp: Long) {
 
     class Value(val value: Float, var point: PointF = PointF(0f, 0f))
 
-    class Item(
-            val timestamp: Long,
-            val values: EnumMap<Indicator, Value> = EnumMap(Indicator::class.java)) {
+    class Item(val timestamp: Long, val values: MutableMap<Indicator, Value?> = mutableMapOf()) {
 
         fun setPoint(x: Float, indicator: Indicator, range: Range<Float>) {
             values[indicator]?.let {
@@ -72,7 +58,7 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
 
     // Ranges
 
-    private val ranges: EnumMap<Indicator, Range<Float>> = EnumMap(Indicator::class.java)
+    private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
 
     fun range(item: Item, indicator: Indicator) {
         val currValue = item.values[indicator]?.value ?: return
