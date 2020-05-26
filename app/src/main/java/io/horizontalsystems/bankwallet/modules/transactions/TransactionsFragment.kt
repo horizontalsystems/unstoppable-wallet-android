@@ -190,8 +190,9 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
 
         txValueInFiat.text = transactionRecord.currencyValue?.let {
-            App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
+            App.numberFormatter.format(it, showNegativeSign = false, trimmable = true, canUseLessSymbol = true)
         }
+        txValueInFiat.setTextColor(getAmountColor(incoming))
 
         txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, getLockIcon(transactionRecord.lockState), 0)
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
@@ -215,8 +216,9 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 
         if (current.currencyValue != prev.currencyValue) {
             txValueInFiat.text = current.currencyValue?.let {
-                App.numberFormatter.formatForTransactions(containerView.context, it, incoming, canUseLessSymbol = true, trimmable = true)
+                App.numberFormatter.format(it, showNegativeSign = false, trimmable = true, canUseLessSymbol = true)
             }
+            txValueInFiat.setTextColor(getAmountColor(incoming))
         }
 
         if (current.lockState != prev.lockState) {
@@ -236,6 +238,11 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         if (current.doubleSpend != prev.doubleSpend) {
             doubleSpendIcon.visibility = if (current.doubleSpend) View.VISIBLE else View.GONE
         }
+    }
+
+    private fun getAmountColor(incoming: Boolean): Int {
+        val amountTextColor = if (incoming) R.color.green_d else R.color.yellow_d
+        return itemView.context.getColor(amountTextColor)
     }
 }
 
