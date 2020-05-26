@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.view_chart.view.*
 import java.math.BigDecimal
 
 interface ChartDraw {
+    var isVisible: Boolean
     fun draw(canvas: Canvas)
 }
 
@@ -36,32 +37,30 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     var rateFormatter: RateFormatter? = null
 
     private val config = ChartConfig(context, attrs)
-    private val animator = ChartAnimator {
-        chartMain.invalidate()
-        chartBottom.invalidate()
-        chartTimeline.invalidate()
-    }
+    private val animatorMain = ChartAnimator { chartMain.invalidate() }
+    private val animatorBottom = ChartAnimator { chartBottom.invalidate() }
 
-    private val mainCurve = ChartCurve(config, animator)
-    private val mainGradient = ChartGradient(animator)
-    private val bottomVolume = ChartVolume(config, animator)
+    private val mainCurve = ChartCurve(config, animatorMain, isVisible = true)
+    private val mainGradient = ChartGradient(animatorMain)
 
-    private val gridMain = ChartGrid(config)
-    private val gridBottom = ChartGrid(config)
-    private val gridDashMain = ChartGridDash(config)
-    private val gridDashBottom = ChartGridDash(config)
-    private val gridTimeline = ChartGridTimeline(config)
+    private val mainGrid = ChartGrid(config)
+    private val mainRange = ChartGridRange(config)
 
-    private val emaFastCurve = ChartCurve(config, animator)
-    private val emaSlowCurve = ChartCurve(config, animator)
-    private val emaLabel = ChartGridLabel(config)
+    private val bottomGrid = ChartGrid(config)
+    private val bottomVolume = ChartVolume(config, animatorBottom)
+    private val timelineGrid = ChartGridTimeline(config)
 
-    private val macdCurve = ChartCurve(config, animator)
-    private val macdSignalCurve = ChartCurve(config, animator)
-    private val macdHistogram = ChartHistogram(config, animator)
-    private val marcLabel = ChartGridLabel(config)
+    private val emaFastCurve = ChartCurve(config, animatorMain)
+    private val emaSlowCurve = ChartCurve(config, animatorMain)
+    private val emaLabel = ChartBottomLabel(config)
 
-    private val rsiCurve = ChartCurve(config, animator)
+    private val macdCurve = ChartCurve(config, animatorBottom)
+    private val macdSignal = ChartCurve(config, animatorBottom)
+    private val macdHistogram = ChartHistogram(config, animatorBottom)
+    private val macdLabel = ChartBottomLabel(config)
+
+    private val rsiCurve = ChartCurve(config, animatorBottom)
+    private val rsiRange = ChartGridRange(config, isVisible = false)
 
     fun setListener(listener: Listener) {
         chartTouch.onUpdate(object : Listener {
@@ -97,98 +96,121 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     }
 
     fun showError(error: String) {
-        chartMain.visibility = View.INVISIBLE
-        chartError.visibility = View.VISIBLE
+        listOf(chartMain, chartBottom, chartTimeline).forEach {
+            it.visibility = View.INVISIBLE
+        }
+        chartError.showIf(true)
         chartError.text = error
+    }
+
+    fun showEma() {
+        setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = !emaFastCurve.isVisible)
+        animatorMain.start()
+    }
+
+    fun showMacd() {
+        val visible = !macdCurve.isVisible
+        setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
+        setVisible(rsiCurve, rsiRange, isVisible = false)
+        setVisible(bottomVolume, isVisible = !visible)
+        animatorBottom.start()
+    }
+
+    fun showRsi() {
+        val visible = !rsiCurve.isVisible
+        setVisible(rsiCurve, rsiRange, isVisible = visible)
+        setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = false)
+        setVisible(bottomVolume, isVisible = !visible)
+        animatorBottom.start()
     }
 
     fun setData(data: ChartData, chartType: ChartView.ChartType) {
         config.setTrendColor(data)
 
-        val shapeMain = chartMain.shape
-        val shapeBottom = chartBottom.shape
-        val shapeTimeline = chartTimeline.shape
+        val emaFast = PointConverter.curve(data.values(Indicator.EmaFast), chartMain.shape, config.curveVerticalOffset)
+        val emaSlow = PointConverter.curve(data.values(Indicator.EmaSlow), chartMain.shape, config.curveVerticalOffset)
+        val rsi = PointConverter.curve(data.values(Indicator.Rsi), chartBottom.shape, 0f)
 
-        val emaFast = PointConverter.curve(data.values(Indicator.EmaFast), shapeMain, config.curveVerticalOffset)
-        val emaSlow = PointConverter.curve(data.values(Indicator.EmaSlow), shapeMain, config.curveVerticalOffset)
-        val rsi = PointConverter.curve(data.values(Indicator.Rsi), shapeBottom, 0f)
+        val macd = PointConverter.curve(data.values(Indicator.Macd), chartBottom.shape, config.macdLineOffset)
+        val signal = PointConverter.curve(data.values(Indicator.MacdSignal), chartBottom.shape, config.macdLineOffset)
+        val histogram = PointConverter.histogram(data.values(Indicator.MacdHistogram), chartBottom.shape, config.macdHistogramOffset)
 
-        val macd = PointConverter.curve(data.values(Indicator.Macd), shapeBottom, config.macdLineOffset)
-        val macdSignal = PointConverter.curve(data.values(Indicator.MacdSignal), shapeBottom, config.macdLineOffset)
-        val histogram = PointConverter.histogram(data.values(Indicator.MacdHistogram), shapeBottom, config.macdHistogramOffset)
+        val coordinates = PointConverter.coordinates(data, chartMain.shape, config.curveVerticalOffset)
+        val points = PointConverter.curve(data.values(Indicator.Candle), chartMain.shape, config.curveVerticalOffset)
+        val volumes = PointConverter.volume(data.values(Indicator.Volume), chartBottom.shape, config.volumeOffset)
+        val timeline = GridHelper.map(chartType, data.startTimestamp, data.endTimestamp, chartMain.shape.right)
 
-        val coordinates = PointConverter.coordinates(data, shapeMain, config.curveVerticalOffset)
-        val points = PointConverter.curve(data.values(Indicator.Candle), shapeMain, config.curveVerticalOffset)
-        val volumeBars = PointConverter.volume(data.values(Indicator.Volume), shapeBottom, config.volumeOffset)
-        val columns = GridHelper.map(chartType, data.startTimestamp, data.endTimestamp, shapeMain.right)
-
-        chartTouch.configure(config, shapeTimeline.bottom)
+        chartTouch.configure(config, chartTimeline.shape.height())
         chartTouch.setCoordinates(coordinates)
 
-        emaFastCurve.setShape(shapeMain)
+        // EMA
+        emaFastCurve.setShape(chartMain.shape)
         emaFastCurve.setPoints(emaFast)
         emaFastCurve.setColor(config.curveFastColor)
 
-        emaSlowCurve.setShape(shapeMain)
+        emaSlowCurve.setShape(chartMain.shape)
         emaSlowCurve.setPoints(emaSlow)
         emaSlowCurve.setColor(config.curveSlowColor)
 
-        emaLabel.setShape(shapeMain)
+        emaLabel.setShape(chartMain.shape)
         emaLabel.setValues(mapOf(
                 "50" to config.curveSlowColor,
                 "25" to config.curveFastColor))
 
-        // macd
-        rsiCurve.setShape(shapeBottom)
+        // RSI
+        rsiCurve.setShape(chartBottom.shape)
         rsiCurve.setPoints(rsi)
         rsiCurve.setColor(config.curveFastColor)
 
-        // macd
-        macdCurve.setShape(shapeBottom)
+        rsiRange.setShape(chartBottom.shape)
+        rsiRange.setOffset(chartBottom.shape.height() * 0.3f)
+        rsiRange.setValues("70", "30")
+
+        // MACD
+        macdCurve.setShape(chartBottom.shape)
         macdCurve.setPoints(macd)
         macdCurve.setColor(config.curveFastColor)
 
-        macdSignalCurve.setShape(shapeBottom)
-        macdSignalCurve.setPoints(macdSignal)
-        macdSignalCurve.setColor(config.curveSlowColor)
+        macdSignal.setShape(chartBottom.shape)
+        macdSignal.setPoints(signal)
+        macdSignal.setColor(config.curveSlowColor)
 
-        macdHistogram.setShape(shapeBottom)
+        macdHistogram.setShape(chartBottom.shape)
         macdHistogram.setPoints(histogram)
 
-        marcLabel.setShape(shapeBottom)
-        marcLabel.setOffset(shapeBottom.height() * 0.3f)
-        marcLabel.setValues(mapOf(
+        macdLabel.setShape(chartBottom.shape)
+        macdLabel.setOffset(chartBottom.shape.height() * 0.3f)
+        macdLabel.setValues(mapOf(
                 "9" to config.gridLabelColor,
                 "26" to config.gridLabelColor,
                 "12" to config.gridLabelColor))
 
-        mainCurve.setShape(shapeMain)
+        // Candles
+        mainCurve.setShape(chartMain.shape)
         mainCurve.setPoints(points)
         mainCurve.setColor(config.curveColor)
 
         mainGradient.setPoints(points)
-        mainGradient.setShape(shapeMain)
+        mainGradient.setShape(chartMain.shape)
         mainGradient.setShader(config.curveColor)
 
-        bottomVolume.setPoints(volumeBars)
-        bottomVolume.setShape(shapeBottom)
-
-        gridMain.setShape(shapeMain)
-        gridMain.set(columns)
-
-        gridBottom.setShape(shapeBottom)
-        gridBottom.set(columns)
+        mainGrid.setShape(chartMain.shape)
+        mainGrid.set(timeline)
 
         val candleRange = data.valueRange
-        gridDashMain.setShape(shapeMain)
-        gridDashMain.setValues(formatRate(candleRange.upper), formatRate(candleRange.lower))
+        mainRange.setShape(chartMain.shape)
+        mainRange.setValues(formatRate(candleRange.upper), formatRate(candleRange.lower))
 
-        gridDashBottom.setShape(shapeBottom)
-        gridDashBottom.setOffset(shapeBottom.height() * 0.3f)
-        gridDashBottom.setValues("70", "30")
+        // Volume
+        bottomVolume.setPoints(volumes)
+        bottomVolume.setShape(chartBottom.shape)
 
-        gridTimeline.setColumns(columns)
-        gridTimeline.setShape(shapeTimeline)
+        bottomGrid.setShape(chartBottom.shape)
+        bottomGrid.set(timeline)
+
+        // Timeline
+        timelineGrid.setColumns(timeline)
+        timelineGrid.setShape(chartTimeline.shape)
 
         // ---------------------------
         // *********
@@ -196,19 +218,24 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         chartMain.clear()
         chartMain.add(mainCurve, mainGradient)
-        chartMain.add(gridMain, gridDashMain, emaLabel)
+        chartMain.add(mainGrid, mainRange, emaLabel)
         chartMain.add(emaFastCurve, emaSlowCurve)
 
         chartBottom.clear()
-        chartBottom.add(gridBottom)
-        // chartBottom.add(bottomVolume)
-        chartBottom.add(macdHistogram, macdCurve, macdSignalCurve, marcLabel)
-//        chartBottom.add(rsiCurve, gridDashBottom)
+        chartBottom.add(bottomGrid)
+        chartBottom.add(bottomVolume)
+        chartBottom.add(macdHistogram, macdCurve, this.macdSignal, macdLabel)
+        chartBottom.add(rsiCurve, rsiRange)
 
         chartTimeline.clear()
-        chartTimeline.add(gridTimeline)
+        chartTimeline.add(timelineGrid)
 
-        animator.start()
+        animatorMain.start()
+        animatorBottom.start()
+    }
+
+    private fun setVisible(vararg draw: ChartDraw, isVisible: Boolean) {
+        draw.forEach { it.isVisible = isVisible }
     }
 
     private fun formatRate(value: Float): String {
