@@ -7,7 +7,7 @@ import android.graphics.Typeface
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.GridColumn
 
-class ChartGridTimeline(private val config: ChartConfig) : ChartDraw {
+class ChartGridTimeline(private val config: ChartConfig, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
     private var columns = listOf<GridColumn>()
@@ -36,7 +36,7 @@ class ChartGridTimeline(private val config: ChartConfig) : ChartDraw {
         }
     }
 
-    fun textPosition(x: Float, text: String): Float {
+    private fun textPosition(x: Float, text: String): Float {
         val width = config.measureTextWidth(text)
         if (width + x >= shape.right) {
             return shape.right - (width + config.timelineTextPadding)

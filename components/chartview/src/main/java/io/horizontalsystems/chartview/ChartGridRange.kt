@@ -3,7 +3,7 @@ package io.horizontalsystems.chartview
 import android.graphics.*
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartGridDash(private val config: ChartConfig) : ChartDraw {
+class ChartGridRange(private val config: ChartConfig, override var isVisible: Boolean = true) : ChartDraw {
 
     private var top: String = ""
     private var low: String = ""
@@ -38,6 +38,7 @@ class ChartGridDash(private val config: ChartConfig) : ChartDraw {
     }
 
     override fun draw(canvas: Canvas) {
+        if (!isVisible) return
         canvas.drawTopLow()
     }
 

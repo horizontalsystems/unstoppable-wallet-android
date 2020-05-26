@@ -7,7 +7,7 @@ import android.graphics.RectF
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartHistogram(private val config: ChartConfig, private val animator: ChartAnimator) : ChartDraw {
+class ChartHistogram(private val config: ChartConfig, private val animator: ChartAnimator, override var isVisible: Boolean = false) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
 
@@ -32,6 +32,8 @@ class ChartHistogram(private val config: ChartConfig, private val animator: Char
     }
 
     override fun draw(canvas: Canvas) {
+        if (!isVisible) return
+
         val middle = shape.height() / 2
         var prevEnd = -100f
 

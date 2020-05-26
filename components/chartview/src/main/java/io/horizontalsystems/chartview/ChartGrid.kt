@@ -6,7 +6,7 @@ import android.graphics.RectF
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.GridColumn
 
-class ChartGrid(private val config: ChartConfig) : ChartDraw {
+class ChartGrid(private val config: ChartConfig, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
     private var columns = listOf<GridColumn>()
