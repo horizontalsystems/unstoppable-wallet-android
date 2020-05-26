@@ -8,6 +8,7 @@ import io.horizontalsystems.eoskit.core.exceptions.BackendError
 import io.horizontalsystems.eoskit.models.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -102,7 +103,11 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
         get() = balance
 
     override fun validate(account: String) {
-        // TODO need to implement this in EOS kit
+        val disposable = Single.fromCallable {
+            eosKit.validate(account)
+        }
+                .subscribeOn(Schedulers.io())
+                .blockingGet()
     }
 
     override fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit> {
