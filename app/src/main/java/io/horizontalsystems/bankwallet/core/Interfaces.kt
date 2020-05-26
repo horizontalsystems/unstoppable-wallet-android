@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.content.Context
-import android.text.SpannableString
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.TorManager
@@ -384,7 +382,6 @@ interface IAppNumberFormatter {
     fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
     fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean = false, maxFraction: Int? = null): String?
     fun formatForTransactions(coinValue: CoinValue): String?
-    fun formatForTransactions(context: Context, currencyValue: CurrencyValue, isIncoming: Boolean, canUseLessSymbol: Boolean, trimmable: Boolean): SpannableString
     fun format(value: Double, showSign: Boolean = false, precision: Int = 8): String
     fun format(value: BigDecimal, precision: Int): String?
 }
