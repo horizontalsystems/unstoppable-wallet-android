@@ -7,7 +7,7 @@ import android.graphics.RectF
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartVolume(private val config: ChartConfig, private val animator: ChartAnimator) : ChartDraw {
+class ChartVolume(private val config: ChartConfig, private val animator: ChartAnimator, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
 
@@ -27,6 +27,8 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
     }
 
     override fun draw(canvas: Canvas) {
+        if (!isVisible) return
+
         val height = shape.height()
         var prevEnd = -100f
 

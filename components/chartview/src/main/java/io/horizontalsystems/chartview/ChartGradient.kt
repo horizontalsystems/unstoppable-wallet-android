@@ -4,7 +4,7 @@ import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 
-class ChartGradient(private val animator: ChartAnimator) : ChartDraw {
+class ChartGradient(private val animator: ChartAnimator, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
     private var points = listOf<PointF>()
