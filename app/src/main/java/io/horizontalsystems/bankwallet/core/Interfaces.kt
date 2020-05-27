@@ -381,7 +381,6 @@ interface IAppNumberFormatter {
     fun format(value: BigDecimal, coinCode: String, realNumber: Boolean = false, trimmable: Boolean = false): String?
     fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
     fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean = false, maxFraction: Int? = null): String?
-    fun formatForTransactions(coinValue: CoinValue): String?
     fun format(value: Double, showSign: Boolean = false, precision: Int = 8): String
     fun format(value: BigDecimal, precision: Int): String?
 }
