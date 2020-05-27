@@ -108,8 +108,10 @@ class RateChartViewFactory {
     private fun createChartData(chartInfo: ChartInfo, marketInfo: MarketInfo?, chartType: ChartType): ChartData {
         val points = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }
         var startTime = chartInfo.startTimestamp
+        val lastPoint = chartInfo.points.lastOrNull()
 
-        if (marketInfo == null) {
+        //  Points expired or not market info
+        if (lastPoint?.timestamp != chartInfo.endTimestamp || marketInfo == null) {
             return ChartDataFactory.build(points, startTime, chartInfo.endTimestamp, startDayPoint = null)
         }
 
