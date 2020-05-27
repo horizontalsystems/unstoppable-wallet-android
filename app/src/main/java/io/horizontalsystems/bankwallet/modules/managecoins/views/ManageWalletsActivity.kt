@@ -77,7 +77,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
                     getString(R.string.AddressFormatSettings_Title),
                     coin.title,
                     LayoutHelper.getCoinDrawableResource(this, coin.code),
-                    items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description())) },
+                    items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description(), derivation.addressPrefix(coin.type))) },
                     items.indexOf(selected),
                     notifyUnchanged = true,
                     onItemSelected = { position ->
