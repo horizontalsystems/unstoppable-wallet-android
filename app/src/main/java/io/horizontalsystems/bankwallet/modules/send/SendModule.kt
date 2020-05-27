@@ -288,7 +288,7 @@ object SendModule {
 
         fun getFormattedForTxInfo(): String? = when(this) {
             is CoinValueInfo -> {
-                App.numberFormatter.format(coinValue, explicitSign = true, realNumber = true)
+                App.numberFormatter.format(coinValue, realNumber = true)
             }
             is CurrencyValueInfo -> {
                 App.numberFormatter.format(currencyValue, showNegativeSign = false, trimmable = false, canUseLessSymbol = false)

@@ -19,11 +19,11 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
-    override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean, trimmable: Boolean): String? {
-        return format(coinValue.value, coinValue.coin.code, explicitSign, realNumber, trimmable)
+    override fun format(coinValue: CoinValue, realNumber: Boolean, trimmable: Boolean): String? {
+        return format(coinValue.value, coinValue.coin.code, realNumber, trimmable)
     }
 
-    override fun format(value: BigDecimal, coinCode: String, explicitSign: Boolean, realNumber: Boolean, trimmable: Boolean): String? {
+    override fun format(value: BigDecimal, coinCode: String, realNumber: Boolean, trimmable: Boolean): String? {
         var valueAbs = value.abs()
 
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
@@ -36,14 +36,8 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
         valueAbs = valueAbs.stripTrailingZeros()
         val formatted = customFormatter.format(valueAbs)
-        var result = "$formatted ${coinCode}"
 
-        if (explicitSign && value.toLong() != 0L) {
-            val sign = if (value < BigDecimal.ZERO) "-" else "+"
-            result = "$sign $result"
-        }
-
-        return result
+        return "$formatted ${coinCode}"
     }
 
     override fun formatForTransactions(coinValue: CoinValue): String? {
