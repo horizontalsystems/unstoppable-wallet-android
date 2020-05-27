@@ -17,6 +17,7 @@ import io.horizontalsystems.views.showIf
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 
 class RateChartActivity : BaseActivity(), Chart.Listener {
@@ -133,13 +134,13 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + " " + shortVolumeValue.second
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
-                formatter.format(item.supply.value, item.supply.coinCode, trimmable = true)
+                formatter.format(item.supply.value.setScale(0, RoundingMode.HALF_EVEN), item.supply.coinCode)
             } else {
                 getString(R.string.NotAvailable)
             }
 
             totalSupplyValue.text = item.maxSupply?.let {
-                formatter.format(it.value, it.coinCode, trimmable = true)
+                formatter.format(it.value, it.coinCode)
             } ?: run {
                 getString(R.string.NotAvailable)
             }

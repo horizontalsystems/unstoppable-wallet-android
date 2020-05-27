@@ -23,13 +23,12 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return format(coinValue.value, coinValue.coin.code, realNumber)
     }
 
-    override fun format(value: BigDecimal, coinCode: String, realNumber: Boolean, trimmable: Boolean): String? {
+    override fun format(value: BigDecimal, coinCode: String, realNumber: Boolean): String? {
         var valueAbs = value.abs()
 
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
-            trimmable -> customFormatter.maximumFractionDigits = 0
             !realNumber && valueAbs > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
             else -> customFormatter.maximumFractionDigits = 8
         }
