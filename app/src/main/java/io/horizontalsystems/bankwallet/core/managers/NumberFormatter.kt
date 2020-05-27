@@ -19,8 +19,8 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
-    override fun format(coinValue: CoinValue, realNumber: Boolean, trimmable: Boolean): String? {
-        return format(coinValue.value, coinValue.coin.code, realNumber, trimmable)
+    override fun format(coinValue: CoinValue, realNumber: Boolean): String? {
+        return format(coinValue.value, coinValue.coin.code, realNumber)
     }
 
     override fun format(value: BigDecimal, coinCode: String, realNumber: Boolean, trimmable: Boolean): String? {
