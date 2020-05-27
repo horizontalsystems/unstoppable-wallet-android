@@ -291,7 +291,7 @@ object SendModule {
                 App.numberFormatter.format(coinValue, realNumber = true)
             }
             is CurrencyValueInfo -> {
-                App.numberFormatter.format(currencyValue, showNegativeSign = false, trimmable = false, canUseLessSymbol = false)
+                App.numberFormatter.format(currencyValue, trimmable = false, canUseLessSymbol = false)
             }
         }
     }
