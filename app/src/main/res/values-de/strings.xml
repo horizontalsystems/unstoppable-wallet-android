@@ -371,9 +371,9 @@
     <string name="CoinOption_Slow_Subtitle">1–12 Stunden</string>
     <string name="CoinOption_AddressFormatTitle">Adressformat</string>
     <string name="CoinOption_SyncModeTitle">Parameter wiederherstellen</string>
-    <string name="CoinOption_bip44_Subtitle">Älter (beginnt mit 1 ...)</string>
-    <string name="CoinOption_bip49_Subtitle">Beliebt (beginnt mit 3 ...)</string>
-    <string name="CoinOption_bip84_Subtitle">Am neuesten (beginnt mit bc1 ...)</string>
+    <string name="CoinOption_bip44_Subtitle">Älter (beginnt mit %s)</string>
+    <string name="CoinOption_bip49_Subtitle">Beliebt (beginnt mit %s)</string>
+    <string name="CoinOption_bip84_Subtitle">Am neuesten (beginnt mit %s)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1T</string>
     <string name="Charts_TimeDuration_Week">7D</string>

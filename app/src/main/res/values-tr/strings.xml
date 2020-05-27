@@ -370,9 +370,9 @@
     <string name="CoinOption_Slow_Subtitle">1-12 saat</string>
     <string name="CoinOption_AddressFormatTitle">Adres Formatı</string>
     <string name="CoinOption_SyncModeTitle">Geri Yükleme Ayarları</string>
-    <string name="CoinOption_bip44_Subtitle">Eski (1... ile başlar)</string>
-    <string name="CoinOption_bip49_Subtitle">Popüler (3... ile başlar)</string>
-    <string name="CoinOption_bip84_Subtitle">Yeni (bc1... ile başlar)</string>
+    <string name="CoinOption_bip44_Subtitle">Eski (%s ile başlar)</string>
+    <string name="CoinOption_bip49_Subtitle">Popüler (%s ile başlar)</string>
+    <string name="CoinOption_bip84_Subtitle">Yeni (%s ile başlar)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1G</string>
     <string name="Charts_TimeDuration_Week">7G</string>

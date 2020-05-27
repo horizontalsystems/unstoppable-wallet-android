@@ -373,9 +373,9 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinOption_Slow_Subtitle">1 - 24 heures</string>
     <string name="CoinOption_AddressFormatTitle">Format de l\'adresse</string>
     <string name="CoinOption_SyncModeTitle">Restaurer les paramètres</string>
-    <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par 1...)</string>
-    <string name="CoinOption_bip49_Subtitle">Populaire (commence par 3...)</string>
-    <string name="CoinOption_bip84_Subtitle">Plus récent (commence par bc1...)</string>
+    <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par %s)</string>
+    <string name="CoinOption_bip49_Subtitle">Populaire (commence par %s)</string>
+    <string name="CoinOption_bip84_Subtitle">Plus récent (commence par %s)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1J</string>
     <string name="Charts_TimeDuration_Week">7J</string>

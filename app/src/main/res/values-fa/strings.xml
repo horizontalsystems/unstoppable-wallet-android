@@ -377,9 +377,9 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
     <string name="CoinOption_AddressFormatTitle">ساختار آدرس</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
-    <string name="CoinOption_bip44_Subtitle">قدیمی تر (شروع با ۱...)</string>
-    <string name="CoinOption_bip49_Subtitle">محبوب (شروع با ۳...)</string>
-    <string name="CoinOption_bip84_Subtitle">جدیدترین (شروع با bc1...)</string>
+    <string name="CoinOption_bip44_Subtitle">قدیمی تر (%sشروع با)</string>
+    <string name="CoinOption_bip49_Subtitle">محبوب (%sشروع با)</string>
+    <string name="CoinOption_bip84_Subtitle">جدیدترین (%sشروع با)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">۱روز</string>
     <string name="Charts_TimeDuration_Week">۷روز</string>
