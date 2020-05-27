@@ -176,6 +176,18 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
                 resetActions(view)
             }
         }
+
+        ema.setOnClickListener {
+            chart.showEma()
+        }
+
+        macd.setOnClickListener {
+            chart.showMacd()
+        }
+
+        rsi.setOnClickListener {
+            chart.showRsi()
+        }
     }
 
     private fun resetActions(current: View, setDefault: Boolean = false) {
@@ -184,7 +196,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         val inLeftSide = chart.width / 2 < current.left
         if (setDefault) {
-            chartWrap.scrollTo(if (inLeftSide) chart.width else 0, 0)
+            chartActionsWrap.scrollTo(if (inLeftSide) chart.width else 0, 0)
             return
         }
 
@@ -194,7 +206,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             chart.scrollX - current.width
         }
 
-        chartWrap.smoothScrollBy(by, 0)
+        chartActionsWrap.smoothScrollBy(by, 0)
     }
 
     private fun setViewVisibility(vararg views: View, isVisible: Boolean) {
