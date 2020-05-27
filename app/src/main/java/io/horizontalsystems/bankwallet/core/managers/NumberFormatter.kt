@@ -98,7 +98,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return "${currencyValue.currency.symbol}$formatted"
     }
 
-    override fun format(value: Double, showSign: Boolean, precision: Int): String {
+    override fun format(value: Double, precision: Int): String {
         val customFormatter = getFormatter(languageManager.currentLocale)?.also {
             it.maximumFractionDigits = precision
         }
@@ -107,15 +107,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
             customFormatter?.maximumFractionDigits = 0
         }
 
-        var format = customFormatter?.format(abs(value)) ?: "0"
-        if (showSign) {
-            format = if (value < 0.0)
-                "-$format" else {
-                "+$format"
-            }
-        }
-
-        return format
+        return customFormatter?.format(abs(value)) ?: "0"
     }
 
     override fun format(value: BigDecimal, precision: Int): String? {
