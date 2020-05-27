@@ -39,10 +39,8 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return "$formatted ${coinCode}"
     }
 
-    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
-
-        val absValue = currencyValue.value.abs()
-        var value = absValue
+    override fun format(currencyValue: CurrencyValue, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
+        var value = currencyValue.value
 
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
@@ -67,12 +65,8 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
         var result = "${currencyValue.currency.symbol}$formatted"
 
-        if (canUseLessSymbol && absValue <= FIAT_SMALL_NUMBER_EDGE && absValue > BigDecimal.ZERO) {
+        if (canUseLessSymbol && currencyValue.value <= FIAT_SMALL_NUMBER_EDGE && currencyValue.value > BigDecimal.ZERO) {
             result = "< $result"
-        }
-
-        if (showNegativeSign && currencyValue.value < BigDecimal.ZERO) {
-            result = "- $result"
         }
 
         return result
