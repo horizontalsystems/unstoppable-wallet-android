@@ -77,6 +77,27 @@ fun AccountType.Derivation.description(): Int = when (this) {
     AccountType.Derivation.bip49 -> R.string.CoinOption_bip49_Subtitle
 }
 
+fun AccountType.Derivation.addressPrefix(coinType: CoinType): String? {
+    return when(coinType){
+        CoinType.Bitcoin -> {
+            when (this) {
+                AccountType.Derivation.bip44 -> "1"
+                AccountType.Derivation.bip49 -> "3"
+                AccountType.Derivation.bip84 -> "bc1"
+            }
+        }
+        CoinType.Litecoin -> {
+            when (this) {
+                AccountType.Derivation.bip44 -> "L"
+                AccountType.Derivation.bip49 -> "M"
+                AccountType.Derivation.bip84 -> "ltc1"
+            }
+        }
+        else -> null
+    }
+
+}
+
 @Parcelize
 enum class AccountOrigin(val value: String) : Parcelable {
     Created("Created"),
