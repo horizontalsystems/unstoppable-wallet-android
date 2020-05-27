@@ -111,38 +111,42 @@ class AddressFormatSettingsActivity : BaseActivity() {
     }
 
     private fun setBtcItems() {
+        val btcCoinType  =  CoinType.Bitcoin
+
         btcBip44.bind(
                 Derivation.bip44.longTitle(),
-                getString(Derivation.bip44.description()),
+                getString(Derivation.bip44.description(), Derivation.bip44.addressPrefix(btcCoinType)),
                 { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, Derivation.bip44)) }
         )
         btcBip49.bind(
                 Derivation.bip49.longTitle(),
-                getString(Derivation.bip49.description()),
+                getString(Derivation.bip49.description(), Derivation.bip49.addressPrefix(btcCoinType)),
                 { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, Derivation.bip49)) }
         )
         btcBip84.bind(
                 Derivation.bip84.longTitle(),
-                getString(Derivation.bip84.description()),
+                getString(Derivation.bip84.description(), Derivation.bip84.addressPrefix(btcCoinType)),
                 { presenter.onSelect(DerivationSetting(CoinType.Bitcoin, Derivation.bip84)) },
                 true
         )
     }
 
     private fun setLtcItems() {
+        val ltcCoinType  =  CoinType.Litecoin
+
         ltcBip44.bind(
                 Derivation.bip44.longTitle(),
-                getString(Derivation.bip44.description()),
+                getString(Derivation.bip44.description(), Derivation.bip44.addressPrefix(ltcCoinType)),
                 { presenter.onSelect(DerivationSetting(CoinType.Litecoin, Derivation.bip44)) }
         )
         ltcBip49.bind(
                 Derivation.bip49.longTitle(),
-                getString(Derivation.bip49.description()),
+                getString(Derivation.bip49.description(), Derivation.bip49.addressPrefix(ltcCoinType)),
                 { presenter.onSelect(DerivationSetting(CoinType.Litecoin, Derivation.bip49)) }
         )
         ltcBip84.bind(
                 Derivation.bip84.longTitle(),
-                getString(Derivation.bip84.description()),
+                getString(Derivation.bip84.description(), Derivation.bip84.addressPrefix(ltcCoinType)),
                 { presenter.onSelect(DerivationSetting(CoinType.Litecoin, Derivation.bip84)) },
                 true
         )
