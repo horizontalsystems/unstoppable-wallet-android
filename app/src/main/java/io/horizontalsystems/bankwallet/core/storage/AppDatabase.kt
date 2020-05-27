@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 16, exportSchema = false, entities = [
+@Database(version = 17, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     PriceAlertRecord::class,
@@ -55,7 +55,8 @@ abstract class AppDatabase : RoomDatabase() {
                             moveCoinSettingsFromAccountToWallet,
                             storeBipToPreferences,
                             addBlockchainSettingsTable,
-                            addIndexToEnableWallet
+                            addIndexToEnableWallet,
+                            updateBchSyncMode
                     )
                     .build()
         }
@@ -317,6 +318,16 @@ abstract class AppDatabase : RoomDatabase() {
         private val addIndexToEnableWallet: Migration = object : Migration(15, 16) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE INDEX IF NOT EXISTS `index_EnabledWallet_accountId` ON `EnabledWallet` (`accountId`)")
+            }
+        }
+
+        private val updateBchSyncMode: Migration = object : Migration(16, 17) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    UPDATE BlockchainSetting 
+                    SET value = '${SyncMode.Slow.value}' 
+                    WHERE coinType = 'bitcoincash' AND `key` = 'sync_mode' AND value = '${SyncMode.Fast.value}';
+                    """.trimIndent())
             }
         }
     }
