@@ -24,18 +24,15 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     }
 
     override fun format(value: BigDecimal, coinCode: String, realNumber: Boolean): String? {
-        var valueAbs = value.abs()
-
         val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
-            !realNumber && valueAbs > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
+            !realNumber && value > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
             else -> customFormatter.maximumFractionDigits = 8
         }
-        valueAbs = valueAbs.stripTrailingZeros()
-        val formatted = customFormatter.format(valueAbs)
+        val formatted = customFormatter.format(value)
 
-        return "$formatted ${coinCode}"
+        return "$formatted $coinCode"
     }
 
     override fun format(currencyValue: CurrencyValue, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
