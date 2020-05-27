@@ -31,7 +31,6 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         when {
             trimmable -> customFormatter.maximumFractionDigits = 0
             !realNumber && valueAbs > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
-            valueAbs.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.maximumFractionDigits = 0
             else -> customFormatter.maximumFractionDigits = 8
         }
         valueAbs = valueAbs.stripTrailingZeros()
@@ -101,10 +100,6 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     override fun format(value: Double, precision: Int): String {
         val customFormatter = getFormatter(languageManager.currentLocale)?.also {
             it.maximumFractionDigits = precision
-        }
-
-        if (value == 0.0) {
-            customFormatter?.maximumFractionDigits = 0
         }
 
         return customFormatter?.format(abs(value)) ?: "0"
