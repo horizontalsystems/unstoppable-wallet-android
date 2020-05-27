@@ -93,7 +93,7 @@
                 tools:text="-18" />
 
             <HorizontalScrollView
-                android:id="@+id/chartWrap"
+                android:id="@+id/chartActionsWrap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -324,6 +324,42 @@
                 app:layout_constraintTop_toBottomOf="@+id/chart" />
 
             <TextView
+                android:id="@+id/ema"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="EMA"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/border3" />
+
+            <TextView
+                android:id="@+id/macd"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="MACD"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/ema" />
+
+            <TextView
+                android:id="@+id/rsi"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="RSI"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/macd" />
+
+            <TextView
                 android:id="@+id/volumeTitle"
                 style="@font/noto_sans_regular"
                 android:layout_width="wrap_content"
@@ -333,7 +369,7 @@
                 android:textColor="@color/grey"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/border3" />
+                app:layout_constraintTop_toBottomOf="@+id/rsi" />
 
             <TextView
                 android:id="@+id/volumeValue"
