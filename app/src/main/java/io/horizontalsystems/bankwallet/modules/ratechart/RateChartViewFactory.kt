@@ -51,7 +51,7 @@ class RateChartViewFactory {
             ChartType.MONTHLY24 -> ChartView.ChartType.MONTHLY24
         }
 
-        val (emaTrend, rsiTrend, macdTrend) = calculateTrend(chartData.items.lastOrNull())
+        val (emaTrend, rsiTrend, macdTrend) = calculateTrend(chartData, marketInfo)
 
         return ChartInfoViewItem(chartData, chartType, chartData.diff(), emaTrend, rsiTrend, macdTrend)
     }
@@ -67,16 +67,23 @@ class RateChartViewFactory {
         )
     }
 
-    private fun calculateTrend(data: ChartData.Item?): Triple<ChartInfoTrend, ChartInfoTrend, ChartInfoTrend> {
+    private fun calculateTrend(data: ChartData, marketInfo: MarketInfo?): Triple<ChartInfoTrend, ChartInfoTrend, ChartInfoTrend> {
         var emaTrend = ChartInfoTrend.NEUTRAL
         var rsiTrend = ChartInfoTrend.NEUTRAL
         var macdTrend = ChartInfoTrend.NEUTRAL
 
-        if (data == null) {
+        if (data.items.isEmpty()) {
             return Triple(emaTrend, rsiTrend, macdTrend)
         }
 
-        data.values[Indicator.Rsi]?.let { rsi ->
+        var lastItem = data.items.last()
+
+        //  Skip market info item for the trend calculation
+        if (data.endTimestamp == marketInfo?.timestamp) {
+            lastItem = data.items[data.items.size - 2]
+        }
+
+        lastItem.values[Indicator.Rsi]?.let { rsi ->
             rsiTrend = when {
                 rsi.value > Indicator.Rsi.max -> ChartInfoTrend.UP
                 rsi.value < Indicator.Rsi.min -> ChartInfoTrend.DOWN
@@ -84,7 +91,7 @@ class RateChartViewFactory {
             }
         }
 
-        data.values[Indicator.MacdHistogram]?.let { macd ->
+        lastItem.values[Indicator.MacdHistogram]?.let { macd ->
             macdTrend = when {
                 macd.value > 0 -> ChartInfoTrend.UP
                 macd.value < 0 -> ChartInfoTrend.DOWN
@@ -92,8 +99,8 @@ class RateChartViewFactory {
             }
         }
 
-        val emaSlow = data.values[Indicator.EmaSlow]
-        val emaFast = data.values[Indicator.EmaFast]
+        val emaSlow = lastItem.values[Indicator.EmaSlow]
+        val emaFast = lastItem.values[Indicator.EmaFast]
         if (emaFast != null && emaSlow != null) {
             emaTrend = when {
                 emaFast.value > emaSlow.value -> ChartInfoTrend.UP
