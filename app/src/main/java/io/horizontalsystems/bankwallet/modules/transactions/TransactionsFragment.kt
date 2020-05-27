@@ -190,7 +190,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
 
         txValueInFiat.text = transactionRecord.currencyValue?.let {
-            App.numberFormatter.format(it, showNegativeSign = false, trimmable = true, canUseLessSymbol = true)
+            App.numberFormatter.format(it, trimmable = true)
         }
         txValueInFiat.setTextColor(getAmountColor(incoming))
 
@@ -216,7 +216,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 
         if (current.currencyValue != prev.currencyValue) {
             txValueInFiat.text = current.currencyValue?.let {
-                App.numberFormatter.format(it, showNegativeSign = false, trimmable = true, canUseLessSymbol = true)
+                App.numberFormatter.format(it, trimmable = true)
             }
             txValueInFiat.setTextColor(getAmountColor(incoming))
         }
