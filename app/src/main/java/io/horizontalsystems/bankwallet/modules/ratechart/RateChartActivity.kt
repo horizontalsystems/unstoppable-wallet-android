@@ -27,6 +27,10 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
 
+    private var emaTrend = ChartInfoTrend.NEUTRAL
+    private var macdTrend = ChartInfoTrend.NEUTRAL
+    private var rsiTrend = ChartInfoTrend.NEUTRAL
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rate_chart)
@@ -101,6 +105,14 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
                 chart.visibility = View.VISIBLE
                 chart.setData(item.chartData, item.chartType)
             }
+
+            emaTrend = item.emaTrend
+            macdTrend = item.macdTrend
+            rsiTrend = item.rsiTrend
+
+            updateEmaIndicator()
+            updateMacdIndicator()
+            updateRsiIndicator()
 
             coinRateDiff.diff = item.diffValue
         })
@@ -177,16 +189,37 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             }
         }
 
-        ema.setOnClickListener {
+        emaChartIndicator.setOnClickListener {
             chart.showEma()
+            updateEmaIndicator()
         }
 
-        macd.setOnClickListener {
+        macdChartIndicator.setOnClickListener {
             chart.showMacd()
+            updateMacdIndicator()
         }
 
-        rsi.setOnClickListener {
+        rsiChartIndicator.setOnClickListener {
             chart.showRsi()
+            updateRsiIndicator()
+        }
+    }
+
+    private fun updateEmaIndicator() {
+        emaChartIndicator.bind("EMA", chart.emaCurveIsVisible, emaTrend)
+    }
+
+    private fun updateMacdIndicator() {
+        macdChartIndicator.bind("MACD", chart.macdCurveIsVisible, macdTrend)
+        if (chart.macdCurveIsVisible){
+            rsiChartIndicator.bind("RSI", false, rsiTrend)
+        }
+    }
+
+    private fun updateRsiIndicator() {
+        rsiChartIndicator.bind("RSI", chart.rsiCurveIsVisible, rsiTrend)
+        if (chart.rsiCurveIsVisible){
+            macdChartIndicator.bind("MACD", false, macdTrend)
         }
     }
 

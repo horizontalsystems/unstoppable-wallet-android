@@ -99,7 +99,7 @@
                     android:layout_gravity="end"
                     android:layout_marginStart="7dp"
                     android:layout_marginTop="2dp"
-                    android:src="@drawable/ic_hide"
+                    android:src="@drawable/ic_hide_24"
                     app:layout_constraintStart_toEndOf="@+id/balanceText"
                     app:layout_constraintTop_toTopOf="parent" />
             </FrameLayout>
