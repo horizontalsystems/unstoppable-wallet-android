@@ -273,22 +273,22 @@ object SendModule {
         data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
 
         fun getAmountName(): String = when (this) {
-            is CoinValueInfo -> this.coinValue.coin.title
-            is CurrencyValueInfo -> this.currencyValue.currency.code
+            is CoinValueInfo -> coinValue.coin.title
+            is CurrencyValueInfo -> currencyValue.currency.code
         }
 
         fun getFormatted(): String? = when (this) {
             is CoinValueInfo -> {
-                App.numberFormatter.format(this.coinValue)
+                App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
             }
             is CurrencyValueInfo -> {
-                App.numberFormatter.formatFiat(this.currencyValue.value, this.currencyValue.currency.symbol, 2, 2)
+                App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 2)
             }
         }
 
         fun getFormattedForTxInfo(): String? = when(this) {
             is CoinValueInfo -> {
-                App.numberFormatter.format(coinValue, realNumber = true)
+                App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
             }
             is CurrencyValueInfo -> {
                 val significantDecimal = App.numberFormatter.getSignificantDecimal(currencyValue.value)

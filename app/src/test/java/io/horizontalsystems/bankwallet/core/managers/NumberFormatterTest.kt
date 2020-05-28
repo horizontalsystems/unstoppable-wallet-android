@@ -19,6 +19,44 @@ class NumberFormatterTest {
     }
 
     @Test
+    fun testFormatCoin() {
+        assertFormattedCoin(BigDecimal("0.000012345678"), 0, 4, "< 0.0001 BTC")
+
+        assertFormattedCoin(BigDecimal("0.0000012345678"), 0, 8, "0.00000123 BTC")
+        assertFormattedCoin(BigDecimal("0.000012345678"), 0, 8, "0.00001235 BTC")
+        assertFormattedCoin(BigDecimal("0.00012345678"), 0, 8, "0.00012346 BTC")
+        assertFormattedCoin(BigDecimal("0.0012345678"), 0, 8, "0.00123457 BTC")
+        assertFormattedCoin(BigDecimal("0.012345678"), 0, 8, "0.01234568 BTC")
+        assertFormattedCoin(BigDecimal("0.12345678"), 0, 8, "0.12345678 BTC")
+
+        assertFormattedCoin(BigDecimal("1.0000012345678"), 0, 8, "1.00000123 BTC")
+        assertFormattedCoin(BigDecimal("1.000012345678"), 0, 8, "1.00001235 BTC")
+        assertFormattedCoin(BigDecimal("1.00012345678"), 0, 8, "1.00012346 BTC")
+        assertFormattedCoin(BigDecimal("1.0012345678"), 0, 8, "1.00123457 BTC")
+        assertFormattedCoin(BigDecimal("1.012345678"), 0, 8, "1.01234568 BTC")
+        assertFormattedCoin(BigDecimal("1.12345678"), 0, 8, "1.12345678 BTC")
+
+        assertFormattedCoin(BigDecimal("123.0000012345678"), 0, 8, "123.00000123 BTC")
+        assertFormattedCoin(BigDecimal("123.000012345678"), 0, 8, "123.00001235 BTC")
+        assertFormattedCoin(BigDecimal("123.00012345678"), 0, 8, "123.00012346 BTC")
+        assertFormattedCoin(BigDecimal("123.0012345678"), 0, 8, "123.00123457 BTC")
+        assertFormattedCoin(BigDecimal("123.012345678"), 0, 8, "123.01234568 BTC")
+        assertFormattedCoin(BigDecimal("123.12345678"), 0, 8, "123.12345678 BTC")
+
+        assertFormattedCoin(BigDecimal("1234.0000012345678"), 0, 8, "1,234.00000123 BTC")
+        assertFormattedCoin(BigDecimal("1234.000012345678"), 0, 8, "1,234.00001235 BTC")
+        assertFormattedCoin(BigDecimal("1234.00012345678"), 0, 8, "1,234.00012346 BTC")
+        assertFormattedCoin(BigDecimal("1234.0012345678"), 0, 8, "1,234.00123457 BTC")
+        assertFormattedCoin(BigDecimal("1234.012345678"), 0, 8, "1,234.01234568 BTC")
+        assertFormattedCoin(BigDecimal("1234.12345678"), 0, 8, "1,234.12345678 BTC")
+    }
+
+    private fun assertFormattedCoin(value: BigDecimal, minimumFractionDigits: Int, maximumFractionDigits: Int, expected: String) {
+        val formatted = numberFormatter.formatCoin(value, "BTC", minimumFractionDigits, maximumFractionDigits)
+        assertEquals(expected, formatted)
+    }
+
+    @Test
     fun testFormatFiat() {
         assertFormattedFiat(BigDecimal("0.004"), 0, 2, "< $0.01")
         assertFormattedFiat(BigDecimal("0.009"), 0, 2, "< $0.01")
@@ -72,27 +110,4 @@ class NumberFormatterTest {
 
         assertEquals(expected, formatted)
     }
-
-
-//    @Test
-//    fun testFormatBigDecimal() {
-//
-//        assertBigDecimal(BigDecimal("235.0000"), "235 BTC")
-//        assertBigDecimal(BigDecimal("2350000"), "2,350,000 BTC")
-//    }
-//
-//    private fun assertBigDecimal(value: BigDecimal, expected: String) {
-//        val format = numberFormatter.format(value, "BTC")
-//        assertEquals(expected, format)
-//    }
-//
-//    @Test
-//    fun testFormatDouble() {
-//        assertFormatDouble(0.123456789, "0.12345679")
-//        assertFormatDouble(0.0, "0")
-//    }
-//
-//    private fun assertFormatDouble(value: Double, expected: String) {
-//        assertEquals(expected, numberFormatter.format(value))
-//    }
 }

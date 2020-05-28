@@ -61,7 +61,7 @@ class BalanceViewItemFactory {
     private fun coinValue(state: AdapterState?, balance: BigDecimal?, coin: Coin, visible: Boolean): DeemedValue {
         val dimmed = state !is AdapterState.Synced
         val value = balance?.let {
-            App.numberFormatter.format(CoinValue(coin, balance))
+            App.numberFormatter.formatCoin(balance, coin.code, 0, 4)
         }
 
         return DeemedValue(value, dimmed, visible)
@@ -144,7 +144,7 @@ class BalanceViewItemFactory {
     private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {
         val scaledValue = item.marketInfo?.diff?.setScale(diffScale, RoundingMode.HALF_EVEN)?.stripTrailingZeros()
         val isPositive = (scaledValue ?: BigDecimal.ZERO) >= BigDecimal.ZERO
-        val rateDiffText = scaledValue?.let { App.numberFormatter.format(scaledValue.abs(), diffScale) + "%" }
+        val rateDiffText = scaledValue?.let { App.numberFormatter.formatSimple(scaledValue.abs(), 0, diffScale) + "%" }
         val dimmed = item.marketInfo?.isExpired() ?: true
         return RateDiff(DeemedValue(rateDiffText, dimmed, true), isPositive)
     }

@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
 import io.horizontalsystems.core.helpers.DateHelper
+import java.math.BigDecimal
 import java.math.BigInteger
 
 class FullTransactionEthereumAdapter(private val provider: FullTransactionInfoModule.EthereumForksProvider,
@@ -34,7 +35,7 @@ class FullTransactionEthereumAdapter(private val provider: FullTransactionInfoMo
                 data.value.toDouble() / EthereumResponse.ethRate
             }
 
-            section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = "${App.numberFormatter.format(amount)} ${coin.code}"))
+            section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = App.numberFormatter.formatCoin(amount, coin.code, 0, 8)))
 
             data.nonce?.let {
                 section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = it, dimmed = true))
@@ -46,7 +47,7 @@ class FullTransactionEthereumAdapter(private val provider: FullTransactionInfoMo
         mutableListOf<FullTransactionItem>().let { section ->
             data.fee?.let {
                 val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
-                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(it.toDouble())} ${feeCoin.code}"))
+                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.formatCoin(BigDecimal(it), feeCoin.code, 0, 8)))
             }
             if (data.size != null) {
                 section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))

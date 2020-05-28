@@ -155,8 +155,7 @@ class SendAmountFragment(
                 }
             }
             is SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance -> {
-                context?.getString(R.string.Send_Error_MinRequiredBalance,
-                                   App.numberFormatter.format(error.minimumRequiredBalance))
+                context?.getString(R.string.Send_Error_MinRequiredBalance, App.numberFormatter.formatCoin(error.minimumRequiredBalance.value, error.minimumRequiredBalance.coin.code, 0, 8))
             }
             else -> null
         }
