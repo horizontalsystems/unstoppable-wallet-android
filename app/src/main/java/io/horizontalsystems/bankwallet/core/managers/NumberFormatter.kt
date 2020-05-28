@@ -42,7 +42,6 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
         when {
             value.compareTo(BigDecimal.ZERO) == 0 -> {
-                value = BigDecimal.ZERO
                 customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
             }
             value < FIAT_SMALL_NUMBER_EDGE -> {
