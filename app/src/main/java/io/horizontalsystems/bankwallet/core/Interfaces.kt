@@ -377,12 +377,10 @@ interface IWalletManager {
 }
 
 interface IAppNumberFormatter {
-    fun format(coinValue: CoinValue, realNumber: Boolean = false): String?
-    fun format(value: BigDecimal, coinCode: String, realNumber: Boolean = false): String?
-    fun format(value: Double, precision: Int = 8): String
+    fun formatSimple(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int): String
+    fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
     fun formatFiat(value: BigDecimal, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
     fun getSignificantDecimal(value: BigDecimal): Int
-    fun format(value: BigDecimal, precision: Int): String?
 }
 
 interface IFeeRateProvider {

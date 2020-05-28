@@ -119,7 +119,7 @@ class SendFeeFragment(
                 val coinCode = error.coin.code
                 val tokenProtocol = error.coinProtocol
                 val feeCoinTitle = error.feeCoin.title
-                val formattedFee = App.numberFormatter.format(error.fee)
+                val formattedFee = App.numberFormatter.formatCoin(error.fee.value, error.fee.coin.code, 0, 8)
 
                 feeError.text = context?.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol,
                                                    feeCoinTitle, formattedFee)

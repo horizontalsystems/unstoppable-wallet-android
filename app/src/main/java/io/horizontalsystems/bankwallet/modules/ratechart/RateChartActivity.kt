@@ -132,13 +132,13 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + " " + shortVolumeValue.second
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
-                formatter.format(item.supply.value.setScale(0, RoundingMode.HALF_EVEN), item.supply.coinCode)
+                formatter.formatCoin(item.supply.value, item.supply.coinCode, 0, 0)
             } else {
                 getString(R.string.NotAvailable)
             }
 
             totalSupplyValue.text = item.maxSupply?.let {
-                formatter.format(it.value, it.coinCode)
+                formatter.formatCoin(it.value, it.coinCode, 0, 0)
             } ?: run {
                 getString(R.string.NotAvailable)
             }

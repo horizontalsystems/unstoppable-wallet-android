@@ -139,7 +139,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         }
 
         private fun getFeeText(coinValue: CoinValue, currencyValue: CurrencyValue?): String? {
-            var fee: String = App.numberFormatter.format(coinValue, realNumber = true) ?: return null
+            var fee: String = App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
             currencyValue?.let {
                 val fiatFee = App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
                 fee += " | $fiatFee"

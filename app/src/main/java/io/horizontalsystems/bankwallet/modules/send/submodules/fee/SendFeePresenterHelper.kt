@@ -16,7 +16,7 @@ class SendFeePresenterHelper(
     fun feeAmount(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: BigDecimal?): String? {
         return when (inputType) {
             SendModule.InputType.COIN -> coinAmount?.let {
-                numberFormatter.format(CoinValue(coin, it))
+                numberFormatter.formatCoin(it, coin.code, 0, 8)
             }
             SendModule.InputType.CURRENCY -> {
                 rate?.let { rateValue ->
