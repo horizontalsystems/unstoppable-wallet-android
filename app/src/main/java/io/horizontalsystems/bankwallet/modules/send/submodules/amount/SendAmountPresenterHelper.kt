@@ -38,7 +38,7 @@ class SendAmountPresenterHelper(
             }
             SendModule.InputType.COIN -> {
                 rate?.let {
-                    numberFormatter.format(CurrencyValue(baseCurrency, coinAmount?.times(it) ?: BigDecimal.ZERO))
+                    numberFormatter.formatFiat(coinAmount?.times(it) ?: BigDecimal.ZERO, baseCurrency.symbol, 2, 2)
                 }
             }
         }
@@ -48,7 +48,7 @@ class SendAmountPresenterHelper(
         return when (inputType) {
             SendModule.InputType.CURRENCY -> {
                 rate?.let {
-                    numberFormatter.format(CurrencyValue(baseCurrency, coinAmount?.times(it) ?: BigDecimal.ZERO))
+                    numberFormatter.formatFiat(coinAmount?.times(it) ?: BigDecimal.ZERO, baseCurrency.symbol, 2, 2)
                 }
             }
             SendModule.InputType.COIN -> {

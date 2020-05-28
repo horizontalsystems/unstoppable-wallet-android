@@ -21,7 +21,7 @@ class SendFeePresenterHelper(
             SendModule.InputType.CURRENCY -> {
                 rate?.let { rateValue ->
                     coinAmount?.times(rateValue)?.let { amount ->
-                        numberFormatter.format(CurrencyValue(baseCurrency, amount))
+                        numberFormatter.formatFiat(amount, baseCurrency.symbol, 2, 2)
                     }
                 }
             }
