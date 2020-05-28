@@ -195,7 +195,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txValueInFiat.setTextColor(getAmountColor(incoming))
 
         txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, getLockIcon(transactionRecord.lockState), 0)
-        txValueInCoin.text = App.numberFormatter.format(transactionRecord.coinValue)
+        txValueInCoin.text = App.numberFormatter.formatCoin(transactionRecord.coinValue.value, transactionRecord.coinValue.coin.code, 0, 8)
         directionIcon.setImageResource(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
         txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
@@ -226,7 +226,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
 
         if (current.coinValue != prev.coinValue) {
-            txValueInCoin.text = App.numberFormatter.format(current.coinValue)
+            txValueInCoin.text = App.numberFormatter.formatCoin(current.coinValue.value, current.coinValue.coin.code, 0, 8)
         }
 
         if (current.status != prev.status || current.date != prev.date) {

@@ -34,7 +34,7 @@ class SendAmountPresenterHelper(
     fun getHint(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: BigDecimal?): String? {
         return when (inputType) {
             SendModule.InputType.CURRENCY -> {
-                numberFormatter.format(CoinValue(coin, coinAmount ?: BigDecimal.ZERO), realNumber = true)
+                numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coin.code, 0, 8)
             }
             SendModule.InputType.COIN -> {
                 rate?.let {
@@ -52,7 +52,7 @@ class SendAmountPresenterHelper(
                 }
             }
             SendModule.InputType.COIN -> {
-                numberFormatter.format(CoinValue(coin, coinAmount ?: BigDecimal.ZERO), realNumber = true)
+                numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coin.code, 0, 8)
             }
         }
     }

@@ -54,7 +54,7 @@ class RateDiffView : androidx.appcompat.widget.AppCompatTextView {
             setTextColor(textColor)
             setLeftIcon(context.getDrawable(iconRes))
 
-            text = App.numberFormatter.format(scaledValue.abs(), diffScale) + "%"
+            text = App.numberFormatter.formatSimple(scaledValue.abs(), 0, diffScale) + "%"
         }
     }
 

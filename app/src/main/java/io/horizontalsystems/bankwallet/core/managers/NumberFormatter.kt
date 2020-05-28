@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.ILanguageManager
+import java.lang.UnsupportedOperationException
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
@@ -12,11 +11,6 @@ import kotlin.math.abs
 import kotlin.math.pow
 
 class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
-
-    private val COIN_BIG_NUMBER_EDGE = "0.01".toBigDecimal()
-    private val FIAT_BIG_NUMBER_EDGE = "1000".toBigDecimal()
-    private val FIAT_SMALL_NUMBER_EDGE = "0.01".toBigDecimal()
-    private val FIAT_TEN_CENT_EDGE = "0.1".toBigDecimal()
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
@@ -49,37 +43,46 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
     }
 
-    override fun format(coinValue: CoinValue, realNumber: Boolean): String? {
-        return format(coinValue.value, coinValue.coin.code, realNumber)
-    }
-
-    override fun format(value: BigDecimal, coinCode: String, realNumber: Boolean): String? {
-        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
-
-        when {
-            !realNumber && value > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
-            else -> customFormatter.maximumFractionDigits = 8
-        }
-        val formatted = customFormatter.format(value)
-
-        return "$formatted $coinCode"
-    }
-
-
-    override fun format(value: Double, precision: Int): String {
-        val customFormatter = getFormatter(languageManager.currentLocale)?.also {
-            it.maximumFractionDigits = precision
+    override fun formatSimple(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
+        val bigDecimalValue = when (value) {
+            is Double -> BigDecimal(value)
+            is BigDecimal -> value
+            else -> throw UnsupportedOperationException()
         }
 
-        return customFormatter?.format(abs(value)) ?: "0"
+        val formatter = getFormatter(languageManager.currentLocale) ?: throw Exception("No formatter")
+
+        formatter.minimumFractionDigits = minimumFractionDigits
+        formatter.maximumFractionDigits = maximumFractionDigits
+
+        val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
+
+        return if (bigDecimalValue > BigDecimal.ZERO && bigDecimalValue < mostLowValue) {
+            "< " + formatter.format(mostLowValue)
+        } else {
+            formatter.format(bigDecimalValue)
+        }
     }
 
-    override fun format(value: BigDecimal, precision: Int): String? {
-        val numberFormat = getFormatter(languageManager.currentLocale)?.apply {
-            maximumFractionDigits = precision
+    override fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
+        val bigDecimalValue = when (value) {
+            is Double -> BigDecimal(value)
+            is BigDecimal -> value
+            else -> throw UnsupportedOperationException()
         }
 
-        return numberFormat?.format(value)
+        val formatter = getFormatter(languageManager.currentLocale) ?: throw Exception("No formatter")
+
+        formatter.minimumFractionDigits = minimumFractionDigits
+        formatter.maximumFractionDigits = maximumFractionDigits
+
+        val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
+
+        return if (bigDecimalValue > BigDecimal.ZERO && bigDecimalValue < mostLowValue) {
+            "< " + formatter.format(mostLowValue) + " " + code
+        } else {
+            formatter.format(bigDecimalValue) + " " + code
+        }
     }
 
     private fun getFormatter(locale: Locale): NumberFormat? {
