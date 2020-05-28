@@ -57,7 +57,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
 
     private fun rate(currencyValue: CurrencyValue?): String? {
         currencyValue ?: return null
-        return numberFormatter.formatForRates(currencyValue, trimmable = true)
+        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 0, 2)
     }
 
 }

@@ -119,19 +119,17 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         })
 
         presenterView.showMarketInfo.observe(this, Observer { item ->
-            coinRateLast.text = formatter.formatForRates(item.rateValue)
+            coinRateLast.text = formatter.formatFiat(item.rateValue.value, item.rateValue.currency.symbol, 2, 4)
 
             coinMarketCap.text = if (item.marketCap.value > BigDecimal.ZERO) {
                 val shortCapValue = shortenValue(item.marketCap.value)
-                val marketCap = CurrencyValue(item.marketCap.currency, shortCapValue.first)
-                formatter.format(marketCap, canUseLessSymbol = false) + " " + shortCapValue.second
+                formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + " " + shortCapValue.second
             } else {
                 getString(R.string.NotAvailable)
             }
 
             val shortVolumeValue = shortenValue(item.volume.value)
-            val volume = CurrencyValue(item.volume.currency, shortVolumeValue.first)
-            volumeValue.text = formatter.format(volume, canUseLessSymbol = false) + " " + shortVolumeValue.second
+            volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + " " + shortVolumeValue.second
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
                 formatter.format(item.supply.value.setScale(0, RoundingMode.HALF_EVEN), item.supply.coinCode)
@@ -158,12 +156,12 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             }
 
             pointInfoDate.text = DateHelper.shortDate(date, far = "MM/dd/yy")
-            pointInfoPrice.text = formatter.formatForRates(item.currencyValue, maxFraction = 8)
+            pointInfoPrice.text = formatter.formatFiat(item.currencyValue.value, item.currencyValue.currency.symbol, 2, 4)
 
             item.volume?.let {
                 pointInfoVolumeTitle.visibility = View.VISIBLE
                 pointInfoVolume.visibility = View.VISIBLE
-                pointInfoVolume.text = formatter.format(item.volume, trimmable = true)
+                pointInfoVolume.text = formatter.formatFiat(item.volume.value, item.volume.currency.symbol, 0, 2)
             }
         })
 

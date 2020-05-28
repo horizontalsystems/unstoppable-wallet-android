@@ -282,7 +282,7 @@ object SendModule {
                 App.numberFormatter.format(this.coinValue)
             }
             is CurrencyValueInfo -> {
-                App.numberFormatter.format(this.currencyValue, trimmable = true)
+                App.numberFormatter.formatFiat(this.currencyValue.value, this.currencyValue.currency.symbol, 2, 2)
             }
         }
 
@@ -291,7 +291,9 @@ object SendModule {
                 App.numberFormatter.format(coinValue, realNumber = true)
             }
             is CurrencyValueInfo -> {
-                App.numberFormatter.format(currencyValue, canUseLessSymbol = false)
+                val significantDecimal = App.numberFormatter.getSignificantDecimal(currencyValue.value)
+
+                App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 0, significantDecimal)
             }
         }
     }

@@ -127,7 +127,8 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         }
 
         private fun bindRate(detail: TransactionDetailViewItem.Rate) {
-            val rateValue = itemView.context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.formatForRates(detail.currencyValue), detail.coinCode)
+            val rateFormatted = App.numberFormatter.formatFiat(detail.currencyValue.value, detail.currencyValue.currency.symbol, 2, 4)
+            val rateValue = itemView.context.getString(R.string.Balance_RatePerCoin, rateFormatted, detail.coinCode)
             bind(itemView.context.getString(R.string.TransactionInfo_HistoricalRate), rateValue)
         }
 
@@ -140,7 +141,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         private fun getFeeText(coinValue: CoinValue, currencyValue: CurrencyValue?): String? {
             var fee: String = App.numberFormatter.format(coinValue, realNumber = true) ?: return null
             currencyValue?.let {
-                val fiatFee = App.numberFormatter.format(it)
+                val fiatFee = App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
                 fee += " | $fiatFee"
             }
 

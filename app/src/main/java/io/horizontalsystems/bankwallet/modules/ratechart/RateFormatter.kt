@@ -8,6 +8,6 @@ import java.math.BigDecimal
 
 class RateFormatter(private val currency: Currency) : Chart.RateFormatter {
     override fun format(value: BigDecimal): String? {
-        return App.numberFormatter.formatForRates(CurrencyValue(currency, value), trimmable = true)
+        return App.numberFormatter.formatFiat(value, currency.symbol, 0, 2)
     }
 }

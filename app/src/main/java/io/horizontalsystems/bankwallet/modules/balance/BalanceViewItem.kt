@@ -41,7 +41,7 @@ data class RateDiff(
 data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate: Boolean) {
 
     val xBalanceText = currencyValue?.let {
-        App.numberFormatter.format(it)
+        App.numberFormatter.formatFiat(it.value, it.currency.symbol, 2, 2)
     }
 
     fun getBalanceTextColor(context: Context) = ContextCompat.getColor(context, if (upToDate) R.color.yellow_d else R.color.yellow_50)
@@ -71,7 +71,7 @@ class BalanceViewItemFactory {
         val dimmed = state !is AdapterState.Synced || marketInfo?.isExpired() ?: false
         val value = marketInfo?.rate?.let { rate ->
             balance?.let {
-                App.numberFormatter.format(CurrencyValue(currency, it * rate), trimmable = true)
+                App.numberFormatter.formatFiat(it * rate, currency.symbol, 0, 2)
             }
         }
 
@@ -82,7 +82,7 @@ class BalanceViewItemFactory {
         var dimmed = false
         val value = marketInfo?.let {
             dimmed = marketInfo.isExpired()
-            App.numberFormatter.formatForRates(CurrencyValue(currency, marketInfo.rate), trimmable = true)
+            App.numberFormatter.formatFiat(marketInfo.rate, currency.symbol, 2, 4)
         }
 
         return DeemedValue(value, dimmed = dimmed)
