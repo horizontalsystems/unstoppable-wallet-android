@@ -526,6 +526,10 @@
     <string name="Charts_Error_NotAvailable">Chart not available</string>
     <string name="Charts_LatestNews">Latest News</string>
 
+    <string name="Charts_Trend_Up">Up Trend</string>
+    <string name="Charts_Trend_Down">Down Trend</string>
+    <string name="Charts_Trend_Neutral">Neutral</string>
+
     <!--Rate list-->
 
     <string name="RateList_portfolio">Portfolio</string>

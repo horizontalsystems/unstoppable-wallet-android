@@ -59,6 +59,15 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val rsiCurve = ChartCurve(config, animatorBottom)
     private val rsiRange = ChartGridRange(config, isVisible = false)
 
+    val emaCurveIsVisible
+        get() = emaFastCurve.isVisible
+
+    val macdCurveIsVisible
+        get() = macdCurve.isVisible
+
+    val rsiCurveIsVisible
+        get() = rsiCurve.isVisible
+
     fun setListener(listener: Listener) {
         chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {

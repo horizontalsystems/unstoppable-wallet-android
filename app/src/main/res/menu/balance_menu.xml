@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menuShowBalance"
         android:title="@string/ManageKeys_Show"
-        android:icon="@drawable/ic_show"
+        android:icon="@drawable/ic_show_24"
         app:showAsAction="always" />
 
 </menu>
