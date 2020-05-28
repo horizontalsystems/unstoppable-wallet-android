@@ -19,6 +19,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+import kotlin.math.absoluteValue
 
 abstract class BitcoinBaseAdapter(
         open val kit: AbstractKit,
@@ -224,7 +225,7 @@ abstract class BitcoinBaseAdapter(
                 transactionIndex = transaction.transactionIndex,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockHeight?.toLong(),
-                amount = satoshiToBTC(amount),
+                amount = satoshiToBTC(amount.absoluteValue),
                 fee = satoshiToBTC(transaction.fee),
                 timestamp = transaction.timestamp,
                 from = from,

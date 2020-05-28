@@ -9,6 +9,7 @@ import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.pow
 
 class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
 
@@ -18,6 +19,35 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     private val FIAT_TEN_CENT_EDGE = "0.1".toBigDecimal()
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
+
+    override fun formatFiat(value: BigDecimal, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
+        val formatter = getFormatter(languageManager.currentLocale) ?: throw Exception("No formatter")
+
+        formatter.minimumFractionDigits = minimumFractionDigits
+        formatter.maximumFractionDigits = maximumFractionDigits
+
+        val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
+
+        return if (value > BigDecimal.ZERO && value < mostLowValue) {
+            "< " + symbol + formatter.format(mostLowValue)
+        } else {
+            symbol + formatter.format(value)
+        }
+    }
+
+    override fun getSignificantDecimal(value: BigDecimal): Int {
+        if (value == BigDecimal.ZERO || value >= BigDecimal(1)) {
+            return 2
+        }
+
+        val numberOfZerosAfterDot = value.scale() - value.precision()
+
+        return if (numberOfZerosAfterDot >= 4) {
+            numberOfZerosAfterDot + 4
+        } else {
+            4
+        }
+    }
 
     override fun format(coinValue: CoinValue, realNumber: Boolean): String? {
         return format(coinValue.value, coinValue.coin.code, realNumber)
@@ -35,56 +65,6 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return "$formatted $coinCode"
     }
 
-    override fun format(currencyValue: CurrencyValue, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
-        var value = currencyValue.value
-
-        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
-
-        when {
-            value.compareTo(BigDecimal.ZERO) == 0 -> {
-                customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
-            }
-            value < FIAT_SMALL_NUMBER_EDGE -> {
-                value = BigDecimal("0.01")
-                customFormatter.maximumFractionDigits = 2
-            }
-            value >= FIAT_BIG_NUMBER_EDGE && trimmable -> {
-                customFormatter.maximumFractionDigits = 0
-            }
-            else -> {
-                customFormatter.maximumFractionDigits = 2
-            }
-        }
-
-        val formatted = customFormatter.format(value)
-
-        var result = "${currencyValue.currency.symbol}$formatted"
-
-        if (canUseLessSymbol && currencyValue.value <= FIAT_SMALL_NUMBER_EDGE && currencyValue.value > BigDecimal.ZERO) {
-            result = "< $result"
-        }
-
-        return result
-    }
-
-    override fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean, maxFraction: Int?): String? {
-        val value = currencyValue.value.abs()
-
-        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
-
-        when {
-            maxFraction != null -> customFormatter.maximumFractionDigits = maxFraction
-            value.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
-            else -> {
-                val significantDecimalCount: Int = getSignificantDecimal(value, maxDecimal = 8)
-                customFormatter.maximumFractionDigits = significantDecimalCount
-            }
-        }
-
-        val formatted = customFormatter.format(value)
-
-        return "${currencyValue.currency.symbol}$formatted"
-    }
 
     override fun format(value: Double, precision: Int): String {
         val customFormatter = getFormatter(languageManager.currentLocale)?.also {
@@ -102,26 +82,19 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return numberFormat?.format(value)
     }
 
-    private fun getSignificantDecimal(value: BigDecimal, maxDecimal: Int): Int {
-        //Here 4 numbers is significant value
-        val ten = 10.toBigDecimal()
-        val threshold = 1000.toBigDecimal()
-
-        for (decimalCount in 0 until maxDecimal) {
-            if (value * ten.pow(decimalCount) >= threshold) {
-                return decimalCount
-            }
-        }
-        return maxDecimal
-    }
-
     private fun getFormatter(locale: Locale): NumberFormat? {
-        return formatters[locale.language] ?: run {
+        if (formatters[locale.language] == null) {
             val newFormatter = NumberFormat.getInstance(locale).apply {
-                roundingMode = RoundingMode.HALF_EVEN
+                roundingMode = RoundingMode.HALF_UP
             }
+
             formatters[locale.language] = newFormatter
-            return newFormatter
+        }
+
+        return formatters[locale.language]?.apply {
+            // reset
+            this.minimumFractionDigits = 0
+            this.maximumFractionDigits = 3
         }
     }
 }

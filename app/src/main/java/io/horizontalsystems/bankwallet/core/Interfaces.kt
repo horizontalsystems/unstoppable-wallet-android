@@ -379,9 +379,9 @@ interface IWalletManager {
 interface IAppNumberFormatter {
     fun format(coinValue: CoinValue, realNumber: Boolean = false): String?
     fun format(value: BigDecimal, coinCode: String, realNumber: Boolean = false): String?
-    fun format(currencyValue: CurrencyValue, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
-    fun formatForRates(currencyValue: CurrencyValue, trimmable: Boolean = false, maxFraction: Int? = null): String?
     fun format(value: Double, precision: Int = 8): String
+    fun formatFiat(value: BigDecimal, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
+    fun getSignificantDecimal(value: BigDecimal): Int
     fun format(value: BigDecimal, precision: Int): String?
 }
 
