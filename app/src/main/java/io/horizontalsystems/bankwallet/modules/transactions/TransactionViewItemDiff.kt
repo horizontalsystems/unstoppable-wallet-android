@@ -2,26 +2,18 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.recyclerview.widget.DiffUtil
 
-class TransactionViewItemDiff(private val old: List<TransactionViewItem>, private val new: List<TransactionViewItem>) : DiffUtil.Callback() {
+class TransactionViewItemDiff : DiffUtil.ItemCallback<TransactionViewItem>() {
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return old[oldItemPosition].itemTheSame(new[newItemPosition])
+    override fun areItemsTheSame(oldItem: TransactionViewItem, newItem: TransactionViewItem): Boolean {
+        return oldItem.itemTheSame(newItem)
     }
 
-    override fun getOldListSize(): Int {
-        return old.size
+    override fun areContentsTheSame(oldItem: TransactionViewItem, newItem: TransactionViewItem): Boolean {
+        return oldItem.contentTheSame(newItem)
     }
 
-    override fun getNewListSize(): Int {
-        return new.size
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return old[oldItemPosition].contentTheSame(new[newItemPosition])
-    }
-
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return old[oldItemPosition]
+    override fun getChangePayload(oldItem: TransactionViewItem, newItem: TransactionViewItem): Any? {
+        return oldItem
     }
 
 }
