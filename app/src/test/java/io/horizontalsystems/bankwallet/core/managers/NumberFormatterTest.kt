@@ -106,7 +106,7 @@ class NumberFormatterTest {
     }
 
     private fun assertFormattedFiatSignificant(value: BigDecimal, expected: String) {
-        val formatted = numberFormatter.formatFiat(value, "$", 0, numberFormatter.getSignificantDecimal(value))
+        val formatted = numberFormatter.formatFiat(value, "$", 0, numberFormatter.getSignificantDecimalFiat(value))
 
         assertEquals(expected, formatted)
     }

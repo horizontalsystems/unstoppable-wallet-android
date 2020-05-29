@@ -7,14 +7,19 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
-import kotlin.math.abs
 import kotlin.math.pow
 
 class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
-    override fun formatFiat(value: BigDecimal, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
+    override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {
+        val bigDecimalValue = when (value) {
+            is Double -> BigDecimal(value)
+            is BigDecimal -> value
+            else -> throw UnsupportedOperationException()
+        }
+
         val formatter = getFormatter(languageManager.currentLocale) ?: throw Exception("No formatter")
 
         formatter.minimumFractionDigits = minimumFractionDigits
@@ -22,14 +27,22 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
         val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
 
-        return if (value > BigDecimal.ZERO && value < mostLowValue) {
-            "< " + symbol + formatter.format(mostLowValue)
+        return if (bigDecimalValue > BigDecimal.ZERO && bigDecimalValue < mostLowValue) {
+            "< " + prefix + formatter.format(mostLowValue) + suffix
         } else {
-            symbol + formatter.format(value)
+            prefix + formatter.format(bigDecimalValue) + suffix
         }
     }
 
-    override fun getSignificantDecimal(value: BigDecimal): Int {
+    override fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
+        return format(value, minimumFractionDigits, maximumFractionDigits, suffix = " $code")
+    }
+
+    override fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
+        return format(value, minimumFractionDigits, maximumFractionDigits, prefix = symbol)
+    }
+
+    override fun getSignificantDecimalFiat(value: BigDecimal): Int {
         if (value == BigDecimal.ZERO || value >= BigDecimal(1)) {
             return 2
         }
@@ -40,48 +53,6 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
             numberOfZerosAfterDot + 4
         } else {
             4
-        }
-    }
-
-    override fun formatSimple(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
-        val bigDecimalValue = when (value) {
-            is Double -> BigDecimal(value)
-            is BigDecimal -> value
-            else -> throw UnsupportedOperationException()
-        }
-
-        val formatter = getFormatter(languageManager.currentLocale) ?: throw Exception("No formatter")
-
-        formatter.minimumFractionDigits = minimumFractionDigits
-        formatter.maximumFractionDigits = maximumFractionDigits
-
-        val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
-
-        return if (bigDecimalValue > BigDecimal.ZERO && bigDecimalValue < mostLowValue) {
-            "< " + formatter.format(mostLowValue)
-        } else {
-            formatter.format(bigDecimalValue)
-        }
-    }
-
-    override fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
-        val bigDecimalValue = when (value) {
-            is Double -> BigDecimal(value)
-            is BigDecimal -> value
-            else -> throw UnsupportedOperationException()
-        }
-
-        val formatter = getFormatter(languageManager.currentLocale) ?: throw Exception("No formatter")
-
-        formatter.minimumFractionDigits = minimumFractionDigits
-        formatter.maximumFractionDigits = maximumFractionDigits
-
-        val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
-
-        return if (bigDecimalValue > BigDecimal.ZERO && bigDecimalValue < mostLowValue) {
-            "< " + formatter.format(mostLowValue) + " " + code
-        } else {
-            formatter.format(bigDecimalValue) + " " + code
         }
     }
 
