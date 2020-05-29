@@ -20,22 +20,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <ImageView
-        android:id="@+id/backgroundImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_ellipse"
-        app:layout_constraintBottom_toTopOf="@+id/verticalCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintGuide_percent="0.6" />
 
     <ImageSwitcher
         android:id="@+id/imageSwitcher"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:background="@drawable/ic_ellipse"
         android:inAnimation="@android:anim/fade_in"
         android:outAnimation="@android:anim/fade_out"
         app:layout_constraintBottom_toTopOf="@+id/verticalCenter"
@@ -65,9 +56,9 @@
         app:ci_animator="@anim/pager_indicator_animation"
         app:ci_drawable="@drawable/pin_pager_circle_selected"
         app:ci_drawable_unselected="@drawable/pin_pager_circle"
-        app:ci_height="8dp"
-        app:ci_margin="6dp"
-        app:ci_width="8dp"
+        app:ci_height="4dp"
+        app:ci_margin="4dp"
+        app:ci_width="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
