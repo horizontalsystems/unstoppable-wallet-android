@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import io.horizontalsystems.bankwallet.R
@@ -84,7 +84,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         })
 
         viewModel.items.observe(viewLifecycleOwner, Observer {
-            transactionsAdapter.updateItems(it)
+            transactionsAdapter.submitList(it)
         })
 
         viewModel.reloadTransactions.observe(viewLifecycleOwner, Observer {
@@ -115,11 +115,10 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
 
 }
 
-class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderTransaction.ClickListener {
+class TransactionsAdapter(private var listener: Listener) : ListAdapter<TransactionViewItem, ViewHolder>(TransactionViewItemDiff()), ViewHolderTransaction.ClickListener {
 
     private val noTransactionsView = 0
     private val transactionView = 1
-    private var items = listOf<TransactionViewItem>()
 
     interface Listener {
         fun onItemClick(item: TransactionViewItem)
@@ -128,11 +127,11 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
     lateinit var viewModel: TransactionsViewModel
 
     override fun getItemCount(): Int {
-        return if (items.size == 0) 1 else items.size
+        return if (super.getItemCount() == 0) 1 else super.getItemCount()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (items.size == 0) noTransactionsView else transactionView
+        return if (super.getItemCount() == 0) noTransactionsView else transactionView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -147,32 +146,21 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (holder !is ViewHolderTransaction) return
 
-        viewModel.delegate.willShow(items[position])
+        val item = getItem(position)
+        viewModel.delegate.willShow(item)
 
         val prev = payloads.lastOrNull() as? TransactionViewItem
 
         if (prev == null) {
-            holder.bind(items[position], showBottomShade = (position == itemCount - 1))
+            holder.bind(item, showBottomShade = (position == itemCount - 1))
         } else {
-            holder.bindUpdate(items[position], prev)
+            holder.bindUpdate(item, prev)
         }
     }
 
     override fun onClick(position: Int) {
-        listener.onItemClick(items[position])
+        listener.onItemClick(getItem(position))
     }
-
-    fun updateItems(items: List<TransactionViewItem>) {
-        if (this.items.isEmpty()) {
-            this.items = items
-            notifyDataSetChanged()
-        } else {
-            val diffResult = DiffUtil.calculateDiff(TransactionViewItemDiff(this.items, items))
-            this.items = items
-            diffResult.dispatchUpdatesTo(this)
-        }
-    }
-
 }
 
 class ViewHolderTransaction(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
