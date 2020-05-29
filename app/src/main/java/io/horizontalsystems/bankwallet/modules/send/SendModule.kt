@@ -291,7 +291,7 @@ object SendModule {
                 App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
             }
             is CurrencyValueInfo -> {
-                val significantDecimal = App.numberFormatter.getSignificantDecimal(currencyValue.value)
+                val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(currencyValue.value)
 
                 App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 0, significantDecimal)
             }

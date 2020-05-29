@@ -144,7 +144,7 @@ class BalanceViewItemFactory {
     private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {
         val scaledValue = item.marketInfo?.diff?.setScale(diffScale, RoundingMode.HALF_EVEN)?.stripTrailingZeros()
         val isPositive = (scaledValue ?: BigDecimal.ZERO) >= BigDecimal.ZERO
-        val rateDiffText = scaledValue?.let { App.numberFormatter.formatSimple(scaledValue.abs(), 0, diffScale) + "%" }
+        val rateDiffText = scaledValue?.let { App.numberFormatter.format(scaledValue.abs(), 0, diffScale) + "%" }
         val dimmed = item.marketInfo?.isExpired() ?: true
         return RateDiff(DeemedValue(rateDiffText, dimmed, true), isPositive)
     }
