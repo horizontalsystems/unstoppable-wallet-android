@@ -32,7 +32,7 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         }
 
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${App.numberFormatter.format(feePerByte, 0, 0)} ($unitName)", dimmed = true))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = App.numberFormatter.format(feePerByte, 0, 0, suffix = " ($unitName)"), dimmed = true))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))
