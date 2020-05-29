@@ -179,7 +179,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
-            balanceItemsAdapter.setItems(it)
+            balanceItemsAdapter.submitList(it)
         })
 
         viewModel.setHeaderViewItem.observe(viewLifecycleOwner, Observer {

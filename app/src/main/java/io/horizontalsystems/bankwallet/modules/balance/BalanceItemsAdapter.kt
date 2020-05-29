@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -10,7 +10,7 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 
-class BalanceItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BalanceItemsAdapter(private val listener: Listener) : ListAdapter<BalanceViewItem, RecyclerView.ViewHolder>(BalanceViewItemDiff()) {
 
     interface Listener {
         fun onSendClicked(viewItem: BalanceViewItem)
@@ -21,24 +21,10 @@ class BalanceItemsAdapter(private val listener: Listener) : RecyclerView.Adapter
         fun onAddCoinClicked()
     }
 
-    private var items: List<BalanceViewItem> = listOf()
-
     private val coinType = 1
     private val addCoinType = 2
 
-    fun setItems(items: List<BalanceViewItem>) {
-        //  Update with regular method for the initial load to avoid showing balance tab with empty list
-        if (this.items.isEmpty()) {
-            this.items = items
-            notifyDataSetChanged()
-        } else {
-            val diffResult = DiffUtil.calculateDiff(BalanceViewItemDiff(this.items, items))
-            this.items = items
-            diffResult.dispatchUpdatesTo(this)
-        }
-    }
-
-    override fun getItemCount() = items.size + 1
+    override fun getItemCount() = super.getItemCount() + 1
 
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount - 1) addCoinType else coinType
@@ -60,7 +46,7 @@ class BalanceItemsAdapter(private val listener: Listener) : RecyclerView.Adapter
 
         if (holder !is BalanceItemViewHolder) return
 
-        val item = items[position]
+        val item = getItem(position)
         val prev = payloads.lastOrNull() as? BalanceViewItem
 
         if (prev == null) {
