@@ -2,25 +2,17 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.recyclerview.widget.DiffUtil
 
-class BalanceViewItemDiff(private val oldItems: List<BalanceViewItem>, private val newItems: List<BalanceViewItem>) : DiffUtil.Callback() {
+class BalanceViewItemDiff : DiffUtil.ItemCallback<BalanceViewItem>() {
 
-    override fun getOldListSize(): Int {
-        return oldItems.size
+    override fun areItemsTheSame(oldItem: BalanceViewItem, newItem: BalanceViewItem): Boolean {
+        return oldItem.wallet == newItem.wallet
     }
 
-    override fun getNewListSize(): Int {
-        return newItems.size
+    override fun areContentsTheSame(oldItem: BalanceViewItem, newItem: BalanceViewItem): Boolean {
+        return oldItem == newItem
     }
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldItems[oldItemPosition].wallet == newItems[newItemPosition].wallet
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldItems[oldItemPosition] == newItems[newItemPosition]
-    }
-
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return oldItems[oldItemPosition]
+    override fun getChangePayload(oldItem: BalanceViewItem, newItem: BalanceViewItem): Any? {
+        return oldItem
     }
 }
