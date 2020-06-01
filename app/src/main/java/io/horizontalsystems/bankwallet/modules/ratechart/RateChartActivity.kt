@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.cryptonews.CryptoNewsFragment
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.DateHelper
@@ -55,12 +54,6 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.cryptoNews, CryptoNewsFragment(coinCode))
-            commit()
-        }
-
         presenter.viewDidLoad()
     }
 
@@ -121,22 +114,24 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
             coinMarketCap.text = if (item.marketCap.value > BigDecimal.ZERO) {
                 val shortCapValue = shortenValue(item.marketCap.value)
-                formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + " " + shortCapValue.second
+                formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 1) + shortCapValue.second
             } else {
                 getString(R.string.NotAvailable)
             }
 
             val shortVolumeValue = shortenValue(item.volume.value)
-            volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + " " + shortVolumeValue.second
+            volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 1) + shortVolumeValue.second
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
-                formatter.formatCoin(item.supply.value, item.supply.coinCode, 0, 0)
+                val shortValue = shortenValue(item.supply.value)
+                "${formatter.format(shortValue.first,0,1)}${shortValue.second} ${item.supply.coinCode}"
             } else {
                 getString(R.string.NotAvailable)
             }
 
             totalSupplyValue.text = item.maxSupply?.let {
-                formatter.formatCoin(it.value, it.coinCode, 0, 0)
+                val shortValue = shortenValue(it.value)
+                "${formatter.format(shortValue.first,0,1)}${shortValue.second} ${it.coinCode}"
             } ?: run {
                 getString(R.string.NotAvailable)
             }
