@@ -512,10 +512,10 @@
     <string name="Charts_Title">%s Price</string>
     <string name="Charts_Rate_High">%s High</string>
     <string name="Charts_Rate_Low">%s Low</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_Volume24">Volume (24h)</string>
-    <string name="Charts_inCirculation">in Circulation</string>
-    <string name="Charts_TotalSupply">Total Supply</string>
+    <string name="Charts_MarketCap">MCap</string>
+    <string name="Charts_Volume24">Vol (24h)</string>
+    <string name="Charts_inCirculation">In Circ</string>
+    <string name="Charts_TotalSupply">Total</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
