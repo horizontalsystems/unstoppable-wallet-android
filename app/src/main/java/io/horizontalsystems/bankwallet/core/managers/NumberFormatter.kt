@@ -16,6 +16,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {
         val bigDecimalValue = when (value) {
             is Double -> BigDecimal(value)
+            is Float -> value.toBigDecimal()
             is BigDecimal -> value
             else -> throw UnsupportedOperationException()
         }
