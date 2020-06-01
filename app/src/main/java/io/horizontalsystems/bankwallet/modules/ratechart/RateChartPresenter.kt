@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interac
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
-import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -56,13 +56,17 @@ class RateChartPresenter(
         fetchChartInfo()
     }
 
-    override fun onTouchSelect(point: ChartPoint) {
-        val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
-        val volumeValue = point.volume?.let { volume ->
-            CurrencyValue(currency, volume.toBigDecimal())
-        }
+    override fun onTouchSelect(point: PointInfo, macdIsVisible: Boolean) {
+        val price = CurrencyValue(currency, point.value.toBigDecimal())
 
-        view.showSelectedPoint(ChartPointViewItem(point.timestamp, currencyValue, volumeValue, chartType))
+        if (macdIsVisible){
+            view.showSelectedPointInfo(ChartPointViewItem(point.timestamp, price, null, point.macdInfo))
+        } else {
+            val volume = point.volume?.let { volume ->
+                CurrencyValue(currency, volume.toBigDecimal())
+            }
+            view.showSelectedPointInfo(ChartPointViewItem(point.timestamp, price, volume, null))
+        }
     }
 
     private fun fetchChartInfo() {

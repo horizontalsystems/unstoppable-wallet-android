@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -17,14 +17,14 @@ object RateChartModule {
         fun setChartType(type: ChartType)
         fun showChartInfo(viewItem: ChartInfoViewItem)
         fun showMarketInfo(viewItem: MarketInfoViewItem)
-        fun showSelectedPoint(item: ChartPointViewItem)
+        fun showSelectedPointInfo(item: ChartPointViewItem)
         fun showError(ex: Throwable)
     }
 
     interface ViewDelegate {
         fun viewDidLoad()
         fun onSelect(type: ChartType)
-        fun onTouchSelect(point: ChartPoint)
+        fun onTouchSelect(point: PointInfo, macdIsVisible: Boolean)
     }
 
     interface Interactor {

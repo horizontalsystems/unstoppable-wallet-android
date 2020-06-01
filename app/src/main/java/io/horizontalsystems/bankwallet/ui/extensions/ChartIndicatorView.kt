@@ -27,7 +27,6 @@ class ChartIndicatorView : LinearLayout {
 
         trendText.setText(getTrendText(trend))
         trendText.setTextColor(ContextCompat.getColor(context, getTrendTextColor(trend)))
-        trendIcon.setImageResource(getTrendImage(trend))
     }
 
     private fun getTrendText(trend: ChartInfoTrend): Int {
@@ -43,14 +42,6 @@ class ChartIndicatorView : LinearLayout {
             ChartInfoTrend.DOWN -> R.color.red_d
             ChartInfoTrend.UP -> R.color.green_d
             ChartInfoTrend.NEUTRAL -> R.color.grey
-        }
-    }
-
-    private fun getTrendImage(trend: ChartInfoTrend): Int {
-        return when(trend){
-            ChartInfoTrend.DOWN -> R.drawable.ic_down_red
-            ChartInfoTrend.UP -> R.drawable.ic_up_green
-            ChartInfoTrend.NEUTRAL -> R.drawable.ic_neutral_12
         }
     }
 

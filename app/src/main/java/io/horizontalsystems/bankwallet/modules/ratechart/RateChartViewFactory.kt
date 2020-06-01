@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -20,9 +21,9 @@ data class ChartInfoViewItem(
 
 data class ChartPointViewItem(
         val date: Long,
-        val currencyValue: CurrencyValue,
+        val price: CurrencyValue,
         val volume: CurrencyValue?,
-        val chartType: ChartType
+        val macdInfo: MacdInfo?
 )
 
 enum class ChartInfoTrend {

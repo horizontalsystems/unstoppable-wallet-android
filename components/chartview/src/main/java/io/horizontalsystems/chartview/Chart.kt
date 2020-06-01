@@ -9,7 +9,7 @@ import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
-import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.view_chart.view.*
 import java.math.BigDecimal
@@ -20,7 +20,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(point: ChartPoint)
+        fun onTouchSelect(point: PointInfo)
     }
 
     interface RateFormatter {
@@ -84,7 +84,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
                 listener.onTouchUp()
             }
 
-            override fun onTouchSelect(point: ChartPoint) {
+            override fun onTouchSelect(point: PointInfo) {
                 listener.onTouchSelect(point)
             }
         })
