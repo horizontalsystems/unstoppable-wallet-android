@@ -30,6 +30,7 @@
     <color name="darkest">#0f1014</color>
     <color name="steel_light">#ebebf0</color>
     <color name="steel_dark">#252933</color>
+    <color name="steel_10">#1a6E7899</color>
     <color name="steel_20">#336E7899</color>
     <color name="steel_dark_pressed">#353842</color>
 </resources>
