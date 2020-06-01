@@ -32,15 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:includeFontPadding="false"
         tools:text="Down Trend" />
-
-    <ImageView
-        android:id="@+id/trendIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        tools:src="@drawable/ic_down_red" />
 
 </LinearLayout>

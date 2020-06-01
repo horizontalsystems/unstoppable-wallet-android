@@ -4,7 +4,8 @@ import android.graphics.PointF
 import android.graphics.RectF
 import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.Indicator.*
-import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.MacdInfo
+import io.horizontalsystems.chartview.models.PointInfo
 
 object PointConverter {
     fun coordinates(data: ChartData, shape: RectF, verticalPadding: Float): List<Coordinate> {
@@ -16,11 +17,22 @@ object PointConverter {
         for (item in data.items) {
             val value = item.values[Candle] ?: continue
             val volume = item.values[Volume]
+            val macd = item.values[Macd]
+            val signal = item.values[MacdSignal]
+            val histogram = item.values[MacdHistogram]
+
             val point = value.point
             val x = point.x * width
             val y = point.y * height
 
-            coordinates.add(Coordinate(x, shape.height() - verticalPadding - y, ChartPoint(value.value, volume?.value, item.timestamp)))
+            coordinates.add(Coordinate(
+                    x = x,
+                    y =shape.height() - verticalPadding - y,
+                    point = PointInfo(
+                            value.value,
+                            volume?.value,
+                            MacdInfo(macd?.value, signal?.value, histogram?.value), item.timestamp)
+            ))
         }
 
         return coordinates

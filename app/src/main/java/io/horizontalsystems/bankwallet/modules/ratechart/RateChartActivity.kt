@@ -8,16 +8,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.cryptonews.CryptoNewsFragment
 import io.horizontalsystems.chartview.Chart
-import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.showIf
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.*
 
 class RateChartActivity : BaseActivity(), Chart.Listener {
@@ -82,8 +80,8 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         setViewVisibility(chartActions, isVisible = true)
     }
 
-    override fun onTouchSelect(point: ChartPoint) {
-        presenter.onTouchSelect(point)
+    override fun onTouchSelect(point: PointInfo) {
+        presenter.onTouchSelect(point, chart.macdCurveIsVisible)
     }
 
     //  Private
@@ -103,7 +101,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showChartInfo.observe(this, Observer { item ->
             rootView.post {
-                chart.visibility = View.VISIBLE
+                setViewVisibility(chart, emaChartIndicator, macdChartIndicator, rsiChartIndicator, isVisible = true)
                 chart.setData(item.chartData, item.chartType)
             }
 
@@ -147,27 +145,45 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         presenterView.setSelectedPoint.observe(this, Observer { item ->
             pointInfoVolume.visibility = View.INVISIBLE
             pointInfoVolumeTitle.visibility = View.INVISIBLE
-            pointInfoTime.visibility = View.INVISIBLE
 
-            val date = Date(item.date * 1000)
-            if (item.chartType == ChartType.DAILY || item.chartType == ChartType.WEEKLY) {
-                pointInfoTime.visibility = View.VISIBLE
-                pointInfoTime.text = DateHelper.getOnlyTime(date)
-            }
+            macdHistogram.visibility = View.INVISIBLE
+            macdSignal.visibility = View.INVISIBLE
+            macdValue.visibility = View.INVISIBLE
 
-            pointInfoDate.text = DateHelper.shortDate(date, far = "MM/dd/yy")
-            pointInfoPrice.text = formatter.formatFiat(item.currencyValue.value, item.currencyValue.currency.symbol, 2, 4)
+            pointInfoDate.text = DateHelper.getDayAndTime(Date(item.date * 1000))
+            pointInfoPrice.text = formatter.formatFiat(item.price.value, item.price.currency.symbol, 2, 4)
 
             item.volume?.let {
                 pointInfoVolumeTitle.visibility = View.VISIBLE
                 pointInfoVolume.visibility = View.VISIBLE
                 pointInfoVolume.text = formatter.formatFiat(item.volume.value, item.volume.currency.symbol, 0, 2)
             }
+
+            item.macdInfo?.let {macdInfo ->
+                macdInfo.histogram?.let {
+                    macdHistogram.visibility = View.VISIBLE
+                    macdHistogram.setTextColor(getHistogramColor(it))
+                    macdHistogram.text = formatter.format(it, 0, 2)
+                }
+                macdInfo.signal?.let {
+                    macdSignal.visibility = View.VISIBLE
+                    macdSignal.text = formatter.format(it, 0, 2)
+                }
+                macdInfo.macd?.let {
+                    macdValue.visibility = View.VISIBLE
+                    macdValue.text = formatter.format(it, 0, 2)
+                }
+            }
         })
 
         presenterView.showError.observe(this, Observer {
             chart.showError(getString(R.string.Charts_Error_NotAvailable))
         })
+    }
+
+    private fun getHistogramColor(value: Float): Int {
+        val textColor = if (value > 0) R.color.green_d else R.color.red_d
+        return getColor(textColor)
     }
 
     private fun bindActions() {
@@ -209,6 +225,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     }
 
     private fun updateMacdIndicator() {
+        updateTopInfoVisibility()
         macdChartIndicator.bind("MACD", chart.macdCurveIsVisible, macdTrend)
         if (chart.macdCurveIsVisible){
             rsiChartIndicator.bind("RSI", false, rsiTrend)
@@ -216,10 +233,16 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     }
 
     private fun updateRsiIndicator() {
+        updateTopInfoVisibility()
         rsiChartIndicator.bind("RSI", chart.rsiCurveIsVisible, rsiTrend)
         if (chart.rsiCurveIsVisible){
             macdChartIndicator.bind("MACD", false, macdTrend)
         }
+    }
+
+    private fun updateTopInfoVisibility() {
+        setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !chart.macdCurveIsVisible)
+        setViewVisibility(macdSignal,macdHistogram, macdValue, isVisible = chart.macdCurveIsVisible)
     }
 
     private fun resetActions(current: View, setDefault: Boolean = false) {

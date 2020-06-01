@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.xrateskit.entities.ChartType
 
 class RateChartView : RateChartModule.View {
@@ -33,7 +32,7 @@ class RateChartView : RateChartModule.View {
         showMarketInfo.postValue(viewItem)
     }
 
-    override fun showSelectedPoint(item: ChartPointViewItem) {
+    override fun showSelectedPointInfo(item: ChartPointViewItem) {
         setSelectedPoint.postValue(item)
     }
 

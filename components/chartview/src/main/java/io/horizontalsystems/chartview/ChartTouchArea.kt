@@ -49,6 +49,7 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val listener = listener ?: return false
+        if (coordinates.isEmpty()) return false
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
