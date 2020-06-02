@@ -9,16 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <View
-        android:id="@+id/topBox"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/dark_80"
-        app:layout_constraintBottom_toTopOf="@+id/transparentSquare"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -39,6 +29,16 @@
             app:titleTextAppearance="@style/Title3"
             app:titleTextColor="?TitleColor" />
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/topBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/dark_80"
+        app:layout_constraintBottom_toTopOf="@+id/transparentSquare"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/leftBox"
@@ -81,6 +81,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/transparentSquare" />
+
+    <ImageView
+        android:id="@+id/leftTopCorner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_qr_scanner_corner_rounding"
+        app:layout_constraintStart_toEndOf="@+id/leftBox"
+        app:layout_constraintTop_toBottomOf="@+id/topBox" />
+
+    <ImageView
+        android:id="@+id/rightTopCorner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="90"
+        android:src="@drawable/ic_qr_scanner_corner_rounding"
+        app:layout_constraintEnd_toStartOf="@+id/rightBox"
+        app:layout_constraintTop_toBottomOf="@+id/topBox" />
+
+    <ImageView
+        android:id="@+id/rightBottomCorner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="180"
+        android:src="@drawable/ic_qr_scanner_corner_rounding"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBox"
+        app:layout_constraintEnd_toStartOf="@+id/rightBox" />
+
+    <ImageView
+        android:id="@+id/leftBottomCorner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="270"
+        android:src="@drawable/ic_qr_scanner_corner_rounding"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBox"
+        app:layout_constraintStart_toEndOf="@+id/leftBox" />
 
     <Button
         android:id="@+id/cancelButton"
