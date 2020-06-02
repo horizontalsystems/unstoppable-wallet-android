@@ -19,12 +19,18 @@ object RateChartModule {
         fun showMarketInfo(viewItem: MarketInfoViewItem)
         fun showSelectedPointInfo(item: ChartPointViewItem)
         fun showError(ex: Throwable)
+        fun setEmaEnabled(enabled: Boolean)
+        fun setMacdEnabled(enabled: Boolean)
+        fun setRsiEnabled(enabled: Boolean)
     }
 
     interface ViewDelegate {
         fun viewDidLoad()
         fun onSelect(type: ChartType)
-        fun onTouchSelect(point: PointInfo, macdIsVisible: Boolean)
+        fun onTouchSelect(point: PointInfo)
+        fun toggleEma()
+        fun toggleMacd()
+        fun toggleRsi()
     }
 
     interface Interactor {

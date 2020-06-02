@@ -59,15 +59,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val rsiCurve = ChartCurve(config, animatorBottom)
     private val rsiRange = ChartGridRange(config, isVisible = false)
 
-    val emaCurveIsVisible
-        get() = emaFastCurve.isVisible
-
-    val macdCurveIsVisible
-        get() = macdCurve.isVisible
-
-    val rsiCurveIsVisible
-        get() = rsiCurve.isVisible
-
     fun setListener(listener: Listener) {
         chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {
@@ -109,23 +100,19 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartError.text = error
     }
 
-    fun showEma() {
-        setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = !emaFastCurve.isVisible)
+    fun showEma(visible: Boolean) {
+        setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
         animatorMain.start()
     }
 
-    fun showMacd() {
-        val visible = !macdCurve.isVisible
+    fun showMacd(visible: Boolean) {
         setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
-        setVisible(rsiCurve, rsiRange, isVisible = false)
         setVisible(bottomVolume, isVisible = !visible)
         animatorBottom.start()
     }
 
-    fun showRsi() {
-        val visible = !rsiCurve.isVisible
+    fun showRsi(visible: Boolean) {
         setVisible(rsiCurve, rsiRange, isVisible = visible)
-        setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = false)
         setVisible(bottomVolume, isVisible = !visible)
         animatorBottom.start()
     }

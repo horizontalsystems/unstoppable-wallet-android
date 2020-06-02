@@ -74,7 +74,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     }
 
     override fun onTouchSelect(point: PointInfo) {
-        presenter.onTouchSelect(point, chart.macdCurveIsVisible)
+        presenter.onTouchSelect(point)
     }
 
     //  Private
@@ -102,9 +102,9 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             macdTrend = item.macdTrend
             rsiTrend = item.rsiTrend
 
-            updateEmaIndicator()
-            updateMacdIndicator()
-            updateRsiIndicator()
+            emaChartIndicator.bind(EMA, false, emaTrend)
+            macdChartIndicator.bind(MACD, false, macdTrend)
+            rsiChartIndicator.bind(RSI, false, rsiTrend)
 
             coinRateDiff.diff = item.diffValue
         })
@@ -124,14 +124,14 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
                 val shortValue = shortenValue(item.supply.value)
-                "${formatter.format(shortValue.first,0,1)}${shortValue.second} ${item.supply.coinCode}"
+                formatter.format(shortValue.first,0,1, suffix = "${shortValue.second} ${item.supply.coinCode}")
             } else {
                 getString(R.string.NotAvailable)
             }
 
             totalSupplyValue.text = item.maxSupply?.let {
                 val shortValue = shortenValue(it.value)
-                "${formatter.format(shortValue.first,0,1)}${shortValue.second} ${it.coinCode}"
+                formatter.format(shortValue.first,0,1, suffix = "${shortValue.second} ${it.coinCode}")
             } ?: run {
                 getString(R.string.NotAvailable)
             }
@@ -174,6 +174,25 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         presenterView.showError.observe(this, Observer {
             chart.showError(getString(R.string.Charts_Error_NotAvailable))
         })
+
+        presenterView.showEma.observe(this, Observer { enabled ->
+            chart.showEma(enabled)
+            emaChartIndicator.bind(EMA, enabled, emaTrend)
+        })
+
+        presenterView.showMacd.observe(this, Observer { enabled ->
+            chart.showMacd(enabled)
+            macdChartIndicator.bind(MACD, enabled, macdTrend)
+
+            setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !enabled)
+            setViewVisibility(macdSignal,macdHistogram, macdValue, isVisible = enabled)
+        })
+
+        presenterView.showRsi.observe(this, Observer { enabled ->
+            chart.showRsi(enabled)
+            rsiChartIndicator.bind(RSI, enabled, rsiTrend)
+        })
+
     }
 
     private fun getHistogramColor(value: Float): Int {
@@ -200,44 +219,16 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         }
 
         emaChartIndicator.setOnClickListener {
-            chart.showEma()
-            updateEmaIndicator()
+            presenter.toggleEma()
         }
 
         macdChartIndicator.setOnClickListener {
-            chart.showMacd()
-            updateMacdIndicator()
+            presenter.toggleMacd()
         }
 
         rsiChartIndicator.setOnClickListener {
-            chart.showRsi()
-            updateRsiIndicator()
+            presenter.toggleRsi()
         }
-    }
-
-    private fun updateEmaIndicator() {
-        emaChartIndicator.bind("EMA", chart.emaCurveIsVisible, emaTrend)
-    }
-
-    private fun updateMacdIndicator() {
-        updateTopInfoVisibility()
-        macdChartIndicator.bind("MACD", chart.macdCurveIsVisible, macdTrend)
-        if (chart.macdCurveIsVisible){
-            rsiChartIndicator.bind("RSI", false, rsiTrend)
-        }
-    }
-
-    private fun updateRsiIndicator() {
-        updateTopInfoVisibility()
-        rsiChartIndicator.bind("RSI", chart.rsiCurveIsVisible, rsiTrend)
-        if (chart.rsiCurveIsVisible){
-            macdChartIndicator.bind("MACD", false, macdTrend)
-        }
-    }
-
-    private fun updateTopInfoVisibility() {
-        setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !chart.macdCurveIsVisible)
-        setViewVisibility(macdSignal,macdHistogram, macdValue, isVisible = chart.macdCurveIsVisible)
     }
 
     private fun resetActions(current: View, setDefault: Boolean = false) {
@@ -285,5 +276,11 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         }
 
         return Pair(valueDecimal, returnSuffix)
+    }
+
+    companion object{
+        private const val EMA = "EMA"
+        private const val MACD = "MACD"
+        private const val RSI = "RSI"
     }
 }

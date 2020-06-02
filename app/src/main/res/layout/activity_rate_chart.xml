@@ -351,14 +351,14 @@
 
             <TextView
                 android:id="@+id/volumeValue"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/noto_sans_regular"
                 android:textAlignment="textEnd"
                 android:textColor="?ColorLeah"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@+id/bottomInfoMiddleLine"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/volumeTitle"
                 app:layout_constraintTop_toTopOf="@+id/volumeTitle"
                 tools:text="$ 1.92 B" />
 
@@ -376,62 +376,55 @@
 
             <TextView
                 android:id="@+id/coinMarketCap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/noto_sans_regular"
-                android:textAlignment="textEnd"
-                android:textColor="?ColorLeah"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@+id/bottomInfoMiddleLine"
-                app:layout_constraintTop_toTopOf="@+id/coinMarketCapTitle"
-                tools:text="$ 100.92 B" />
-
-            <View
-                android:id="@+id/bottomInfoMiddleLine"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="@color/steel_10"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/volumeTitle" />
-
-            <TextView
-                android:id="@+id/circulationTitle"
-                style="@font/noto_sans_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/Charts_inCirculation"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/bottomInfoMiddleLine"
-                app:layout_constraintTop_toTopOf="@+id/volumeTitle" />
-
-            <TextView
-                android:id="@+id/circulationValue"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans_regular"
                 android:textAlignment="textEnd"
                 android:textColor="?ColorLeah"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/coinMarketCapTitle"
+                app:layout_constraintTop_toTopOf="@+id/coinMarketCapTitle"
+                tools:text="$ 100.92 B" />
+
+            <TextView
+                android:id="@+id/circulationTitle"
+                style="@font/noto_sans_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Charts_inCirculation"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/coinMarketCapTitle" />
+
+            <TextView
+                android:id="@+id/circulationValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/circulationTitle"
                 app:layout_constraintTop_toTopOf="@+id/circulationTitle"
                 tools:text="100.92B BTC" />
 
             <TextView
                 android:id="@+id/totalSupplyTitle"
                 style="@font/noto_sans_regular"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/Charts_TotalSupply"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/bottomInfoMiddleLine"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@+id/circulationTitle" />
 
             <TextView
@@ -443,6 +436,7 @@
                 android:textColor="?ColorLeah"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/totalSupplyTitle"
                 app:layout_constraintTop_toTopOf="@+id/totalSupplyTitle"
                 tools:text="100M BTC" />
 
