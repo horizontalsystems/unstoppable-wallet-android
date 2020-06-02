@@ -45,7 +45,6 @@ object RateListModule {
     interface IRateListFactory {
         fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<ViewItem.CoinViewItem>
         fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<ViewItem.CoinViewItem>
-        fun getViewItems(portfolioItems: List<ViewItem.CoinViewItem>): List<ViewItem>
     }
 
     class Factory : ViewModelProvider.Factory {

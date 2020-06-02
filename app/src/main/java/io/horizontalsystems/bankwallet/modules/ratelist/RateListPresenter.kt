@@ -109,7 +109,7 @@ class RateListPresenter(
     }
 
     private fun updateViewItems() {
-        view.setViewItems(factory.getViewItems(portfolioViewItems))
+        view.setViewItems(portfolioViewItems)
     }
 
     private fun lastUpdateTimestamp(marketInfos: Map<String, MarketInfo?>): Long? {

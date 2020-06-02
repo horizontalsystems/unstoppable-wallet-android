@@ -35,17 +35,6 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
         }
     }
 
-    override fun getViewItems(portfolioItems: List<ViewItem.CoinViewItem>): List<ViewItem> {
-        val viewItems = mutableListOf<ViewItem>()
-
-        if (portfolioItems.isNotEmpty()) {
-            viewItems.add(ViewItem.PortfolioHeader)
-            viewItems.addAll(portfolioItems)
-        }
-
-        return viewItems
-    }
-
     private fun rate(currencyValue: CurrencyValue?): String? {
         currencyValue ?: return null
         return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 0, 2)
