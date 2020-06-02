@@ -49,7 +49,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
     private fun observeView(view: RateListView) {
         view.datesLiveData.observe(viewLifecycleOwner, Observer { lastUpdateTimestamp ->
             val dateAndTime = DateHelper.getDayAndTime(Date(lastUpdateTimestamp * 1000))
-            timeAgoText.text = dateAndTime
+            time.text = dateAndTime
         })
 
         view.viewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
@@ -77,7 +77,6 @@ class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
 
     var viewItems = listOf<ViewItem>()
 
-    private val portfolioHeader = 0
     private val coinViewItem = 1
     private val sourceView = 4
 
@@ -86,8 +85,7 @@ class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
     override fun getItemViewType(position: Int): Int {
         return when (viewItems[position]) {
             is ViewItem.CoinViewItem -> coinViewItem
-            ViewItem.PortfolioHeader -> portfolioHeader
-            ViewItem.SourceText -> sourceView
+            is ViewItem.SourceText -> sourceView
             else -> throw UnsupportedOperationException()
         }
     }
@@ -95,7 +93,6 @@ class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             coinViewItem -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
-            portfolioHeader -> ViewHolderSectionHeaderPortfolio(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_section_header_portfolio, parent, false))
             sourceView -> ViewHolderSource(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_list_source, parent, false))
             else -> throw Exception("No such view type")
         }
