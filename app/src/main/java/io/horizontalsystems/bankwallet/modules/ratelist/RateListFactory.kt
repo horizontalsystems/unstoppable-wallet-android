@@ -35,21 +35,12 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
         }
     }
 
-    override fun getViewItems(portfolioItems: List<ViewItem.CoinViewItem>, topListItems: List<ViewItem.CoinViewItem>, loading: Boolean): List<ViewItem> {
+    override fun getViewItems(portfolioItems: List<ViewItem.CoinViewItem>): List<ViewItem> {
         val viewItems = mutableListOf<ViewItem>()
 
         if (portfolioItems.isNotEmpty()) {
             viewItems.add(ViewItem.PortfolioHeader)
             viewItems.addAll(portfolioItems)
-        }
-
-        if (topListItems.isEmpty() && loading){
-            viewItems.add(ViewItem.LoadingSpinner)
-        }
-        if (topListItems.isNotEmpty()){
-            viewItems.add(ViewItem.TopListHeader)
-            viewItems.addAll(topListItems)
-            viewItems.add(ViewItem.SourceText)
         }
 
         return viewItems
