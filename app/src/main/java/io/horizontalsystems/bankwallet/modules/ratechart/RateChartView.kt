@@ -11,6 +11,9 @@ class RateChartView : RateChartModule.View {
     val showChartInfo = SingleLiveEvent<ChartInfoViewItem>()
     val showMarketInfo = SingleLiveEvent<MarketInfoViewItem>()
     val showError = SingleLiveEvent<Throwable>()
+    val showEma = SingleLiveEvent<Boolean>()
+    val showMacd = SingleLiveEvent<Boolean>()
+    val showRsi = SingleLiveEvent<Boolean>()
 
     override fun showSpinner() {
         showSpinner.call()
@@ -39,4 +42,17 @@ class RateChartView : RateChartModule.View {
     override fun showError(ex: Throwable) {
         showError.postValue(ex)
     }
+
+    override fun setEmaEnabled(visible: Boolean) {
+        showEma.postValue(visible)
+    }
+
+    override fun setMacdEnabled(visible: Boolean) {
+        showMacd.postValue(visible)
+    }
+
+    override fun setRsiEnabled(visible: Boolean) {
+        showRsi.postValue(visible)
+    }
+
 }
