@@ -22,6 +22,9 @@ class RateChartPresenter(
     : ViewModel(), ViewDelegate, InteractorDelegate {
 
     private var chartType = interactor.defaultChartType ?: ChartType.DAILY
+    private var emaIsEnabled = false
+    private var macdIsEnabled = false
+    private var rsiIsEnabled = false
 
     private var chartInfo: ChartInfo? = null
         set(value) {
@@ -56,10 +59,10 @@ class RateChartPresenter(
         fetchChartInfo()
     }
 
-    override fun onTouchSelect(point: PointInfo, macdIsVisible: Boolean) {
+    override fun onTouchSelect(point: PointInfo) {
         val price = CurrencyValue(currency, point.value.toBigDecimal())
 
-        if (macdIsVisible){
+        if (macdIsEnabled){
             view.showSelectedPointInfo(ChartPointViewItem(point.timestamp, price, null, point.macdInfo))
         } else {
             val volume = point.volume?.let { volume ->
@@ -67,6 +70,29 @@ class RateChartPresenter(
             }
             view.showSelectedPointInfo(ChartPointViewItem(point.timestamp, price, volume, null))
         }
+    }
+
+    override fun toggleEma() {
+        emaIsEnabled = !emaIsEnabled
+        view.setEmaEnabled(emaIsEnabled)
+    }
+
+    override fun toggleMacd() {
+        if (rsiIsEnabled){
+            toggleRsi()
+        }
+
+        macdIsEnabled = !macdIsEnabled
+        view.setMacdEnabled(macdIsEnabled)
+    }
+
+    override fun toggleRsi() {
+        if (macdIsEnabled){
+            toggleMacd()
+        }
+
+        rsiIsEnabled = !rsiIsEnabled
+        view.setRsiEnabled(rsiIsEnabled)
     }
 
     private fun fetchChartInfo() {
