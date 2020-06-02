@@ -18,6 +18,7 @@ import io.horizontalsystems.views.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_rates.*
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
+import java.lang.UnsupportedOperationException
 import java.util.*
 
 class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
@@ -78,8 +79,6 @@ class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
 
     private val portfolioHeader = 0
     private val coinViewItem = 1
-    private val topListHeader = 2
-    private val loadingSpinner = 3
     private val sourceView = 4
 
     override fun getItemCount(): Int = viewItems.size
@@ -88,9 +87,8 @@ class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
         return when (viewItems[position]) {
             is ViewItem.CoinViewItem -> coinViewItem
             ViewItem.PortfolioHeader -> portfolioHeader
-            ViewItem.TopListHeader -> topListHeader
-            ViewItem.LoadingSpinner -> loadingSpinner
             ViewItem.SourceText -> sourceView
+            else -> throw UnsupportedOperationException()
         }
     }
 
@@ -98,8 +96,6 @@ class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<Re
         return when (viewType) {
             coinViewItem -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
             portfolioHeader -> ViewHolderSectionHeaderPortfolio(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_section_header_portfolio, parent, false))
-            topListHeader -> ViewHolderSectionHeaderTop100(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_section_header_top_100, parent, false))
-            loadingSpinner -> ViewHolderLoadingSpinner(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_rate_list_spinner, parent, false))
             sourceView -> ViewHolderSource(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_list_source, parent, false))
             else -> throw Exception("No such view type")
         }
