@@ -15,6 +15,7 @@ import io.horizontalsystems.views.showIf
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 
 class RateChartActivity : BaseActivity(), Chart.Listener {
@@ -114,24 +115,24 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
             coinMarketCap.text = if (item.marketCap.value > BigDecimal.ZERO) {
                 val shortCapValue = shortenValue(item.marketCap.value)
-                formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 1) + shortCapValue.second
+                formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + shortCapValue.second
             } else {
                 getString(R.string.NotAvailable)
             }
 
             val shortVolumeValue = shortenValue(item.volume.value)
-            volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 1) + shortVolumeValue.second
+            volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + shortVolumeValue.second
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
                 val shortValue = shortenValue(item.supply.value)
-                formatter.format(shortValue.first,0,1, suffix = "${shortValue.second} ${item.supply.coinCode}")
+                formatter.format(shortValue.first,0,2, suffix = "${shortValue.second} ${item.supply.coinCode}")
             } else {
                 getString(R.string.NotAvailable)
             }
 
             totalSupplyValue.text = item.maxSupply?.let {
                 val shortValue = shortenValue(it.value)
-                formatter.format(shortValue.first,0,1, suffix = "${shortValue.second} ${it.coinCode}")
+                formatter.format(shortValue.first,0,2, suffix = "${shortValue.second} ${it.coinCode}")
             } ?: run {
                 getString(R.string.NotAvailable)
             }
@@ -275,7 +276,13 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             returnSuffix = suffix[base]
         }
 
-        return Pair(valueDecimal, returnSuffix)
+        val roundedDecimalValue = if (valueDecimal < BigDecimal.TEN){
+            valueDecimal.setScale(2, RoundingMode.HALF_EVEN)
+        } else {
+            valueDecimal.setScale(1, RoundingMode.HALF_EVEN)
+        }
+
+        return Pair(roundedDecimalValue, returnSuffix)
     }
 
     companion object{
