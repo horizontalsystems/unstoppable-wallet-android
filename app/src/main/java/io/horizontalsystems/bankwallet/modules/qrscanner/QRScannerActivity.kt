@@ -5,8 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.KeyEvent
-import android.view.WindowManager
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.client.android.DecodeFormatManager
@@ -40,8 +39,8 @@ class QRScannerActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        window.decorView.systemUiVisibility = 0
+        val oldFlags = window.decorView.systemUiVisibility
+        window.decorView.systemUiVisibility = oldFlags or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         cancelButton.setOnClickListener {
             onBackPressed()
@@ -65,10 +64,6 @@ class QRScannerActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        return barcodeView.onKeyDown(keyCode, event)
     }
 
     @AfterPermissionGranted(REQUEST_CAMERA_PERMISSION)
