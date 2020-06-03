@@ -11,8 +11,6 @@ class RateListPresenter(
         private val factory: RateListModule.IRateListFactory
 ) : ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate {
 
-    private var portfolioViewItems = mutableListOf<ViewItem.CoinViewItem>()
-
     private var portfolioMarketInfos = mutableMapOf<String, MarketInfo>()
     private var topMarketInfos = mutableListOf<TopMarket>()
 
@@ -29,8 +27,6 @@ class RateListPresenter(
                 portfolioMarketInfos.put(coin.code, marketInfo)
             }
         }
-
-        portfolioViewItems.addAll(factory.portfolioViewItems(coins, currency, portfolioMarketInfos))
 
         updateViewItems()
 
@@ -98,9 +94,6 @@ class RateListPresenter(
             }
         }
 
-        portfolioViewItems.clear()
-        portfolioViewItems.addAll(factory.portfolioViewItems(coins, currency, portfolioMarketInfos))
-
         lastUpdateTimestamp(portfolioMarketInfos)?.let {
             view.setDate(it)
         }
@@ -109,7 +102,7 @@ class RateListPresenter(
     }
 
     private fun updateViewItems() {
-        view.setViewItems(portfolioViewItems)
+        view.setViewItems(factory.portfolioViewItems(coins, currency, portfolioMarketInfos))
     }
 
     private fun lastUpdateTimestamp(marketInfos: Map<String, MarketInfo?>): Long? {

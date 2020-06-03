@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.xrateskit.entities.CryptoNews
 
 class CryptoNewsPresenter(
-        val view: CryptoNewsModule.View,
+        val view: CryptoNewsView,
         private val coinCode: String,
         private val interactor: CryptoNewsModule.Interactor)
     : CryptoNewsModule.ViewDelegate, CryptoNewsModule.InteractorDelegate, ViewModel() {

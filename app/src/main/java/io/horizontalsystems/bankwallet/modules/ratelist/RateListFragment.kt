@@ -2,17 +2,20 @@ package io.horizontalsystems.bankwallet.modules.ratelist
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.MergeAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.modules.cryptonews.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.views.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
@@ -21,9 +24,12 @@ import kotlinx.android.synthetic.main.view_holder_coin_rate.*
 
 class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
 
-    private lateinit var coinRatesAdapter: CoinRatesAdapter
     private lateinit var coinRatesHeaderAdapter: CoinRatesHeaderAdapter
+    private lateinit var coinRatesAdapter: CoinRatesAdapter
+    private lateinit var cryptoNewsAdapter: CryptoNewsAdapter
+    private lateinit var cryptoNewsHeaderAdapter: CryptoNewsHeaderAdapter
     private lateinit var presenter: RateListPresenter
+    private lateinit var cryptoNewsPresenter: CryptoNewsPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rates, container, false)
@@ -34,12 +40,19 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
 
         coinRatesHeaderAdapter = CoinRatesHeaderAdapter(getString(R.string.RateList_portfolio))
         coinRatesAdapter = CoinRatesAdapter(this)
-        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter)
+        cryptoNewsHeaderAdapter = CryptoNewsHeaderAdapter()
+        cryptoNewsAdapter = CryptoNewsAdapter()
+
+        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter, cryptoNewsHeaderAdapter, cryptoNewsAdapter)
 
         presenter = ViewModelProvider(this, RateListModule.Factory()).get(RateListPresenter::class.java)
+        presenter.viewDidLoad()
         observeView(presenter.view)
         observeRouter(presenter.router)
-        presenter.viewDidLoad()
+
+        cryptoNewsPresenter = ViewModelProvider(this, CryptoNewsModule.Factory("")).get(CryptoNewsPresenter::class.java)
+        observeCryptoNewsView(cryptoNewsPresenter.view)
+        cryptoNewsPresenter.onLoad()
     }
 
     override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
@@ -52,8 +65,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
         })
 
         view.viewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
-            coinRatesAdapter.viewItems = viewItems
-            coinRatesAdapter.notifyDataSetChanged()
+            coinRatesAdapter.submitList(viewItems)
         })
     }
 
@@ -65,83 +77,18 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
             })
         })
     }
-}
 
+    private fun observeCryptoNewsView(cryptoNewsView: CryptoNewsView) {
+        cryptoNewsView.showNews.observe(viewLifecycleOwner, Observer { items ->
+            cryptoNewsAdapter.submitList(items)
+        })
 
-class CoinRatesAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        cryptoNewsView.showSpinner.observe(viewLifecycleOwner, Observer { show ->
+            cryptoNewsHeaderAdapter.bind(show, false)
+        })
 
-    interface Listener {
-        fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem)
-    }
-
-    var viewItems = listOf<ViewItem>()
-
-    private val coinViewItem = 1
-    private val sourceView = 4
-
-    override fun getItemCount(): Int = viewItems.size
-
-    override fun getItemViewType(position: Int): Int {
-        return when (viewItems[position]) {
-            is ViewItem.CoinViewItem -> coinViewItem
-            is ViewItem.SourceText -> sourceView
-            else -> throw UnsupportedOperationException()
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            coinViewItem -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
-            sourceView -> ViewHolderSource(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_list_source, parent, false))
-            else -> throw Exception("No such view type")
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = viewItems[position]
-        if (item is ViewItem.CoinViewItem) {
-            (holder as? ViewHolderCoin)?.bind(item)
-        }
-    }
-
-}
-
-class ViewHolderSectionHeaderPortfolio(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class ViewHolderSectionHeaderTop100(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class ViewHolderLoadingSpinner(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class ViewHolderSource(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-
-class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    private var coinViewItem: ViewItem.CoinViewItem? = null
-
-    init {
-        containerView.setOnClickListener {
-            coinViewItem?.let {
-                listener.onCoinClicked(it)
-            }
-        }
-    }
-
-    fun bind(viewItem: ViewItem.CoinViewItem) {
-        this.coinViewItem = viewItem
-
-        coinIcon.isVisible = viewItem.coinItem.coin != null
-        viewItem.coinItem.coin?.code?.let { coinIcon.setCoinImage(it) }
-        titleText.text = viewItem.coinItem.coinName
-        subtitleText.text = viewItem.coinItem.coinCode
-
-        txValueInFiat.isActivated = !viewItem.coinItem.rateDimmed //change color via state: activated/not activated
-        txValueInFiat.text = viewItem.coinItem.rate ?: containerView.context.getString(R.string.NotAvailable)
-
-        if (viewItem.coinItem.diff != null) {
-            txDiff.diff = viewItem.coinItem.diff
-            txDiff.visibility = View.VISIBLE
-            txDiffNa.visibility = View.GONE
-        } else {
-            txDiff.visibility = View.GONE
-            txDiffNa.visibility = View.VISIBLE
-        }
-
-        bottomShade.visibility = if (viewItem.last) View.VISIBLE else View.GONE
+        cryptoNewsView.showError.observe(viewLifecycleOwner, Observer {
+            cryptoNewsHeaderAdapter.bind(false, true)
+        })
     }
 }
