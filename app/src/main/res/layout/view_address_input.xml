@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="11dp"
-    android:paddingBottom="11dp">
+    android:paddingTop="12dp">
 
     <View
         android:id="@+id/background"

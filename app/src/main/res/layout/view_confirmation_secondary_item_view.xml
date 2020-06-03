@@ -8,7 +8,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
@@ -18,59 +17,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/memoLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/Subhead2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Send_Confirmation_HintMemo"
-                android:textColor="@color/grey" />
-
-            <TextView
-                android:id="@+id/memoValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                tools:text="Salary for August" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/feeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/Subhead2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Send_Fee"
-                android:textColor="@color/grey" />
-
-            <TextView
-                android:id="@+id/feeValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                tools:text="0.0053 DASH" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/timeWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal"
             android:visibility="gone">
 
@@ -92,10 +42,35 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/feeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Send_Fee"
+                android:textColor="@color/grey" />
+
+            <TextView
+                android:id="@+id/feeValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                tools:text="0.0053 DASH" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/lockTimeWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal"
             android:visibility="gone">
 
