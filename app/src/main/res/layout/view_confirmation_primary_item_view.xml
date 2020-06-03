@@ -138,7 +138,7 @@
 
         <TextView
             android:id="@+id/memoValue"
-            style="@style/Subhead1"
+            style="@style/SubheadItalic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

@@ -44,6 +44,11 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="SubheadItalic">
+        <item name="android:fontFamily">@font/noto_sans_medium_italic</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="Subhead2">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">14sp</item>
