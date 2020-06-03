@@ -128,11 +128,11 @@
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_To">To: </string>
-    <string name="Send_Confirmation_HintMemo" translatable="false">Memo:</string>
+    <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_Eos_HintAccount" translatable="false">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
-    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_LockTime" translatable="false">TimeLock:</string>
+    <string name="Send_Confirmation_EstimateTime">Duration</string>
+    <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
@@ -159,7 +159,7 @@
     <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
