@@ -1,23 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.cryptonews
 
-import android.net.Uri
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.views.inflate
-import io.horizontalsystems.xrateskit.entities.CryptoNews
-import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_crypto_news.*
-import kotlinx.android.synthetic.main.view_holder_crypto_news.*
 
 class CryptoNewsFragment(private val coinCode: String) : Fragment() {
 
@@ -44,8 +35,7 @@ class CryptoNewsFragment(private val coinCode: String) : Fragment() {
 
     private fun observeEvents() {
         cryptoNewsView.showNews.observe(this, Observer { items ->
-            adapter.items = items
-            adapter.notifyDataSetChanged()
+            adapter.submitList(items)
         })
 
         cryptoNewsView.showSpinner.observe(this, Observer { show ->
@@ -56,38 +46,5 @@ class CryptoNewsFragment(private val coinCode: String) : Fragment() {
         cryptoNewsView.showError.observe(this, Observer {
             notAvailable.visibility = View.VISIBLE
         })
-    }
-}
-
-class CryptoNewsAdapter : RecyclerView.Adapter<ViewHolderNews>() {
-
-    var items = listOf<CryptoNews>()
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderNews {
-        return ViewHolderNews(inflate(parent, R.layout.view_holder_crypto_news))
-    }
-
-    override fun onBindViewHolder(holder: ViewHolderNews, position: Int) {
-        holder.bind(items[position])
-    }
-}
-
-class ViewHolderNews(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    fun bind(item: CryptoNews) {
-        newsTitle.text = item.title
-        newsTime.text = DateUtils.getRelativeTimeSpanString(item.timestamp * 1000)
-
-        containerView.setOnClickListener {
-            loadNews(item.url)
-        }
-    }
-
-    private fun loadNews(url: String) {
-        val customTabsIntent = CustomTabsIntent.Builder().build()
-        customTabsIntent.launchUrl(containerView.context, Uri.parse(url))
     }
 }
