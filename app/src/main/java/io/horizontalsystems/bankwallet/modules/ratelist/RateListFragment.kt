@@ -9,21 +9,20 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.MergeAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_rates.*
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
-import java.lang.UnsupportedOperationException
-import java.util.*
 
 class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
 
-    private lateinit var adapter: CoinRatesAdapter
+    private lateinit var coinRatesAdapter: CoinRatesAdapter
+    private lateinit var coinRatesHeaderAdapter: CoinRatesHeaderAdapter
     private lateinit var presenter: RateListPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,13 +32,14 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        coinRatesHeaderAdapter = CoinRatesHeaderAdapter(getString(R.string.RateList_portfolio))
+        coinRatesAdapter = CoinRatesAdapter(this)
+        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter)
+
         presenter = ViewModelProvider(this, RateListModule.Factory()).get(RateListPresenter::class.java)
         observeView(presenter.view)
         observeRouter(presenter.router)
         presenter.viewDidLoad()
-
-        adapter = CoinRatesAdapter(this)
-        coinRatesRecyclerView.adapter = adapter
     }
 
     override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
@@ -48,13 +48,12 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
 
     private fun observeView(view: RateListView) {
         view.datesLiveData.observe(viewLifecycleOwner, Observer { lastUpdateTimestamp ->
-            val dateAndTime = DateHelper.getDayAndTime(Date(lastUpdateTimestamp * 1000))
-            time.text = dateAndTime
+            coinRatesHeaderAdapter.timestamp = lastUpdateTimestamp
         })
 
         view.viewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
-            adapter.viewItems = viewItems
-            adapter.notifyDataSetChanged()
+            coinRatesAdapter.viewItems = viewItems
+            coinRatesAdapter.notifyDataSetChanged()
         })
     }
 
