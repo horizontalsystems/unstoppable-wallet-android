@@ -38,7 +38,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
         cryptoNewsAdapter = CryptoNewsAdapter()
 
         coinRatesRecyclerView.itemAnimator = null
-        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter, cryptoNewsHeaderAdapter, cryptoNewsAdapter)
+        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter, cryptoNewsHeaderAdapter, cryptoNewsAdapter, SourceAdapter())
 
         presenter.viewDidLoad()
         observeView(presenter.view)
@@ -49,7 +49,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
         cryptoNewsPresenter.onLoad()
     }
 
-    override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
+    override fun onCoinClicked(coinViewItem: CoinViewItem) {
         presenter.onCoinClicked(coinViewItem)
     }
 
