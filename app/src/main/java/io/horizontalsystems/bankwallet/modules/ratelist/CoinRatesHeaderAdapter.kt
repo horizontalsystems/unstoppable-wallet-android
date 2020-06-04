@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.ratelist
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.core.helpers.DateHelper
@@ -11,7 +12,7 @@ import kotlinx.android.synthetic.main.view_holder_date.*
 import kotlinx.android.synthetic.main.view_holder_title.*
 import java.util.*
 
-class CoinRatesHeaderAdapter(val title: CharSequence) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CoinRatesHeaderAdapter(private val title: CharSequence, private val sortButtonClickListener: View.OnClickListener? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var timestamp = 0L
         set(value) {
@@ -33,7 +34,7 @@ class CoinRatesHeaderAdapter(val title: CharSequence) : RecyclerView.Adapter<Rec
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
             DateViewHolder.layout -> DateViewHolder.create(parent)
-            TitleViewHolder.layout -> TitleViewHolder.create(parent)
+            TitleViewHolder.layout -> TitleViewHolder.create(parent, sortButtonClickListener)
             else -> throw IllegalStateException("Undefined viewType: $viewType")
         }
     }
@@ -59,7 +60,13 @@ class CoinRatesHeaderAdapter(val title: CharSequence) : RecyclerView.Adapter<Rec
 
     }
 
-    class TitleViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class TitleViewHolder(override val containerView: View, sortButtonClickListener: View.OnClickListener?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        init {
+            sortButton.isVisible = sortButtonClickListener != null
+            sortButton.setOnClickListener(sortButtonClickListener)
+        }
+
         fun setTitle(titleStr: CharSequence) {
             title.text = titleStr
         }
@@ -67,7 +74,9 @@ class CoinRatesHeaderAdapter(val title: CharSequence) : RecyclerView.Adapter<Rec
         companion object {
             const val layout = R.layout.view_holder_title
 
-            fun create(parent: ViewGroup) = TitleViewHolder(inflate(parent, layout, false))
+            fun create(parent: ViewGroup, sortButtonClickListener: View.OnClickListener?): TitleViewHolder {
+                return TitleViewHolder(inflate(parent, layout, false), sortButtonClickListener)
+            }
         }
 
     }
