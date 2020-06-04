@@ -49,8 +49,8 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
         cryptoNewsPresenter.onLoad()
     }
 
-    override fun onCoinClicked(coinViewItem: CoinViewItem) {
-        presenter.onCoinClicked(coinViewItem)
+    override fun onCoinClicked(coinItem: CoinItem) {
+        presenter.onCoinClicked(coinItem)
     }
 
     private fun observeView(view: RateListView) {

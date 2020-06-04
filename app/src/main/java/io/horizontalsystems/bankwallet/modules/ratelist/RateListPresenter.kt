@@ -52,8 +52,8 @@ class RateListPresenter(
         }
     }
 
-    override fun onCoinClicked(coinViewItem: CoinViewItem) {
-        router.openChart(coinViewItem.coinItem.coinCode, coinViewItem.coinItem.coinName)
+    override fun onCoinClicked(coinItem: CoinItem) {
+        router.openChart(coinItem.coinCode, coinItem.coinName)
     }
 
     //IInteractorDelegate
