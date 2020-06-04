@@ -13,8 +13,8 @@ object RateListModule {
 
     interface IView {
         fun setDate(lastUpdateTime: Long)
-        fun setPortfolioViewItems(viewItems: List<ViewItem>)
-        fun setTopViewItems(viewItems: List<ViewItem>)
+        fun setPortfolioViewItems(viewItems: List<CoinViewItem>)
+        fun setTopViewItems(viewItems: List<CoinViewItem>)
     }
 
     interface IRouter {
@@ -23,7 +23,7 @@ object RateListModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem)
+        fun onCoinClicked(coinViewItem: CoinViewItem)
     }
 
     interface IInteractor {
@@ -44,8 +44,8 @@ object RateListModule {
     }
 
     interface IRateListFactory {
-        fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<ViewItem.CoinViewItem>
-        fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<ViewItem.CoinViewItem>
+        fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<CoinViewItem>
+        fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<CoinViewItem>
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -86,7 +86,4 @@ class RateListSorter {
 
 data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, var coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean)
 
-sealed class ViewItem{
-    object SourceText: ViewItem()
-    data class CoinViewItem(val coinItem: CoinItem, val last: Boolean): ViewItem()
-}
+data class CoinViewItem(val coinItem: CoinItem, val last: Boolean)

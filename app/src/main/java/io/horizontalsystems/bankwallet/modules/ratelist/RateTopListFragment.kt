@@ -31,14 +31,14 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
         coinRatesAdapter = CoinRatesAdapter(this)
 
         coinRatesRecyclerView.itemAnimator = null
-        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter)
+        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter, SourceAdapter())
 
         presenter.viewDidLoad()
         observeView(presenter.view)
         observeRouter(presenter.router)
     }
 
-    override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
+    override fun onCoinClicked(coinViewItem: CoinViewItem) {
         presenter.onCoinClicked(coinViewItem)
     }
 

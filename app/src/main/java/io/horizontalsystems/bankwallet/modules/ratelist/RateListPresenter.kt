@@ -52,7 +52,7 @@ class RateListPresenter(
         }
     }
 
-    override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
+    override fun onCoinClicked(coinViewItem: CoinViewItem) {
         router.openChart(coinViewItem.coinItem.coinCode, coinViewItem.coinItem.coinName)
     }
 

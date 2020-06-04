@@ -9,7 +9,7 @@ import io.horizontalsystems.xrateskit.entities.TopMarket
 
 class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateListModule.IRateListFactory {
 
-    override fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<ViewItem.CoinViewItem> {
+    override fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<CoinViewItem> {
         return coins.mapIndexed { index, coin ->
             val marketInfo = marketInfos[coin.code]
             val rateCurrencyValue = marketInfo?.rate?.let { CurrencyValue(currency, it) }
@@ -17,13 +17,13 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
             val dimRate = (marketInfo?.rate != null && marketInfo.isExpired())
             val timestamp = marketInfo?.timestamp ?: 0L
 
-            ViewItem.CoinViewItem(CoinItem(coin.code, coin.title, rate(rateCurrencyValue), diff, coin, timestamp, rateDimmed = dimRate), index == coins.size - 1)
+            CoinViewItem(CoinItem(coin.code, coin.title, rate(rateCurrencyValue), diff, coin, timestamp, rateDimmed = dimRate), index == coins.size - 1)
         }
     }
 
-    override fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<ViewItem.CoinViewItem> {
+    override fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<CoinViewItem> {
         return topMarketList.mapIndexed { index, topMarket ->
-            ViewItem.CoinViewItem(
+            CoinViewItem(
                     CoinItem(
                             topMarket.coinCode,
                             topMarket.coinName,
