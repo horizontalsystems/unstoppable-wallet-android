@@ -12,13 +12,14 @@ class RateListPresenter(
 ) : ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate {
 
     private var portfolioMarketInfos = mutableMapOf<String, MarketInfo>()
-    private var topMarketInfos = mutableListOf<TopMarket>()
+    private val topMarketInfos = mutableListOf<TopMarket>()
 
     private var loading = false
 
     private val coins = interactor.coins
     private val currency = interactor.currency
     private var inited = false
+    private var sortType: TopListSortType = TopListSortType.MarketCap
 
     //IViewDelegate
 
@@ -56,6 +57,16 @@ class RateListPresenter(
         router.openChart(coinItem.coinCode, coinItem.coinName)
     }
 
+    override fun onTopListSortClick() {
+        router.openSortingTypeDialog(sortType)
+    }
+
+    override fun onTopListSortTypeChange(sortType: TopListSortType) {
+        this.sortType = sortType
+        sortTopList()
+        updateViewItems()
+    }
+
     //IInteractorDelegate
 
     override fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>) {
@@ -72,7 +83,17 @@ class RateListPresenter(
         topMarketInfos.clear()
         topMarketInfos.addAll(items)
 
+        sortTopList()
+
         syncListsAndShow()
+    }
+
+    private fun sortTopList() {
+        when (sortType) {
+            TopListSortType.MarketCap -> topMarketInfos.sortByDescending { it.marketInfo.marketCap }
+            TopListSortType.Winners -> topMarketInfos.sortByDescending { it.marketInfo.diff }
+            TopListSortType.Losers -> topMarketInfos.sortByDescending { -it.marketInfo.diff }
+        }
     }
 
     override fun didFailToFetchTopList() {

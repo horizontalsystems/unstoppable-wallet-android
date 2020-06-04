@@ -534,6 +534,9 @@
 
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
+    <string name="RateList_MarketCap">M.Cap</string>
+    <string name="RateList_TopWinners">Top Winners</string>
+    <string name="RateList_TopLosers">Top Losers</string>
 
     <!-- Balance Sync Error -->
 
