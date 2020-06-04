@@ -59,9 +59,6 @@ class CoinRatesAdapter(private val listener: Listener) : ListAdapter<ViewItem, R
 }
 
 
-class ViewHolderSectionHeaderPortfolio(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class ViewHolderSectionHeaderTop100(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class ViewHolderLoadingSpinner(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 class ViewHolderSource(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
 class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
