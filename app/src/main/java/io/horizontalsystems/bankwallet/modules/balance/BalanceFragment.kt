@@ -168,7 +168,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ManageWalletsModule.start(it, true) }
+            context?.let { ManageWalletsModule.start(it) }
         })
 
         viewModel.setViewItems.observe(viewLifecycleOwner, Observer {

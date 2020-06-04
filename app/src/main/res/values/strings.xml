@@ -402,6 +402,7 @@
 
     <string name="ManageCoins_title">Choose Coins</string>
     <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Wallet</string>
     <string name="ManageCoins_Alert_CantCreateDescription">At this point Unstoppable is not able to create new %s wallets. You\'re only able to restore the existing one.</string>
 
@@ -446,6 +447,13 @@
     <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
+
+    <!-- Add Token Dialog-->
+    <string name="AddTokenDialog_Title">Choose Blockchain</string>
+    <string name="AddTokenDialog_Subtitle">Adding Token</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
+    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
+    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
 
     <!-- Address Format Settings List -->
 
