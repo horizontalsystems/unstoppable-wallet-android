@@ -139,6 +139,9 @@
         <activity
             android:name=".modules.settings.security.privacy.PrivacySettingsInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.addErc20token.AddErc20TokenActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"
