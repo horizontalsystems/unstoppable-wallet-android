@@ -10,7 +10,6 @@ import java.util.concurrent.Executors
 
 class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
-        val showCloseButton: Boolean,
         val router: ManageWalletsModule.IRouter,
         val view: ManageWalletsModule.IView
 ) : ViewModel(), ManageWalletsModule.IViewDelegate {

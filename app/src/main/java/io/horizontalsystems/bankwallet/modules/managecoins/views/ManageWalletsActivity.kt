@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.managecoins.views
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
@@ -10,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
@@ -33,18 +33,13 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_coins)
 
-        val showCloseButton = intent?.extras?.getBoolean(ModuleField.SHOW_CLOSE_BUTTON, false)
-                ?: false
-
-        presenter = ViewModelProvider(this, ManageWalletsModule.Factory(showCloseButton))
+        presenter = ViewModelProvider(this, ManageWalletsModule.Factory())
                 .get(ManageWalletsPresenter::class.java)
 
         presenter.onLoad()
 
         setSupportActionBar(toolbar)
-        if (!presenter.showCloseButton) {
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         adapter = CoinItemsAdapter(this)
         recyclerView.adapter = adapter
@@ -106,17 +101,14 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.menuClose)?.apply {
-            isVisible = presenter.showCloseButton
-        }
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuClose -> {
-                onBackPressed()
+            R.id.menuAddToken -> {
+                AddTokenDialog.show(this, object : AddTokenDialog.Listener{
+                    override fun onClickAddErc20Token() {
+                        Log.e("ManageWalletsAct", "Add Erc20 clicked")
+                    }
+                })
                 return true
             }
         }

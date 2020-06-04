@@ -59,19 +59,18 @@ object ManageWalletsModule {
         fun close()
     }
 
-    fun start(context: Context, showCloseButton: Boolean) {
+    fun start(context: Context) {
         val intent = Intent(context, ManageWalletsActivity::class.java)
-        intent.putExtra(ModuleField.SHOW_CLOSE_BUTTON, showCloseButton)
         context.startActivity(intent)
     }
 
-    class Factory(private val showCloseButton: Boolean) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageWalletsView()
             val router = ManageWalletsRouter()
             val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.blockchainSettingsManager)
-            val presenter = ManageWalletsPresenter(interactor, showCloseButton, router, view)
+            val presenter = ManageWalletsPresenter(interactor, router, view)
 
             return presenter as T
         }
