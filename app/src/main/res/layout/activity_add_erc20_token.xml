@@ -44,15 +44,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/addressLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp">
 
                 <View
                     android:id="@+id/background"
@@ -101,6 +101,7 @@
                             android:layout_height="wrap_content"
                             android:includeFontPadding="false"
                             android:textColor="?ColorLucian"
+                            android:text="@string/AddErc20Token_InvalidAddressError"
                             android:visibility="gone"
                             tools:text="@string/Send_Error_IncorrectAddress" />
                     </LinearLayout>
@@ -123,12 +124,29 @@
 
             </FrameLayout>
 
+            <ProgressBar
+                android:id="@+id/progressLoading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="@color/grey"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/grey"
+                android:indeterminateTintMode="src_atop"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/coinNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:orientation="horizontal">
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     style="@style/Subhead2"
@@ -151,8 +169,12 @@
                 android:id="@+id/symbolLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:orientation="horizontal">
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     style="@style/Subhead2"
@@ -175,8 +197,12 @@
                 android:id="@+id/decimalsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:orientation="horizontal">
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     style="@style/Subhead2"
@@ -195,15 +221,28 @@
                     android:textColor="@color/grey" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/warningText"
+                style="@style/ImportantText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/AddErc20Token_CoinAlreadyInListWarning"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <Button
-                android:id="@+id/btnProceed"
+                android:id="@+id/btnAddToken"
                 style="@style/ButtonPrimaryYellow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="28dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="12dp"
-                android:text="@string/Button_Add" />
+                android:text="@string/Button_Add"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
