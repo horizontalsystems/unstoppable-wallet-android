@@ -19,11 +19,14 @@ object RateListModule {
 
     interface IRouter {
         fun openChart(coinCode: String, coinTitle: String)
+        fun openSortingTypeDialog(sortType: TopListSortType)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun onCoinClicked(coinItem: CoinItem)
+        fun onTopListSortClick()
+        fun onTopListSortTypeChange(sortType: TopListSortType)
     }
 
     interface IInteractor {
