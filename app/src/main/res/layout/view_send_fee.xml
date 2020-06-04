@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:includeFontPadding="false"
-                android:textColor="?TextColorGreyLightToDark"
+                android:textColor="?ColorLeah"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txSpeedMenuArrow"
                 app:layout_constraintTop_toTopOf="parent"

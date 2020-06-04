@@ -149,9 +149,7 @@ class SendFeeFragment(
         txFeeSecondary.visibility = if (!loading) View.VISIBLE else View.GONE
         txFeeLoading.visibility = if (loading) View.VISIBLE else View.GONE
 
-        context?.let {
-            txSpeedMenu.setTextColor(it.getColor(if (loading) R.color.grey_50 else R.color.grey))
-        }
+        txSpeedMenu.alpha = if (loading) 0.5f else 1f
         txSpeedLayout.isEnabled = (!loading)
     }
 
