@@ -27,6 +27,7 @@
     <string name="Button_Done">Done</string>
     <string name="Button_Retry">Retry</string>
     <string name="Button_Change">Change</string>
+    <string name="Button_Add">Add</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
@@ -454,6 +455,14 @@
     <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
     <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
     <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+
+    <!-- Add Erc20 Token -->
+    <string name="AddErc20Token_Title">Add ERC20</string>
+    <string name="AddErc20Token_CoinName">Coin Name</string>
+    <string name="AddErc20Token_Symbol">Symbol</string>
+    <string name="AddErc20Token_Decimals">Decimals</string>
+    <string name="AddErc20Token_Dots">…</string>
+    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
 
     <!-- Address Format Settings List -->
 

@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenActivity
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsPresenter
@@ -106,7 +107,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
             R.id.menuAddToken -> {
                 AddTokenDialog.show(this, object : AddTokenDialog.Listener{
                     override fun onClickAddErc20Token() {
-                        Log.e("ManageWalletsAct", "Add Erc20 clicked")
+                        startActivity(Intent(this@ManageWalletsActivity, AddErc20TokenActivity::class.java))
                     }
                 })
                 return true
