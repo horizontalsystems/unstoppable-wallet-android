@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuClose"
-        android:title="@string/Button_Done"
+        android:id="@+id/menuAddToken"
+        android:title="@string/ManageCoins_AddToken"
         app:showAsAction="always" />
 
 </menu>
