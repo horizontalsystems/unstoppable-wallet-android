@@ -87,9 +87,6 @@ class RateListSorter {
 data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, var coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean)
 
 sealed class ViewItem{
-    object PortfolioHeader: ViewItem()
-    object TopListHeader: ViewItem()
-    object LoadingSpinner: ViewItem()
     object SourceText: ViewItem()
     data class CoinViewItem(val coinItem: CoinItem, val last: Boolean): ViewItem()
 }
