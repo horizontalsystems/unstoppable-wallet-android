@@ -8,21 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.MergeAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.cryptonews.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import kotlinx.android.synthetic.main.fragment_rates.*
 
-class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
+class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
 
     private lateinit var coinRatesHeaderAdapter: CoinRatesHeaderAdapter
     private lateinit var coinRatesAdapter: CoinRatesAdapter
-    private lateinit var cryptoNewsAdapter: CryptoNewsAdapter
-    private lateinit var cryptoNewsHeaderAdapter: CryptoNewsHeaderAdapter
-    private lateinit var cryptoNewsPresenter: CryptoNewsPresenter
     private val presenter: RateListPresenter by activityViewModels { RateListModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,21 +27,15 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        coinRatesHeaderAdapter = CoinRatesHeaderAdapter(getString(R.string.RateList_portfolio))
+        coinRatesHeaderAdapter = CoinRatesHeaderAdapter(getString(R.string.RateList_top100))
         coinRatesAdapter = CoinRatesAdapter(this)
-        cryptoNewsHeaderAdapter = CryptoNewsHeaderAdapter()
-        cryptoNewsAdapter = CryptoNewsAdapter()
 
         coinRatesRecyclerView.itemAnimator = null
-        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter, cryptoNewsHeaderAdapter, cryptoNewsAdapter)
+        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter)
 
         presenter.viewDidLoad()
         observeView(presenter.view)
         observeRouter(presenter.router)
-
-        cryptoNewsPresenter = ViewModelProvider(this, CryptoNewsModule.Factory("")).get(CryptoNewsPresenter::class.java)
-        observeCryptoNewsView(cryptoNewsPresenter.view)
-        cryptoNewsPresenter.onLoad()
     }
 
     override fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem) {
@@ -58,7 +47,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
             coinRatesHeaderAdapter.timestamp = lastUpdateTimestamp
         })
 
-        view.portfolioViewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
+        view.topViewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
             coinRatesAdapter.submitList(viewItems)
         })
     }
@@ -69,20 +58,6 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
                 putExtra(ModuleField.COIN_CODE, coinCode)
                 putExtra(ModuleField.COIN_TITLE, coinTitle)
             })
-        })
-    }
-
-    private fun observeCryptoNewsView(cryptoNewsView: CryptoNewsView) {
-        cryptoNewsView.showNews.observe(viewLifecycleOwner, Observer { items ->
-            cryptoNewsAdapter.submitList(items)
-        })
-
-        cryptoNewsView.showSpinner.observe(viewLifecycleOwner, Observer { show ->
-            cryptoNewsHeaderAdapter.bind(show, false)
-        })
-
-        cryptoNewsView.showError.observe(viewLifecycleOwner, Observer {
-            cryptoNewsHeaderAdapter.bind(false, true)
         })
     }
 }
