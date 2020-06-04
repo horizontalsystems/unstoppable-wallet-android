@@ -12,57 +12,35 @@ import io.horizontalsystems.views.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
 
-class CoinRatesAdapter(private val listener: Listener) : ListAdapter<ViewItem, RecyclerView.ViewHolder>(coinRateDiff) {
+class CoinRatesAdapter(private val listener: Listener) : ListAdapter<CoinViewItem, ViewHolderCoin>(coinRateDiff) {
 
     interface Listener {
-        fun onCoinClicked(coinViewItem: ViewItem.CoinViewItem)
+        fun onCoinClicked(coinViewItem: CoinViewItem)
     }
 
-    private val coinViewItem = 1
-    private val sourceView = 4
-
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is ViewItem.CoinViewItem -> coinViewItem
-            is ViewItem.SourceText -> sourceView
-            else -> throw UnsupportedOperationException()
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderCoin {
+        return ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            coinViewItem -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
-            sourceView -> ViewHolderSource(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_list_source, parent, false))
-            else -> throw Exception("No such view type")
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        if (item is ViewItem.CoinViewItem) {
-            (holder as? ViewHolderCoin)?.bind(item)
-        }
+    override fun onBindViewHolder(holder: ViewHolderCoin, position: Int) {
+        holder.bind(getItem(position))
     }
 
     companion object {
-        val coinRateDiff = object: DiffUtil.ItemCallback<ViewItem>() {
-            override fun areItemsTheSame(oldItem: ViewItem, newItem: ViewItem): Boolean {
+        private val coinRateDiff = object: DiffUtil.ItemCallback<CoinViewItem>() {
+            override fun areItemsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: ViewItem, newItem: ViewItem): Boolean {
+            override fun areContentsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
                 return oldItem == newItem
             }
         }
     }
-
 }
 
-
-class ViewHolderSource(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-
 class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    private var coinViewItem: ViewItem.CoinViewItem? = null
+    private var coinViewItem: CoinViewItem? = null
 
     init {
         containerView.setOnClickListener {
@@ -72,7 +50,7 @@ class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapte
         }
     }
 
-    fun bind(viewItem: ViewItem.CoinViewItem) {
+    fun bind(viewItem: CoinViewItem) {
         this.coinViewItem = viewItem
 
         coinIcon.isVisible = viewItem.coinItem.coin != null
