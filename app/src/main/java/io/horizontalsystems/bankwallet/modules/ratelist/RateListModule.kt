@@ -13,7 +13,8 @@ object RateListModule {
 
     interface IView {
         fun setDate(lastUpdateTime: Long)
-        fun setViewItems(viewItems: List<ViewItem>)
+        fun setPortfolioViewItems(viewItems: List<ViewItem>)
+        fun setTopViewItems(viewItems: List<ViewItem>)
     }
 
     interface IRouter {

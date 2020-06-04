@@ -18,10 +18,14 @@ class RateListPresenter(
 
     private val coins = interactor.coins
     private val currency = interactor.currency
+    private var inited = false
 
     //IViewDelegate
 
     override fun viewDidLoad() {
+        if (inited) return
+        inited = true
+
         coins.map { coin ->
             interactor.getMarketInfo(coin.code, currency.code)?.let { marketInfo ->
                 portfolioMarketInfos.put(coin.code, marketInfo)
@@ -102,7 +106,8 @@ class RateListPresenter(
     }
 
     private fun updateViewItems() {
-        view.setViewItems(factory.portfolioViewItems(coins, currency, portfolioMarketInfos))
+        view.setTopViewItems(factory.topListViewItems(topMarketInfos, currency))
+        view.setPortfolioViewItems(factory.portfolioViewItems(coins, currency, portfolioMarketInfos))
     }
 
     private fun lastUpdateTimestamp(marketInfos: Map<String, MarketInfo?>): Long? {

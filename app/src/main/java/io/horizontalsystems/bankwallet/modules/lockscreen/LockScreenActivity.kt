@@ -6,6 +6,7 @@ import android.os.Bundle
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.ratelist.RatesListFragment
+import io.horizontalsystems.bankwallet.modules.ratelist.RatesTopListFragment
 import io.horizontalsystems.pin.PinFragment
 import kotlinx.android.synthetic.main.activity_lockscreen.*
 
@@ -16,10 +17,13 @@ class LockScreenActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lockscreen)
 
-        val pinFragment = PinFragment()
+        val fragments = listOf(
+                PinFragment(),
+                RatesListFragment(),
+                RatesTopListFragment()
+        )
 
-        val fragments = listOf(pinFragment, RatesListFragment())
-
+        viewPager.offscreenPageLimit = 2
         viewPager.adapter = LockScreenViewPagerAdapter(fragments, supportFragmentManager)
 
         circleIndicator.setViewPager(viewPager)
