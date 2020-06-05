@@ -60,6 +60,7 @@ class NumberFormatterTest {
     fun testFormatFiat() {
         assertFormattedFiat(BigDecimal("0.004"), 0, 2, "< $0.01")
         assertFormattedFiat(BigDecimal("0.009"), 0, 2, "< $0.01")
+        assertFormattedFiat(BigDecimal("0.0004"), 0, 3, "< $0.001")
         assertFormattedFiat(BigDecimal.ZERO, 2, 2, "$0.00")
         assertFormattedFiat(BigDecimal.ZERO, 0, 2, "$0")
     }
