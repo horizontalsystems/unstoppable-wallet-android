@@ -29,11 +29,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val networkNotAvailable = SingleLiveEvent<Void>()
     val showErrorMessageCopied = SingleLiveEvent<Void>()
 
-    fun init() {
-        BalanceModule.init(this, this)
-
-        delegate.onLoad()
-    }
 
     // IRouter
 
