@@ -21,10 +21,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
             else -> throw UnsupportedOperationException()
         }
 
-        val formatter = getFormatter(languageManager.currentLocale) ?: throw Exception("No formatter")
-
-        formatter.minimumFractionDigits = minimumFractionDigits
-        formatter.maximumFractionDigits = maximumFractionDigits
+        val formatter = getFormatter(languageManager.currentLocale, minimumFractionDigits, maximumFractionDigits)
 
         val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
 
@@ -57,19 +54,18 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
     }
 
-    private fun getFormatter(locale: Locale): NumberFormat? {
-        if (formatters[locale.language] == null) {
-            val newFormatter = NumberFormat.getInstance(locale).apply {
-                roundingMode = RoundingMode.HALF_UP
+    private fun getFormatter(locale: Locale, minimumFractionDigits: Int, maximumFractionDigits: Int): NumberFormat {
+        val formatterId = "${locale.language}-$minimumFractionDigits-$maximumFractionDigits"
+
+        if (formatters[formatterId] == null) {
+            formatters[formatterId] = NumberFormat.getInstance(locale).apply {
+                this.roundingMode = RoundingMode.HALF_UP
+
+                this.minimumFractionDigits = minimumFractionDigits
+                this.maximumFractionDigits = maximumFractionDigits
             }
-
-            formatters[locale.language] = newFormatter
         }
 
-        return formatters[locale.language]?.apply {
-            // reset
-            this.minimumFractionDigits = 0
-            this.maximumFractionDigits = 3
-        }
+        return formatters[formatterId] ?: throw Exception("No formatter")
     }
 }
