@@ -48,7 +48,7 @@ object RateListModule {
 
     interface IRateListFactory {
         fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<CoinItem>
-        fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<CoinItem>
+        fun topListViewItems(topMarketList: List<TopMarketRanked>, currency: Currency): List<CoinItem>
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -87,4 +87,6 @@ class RateListSorter {
     }
 }
 
-data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, var coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean)
+data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean, val rank: Int? = null)
+
+data class TopMarketRanked(val coinCode: String, val coinName: String, val marketInfo: MarketInfo, val rank: Int)

@@ -12,7 +12,7 @@ class RateListPresenter(
 ) : ViewModel(), RateListModule.IViewDelegate, RateListModule.IInteractorDelegate {
 
     private var portfolioMarketInfos = mutableMapOf<String, MarketInfo>()
-    private val topMarketInfos = mutableListOf<TopMarket>()
+    private val topMarketInfos = mutableListOf<TopMarketRanked>()
 
     private var loading = false
 
@@ -81,7 +81,10 @@ class RateListPresenter(
         loading = false
 
         topMarketInfos.clear()
-        topMarketInfos.addAll(items)
+        // sort items by market cap in descending order to define their ranks
+        topMarketInfos.addAll(items.sortedByDescending { it.marketInfo.marketCap }.mapIndexed { index, topMarket ->
+            TopMarketRanked(topMarket.coinCode, topMarket.coinName, topMarket.marketInfo,index + 1)
+        })
 
         sortTopList()
 
@@ -111,7 +114,7 @@ class RateListPresenter(
             topMarketInfos.forEachIndexed { index, topMarket ->
                 if (topMarket.coinCode == coinCode) {
                     if (portfolioMarketInfo.timestamp > topMarket.marketInfo.timestamp) {
-                        topMarketInfos[index] = TopMarket(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo)
+                        topMarketInfos[index] = TopMarketRanked(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo, topMarket.rank)
                     } else {
                         portfolioMarketInfos[coinCode] = topMarket.marketInfo
                     }

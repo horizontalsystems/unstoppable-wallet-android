@@ -17,6 +17,19 @@
         tools:src="@drawable/coin_ada" />
 
     <TextView
+        android:textAlignment="center"
+        android:id="@+id/rank"
+        style="@style/CaptionSB"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/coinIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="87" />
+
+    <TextView
         android:id="@+id/titleText"
         style="@style/Body"
         android:layout_width="wrap_content"
@@ -25,7 +38,7 @@
         android:layout_marginTop="7dp"
         android:textColor="?ColorOz"
         app:layout_constraintBottom_toTopOf="@+id/subtitleText"
-        app:layout_constraintStart_toEndOf="@+id/coinIcon"
+        app:layout_constraintStart_toEndOf="@+id/rank"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="BTC" />
 
