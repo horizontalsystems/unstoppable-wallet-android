@@ -2,12 +2,11 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.core.ILanguageManager
-import java.lang.UnsupportedOperationException
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
-import kotlin.math.pow
 
 class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
 
@@ -23,7 +22,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
         val formatter = getFormatter(languageManager.currentLocale, minimumFractionDigits, maximumFractionDigits)
 
-        val mostLowValue = 10.0.pow(-maximumFractionDigits).toBigDecimal()
+        val mostLowValue = BigDecimal(BigInteger.ONE, maximumFractionDigits)
 
         return if (bigDecimalValue > BigDecimal.ZERO && bigDecimalValue < mostLowValue) {
             "< " + prefix + formatter.format(mostLowValue) + suffix
