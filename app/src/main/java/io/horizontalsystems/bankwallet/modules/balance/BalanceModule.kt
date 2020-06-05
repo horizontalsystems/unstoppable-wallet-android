@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
@@ -128,24 +130,31 @@ object BalanceModule {
             get() = marketInfo?.rate?.let { balance?.times(it) }
     }
 
-    fun init(view: BalanceViewModel, router: IRouter) {
-        val currencyManager = App.currencyManager
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val viewAndRouter = BalanceViewModel()
 
-        val interactor = BalanceInteractor(
-                App.walletManager,
-                App.adapterManager, currencyManager,
-                App.localStorage,
-                App.xRateManager,
-                App.predefinedAccountTypeManager,
-                App.rateAppManager,
-                App.connectivityManager,
-                TextHelper)
+            val interactor = BalanceInteractor(
+                    App.walletManager,
+                    App.adapterManager,
+                    App.currencyManager,
+                    App.localStorage,
+                    App.xRateManager,
+                    App.predefinedAccountTypeManager,
+                    App.rateAppManager,
+                    App.connectivityManager,
+                    TextHelper)
 
-        val presenter = BalancePresenter(interactor, router, BalanceSorter(), App.predefinedAccountTypeManager,
-                                         BalanceViewItemFactory())
+            val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
-        presenter.view = view
-        interactor.delegate = presenter
-        view.delegate = presenter
+            presenter.view = viewAndRouter
+            interactor.delegate = presenter
+            viewAndRouter.delegate = presenter
+
+            presenter.onLoad()
+
+            return viewAndRouter as T
+        }
     }
 }
