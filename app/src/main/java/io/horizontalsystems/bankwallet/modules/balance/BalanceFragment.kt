@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener {
 
-    private lateinit var viewModel: BalanceViewModel
+    private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
     private var totalBalanceTabHeight: Int = 0
     private val animationPlaybackSpeed: Double = 1.3
@@ -43,13 +43,6 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(BalanceViewModel::class.java)
-        viewModel.init()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
