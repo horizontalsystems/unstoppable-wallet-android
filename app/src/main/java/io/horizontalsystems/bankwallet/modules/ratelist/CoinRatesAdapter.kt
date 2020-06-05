@@ -53,8 +53,20 @@ class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapte
     fun bind(coinItem: CoinItem) {
         this.coinItem = coinItem
 
-        coinIcon.isVisible = coinItem.coin != null
-        coinItem.coin?.code?.let { coinIcon.setCoinImage(it) }
+        if (coinItem.coin != null) {
+            coinIcon.isVisible = true
+            coinIcon.setCoinImage(coinItem.coin.code)
+        } else {
+            coinIcon.isVisible = false
+        }
+
+        if (coinItem.rank != null) {
+            rank.isVisible = true
+            rank.text = coinItem.rank.toString()
+        } else {
+            rank.isVisible = false
+        }
+
         titleText.text = coinItem.coinName
         subtitleText.text = coinItem.coinCode
 

@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
-import io.horizontalsystems.xrateskit.entities.TopMarket
 
 class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateListModule.IRateListFactory {
 
@@ -21,7 +20,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
         }
     }
 
-    override fun topListViewItems(topMarketList: List<TopMarket>, currency: Currency): List<CoinItem> {
+    override fun topListViewItems(topMarketList: List<TopMarketRanked>, currency: Currency): List<CoinItem> {
         return topMarketList.map { topMarket ->
             CoinItem(
                     topMarket.coinCode,
@@ -29,7 +28,8 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
                     rate(CurrencyValue(currency, topMarket.marketInfo.rate)),
                     topMarket.marketInfo.diff,
                     timestamp = topMarket.marketInfo.timestamp,
-                    rateDimmed = topMarket.marketInfo.isExpired()
+                    rateDimmed = topMarket.marketInfo.isExpired(),
+                    rank = topMarket.rank
             )
         }
     }
