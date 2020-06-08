@@ -4,15 +4,15 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 
 class RestoreCoinsInteractor(
-        private val appConfigProvider: IAppConfigProvider,
+        private val coinManager: ICoinManager,
         private val blockChainSettingsManager: IBlockchainSettingsManager
 ) : RestoreCoinsModule.IInteractor {
 
     override val coins: List<Coin>
-        get() = appConfigProvider.coins
+        get() = coinManager.coins
 
     override val featuredCoins: List<Coin>
-        get() = appConfigProvider.featuredCoins
+        get() = coinManager.featuredCoins
 
     override fun derivationSettings(coin: Coin): DerivationSetting? {
         return blockChainSettingsManager.derivationSetting(coin.type)

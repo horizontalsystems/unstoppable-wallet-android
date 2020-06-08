@@ -15,7 +15,7 @@ class AppStatusManager(
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
-        private val appConfigProvider: IAppConfigProvider,
+        private val coinManager: ICoinManager,
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
         private val binanceKitManager: IBinanceKitManager
@@ -104,7 +104,7 @@ class AppStatusManager(
     }
 
     private fun getCoin(coinId: String): Coin {
-        return appConfigProvider.coins.first { it.coinId == coinId }
+        return coinManager.coins.first { it.coinId == coinId }
     }
 
 }

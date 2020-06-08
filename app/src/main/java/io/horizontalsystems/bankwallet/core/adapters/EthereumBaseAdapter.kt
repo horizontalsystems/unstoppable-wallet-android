@@ -39,7 +39,7 @@ abstract class EthereumBaseAdapter(
     }
 
     override fun validate(address: String) {
-        ethereumKit.validateAddress(address)
+        EthereumKit.validateAddress(address)
     }
 
     // IReceiveAdapter
