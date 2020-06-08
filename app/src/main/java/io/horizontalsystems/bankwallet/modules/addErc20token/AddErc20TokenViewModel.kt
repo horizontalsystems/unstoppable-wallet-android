@@ -3,14 +3,13 @@ package io.horizontalsystems.bankwallet.modules.addErc20token
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.IErc20ContractInfoProvider
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
-import java.util.concurrent.TimeUnit
 
 class AddErc20TokenViewModel : ViewModel() {
 
@@ -27,10 +26,12 @@ class AddErc20TokenViewModel : ViewModel() {
     private var coin: Coin? = null
 
     private lateinit var coinManager:ICoinManager
+    private lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
 
     //todo discuss how to inject managers to ViewModule
-    fun initViewModule(coinManager: ICoinManager){
+    fun initViewModule(coinManager: ICoinManager, erc20ContractInfoProvider: IErc20ContractInfoProvider){
         this.coinManager = coinManager
+        this.erc20ContractInfoProvider = erc20ContractInfoProvider
     }
 
     fun onTextChange(text: CharSequence?) {
@@ -79,8 +80,8 @@ class AddErc20TokenViewModel : ViewModel() {
     private fun fetchCoin(contractAddress: String) {
         disposable?.dispose()
 
-        disposable = Single.just(Coin("TSC","TestCoin","TSC",8, CoinType.Bitcoin))
-                .delay(12, TimeUnit.SECONDS)
+        disposable = erc20ContractInfoProvider.getCoin(contractAddress)
+                .subscribeOn(Schedulers.io())
                 .subscribe({ fetchedCoin ->
                     coin = fetchedCoin
                     showProgressbar.postValue(false)
