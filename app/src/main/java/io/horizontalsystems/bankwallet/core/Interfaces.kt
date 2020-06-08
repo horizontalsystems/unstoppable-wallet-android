@@ -118,6 +118,7 @@ interface INetworkManager {
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
+    fun getCoinInfo(host: String, path: String): Flowable<JsonObject>
 }
 
 interface IClipboardManager {
@@ -470,6 +471,10 @@ interface ICoinManager{
     val featuredCoins: List<Coin>
     fun existingErc20Coin(erc20Address: String): Coin?
     fun save(coin: Coin)
+}
+
+interface IErc20ContractInfoProvider{
+    fun getCoin(address: String): Single<Coin>
 }
 
 sealed class FeeRatePriority {
