@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.factories
+package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Coin

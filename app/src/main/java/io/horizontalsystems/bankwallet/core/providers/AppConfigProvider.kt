@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.managers
+package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.BuildConfig
