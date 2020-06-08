@@ -146,6 +146,13 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "androidx.biometric:biometric:1.0.1"
 
+    //Markdown parser library
+    final def markwon_version = '4.4.0'
+    implementation "io.noties.markwon:core:$markwon_version"
+    implementation "io.noties.markwon:image-picasso:$markwon_version"
+    implementation "io.noties.markwon:linkify:$markwon_version"
+    implementation "io.noties.markwon:recycler:$markwon_version"
+
     //ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.4'
 
