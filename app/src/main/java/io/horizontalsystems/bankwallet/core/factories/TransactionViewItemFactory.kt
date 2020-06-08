@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.factories
 
+import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.util.*
