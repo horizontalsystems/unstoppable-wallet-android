@@ -47,7 +47,7 @@ object RestoreCoinsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RestoreCoinsView()
             val router = RestoreCoinsRouter()
-            val interactor = RestoreCoinsInteractor(App.appConfigProvider, App.blockchainSettingsManager)
+            val interactor = RestoreCoinsInteractor(App.coinManager, App.blockchainSettingsManager)
             val presenter = RestoreCoinsPresenter(view, router, interactor, predefinedAccountType)
 
             return presenter as T

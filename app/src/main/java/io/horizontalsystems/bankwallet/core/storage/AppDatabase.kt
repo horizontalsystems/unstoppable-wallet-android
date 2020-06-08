@@ -15,12 +15,13 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 17, exportSchema = false, entities = [
+@Database(version = 18, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     PriceAlertRecord::class,
     AccountRecord::class,
-    BlockchainSetting::class]
+    BlockchainSetting::class,
+    CoinRecord:: class]
 )
 
 @TypeConverters(DatabaseConverters::class)
@@ -31,6 +32,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun accountsDao(): AccountsDao
     abstract fun priceAlertsDao(): PriceAlertsDao
     abstract fun blockchainSettingDao(): BlockchainSettingDao
+    abstract fun coinRecordDao(): CoinRecordDao
 
     companion object {
 
@@ -56,7 +58,8 @@ abstract class AppDatabase : RoomDatabase() {
                             storeBipToPreferences,
                             addBlockchainSettingsTable,
                             addIndexToEnableWallet,
-                            updateBchSyncMode
+                            updateBchSyncMode,
+                            addCoinRecordTable
                     )
                     .build()
         }
@@ -327,6 +330,22 @@ abstract class AppDatabase : RoomDatabase() {
                     UPDATE BlockchainSetting 
                     SET value = '${SyncMode.Slow.value}' 
                     WHERE coinType = 'bitcoincash' AND `key` = 'sync_mode' AND value = '${SyncMode.Fast.value}';
+                    """.trimIndent())
+            }
+        }
+
+        private val addCoinRecordTable: Migration = object : Migration(17, 18) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS CoinRecord (
+                    `coinId` TEXT NOT NULL, 
+                    `title` TEXT NOT NULL, 
+                    `code` TEXT NOT NULL, 
+                    `decimal` INTEGER NOT NULL, 
+                    `tokenType` TEXT NOT NULL, 
+                    `erc20Address` TEXT, 
+                    PRIMARY KEY(`coinId`)
+                    )
                     """.trimIndent())
             }
         }

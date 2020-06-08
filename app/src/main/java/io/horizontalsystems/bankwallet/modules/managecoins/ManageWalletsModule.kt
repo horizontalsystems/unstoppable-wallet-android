@@ -69,7 +69,7 @@ object ManageWalletsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageWalletsView()
             val router = ManageWalletsRouter()
-            val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountManager, App.accountCreator, App.blockchainSettingsManager)
+            val interactor = ManageWalletsInteractor(App.coinManager, App.walletManager, App.accountManager, App.accountCreator, App.blockchainSettingsManager)
             val presenter = ManageWalletsPresenter(interactor, router, view)
 
             return presenter as T

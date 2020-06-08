@@ -13,7 +13,7 @@ class FeeCoinProvider(private val appConfigProvider: IAppConfigProvider) {
     }
 
     private fun erc20(): Pair<Coin, String>? {
-        val coin = appConfigProvider.coins.firstOrNull { it.type == CoinType.Ethereum }
+        val coin = appConfigProvider.defaultCoins.firstOrNull { it.type == CoinType.Ethereum }
 
         return coin?.let { Pair(coin, "ERC20") }
     }
@@ -22,7 +22,7 @@ class FeeCoinProvider(private val appConfigProvider: IAppConfigProvider) {
         if (symbol == "BNB") {
             return null
         }
-        val coin = appConfigProvider.coins.firstOrNull { it.type is CoinType.Binance && it.type.symbol == "BNB" }
+        val coin = appConfigProvider.defaultCoins.firstOrNull { it.type is CoinType.Binance && it.type.symbol == "BNB" }
 
         return coin?.let { Pair(coin, "BEP-2") }
     }

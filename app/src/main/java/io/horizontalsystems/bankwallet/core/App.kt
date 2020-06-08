@@ -78,6 +78,8 @@ class App : CoreApp() {
         lateinit var rateCoinMapper: RateCoinMapper
         lateinit var rateAppManager: IRateAppManager
         lateinit var derivationSettingsManager: IDerivationSettingsManager
+        lateinit var coinRecordStorage: ICoinRecordStorage
+        lateinit var coinManager: ICoinManager
     }
 
     override fun onCreate() {
@@ -111,8 +113,11 @@ class App : CoreApp() {
         rateStorage = RatesRepository(appDatabase)
         accountsStorage = AccountsStorage(appDatabase)
 
+        coinRecordStorage = CoinRecordStorage(appDatabase)
+        coinManager = CoinManager(appConfigProvider, coinRecordStorage)
+
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(appConfigProvider, enabledWalletsStorage)
+        walletStorage = WalletStorage(coinManager, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
@@ -167,7 +172,7 @@ class App : CoreApp() {
         addressParserFactory = AddressParserFactory()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
-        priceAlertsStorage = PriceAlertsStorage(appConfigProvider, appDatabase)
+        priceAlertsStorage = PriceAlertsStorage(coinManager, appDatabase)
         priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
         emojiHelper = EmojiHelper()
         notificationFactory = NotificationFactory(emojiHelper, instance)
@@ -178,7 +183,7 @@ class App : CoreApp() {
             backgroundManager.registerListener(this)
         }
 
-        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager)
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, eosKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
