@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo

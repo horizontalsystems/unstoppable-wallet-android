@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.managers
+package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
