@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.Erc20ContractInfoProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
@@ -83,6 +84,7 @@ class App : CoreApp() {
         lateinit var derivationSettingsManager: IDerivationSettingsManager
         lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
+        lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
     }
 
     override fun onCreate() {
@@ -203,6 +205,7 @@ class App : CoreApp() {
         )
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
+        erc20ContractInfoProvider = Erc20ContractInfoProvider(appConfigTestMode, appConfigProvider, networkManager)
 
         val nightMode = if (CoreApp.themeStorage.isLightModeOn)
             AppCompatDelegate.MODE_NIGHT_NO else

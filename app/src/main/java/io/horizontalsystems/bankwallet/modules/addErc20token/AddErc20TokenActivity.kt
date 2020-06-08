@@ -22,7 +22,8 @@ class AddErc20TokenActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val model: AddErc20TokenViewModel by viewModels()
-        model.initViewModule(App.coinManager)
+
+        model.initViewModule(App.coinManager, App.erc20ContractInfoProvider)
 
         btnPaste.setOnClickListener {
             val text = TextHelper.getCopiedText()

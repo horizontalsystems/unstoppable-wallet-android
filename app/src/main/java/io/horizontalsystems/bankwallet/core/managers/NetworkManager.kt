@@ -35,6 +35,9 @@ class NetworkManager : INetworkManager {
         return ServicePing.service(host, isSafeCall).ping(url)
     }
 
+    override fun getCoinInfo(host: String, path: String): Flowable<JsonObject> {
+        return ServiceErc20ContractInfo.service(host).getTokenInfo(path)
+    }
 }
 
 object ServiceFullTransaction {
@@ -64,6 +67,20 @@ object ServicePing {
         @GET
         fun ping(@Url path: String): Flowable<Any>
     }
+}
+
+object ServiceErc20ContractInfo {
+    fun service(apiURL: String): Erc20ContractInfoAPI {
+        return APIClient.retrofit(apiURL, 60)
+                .create(Erc20ContractInfoAPI::class.java)
+    }
+
+    interface Erc20ContractInfoAPI {
+        @GET
+        @Headers("Content-Type: application/json")
+        fun getTokenInfo(@Url path: String): Flowable<JsonObject>
+    }
+
 }
 
 object APIClient {
