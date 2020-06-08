@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 
 class CreateWalletInteractor(
-        private val appConfigProvider: IAppConfigProvider,
+        private val coinManager: ICoinManager,
         private val accountCreator: IAccountCreator,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
@@ -12,10 +12,10 @@ class CreateWalletInteractor(
 ) : CreateWalletModule.IInteractor {
 
     override val coins: List<Coin>
-        get() = appConfigProvider.coins
+        get() = coinManager.coins
 
     override val featuredCoins: List<Coin>
-        get() = appConfigProvider.featuredCoins
+        get() = coinManager.featuredCoins
 
     override fun createAccounts(accounts: List<Account>) {
         accounts.forEach {

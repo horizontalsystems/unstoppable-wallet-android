@@ -280,10 +280,17 @@ interface IAppConfigProvider {
     val maxDecimal: Int
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
-    val coins: List<Coin>
+    val defaultCoins: List<Coin>
     val derivationSettings: List<DerivationSetting>
     val syncModeSettings: List<SyncModeSetting>
     val communicationSettings: List<CommunicationSetting>
+}
+
+interface ICoinRecordStorage{
+    val coins: List<Coin>
+    fun save(coin: Coin): Boolean
+    fun delete(coin: Coin)
+    fun deleteAll()
 }
 
 interface IRateStorage {
@@ -455,6 +462,14 @@ interface IRateAppManager {
     fun onBalancePageInactive()
     fun onAppLaunch()
     fun onAppBecomeActive()
+}
+
+interface ICoinManager{
+    val coinAddedObservable: Flowable<Coin>
+    val coins: List<Coin>
+    val featuredCoins: List<Coin>
+    fun existingErc20Coin(erc20Address: String): Coin?
+    fun save(coin: Coin)
 }
 
 sealed class FeeRatePriority {

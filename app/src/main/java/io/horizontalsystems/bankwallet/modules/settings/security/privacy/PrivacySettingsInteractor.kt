@@ -11,7 +11,7 @@ class PrivacySettingsInteractor(
         private val pinComponent: IPinComponent,
         private val torManager: ITorManager,
         private val blockchainSettingsManager: IBlockchainSettingsManager,
-        private val appConfigProvider: IAppConfigProvider,
+        private val coinManager: ICoinManager,
         private val walletManager: IWalletManager,
         private val localStorageManager: ILocalStorage,
         private val adapterManager: IAdapterManager,
@@ -121,31 +121,31 @@ class PrivacySettingsInteractor(
     }
 
     override fun ether(): Coin {
-        return appConfigProvider.coins.first { it.code == "ETH" }
+        return coinManager.coins.first { it.code == "ETH" }
     }
 
     override fun eos(): Coin {
-        return appConfigProvider.coins.first { it.code == "EOS" }
+        return coinManager.coins.first { it.code == "EOS" }
     }
 
     override fun binance(): Coin {
-        return appConfigProvider.coins.first { it.code == "BNB" }
+        return coinManager.coins.first { it.code == "BNB" }
     }
 
     override fun bitcoin(): Coin {
-        return appConfigProvider.coins.first { it.code == "BTC" }
+        return coinManager.coins.first { it.code == "BTC" }
     }
 
     override fun litecoin(): Coin {
-        return appConfigProvider.coins.first { it.code == "LTC" }
+        return coinManager.coins.first { it.code == "LTC" }
     }
 
     override fun bitcoinCash(): Coin {
-        return appConfigProvider.coins.first { it.code == "BCH" }
+        return coinManager.coins.first { it.code == "BCH" }
     }
 
     override fun dash(): Coin {
-        return appConfigProvider.coins.first { it.code == "DASH" }
+        return coinManager.coins.first { it.code == "DASH" }
     }
 
     override fun getWalletsForUpdate(coinType: CoinType): List<Wallet> {

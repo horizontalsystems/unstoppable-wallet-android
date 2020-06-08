@@ -82,7 +82,7 @@ object PrivacySettingsModule {
                 App.pinComponent,
                 App.torKitManager,
                 App.blockchainSettingsManager,
-                App.appConfigProvider,
+                App.coinManager,
                 App.walletManager,
                 App.localStorage,
                 App.adapterManager,

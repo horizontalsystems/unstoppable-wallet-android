@@ -35,16 +35,16 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
 
     override val featuredCoins: List<Coin>
         get() = listOf(
-                coins[0],
-                coins[1],
-                coins[2],
-                coins[3],
-                coins[4],
-                coins[5],
-                coins[6]
+                defaultCoins[0],
+                defaultCoins[1],
+                defaultCoins[2],
+                defaultCoins[3],
+                defaultCoins[4],
+                defaultCoins[5],
+                defaultCoins[6]
         )
 
-    override val coins: List<Coin> by lazy {
+    override val defaultCoins: List<Coin> by lazy {
         listOf(
                 Coin("BTC", "Bitcoin", "BTC", 8, CoinType.Bitcoin),
                 Coin("LTC", "Litecoin", "LTC", 8, CoinType.Litecoin),

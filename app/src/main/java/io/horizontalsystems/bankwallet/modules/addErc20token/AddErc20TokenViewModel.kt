@@ -1,11 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.addErc20token
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import java.lang.Exception
@@ -25,6 +26,13 @@ class AddErc20TokenViewModel : ViewModel() {
     private var disposable: Disposable? = null
     private var coin: Coin? = null
 
+    private lateinit var coinManager:ICoinManager
+
+    //todo discuss how to inject managers to ViewModule
+    fun initViewModule(coinManager: ICoinManager){
+        this.coinManager = coinManager
+    }
+
     fun onTextChange(text: CharSequence?) {
         showTrashButton.postValue(!text.isNullOrEmpty())
         showPasteButton.postValue(text.isNullOrEmpty())
@@ -40,6 +48,7 @@ class AddErc20TokenViewModel : ViewModel() {
             validateAddress(contractAddress)
         } catch (e: Exception) {
             showInvalidAddressError.postValue(true)
+            return
         }
 
         existingCoin(contractAddress)?.let { coin ->
@@ -87,13 +96,12 @@ class AddErc20TokenViewModel : ViewModel() {
             ViewItem(coin.title, coin.code, coin.decimal)
 
     private fun existingCoin(contractAddress: String): Coin? {
-        //("Not yet implemented")
-        return null
+        return coinManager.existingErc20Coin(contractAddress)
     }
 
     @Throws
     private fun validateAddress(contractAddress: String) {
-        //("Not yet implemented")
+        EthereumKit.validateAddress(contractAddress)
     }
 
     fun onAddClick() {
@@ -103,7 +111,7 @@ class AddErc20TokenViewModel : ViewModel() {
     }
 
     private fun save(coin: Coin) {
-        //TODO("Not yet implemented")
+        coinManager.save(coin)
     }
 
     data class ViewItem(val coinName: String, val symbol: String, val decimal: Int)
