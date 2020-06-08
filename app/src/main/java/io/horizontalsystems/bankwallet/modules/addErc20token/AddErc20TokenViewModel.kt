@@ -11,7 +11,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
 
-class AddErc20TokenViewModel : ViewModel() {
+class AddErc20TokenViewModel(
+        private val coinManager: ICoinManager,
+        private val erc20ContractInfoProvider: IErc20ContractInfoProvider) : ViewModel() {
 
     val showTrashButton = MutableLiveData<Boolean>()
     val showPasteButton = MutableLiveData<Boolean>()
@@ -25,14 +27,6 @@ class AddErc20TokenViewModel : ViewModel() {
     private var disposable: Disposable? = null
     private var coin: Coin? = null
 
-    private lateinit var coinManager:ICoinManager
-    private lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
-
-    //todo discuss how to inject managers to ViewModule
-    fun initViewModule(coinManager: ICoinManager, erc20ContractInfoProvider: IErc20ContractInfoProvider){
-        this.coinManager = coinManager
-        this.erc20ContractInfoProvider = erc20ContractInfoProvider
-    }
 
     fun onTextChange(text: CharSequence?) {
         showTrashButton.postValue(!text.isNullOrEmpty())

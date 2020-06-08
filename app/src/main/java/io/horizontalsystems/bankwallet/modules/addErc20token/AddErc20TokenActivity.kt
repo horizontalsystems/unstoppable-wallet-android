@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -21,9 +20,7 @@ class AddErc20TokenActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val model: AddErc20TokenViewModel by viewModels()
-
-        model.initViewModule(App.coinManager, App.erc20ContractInfoProvider)
+        val model: AddErc20TokenViewModel by viewModels { AddErc20TokenModule.Factory() }
 
         btnPaste.setOnClickListener {
             val text = TextHelper.getCopiedText()
