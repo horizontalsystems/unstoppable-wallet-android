@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
+import io.reactivex.disposables.Disposable
 
 class ManageWalletsInteractor(
         private val coinManager: ICoinManager,
@@ -10,6 +11,9 @@ class ManageWalletsInteractor(
         private val accountCreator: IAccountCreator,
         private val blockchainSettingsManager: IBlockchainSettingsManager
 ) : ManageWalletsModule.IInteractor {
+
+    var delegate: ManageWalletsModule.InteractorDelegate? = null
+    private var disposable: Disposable? = null
 
     override val coins: List<Coin>
         get() = coinManager.coins
@@ -53,5 +57,15 @@ class ManageWalletsInteractor(
 
     override fun initializeSettings(coinType: CoinType) {
         blockchainSettingsManager.initializeSettings(coinType)
+    }
+
+    override fun subscribeForNewTokenAddition() {
+        disposable = coinManager.coinAddedObservable
+                .subscribe({ delegate?.onNewTokenAdded() }, { /* error */})
+    }
+
+    override fun clear() {
+        disposable?.dispose()
+        disposable = null
     }
 }
