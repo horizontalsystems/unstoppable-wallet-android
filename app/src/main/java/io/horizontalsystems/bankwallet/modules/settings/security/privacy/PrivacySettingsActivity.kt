@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
@@ -115,7 +116,7 @@ class PrivacySettingsActivity : BaseActivity() {
                     supportFragmentManager,
                     getString(R.string.SettingsPrivacy_Transactions),
                     getString(R.string.SettingsPrivacy_TransactionsSettingText),
-                    R.drawable.ic_transactions,
+                    ContextCompat.getDrawable(this, R.drawable.ic_transactions),
                     items.map { getSortingInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
@@ -145,7 +146,7 @@ class PrivacySettingsActivity : BaseActivity() {
                     supportFragmentManager,
                     getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
                     coin.title,
-                    LayoutHelper.getCoinDrawableResource(this, coin.code),
+                    AppLayoutHelper.getCoinDrawable(this, coin.code, coin.type),
                     items.map { getCommunicationModeInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
@@ -193,7 +194,7 @@ class PrivacySettingsActivity : BaseActivity() {
                         supportFragmentManager,
                         getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
                         coin.title,
-                        LayoutHelper.getCoinDrawableResource(this, coin.code),
+                        AppLayoutHelper.getCoinDrawable(this, coin.code, coin.type),
                         items.map { getSyncModeInfo(it) },
                         items.indexOf(selected),
                         onItemSelected = { position ->

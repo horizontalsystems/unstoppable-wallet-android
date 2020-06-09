@@ -11,8 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.fragment_bottom_manage_wallets.*
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 
 class ManageWalletsDialog(
         private val listener: Listener,
@@ -36,7 +35,7 @@ class ManageWalletsDialog(
 
         setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
         setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
-        context?.let { setHeaderIcon(LayoutHelper.getCoinDrawableResource(it, coin.code)) }
+        context?.let { setHeaderIconDrawable(AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type)) }
 
         addKeyInfo = view.findViewById(R.id.addKeyInfo)
         btnCreateKey = view.findViewById(R.id.primaryActionBtn)

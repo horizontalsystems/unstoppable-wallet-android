@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.setCoinImage
+import io.horizontalsystems.bankwallet.ui.extensions.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
 
@@ -55,7 +55,7 @@ class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapte
 
         if (coinItem.coin != null) {
             coinIcon.isVisible = true
-            coinIcon.setCoinImage(coinItem.coin.code)
+            coinIcon.setCoinImage(coinItem.coin.code, coinItem.coin.type)
         } else {
             coinIcon.isVisible = false
         }

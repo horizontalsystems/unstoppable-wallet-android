@@ -33,11 +33,6 @@ object LayoutHelper {
         return ContextCompat.getDrawable(context, id)
     }
 
-    fun getCoinDrawableResource(context: Context, coinCode: String): Int {
-        val coinResourceName = "coin_${coinCode.replace("-", "_").toLowerCase()}"
-        return context.resources.getIdentifier(coinResourceName, "drawable", context.packageName)
-    }
-
     fun getCurrencyDrawableResource(context: Context, currencyCode: String): Int {
         return context.resources.getIdentifier("currency_$currencyCode", "drawable", context.packageName)
     }

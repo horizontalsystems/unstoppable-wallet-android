@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.SettingsViewDropdown
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_alerts.*
@@ -152,9 +153,9 @@ class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : 
 class NotificationItemViewHolder(override val containerView: SettingsViewDropdown, private val presenter: NotificationsPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(coinViewItem: NotificationsModule.PriceAlertViewItem, lastElement: Boolean, clickable: Boolean) {
-        containerView.showIcon(coinViewItem.code)
+        containerView.showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, coinViewItem.coin.code, coinViewItem.coin.type))
         containerView.showTitle(coinViewItem.title)
-        containerView.showSubtitle(coinViewItem.code)
+        containerView.showSubtitle(coinViewItem.coin.code)
         containerView.showDropdownValue(coinViewItem.state.value?.let { "$it%" } ?: itemView.context.getString(R.string.SettingsNotifications_Off))
         containerView.showBottomBorder(lastElement)
         containerView.isEnabled = clickable
