@@ -68,9 +68,14 @@ class AddErc20TokenActivity : BaseActivity() {
         })
 
         model.coinLiveData.observe(this, Observer { viewItem ->
-            coinNameLayout.isVisible = viewItem != null
-            symbolLayout.isVisible = viewItem != null
-            decimalsLayout.isVisible = viewItem != null
+            coinNameTitle.isVisible = viewItem != null
+            coinNameValue.isVisible = viewItem != null
+
+            symbolTitle.isVisible = viewItem != null
+            symbolValue.isVisible = viewItem != null
+
+            decimalTitle.isVisible = viewItem != null
+            decimalsValue.isVisible = viewItem != null
 
             viewItem?.let {
                 coinNameValue.text = it.coinName
