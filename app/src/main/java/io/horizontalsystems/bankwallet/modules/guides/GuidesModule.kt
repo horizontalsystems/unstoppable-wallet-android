@@ -2,37 +2,25 @@ package io.horizontalsystems.bankwallet.modules.guides
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.managers.GuidesManager
+import io.horizontalsystems.bankwallet.entities.Guide
+import java.util.*
 
 object GuidesModule {
 
-    interface View {
-        fun open(item: GuideItem)
-
-    }
-
-    interface ViewDelegate {
-        fun onLoad()
-        fun onGuideClick(item: GuideItem)
-    }
-
     interface Interactor {
-
+        val guides: List<Guide>
     }
 
     interface InteractorDelegate {
 
     }
 
-    interface Router {
-
-    }
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = GuidesView()
-            val interactor = GuidesInteractor()
-            val presenter = GuidesPresenter(view, interactor)
+            val interactor = GuidesInteractor(GuidesManager)
+            val presenter = GuidesViewModel(interactor)
 
             interactor.delegate = presenter
 
@@ -40,3 +28,8 @@ object GuidesModule {
         }
     }
 }
+
+data class GuideViewItem(val title: String,
+                         val date: Date,
+                         val imageUrl: String?)
+

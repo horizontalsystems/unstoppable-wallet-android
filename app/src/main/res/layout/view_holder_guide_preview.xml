@@ -3,71 +3,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    app:cardBackgroundColor="@color/steel_dark"
+    app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/guideWrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/ColorLawrence">
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground">
 
-        <TextView
-            android:id="@+id/categoryText"
-            style="@style/Subhead1"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:layout_marginBottom="12dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:paddingTop="1dp"
-            android:paddingBottom="2dp"
-            android:textColor="?ColorOz"
-            android:background="@drawable/guide_category_rounded_background"
-            app:layout_constraintStart_toStartOf="@+id/titleText"
-            app:layout_constraintBottom_toTopOf="@+id/titleText"
-            tools:text="guide" />
-
-        <TextView
-            android:id="@+id/titleText"
-            style="@style/Title3"
-            android:layout_width="0dp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="14dp"
-            android:textColor="?ColorOz"
-            app:layout_constraintBottom_toTopOf="@+id/timeIcon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Libra in Simple Terms" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="160dp" />
 
         <ImageView
-            android:id="@+id/timeIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_time"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/timeText"
+            android:id="@+id/date"
             style="@style/Caption"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="40 m"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:textColor="@color/grey"
-            app:layout_constraintStart_toEndOf="@+id/timeIcon"
-            app:layout_constraintBottom_toBottomOf="@+id/timeIcon"
-            app:layout_constraintTop_toTopOf="@+id/timeIcon"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            tools:text="20 June, 2020" />
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Title3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            tools:text="Bitcoin Explained In Simple Terms" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
