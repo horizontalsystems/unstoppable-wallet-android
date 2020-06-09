@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -97,6 +98,10 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     fun setHeaderIcon(@DrawableRes resource: Int) {
         headerIcon?.setImageResource(resource)
+    }
+
+    fun setHeaderIconDrawable(drawable: Drawable?) {
+        headerIcon?.setImageDrawable(drawable)
     }
 
 }

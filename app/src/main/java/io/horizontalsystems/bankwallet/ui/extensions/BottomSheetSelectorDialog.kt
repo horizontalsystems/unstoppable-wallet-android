@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_bottom_selector.*
 class BottomSheetSelectorDialog(
         private val title: String,
         private val subtitle: String,
-        private val icon: Int,
+        private val icon: Drawable?,
         private val items: List<Pair<String, String>>,
         private val selected: Int,
         private val onItemSelected: (Int) -> Unit,
@@ -28,7 +29,7 @@ class BottomSheetSelectorDialog(
 
         setTitle(title)
         setSubtitle(subtitle)
-        setHeaderIcon(icon)
+        setHeaderIconDrawable(icon)
 
         val itemsAdapter = SelectorItemsAdapter(items, selected)
 
@@ -56,7 +57,7 @@ class BottomSheetSelectorDialog(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Int, items: List<Pair<String, String>>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Drawable?, items: List<Pair<String, String>>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
             BottomSheetSelectorDialog(title, subtitle, icon, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
                     .show(fragmentManager, "selector_dialog")
         }

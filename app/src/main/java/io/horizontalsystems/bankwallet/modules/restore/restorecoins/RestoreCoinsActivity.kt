@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinItemsAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import kotlinx.android.synthetic.main.select_coins.*
 
 class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
@@ -97,7 +97,7 @@ class RestoreCoinsActivity : BaseActivity(), CoinItemsAdapter.Listener {
                     supportFragmentManager,
                     getString(R.string.AddressFormatSettings_Title),
                     coin.title,
-                    LayoutHelper.getCoinDrawableResource(this, coin.code),
+                    AppLayoutHelper.getCoinDrawable(this, coin.code, coin.type),
                     items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description(), derivation.addressPrefix(coin.type))) },
                     items.indexOf(selected),
                     onItemSelected = { position ->

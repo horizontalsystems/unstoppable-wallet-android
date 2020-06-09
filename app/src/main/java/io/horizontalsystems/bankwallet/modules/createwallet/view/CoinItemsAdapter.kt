@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.ui.extensions.setCoinImage
 import io.horizontalsystems.views.inflate
-import io.horizontalsystems.views.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
 
@@ -91,7 +91,7 @@ class CoinItemWithSwitchViewHolder(
         val viewItem = item.coinViewItem ?: return
         val coin = viewItem.coin
 
-        coinIcon.setCoinImage(coin.code)
+        coinIcon.setCoinImage(coin.code, coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
@@ -129,7 +129,7 @@ class CoinItemWithArrowViewHolder(
         val coin = viewItem.coin
 
         rightArrow.visibility = View.VISIBLE
-        coinIcon.setCoinImage(coin.code)
+        coinIcon.setCoinImage(coin.code, coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.typeLabel()

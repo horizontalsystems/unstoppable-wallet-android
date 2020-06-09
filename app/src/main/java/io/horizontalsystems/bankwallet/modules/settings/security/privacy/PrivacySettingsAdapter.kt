@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule.IPrivacySettingsViewDelegate
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.SettingsViewDropdown
 import kotlinx.android.extensions.LayoutContainer
 
@@ -66,7 +67,7 @@ class PrivacySettingsItemViewHolder(override val containerView: SettingsViewDrop
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(viewItem: PrivacySettingsViewItem, lastElement: Boolean) {
-        containerView.showIcon(viewItem.coin.code)
+        containerView.showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, viewItem.coin.code, viewItem.coin.type))
         containerView.showTitle(viewItem.coin.title)
         containerView.showBottomBorder(lastElement)
 

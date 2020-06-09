@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragme
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -29,20 +30,20 @@ class SendActivity : BaseActivity() {
     private lateinit var mainPresenter: SendPresenter
 
     private var proceedButtonView: ProceedButtonView? = null
-
+//todo convert to coordinatorlayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
-        val iconRes = LayoutHelper.getCoinDrawableResource(this, wallet.coin.code)
+        val iconRes = AppLayoutHelper.getCoinDrawable(this, wallet.coin.code, wallet.coin.type)
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.Send_Title, wallet.coin.code),
-                leftBtnItem = TopMenuItem(iconRes),
-                rightBtnItem = TopMenuItem(R.drawable.close, onClick = { onBackPressed() })
-        )
+//        shadowlessToolbar.bind(
+//                title = getString(R.string.Send_Title, wallet.coin.code),
+//                leftBtnItem = TopMenuItem(iconRes),
+//                rightBtnItem = TopMenuItem(R.drawable.close, onClick = { onBackPressed() })
+//        )
 
         mainPresenter = ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
 
