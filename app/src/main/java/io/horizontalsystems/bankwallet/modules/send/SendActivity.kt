@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
@@ -21,29 +23,29 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFrag
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.TopMenuItem
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_send.*
+import kotlinx.android.synthetic.main.activity_send.toolbar
 
 class SendActivity : BaseActivity() {
 
     private lateinit var mainPresenter: SendPresenter
 
     private var proceedButtonView: ProceedButtonView? = null
-//todo convert to coordinatorlayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
-        val iconRes = AppLayoutHelper.getCoinDrawable(this, wallet.coin.code, wallet.coin.type)
+        setSupportActionBar(toolbar)
 
-//        shadowlessToolbar.bind(
-//                title = getString(R.string.Send_Title, wallet.coin.code),
-//                leftBtnItem = TopMenuItem(iconRes),
-//                rightBtnItem = TopMenuItem(R.drawable.close, onClick = { onBackPressed() })
-//        )
+        val coinDrawable = AppLayoutHelper.getCoinDrawable(this, wallet.coin.code, wallet.coin.type)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(coinDrawable)
+
+        title = getString(R.string.Send_Title, wallet.coin.code)
 
         mainPresenter = ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
 
@@ -51,6 +53,25 @@ class SendActivity : BaseActivity() {
         subscribeToRouterEvents(mainPresenter.router as SendRouter)
 
         mainPresenter.onViewDidLoad()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.send_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuClose -> {
+                finish()
+                return true
+            }
+            android.R.id.home -> {
+                //don't do anything
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun subscribeToRouterEvents(router: SendRouter) {
@@ -89,7 +110,7 @@ class SendActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
                 mainPresenter.onAddressScan(it)
             }
