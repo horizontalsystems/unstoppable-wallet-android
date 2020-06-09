@@ -26,12 +26,7 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
 
     fun showIcon(drawable: Drawable?) {
         settingsIcon.showIf(drawable != null)
-        drawable?.let { settingsIcon.setImageDrawable(it) }
-    }
-
-    fun showIcon(coin: String) {
-        settingsIcon.showIf(true)
-        settingsIcon.setCoinImage(coin)
+        settingsIcon.setImageDrawable(drawable)
     }
 
     fun showBottomBorder(visible: Boolean) {

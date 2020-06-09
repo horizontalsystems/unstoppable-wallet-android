@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
 object NotificationsModule {
@@ -48,10 +49,10 @@ object NotificationsModule {
         context.startActivity(intent)
     }
 
-    data class PriceAlertViewItem(val title: String, val code: String) {
+    data class PriceAlertViewItem(val title: String, val coin: Coin) {
         lateinit var state: PriceAlert.State
 
-        constructor(title: String, code: String, state: PriceAlert.State) : this(title, code) {
+        constructor(title: String, coin: Coin, state: PriceAlert.State) : this(title, coin) {
             this.state = state
         }
     }
