@@ -12,7 +12,7 @@ class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
         val router: ManageWalletsModule.IRouter,
         val view: ManageWalletsModule.IView
-) : ViewModel(), ManageWalletsModule.IViewDelegate {
+) : ViewModel(), ManageWalletsModule.IViewDelegate, ManageWalletsModule.InteractorDelegate {
 
     private val wallets = mutableMapOf<Coin, Wallet>()
     private var walletWithSettings: Wallet? = null
@@ -24,6 +24,8 @@ class ManageWalletsPresenter(
         interactor.wallets.forEach { wallet ->
             wallets[wallet.coin] = wallet
         }
+
+        interactor.subscribeForNewTokenAddition()
 
         Handler().postDelayed({ syncViewItems()}, 200)
     }
@@ -96,6 +98,15 @@ class ManageWalletsPresenter(
     }
 
     override fun onBlockchainSettingsCancel() {
+        syncViewItems()
+    }
+
+    override fun onCleared() {
+        interactor.clear()
+        super.onCleared()
+    }
+
+    override fun onNewTokenAdded() {
         syncViewItems()
     }
 

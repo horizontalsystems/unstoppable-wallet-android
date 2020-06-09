@@ -52,6 +52,12 @@ object ManageWalletsModule {
         fun saveDerivationSetting(derivationSetting: DerivationSetting)
         fun initializeSettingsWithDefault(coinType: CoinType)
         fun initializeSettings(coinType: CoinType)
+        fun subscribeForNewTokenAddition()
+        fun clear()
+    }
+
+    interface InteractorDelegate {
+        fun onNewTokenAdded()
     }
 
     interface IRouter {
@@ -71,6 +77,8 @@ object ManageWalletsModule {
             val router = ManageWalletsRouter()
             val interactor = ManageWalletsInteractor(App.coinManager, App.walletManager, App.accountManager, App.accountCreator, App.blockchainSettingsManager)
             val presenter = ManageWalletsPresenter(interactor, router, view)
+
+            interactor.delegate = presenter
 
             return presenter as T
         }
