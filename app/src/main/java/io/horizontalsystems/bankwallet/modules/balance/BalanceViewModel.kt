@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Account
@@ -19,12 +20,12 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val openChartModule = SingleLiveEvent<Coin>()
     val openContactPage = SingleLiveEvent<Void>()
 
-    val isSortOn = SingleLiveEvent<Boolean>()
-    val setHeaderViewItem = SingleLiveEvent<BalanceHeaderViewItem>()
-    val setViewItems = SingleLiveEvent<List<BalanceViewItem>>()
+    val isSortOn = MutableLiveData<Boolean>()
+    val setHeaderViewItem = MutableLiveData<BalanceHeaderViewItem>()
+    val setViewItems = MutableLiveData<List<BalanceViewItem>>()
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
-    val setBalanceHiddenLiveEvent = SingleLiveEvent<Pair<Boolean, Boolean>>()
+    val setBalanceHiddenLiveEvent = MutableLiveData<Pair<Boolean, Boolean>>()
     val showSyncError = SingleLiveEvent<Triple<Wallet, String, Boolean>>()
     val networkNotAvailable = SingleLiveEvent<Void>()
     val showErrorMessageCopied = SingleLiveEvent<Void>()
