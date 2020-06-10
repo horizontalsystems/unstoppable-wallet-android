@@ -25,7 +25,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val setViewItems = MutableLiveData<List<BalanceViewItem>>()
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
-    val setBalanceHiddenLiveEvent = MutableLiveData<Pair<Boolean, Boolean>>()
+    val setBalanceHidden = MutableLiveData<Pair<Boolean, Boolean>>()
     val showSyncError = SingleLiveEvent<Triple<Wallet, String, Boolean>>()
     val networkNotAvailable = SingleLiveEvent<Void>()
     val showErrorMessageCopied = SingleLiveEvent<Void>()
@@ -84,7 +84,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun setBalanceHidden(hidden: Boolean, animate: Boolean) {
-        setBalanceHiddenLiveEvent.postValue(Pair(hidden, animate))
+        setBalanceHidden.postValue(Pair(hidden, animate))
     }
 
     override fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean) {
