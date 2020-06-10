@@ -225,7 +225,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
             }
         })
 
-        viewModel.setBalanceHiddenLiveEvent.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
+        viewModel.setBalanceHidden.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
             setOptionsMenuVisible(hideBalance)
 
             if (animate) {
