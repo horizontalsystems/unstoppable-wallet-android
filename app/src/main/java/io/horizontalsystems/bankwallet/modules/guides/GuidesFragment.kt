@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.guides
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.guideview.GuideViewerActivity
+import io.horizontalsystems.bankwallet.modules.guideview.GuideModule
 import kotlinx.android.synthetic.main.fragment_guides.*
 
 
@@ -40,8 +39,11 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener {
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.openGuide.observe(viewLifecycleOwner, Observer { guideItem ->
-            startActivity(Intent(activity, GuideViewerActivity::class.java))
+        viewModel.openGuide.observe(viewLifecycleOwner, Observer { guide ->
+            context?.let {
+                GuideModule.start(it, guide)
+            }
+
         })
     }
 
