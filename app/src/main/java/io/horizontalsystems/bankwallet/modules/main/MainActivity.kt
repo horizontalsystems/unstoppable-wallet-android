@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -37,6 +38,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     private var disposables = CompositeDisposable()
     private var transInfoViewModel: TransactionInfoViewModel? = null
     private var txInfoBottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private var messageInfoSnackbar: Snackbar? = null
 
     private lateinit var viewModel: MainViewModel
 
@@ -111,6 +113,10 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
 
     override fun closeTransactionInfo() {
         txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    override fun onShowInfoMessage(snackbar: Snackbar?) {
+        this.messageInfoSnackbar = snackbar
     }
 
     // RateAppDialogFragment.Listener
@@ -225,6 +231,9 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
                     bottomSheetBehavior.isFitToContents = true
                     bottomSheetDim.alpha = 1f
                     bottomSheetDim.visibility = View.VISIBLE
+                }
+                else{
+                    messageInfoSnackbar?.dismiss()
                 }
             }
 

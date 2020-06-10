@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
@@ -26,6 +27,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         fun openTransactionInfo()
         fun openFullTransactionInfo(transactionHash: String, wallet: Wallet)
         fun closeTransactionInfo()
+        fun onShowInfoMessage(snackbar: Snackbar? = null)
     }
 
     constructor(context: Context) : super(context)
@@ -54,7 +56,8 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         rvDetails.adapter = transactionDetailsAdapter
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
+            val snackbar = HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
+            listener?.onShowInfoMessage(snackbar)
         })
 
         viewModel.showShareLiveEvent.observe(lifecycleOwner, Observer { url ->
