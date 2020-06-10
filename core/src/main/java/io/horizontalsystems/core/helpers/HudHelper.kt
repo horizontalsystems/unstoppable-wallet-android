@@ -24,21 +24,22 @@ object HudHelper {
     }
 
     fun showSuccessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT,
-                           gravity: SnackbarGravity = SnackbarGravity.BOTTOM) {
-        showHudNotification(contenView, contenView.context.getString(resId), R.color.green_d, duration, gravity)
+                           gravity: SnackbarGravity = SnackbarGravity.BOTTOM) : Snackbar {
+        return showHudNotification(contenView, contenView.context.getString(resId), R.color.green_d, duration, gravity)
     }
 
     fun showErrorMessage(contenView: View, textRes: Int, gravity: SnackbarGravity = SnackbarGravity.BOTTOM) {
-        showErrorMessage(contenView, contenView.context.getString(textRes), gravity)
+         showErrorMessage(contenView, contenView.context.getString(textRes), gravity)
     }
 
-    fun showErrorMessage(contenView: View, text: String, gravity: SnackbarGravity = SnackbarGravity.BOTTOM) {
-        showHudNotification(contenView, text, R.color.red_d, SnackbarDuration.LONG, gravity)
+    fun showErrorMessage(contenView: View, text: String, gravity: SnackbarGravity = SnackbarGravity.BOTTOM) : Snackbar {
+        return showHudNotification(contenView, text, R.color.red_d, SnackbarDuration.LONG, gravity)
     }
 
-    private fun showHudNotification(contenView: View, text: String, backgroundColor: Int, duration: SnackbarDuration, gravity: SnackbarGravity) {
+    private fun showHudNotification(contenView: View, text: String, backgroundColor: Int, duration: SnackbarDuration, gravity: SnackbarGravity)
+            : Snackbar {
 
-        Snackbar.make(contenView, text, duration.duration).apply {
+        return Snackbar.make(contenView, text, duration.duration).apply {
 
             if(gravity == SnackbarGravity.TOP_OF_VIEW)
                 this.anchorView = contenView
@@ -49,8 +50,8 @@ object HudHelper {
 
             this.view.background.setTint(getColor(this.view.context, backgroundColor))
             this.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
-
-        }.show()
+            this.show()
+        }
     }
 
     private fun getColor(context: Context, colorId: Int) = ContextCompat.getColor(context, colorId)
