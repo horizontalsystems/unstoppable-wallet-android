@@ -66,7 +66,7 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
 
         router.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { selected ->
 
-            val sortTypes = listOf(TopListSortType.MarketCap, TopListSortType.Winners, TopListSortType.Losers)
+            val sortTypes = listOf(TopListSortType.Rank, TopListSortType.Winners, TopListSortType.Losers)
             val selectorItems = sortTypes.map {
                 SelectorItem(getString(it.titleRes), it == selected)
             }
