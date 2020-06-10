@@ -146,7 +146,7 @@
             android:name=".modules.addErc20token.AddErc20TokenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.guideview.GuideViewerActivity"
+            android:name=".modules.guideview.GuideActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data
