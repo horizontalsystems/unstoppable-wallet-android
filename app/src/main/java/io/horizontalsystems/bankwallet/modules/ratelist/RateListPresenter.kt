@@ -19,7 +19,7 @@ class RateListPresenter(
     private val coins = interactor.coins
     private val currency = interactor.currency
     private var inited = false
-    private var sortType: TopListSortType = TopListSortType.MarketCap
+    private var sortType: TopListSortType = TopListSortType.Rank
 
     //IViewDelegate
 
@@ -81,8 +81,7 @@ class RateListPresenter(
         loading = false
 
         topMarketInfos.clear()
-        // sort items by market cap in descending order to define their ranks
-        topMarketInfos.addAll(items.sortedByDescending { it.marketInfo.marketCap }.mapIndexed { index, topMarket ->
+        topMarketInfos.addAll(items.mapIndexed { index, topMarket ->
             TopMarketRanked(topMarket.coinCode, topMarket.coinName, topMarket.marketInfo,index + 1)
         })
 
@@ -93,7 +92,7 @@ class RateListPresenter(
 
     private fun sortTopList() {
         when (sortType) {
-            TopListSortType.MarketCap -> topMarketInfos.sortByDescending { it.marketInfo.marketCap }
+            TopListSortType.Rank -> topMarketInfos.sortBy { it.rank }
             TopListSortType.Winners -> topMarketInfos.sortByDescending { it.marketInfo.diff }
             TopListSortType.Losers -> topMarketInfos.sortByDescending { -it.marketInfo.diff }
         }
