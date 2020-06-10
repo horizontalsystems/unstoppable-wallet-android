@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.R
 
 sealed class TopListSortType(@StringRes val titleRes: Int) {
 
-    object MarketCap: TopListSortType(R.string.RateList_MarketCap)
+    object Rank: TopListSortType(R.string.RateList_Rank)
     object Winners: TopListSortType(R.string.RateList_TopWinners)
     object Losers: TopListSortType(R.string.RateList_TopLosers)
 
