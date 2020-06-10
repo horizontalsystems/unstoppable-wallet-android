@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 
 class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, CoinItemsAdapter.Listener {
@@ -34,13 +35,16 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_coins)
 
+        shadowlessToolbar.bind(
+                getString(R.string.ManageCoins_title),
+                leftBtnItem = TopMenuItem(text = R.string.ManageCoins_AddToken, onClick = { showAddTokenDialog() }),
+                rightBtnItem = TopMenuItem(text = R.string.Button_Done, onClick = { finish() })
+        )
+
         presenter = ViewModelProvider(this, ManageWalletsModule.Factory())
                 .get(ManageWalletsPresenter::class.java)
 
         presenter.onLoad()
-
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         adapter = CoinItemsAdapter(this)
         recyclerView.adapter = adapter
@@ -85,35 +89,6 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
             )
         })
 
-    }
-
-    private fun observe(router: ManageWalletsRouter) {
-        router.openRestoreModule.observe(this, Observer { predefinedAccountType ->
-            RestoreModule.startForResult(this, predefinedAccountType, RestoreMode.InApp)
-        })
-
-        router.closeLiveDate.observe(this, Observer {
-            finish()
-        })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.manage_coins_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuAddToken -> {
-                AddTokenDialog.show(this, object : AddTokenDialog.Listener{
-                    override fun onClickAddErc20Token() {
-                        startActivity(Intent(this@ManageWalletsActivity, AddErc20TokenActivity::class.java))
-                    }
-                })
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -162,5 +137,23 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
 
     override fun select(coin: Coin) {
         presenter.onSelect(coin)
+    }
+
+    private fun observe(router: ManageWalletsRouter) {
+        router.openRestoreModule.observe(this, Observer { predefinedAccountType ->
+            RestoreModule.startForResult(this, predefinedAccountType, RestoreMode.InApp)
+        })
+
+        router.closeLiveDate.observe(this, Observer {
+            finish()
+        })
+    }
+
+    private fun showAddTokenDialog() {
+        AddTokenDialog.show(this, object : AddTokenDialog.Listener {
+            override fun onClickAddErc20Token() {
+                startActivity(Intent(this@ManageWalletsActivity, AddErc20TokenActivity::class.java))
+            }
+        })
     }
 }
