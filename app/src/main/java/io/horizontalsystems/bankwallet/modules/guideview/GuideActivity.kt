@@ -1,40 +1,34 @@
 package io.horizontalsystems.bankwallet.modules.guideview
 
-import android.content.res.Resources
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.annotation.NonNull
+import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.entities.Guide
 import io.noties.markwon.Markwon
 import io.noties.markwon.image.AsyncDrawable
-import io.noties.markwon.image.AsyncDrawableLoader
 import io.noties.markwon.image.picasso.PicassoImagesPlugin
 import io.noties.markwon.image.picasso.PicassoImagesPlugin.PicassoStore
-import kotlinx.android.synthetic.main.activity_guide_viewer.*
-import okhttp3.OkHttpClient
-import java.util.concurrent.Executors
+import kotlinx.android.synthetic.main.activity_guide.*
+import org.apache.commons.io.IOUtils
+import java.io.StringWriter
 
 
-class GuideViewerActivity : BaseActivity() {
+class GuideActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_guide_viewer)
+        setContentView(R.layout.activity_guide)
         appBarLayout.outlineProvider = null
         setTransparentStatusBar()
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
-
-//        guideWebView.setBackgroundColor(ContextCompat.getColor(this, if (CoreApp.themeStorage.isLightModeOn) R.color.white else R.color.dark))
-//        guideWebView.loadUrl("https://stackoverflow.com/questions/3407256/height-of-status-bar-in-android")
-
-        // obtain an instance of Markwon
-//        val markwon = Markwon.create(this)
-
 
         val markwon = Markwon.builder(this) // automatically create Picasso instance
                 .usePlugin(PicassoImagesPlugin.create(this)) // use provided picasso instance
@@ -55,7 +49,17 @@ class GuideViewerActivity : BaseActivity() {
                 }))
                 .build()
 
-        markwon.setMarkdown(textView, getMarkDown())
+
+        val guide = intent.extras?.getParcelable<Guide>(GuideModule.GuideKey)
+        val viewModel by viewModels<GuideViewModel> { GuideModule.Factory(guide) }
+
+        viewModel.guideLiveData.observe(this, Observer {
+            Picasso.get().load(it.imageUrl).into(image)
+
+            val writer = StringWriter()
+            IOUtils.copy(assets.open("guides/${it.fileName}.md"), writer, Charsets.UTF_8)
+            markwon.setMarkdown(textView, writer.toString())
+        })
 
     }
 
