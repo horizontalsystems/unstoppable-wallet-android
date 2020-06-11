@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.guideview
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
@@ -13,12 +12,15 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.picasso.PicassoImagesPlugin
 import io.noties.markwon.image.picasso.PicassoImagesPlugin.PicassoStore
+import io.noties.markwon.recycler.MarkwonAdapter
 import kotlinx.android.synthetic.main.activity_guide.*
 import org.apache.commons.io.IOUtils
 import java.io.StringWriter
 
 
 class GuideActivity : BaseActivity() {
+
+    private lateinit var markwon: Markwon
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,37 +32,49 @@ class GuideActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-        val markwon = Markwon.builder(this) // automatically create Picasso instance
-                .usePlugin(PicassoImagesPlugin.create(this)) // use provided picasso instance
-                .usePlugin(PicassoImagesPlugin.create(Picasso.get())) // if you need more control
+        val guide = intent.extras?.getParcelable<Guide>(GuideModule.GuideKey)
+        val viewModel by viewModels<GuideViewModel> { GuideModule.Factory(guide) }
+
+        markwon = buildMarkwon()
+
+        viewModel.guideLiveData.observe(this, Observer {
+            showContent(it)
+        })
+
+    }
+
+    private fun showContent(guide: Guide) {
+//        Picasso.get().load(it.imageUrl).into(image)
+
+        val writer = StringWriter()
+        IOUtils.copy(assets.open("guides/${guide.fileName}.md"), writer, Charsets.UTF_8)
+
+//        markwon.setMarkdown(textView, writer.toString())
+
+        val adapter = MarkwonAdapter
+                .builderTextViewIsRoot(android.R.layout.simple_list_item_1)
+                .build()
+        rvBlocks.adapter = adapter
+
+        adapter.setMarkdown(markwon, writer.toString())
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun buildMarkwon(): Markwon {
+        return Markwon.builder(this) // automatically create Picasso instance
                 .usePlugin(PicassoImagesPlugin.create(object : PicassoStore {
-                    @NonNull
-                    override fun load(@NonNull drawable: AsyncDrawable): RequestCreator {
+                    override fun load(drawable: AsyncDrawable): RequestCreator {
                         return Picasso.get()
                                 .load(drawable.destination) // please note that drawable should be used as tag (not a destination)
                                 // otherwise there won't be support for multiple images with the same URL
                                 .tag(drawable)
                     }
 
-                    override fun cancel(@NonNull drawable: AsyncDrawable) {
-                        Picasso.get()
-                                .cancelTag(drawable)
+                    override fun cancel(drawable: AsyncDrawable) {
+                        Picasso.get().cancelTag(drawable)
                     }
                 }))
                 .build()
-
-
-        val guide = intent.extras?.getParcelable<Guide>(GuideModule.GuideKey)
-        val viewModel by viewModels<GuideViewModel> { GuideModule.Factory(guide) }
-
-        viewModel.guideLiveData.observe(this, Observer {
-            Picasso.get().load(it.imageUrl).into(image)
-
-            val writer = StringWriter()
-            IOUtils.copy(assets.open("guides/${it.fileName}.md"), writer, Charsets.UTF_8)
-            markwon.setMarkdown(textView, writer.toString())
-        })
-
     }
 
     private fun getMarkDown(): String {
