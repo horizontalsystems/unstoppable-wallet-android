@@ -8,7 +8,7 @@ class SendView : SendModule.IView {
 
     override lateinit var delegate: SendModule.IViewDelegate
 
-    val error = MutableLiveData<Throwable>()
+    val error = SingleLiveEvent<Throwable>()
     val errorInDialog = SingleLiveEvent<LocalizedException>()
     val confirmationViewItems = MutableLiveData<List<SendModule.SendConfirmationViewItem>>()
     val showSendConfirmation = SingleLiveEvent<Unit>()
