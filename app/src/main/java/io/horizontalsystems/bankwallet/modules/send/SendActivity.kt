@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
@@ -77,7 +78,9 @@ class SendActivity : BaseActivity() {
     private fun subscribeToRouterEvents(router: SendRouter) {
         router.closeWithSuccess.observe(this, Observer {
             HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Send_Success, HudHelper.SnackbarDuration.LONG)
-            finish()
+
+            //Delay 1200 millis to properly show message
+            Handler().postDelayed({ finish() }, 1200)
         })
 
         router.scanQrCode.observe(this, Observer {
