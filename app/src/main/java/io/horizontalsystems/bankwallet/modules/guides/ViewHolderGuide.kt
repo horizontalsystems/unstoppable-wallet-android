@@ -22,7 +22,7 @@ class ViewHolderGuide(override val containerView: View, private val listener: Cl
         title.text = item.title
         date.text = DateHelper.shortDate(item.date)
 
-        Picasso.get().load(item.imageUrl).into(image);
+        Picasso.get().load(item.imageUrl).into(image)
     }
 
 }

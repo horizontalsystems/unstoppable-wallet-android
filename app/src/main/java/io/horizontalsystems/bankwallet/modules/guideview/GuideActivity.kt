@@ -6,13 +6,15 @@ import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Guide
+import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.core.MarkwonTheme
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.picasso.PicassoImagesPlugin
 import io.noties.markwon.image.picasso.PicassoImagesPlugin.PicassoStore
-import io.noties.markwon.recycler.MarkwonAdapter
 import kotlinx.android.synthetic.main.activity_guide.*
 import org.apache.commons.io.IOUtils
 import java.io.StringWriter
@@ -49,19 +51,33 @@ class GuideActivity : BaseActivity() {
         val writer = StringWriter()
         IOUtils.copy(assets.open("guides/${guide.fileName}.md"), writer, Charsets.UTF_8)
 
-//        markwon.setMarkdown(textView, writer.toString())
 
-        val adapter = MarkwonAdapter
-                .builderTextViewIsRoot(android.R.layout.simple_list_item_1)
-                .build()
+        val document = markwon.parse(writer.toString())
+        val guideVisitor = GuideVisitor(markwon)
+        document.accept(guideVisitor)
+
+
+        val adapter = GuideContentAdapter()
         rvBlocks.adapter = adapter
 
-        adapter.setMarkdown(markwon, writer.toString())
-        adapter.notifyDataSetChanged()
+        adapter.submitList(guideVisitor.blocks)
+
+
+
+
+//        markwon.setMarkdown(content, writer.toString())
+
+//        val adapter = MarkwonAdapter
+//                .builderTextViewIsRoot(android.R.layout.simple_list_item_1)
+//                .build()
+//        rvBlocks.adapter = adapter
+//
+//        adapter.setMarkdown(markwon, writer.toString())
+//        adapter.notifyDataSetChanged()
     }
 
     private fun buildMarkwon(): Markwon {
-        return Markwon.builder(this) // automatically create Picasso instance
+        return Markwon.builder(App.instance) // automatically create Picasso instance
                 .usePlugin(PicassoImagesPlugin.create(object : PicassoStore {
                     override fun load(drawable: AsyncDrawable): RequestCreator {
                         return Picasso.get()
