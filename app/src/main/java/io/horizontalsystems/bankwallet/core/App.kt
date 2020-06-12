@@ -56,7 +56,6 @@ class App : CoreApp() {
         lateinit var xRateManager: IRateManager
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
-        lateinit var rateStorage: IRateStorage
         lateinit var accountsStorage: IAccountsStorage
         lateinit var priceAlertsStorage: IPriceAlertsStorage
         lateinit var priceAlertManager: PriceAlertManager
@@ -115,7 +114,6 @@ class App : CoreApp() {
         binanceKitManager = BinanceKitManager(appConfigTestMode.testMode)
 
         appDatabase = AppDatabase.getInstance(this)
-        rateStorage = RatesRepository(appDatabase)
         accountsStorage = AccountsStorage(appDatabase)
 
         coinRecordStorage = CoinRecordStorage(appDatabase)
@@ -184,7 +182,7 @@ class App : CoreApp() {
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
         backgroundRateAlertScheduler = BackgroundRateAlertScheduler(instance)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(localStorage, backgroundRateAlertScheduler, priceAlertsStorage, xRateManager, walletStorage, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(localStorage, backgroundRateAlertScheduler, priceAlertsStorage, xRateManager, walletStorage, currencyManager, priceAlertHandler, notificationManager).apply {
             backgroundManager.registerListener(this)
         }
 
