@@ -294,15 +294,6 @@ interface ICoinRecordStorage{
     fun deleteAll()
 }
 
-interface IRateStorage {
-    fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
-    fun latestRate(coinCode: CoinCode, currencyCode: String): Rate?
-    fun rateSingle(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<Rate>
-    fun save(rate: Rate)
-    fun saveLatest(rate: Rate)
-    fun deleteAll()
-}
-
 interface IRateManager {
     fun set(coins: List<String>)
     fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?

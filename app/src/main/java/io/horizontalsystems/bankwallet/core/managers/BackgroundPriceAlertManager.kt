@@ -11,7 +11,6 @@ class BackgroundPriceAlertManager(
         private val rateManager: IRateManager,
         private val walletStorage: IWalletStorage,
         private val currencyManager: ICurrencyManager,
-        private val rateStorage: IRateStorage,
         private val priceAlertHandler: IPriceAlertHandler,
         private val notificationManager: INotificationManager)
     : IBackgroundPriceAlertManager, BackgroundManager.Listener {
@@ -58,8 +57,8 @@ class BackgroundPriceAlertManager(
         val alerts = priceAlertsStorage.all()
         val currency = currencyManager.baseCurrency
         alerts.forEach { priceAlert ->
-            val rate = rateStorage.latestRate(priceAlert.coin.code, currency.code)
-            priceAlert.lastRate = rate?.value
+            //val rate = rateStorage.latestRate(priceAlert.coin.code, currency.code)
+            //priceAlert.lastRate = rate?.value
         }
         priceAlertsStorage.save(alerts)
     }
