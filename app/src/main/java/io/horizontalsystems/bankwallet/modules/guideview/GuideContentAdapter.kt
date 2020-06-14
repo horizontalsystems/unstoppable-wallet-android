@@ -53,6 +53,10 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideContentAdapter.ViewHold
                     h2.text = item.text
                     headingBottomBorder.isVisible = true
                 }
+                is GuideBlock.Heading3 -> {
+                    h3.isVisible = true
+                    h3.text = item.text
+                }
                 is GuideBlock.Paragraph -> {
                     paragraph.isVisible = true
                     paragraph.text = item.text
