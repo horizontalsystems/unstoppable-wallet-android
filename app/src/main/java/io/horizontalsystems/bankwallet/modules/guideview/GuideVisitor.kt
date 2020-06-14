@@ -10,6 +10,7 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
     val blocks = mutableListOf<GuideBlock>()
 
     val spannableStringBuilder = SpannableStringBuilder()
+    private var quoted = false
 
     override fun visit(heading: Heading) {
         val guideVisitor = GuideVisitor(markwon)
@@ -36,7 +37,7 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
         val guideVisitor = GuideVisitor(markwon)
         guideVisitor.visitChildren(paragraph)
 
-        blocks.add(GuideBlock.Paragraph(guideVisitor.spannableStringBuilder))
+        blocks.add(GuideBlock.Paragraph(guideVisitor.spannableStringBuilder, quoted))
     }
 
     override fun visit(text: Text) {
@@ -61,7 +62,23 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
     }
 
     override fun visit(blockQuote: BlockQuote) {
+        quoted = true
+        val blocksCount = blocks.size
         super.visit(blockQuote)
+        quoted = false
+
+        val updatedBlocksCount = blocks.size
+        if (updatedBlocksCount == blocksCount) return
+
+        (blocks[blocksCount] as? GuideBlock.Paragraph)?.let {
+            it.quotedFirst = true
+        }
+
+        (blocks[updatedBlocksCount - 1] as? GuideBlock.Paragraph)?.let {
+            it.quotedLast = true
+        }
+
+
     }
 }
 
@@ -69,6 +86,9 @@ sealed class GuideBlock {
     data class Heading1(val text: Spanned) : GuideBlock()
     data class Heading2(val text: Spanned) : GuideBlock()
     data class Heading3(val text: Spanned) : GuideBlock()
-    data class Paragraph(val text: Spanned) : GuideBlock()
+    data class Paragraph(val text: Spanned, val quoted: Boolean) : GuideBlock() {
+        var quotedFirst = false
+        var quotedLast = false
+    }
     data class Image(val destination: String, val title: String?) : GuideBlock()
 }
