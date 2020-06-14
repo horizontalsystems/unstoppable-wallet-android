@@ -38,6 +38,18 @@
         android:layout_marginBottom="12dp"
         android:background="@color/grey_50" />
 
+    <TextView
+        android:id="@+id/h3"
+        style="@style/Headline2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="?ColorJacob"
+        tools:text="Bitcoin in Simple Terms" />
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
