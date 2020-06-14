@@ -18,6 +18,7 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
         val block = when (heading.level) {
             1 -> GuideBlock.Heading1(guideVisitor.spannableStringBuilder)
             2 -> GuideBlock.Heading2(guideVisitor.spannableStringBuilder)
+            3 -> GuideBlock.Heading3(guideVisitor.spannableStringBuilder)
             else -> null
         }
 
@@ -67,6 +68,7 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
 sealed class GuideBlock {
     data class Heading1(val text: Spanned) : GuideBlock()
     data class Heading2(val text: Spanned) : GuideBlock()
+    data class Heading3(val text: Spanned) : GuideBlock()
     data class Paragraph(val text: Spanned) : GuideBlock()
     data class Image(val destination: String, val title: String?) : GuideBlock()
 }
