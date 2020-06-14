@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_guide_h1.*
@@ -100,11 +101,20 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideContentAdapter.ViewHold
     }
 
     class ViewHolderParagraph(override val containerView: View) : ViewHolder(containerView), LayoutContainer {
+        private val blockQuoteOffset = LayoutHelper.dp(12f, containerView.context)
+
         override fun bind(item: GuideBlock) {
             if (item !is GuideBlock.Paragraph) return
 
             paragraph.isVisible = true
             paragraph.text = item.text
+
+            quoted.isVisible = item.quoted
+
+            val topPadding = if (item.quotedFirst) blockQuoteOffset else 0
+            val bottomPadding = if (item.quotedLast) blockQuoteOffset else 0
+
+            containerView.setPadding(0, topPadding, 0, bottomPadding)
         }
     }
 
