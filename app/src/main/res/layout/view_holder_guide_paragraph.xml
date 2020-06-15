@@ -31,7 +31,7 @@
         app:constraint_referenced_ids="quotedBg,quotedBorder" />
 
     <TextView
-        android:id="@+id/paragraph"
+        android:id="@+id/listItemMarker"
         style="@style/Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +39,21 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="12dp"
-        android:textColor="#C8C7CC"
+        android:textColor="?ColorBran"
+        app:layout_constraintBaseline_toBaselineOf="@id/paragraph"
+        tools:text="•" />
+
+    <TextView
+        android:id="@+id/paragraph"
+        style="@style/Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textColor="?ColorBran"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem" />

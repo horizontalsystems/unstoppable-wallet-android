@@ -101,7 +101,8 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideContentAdapter.ViewHold
     }
 
     class ViewHolderParagraph(override val containerView: View) : ViewHolder(containerView), LayoutContainer {
-        private val blockQuoteOffset = LayoutHelper.dp(12f, containerView.context)
+        private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, containerView.context)
+        private val listItemIndent = LayoutHelper.dp(24f, containerView.context)
 
         override fun bind(item: GuideBlock) {
             if (item !is GuideBlock.Paragraph) return
@@ -109,10 +110,26 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideContentAdapter.ViewHold
             paragraph.isVisible = true
             paragraph.text = item.text
 
+            blockquote(item)
+            listItem(item)
+        }
+
+        private fun listItem(item: GuideBlock) {
+            val leftPadding = if (item.listItem) listItemIndent else 0
+            val topPadding = if (item.listTightTop) 0 else LayoutHelper.dp(12f, containerView.context)
+            val bottomPadding = if (item.listTightBottom) 0 else LayoutHelper.dp(12f, containerView.context)
+
+            paragraph.setPadding(leftPadding, topPadding, 0, bottomPadding)
+
+            listItemMarker.text = item.listItemMarker
+            listItemMarker.isVisible = item.listItemMarker != null
+        }
+
+        private fun blockquote(item: GuideBlock) {
             quoted.isVisible = item.quoted
 
-            val topPadding = if (item.quotedFirst) blockQuoteOffset else 0
-            val bottomPadding = if (item.quotedLast) blockQuoteOffset else 0
+            val topPadding = if (item.quotedFirst) blockQuoteVerticalPadding else 0
+            val bottomPadding = if (item.quotedLast) blockQuoteVerticalPadding else 0
 
             containerView.setPadding(0, topPadding, 0, bottomPadding)
         }
