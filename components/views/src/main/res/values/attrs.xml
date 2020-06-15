@@ -76,6 +76,7 @@
     <attr name="ColorLucianPressed" format="reference|color" />
     <attr name="ColorOz" format="reference|color" />
     <attr name="ColorLeah" format="reference|color" />
+    <attr name="ColorBran" format="reference|color" />
 
     <!--  New themed colors for backgrounds -->
     <attr name="ColorJeremy" format="reference|color" />

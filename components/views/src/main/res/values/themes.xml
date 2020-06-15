@@ -58,6 +58,7 @@
         <item name="ColorLucianPressed">@color/red_d</item>
         <item name="ColorOz">@color/dark</item>
         <item name="ColorLeah">@color/steel_dark</item>
+        <item name="ColorBran">@color/dark</item>
         <!-- New colors: for backgrounds -->
         <item name="ColorJeremy">@color/steel_light</item>
         <item name="ColorElena">@color/light_grey</item>
