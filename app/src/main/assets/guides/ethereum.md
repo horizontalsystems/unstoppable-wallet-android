@@ -1,44 +1,96 @@
 # Ethereum in Simple Terms
 
-Ethereum is regularly mentioned alongside Bitcoin as one of the most popular decentralized cryptocurrencies. But what is Ethereum? What makes it different from Bitcoin and why there is so much hype around it?
+Ethereum is regularly mentioned alongside Bitcoin as one of the most popular decentralized cryptocurrencies. 
 
-Ethereum was first proposed in 2013 but came to prominence in 2015, some six years after Bitcoin. The Ethereum platform was initially proposed and developed by Vitalik Buterin, along with several other contributors and co-founders. 
+Ethereum was first proposed in 2013 but came to prominence in 2015, some six years after Bitcoin. The Ethereum platform was proposed and developed by [Vitalik Buterin](https://en.wikipedia.org/wiki/Vitalik_Buterin), along with several other contributors and co-founders. 
 
-At this point in time, Ethereum is likely to be one of the biggest open blockchains in the world with over a million independent software engineers working on improving various aspects of the blockchain and building services on top of it.
+Many wonder what makes Ethereum different from Bitcoin and why there is so much hype around it. Ethereum proposed a different approach to cryptocurrency and blockchain, in comparison to existing blockchain projects like Bitcoin. 
 
-Ethereum proposed a different approach to cryptocurrency and blockchain, in comparison to existing blockchain projects like Bitcoin. Where Bitcoin is a store of value and limited to transfers of Bitcoin from one address to another, Ethereum is the foundation for building decentralized services for all kinds of things.
+> Bitcoin blockchain enables value transfers where value is denominated in Bitcoin (denoted by BTC). Anyone in the world can connect to Bitcoin network and send receive Bitcoins without intermediaries.
+>
+> Ethereum on the other hand is the platform for building decentralized services. It can be used to build public services which are always online, unblockable and operate as described without any means to cheat. 
+
+Think of Ethereum as a global computer that's open to everyone to participate in.
 
 ## Why Ethereum
 
-Any software engineer without the need for someone’s permission can use the Ethereum platform to build a decentralized service. For as long as Ethereum is running and there is at least one network server (also known as node) the services built on Ethereum will remain operational and accessible to the public. Taking into account that anyone can operate an Ethereum node, censoring such network is extremely difficult if not impossible.
+Someone may think what's the big deal? The regular web is full of all kinds of services, websites and applications.
 
-The terms Ethereum network, Ethereum blockchain, Ethereum platform usually mean the same thing. The Ethereum network consists of all servers worldwide that run Ethereum node software.
+What makes Ethereum attractive is the fact that it's open and trustless:
 
-Bitcoin’s purpose is to provide a reliable store of value and alternative to digital payments. Ethereum’s purpose is to enable developers to create decentralized applications and services that operate on an open publicly-accessible platform. The platform guarantees that services running on it operate in a transparent manner and without the potential for any external influence to change or cheat the system. 
+- Anyone without the need for someone’s permission can use the Ethereum platform to host a decentralized service. It can be an online store, a crowdfunding campaign, a game etc. 
+
+- The services running on Ethereum are accessible anywhere in the world and is permanent. For as long there is at least one Ethereum network server (also known as node) the service will remain operational and accessible to the public. 
+
+- The services that operate on Ethereum are transparent in their operations. Anyone can lookup a service operating on Ethereum blockchain and verify that it works as expected as well as the full history of everything that took place on the service.
+
+- Taking into account that anyone in the world can operate an Ethereum node, censoring such a network is extremely difficult. Therefore, blocking a service running on Ethereum is considerably more difficult than blocking a website.
+
+So, Ethereum platform is well suited for any type of service where reliability and transparency is critical.
 
 For example, a lottery app built on Ethereum cannot cheat. It’s transparent in the way it operates and works exactly the way it was programmed. Anyone with sufficient technical knowledge can check the logic powering the service and confirm there are no workarounds or vulnerabilities. 
 
-Conversely, with a regular lottery app or website, there is no way of checking the code. You have to place your trust in the developer of the service. 
+Conversely, with a regular lottery app or website, there is no way of checking the code. You have to place your trust in the developer of the service, be it a government or some other entity.
 
 ## Ethereum Blockchain
 
-Ethereum is a blockchain, a digital log that tracks every action (aka transaction) that's made on Ethereum blockchain. A transaction ranges from a simple transfer of Ether tokens from one wallet address to another, to more complex processes such as the execution of a decentralized program (aka, smart contract---more on these in a moment!). 
+Under the hood, Ethereum is a blockchain. If you are new to this concept then read our short guide to blockchains.
 
-Every transaction made on the Ethereum blockchain, reaches all the nodes within a few seconds. It should be noted that every Ethereum node holds the same live copy of the blockchain. There is a consensus algorithm in place that ensures that all nodes on the network end up with the same copy of the blockchain. Each node is Ethereum blockchain. All nodes talk to each other. If one is down the others are there to keep the system running.
+The Ethereum blockchain is basically a history of all actions (aka transaction) that ever happened on Ethereum, starting from the very beginning.
 
-So, think of Ethereum as a global computer that's open to everyone to participate in.
+A transaction can range from a simple transfer of Ether tokens from one wallet to another, to more complex processes such as the execution of an action on some decentralized service (aka, smart contract---more on these in a moment!). 
 
-To sum up, nodes are vital for the proper operation of the Ethereum blockchain. Nodes ensure decentralization, availability 24/7 and censroship-resistance. Anyone can unconditionally operate an Ethereum node. The more nodes there are online the more secure Ethereum blockchain is.
+Every transaction made on the Ethereum, reaches all Ethereum nodes within a few seconds. There is a consensus algorithm in place that ensures that all nodes on the network end up with the same copy of the blockchain. 
 
-Every node individually validates every transaction, ensuring only legitimate transactions enter the blockchain. A node cannot cheat the rest of the network. 
+Each Ethereum node has a live copy of the Ethereum blockchain. All nodes talk to each other. If one is down the others are there to keep the system running.
+
+As the cases with all open blockchains, the Ethereum network nodes ensure decentralization, availability 24/7 and censorship-resistance. Anyone can unconditionally operate an Ethereum node. The more nodes there are online the more secure Ethereum blockchain is.
+
+Every node individually validates every transaction, ensuring only legitimate transactions enter the blockchain. A node cannot cheat the rest of the network.
+
+## Ethereum Is A Platform
+
+The terms Ethereum network, Ethereum blockchain, Ethereum platform often mean the same thing. 
+
+The Ethereum network consists of all servers worldwide which run Ethereum node software. 
+
+Being an open network where anyone can deploy services the Ethereum can be regarded as a global platform for decentralized services. It's a well suited platform for services where a high level of trust and reliability is required.
+
+Just like the Amazon or Ebay are the platforms for selling things online, Ethereum is on the way to become a leading platform for decentralized services.
+
+After being online for nearly 5 years it already proven itself as a viable platform for financial applications. 
+
+The Ethereum platform managed to attract over a million engineers worldwide. Most of those are currently building all kinds of public services on Ethereum. We will be looking at some of these services further down.
+
+The large size of the network is what attracts most engineers specifically to Ethereum and not competing projects.
+
+The Bitcoin blockchain is the only blockchain that potentially has an even larger network.
 
 ## Ethereum Currency
 
-Ethereum network nodes earn Ether (also called Ethereum), which is the cryptocurrency of the Ethereum blockchain. Ether is like fuel for validating transactions on the Ethereum network. The users interacting with services on the Ethereum blockchain pay this in a form of small transaction fees.
+Just like Bitcoin blockchain, Ethereum blockchain has it own native cryptocurrency known as Ether (also called Ethereum).
 
-The emission of new Ether currency into the network is encoded into Ethereum protocol and is there to encourage people to run Ethereum nodes. The supply of new Ether is limited to 18 million tokens per year, although that limit has never been reached. The supply of new Ether has averaged just under 9 million per year since 2015.
+The Ether is needed for doing anything on the Ethereum blockchain. Users pay small transaction fees when interacting with decentralized services on the Ethereum. The fees have to be paid in Ether. 
+
+
+
+The Ether cryptocurrency 
+
+// is a tradeable asset
+// circulation
+
 
 There are several core differences between the operation of Ethereum and Bitcoin regarding the creation and distribution. For example, once the total number of Bitcoins reaches 21 million, no more Bitcoin will be created. Whereas, there is no such upper limit to the total Ethereum supply.
+
+
+As we have mentioned, anyone can unconditionally operate an Ethereum node. Although there is little incentive to do that, it makes the network more decentralized. A lot of people operate Ethereum nodes because of that.
+
+The Ethereum nodes earn Ether.
+
+The emission of new Ether currency is encoded into the code powering Ethereum blockchain. It is there to encourage people to run Ethereum nodes. The supply of new Ether is limited to 18 million tokens per year, although that limit has never been reached. The supply of new Ether has averaged just under 9 million per year since 2015. 
+
+
+
 
 ## Smart Contracts
 
@@ -135,4 +187,9 @@ With enough time and resources, someone could feasibly link certain transactions
 Time to Begin Your Ethereum Journey
 You've reached the beginning of your Ethereum journey. The knowledge you've amassed in this short Ethereum guide will hold you in good stead for your first steps into the world of Ethereum, and other cryptocurrencies, too. 
 As one final note, please understand that this isn't a comprehensive guide. Ethereum is a vast subject, and cryptocurrency and blockchain even more. However, you can use the information in this guide as your stepping stone onto bigger and greater things in the burgeoning world of cryptocurrency.
-Thank you for reading.
+Thank you for reading. 
+## Ethereum Is Independent
+
+// controls
+// censorship
+// survival
