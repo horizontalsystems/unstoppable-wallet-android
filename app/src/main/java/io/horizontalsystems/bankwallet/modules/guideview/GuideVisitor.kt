@@ -70,25 +70,23 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
         val updatedBlocksCount = blocks.size
         if (updatedBlocksCount == blocksCount) return
 
-        (blocks[blocksCount] as? GuideBlock.Paragraph)?.let {
-            it.quotedFirst = true
-        }
-
-        (blocks[updatedBlocksCount - 1] as? GuideBlock.Paragraph)?.let {
-            it.quotedLast = true
-        }
-
-
+        blocks[blocksCount].quotedFirst = true
+        blocks[updatedBlocksCount - 1].quotedLast = true
     }
 }
 
 sealed class GuideBlock {
+    var quoted = false
+    var quotedFirst = false
+    var quotedLast = false
+
     data class Heading1(val text: Spanned) : GuideBlock()
     data class Heading2(val text: Spanned) : GuideBlock()
     data class Heading3(val text: Spanned) : GuideBlock()
-    data class Paragraph(val text: Spanned, val quoted: Boolean) : GuideBlock() {
-        var quotedFirst = false
-        var quotedLast = false
+    data class Paragraph(val text: Spanned) : GuideBlock() {
+        constructor(text: Spanned, quoted: Boolean) : this(text) {
+            this.quoted = quoted
+        }
     }
     data class Image(val destination: String, val title: String?) : GuideBlock()
 }
