@@ -148,7 +148,7 @@ Bitcoin is not only an improvement on how we perform financial transactions and 
 
 Unlike traditional assets and financial instruments, which are generally enforced by governments or other centralized organizations, the core driving force of Bitcoin is its global community. The community is guided by liberal ideals.
 
-Some of the main principles at the core of those ideals are:
+Some of the principles at the core of those ideals are:
  
 - A financial system must be decentralized and tamper-proof.
 - A financial network must be unconditionally open for all.
