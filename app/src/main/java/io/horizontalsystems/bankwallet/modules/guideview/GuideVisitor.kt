@@ -5,7 +5,10 @@ import android.text.Spanned
 import io.noties.markwon.Markwon
 import org.commonmark.node.*
 
-class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
+class GuideVisitor(
+        private val markwon: Markwon,
+        private val listItemMarkerGenerator: ListItemMarkerGenerator? = null
+) : AbstractVisitor() {
 
     val blocks = mutableListOf<GuideBlock>()
 
@@ -74,12 +77,76 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
             blocks.addAll(subblocks)
         }
     }
+
+
+    override fun visit(bulletList: BulletList) {
+        visitListBlock(bulletList, ListItemMarkerGenerator.Unordered)
+    }
+
+    override fun visit(orderedList: OrderedList) {
+        visitListBlock(orderedList, ListItemMarkerGenerator.Ordered(orderedList.startNumber, orderedList.delimiter))
+    }
+
+    private fun visitListBlock(listBlock: ListBlock, listItemMarkerGenerator: ListItemMarkerGenerator) {
+        val guideVisitor = GuideVisitor(markwon, listItemMarkerGenerator)
+        guideVisitor.visitChildren(listBlock)
+        guideVisitor.blocks.let { subblocks ->
+            if (listBlock.isTight) {
+                subblocks.forEach {
+                    it.listTightTop = true
+                    it.listTightBottom = true
+                }
+                subblocks.firstOrNull()?.listTightTop = false
+                subblocks.lastOrNull()?.listTightBottom = false
+            }
+
+            blocks.addAll(subblocks)
+        }
+    }
+
+
+    override fun visit(listItem: ListItem) {
+        val guideVisitor = GuideVisitor(markwon)
+
+        guideVisitor.visitChildren(listItem)
+        guideVisitor.blocks.let { subblocks ->
+            subblocks.forEach {
+                it.listItem = true
+            }
+            subblocks.firstOrNull()?.listItemMarker = getNextListItemMarker()
+            blocks.addAll(subblocks)
+        }
+    }
+
+    private fun getNextListItemMarker(): String? {
+        return listItemMarkerGenerator?.getNext()
+    }
+}
+
+abstract class ListItemMarkerGenerator {
+    abstract fun getNext(): String
+
+    object Unordered : ListItemMarkerGenerator() {
+        override fun getNext() = "• "
+    }
+
+    class Ordered(private var startNumber: Int, private val delimiter: Char) : ListItemMarkerGenerator() {
+        override fun getNext(): String {
+            return "${startNumber++}$delimiter "
+        }
+    }
+
 }
 
 sealed class GuideBlock {
     var quoted = false
     var quotedFirst = false
     var quotedLast = false
+
+    var listItem = false
+    var listItemMarker: String? = null
+    var listTightTop = false
+    var listTightBottom = false
 
     data class Heading1(val text: Spanned) : GuideBlock()
     data class Heading2(val text: Spanned) : GuideBlock()
