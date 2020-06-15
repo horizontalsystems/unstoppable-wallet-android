@@ -62,16 +62,17 @@ class GuideVisitor(private val markwon: Markwon) : AbstractVisitor() {
     }
 
     override fun visit(blockQuote: BlockQuote) {
-        quoted = true
-        val blocksCount = blocks.size
-        super.visit(blockQuote)
-        quoted = false
+        val guideVisitor = GuideVisitor(markwon)
 
-        val updatedBlocksCount = blocks.size
-        if (updatedBlocksCount == blocksCount) return
+        guideVisitor.visitChildren(blockQuote)
 
-        blocks[blocksCount].quotedFirst = true
-        blocks[updatedBlocksCount - 1].quotedLast = true
+        guideVisitor.blocks.let { subblocks ->
+            subblocks.forEach { it.quoted = true }
+            subblocks.firstOrNull()?.quotedFirst = true
+            subblocks.lastOrNull()?.quotedLast = true
+
+            blocks.addAll(subblocks)
+        }
     }
 }
 
