@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.binancechainkit.proto.List
 import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 class BackgroundPriceAlertManager(
         private val localStorage: ILocalStorage,
@@ -15,6 +18,7 @@ class BackgroundPriceAlertManager(
         private val notificationManager: INotificationManager)
     : IBackgroundPriceAlertManager, BackgroundManager.Listener {
 
+    private var disposable: Disposable? = null
 
     override fun onAppLaunch() {
         if (notificationManager.isEnabled && localStorage.isAlertNotificationOn) {
@@ -54,13 +58,34 @@ class BackgroundPriceAlertManager(
     }
 
     override fun didEnterBackground() {
+        disposable?.dispose()
+
         val alerts = priceAlertsStorage.all()
         val currency = currencyManager.baseCurrency
-        alerts.forEach { priceAlert ->
-            //val rate = rateStorage.latestRate(priceAlert.coin.code, currency.code)
-            //priceAlert.lastRate = rate?.value
+        var hasExpiredRate = false
+        val coinCodes = alerts.map {
+            val marketInfo = rateManager.marketInfo(it.coin.code, currency.code)
+            if (marketInfo?.isExpired() == true) {
+                hasExpiredRate = true
+            }
+            it.lastRate = marketInfo?.rate
+            it.coin.code
         }
-        priceAlertsStorage.save(alerts)
+
+        if(!hasExpiredRate) {
+            priceAlertsStorage.save(alerts)
+        } else {
+            rateManager.set(coinCodes)
+            disposable = rateManager.marketInfoObservable(currency.code)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe { marketInfoMap ->
+                        alerts.forEach{ alert ->
+                            alert.lastRate = marketInfoMap[alert.coin.code]?.rate
+                        }
+                        priceAlertsStorage.save(alerts)
+                    }
+        }
     }
 
     override fun willEnterForeground() {
