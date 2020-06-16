@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.guideview
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,6 +18,8 @@ import kotlinx.android.synthetic.main.view_holder_guide_h2.*
 import kotlinx.android.synthetic.main.view_holder_guide_h3.*
 import kotlinx.android.synthetic.main.view_holder_guide_image.*
 import kotlinx.android.synthetic.main.view_holder_guide_paragraph.*
+import org.apache.commons.io.FilenameUtils
+import java.net.URL
 
 class GuideContentAdapter : ListAdapter<GuideBlock, GuideContentAdapter.ViewHolder>(diffCallback) {
 
@@ -86,8 +90,16 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideContentAdapter.ViewHold
     }
 
     class ViewHolderImage(override val containerView: View) : ViewHolder(containerView), LayoutContainer {
+        private val ratios = mapOf(
+                "l" to "4:3",
+                "p" to "9:16",
+                "s" to "1:1"
+        )
+
         override fun bind(item: GuideBlock) {
             if (item !is GuideBlock.Image) return
+
+            setDimensionRatio(item.destination)
 
             if (item.title == null) {
                 imageCaption.isVisible = false
@@ -97,6 +109,18 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideContentAdapter.ViewHold
             }
 
             Picasso.get().load(item.destination).into(image)
+        }
+
+        private fun setDimensionRatio(destination: String) {
+            if (containerView is ConstraintLayout) {
+                val baseName = FilenameUtils.getBaseName(URL(destination).path)
+                val suffix = baseName.split("-").last()
+
+                val set = ConstraintSet()
+                set.clone(containerView)
+                set.setDimensionRatio(image.id, ratios[suffix])
+                set.applyTo(containerView)
+            }
         }
     }
 
