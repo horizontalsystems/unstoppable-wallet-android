@@ -146,14 +146,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "androidx.biometric:biometric:1.0.1"
 
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
-    //Markdown parser library
-    final def markwon_version = '4.4.0'
-    implementation "io.noties.markwon:core:$markwon_version"
-    implementation "io.noties.markwon:image-picasso:$markwon_version"
-    implementation "io.noties.markwon:linkify:$markwon_version"
-    implementation "io.noties.markwon:recycler:$markwon_version"
+    implementation 'com.atlassian.commonmark:commonmark:0.15.1'
 
     //ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.4'

@@ -1,22 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.guideview
 
+import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import io.noties.markwon.Markwon
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import org.commonmark.node.*
 
-class GuideVisitor(
-        private val markwon: Markwon,
-        private val listItemMarkerGenerator: ListItemMarkerGenerator? = null
-) : AbstractVisitor() {
+class GuideVisitor(private val listItemMarkerGenerator: ListItemMarkerGenerator? = null) : AbstractVisitor() {
 
     val blocks = mutableListOf<GuideBlock>()
 
-    val spannableStringBuilder = SpannableStringBuilder()
+    private val spannableStringBuilder = SpannableStringBuilder()
     private var quoted = false
 
     override fun visit(heading: Heading) {
-        val guideVisitor = GuideVisitor(markwon)
+        val guideVisitor = GuideVisitor()
         guideVisitor.visitChildren(heading)
 
         val block = when (heading.level) {
@@ -37,35 +36,34 @@ class GuideVisitor(
             return visit(firstChild)
         }
 
-        val guideVisitor = GuideVisitor(markwon)
+        val guideVisitor = GuideVisitor()
         guideVisitor.visitChildren(paragraph)
 
         blocks.add(GuideBlock.Paragraph(guideVisitor.spannableStringBuilder, quoted))
     }
 
     override fun visit(text: Text) {
-        spannableStringBuilder.append(markwon.render(text))
+        spannableStringBuilder.append(text.literal)
     }
 
     override fun visit(strongEmphasis: StrongEmphasis) {
-        spannableStringBuilder.append(markwon.render(strongEmphasis))
+        spannableStringBuilder.append(getWrappedContent(strongEmphasis, StyleSpan(Typeface.BOLD)))
     }
 
     override fun visit(link: Link) {
-        spannableStringBuilder.append(markwon.render(link))
+        spannableStringBuilder.append(getWrappedContent(link, URLSpan(link.destination)))
     }
 
     override fun visit(emphasis: Emphasis) {
-        spannableStringBuilder.append(markwon.render(emphasis))
+        spannableStringBuilder.append(getWrappedContent(emphasis, StyleSpan(Typeface.ITALIC)))
     }
 
     override fun visit(image: Image) {
         blocks.add(GuideBlock.Image(image.destination, image.title))
-        spannableStringBuilder.append(markwon.render(image))
     }
 
     override fun visit(blockQuote: BlockQuote) {
-        val guideVisitor = GuideVisitor(markwon)
+        val guideVisitor = GuideVisitor()
 
         guideVisitor.visitChildren(blockQuote)
 
@@ -88,7 +86,7 @@ class GuideVisitor(
     }
 
     private fun visitListBlock(listBlock: ListBlock, listItemMarkerGenerator: ListItemMarkerGenerator) {
-        val guideVisitor = GuideVisitor(markwon, listItemMarkerGenerator)
+        val guideVisitor = GuideVisitor(listItemMarkerGenerator)
         guideVisitor.visitChildren(listBlock)
         guideVisitor.blocks.let { subblocks ->
             if (listBlock.isTight) {
@@ -106,7 +104,7 @@ class GuideVisitor(
 
 
     override fun visit(listItem: ListItem) {
-        val guideVisitor = GuideVisitor(markwon)
+        val guideVisitor = GuideVisitor()
 
         guideVisitor.visitChildren(listItem)
         guideVisitor.blocks.let { subblocks ->
@@ -120,6 +118,16 @@ class GuideVisitor(
 
     private fun getNextListItemMarker(): String? {
         return listItemMarkerGenerator?.getNext()
+    }
+
+    private fun getWrappedContent(node: Node, span: Any): SpannableStringBuilder {
+        val guideVisitor = GuideVisitor()
+        guideVisitor.visitChildren(node)
+
+        val content = guideVisitor.spannableStringBuilder
+        content.setSpan(span, 0, content.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        return content
     }
 }
 
