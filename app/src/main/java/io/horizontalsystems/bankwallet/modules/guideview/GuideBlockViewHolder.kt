@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.guideview
 
+import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -86,8 +87,8 @@ class ViewHolderParagraph(override val containerView: View) : GuideBlockViewHold
     override fun bind(item: GuideBlock) {
         if (item !is GuideBlock.Paragraph) return
 
-        paragraph.isVisible = true
         paragraph.text = item.text
+        paragraph.movementMethod = LinkMovementMethod.getInstance()
 
         blockquote(item)
         listItem(item)
