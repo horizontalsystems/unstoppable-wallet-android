@@ -41,7 +41,7 @@ class GuideActivity : BaseActivity() {
         val parser = Parser.builder().build()
         val document = parser.parseReader(InputStreamReader(fileStream, Charsets.UTF_8))
 
-        val guideVisitor = GuideVisitor()
+        val guideVisitor = GuideVisitorBlock()
         document.accept(guideVisitor)
 
         contentAdapter.submitList(guideVisitor.blocks)
