@@ -15,8 +15,7 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 18, exportSchema = false, entities = [
-    Rate::class,
+@Database(version = 19, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlertRecord::class,
     AccountRecord::class,
@@ -27,7 +26,6 @@ import io.horizontalsystems.bankwallet.entities.*
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun ratesDao(): RatesDao
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun accountsDao(): AccountsDao
     abstract fun priceAlertsDao(): PriceAlertsDao
@@ -59,7 +57,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addBlockchainSettingsTable,
                             addIndexToEnableWallet,
                             updateBchSyncMode,
-                            addCoinRecordTable
+                            addCoinRecordTable,
+                            removeRateStorageTable
                     )
                     .build()
         }
@@ -347,6 +346,12 @@ abstract class AppDatabase : RoomDatabase() {
                     PRIMARY KEY(`coinId`)
                     )
                     """.trimIndent())
+            }
+        }
+
+        private val removeRateStorageTable: Migration = object : Migration(18, 19) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE IF EXISTS Rate")
             }
         }
     }
