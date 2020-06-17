@@ -9,8 +9,8 @@ import io.horizontalsystems.core.SingleLiveEvent
 class GuidesViewModel(private val interactor: GuidesModule.Interactor) : GuidesModule.InteractorDelegate, ViewModel() {
 
     val openGuide = SingleLiveEvent<Guide>()
-    val viewItemsLiveData = MutableLiveData<List<GuideViewItem>>()
-    val spinner = MutableLiveData<Boolean>()
+    val guidesLiveData = MutableLiveData<List<Guide>>()
+    val loading = MutableLiveData<Boolean>()
     val filters = MutableLiveData<List<String>>()
 
     private var guideCategories: Array<GuideCategory> = arrayOf()
@@ -18,29 +18,32 @@ class GuidesViewModel(private val interactor: GuidesModule.Interactor) : GuidesM
 
 
     init {
-        spinner.postValue(true)
+        loading.postValue(true)
         interactor.fetchGuideCategories()
     }
 
-    fun onGuideClick(position: Int) {
-        guideCategories[currentCategoryIndex].guides[position].let {
-            openGuide.postValue(it)
-        }
+    fun onGuideClick(guide: Guide) {
+        openGuide.postValue(guide)
     }
 
     override fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
         this.guideCategories = guideCategories
 
         filters.postValue(guideCategories.map { it.title })
-        spinner.postValue(false)
+        loading.postValue(false)
+
+        syncViewItems()
+    }
+
+    override fun onSelectFilter(filterId: String) {
+        currentCategoryIndex = guideCategories.indexOfFirst {
+            it.title == filterId
+        }
 
         syncViewItems()
     }
 
     private fun syncViewItems() {
-        val viewItems = guideCategories[currentCategoryIndex].guides.map { guide ->
-                GuideViewItem(guide.title, guide.updatedAt, guide.imageUrl)
-        }
-        viewItemsLiveData.postValue(viewItems)
+        guidesLiveData.postValue(guideCategories[currentCategoryIndex].guides)
     }
 }

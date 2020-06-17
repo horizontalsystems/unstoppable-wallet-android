@@ -3,15 +3,16 @@ package io.horizontalsystems.bankwallet.modules.guides
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.views.inflate
 
 class GuidesAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewHolderGuide>(), ViewHolderGuide.ClickListener {
 
     interface Listener {
-        fun onItemClick(position: Int)
+        fun onItemClick(guide: Guide)
     }
 
-    var items = listOf<GuideViewItem>()
+    var items = listOf<Guide>()
 
     override fun getItemCount(): Int {
         return items.size
@@ -25,7 +26,7 @@ class GuidesAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewH
         holder.bind(items[position])
     }
 
-    override fun onClick(position: Int) {
-        listener.onItemClick(position)
+    override fun onClick(guide: Guide) {
+        listener.onItemClick(guide)
     }
 }

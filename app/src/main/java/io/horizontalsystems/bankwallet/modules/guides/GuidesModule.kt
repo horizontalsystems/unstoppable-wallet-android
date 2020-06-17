@@ -15,6 +15,7 @@ object GuidesModule {
 
     interface InteractorDelegate {
         fun didFetchGuideCategories(guideCategories: Array<GuideCategory>)
+        fun onSelectFilter(filterId: String)
 
     }
 
@@ -30,8 +31,3 @@ object GuidesModule {
         }
     }
 }
-
-data class GuideViewItem(val title: String,
-                         val date: Date,
-                         val imageUrl: String?)
-
