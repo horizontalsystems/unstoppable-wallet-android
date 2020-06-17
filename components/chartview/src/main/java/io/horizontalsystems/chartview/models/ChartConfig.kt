@@ -30,8 +30,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var curvePressedColor = context.getColor(R.color.light)
     var curveOutdatedColor = context.getColor(R.color.grey_50)
     var curveVerticalOffset = dp2px(18f)
-    var curveFastColor = Color.parseColor("#1A60FF")
-    var curveSlowColor = context.getColor(R.color.yellow_d)
+    var curveFastColor = Color.parseColor("#801A60FF")
+    var curveSlowColor = Color.parseColor("#80ffa800")
 
     var cursorColor = context.getColor(R.color.light)
 
