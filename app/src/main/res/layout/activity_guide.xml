@@ -26,15 +26,4 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/content"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content" />-->
-
-<!--    </androidx.core.widget.NestedScrollView>-->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
