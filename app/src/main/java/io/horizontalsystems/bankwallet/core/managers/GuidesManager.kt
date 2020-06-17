@@ -28,4 +28,18 @@ object GuidesManager {
             categories
         }
     }
+
+    fun getGuideContent(url: String): Single<String> {
+        return Single.fromCallable {
+            val request = Request.Builder()
+                    .url(url)
+                    .build()
+
+            val response = httpClient.newCall(request).execute()
+            val content = response.body?.string()
+            response.close()
+
+            content
+        }
+    }
 }

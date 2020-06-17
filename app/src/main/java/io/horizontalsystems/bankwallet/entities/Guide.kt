@@ -8,7 +8,7 @@ import java.util.*
 data class Guide(
         val title: String,
         val updatedAt: Date,
-        val imageUrl: String,
+        val imageUrl: String?,
         val fileUrl: String
 ) : Parcelable
 
