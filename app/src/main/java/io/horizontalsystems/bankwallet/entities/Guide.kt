@@ -7,7 +7,11 @@ import java.util.*
 @Parcelize
 data class Guide(
         val title: String,
-        val date: Date,
+        val updatedAt: Date,
         val imageUrl: String,
-        val fileName: String
+        val fileUrl: String
 ) : Parcelable
+
+data class GuideCategory(val title: String) {
+    var guides = listOf<Guide>()
+}
