@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.managers.GuidesManager
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.core.putParcelableExtra
 
@@ -17,16 +18,10 @@ object GuideModule {
         context.startActivity(intent)
     }
 
-
     class Factory(private val guide: Guide?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            val interactor = GuideInteractor()
-            val viewModel = GuideViewModel(guide)
-
-//            interactor.delegate = presenter
-
-            return viewModel as T
+            return GuideViewModel(guide, GuidesManager) as T
         }
     }
 }
