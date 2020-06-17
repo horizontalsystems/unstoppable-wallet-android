@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_guide_preview.*
@@ -11,18 +12,26 @@ import kotlinx.android.synthetic.main.view_holder_guide_preview.*
 class ViewHolderGuide(override val containerView: View, private val listener: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
-        fun onClick(position: Int)
+        fun onClick(guide: Guide)
     }
+
+    private var guide: Guide? = null
 
     init {
-        containerView.setOnSingleClickListener { listener.onClick(bindingAdapterPosition) }
+        containerView.setOnSingleClickListener {
+            guide?.let {
+                listener.onClick(it)
+            }
+        }
     }
 
-    fun bind(item: GuideViewItem) {
-        title.text = item.title
-        date.text = DateHelper.shortDate(item.date)
+    fun bind(guide: Guide) {
+        this.guide = guide
 
-        Picasso.get().load(item.imageUrl).into(image)
+        title.text = guide.title
+        date.text = DateHelper.shortDate(guide.updatedAt)
+
+        Picasso.get().load(guide.imageUrl).into(image)
     }
 
 }

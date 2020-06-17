@@ -29,9 +29,33 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:title="@string/Guides_Title" />
+                app:title="@string/Guides_Title" >
+                <ProgressBar
+                    android:id="@+id/toolbarSpinner"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:indeterminateTint="@color/grey"
+                    android:indeterminate="true"
+                    android:layout_marginEnd="18dp"
+                    android:layout_gravity="end"
+                    android:indeterminateDrawable="@drawable/circular_spinner"
+                    android:visibility="invisible"/>
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:itemCount="3"
+            tools:listitem="@layout/view_holder_filter" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
