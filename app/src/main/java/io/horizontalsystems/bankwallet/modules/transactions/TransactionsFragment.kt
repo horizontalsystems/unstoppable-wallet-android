@@ -108,9 +108,9 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         viewModel.delegate.onTransactionItemClick(item)
     }
 
-    override fun onFilterItemClick(item: Wallet?) {
+    override fun onFilterItemClick(item: FilterAdapter.FilterItem?) {
         recyclerTransactions.layoutManager?.scrollToPosition(0)
-        viewModel.delegate.onFilterSelect(item)
+        viewModel.delegate.onFilterSelect(item as? Wallet)
     }
 
 }
@@ -239,17 +239,19 @@ class ViewHolderEmptyScreen(override val containerView: View) : ViewHolder(conta
 class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderFilter.ClickListener {
 
     interface Listener {
-        fun onFilterItemClick(item: Wallet?)
+        fun onFilterItemClick(item: FilterItem?)
     }
+
+    open class FilterItem(val filterId: String)
 
     var filterChangeable = true
 
-    private var selectedFilterId: Wallet? = null
-    private var filters: List<Wallet?> = listOf()
+    private var selectedFilterItem: FilterItem? = null
+    private var filters: List<FilterItem?> = listOf()
 
-    fun setFilters(filters: List<Wallet?>) {
+    fun setFilters(filters: List<FilterItem?>) {
         this.filters = filters
-        selectedFilterId = null
+        selectedFilterItem = filters.firstOrNull()
         notifyDataSetChanged()
     }
 
@@ -260,14 +262,16 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderFilter -> holder.bind(filters[position], selectedFilterId == filters[position])
+            is ViewHolderFilter -> {
+                holder.bind(filters[position]?.filterId, selectedFilterItem == filters[position])
+            }
         }
     }
 
     override fun onClickItem(position: Int) {
         if (filterChangeable) {
             listener.onFilterItemClick(filters[position])
-            selectedFilterId = filters[position]
+            selectedFilterItem = filters[position]
             notifyDataSetChanged()
         }
     }
@@ -279,8 +283,8 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
         fun onClickItem(position: Int)
     }
 
-    fun bind(wallet: Wallet?, active: Boolean) {
-        buttonFilter.text = wallet?.coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
+    fun bind(filterId: String?, active: Boolean) {
+        buttonFilter.text = filterId ?: containerView.context.getString(R.string.Transactions_FilterAll)
         buttonFilter.isActivated = active
         buttonFilter.setOnClickListener { l.onClickItem(adapterPosition) }
     }
