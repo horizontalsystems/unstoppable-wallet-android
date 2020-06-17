@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -17,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+
 
 class RateChartActivity : BaseActivity(), Chart.Listener {
     private lateinit var presenter: RateChartPresenter
@@ -125,17 +129,23 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
             circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
                 val shortValue = shortenValue(item.supply.value)
-                formatter.format(shortValue.first,0,2, suffix = "${shortValue.second} ${item.supply.coinCode}")
+                formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${item.supply.coinCode}")
             } else {
                 getString(R.string.NotAvailable)
             }
 
             totalSupplyValue.text = item.maxSupply?.let {
                 val shortValue = shortenValue(it.value)
-                formatter.format(shortValue.first,0,2, suffix = "${shortValue.second} ${it.coinCode}")
+                formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${it.coinCode}")
             } ?: run {
                 getString(R.string.NotAvailable)
             }
+
+            startDateValue.text = item.startDate ?: getString(R.string.NotAvailable)
+
+            btnWebsite.isVisible = item.website?.isNotEmpty() == true
+            item.website?.let { url -> btnWebsite.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) } }
+
         })
 
         presenterView.setSelectedPoint.observe(this, Observer { item ->
@@ -155,7 +165,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
                 pointInfoVolume.text = formatter.formatFiat(item.volume.value, item.volume.currency.symbol, 0, 2)
             }
 
-            item.macdInfo?.let {macdInfo ->
+            item.macdInfo?.let { macdInfo ->
                 macdInfo.histogram?.let {
                     macdHistogram.visibility = View.VISIBLE
                     macdHistogram.setTextColor(getHistogramColor(it))
@@ -186,7 +196,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             macdChartIndicator.bind(MACD, enabled, macdTrend)
 
             setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !enabled)
-            setViewVisibility(macdSignal,macdHistogram, macdValue, isVisible = enabled)
+            setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = enabled)
         })
 
         presenterView.showRsi.observe(this, Observer { enabled ->
@@ -276,7 +286,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             returnSuffix = suffix[base]
         }
 
-        val roundedDecimalValue = if (valueDecimal < BigDecimal.TEN){
+        val roundedDecimalValue = if (valueDecimal < BigDecimal.TEN) {
             valueDecimal.setScale(2, RoundingMode.HALF_EVEN)
         } else {
             valueDecimal.setScale(1, RoundingMode.HALF_EVEN)
@@ -285,7 +295,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         return Pair(roundedDecimalValue, returnSuffix)
     }
 
-    companion object{
+    companion object {
         private const val EMA = "EMA"
         private const val MACD = "MACD"
         private const val RSI = "RSI"
