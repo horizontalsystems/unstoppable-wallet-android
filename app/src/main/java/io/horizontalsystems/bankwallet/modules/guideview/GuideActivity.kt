@@ -7,8 +7,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Guide
 import kotlinx.android.synthetic.main.activity_guide.*
-import org.commonmark.parser.Parser
-import java.io.InputStreamReader
 
 
 class GuideActivity : BaseActivity() {
@@ -25,25 +23,13 @@ class GuideActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
+        rvBlocks.adapter = contentAdapter
+
         val guide = intent.extras?.getParcelable<Guide>(GuideModule.GuideKey)
         val viewModel by viewModels<GuideViewModel> { GuideModule.Factory(guide) }
 
-        viewModel.guideLiveData.observe(this, Observer {
-            showContent(it)
+        viewModel.blocks.observe(this, Observer {
+            contentAdapter.submitList(it)
         })
-
-        rvBlocks.adapter = contentAdapter
-    }
-
-    private fun showContent(guide: Guide) {
-        val fileStream = assets.open("guides/${guide.fileUrl}.md")
-
-        val parser = Parser.builder().build()
-        val document = parser.parseReader(InputStreamReader(fileStream, Charsets.UTF_8))
-
-        val guideVisitor = GuideVisitorBlock()
-        document.accept(guideVisitor)
-
-        contentAdapter.submitList(guideVisitor.blocks)
     }
 }
