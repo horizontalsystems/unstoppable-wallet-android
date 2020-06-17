@@ -36,7 +36,7 @@ class GuideActivity : BaseActivity() {
     }
 
     private fun showContent(guide: Guide) {
-        val fileStream = assets.open("guides/${guide.fileName}.md")
+        val fileStream = assets.open("guides/${guide.fileUrl}.md")
 
         val parser = Parser.builder().build()
         val document = parser.parseReader(InputStreamReader(fileStream, Charsets.UTF_8))

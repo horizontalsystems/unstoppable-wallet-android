@@ -1,34 +1,31 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.entities.Guide
-import java.util.*
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
+import io.horizontalsystems.bankwallet.entities.GuideCategory
+import io.reactivex.Single
+import okhttp3.*
 
 object GuidesManager {
 
-    val guides: List<Guide> = listOf(
-            Guide(
-                    title = "Tether in Simple Terms",
-                    date = Date(),
-                    imageUrl = "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/master/token_guides/images/TetherMain.png",
-                    fileName = "tether"
-            ),
-            Guide(
-                    title = "MakerDAO & DAI in Simple Terms",
-                    date = Date(),
-                    imageUrl = "http://media.gettyimages.com/photos/car-steel-wheels-of-a-new-bmw-coupe-picture-id516914879",
-                    fileName = "maker"
-            ),
-            Guide(
-                    title = "Bitcoin In Simple Terms",
-                    date = Date(),
-                    imageUrl = "https://media.gettyimages.com/photos/530d-car-head-lights-picture-id157735154",
-                    fileName = "bitcoin"
-            ),
-            Guide(
-                    title = "Ethereum in Simple Terms",
-                    date = Date(),
-                    imageUrl = "http://media.gettyimages.com/photos/modern-key-to-the-bmw-in-a-hand-picture-id890886864",
-                    fileName = "ethereum"
-            )
-    )
+    private val httpClient = OkHttpClient()
+
+    private val gson = GsonBuilder()
+            .setDateFormat("dd-MM-yyyy")
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create()
+
+    fun getGuideCategories(): Single<Array<GuideCategory>> {
+        return Single.fromCallable {
+            val request = Request.Builder()
+                    .url("https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/master/index.json")
+                    .build()
+
+            val response = httpClient.newCall(request).execute()
+            val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategory>::class.java)
+            response.close()
+
+            categories
+        }
+    }
 }
