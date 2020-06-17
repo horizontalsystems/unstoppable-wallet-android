@@ -8,8 +8,8 @@ class BackupWordsInteractor(private val indexesProvider: IRandomProvider, privat
 
     var delegate: BackupWordsModule.IInteractorDelegate? = null
 
-    override fun getConfirmationIndices(): List<Int> {
-        return indexesProvider.getRandomIndexes(2)
+    override fun getConfirmationIndices(maxIndex: Int): List<Int> {
+        return indexesProvider.getRandomIndexes(2, maxIndex)
     }
 
     override fun validate(confirmationWords: HashMap<Int, String>) {

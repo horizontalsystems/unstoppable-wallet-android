@@ -30,7 +30,7 @@ object BackupWordsModule {
     }
 
     interface IInteractor {
-        fun getConfirmationIndices(): List<Int>
+        fun getConfirmationIndices(maxIndex: Int): List<Int>
         fun validate(confirmationWords: HashMap<Int, String>)
     }
 

@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
@@ -111,7 +110,7 @@ interface IPredefinedAccountTypeManager {
 }
 
 interface IRandomProvider {
-    fun getRandomIndexes(count: Int): List<Int>
+    fun getRandomIndexes(count: Int, maxIndex: Int): List<Int>
 }
 
 interface INetworkManager {
