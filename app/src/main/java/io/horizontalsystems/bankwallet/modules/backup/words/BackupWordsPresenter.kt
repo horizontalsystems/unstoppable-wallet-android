@@ -2,7 +2,10 @@ package io.horizontalsystems.bankwallet.modules.backup.words
 
 import java.util.*
 
-class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor, private val router: BackupWordsModule.IRouter, private val state: BackupWordsModule.State)
+class BackupWordsPresenter(
+        private val interactor: BackupWordsModule.IInteractor,
+        private val router: BackupWordsModule.IRouter,
+        private val state: BackupWordsModule.State)
     : BackupWordsModule.IPresenter, BackupWordsModule.IViewDelegate, BackupWordsModule.IInteractorDelegate {
 
     //  View
@@ -19,7 +22,7 @@ class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor
 
     override fun onNextClick() {
         if (state.canLoadNextPage()) {
-            view?.showConfirmationWords(interactor.getConfirmationIndices())
+            view?.showConfirmationWords(interactor.getConfirmationIndices(state.words.size))
             loadCurrentPage()
         }
     }
