@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.guides
 
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Guide
@@ -31,7 +33,17 @@ class ViewHolderGuide(override val containerView: View, private val listener: Cl
         title.text = guide.title
         date.text = DateHelper.shortDate(guide.updatedAt)
 
-        Picasso.get().load(guide.imageUrl).into(image)
+        image.setImageDrawable(null)
+        placeholder.isVisible = true
+
+        guide.imageUrl?.let {
+            Picasso.get().load(it).into(image, object : Callback.EmptyCallback() {
+                override fun onSuccess() {
+                    placeholder.isVisible = false
+                }
+            })
+        }
+
     }
 
 }
