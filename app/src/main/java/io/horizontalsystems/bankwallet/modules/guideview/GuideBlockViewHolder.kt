@@ -4,6 +4,7 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Callback
@@ -56,7 +57,7 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
     override fun bind(item: GuideBlock) {
         if (item !is GuideBlock.Image) return
 
-        setDimensionRatio(item.destination)
+        setConstraints(item.destination, item.mainImage)
 
         placeholder.isVisible = true
         image.setImageDrawable(null)
@@ -76,7 +77,7 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
                 })
     }
 
-    private fun setDimensionRatio(destination: String) {
+    private fun setConstraints(destination: String, mainImage: Boolean) {
         if (containerView is ConstraintLayout) {
             val baseName = FilenameUtils.getBaseName(URL(destination).path)
             val suffix = baseName.split("-").last()
@@ -84,6 +85,7 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
             val set = ConstraintSet()
             set.clone(containerView)
             set.setDimensionRatio(image.id, ratios[suffix])
+            set.setMargin(image.id, TOP, if (mainImage) 0 else LayoutHelper.dp(12f, containerView.context))
             set.applyTo(containerView)
         }
     }

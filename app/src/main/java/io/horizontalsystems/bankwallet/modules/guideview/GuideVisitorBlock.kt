@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.guideview
 
 import org.commonmark.node.*
 
-class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGenerator? = null) : AbstractVisitor() {
+class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGenerator? = null, val level: Int = 0) : AbstractVisitor() {
 
     val blocks = mutableListOf<GuideBlock>()
     private var quoted = false
@@ -32,11 +32,11 @@ class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGener
     }
 
     override fun visit(image: Image) {
-        blocks.add(GuideBlock.Image(image.destination, image.title))
+        blocks.add(GuideBlock.Image(image.destination, image.title, level == 0 && blocks.isEmpty()))
     }
 
     override fun visit(blockQuote: BlockQuote) {
-        val guideVisitor = GuideVisitorBlock()
+        val guideVisitor = GuideVisitorBlock(level = level + 1)
 
         guideVisitor.visitChildren(blockQuote)
 
@@ -58,7 +58,7 @@ class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGener
     }
 
     override fun visit(listItem: ListItem) {
-        val guideVisitor = GuideVisitorBlock()
+        val guideVisitor = GuideVisitorBlock(level = level + 1)
 
         guideVisitor.visitChildren(listItem)
         guideVisitor.blocks.let { subblocks ->
@@ -71,7 +71,7 @@ class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGener
     }
 
     private fun visitListBlock(listBlock: ListBlock, listItemMarkerGenerator: ListItemMarkerGenerator) {
-        val guideVisitor = GuideVisitorBlock(listItemMarkerGenerator)
+        val guideVisitor = GuideVisitorBlock(listItemMarkerGenerator, level = level + 1)
         guideVisitor.visitChildren(listBlock)
         guideVisitor.blocks.let { subblocks ->
             if (listBlock.isTight) {

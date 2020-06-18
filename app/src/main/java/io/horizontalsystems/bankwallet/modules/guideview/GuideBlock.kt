@@ -20,5 +20,5 @@ sealed class GuideBlock {
             this.quoted = quoted
         }
     }
-    data class Image(val destination: String, val title: String?) : GuideBlock()
+    data class Image(val destination: String, val title: String?, val mainImage: Boolean) : GuideBlock()
 }
