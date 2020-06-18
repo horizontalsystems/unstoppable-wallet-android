@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -57,6 +58,9 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
 
         setDimensionRatio(item.destination)
 
+        placeholder.isVisible = true
+        image.setImageDrawable(null)
+
         if (item.title == null) {
             imageCaption.isVisible = false
         } else {
@@ -64,7 +68,12 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
             imageCaption.text = item.title
         }
 
-        Picasso.get().load(item.destination).into(image)
+        Picasso.get().load(item.destination)
+                .into(image, object : Callback.EmptyCallback() {
+                    override fun onSuccess() {
+                        placeholder.isVisible = false
+                    }
+                })
     }
 
     private fun setDimensionRatio(destination: String) {
