@@ -151,7 +151,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     private fun loadViewPager() {
         setTopMarginByStatusBarHeight(viewPager)
 
-        viewPager.offscreenPageLimit = 2
+        viewPager.offscreenPageLimit = 3
         viewPager.setPagingEnabled(true)
         viewPager.adapter = adapter
 
