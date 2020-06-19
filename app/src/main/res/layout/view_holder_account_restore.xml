@@ -5,62 +5,43 @@
     android:id="@+id/viewHolderRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="13dp"
-    android:layout_marginEnd="13dp"
-    android:layout_marginBottom="4dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="1dp"
     android:background="?PredefinedAccountBackground"
     android:orientation="vertical"
-    android:paddingStart="12dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="12dp"
     android:paddingBottom="8dp">
 
     <!-- First line-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp">
+    <TextView
+        android:id="@+id/accountName"
+        style="@style/Headline2"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="?BallanceCoinNameColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Bitcoin" />
 
-        <TextView
-            android:id="@+id/accountName"
-            style="@style/Headline2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:textColor="?BallanceCoinNameColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Bitcoin" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Second line-->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="23dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="12dp">
-
-        <TextView
-            android:id="@+id/accountCoin"
-            style="@style/Subhead2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:includeFontPadding="false"
-            android:textColor="@color/grey"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="BTC, BCH, DASH, ETH, ERC20" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/accountCoin"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="@+id/accountName"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="BTC, BCH, DASH, ETH, ERC20" />
 
 </LinearLayout>
