@@ -45,8 +45,8 @@
         <ImageButton
             android:id="@+id/btnQRCodeScan"
             style="@style/ImageButtonSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_scan_qr_copy"
             android:visibility="visible" />
@@ -55,15 +55,15 @@
             android:id="@+id/btnPaste"
             style="@style/ButtonSecondary"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="28dp"
             android:visibility="visible"
             tools:text="Paste" />
 
         <ImageButton
             android:id="@+id/btnDeleteInput"
             style="@style/ImageButtonSecondary"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/ic_delete"
             android:visibility="gone" />
     </LinearLayout>
