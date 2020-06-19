@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
-    private lateinit var viewModel: TransactionsViewModel
+    private val viewModel by viewModels<TransactionsViewModel> { TransactionsModule.Factory() }
     private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter(this)
 
@@ -36,9 +36,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(TransactionsViewModel::class.java)
-        viewModel.init()
 
         val layoutManager = NpaLinearLayoutManager(context)
         transactionsAdapter.viewModel = viewModel
@@ -95,13 +92,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             toolbarSpinner.visibility = if (show) View.VISIBLE else View.INVISIBLE
         })
 
-    }
-
-    override fun setMenuVisibility(menuVisible: Boolean) {
-        super.setMenuVisibility(menuVisible)
-        if (menuVisible) {
-            viewModel.delegate.onVisible()
-        }
     }
 
     override fun onItemClick(item: TransactionViewItem) {
