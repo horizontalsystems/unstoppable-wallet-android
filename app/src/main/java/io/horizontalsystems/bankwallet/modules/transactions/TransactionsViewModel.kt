@@ -13,12 +13,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val items = MutableLiveData<List<TransactionViewItem>>()
     val reloadTransactions = SingleLiveEvent<Unit>()
-    val showSyncing = SingleLiveEvent<Boolean>()
-
-    fun init() {
-        TransactionsModule.initModule(this, this)
-        delegate.viewDidLoad()
-    }
+    val showSyncing = MutableLiveData<Boolean>()
 
     override fun showFilters(filters: List<Wallet?>) {
         filterItems.postValue(filters)
