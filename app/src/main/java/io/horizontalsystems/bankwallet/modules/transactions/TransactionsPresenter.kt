@@ -21,10 +21,6 @@ class TransactionsPresenter(
         interactor.initialFetch()
     }
 
-    override fun onVisible() {
-        view?.showTransactions(dataSource.itemsCopy)
-    }
-
     override fun onTransactionItemClick(transaction: TransactionViewItem) {
         router.openTransactionInfo(transaction)
     }
