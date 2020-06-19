@@ -172,7 +172,12 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
-            balanceItemsAdapter.submitList(it)
+            val scrollToTop = balanceItemsAdapter.itemCount == 1
+            balanceItemsAdapter.submitList(it) {
+                if (scrollToTop) {
+                    recyclerCoins.layoutManager?.scrollToPosition(0)
+                }
+            }
         })
 
         viewModel.setHeaderViewItem.observe(viewLifecycleOwner, Observer {
