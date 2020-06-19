@@ -28,7 +28,8 @@
                 android:maxLines="6"
                 android:inputType="textMultiLine|textVisiblePassword"
                 android:paddingStart="12dp"
-                android:paddingTop="5dp"
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
                 android:paddingEnd="12dp" />
 
             <TextView
