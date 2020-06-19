@@ -114,8 +114,8 @@
     <style name="ImageButtonSecondary" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>
-        <item name="android:paddingEnd">3dp</item>
-        <item name="android:paddingStart">3dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:paddingStart">6dp</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:scaleType">fitCenter</item>
