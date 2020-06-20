@@ -24,6 +24,7 @@
     <string name="Button_Done">완료</string>
     <string name="Button_Retry">재시도</string>
     <string name="Button_Change">변경하기</string>
+    <string name="Button_Add">Add</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -100,6 +101,7 @@
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_ScanQrCode">QR 코드 스캔</string>
     <string name="Send_Success">\u2713 보냄</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
     <string name="Send_Error_InvalidAddress">주소가 올바르지 않습니다. 다시 확인하고 시도해주세요!</string>
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
@@ -197,6 +199,8 @@
     <string name="FullInfo_SubtitleInputs">입력값</string>
     <string name="FullInfo_SubtitleOutputs">산출값</string>
     <string name="FullInfoEth_Amount">양</string>
+    <!--Guides-->
+    <string name="Guides_Title">Guides</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -308,6 +312,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 선택하기</string>
     <string name="ManageCoins_save">저장</string>
+    <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s 지갑</string>
     <string name="ManageCoins_Alert_CantCreateDescription">언스탑퍼블은 현재 새로운 %s 지갑을 만들 수 없습니다. 귀하께서는 기존 항목만 복원이 가능합니다.</string>
     <!-- Experimental Feature -->
@@ -342,6 +347,21 @@
     <string name="AddCoin_CreationNotSupportedDescription">%2$s을(를) 보내거나 받으려면 %1$s 지갑을 설정해야 합니다.\n\n현재 Ustoppable은 신규 %3$s 지갑을 생성할 수 없으며, 기존의 지갑을 복원하는 것만 가능합니다.\n\n귀하는 이 지갑을 다음 용도를 위해 사용할 수 있습니다: %4$s</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
+    <!-- Add Token Dialog-->
+    <string name="AddTokenDialog_Title">Choose Blockchain</string>
+    <string name="AddTokenDialog_Subtitle">Adding Token</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
+    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
+    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <!-- Add Erc20 Token -->
+    <string name="AddErc20Token_Title">Add ERC20</string>
+    <string name="AddErc20Token_CoinName">Coin Name</string>
+    <string name="AddErc20Token_Symbol">Symbol</string>
+    <string name="AddErc20Token_Decimals">Decimals</string>
+    <string name="AddErc20Token_Dots">…</string>
+    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <!-- Blockchain Settings -->
@@ -392,6 +412,8 @@
     <string name="Charts_Volume24">볼륨 (24 시간)</string>
     <string name="Charts_inCirculation">유통</string>
     <string name="Charts_TotalSupply">총 발행량</string>
+    <string name="Charts_StartDate">Start Date</string>
+    <string name="Charts_Website">Official Website</string>
     <string name="Charts_MarketCap_Thousand">천</string>
     <string name="Charts_MarketCap_Million">백만</string>
     <string name="Charts_MarketCap_Billion">십억</string>
@@ -400,10 +422,15 @@
     <string name="Charts_Price">금액</string>
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
     <string name="Charts_LatestNews">최신 뉴스</string>
+    <string name="Charts_Trend_Up">Up Trend</string>
+    <string name="Charts_Trend_Down">Down Trend</string>
+    <string name="Charts_Trend_Neutral">Neutral</string>
     <!--Rate list-->
     <string name="RateList_portfolio">포트폴리오</string>
     <string name="RateList_top100">상위 100</string>
-    <string name="RateList_prices">가격</string>
+    <string name="RateList_Rank">Rank</string>
+    <string name="RateList_TopWinners">Top Winners</string>
+    <string name="RateList_TopLosers">Top Losers</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">동기화 오류</string>
     <string name="BalanceSyncError_Description">나중에 보고할 수 있도록 에러 텍스트가 클립보드에 복사됩니다.</string>
