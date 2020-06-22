@@ -33,6 +33,9 @@
         <attr name="inputHint" format="string" />
         <attr name="inputMaxLines" format="integer" />
     </declare-styleable>
+    <declare-styleable name="ChartIndicatorView">
+        <attr name="title" />
+    </declare-styleable>
 
     <!--  Custom view themes/styles -->
     <attr name="BallanceCoinNameColor" format="reference|color" />
