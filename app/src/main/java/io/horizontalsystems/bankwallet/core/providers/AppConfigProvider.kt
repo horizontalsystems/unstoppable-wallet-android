@@ -56,6 +56,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("ZRX", "0x Protocol", "ZRX", 18, CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),
                 Coin("ELF", "Aelf", "ELF", 18, CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e")),
                 Coin("ANKR", "Ankr Network", "ANKR", 8, CoinType.Binance("ANKR-E97")),
+                Coin("ANT", "Aragon", "ANT", 18, CoinType.Erc20("0x960b236A07cf122663c4303350609A66A7B288C0")),
                 Coin("BNT", "Bancor", "BNT", 18, CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C")),
                 Coin("BAT", "Basic Attention Token", "BAT", 18, CoinType.Erc20("0x0D8775F648430679A709E98d2b0Cb6250d2887EF")),
                 Coin("BNB-ERC20", "Binance ERC20", "BNB", 18, CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
