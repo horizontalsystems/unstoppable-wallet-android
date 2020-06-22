@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/clickable_background_color_lawrence"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="60dp">
 
     <View
         android:id="@+id/topShade"
@@ -20,7 +20,10 @@
         android:id="@+id/coinIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_margin="24dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@id/coinTitle"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +51,7 @@
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="3dp"
         android:maxWidth="200dp"
         android:textColor="@color/grey"
         android:maxLines="1"
@@ -100,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
