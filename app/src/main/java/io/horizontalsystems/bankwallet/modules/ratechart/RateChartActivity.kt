@@ -106,36 +106,53 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         presenterView.showMarketInfo.observe(this, Observer { item ->
             coinRateLast.text = formatter.formatFiat(item.rateValue.value, item.rateValue.currency.symbol, 2, 4)
 
-            coinMarketCap.text = if (item.marketCap.value > BigDecimal.ZERO) {
-                val shortCapValue = shortenValue(item.marketCap.value)
-                formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + shortCapValue.second
-            } else {
-                getString(R.string.NotAvailable)
+            coinMarketCap.apply {
+                if (item.marketCap.value > BigDecimal.ZERO) {
+                    val shortCapValue = shortenValue(item.marketCap.value)
+                    text = formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + shortCapValue.second
+                } else {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
             }
 
-            val shortVolumeValue = shortenValue(item.volume.value)
-            volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + shortVolumeValue.second
-
-            circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
-                val shortValue = shortenValue(item.supply.value)
-                formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${item.supply.coinCode}")
-            } else {
-                getString(R.string.NotAvailable)
+            volumeValue.apply {
+                val shortVolumeValue = shortenValue(item.volume.value)
+                text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + shortVolumeValue.second
             }
 
-            totalSupplyValue.text = item.maxSupply?.let {
-                val shortValue = shortenValue(it.value)
-                formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${it.coinCode}")
-            } ?: run {
-                getString(R.string.NotAvailable)
+            circulationValue.apply {
+                if (item.supply.value > BigDecimal.ZERO) {
+                    val shortValue = shortenValue(item.supply.value)
+                    text = formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${item.supply.coinCode}")
+                } else {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
             }
 
-            startDateValue.text = item.startDate ?: getString(R.string.NotAvailable)
+            totalSupplyValue.apply {
+                item.maxSupply?.let {
+                    val shortValue = shortenValue(it.value)
+                    text = formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${it.coinCode}")
+                } ?: run {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
+            }
 
-            websiteValue.text = item.website?.let{
-                TextHelper.getUrl(it)
-            } ?: run {
-                getString(R.string.NotAvailable)
+            startDateValue.apply{
+                text = item.startDate ?: getString(R.string.NotAvailable)
+                isEnabled = !item.startDate.isNullOrEmpty()
+            }
+
+            websiteValue.apply {
+                item.website?.let {
+                    text = TextHelper.getUrl(it)
+                } ?: run {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
             }
 
         })
