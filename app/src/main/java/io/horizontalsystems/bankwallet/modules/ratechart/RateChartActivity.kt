@@ -1,16 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.DateHelper
@@ -143,8 +141,11 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
             startDateValue.text = item.startDate ?: getString(R.string.NotAvailable)
 
-            btnWebsite.isVisible = item.website?.isNotEmpty() == true
-            item.website?.let { url -> btnWebsite.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) } }
+            websiteValue.text = item.website?.let{
+                TextHelper.getUrl(it)
+            } ?: run {
+                getString(R.string.NotAvailable)
+            }
 
         })
 
