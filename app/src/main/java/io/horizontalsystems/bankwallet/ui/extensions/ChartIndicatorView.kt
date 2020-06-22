@@ -33,7 +33,7 @@ class ChartIndicatorView(context: Context, attrs: AttributeSet) : LinearLayout(c
     }
 
     fun setStateEnabled(enabled: Boolean){
-        stateIcon.setImageResource(if (enabled) R.drawable.ic_hide_16 else R.drawable.ic_show_16)
+        stateIcon.setImageResource(if (enabled) R.drawable.ic_shown_16 else R.drawable.ic_hidden_16)
     }
 
     private fun getTrendText(trend: ChartInfoTrend): Int {
