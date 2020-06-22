@@ -83,8 +83,8 @@
                 app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/coinRateLast"
-                app:negativeColor="?ColorLucian"
-                app:positiveColor="?ColorRemus"
+                app:negativeColor="?ColorLeah"
+                app:positiveColor="?ColorLeah"
                 tools:text="-18" />
 
             <HorizontalScrollView
