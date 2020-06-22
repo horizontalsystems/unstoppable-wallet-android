@@ -28,10 +28,6 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
 
-    private var emaTrend = ChartInfoTrend.NEUTRAL
-    private var macdTrend = ChartInfoTrend.NEUTRAL
-    private var rsiTrend = ChartInfoTrend.NEUTRAL
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rate_chart)
@@ -97,17 +93,12 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showChartInfo.observe(this, Observer { item ->
             rootView.post {
-                setViewVisibility(chart, emaChartIndicator, macdChartIndicator, rsiChartIndicator, isVisible = true)
                 chart.setData(item.chartData, item.chartType)
             }
 
-            emaTrend = item.emaTrend
-            macdTrend = item.macdTrend
-            rsiTrend = item.rsiTrend
-
-            emaChartIndicator.bind(EMA, false, emaTrend)
-            macdChartIndicator.bind(MACD, false, macdTrend)
-            rsiChartIndicator.bind(RSI, false, rsiTrend)
+            emaChartIndicator.bind(item.emaTrend)
+            macdChartIndicator.bind(item.macdTrend)
+            rsiChartIndicator.bind(item.rsiTrend)
 
             coinRateDiff.diff = item.diffValue
         })
@@ -189,12 +180,12 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showEma.observe(this, Observer { enabled ->
             chart.showEma(enabled)
-            emaChartIndicator.bind(EMA, enabled, emaTrend)
+            emaChartIndicator.setStateEnabled(enabled)
         })
 
         presenterView.showMacd.observe(this, Observer { enabled ->
             chart.showMacd(enabled)
-            macdChartIndicator.bind(MACD, enabled, macdTrend)
+            macdChartIndicator.setStateEnabled(enabled)
 
             setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !enabled)
             setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = enabled)
@@ -202,7 +193,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showRsi.observe(this, Observer { enabled ->
             chart.showRsi(enabled)
-            rsiChartIndicator.bind(RSI, enabled, rsiTrend)
+            rsiChartIndicator.setStateEnabled(enabled)
         })
 
     }
@@ -296,9 +287,4 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         return Pair(roundedDecimalValue, returnSuffix)
     }
 
-    companion object {
-        private const val EMA = "EMA"
-        private const val MACD = "MACD"
-        private const val RSI = "RSI"
-    }
 }

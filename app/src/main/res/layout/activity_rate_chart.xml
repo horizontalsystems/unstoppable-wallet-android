@@ -313,7 +313,7 @@
                 android:id="@+id/emaChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                app:title="@string/Charts_IndicatorEMA"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/border3" />
@@ -322,7 +322,7 @@
                 android:id="@+id/macdChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                app:title="@string/Charts_IndicatorMACD"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emaChartIndicator" />
@@ -331,7 +331,7 @@
                 android:id="@+id/rsiChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                app:title="@string/Charts_IndicatorRSI"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/macdChartIndicator" />
