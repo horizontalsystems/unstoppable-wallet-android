@@ -97,6 +97,15 @@
         <item name="android:paddingBottom">4.5dp</item>
     </style>
 
+    <style name="TabComponent" parent="ButtonTransparent">
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
     <style name="ButtonPrivacySettings">
         <item name="android:background">@drawable/button_privacy_settings_background</item>
         <item name="android:textColor">@color/button_transparent_text_color</item>

@@ -102,86 +102,56 @@
                 <LinearLayout
                     android:id="@+id/chartActions"
                     android:layout_width="wrap_content"
-                    android:layout_height="49dp"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <TextView
+                    <Button
                         android:id="@+id/button1D"
-                        style="@style/TextFlatButton"
+                        style="@style/TabComponent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:paddingStart="18dp"
-                        android:paddingEnd="18dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_Day" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/button1W"
-                        style="@style/TextFlatButton"
+                        style="@style/TabComponent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:paddingStart="18dp"
-                        android:paddingEnd="18dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_Week" />
 
                     <TextView
                         android:id="@+id/button1M"
-                        style="@style/TextFlatButton"
+                        style="@style/TabComponent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:paddingStart="18dp"
-                        android:paddingEnd="18dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_Month" />
 
                     <TextView
                         android:id="@+id/button3M"
-                        style="@style/TextFlatButton"
+                        style="@style/TabComponent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:paddingStart="18dp"
-                        android:paddingEnd="18dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_Month3" />
 
                     <TextView
                         android:id="@+id/button6M"
-                        style="@style/TextFlatButton"
+                        style="@style/TabComponent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:paddingStart="18dp"
-                        android:paddingEnd="18dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_HalfYear" />
 
                     <TextView
                         android:id="@+id/button1Y"
-                        style="@style/TextFlatButton"
+                        style="@style/TabComponent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:paddingStart="18dp"
-                        android:paddingEnd="18dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_Year" />
 
                     <TextView
                         android:id="@+id/button2Y"
-                        style="@style/TextFlatButton"
+                        style="@style/TabComponent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:paddingStart="18dp"
-                        android:paddingEnd="18dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_Year2" />
 
                 </LinearLayout>
