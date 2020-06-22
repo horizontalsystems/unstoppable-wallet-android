@@ -17,6 +17,7 @@ object CoinInfoMap {
             "ZRX" to CoinInfo(BigDecimal(1_000_000_000), "15/08/2017", "https://www.0xproject.com/#home"),
             "ELF" to CoinInfo(BigDecimal(880_000_000), "18/12/2017", "http://aelf.io/"),
             "ANKR" to CoinInfo(BigDecimal(10_000_000_000), "21/02/2019", "https://www.ankr.com/"),
+            "ANT" to CoinInfo(BigDecimal(39_609_524), "05/05/2017", "https://aragon.one/"),
             "BNT" to CoinInfo(BigDecimal(67_721_371), "13/02/2017", "https://bancor.network/"),
             "BAT" to CoinInfo(BigDecimal(1_500_000_000), "31/05/2017", "https://basicattentiontoken.org/"),
             "BUSD" to CoinInfo(BigDecimal(28_603_822), "10/09/2019", "https://www.paxos.com/busd/"),
