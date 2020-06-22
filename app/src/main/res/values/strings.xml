@@ -543,6 +543,9 @@
     <string name="Charts_StartDate">Start Date</string>
     <string name="Charts_Website">Official Website</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
+    <string name="Charts_IndicatorEMA" translatable="false">EMA</string>
+    <string name="Charts_IndicatorMACD" translatable="false">MACD</string>
+    <string name="Charts_IndicatorRSI" translatable="false">RSI</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>

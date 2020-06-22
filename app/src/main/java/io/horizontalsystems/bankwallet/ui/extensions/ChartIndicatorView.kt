@@ -8,25 +8,32 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.ratechart.ChartInfoTrend
 import kotlinx.android.synthetic.main.chart_indicator_view.view.*
 
-class ChartIndicatorView : LinearLayout {
+class ChartIndicatorView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
 
     init {
         inflate(context, R.layout.chart_indicator_view, this)
+
+        val attributes = context.obtainStyledAttributes(attrs, io.horizontalsystems.views.R.styleable.ChartIndicatorView)
+        try {
+            setTitle(attributes.getString(io.horizontalsystems.views.R.styleable.ChartIndicatorView_title))
+        }finally {
+            attributes.recycle()
+        }
     }
 
-    constructor(context: Context) : super(context)
+    private fun setTitle(titleText: String?) {
+        title.text = titleText
+    }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    fun bind(trend: ChartInfoTrend? = null) {
+        trend?.let {
+            trendText.setText(getTrendText(it))
+            trendText.setTextColor(ContextCompat.getColor(context, getTrendTextColor(it)))
+        }
+    }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-
-    fun bind(title: String, enabled: Boolean, trend: ChartInfoTrend) {
+    fun setStateEnabled(enabled: Boolean){
         stateIcon.setImageResource(if (enabled) R.drawable.ic_hide_16 else R.drawable.ic_show_16)
-        titleText.text = title
-
-        trendText.setText(getTrendText(trend))
-        trendText.setTextColor(ContextCompat.getColor(context, getTrendTextColor(trend)))
     }
 
     private fun getTrendText(trend: ChartInfoTrend): Int {
