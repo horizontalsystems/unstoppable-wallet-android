@@ -467,20 +467,34 @@
                 app:layout_constraintTop_toTopOf="@+id/startDateTitle"
                 tools:text="31/01/2009" />
 
-            <Button
-                android:id="@+id/btnWebsite"
-                style="@style/ButtonPrimarySteel"
+            <TextView
+                android:id="@+id/websiteTitle"
+                style="@font/noto_sans_regular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/Charts_Website"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintVertical_bias="0"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@+id/startDateTitle" />
+
+            <TextView
+                android:id="@+id/websiteValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_regular"
+                android:textAlignment="textEnd"
+                android:textColor="?ColorLeah"
+                android:textSize="14sp"
+                android:autoLink="web"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toEndOf="@id/websiteTitle"
+                app:layout_constraintTop_toTopOf="@+id/websiteTitle"
+                tools:text="bitcoin.org" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView>
