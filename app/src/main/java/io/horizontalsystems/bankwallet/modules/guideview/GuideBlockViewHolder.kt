@@ -84,7 +84,7 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
 
             val set = ConstraintSet()
             set.clone(containerView)
-            set.setDimensionRatio(image.id, ratios[suffix])
+            set.setDimensionRatio(image.id, ratios[suffix] ?: "1:1")
             set.setMargin(image.id, TOP, if (mainImage) 0 else LayoutHelper.dp(12f, containerView.context))
             set.applyTo(containerView)
         }
