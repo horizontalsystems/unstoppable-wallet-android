@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.restore.restorecoins
 
-import android.os.Handler
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewType
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
-import java.util.concurrent.Executors
 
 class RestoreCoinsPresenter(
         val view: RestoreCoinsModule.IView,
@@ -17,12 +15,11 @@ class RestoreCoinsPresenter(
 ) : ViewModel(), RestoreCoinsModule.IViewDelegate {
 
     private var enabledCoins = mutableListOf<Coin>()
-    private val executor = Executors.newSingleThreadExecutor()
 
     override fun onLoad() {
         syncProceedButton()
 
-        Handler().postDelayed({ syncViewItems()}, 200)
+        syncViewItems()
     }
 
     override fun onEnable(coin: Coin) {
@@ -61,21 +58,19 @@ class RestoreCoinsPresenter(
     }
 
     private fun syncViewItems() {
-        executor.submit{
-            val featuredCoinIds = interactor.featuredCoins.map { it.coinId }
-            val featured = filteredCoins(interactor.featuredCoins).map { viewItem(it) }
-            val others = filteredCoins(interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }).map { viewItem(it) }
+        val featuredCoinIds = interactor.featuredCoins.map { it.coinId }
+        val featured = filteredCoins(interactor.featuredCoins).map { viewItem(it) }
+        val others = filteredCoins(interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }).map { viewItem(it) }
 
-            val viewItems = mutableListOf<CoinManageViewItem>()
+        val viewItems = mutableListOf<CoinManageViewItem>()
 
-            if (featured.isNotEmpty()) {
-                viewItems.addAll(featured)
-                viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))
-            }
-            viewItems.addAll(others)
-
-            view.setItems(viewItems)
+        if (featured.isNotEmpty()) {
+            viewItems.addAll(featured)
+            viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))
         }
+        viewItems.addAll(others)
+
+        view.setItems(viewItems)
     }
 
     private fun filteredCoins(coins: List<Coin>): List<Coin> {

@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import android.os.Handler
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewItem
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinManageViewType
 import io.horizontalsystems.bankwallet.modules.createwallet.view.CoinViewItem
-import java.util.concurrent.Executors
 
 class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
@@ -16,7 +14,6 @@ class ManageWalletsPresenter(
 
     private val wallets = mutableMapOf<Coin, Wallet>()
     private var walletWithSettings: Wallet? = null
-    private val executor = Executors.newSingleThreadExecutor()
 
     //  ViewDelegate
 
@@ -27,7 +24,7 @@ class ManageWalletsPresenter(
 
         interactor.subscribeForNewTokenAddition()
 
-        Handler().postDelayed({ syncViewItems()}, 200)
+        syncViewItems()
     }
 
     override fun onEnable(coin: Coin) {
@@ -125,20 +122,18 @@ class ManageWalletsPresenter(
     }
 
     private fun syncViewItems() {
-        executor.submit {
-            val featuredCoinIds = interactor.featuredCoins.map { it.coinId }
-            val featured = interactor.featuredCoins.map { viewItem(it) }
-            val others = interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }.map { viewItem(it) }
-            val viewItems = mutableListOf<CoinManageViewItem>()
+        val featuredCoinIds = interactor.featuredCoins.map { it.coinId }
+        val featured = interactor.featuredCoins.map { viewItem(it) }
+        val others = interactor.coins.filter { !featuredCoinIds.contains(it.coinId) }.map { viewItem(it) }
+        val viewItems = mutableListOf<CoinManageViewItem>()
 
-            if (featured.isNotEmpty()) {
-                viewItems.addAll(featured)
-                viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))
-            }
-            viewItems.addAll(others)
-
-            view.setItems(viewItems)
+        if (featured.isNotEmpty()) {
+            viewItems.addAll(featured)
+            viewItems.add(CoinManageViewItem(CoinManageViewType.Divider))
         }
+        viewItems.addAll(others)
+
+        view.setItems(viewItems)
     }
 
     private fun enableWallet(coin: Coin, account: Account) {
