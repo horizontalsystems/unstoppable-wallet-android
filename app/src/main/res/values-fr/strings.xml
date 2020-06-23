@@ -422,9 +422,6 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="Charts_Price">Prix</string>
     <string name="Charts_Error_NotAvailable">Graphique non disponible</string>
     <string name="Charts_LatestNews">Dernières nouvelles</string>
-    <string name="Charts_Trend_Up">Up Trend</string>
-    <string name="Charts_Trend_Down">Down Trend</string>
-    <string name="Charts_Trend_Neutral">Neutral</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
