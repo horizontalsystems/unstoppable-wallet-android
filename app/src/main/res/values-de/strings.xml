@@ -420,9 +420,6 @@
     <string name="Charts_Price">Preis</string>
     <string name="Charts_Error_NotAvailable">Diagramm nicht verfügbar</string>
     <string name="Charts_LatestNews">Neueste Nachrichten</string>
-    <string name="Charts_Trend_Up">Up Trend</string>
-    <string name="Charts_Trend_Down">Down Trend</string>
-    <string name="Charts_Trend_Neutral">Neutral</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
