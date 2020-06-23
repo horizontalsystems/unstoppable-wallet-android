@@ -279,7 +279,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chart" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.ChartIndicatorView
+            <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/emaChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -288,7 +288,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/border3" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.ChartIndicatorView
+            <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/macdChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -297,7 +297,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emaChartIndicator" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.ChartIndicatorView
+            <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/rsiChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
