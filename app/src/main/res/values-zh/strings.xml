@@ -24,7 +24,7 @@
     <string name="Button_Done">完成</string>
     <string name="Button_Retry">重试</string>
     <string name="Button_Change">更改</string>
-    <string name="Button_Add">Add</string>
+    <string name="Button_Add">添加</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
