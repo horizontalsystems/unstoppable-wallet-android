@@ -24,7 +24,7 @@
     <string name="Button_Done">Готово</string>
     <string name="Button_Retry">Повторить</string>
     <string name="Button_Change">Изменить</string>
-    <string name="Button_Add">Add</string>
+    <string name="Button_Add">Добавить</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Wallet">%s Кошелек</string>
@@ -360,7 +360,7 @@
     <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
+    <string name="AddErc20Token_InvalidAddressError">Неверный Адрес</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <!-- Blockchain Settings -->
@@ -420,9 +420,6 @@
     <string name="Charts_Price">Цена</string>
     <string name="Charts_Error_NotAvailable">График недоступен</string>
     <string name="Charts_LatestNews">Последние Новости</string>
-    <string name="Charts_Trend_Up">Up Trend</string>
-    <string name="Charts_Trend_Down">Down Trend</string>
-    <string name="Charts_Trend_Neutral">Neutral</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Портфель</string>
     <string name="RateList_top100">Топ-100</string>
