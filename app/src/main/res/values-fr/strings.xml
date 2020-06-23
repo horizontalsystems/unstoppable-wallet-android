@@ -24,7 +24,7 @@
     <string name="Button_Done">Fait</string>
     <string name="Button_Retry">Réessayer</string>
     <string name="Button_Change">Changer</string>
-    <string name="Button_Add">Add</string>
+    <string name="Button_Add">Ajouter</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Wallet">%s Portefeuille</string>
@@ -149,7 +149,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_Status">Statut</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
     <string name="TransactionInfo_Id">Identifiant</string>
-    <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
+    <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
     <string name="TransactionInfo_Time">Heure</string>
