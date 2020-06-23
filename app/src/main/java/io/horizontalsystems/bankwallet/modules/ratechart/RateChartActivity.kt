@@ -93,6 +93,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showChartInfo.observe(this, Observer { item ->
             rootView.post {
+                setViewVisibility(chart, isVisible = true)
                 chart.setData(item.chartData, item.chartType)
             }
 

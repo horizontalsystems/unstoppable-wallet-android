@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.*
+import io.horizontalsystems.chartview.extensions.ChartInfoTrend
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
@@ -25,10 +26,6 @@ data class ChartPointViewItem(
         val volume: CurrencyValue?,
         val macdInfo: MacdInfo?
 )
-
-enum class ChartInfoTrend {
-    UP, DOWN, NEUTRAL
-}
 
 data class MarketInfoViewItem(
         val rateValue: CurrencyValue,
