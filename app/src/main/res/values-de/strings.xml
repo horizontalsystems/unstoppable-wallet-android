@@ -24,7 +24,7 @@
     <string name="Button_Done">Fertig</string>
     <string name="Button_Retry">Wiederholen</string>
     <string name="Button_Change">Ändern</string>
-    <string name="Button_Add">Add</string>
+    <string name="Button_Add">Hinzufügen</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s wallet</string>
