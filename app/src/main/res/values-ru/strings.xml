@@ -101,7 +101,7 @@
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
-    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
     <string name="FullInfoEth_Amount">Сумма</string>
     <!--Guides-->
-    <string name="Guides_Title">Guides</string>
+    <string name="Guides_Title">Инструкции</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
@@ -312,7 +312,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Выберите Токены</string>
     <string name="ManageCoins_save">Сохранить</string>
-    <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_AddToken">Добавить Токен</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Кошелек</string>
     <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек Unstoppable не может создавать новый %s кошелек. Вы можете восстановить только существующий.</string>
     <!-- Experimental Feature -->
@@ -347,19 +347,19 @@
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
-    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <string name="AddTokenDialog_Title">Выбрать Блокчейн</string>
+    <string name="AddTokenDialog_Subtitle">Добавляется токен</string>
+    <string name="AddTokenDialog_Erc20Tokens">Токены ERC20</string>
+    <string name="AddTokenDialog_EosTokens">Токены EOS</string>
+    <string name="AddTokenDialog_BinanceTokens">Токены Binance</string>
     <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_CoinName">Coin Name</string>
-    <string name="AddErc20Token_Symbol">Symbol</string>
-    <string name="AddErc20Token_Decimals">Decimals</string>
+    <string name="AddErc20Token_Title">Добавить ERC20</string>
+    <string name="AddErc20Token_CoinName">Название Токена</string>
+    <string name="AddErc20Token_Symbol">Символ</string>
+    <string name="AddErc20Token_Decimals">Десятичные знаки</string>
     <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddErc20Token_ContractAddressHint">Адрес Контракта</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">Этот токен уже есть в списке менеджера монет</string>
     <string name="AddErc20Token_InvalidAddressError">Неверный Адрес</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
@@ -383,7 +383,7 @@
     <string name="TorPage_Title">Соединение с TOR</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Standard</string>
+    <string name="AccountType_Unstoppable">Стандартный</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
@@ -410,8 +410,8 @@
     <string name="Charts_Volume24">Объем (24 ч)</string>
     <string name="Charts_inCirculation">В обороте</string>
     <string name="Charts_TotalSupply">Макс.выпуск</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">Дата Начала</string>
+    <string name="Charts_Website">Официальный веб-сайт</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
     <string name="Charts_MarketCap_Billion">млр.</string>
@@ -423,9 +423,9 @@
     <!--Rate list-->
     <string name="RateList_portfolio">Портфель</string>
     <string name="RateList_top100">Топ-100</string>
-    <string name="RateList_Rank">Rank</string>
-    <string name="RateList_TopWinners">Top Winners</string>
-    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Rank">Место</string>
+    <string name="RateList_TopWinners">Топ Победителей</string>
+    <string name="RateList_TopLosers">Топ Проигравших</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
     <string name="BalanceSyncError_Description">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
