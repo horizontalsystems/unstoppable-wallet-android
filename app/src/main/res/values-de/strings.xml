@@ -101,7 +101,7 @@
     <string name="Send_Confirmation_Send_Button">Senden</string>
     <string name="Send_ScanQrCode">QR-Code Scannen</string>
     <string name="Send_Success">\u2713 Gesendet</string>
-    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Bitte erteilen Sie der Kamera Genehmigung</string>
     <string name="Send_Error_InvalidAddress">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
     <string name="Send_Error_InsufficientBalance">Nicht genug Geldmittel.</string>
     <string name="Send_Error_IncorrectAddress">Falscher Adresse</string>
@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
     <string name="FullInfoEth_Amount">Betrag</string>
     <!--Guides-->
-    <string name="Guides_Title">Guides</string>
+    <string name="Guides_Title">Anleitungen</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
@@ -312,7 +312,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coins auswählen</string>
     <string name="ManageCoins_save">Speichern</string>
-    <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s wallet</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Im Moment kann das Wallet keine neuen %s Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
     <!-- Experimental Feature -->
@@ -347,7 +347,7 @@
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
+    <string name="AddTokenDialog_Title">Blockchain auswählen</string>
     <string name="AddTokenDialog_Subtitle">Adding Token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
     <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
