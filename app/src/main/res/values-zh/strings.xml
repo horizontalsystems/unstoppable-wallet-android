@@ -101,7 +101,7 @@
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_ScanQrCode">扫描二维码</string>
     <string name="Send_Success">\u2713已发送</string>
-    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">请授予相机权限</string>
     <string name="Send_Error_InvalidAddress">地址无效。 请检查并重试！</string>
     <string name="Send_Error_InsufficientBalance">资金不足。</string>
     <string name="Send_Error_IncorrectAddress">错误地址</string>
@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">输出</string>
     <string name="FullInfoEth_Amount">金额</string>
     <!--Guides-->
-    <string name="Guides_Title">Guides</string>
+    <string name="Guides_Title">手册</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
@@ -312,7 +312,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">选择代币</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s钱包</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Unstoppable此时无法创建新的%s钱包。您只可以恢复现有的钱包。</string>
     <!-- Experimental Feature -->
@@ -347,20 +347,20 @@
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
-    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <string name="AddTokenDialog_Title">选择区块链</string>
+    <string name="AddTokenDialog_Subtitle">正在添加代币</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC 20 代币</string>
+    <string name="AddTokenDialog_EosTokens">EOS 代币</string>
+    <string name="AddTokenDialog_BinanceTokens">Binance 代币</string>
     <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_CoinName">Coin Name</string>
-    <string name="AddErc20Token_Symbol">Symbol</string>
-    <string name="AddErc20Token_Decimals">Decimals</string>
+    <string name="AddErc20Token_Title">添加ERC20</string>
+    <string name="AddErc20Token_CoinName">代币图片</string>
+    <string name="AddErc20Token_Symbol">标志</string>
+    <string name="AddErc20Token_Decimals">小数</string>
     <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
+    <string name="AddErc20Token_ContractAddressHint">智能合约地址</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
+    <string name="AddErc20Token_InvalidAddressError">错误地址</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
     <!-- Blockchain Settings -->
@@ -411,8 +411,8 @@
     <string name="Charts_Volume24">量(24小时)</string>
     <string name="Charts_inCirculation">流通中</string>
     <string name="Charts_TotalSupply">供应总额</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">开始日期</string>
+    <string name="Charts_Website">官方网站</string>
     <string name="Charts_MarketCap_Thousand">千</string>
     <string name="Charts_MarketCap_Million">百万</string>
     <string name="Charts_MarketCap_Billion">十亿</string>
@@ -424,9 +424,9 @@
     <!--Rate list-->
     <string name="RateList_portfolio">投资组合</string>
     <string name="RateList_top100">前100名</string>
-    <string name="RateList_Rank">Rank</string>
-    <string name="RateList_TopWinners">Top Winners</string>
-    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Rank">排名</string>
+    <string name="RateList_TopWinners">顶级赢家</string>
+    <string name="RateList_TopLosers">顶级输家</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">同步出错</string>
     <string name="BalanceSyncError_Description">如果您选择报告故障，则其文本将被复制</string>
