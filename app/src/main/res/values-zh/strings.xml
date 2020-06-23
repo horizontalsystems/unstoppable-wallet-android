@@ -421,9 +421,6 @@
     <string name="Charts_Price">价格</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
     <string name="Charts_LatestNews">最新消息</string>
-    <string name="Charts_Trend_Up">Up Trend</string>
-    <string name="Charts_Trend_Down">Down Trend</string>
-    <string name="Charts_Trend_Neutral">Neutral</string>
     <!--Rate list-->
     <string name="RateList_portfolio">投资组合</string>
     <string name="RateList_top100">前100名</string>
