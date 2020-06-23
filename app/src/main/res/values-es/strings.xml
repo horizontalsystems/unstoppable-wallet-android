@@ -24,7 +24,7 @@
     <string name="Button_Done">Listo</string>
     <string name="Button_Retry">Reintentar</string>
     <string name="Button_Change">Cambiar</string>
-    <string name="Button_Add">Add</string>
+    <string name="Button_Add">Añadir</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s Monedero</string>
@@ -101,7 +101,7 @@
     <string name="Send_Confirmation_Send_Button">Enviar</string>
     <string name="Send_ScanQrCode">Escanee el código QR</string>
     <string name="Send_Success">\u2713 Enviado</string>
-    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Por favor, autorice acceso a la camara</string>
     <string name="Send_Error_InvalidAddress">La dirección parece no válida. ¡Por favor verifíquela e inténtelo de nuevo!</string>
     <string name="Send_Error_InsufficientBalance">Saldo insuficiente</string>
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
     <string name="FullInfoEth_Amount">Importe</string>
     <!--Guides-->
-    <string name="Guides_Title">Guides</string>
+    <string name="Guides_Title">Instructivos</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
@@ -319,7 +319,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Elegir monedas</string>
     <string name="ManageCoins_save">Guardar</string>
-    <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Monedero</string>
     <string name="ManageCoins_Alert_CantCreateDescription">En este momento Unstoppable no es capaz de crear nuevas cuentas de monederos %s. Solo puede restaurar la existente.</string>
     <!-- Experimental Feature -->
@@ -354,20 +354,20 @@
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
-    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <string name="AddTokenDialog_Title">Elegir Blockchain</string>
+    <string name="AddTokenDialog_Subtitle">Añadiendo Token</string>
+    <string name="AddTokenDialog_Erc20Tokens">Tokens ERC 20</string>
+    <string name="AddTokenDialog_EosTokens">Tokens EOS</string>
+    <string name="AddTokenDialog_BinanceTokens">Tokens Binance</string>
     <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_CoinName">Coin Name</string>
-    <string name="AddErc20Token_Symbol">Symbol</string>
-    <string name="AddErc20Token_Decimals">Decimals</string>
+    <string name="AddErc20Token_Title">Añadir ERC20</string>
+    <string name="AddErc20Token_CoinName">Nombre de moneda</string>
+    <string name="AddErc20Token_Symbol">Símbolo</string>
+    <string name="AddErc20Token_Decimals">Decimales</string>
     <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
+    <string name="AddErc20Token_ContractAddressHint">Dirección del contrato</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
+    <string name="AddErc20Token_InvalidAddressError">Dirección inválida</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
     <!-- Blockchain Settings -->
@@ -417,8 +417,8 @@
     <string name="Charts_Volume24">Volumen (24H)</string>
     <string name="Charts_inCirculation">en circulación</string>
     <string name="Charts_TotalSupply">Suministro total</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">Fecha de inicio</string>
+    <string name="Charts_Website">Sitio web oficial</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
@@ -430,9 +430,9 @@
     <!--Rate list-->
     <string name="RateList_portfolio">Cartera</string>
     <string name="RateList_top100">Top 100</string>
-    <string name="RateList_Rank">Rank</string>
-    <string name="RateList_TopWinners">Top Winners</string>
-    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Rank">Puesto</string>
+    <string name="RateList_TopWinners">Mejores ganadores</string>
+    <string name="RateList_TopLosers">Peores perdedores</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Error de sincronización</string>
     <string name="BalanceSyncError_Description">El texto de error se copiará al portapapeles si decides reportarlo.</string>
