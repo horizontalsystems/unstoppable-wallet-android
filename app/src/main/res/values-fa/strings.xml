@@ -271,7 +271,7 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsSecurity_SyncModeBlockchainDescription">خصوصی تر</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">درباره</string>
-    <string name="SettingsAbout_AppTitle">Unstoppable</string>
+    <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">شرايط &amp; حريم خصوصي:</string>
     <string name="SettingsAbout_TermsPrivacyText">این برنامه به صورت همتا به همتا است. کارکرد این برنامه به عملکرد سرور وب یا پرسنل پشتیبانی فنی بستگی ندارد. \n\n تا زمانی که اینترنت وجود داشته باشد ، در همه جا کار می کند. هیچ نهادی نمی تواند این برنامه را از کار بیندازد یا کسی را از استفاده از آن بازدارد.
 \n\nکلیدهای رمزنگاری محرمانه که سرمایه رمزنگاری شده شما را کنترل می کنند ، کاملا مطمین در گوشی ذخیره می شوند ، و نه در هیچ جای دیگر.
