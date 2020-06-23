@@ -426,9 +426,6 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Charts_Price">قیمت</string>
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
     <string name="Charts_LatestNews">آخرین اخبار</string>
-    <string name="Charts_Trend_Up">Up Trend</string>
-    <string name="Charts_Trend_Down">Down Trend</string>
-    <string name="Charts_Trend_Neutral">Neutral</string>
     <!--Rate list-->
     <string name="RateList_portfolio">نمونه کار</string>
     <string name="RateList_top100">۱۰۰ برتر</string>
