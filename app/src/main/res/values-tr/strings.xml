@@ -419,9 +419,6 @@
     <string name="Charts_Price">Fiyat</string>
     <string name="Charts_Error_NotAvailable">Grafik yok</string>
     <string name="Charts_LatestNews">Son Haberler</string>
-    <string name="Charts_Trend_Up">Up Trend</string>
-    <string name="Charts_Trend_Down">Down Trend</string>
-    <string name="Charts_Trend_Neutral">Neutral</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Portföy</string>
     <string name="RateList_top100">En Beğenilen 100</string>
