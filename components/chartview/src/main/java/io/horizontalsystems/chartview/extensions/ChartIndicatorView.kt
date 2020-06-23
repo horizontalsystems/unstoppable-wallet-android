@@ -1,11 +1,10 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.chartview.extensions
 
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.ratechart.ChartInfoTrend
+import io.horizontalsystems.chartview.R
 import kotlinx.android.synthetic.main.chart_indicator_view.view.*
 
 class ChartIndicatorView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
@@ -13,9 +12,9 @@ class ChartIndicatorView(context: Context, attrs: AttributeSet) : LinearLayout(c
     init {
         inflate(context, R.layout.chart_indicator_view, this)
 
-        val attributes = context.obtainStyledAttributes(attrs, io.horizontalsystems.views.R.styleable.ChartIndicatorView)
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.ChartIndicatorView)
         try {
-            setTitle(attributes.getString(io.horizontalsystems.views.R.styleable.ChartIndicatorView_title))
+            setTitle(attributes.getString(R.styleable.ChartIndicatorView_title))
         }finally {
             attributes.recycle()
         }
@@ -52,4 +51,8 @@ class ChartIndicatorView(context: Context, attrs: AttributeSet) : LinearLayout(c
         }
     }
 
+}
+
+enum class ChartInfoTrend {
+    UP, DOWN, NEUTRAL
 }
