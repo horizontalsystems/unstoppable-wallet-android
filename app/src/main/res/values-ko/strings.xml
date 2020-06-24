@@ -359,9 +359,9 @@
     <string name="AddErc20Token_Symbol">심볼</string>
     <string name="AddErc20Token_Decimals">소수점</string>
     <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
+    <string name="AddErc20Token_ContractAddressHint">계약 주소</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
+    <string name="AddErc20Token_InvalidAddressError">잘못된 주소</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <!-- Blockchain Settings -->
@@ -412,8 +412,8 @@
     <string name="Charts_Volume24">볼륨 (24 시간)</string>
     <string name="Charts_inCirculation">유통</string>
     <string name="Charts_TotalSupply">총 발행량</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">시작일</string>
+    <string name="Charts_Website">공식 웹사이트</string>
     <string name="Charts_MarketCap_Thousand">천</string>
     <string name="Charts_MarketCap_Million">백만</string>
     <string name="Charts_MarketCap_Billion">십억</string>
@@ -425,9 +425,9 @@
     <!--Rate list-->
     <string name="RateList_portfolio">포트폴리오</string>
     <string name="RateList_top100">상위 100</string>
-    <string name="RateList_Rank">Rank</string>
-    <string name="RateList_TopWinners">Top Winners</string>
-    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Rank">순위</string>
+    <string name="RateList_TopWinners">탑 위너</string>
+    <string name="RateList_TopLosers">탑 루저</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">동기화 오류</string>
     <string name="BalanceSyncError_Description">나중에 보고할 수 있도록 에러 텍스트가 클립보드에 복사됩니다.</string>
