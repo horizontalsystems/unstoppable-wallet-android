@@ -79,13 +79,22 @@
                 style="@style/Subhead1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/notificationIcon"
                 app:layout_constraintTop_toTopOf="@+id/coinRateLast"
                 app:negativeColor="?ColorLeah"
                 app:positiveColor="?ColorLeah"
                 tools:text="-18" />
+
+            <ImageView
+                android:id="@+id/notificationIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_notification_16"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
+                app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+                app:layout_constraintTop_toTopOf="@+id/coinRateLast" />
 
             <HorizontalScrollView
                 android:id="@+id/chartActionsWrap"

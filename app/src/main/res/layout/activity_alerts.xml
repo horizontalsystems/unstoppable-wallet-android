@@ -117,7 +117,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/SettingsNotifications_Title" />
+                app:title="@string/Notification_Title" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
