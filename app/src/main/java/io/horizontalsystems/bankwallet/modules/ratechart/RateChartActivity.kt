@@ -10,6 +10,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.ui.extensions.BottomNotificationMenu
+import io.horizontalsystems.bankwallet.ui.extensions.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
@@ -250,6 +252,10 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         rsiChartIndicator.setOnClickListener {
             presenter.toggleRsi()
+        }
+
+        notificationIcon.setOnClickListener {
+            BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, "Bitcoin", "BTC")
         }
     }
 

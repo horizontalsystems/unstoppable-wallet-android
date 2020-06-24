@@ -371,7 +371,6 @@
 
     <!--Setting_Notifications-->
 
-    <string name="SettingsNotifications_Title">Notifications</string>
     <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
@@ -379,9 +378,19 @@
     <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
     <string name="SettingsNotifications_PushNotification">Push Notification</string>
 
+    <string name="Notification_Title">Notifications</string>
     <string name="Notification_Notifications">Notifications %s</string>
     <string name="Notification_Up">Up</string>
     <string name="Notification_Down">Down</string>
+
+    <string name="NotificationBottomMenu_Change24h">Change 24h</string>
+    <string name="NotificationBottomMenu_Off">Off</string>
+    <string name="NotificationBottomMenu_2" translatable="false">2%</string>
+    <string name="NotificationBottomMenu_5" translatable="false">5%</string>
+    <string name="NotificationBottomMenu_10" translatable="false">10%</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
+    <string name="NotificationBottomMenu_ShortTerm">Short Term 7D</string>
+    <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
 
     <!--Errors-->
 
