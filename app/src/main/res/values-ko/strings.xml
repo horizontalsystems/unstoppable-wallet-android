@@ -24,7 +24,7 @@
     <string name="Button_Done">완료</string>
     <string name="Button_Retry">재시도</string>
     <string name="Button_Change">변경하기</string>
-    <string name="Button_Add">Add</string>
+    <string name="Button_Add">추가</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -101,7 +101,7 @@
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_ScanQrCode">QR 코드 스캔</string>
     <string name="Send_Success">\u2713 보냄</string>
-    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">카메라 권한을 허용하십시오</string>
     <string name="Send_Error_InvalidAddress">주소가 올바르지 않습니다. 다시 확인하고 시도해주세요!</string>
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">산출값</string>
     <string name="FullInfoEth_Amount">양</string>
     <!--Guides-->
-    <string name="Guides_Title">Guides</string>
+    <string name="Guides_Title">가이드</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -312,7 +312,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 선택하기</string>
     <string name="ManageCoins_save">저장</string>
-    <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s 지갑</string>
     <string name="ManageCoins_Alert_CantCreateDescription">언스탑퍼블은 현재 새로운 %s 지갑을 만들 수 없습니다. 귀하께서는 기존 항목만 복원이 가능합니다.</string>
     <!-- Experimental Feature -->
@@ -348,16 +348,16 @@
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
-    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <string name="AddTokenDialog_Title">블록체인 선택</string>
+    <string name="AddTokenDialog_Subtitle">토큰 추가 중</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC 20 토큰</string>
+    <string name="AddTokenDialog_EosTokens">EOS 토큰</string>
+    <string name="AddTokenDialog_BinanceTokens">Binance 토큰</string>
     <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_CoinName">Coin Name</string>
-    <string name="AddErc20Token_Symbol">Symbol</string>
-    <string name="AddErc20Token_Decimals">Decimals</string>
+    <string name="AddErc20Token_Title">ERC20 추가</string>
+    <string name="AddErc20Token_CoinName">코인 이름</string>
+    <string name="AddErc20Token_Symbol">심볼</string>
+    <string name="AddErc20Token_Decimals">소수점</string>
     <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
