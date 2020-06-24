@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
-import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
@@ -329,29 +328,8 @@ interface IPriceAlertsStorage {
     fun deleteExcluding(coinCodes: List<String>)
 }
 
-interface IEmojiHelper {
-    val multiAlerts: String
-
-    fun title(signedState: Int): String
-    fun body(signedState: Int): String
-}
-
-interface IPriceAlertHandler {
-    fun handleAlerts(latestRatesMap: Map<String, BigDecimal?>)
-}
-
-interface IBackgroundPriceAlertManager {
-    fun fetchRates(): Single<Unit>
-    fun onAppLaunch()
-}
-
-interface INotificationFactory {
-    fun notifications(alertItems: List<PriceAlertItem>): List<AlertNotification>
-}
-
 interface INotificationManager {
     val isEnabled: Boolean
-    fun show(notifications: List<AlertNotification>)
     fun clear()
 }
 
@@ -387,11 +365,6 @@ interface IFeeRateProvider {
 
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
-}
-
-interface IBackgroundRateAlertScheduler {
-    fun startPeriodicWorker()
-    fun stopPeriodicWorker()
 }
 
 interface IBlockchainSettingsManager {

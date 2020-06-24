@@ -26,40 +26,10 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
             }
         }
 
-    override fun show(notifications: List<AlertNotification>) {
-        createNotificationChannel()
-        clear()
-
-        notifications.forEachIndexed { index, notification ->
-            showNotification(index, notification)
-        }
-    }
-
     override fun clear() {
         for(i in 0 until maxNumberOfNotifications){
             androidNotificationManager.cancel(i)
         }
-    }
-
-    private fun showNotification(notificationId: Int, notification: AlertNotification) {
-        val builder = NotificationCompat.Builder(App.instance, channelId)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle(notification.title)
-                .setContentText(notification.body)
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(notification.body))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(getPendingIntent())
-                .setAutoCancel(true)
-
-        androidNotificationManager.notify(notificationId, builder.build())
-    }
-
-    private fun getPendingIntent(): PendingIntent {
-        val intent = Intent(App.instance, LauncherActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        return PendingIntent.getActivity(App.instance, 0, intent, 0)
     }
 
     private fun createNotificationChannel() {
