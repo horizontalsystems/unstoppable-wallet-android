@@ -348,7 +348,7 @@
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Выбрать Блокчейн</string>
-    <string name="AddTokenDialog_Subtitle">Добавляется токен</string>
+    <string name="AddTokenDialog_Subtitle">Adding Token</string>
     <string name="AddTokenDialog_Erc20Tokens">Токены ERC20</string>
     <string name="AddTokenDialog_EosTokens">Токены EOS</string>
     <string name="AddTokenDialog_BinanceTokens">Токены Binance</string>
@@ -359,7 +359,7 @@
     <string name="AddErc20Token_Decimals">Десятичные знаки</string>
     <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">Адрес Контракта</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">Этот токен уже есть в списке менеджера монет</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
     <string name="AddErc20Token_InvalidAddressError">Неверный Адрес</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
@@ -383,7 +383,7 @@
     <string name="TorPage_Title">Соединение с TOR</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Стандартный</string>
+    <string name="AccountType_Unstoppable">Standard</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
@@ -410,7 +410,7 @@
     <string name="Charts_Volume24">Объем (24 ч)</string>
     <string name="Charts_inCirculation">В обороте</string>
     <string name="Charts_TotalSupply">Макс.выпуск</string>
-    <string name="Charts_StartDate">Дата Начала</string>
+    <string name="Charts_StartDate">Start Date</string>
     <string name="Charts_Website">Официальный веб-сайт</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
