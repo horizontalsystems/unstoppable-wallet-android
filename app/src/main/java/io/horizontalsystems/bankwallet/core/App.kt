@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.providers.Erc20ContractInfoProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
-import io.horizontalsystems.bankwallet.core.utils.EmojiHelper
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -68,14 +67,9 @@ class App : CoreApp() {
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
-        lateinit var priceAlertHandler: IPriceAlertHandler
-        lateinit var backgroundPriceAlertManager: IBackgroundPriceAlertManager
-        lateinit var emojiHelper: IEmojiHelper
         lateinit var notificationManager: INotificationManager
-        lateinit var notificationFactory: INotificationFactory
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
-        lateinit var backgroundRateAlertScheduler: IBackgroundRateAlertScheduler
         lateinit var blockchainSettingsManager: IBlockchainSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
@@ -177,14 +171,7 @@ class App : CoreApp() {
 
         priceAlertsStorage = PriceAlertsStorage(coinManager, appDatabase)
         priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
-        emojiHelper = EmojiHelper()
-        notificationFactory = NotificationFactory(emojiHelper, instance)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
-        priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
-        backgroundRateAlertScheduler = BackgroundRateAlertScheduler(instance)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(localStorage, backgroundRateAlertScheduler, priceAlertsStorage, xRateManager, walletStorage, currencyManager, priceAlertHandler, notificationManager).apply {
-            backgroundManager.registerListener(this)
-        }
 
         appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, eosKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
@@ -235,7 +222,6 @@ class App : CoreApp() {
             adapterManager.preloadAdapters()
             accountManager.clearAccounts()
             priceAlertManager.onAppLaunch()
-            backgroundPriceAlertManager.onAppLaunch()
         }).start()
 
         rateAppManager.onAppBecomeActive()
