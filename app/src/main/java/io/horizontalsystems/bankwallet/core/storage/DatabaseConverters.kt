@@ -2,9 +2,8 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.PriceAlert
 import java.math.BigDecimal
 
 class DatabaseConverters {
@@ -81,6 +80,26 @@ class DatabaseConverters {
             ethereum -> CoinType.Ethereum
             else -> null
         }
+    }
+
+    @TypeConverter
+    fun fromChangeState(state: PriceAlert.ChangeState): String{
+        return state.value
+    }
+
+    @TypeConverter
+    fun toChangeState(value: String?): PriceAlert.ChangeState?{
+        return PriceAlert.ChangeState.valueOf(value)
+    }
+
+    @TypeConverter
+    fun fromTrendState(state: PriceAlert.TrendState): String{
+        return state.value
+    }
+
+    @TypeConverter
+    fun toTrendState(value: String?): PriceAlert.TrendState?{
+        return PriceAlert.TrendState.valueOf(value)
     }
 
     companion object {
