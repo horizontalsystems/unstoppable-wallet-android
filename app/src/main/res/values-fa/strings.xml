@@ -24,7 +24,7 @@
     <string name="Button_Done">انجام شد</string>
     <string name="Button_Retry">دوباره امتحان کنید</string>
     <string name="Button_Change">تغییر</string>
-    <string name="Button_Add">Add</string>
+    <string name="Button_Add">اضافه کردن</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
@@ -101,7 +101,7 @@
     <string name="Send_Confirmation_Send_Button">ارسال</string>
     <string name="Send_ScanQrCode">کد QR را اسکن کنید</string>
     <string name="Send_Success">\u2713 ارسال شد</string>
-    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">لطفا مجوز دسترسی به دوربین را تایید کنید</string>
     <string name="Send_Error_InvalidAddress">آدرس نامعتبر است. لطفا بررسی کنید و دوباره امتحان کنید!</string>
     <string name="Send_Error_InsufficientBalance">بودجه كافي نيست.</string>
     <string name="Send_Error_IncorrectAddress">آدرس اشتباه</string>
@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">خروجي ها</string>
     <string name="FullInfoEth_Amount">مقدار</string>
     <!--Guides-->
-    <string name="Guides_Title">Guides</string>
+    <string name="Guides_Title">راهنما</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -318,7 +318,7 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <!--Manage Coins-->
     <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
     <string name="ManageCoins_save">ذخیره</string>
-    <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s کیف پول</string>
     <string name="ManageCoins_Alert_CantCreateDescription">در این مرحله ، کیف پول قادر به ایجاد حساب های کیف پول جدید %s نیست. شما فقط قادر به بازیابی کیف پول موجود هستید.</string>
     <!-- Experimental Feature -->
@@ -353,20 +353,20 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
-    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <string name="AddTokenDialog_Title">انتخاب زنجیره بلوکی</string>
+    <string name="AddTokenDialog_Subtitle">در حال اضافه کردن نشان</string>
+    <string name="AddTokenDialog_Erc20Tokens">نشان های ERC 20</string>
+    <string name="AddTokenDialog_EosTokens">نشانه های EOS</string>
+    <string name="AddTokenDialog_BinanceTokens">نشانه های Binance</string>
     <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_CoinName">Coin Name</string>
-    <string name="AddErc20Token_Symbol">Symbol</string>
-    <string name="AddErc20Token_Decimals">Decimals</string>
+    <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
+    <string name="AddErc20Token_CoinName">نام سکه</string>
+    <string name="AddErc20Token_Symbol">نماد</string>
+    <string name="AddErc20Token_Decimals">اعشارها</string>
     <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
+    <string name="AddErc20Token_ContractAddressHint">آدرس قرارداد</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
+    <string name="AddErc20Token_InvalidAddressError">آدرس نامعتبر است</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <!-- Blockchain Settings -->
@@ -416,8 +416,8 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Charts_Volume24">درجه (۲۴ ساعت)</string>
     <string name="Charts_inCirculation">در گردش</string>
     <string name="Charts_TotalSupply">موجودی کل</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">تاریخ شروع</string>
+    <string name="Charts_Website">وب سایت رسمی</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
@@ -429,9 +429,9 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <!--Rate list-->
     <string name="RateList_portfolio">نمونه کار</string>
     <string name="RateList_top100">۱۰۰ برتر</string>
-    <string name="RateList_Rank">Rank</string>
-    <string name="RateList_TopWinners">Top Winners</string>
-    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Rank">رتبه</string>
+    <string name="RateList_TopWinners">برندگان برتر</string>
+    <string name="RateList_TopLosers">بازندگان برتر</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>
     <string name="BalanceSyncError_Description">در صورت تصمیم به گزارش آن ، متن خطا در کلیپ بورد شما کپی خواهد شد.</string>
