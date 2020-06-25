@@ -15,12 +15,12 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 19, exportSchema = false, entities = [
+@Database(version = 20, exportSchema = false, entities = [
     EnabledWallet::class,
-    PriceAlertRecord::class,
+    PriceAlert::class,
     AccountRecord::class,
     BlockchainSetting::class,
-    CoinRecord:: class]
+    CoinRecord::class]
 )
 
 @TypeConverters(DatabaseConverters::class)
@@ -58,7 +58,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addIndexToEnableWallet,
                             updateBchSyncMode,
                             addCoinRecordTable,
-                            removeRateStorageTable
+                            removeRateStorageTable,
+                            updatePriceAlertTable
                     )
                     .build()
         }
@@ -352,6 +353,40 @@ abstract class AppDatabase : RoomDatabase() {
         private val removeRateStorageTable: Migration = object : Migration(18, 19) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE IF EXISTS Rate")
+            }
+        }
+
+        private val updatePriceAlertTable: Migration = object : Migration(19, 20) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinCode` TEXT NOT NULL, `changeState` TEXT, `trendState` TEXT, PRIMARY KEY(`coinCode`))")
+
+                val dbConverter = DatabaseConverters()
+                val alertsCursor = database.query("SELECT * FROM PriceAlertRecord")
+                while (alertsCursor.moveToNext()) {
+                    val coinCodeColumnIndex = alertsCursor.getColumnIndex("coinCode")
+                    val changeStateColumnIndex = alertsCursor.getColumnIndex("stateRaw")
+                    if (coinCodeColumnIndex >= 0 && changeStateColumnIndex >= 0) {
+                        val coinCode = alertsCursor.getString(coinCodeColumnIndex)
+                        val changeStateOld = alertsCursor.getInt(changeStateColumnIndex)
+
+                        val newState = if (changeStateOld == 2 || changeStateOld == 3) {
+                            PriceAlert.ChangeState.PERCENT_2
+                        } else if (changeStateOld == 5) {
+                            PriceAlert.ChangeState.PERCENT_5
+                        } else {
+                            continue
+                        }
+
+                        val changeStateValue = dbConverter.fromChangeState(newState)
+
+                        database.execSQL("""
+                                                INSERT INTO PriceAlert (`coinCode`,`changeState`,`trendState`) 
+                                                VALUES ('$coinCode', '$changeStateValue', 'off')
+                                                """.trimIndent())
+                    }
+                }
+
+                database.execSQL("DROP TABLE IF EXISTS PriceAlertRecord")
             }
         }
     }

@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.notifications
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INotificationManager
+import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
-import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
 class NotificationsInteractor(
-        private val priceAlertManager: PriceAlertManager,
+        private val priceAlertManager: IPriceAlertManager,
         backgroundManager: BackgroundManager,
         private val localStorage: ILocalStorage,
         private val notificationManager: INotificationManager
@@ -32,7 +32,7 @@ class NotificationsInteractor(
         }
 
     override fun savePriceAlerts(priceAlerts: List<PriceAlert>) {
-        priceAlertManager.savePriceAlerts(priceAlerts)
+//        priceAlertManager.savePriceAlerts(priceAlerts)
     }
 
     override fun startBackgroundRateFetchWorker() {

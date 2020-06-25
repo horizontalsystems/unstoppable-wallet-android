@@ -13,9 +13,9 @@ class NotificationsPresenter(
     private var priceAlerts = listOf<PriceAlert>()
 
     override fun viewDidLoad() {
-        priceAlerts = interactor.priceAlerts.sortedBy { it.coin.title }
+//        priceAlerts = interactor.priceAlerts.sortedBy { it.coin.title }
 
-        view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
+//        view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
         view.setNotificationSwitch(interactor.notificationIsOn)
 
         checkPriceAlertsEnabled()
@@ -25,28 +25,28 @@ class NotificationsPresenter(
         view.showStateSelector(itemPosition, priceAlerts[itemPosition])
     }
 
-    override fun didSelectState(itemPosition: Int, state: PriceAlert.State) {
-        val priceAlert = priceAlerts[itemPosition]
-
-        if (priceAlert.state != state) {
-            priceAlert.state = state
-
-            interactor.savePriceAlerts(listOf(priceAlert))
-
-            view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
-        }
-    }
+//    override fun didSelectState(itemPosition: Int, state: PriceAlert.State) {
+//        val priceAlert = priceAlerts[itemPosition]
+//
+//        if (priceAlert.state != state) {
+//            priceAlert.state = state
+//
+//            interactor.savePriceAlerts(listOf(priceAlert))
+//
+//            view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
+//        }
+//    }
 
     override fun didClickOpenSettings() {
         router.openNotificationSettings()
     }
 
     override fun didClickDeactivateAll() {
-        priceAlerts.forEach { it.state = PriceAlert.State.OFF }
+//        priceAlerts.forEach { it.state = PriceAlert.State.OFF }
 
-        interactor.savePriceAlerts(priceAlerts)
+//        interactor.savePriceAlerts(priceAlerts)
 
-        view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
+//        view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
     }
 
     override fun didEnterForeground() {

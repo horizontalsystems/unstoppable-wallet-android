@@ -1,35 +1,21 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IPriceAlertsStorage
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.IPriceAlertManager
+import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.reactivex.schedulers.Schedulers
 
-class PriceAlertManager(private val walletManager: IWalletManager, private val priceAlertsStorage: IPriceAlertsStorage) {
+class PriceAlertManager(private val appDatabase: AppDatabase): IPriceAlertManager {
 
-    fun onAppLaunch(){
-        val disposable = walletManager.walletsUpdatedObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe { wallets ->
-                    val enabledCoins = wallets.map { it.coin.code }
-
-                    priceAlertsStorage.deleteExcluding(enabledCoins)
-                }
+    override fun getPriceAlerts(): List<PriceAlert> {
+        return appDatabase.priceAlertsDao().all()
     }
 
-    fun getPriceAlerts(): List<PriceAlert> {
-        val priceAlerts = priceAlertsStorage.all()
-
-        return walletManager.wallets.map { wallet ->
-            priceAlerts.firstOrNull { it.coin == wallet.coin }
-                    ?: PriceAlert(wallet.coin, PriceAlert.State.OFF)
-        }
+    override fun savePriceAlert(priceAlert: PriceAlert) {
+        appDatabase.priceAlertsDao().update(priceAlert)
     }
 
-    fun savePriceAlerts(priceAlerts: List<PriceAlert>) {
-        priceAlertsStorage.save(priceAlerts.filter { it.state.value != null })
-        priceAlertsStorage.delete(priceAlerts.filter { it.state.value == null })
+    override fun priceAlert(coinCode: String): PriceAlert {
+        val priceAlert = appDatabase.priceAlertsDao().priceAlert(coinCode)
+        return priceAlert ?: PriceAlert(coinCode, PriceAlert.ChangeState.OFF, PriceAlert.TrendState.OFF)
     }
-
 }

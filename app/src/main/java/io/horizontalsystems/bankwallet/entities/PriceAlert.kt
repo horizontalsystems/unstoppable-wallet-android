@@ -1,16 +1,36 @@
 package io.horizontalsystems.bankwallet.entities
 
-import java.math.BigDecimal
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class PriceAlert(val coin: Coin, var state: State, var lastRate: BigDecimal? = null) {
-    enum class State(val value: Int?) {
-        OFF(null),
-        PERCENT_2(2),
-        PERCENT_3(3),
-        PERCENT_5(5);
+
+@Entity
+class PriceAlert(
+        @PrimaryKey val coinCode: String,
+        var changeState: ChangeState?,
+        var trendState: TrendState?
+) {
+
+    enum class ChangeState(val value: String) {
+        OFF("off"),
+        PERCENT_2("2"),
+        PERCENT_5("5"),
+        PERCENT_10("10");
 
         companion object {
-            fun valueOf(value: Int?): State {
+            fun valueOf(value: String?): ChangeState {
+                return values().find { it.value == value } ?: OFF
+            }
+        }
+    }
+
+    enum class TrendState(val value: String) {
+        OFF("off"),
+        SHORT("short"),
+        LONG("long");
+
+        companion object {
+            fun valueOf(value: String?): TrendState {
                 return values().find { it.value == value } ?: OFF
             }
         }
