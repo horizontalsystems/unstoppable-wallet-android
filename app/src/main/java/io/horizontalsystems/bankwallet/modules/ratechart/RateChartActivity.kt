@@ -10,8 +10,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.ui.extensions.BottomNotificationMenu
-import io.horizontalsystems.bankwallet.ui.extensions.NotificationMenuMode
+import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.BottomNotificationMenu
+import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
@@ -27,6 +27,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
     private lateinit var coinCode: String
+    private lateinit var coinTitle: String
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
@@ -40,7 +41,8 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             return
         }
 
-        toolbar.title = intent.getStringExtra(ModuleField.COIN_TITLE)
+        coinTitle = intent.getStringExtra(ModuleField.COIN_TITLE) ?: ""
+        toolbar.title = coinTitle
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -255,7 +257,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         }
 
         notificationIcon.setOnClickListener {
-            BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, "Bitcoin", "BTC")
+            BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, coinTitle, coinCode)
         }
     }
 

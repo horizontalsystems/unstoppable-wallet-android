@@ -320,14 +320,6 @@ interface IAccountsStorage {
     fun clearDeleted()
 }
 
-interface IPriceAlertsStorage {
-    val priceAlertCount: Int
-    fun all(): List<PriceAlert>
-    fun save(priceAlerts: List<PriceAlert>)
-    fun delete(priceAlerts: List<PriceAlert>)
-    fun deleteExcluding(coinCodes: List<String>)
-}
-
 interface INotificationManager {
     val isEnabled: Boolean
     fun clear()
@@ -438,6 +430,12 @@ interface ICoinManager{
 
 interface IErc20ContractInfoProvider{
     fun getCoin(address: String): Single<Coin>
+}
+
+interface IPriceAlertManager{
+    fun getPriceAlerts(): List<PriceAlert>
+    fun savePriceAlert(priceAlert: PriceAlert)
+    fun priceAlert(coinCode: String): PriceAlert
 }
 
 sealed class FeeRatePriority {

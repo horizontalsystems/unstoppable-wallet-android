@@ -56,8 +56,7 @@ class App : CoreApp() {
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
-        lateinit var priceAlertsStorage: IPriceAlertsStorage
-        lateinit var priceAlertManager: PriceAlertManager
+        lateinit var priceAlertManager: IPriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
@@ -169,8 +168,7 @@ class App : CoreApp() {
         addressParserFactory = AddressParserFactory()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
-        priceAlertsStorage = PriceAlertsStorage(coinManager, appDatabase)
-        priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
+        priceAlertManager = PriceAlertManager(appDatabase)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
 
         appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, eosKitManager, binanceKitManager)
@@ -221,7 +219,6 @@ class App : CoreApp() {
             walletManager.loadWallets()
             adapterManager.preloadAdapters()
             accountManager.clearAccounts()
-            priceAlertManager.onAppLaunch()
         }).start()
 
         rateAppManager.onAppBecomeActive()

@@ -70,17 +70,17 @@ class NotificationsActivity : BaseActivity() {
         })
 
         view.showStateSelectorLiveEvent.observe(this, Observer { (itemPosition, selectedPriceAlert) ->
-            val priceAlertValues = PriceAlert.State.values()
-            val selectorItems = priceAlertValues.map { state ->
-                val caption = state.value?.let { "$it%" }
-                        ?: getString(R.string.SettingsNotifications_Off)
-                SelectorItem(caption, state == selectedPriceAlert.state)
-            }
-            SelectorDialog
-                    .newInstance(selectorItems, null, { position ->
-                        presenter.didSelectState(itemPosition, priceAlertValues[position])
-                    }, false)
-                    .show(supportFragmentManager, "price_alert_value_selector")
+//            val priceAlertValues = PriceAlert.State.values()
+//            val selectorItems = priceAlertValues.map { state ->
+//                val caption = state.value?.let { "$it%" }
+//                        ?: getString(R.string.SettingsNotifications_Off)
+//                SelectorItem(caption, state == selectedPriceAlert.state)
+//            }
+//            SelectorDialog
+//                    .newInstance(selectorItems, null, { position ->
+//                        presenter.didSelectState(itemPosition, priceAlertValues[position])
+//                    }, false)
+//                    .show(supportFragmentManager, "price_alert_value_selector")
         })
 
         view.notificationIsOn.observe(this, Observer { enabled ->
@@ -147,7 +147,7 @@ class NotificationItemViewHolder(override val containerView: SettingsViewDropdow
         containerView.showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, coinViewItem.coin.code, coinViewItem.coin.type))
         containerView.showTitle(coinViewItem.title)
         containerView.showSubtitle(coinViewItem.coin.code)
-        containerView.showDropdownValue(coinViewItem.state.value?.let { "$it%" } ?: itemView.context.getString(R.string.SettingsNotifications_Off))
+//        containerView.showDropdownValue(coinViewItem.state.value?.let { "$it%" } ?: itemView.context.getString(R.string.SettingsNotifications_Off))
         containerView.showBottomBorder(lastElement)
         containerView.isEnabled = clickable
 

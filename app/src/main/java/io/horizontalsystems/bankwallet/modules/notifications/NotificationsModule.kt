@@ -23,7 +23,7 @@ object NotificationsModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun didSelectState(itemPosition: Int, state: PriceAlert.State)
+//        fun didSelectState(itemPosition: Int, state: PriceAlert.State)
         fun didClickOpenSettings()
         fun didClickDeactivateAll()
         fun didTapItem(itemPosition: Int)
@@ -50,11 +50,11 @@ object NotificationsModule {
     }
 
     data class PriceAlertViewItem(val title: String, val coin: Coin) {
-        lateinit var state: PriceAlert.State
+//        lateinit var state: PriceAlert.State
 
-        constructor(title: String, coin: Coin, state: PriceAlert.State) : this(title, coin) {
-            this.state = state
-        }
+//        constructor(title: String, coin: Coin, state: PriceAlert.State) : this(title, coin) {
+//            this.state = state
+//        }
     }
 
     class Factory : ViewModelProvider.Factory {
