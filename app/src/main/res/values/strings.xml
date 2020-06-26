@@ -384,13 +384,14 @@
     <string name="Notification_Down">Down</string>
 
     <string name="NotificationBottomMenu_Change24h">Change 24h</string>
-    <string name="NotificationBottomMenu_Off">Off</string>
     <string name="NotificationBottomMenu_2" translatable="false">2%</string>
     <string name="NotificationBottomMenu_5" translatable="false">5%</string>
     <string name="NotificationBottomMenu_10" translatable="false">10%</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">Short Term 7D</string>
+    <string name="NotificationBottomMenu_Short">Short</string>
     <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
+    <string name="NotificationBottomMenu_Long">Long</string>
 
     <!--Errors-->
 
