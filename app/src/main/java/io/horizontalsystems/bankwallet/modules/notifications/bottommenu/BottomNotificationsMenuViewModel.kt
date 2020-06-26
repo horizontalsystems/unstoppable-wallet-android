@@ -49,7 +49,7 @@ class BottomNotificationsMenuViewModel(
 
     private fun getChangeList(): List<NotifMenuViewItem> {
         return listOf(
-                NotifMenuViewItem(R.string.NotificationBottomMenu_Off, NotifViewItemType.Option, OptionValue.ChangeOff, changeState == PriceAlert.ChangeState.OFF),
+                NotifMenuViewItem(R.string.SettingsNotifications_Off, NotifViewItemType.Option, OptionValue.ChangeOff, changeState == PriceAlert.ChangeState.OFF),
                 NotifMenuViewItem(R.string.NotificationBottomMenu_2, NotifViewItemType.Option, OptionValue.Change2, changeState == PriceAlert.ChangeState.PERCENT_2),
                 NotifMenuViewItem(R.string.NotificationBottomMenu_5, NotifViewItemType.Option, OptionValue.Change5, changeState == PriceAlert.ChangeState.PERCENT_5),
                 NotifMenuViewItem(R.string.NotificationBottomMenu_10, NotifViewItemType.Option, OptionValue.Change10, changeState == PriceAlert.ChangeState.PERCENT_10)
@@ -58,7 +58,7 @@ class BottomNotificationsMenuViewModel(
 
     private fun getTrendList(): List<NotifMenuViewItem> {
         return listOf(
-                NotifMenuViewItem(R.string.NotificationBottomMenu_Off, NotifViewItemType.Option, OptionValue.TrendOff, trendState == PriceAlert.TrendState.OFF),
+                NotifMenuViewItem(R.string.SettingsNotifications_Off, NotifViewItemType.Option, OptionValue.TrendOff, trendState == PriceAlert.TrendState.OFF),
                 NotifMenuViewItem(R.string.NotificationBottomMenu_ShortTerm, NotifViewItemType.Option, OptionValue.TrendShort, trendState == PriceAlert.TrendState.SHORT),
                 NotifMenuViewItem(R.string.NotificationBottomMenu_LongTerm, NotifViewItemType.Option, OptionValue.TrendLong, trendState == PriceAlert.TrendState.LONG)
         )

@@ -5,24 +5,23 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.SettingsViewDropdown
+import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_alerts.*
+import kotlinx.android.synthetic.main.view_holder_notification_coin_name.*
 
-class NotificationsActivity : BaseActivity() {
+class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener {
 
-    private lateinit var presenter: NotificationsPresenter
+    private val viewModel by viewModels<NotificationsViewModel>{ NotificationsModule.Factory() }
+
     private lateinit var notificationItemsAdapter: NotificationItemsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,127 +31,134 @@ class NotificationsActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        presenter = ViewModelProvider(this, NotificationsModule.Factory()).get(NotificationsPresenter::class.java)
-
-        observeView(presenter.view as NotificationsView)
-        observeRouter(presenter.router as NotificationsRouter)
-
         buttonAndroidSettings.setOnSingleClickListener {
-            presenter.didClickOpenSettings()
+            viewModel.openSettings()
         }
 
         deactivateAll.setOnSingleClickListener {
-            presenter.didClickDeactivateAll()
+            viewModel.deactivateAll()
         }
 
-        notificationItemsAdapter = NotificationItemsAdapter(presenter)
+        notificationItemsAdapter = NotificationItemsAdapter(this)
         notifications.adapter = notificationItemsAdapter
 
         switchNotification.setOnClickListener { switchNotification.switchToggle() }
 
-        presenter.viewDidLoad()
+        observeViewModel()
     }
 
-    private fun observeView(view: NotificationsView) {
-        view.itemsLiveData.observe(this, Observer {
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    override fun onItemClick(item: NotificationViewItem) {
+
+    }
+
+    private fun observeViewModel() {
+        viewModel.itemsLiveData.observe(this, Observer {
             notificationItemsAdapter.items = it
             notificationItemsAdapter.notifyDataSetChanged()
         })
 
-        view.toggleWarningLiveData.observe(this, Observer { showWarning ->
-            switchNotification.isVisible = !showWarning
-            textDescription.isVisible = !showWarning
-            notifications.isVisible = !showWarning
-            deactivateAll.isVisible = !showWarning
-
-            textWarning.isVisible = showWarning
-            buttonAndroidSettings.isVisible = showWarning
-        })
-
-        view.showStateSelectorLiveEvent.observe(this, Observer { (itemPosition, selectedPriceAlert) ->
-//            val priceAlertValues = PriceAlert.State.values()
-//            val selectorItems = priceAlertValues.map { state ->
-//                val caption = state.value?.let { "$it%" }
-//                        ?: getString(R.string.SettingsNotifications_Off)
-//                SelectorItem(caption, state == selectedPriceAlert.state)
-//            }
-//            SelectorDialog
-//                    .newInstance(selectorItems, null, { position ->
-//                        presenter.didSelectState(itemPosition, priceAlertValues[position])
-//                    }, false)
-//                    .show(supportFragmentManager, "price_alert_value_selector")
-        })
-
-        view.notificationIsOn.observe(this, Observer { enabled ->
-            switchNotification.showSwitch(enabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                presenter.didSwitchAlertNotification(isChecked)
-            })
-
-            notifications.alpha = if (enabled) 1f else 0.5f
-            deactivateAll.alpha = if (enabled) 1f else 0.5f
-
-            //enable/disable clicks on related elements
-            notificationItemsAdapter.clickable = enabled
-            notificationItemsAdapter.notifyDataSetChanged()
-
-            deactivateAll.isEnabled = enabled
-        })
-    }
-
-    private fun observeRouter(router: NotificationsRouter) {
-        router.openNotificationSettingsLiveEvent.observe(this, Observer {
+        viewModel.openNotificationSettings.observe(this, Observer {
             val intent = Intent()
             intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
             intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
             startActivity(intent)
         })
+
+        viewModel.setWarningVisible.observe(this, Observer { showWarning ->
+            notifications.isVisible = !showWarning
+            deactivateAll.isVisible = !showWarning
+            switchNotification.isVisible = !showWarning
+            textDescription.isVisible = !showWarning
+
+            textWarning.isVisible = showWarning
+            buttonAndroidSettings.isVisible = showWarning
+        })
+
+        viewModel.notificationIsOnLiveData.observe(this, Observer { enabled ->
+            switchNotification.showSwitch(enabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                viewModel.switchAlertNotification(isChecked)
+            })
+
+            notifications.isVisible = enabled
+            deactivateAll.isVisible = enabled
+        })
     }
+
 }
 
-class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : RecyclerView.Adapter<NotificationItemViewHolder>() {
-    var items = listOf<NotificationsModule.PriceAlertViewItem>()
-    var clickable = true
+class NotificationItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    init {
-        setHasStableIds(true)
+    var items = listOf<NotificationViewItem>()
+
+    interface Listener{
+        fun onItemClick(item: NotificationViewItem)
+    }
+
+    private val coinName = 1
+    private val notificationOption = 2
+
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position].type) {
+            NotificationViewItemType.CoinName -> coinName
+            else -> notificationOption
+        }
     }
 
     override fun getItemId(position: Int): Long {
         return items[position].hashCode().toLong()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationItemViewHolder {
-        val settingsView = SettingsViewDropdown(parent.context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when(viewType){
+            notificationOption -> {
+                val settingsView = SettingsViewDropdown(parent.context).apply {
+                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                }
+                NotificationItemViewHolder(settingsView, onClick = { index -> listener.onItemClick(items[index]) })
+            }
+            coinName -> NotificationCoinNameViewHolder(inflate(parent, R.layout.view_holder_notification_coin_name, false)
             )
+            else -> throw Exception("Invalid view type")
         }
 
-        return NotificationItemViewHolder(settingsView, presenter)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: NotificationItemViewHolder, position: Int) {
-        holder.bind(items[position], position == itemCount - 1, clickable)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(holder){
+            is NotificationItemViewHolder -> holder.bind(items[position])
+            is NotificationCoinNameViewHolder -> holder.bind(items[position])
+        }
     }
 }
 
-class NotificationItemViewHolder(override val containerView: SettingsViewDropdown, private val presenter: NotificationsPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class NotificationCoinNameViewHolder(override val containerView: View)
+    : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(coinViewItem: NotificationsModule.PriceAlertViewItem, lastElement: Boolean, clickable: Boolean) {
-        containerView.showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, coinViewItem.coin.code, coinViewItem.coin.type))
-        containerView.showTitle(coinViewItem.title)
-        containerView.showSubtitle(coinViewItem.coin.code)
-//        containerView.showDropdownValue(coinViewItem.state.value?.let { "$it%" } ?: itemView.context.getString(R.string.SettingsNotifications_Off))
-        containerView.showBottomBorder(lastElement)
-        containerView.isEnabled = clickable
+    fun bind(item: NotificationViewItem) {
+        coinName.text = item.coinName
+    }
+}
+
+class NotificationItemViewHolder(override val containerView: SettingsViewDropdown, val onClick: (position: Int)-> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    fun bind(item: NotificationViewItem) {
+        item.titleRes?.let {
+            containerView.showTitle(itemView.context.getString(it))
+        }
+        containerView.showDropdownValue(itemView.context.getString(item.dropdownValue))
+        containerView.showBottomBorder(item.type == NotificationViewItemType.TrendOption)
 
         containerView.setOnClickListener {
-            presenter.didTapItem(adapterPosition)
+            onClick(bindingAdapterPosition)
         }
     }
 }
