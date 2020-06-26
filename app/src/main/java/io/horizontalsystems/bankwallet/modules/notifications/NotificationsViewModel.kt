@@ -7,13 +7,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.OptionValue
+import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.core.SingleLiveEvent
 
 class NotificationsViewModel(
         private val priceAlertManager: IPriceAlertManager,
-        private val walletManager: IWalletManager,
+        walletManager: IWalletManager,
         private val coinManager: ICoinManager,
         private val notificationManager: INotificationManager,
         private val localStorage: ILocalStorage) : ViewModel() {
@@ -21,13 +20,11 @@ class NotificationsViewModel(
     private val viewItems = mutableListOf<NotificationViewItem>()
     private val portfolioCoins = walletManager.wallets.map { it.coin }
 
-    private val changeOptions = listOf(OptionValue.ChangeOff, OptionValue.Change2, OptionValue.Change5, OptionValue.Change10)
-    private val trendOptions = listOf(OptionValue.TrendOff, OptionValue.TrendShort, OptionValue.TrendLong)
-
     val itemsLiveData = MutableLiveData<List<NotificationViewItem>>()
     val openNotificationSettings = SingleLiveEvent<Void>()
     val setWarningVisible = MutableLiveData<Boolean>()
     val notificationIsOnLiveData = MutableLiveData<Boolean>()
+    val openOptionsDialog = SingleLiveEvent<Triple<String, String, NotificationMenuMode>>()
 
     private var notificationIsOn: Boolean
         get() = localStorage.isAlertNotificationOn
@@ -126,6 +123,15 @@ class NotificationsViewModel(
     fun switchAlertNotification(checked: Boolean) {
         notificationIsOn = checked
         setNotificationIsOnSwitch()
+    }
+
+    fun onDropdownTap(item: NotificationViewItem) {
+        val coinCode = item.coinCode ?: return
+        val mode = when (item.type) {
+            NotificationViewItemType.ChangeOption -> NotificationMenuMode.Change
+            else -> NotificationMenuMode.Trend
+        }
+        openOptionsDialog.postValue(Triple(item.coinName, coinCode, mode))
     }
 }
 

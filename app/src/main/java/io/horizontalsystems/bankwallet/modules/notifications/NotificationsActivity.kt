@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -53,7 +54,7 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
     }
 
     override fun onItemClick(item: NotificationViewItem) {
-
+        viewModel.onDropdownTap(item)
     }
 
     private fun observeViewModel() {
@@ -86,6 +87,10 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
 
             notifications.isVisible = enabled
             deactivateAll.isVisible = enabled
+        })
+
+        viewModel.openOptionsDialog.observe(this, Observer {(coinName, coinCode, mode) ->
+            BottomNotificationMenu.show(supportFragmentManager, mode, coinName, coinCode)
         })
     }
 

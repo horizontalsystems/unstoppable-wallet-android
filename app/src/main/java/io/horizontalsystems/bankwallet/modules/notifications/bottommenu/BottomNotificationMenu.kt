@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.view_holder_notification_menu_section_head
 
 class BottomNotificationMenu(
         private val mode: NotificationMenuMode,
-        private val coinTitle: String,
+        private val coinName: String,
         private val coinCode: String
 ) : BaseBottomSheetDialogFragment(), NotificationMenuItemsAdapter.Listener {
 
@@ -31,8 +31,8 @@ class BottomNotificationMenu(
 
         setContentView(R.layout.fragment_bottom_notification_menu)
 
-        setTitle(getString(getTitleRes(mode)))
-        setSubtitle(coinTitle)
+        setTitle(getString(getTitle(mode)))
+        setSubtitle(coinName)
         setHeaderIconDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_notification_24) })
 
         val itemsAdapter = NotificationMenuItemsAdapter(this)
@@ -51,7 +51,7 @@ class BottomNotificationMenu(
     }
 
     @StringRes
-    private fun getTitleRes(mode: NotificationMenuMode): Int {
+    private fun getTitle(mode: NotificationMenuMode): Int {
         return when (mode) {
             NotificationMenuMode.All -> R.string.Notification_Title
             NotificationMenuMode.Change -> R.string.NotificationBottomMenu_Change24h
@@ -60,8 +60,8 @@ class BottomNotificationMenu(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, mode: NotificationMenuMode, coinTitle: String, coinCode: String) {
-            BottomNotificationMenu(mode, coinTitle, coinCode)
+        fun show(fragmentManager: FragmentManager, mode: NotificationMenuMode, coinName: String, coinCode: String) {
+            BottomNotificationMenu(mode, coinName, coinCode)
                     .show(fragmentManager, "notification_menu_dialog")
         }
     }
