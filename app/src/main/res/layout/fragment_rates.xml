@@ -5,6 +5,7 @@
     android:id="@+id/coinRatesRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?ColorClaude"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     tools:itemCount="3"
     tools:listitem="@layout/view_holder_coin_rate" />
