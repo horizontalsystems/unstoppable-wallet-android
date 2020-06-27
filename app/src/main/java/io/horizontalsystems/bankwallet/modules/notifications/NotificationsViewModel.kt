@@ -61,9 +61,8 @@ class NotificationsViewModel(
 
         val priceAlerts = priceAlertManager.getPriceAlerts()
         portfolioCoins.forEach { coin ->
-            priceAlerts.firstOrNull { it.coinCode == coin.code }?.let { priceAlert ->
-                viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
-            }
+            val priceAlert = priceAlerts.firstOrNull { it.coinCode == coin.code }
+            viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
         }
 
         getOtherCoinsWithAlert(priceAlerts).forEach { coin ->
@@ -87,11 +86,11 @@ class NotificationsViewModel(
         }
     }
 
-    private fun getPriceAlertViewItems(coin: Coin, priceAlert: PriceAlert): List<NotificationViewItem> {
+    private fun getPriceAlertViewItems(coin: Coin, priceAlert: PriceAlert?): List<NotificationViewItem> {
         val items = mutableListOf<NotificationViewItem>()
         items.add(NotificationViewItem(coin.title, NotificationViewItemType.CoinName))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.ChangeOption, coin.code, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert.changeState)))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.TrendOption, coin.code, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert.trendState)))
+        items.add(NotificationViewItem(coin.title, NotificationViewItemType.ChangeOption, coin.code, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert?.changeState)))
+        items.add(NotificationViewItem(coin.title, NotificationViewItemType.TrendOption, coin.code, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert?.trendState)))
         return items
     }
 
@@ -119,11 +118,7 @@ class NotificationsViewModel(
     }
 
     fun deactivateAll() {
-//        priceAlerts.forEach { it.state = PriceAlert.State.OFF }
-//
-//        interactor.savePriceAlerts(priceAlerts)
-//
-//        view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
+        priceAlertManager.deactivateAllNotifications()
     }
 
     fun onResume() {
