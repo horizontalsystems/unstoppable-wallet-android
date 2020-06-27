@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -22,6 +23,7 @@ object RateChartModule {
         fun setEmaEnabled(enabled: Boolean)
         fun setMacdEnabled(enabled: Boolean)
         fun setRsiEnabled(enabled: Boolean)
+        fun setAlertNotificationActive(active: Boolean)
     }
 
     interface ViewDelegate {
@@ -35,18 +37,22 @@ object RateChartModule {
 
     interface Interactor {
         var defaultChartType: ChartType?
+        var notificationIsOn: Boolean
 
         fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun getChartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
         fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType)
         fun observeMarketInfo(coinCode: String, currencyCode: String)
         fun clear()
+        fun observeAlertNotification(coinCode: String)
+        fun getPriceAlert(coinCode: String): PriceAlert
     }
 
     interface InteractorDelegate {
         fun onUpdate(chartInfo: ChartInfo)
         fun onUpdate(marketInfo: MarketInfo)
         fun onError(ex: Throwable)
+        fun alertNotificationsUpdated()
     }
 
     interface Router
@@ -58,7 +64,7 @@ object RateChartModule {
             val rateFormatter = RateFormatter(currency)
 
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage)
+            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.localStorage)
             val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, currency, RateChartViewFactory())
 
             interactor.delegate = presenter

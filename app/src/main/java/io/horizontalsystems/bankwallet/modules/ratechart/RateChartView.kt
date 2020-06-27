@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
+import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.xrateskit.entities.ChartType
 
@@ -14,6 +15,7 @@ class RateChartView : RateChartModule.View {
     val showEma = SingleLiveEvent<Boolean>()
     val showMacd = SingleLiveEvent<Boolean>()
     val showRsi = SingleLiveEvent<Boolean>()
+    val setAlertNotificationActive = MutableLiveData<Boolean>()
 
     override fun showSpinner() {
         showSpinner.call()
@@ -55,4 +57,7 @@ class RateChartView : RateChartModule.View {
         showRsi.postValue(visible)
     }
 
+    override fun setAlertNotificationActive(active: Boolean) {
+        setAlertNotificationActive.postValue(active)
+    }
 }
