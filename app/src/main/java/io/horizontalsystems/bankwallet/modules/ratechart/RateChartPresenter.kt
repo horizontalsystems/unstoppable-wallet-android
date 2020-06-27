@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
@@ -45,8 +46,10 @@ class RateChartPresenter(
 
         marketInfo = interactor.getMarketInfo(coinCode, currency.code)
         interactor.observeMarketInfo(coinCode, currency.code)
+        interactor.observeAlertNotification(coinCode)
 
         fetchChartInfo()
+        setAlertNotificationIcon()
     }
 
     override fun onSelect(type: ChartType) {
@@ -93,6 +96,19 @@ class RateChartPresenter(
 
         rsiIsEnabled = !rsiIsEnabled
         view.setRsiEnabled(rsiIsEnabled)
+    }
+
+    override fun alertNotificationsUpdated() {
+        setAlertNotificationIcon()
+    }
+
+    private fun setAlertNotificationIcon() {
+        if (interactor.notificationIsOn) {
+            val priceAlert = interactor.getPriceAlert(coinCode)
+            val active = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
+
+            view.setAlertNotificationActive(active)
+        }
     }
 
     private fun fetchChartInfo() {
