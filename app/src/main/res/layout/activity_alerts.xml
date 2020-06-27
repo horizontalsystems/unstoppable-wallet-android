@@ -85,6 +85,7 @@
                 android:layout_marginBottom="32dp"
                 android:layout_marginTop="32dp"
                 app:bottomBorder="true"
+                app:showArrow="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/notifications"
                 app:title="@string/SettingsNotifications_DeactivateAll" />

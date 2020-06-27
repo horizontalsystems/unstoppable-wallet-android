@@ -39,6 +39,7 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
         deactivateAll.setOnSingleClickListener {
             viewModel.deactivateAll()
         }
+        deactivateAll.setTitleRed()
 
         notificationItemsAdapter = NotificationItemsAdapter(this)
         notifications.adapter = notificationItemsAdapter
