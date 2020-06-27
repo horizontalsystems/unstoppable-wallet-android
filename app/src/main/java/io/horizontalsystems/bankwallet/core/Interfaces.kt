@@ -433,6 +433,7 @@ interface IErc20ContractInfoProvider{
 }
 
 interface IPriceAlertManager{
+    val notificationChangedFlowable: Flowable<Unit>
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(priceAlert: PriceAlert)
     fun priceAlert(coinCode: String): PriceAlert

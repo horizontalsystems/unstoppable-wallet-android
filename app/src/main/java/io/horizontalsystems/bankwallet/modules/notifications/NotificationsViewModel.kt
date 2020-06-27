@@ -9,6 +9,8 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.core.SingleLiveEvent
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 class NotificationsViewModel(
         private val priceAlertManager: IPriceAlertManager,
@@ -19,6 +21,7 @@ class NotificationsViewModel(
 
     private val viewItems = mutableListOf<NotificationViewItem>()
     private val portfolioCoins = walletManager.wallets.map { it.coin }
+    private var disposable: Disposable? = null
 
     val itemsLiveData = MutableLiveData<List<NotificationViewItem>>()
     val openNotificationSettings = SingleLiveEvent<Void>()
@@ -36,6 +39,17 @@ class NotificationsViewModel(
         loadAlerts()
         checkPriceAlertsEnabled()
         setNotificationIsOnSwitch()
+
+        disposable = priceAlertManager.notificationChangedFlowable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    loadAlerts()
+                }
+    }
+
+    override fun onCleared() {
+        disposable?.dispose()
+        super.onCleared()
     }
 
     private fun setNotificationIsOnSwitch() {
