@@ -27,4 +27,9 @@ class PriceAlertManager(private val appDatabase: AppDatabase): IPriceAlertManage
         val priceAlert = appDatabase.priceAlertsDao().priceAlert(coinCode)
         return priceAlert ?: PriceAlert(coinCode, PriceAlert.ChangeState.OFF, PriceAlert.TrendState.OFF)
     }
+
+    override fun deactivateAllNotifications() {
+        appDatabase.priceAlertsDao().deleteAll()
+        notificationChangedSubject.onNext(Unit)
+    }
 }

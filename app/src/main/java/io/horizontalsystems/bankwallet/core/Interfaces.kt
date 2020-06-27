@@ -437,6 +437,7 @@ interface IPriceAlertManager{
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(priceAlert: PriceAlert)
     fun priceAlert(coinCode: String): PriceAlert
+    fun deactivateAllNotifications()
 }
 
 sealed class FeeRatePriority {
