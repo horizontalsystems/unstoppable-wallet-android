@@ -74,6 +74,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="3,979.87" />
 
+            <View
+                android:id="@+id/notificationClickArea"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintStart_toStartOf="@+id/coinRateDiff"
+                app:layout_constraintTop_toTopOf="@+id/coinRateDiff"
+                app:layout_constraintBottom_toBottomOf="@+id/coinRateDiff"
+                app:layout_constraintEnd_toEndOf="@+id/notificationIcon"/>
+
             <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
                 android:id="@+id/coinRateDiff"
                 style="@style/Subhead1"
@@ -92,6 +102,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_notification_16"
                 android:paddingStart="8dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
                 app:layout_constraintEnd_toEndOf="@+id/endGuideline"
                 app:layout_constraintTop_toTopOf="@+id/coinRateLast" />

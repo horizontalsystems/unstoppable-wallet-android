@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -10,18 +13,29 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class RateChartInteractor(private val xRateManager: IRateManager, private val localStorage: IChartTypeStorage)
+class RateChartInteractor(
+        private val xRateManager: IRateManager,
+        private val chartTypeStorage: IChartTypeStorage,
+        private val priceAlertManager: IPriceAlertManager,
+        private val localStorage: ILocalStorage)
     : RateChartModule.Interactor {
 
     var delegate: RateChartModule.InteractorDelegate? = null
 
     private var mInfoDisposable: Disposable? = null
     private var cInfoDisposable: Disposable? = null
+    private var alertNotificationDisposable: Disposable? = null
+
+    override var notificationIsOn: Boolean
+        get() = localStorage.isAlertNotificationOn
+        set(value) {
+            localStorage.isAlertNotificationOn = value
+        }
 
     override var defaultChartType: ChartType?
-        get() = localStorage.chartType
+        get() = chartTypeStorage.chartType
         set(value) {
-            localStorage.chartType = value
+            chartTypeStorage.chartType = value
         }
 
     override fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo? {
@@ -57,8 +71,21 @@ class RateChartInteractor(private val xRateManager: IRateManager, private val lo
                 })
     }
 
+    override fun observeAlertNotification(coinCode: String) {
+        alertNotificationDisposable = priceAlertManager.notificationChangedFlowable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    delegate?.alertNotificationsUpdated()
+                }
+    }
+
+    override fun getPriceAlert(coinCode: String): PriceAlert {
+        return priceAlertManager.priceAlert(coinCode)
+    }
+
     override fun clear() {
         mInfoDisposable?.dispose()
         cInfoDisposable?.dispose()
+        alertNotificationDisposable?.dispose()
     }
 }
