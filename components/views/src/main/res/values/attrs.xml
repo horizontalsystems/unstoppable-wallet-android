@@ -70,6 +70,7 @@
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
     <attr name="ShadingBottomGradient" format="reference" />
     <attr name="SecondaryButtonStartGradient" format="reference|color" />
+    <attr name="SecondaryButtonEndGradient" format="reference|color" />
 
     <!--  New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />
