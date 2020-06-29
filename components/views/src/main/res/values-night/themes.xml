@@ -50,6 +50,7 @@
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_dark</item>
         <item name="SecondaryButtonStartGradient">#33ffffff</item>
+        <item name="SecondaryButtonEndGradient">#00ffffff</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_d</item>
