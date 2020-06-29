@@ -13,8 +13,8 @@ class BottomNotificationsMenuViewModel(
         private val mode: NotificationMenuMode) : ViewModel() {
 
     val menuItemsLiveData = MutableLiveData<List<NotifMenuViewItem>>()
-    private var changeState:PriceAlert.ChangeState = PriceAlert.ChangeState.OFF
-    private var trendState:PriceAlert.TrendState = PriceAlert.TrendState.OFF
+    private var changeState: PriceAlert.ChangeState = PriceAlert.ChangeState.OFF
+    private var trendState: PriceAlert.TrendState = PriceAlert.TrendState.OFF
 
     init {
         val priceAlert = priceAlertManager.priceAlert(coinCode)
@@ -24,10 +24,35 @@ class BottomNotificationsMenuViewModel(
         priceAlert.trendState?.let {
             trendState = it
         }
-        setItems(mode)
+        setItems()
     }
 
-    private fun setItems(mode: NotificationMenuMode) {
+    fun onOptionClick(item: NotifMenuViewItem) {
+        if (item.enabled) {
+            return
+        }
+
+        if (item.type == NotifViewItemType.Option) {
+            when (item.optionValue) {
+                OptionValue.ChangeOff,
+                OptionValue.Change2,
+                OptionValue.Change5,
+                OptionValue.Change10 -> {
+                    changeState = getChangeState(item.optionValue)
+                }
+                OptionValue.TrendOff,
+                OptionValue.TrendShort,
+                OptionValue.TrendLong -> {
+                    trendState = getTrendState(item.optionValue)
+                }
+            }
+        }
+
+        setItems()
+        priceAlertManager.savePriceAlert(PriceAlert(coinCode, changeState, trendState))
+    }
+
+    private fun setItems() {
         val items = when (mode) {
             NotificationMenuMode.All -> getFullList()
             NotificationMenuMode.Change -> getChangeList()
@@ -64,33 +89,8 @@ class BottomNotificationsMenuViewModel(
         )
     }
 
-    fun onOptionClick(item: NotifMenuViewItem) {
-        if (item.enabled){
-            return
-        }
-
-        if (item.type == NotifViewItemType.Option) {
-            when (item.optionValue) {
-                OptionValue.ChangeOff,
-                OptionValue.Change2,
-                OptionValue.Change5,
-                OptionValue.Change10 -> {
-                    changeState = getChangeState(item.optionValue)
-                }
-                OptionValue.TrendOff,
-                OptionValue.TrendShort,
-                OptionValue.TrendLong -> {
-                    trendState = getTrendState(item.optionValue)
-                }
-            }
-        }
-
-        setItems(mode)
-        priceAlertManager.savePriceAlert(PriceAlert(coinCode, changeState, trendState))
-    }
-
-    private fun getChangeState(optionValue: OptionValue?): PriceAlert.ChangeState{
-        return when(optionValue){
+    private fun getChangeState(optionValue: OptionValue?): PriceAlert.ChangeState {
+        return when (optionValue) {
             OptionValue.Change2 -> PriceAlert.ChangeState.PERCENT_2
             OptionValue.Change5 -> PriceAlert.ChangeState.PERCENT_5
             OptionValue.Change10 -> PriceAlert.ChangeState.PERCENT_10
@@ -98,8 +98,8 @@ class BottomNotificationsMenuViewModel(
         }
     }
 
-    private fun getTrendState(optionValue: OptionValue?): PriceAlert.TrendState{
-        return when(optionValue){
+    private fun getTrendState(optionValue: OptionValue?): PriceAlert.TrendState {
+        return when (optionValue) {
             OptionValue.TrendShort -> PriceAlert.TrendState.SHORT
             OptionValue.TrendLong -> PriceAlert.TrendState.LONG
             else -> PriceAlert.TrendState.OFF
@@ -108,12 +108,18 @@ class BottomNotificationsMenuViewModel(
 
 }
 
-data class NotifMenuViewItem(@StringRes val title: Int, val type: NotifViewItemType, val optionValue: OptionValue? = null, val enabled: Boolean = false)
-enum class NotifViewItemType{
+data class NotifMenuViewItem(
+        @StringRes val title: Int,
+        val type: NotifViewItemType,
+        val optionValue: OptionValue? = null,
+        val enabled: Boolean = false)
+
+enum class NotifViewItemType {
     SmallHeader,
     BigHeader,
     Option
 }
-enum class OptionValue{
+
+enum class OptionValue {
     Change2, Change5, Change10, ChangeOff, TrendOff, TrendShort, TrendLong
 }

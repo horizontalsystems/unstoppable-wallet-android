@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.view_holder_notification_coin_name.*
 
 class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener {
 
-    private val viewModel by viewModels<NotificationsViewModel>{ NotificationsModule.Factory() }
+    private val viewModel by viewModels<NotificationsViewModel> { NotificationsModule.Factory() }
 
     private lateinit var notificationItemsAdapter: NotificationItemsAdapter
 
@@ -90,7 +90,7 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
             deactivateAll.isVisible = enabled
         })
 
-        viewModel.openOptionsDialog.observe(this, Observer {(coinName, coinCode, mode) ->
+        viewModel.openOptionsDialog.observe(this, Observer { (coinName, coinCode, mode) ->
             BottomNotificationMenu.show(supportFragmentManager, mode, coinName, coinCode)
         })
     }
@@ -101,7 +101,7 @@ class NotificationItemsAdapter(private val listener: Listener) : RecyclerView.Ad
 
     var items = listOf<NotificationViewItem>()
 
-    interface Listener{
+    interface Listener {
         fun onItemClick(item: NotificationViewItem)
     }
 
@@ -120,7 +120,7 @@ class NotificationItemsAdapter(private val listener: Listener) : RecyclerView.Ad
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
+        return when (viewType) {
             notificationOption -> {
                 val settingsView = SettingsViewDropdown(parent.context).apply {
                     layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -139,7 +139,7 @@ class NotificationItemsAdapter(private val listener: Listener) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder){
+        when (holder) {
             is NotificationItemViewHolder -> holder.bind(items[position])
             is NotificationCoinNameViewHolder -> holder.bind(items[position])
         }
@@ -154,7 +154,7 @@ class NotificationCoinNameViewHolder(override val containerView: View)
     }
 }
 
-class NotificationItemViewHolder(override val containerView: SettingsViewDropdown, val onClick: (position: Int)-> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class NotificationItemViewHolder(override val containerView: SettingsViewDropdown, val onClick: (position: Int) -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: NotificationViewItem) {
         item.titleRes?.let {
