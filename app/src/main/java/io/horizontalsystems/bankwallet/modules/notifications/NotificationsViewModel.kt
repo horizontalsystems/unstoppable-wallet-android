@@ -52,6 +52,32 @@ class NotificationsViewModel(
         super.onCleared()
     }
 
+    fun openSettings() {
+        openNotificationSettings.call()
+    }
+
+    fun deactivateAll() {
+        priceAlertManager.deactivateAllNotifications()
+    }
+
+    fun onResume() {
+        checkPriceAlertsEnabled()
+    }
+
+    fun switchAlertNotification(checked: Boolean) {
+        notificationIsOn = checked
+        setNotificationIsOnSwitch()
+    }
+
+    fun onDropdownTap(item: NotificationViewItem) {
+        val coinCode = item.coinCode ?: return
+        val mode = when (item.type) {
+            NotificationViewItemType.ChangeOption -> NotificationMenuMode.Change
+            else -> NotificationMenuMode.Trend
+        }
+        openOptionsDialog.postValue(Triple(item.coinName, coinCode, mode))
+    }
+
     private fun setNotificationIsOnSwitch() {
         notificationIsOnLiveData.postValue(notificationIsOn)
     }
@@ -113,34 +139,8 @@ class NotificationsViewModel(
         }
     }
 
-    fun openSettings() {
-        openNotificationSettings.call()
-    }
-
-    fun deactivateAll() {
-        priceAlertManager.deactivateAllNotifications()
-    }
-
-    fun onResume() {
-        checkPriceAlertsEnabled()
-    }
-
     private fun checkPriceAlertsEnabled() {
         setWarningVisible.postValue(!notificationManager.isEnabled)
-    }
-
-    fun switchAlertNotification(checked: Boolean) {
-        notificationIsOn = checked
-        setNotificationIsOnSwitch()
-    }
-
-    fun onDropdownTap(item: NotificationViewItem) {
-        val coinCode = item.coinCode ?: return
-        val mode = when (item.type) {
-            NotificationViewItemType.ChangeOption -> NotificationMenuMode.Change
-            else -> NotificationMenuMode.Trend
-        }
-        openOptionsDialog.postValue(Triple(item.coinName, coinCode, mode))
     }
 }
 
