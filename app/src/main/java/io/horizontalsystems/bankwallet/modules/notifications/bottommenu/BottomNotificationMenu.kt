@@ -24,7 +24,7 @@ class BottomNotificationMenu(
         private val coinCode: String
 ) : BaseBottomSheetDialogFragment(), NotificationMenuItemsAdapter.Listener {
 
-    private val viewModel by viewModels<BottomNotificationsMenuViewModel>{ NotificationBottomMenuModule.Factory(coinCode, mode) }
+    private val viewModel by viewModels<BottomNotificationsMenuViewModel> { NotificationBottomMenuModule.Factory(coinCode, mode) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,8 +74,11 @@ class NotificationMenuItemsAdapter(private val listener: Listener) : RecyclerVie
     }
 
     var items = listOf<NotifMenuViewItem>()
+
     private val sectionHeader = 1
     private val menuItem = 2
+
+    override fun getItemCount() = items.size
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position].type) {
@@ -98,8 +101,6 @@ class NotificationMenuItemsAdapter(private val listener: Listener) : RecyclerVie
             else -> throw Exception("Invalid view type")
         }
     }
-
-    override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
