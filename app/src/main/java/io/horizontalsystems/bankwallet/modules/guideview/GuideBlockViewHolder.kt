@@ -23,6 +23,10 @@ abstract class GuideBlockViewHolder(itemView: View) : RecyclerView.ViewHolder(it
     abstract fun bind(item: GuideBlock)
 }
 
+class ViewHolderFooter(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
+    override fun bind(item: GuideBlock) {}
+}
+
 class ViewHolderH1(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
     override fun bind(item: GuideBlock) {
         if (item !is GuideBlock.Heading1) return

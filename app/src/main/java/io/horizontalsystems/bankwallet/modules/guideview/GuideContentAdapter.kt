@@ -14,6 +14,7 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideBlockViewHolder>(diffCa
         is GuideBlock.Heading3 -> R.layout.view_holder_guide_h3
         is GuideBlock.Paragraph -> R.layout.view_holder_guide_paragraph
         is GuideBlock.Image -> R.layout.view_holder_guide_image
+        is GuideBlock.Footer -> R.layout.view_holder_guide_footer
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GuideBlockViewHolder = when (viewType) {
@@ -22,6 +23,7 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideBlockViewHolder>(diffCa
         R.layout.view_holder_guide_h3 -> ViewHolderH3(inflate(parent, viewType))
         R.layout.view_holder_guide_paragraph -> ViewHolderParagraph(inflate(parent, viewType))
         R.layout.view_holder_guide_image -> ViewHolderImage(inflate(parent, viewType))
+        R.layout.view_holder_guide_footer -> ViewHolderFooter(inflate(parent, viewType))
         else -> throw Exception("Undefined viewType: $viewType")
     }
 
