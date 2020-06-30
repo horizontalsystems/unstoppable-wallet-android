@@ -4,8 +4,8 @@
     android:background="?ColorClaude"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="12dp"
-    android:layout_marginBottom="12dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
     android:text="@string/Charts_CryptoCompare"
     android:textAlignment="center"
     android:textColor="@color/grey" />
