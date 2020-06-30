@@ -21,4 +21,5 @@ sealed class GuideBlock {
         }
     }
     data class Image(val destination: String, val title: String?, val mainImage: Boolean) : GuideBlock()
+    class Footer: GuideBlock()
 }
