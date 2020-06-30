@@ -30,7 +30,7 @@ class GuideViewModel(private val guide: Guide?, private val guidesManager: Guide
         val guideVisitor = GuideVisitorBlock()
         document.accept(guideVisitor)
 
-        blocks.postValue(guideVisitor.blocks)
+        blocks.postValue(guideVisitor.blocks + GuideBlock.Footer())
     }
 
     override fun onCleared() {
