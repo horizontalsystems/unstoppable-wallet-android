@@ -10,7 +10,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent">
+        android:background="?attr/ColorTyler">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
