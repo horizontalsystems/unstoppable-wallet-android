@@ -17,7 +17,6 @@ class GuideActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_guide)
         appBarLayout.outlineProvider = null
-        setTransparentStatusBar()
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
