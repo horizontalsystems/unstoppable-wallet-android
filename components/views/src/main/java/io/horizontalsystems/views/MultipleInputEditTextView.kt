@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_multiple_input_edit_text.view.*
 
 class MultipleInputEditTextView : ConstraintLayout {
@@ -74,24 +76,16 @@ class MultipleInputEditTextView : ConstraintLayout {
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        btnQRCodeScan.visibility = if (attrInputFromQRCode) View.VISIBLE else View.GONE
-        btnPaste.visibility = if (attrInputFromClipboard) View.VISIBLE else View.GONE
+        btnQRCodeScan.isVisible = attrInputFromQRCode
+        btnPaste.isVisible = attrInputFromClipboard
 
         txtInput.hint = attrInputHint
         txtInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 val string = s.toString()
-                if (string.isEmpty()) {
-                    btnQRCodeScan.visibility = if (attrInputFromQRCode) View.VISIBLE else View.GONE
-                    btnPaste.visibility = if (attrInputFromClipboard) View.VISIBLE else View.GONE
-
-                    btnDeleteInput.visibility = View.GONE
-                } else {
-                    btnQRCodeScan.visibility = View.GONE
-                    btnPaste.visibility = View.GONE
-
-                    btnDeleteInput.visibility = View.VISIBLE
-                }
+                btnDeleteInput.isGone = string.isEmpty()
+                btnPaste.isVisible = string.isEmpty() && attrInputFromClipboard
+                btnQRCodeScan.isVisible = string.isEmpty() && attrInputFromQRCode
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int){

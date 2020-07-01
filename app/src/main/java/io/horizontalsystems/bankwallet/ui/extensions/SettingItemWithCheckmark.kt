@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_setting_item_with_checkmark.view.*
 
@@ -32,7 +32,7 @@ class SettingItemWithCheckmark: FrameLayout {
     }
 
     fun setChecked(checked: Boolean){
-        checkMark.visibility = if (checked) View.VISIBLE else View.GONE
+        checkMark.isVisible = checked
     }
 
     fun setTitle(v: CharSequence) {
@@ -44,7 +44,7 @@ class SettingItemWithCheckmark: FrameLayout {
     }
 
     fun toggleBottomBorder(visible: Boolean) {
-        bottomBorderView.visibility = if (visible) View.VISIBLE else View.GONE
+        bottomBorderView.isVisible = visible
     }
 
 }

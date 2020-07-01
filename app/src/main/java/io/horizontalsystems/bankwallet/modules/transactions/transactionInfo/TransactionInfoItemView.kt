@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 
@@ -19,10 +19,10 @@ class TransactionInfoItemView : ConstraintLayout {
     fun bindHashId(title: String, address: String) {
         txtTitle.text = title
         decoratedText.text = address
-        decoratedText.visibility = View.VISIBLE
+        decoratedText.isVisible = true
 
-        btnAction.visibility = View.GONE
-        transactionStatusView.visibility = View.GONE
+        btnAction.isVisible = false
+        transactionStatusView.isVisible = false
 
         invalidate()
     }

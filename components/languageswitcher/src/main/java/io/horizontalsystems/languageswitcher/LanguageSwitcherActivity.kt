@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -113,7 +114,7 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
 
         title.text = item.nativeName
         subtitle.text = item.name
-        checkmarkIcon.visibility = if (item.current) View.VISIBLE else View.GONE
+        checkmarkIcon.isVisible = item.current
     }
 
     private fun getLangDrawableResource(context: Context, langCode: String): Int {

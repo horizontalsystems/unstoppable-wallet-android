@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.info
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -40,14 +40,14 @@ class InfoActivity : BaseActivity() {
 
         view.txHashLiveEvent.observe(this, Observer { txHash ->
             itemTxHash.bindHashId(getString(R.string.Info_DoubleSpend_ThisTx), txHash)
-            itemTxHash.visibility = View.VISIBLE
+            itemTxHash.isVisible = true
 
             itemTxHash.setOnClickListener { presenter.onClickTxHash(txHash) }
         })
 
         view.conflictingTxHashLiveEvent.observe(this, Observer { conflictingTxHash ->
             itemConflictingTxHash.bindHashId(getString(R.string.Info_DoubleSpend_ConflictingTx), conflictingTxHash)
-            itemConflictingTxHash.visibility = View.VISIBLE
+            itemConflictingTxHash.isVisible = true
 
             itemConflictingTxHash.setOnClickListener { presenter.onClickTxHash(conflictingTxHash) }
         })
@@ -62,7 +62,6 @@ class InfoActivity : BaseActivity() {
 
         presenter.onLoad(infoParams)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.info_menu, menu)

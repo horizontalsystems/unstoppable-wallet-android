@@ -2,15 +2,15 @@ package io.horizontalsystems.chartview
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.PointInfo
-import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.view_chart.view.*
 import java.math.BigDecimal
 
@@ -82,21 +82,21 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     }
 
     fun showSinner() {
-        chartError.showIf(false)
-        chartViewSpinner.showIf(true)
-        loadingShade.showIf(true)
+        chartError.isVisible = false
+        chartViewSpinner.isVisible = true
+        loadingShade.isVisible = true
     }
 
     fun hideSinner() {
-        chartViewSpinner.showIf(false)
-        loadingShade.showIf(false)
+        chartViewSpinner.isVisible  = false
+        loadingShade.isVisible = false
     }
 
     fun showError(error: String) {
         listOf(chartMain, chartBottom, chartTimeline).forEach {
-            it.visibility = View.INVISIBLE
+            it.isInvisible = true
         }
-        chartError.showIf(true)
+        chartError.isVisible = true
         chartError.text = error
     }
 

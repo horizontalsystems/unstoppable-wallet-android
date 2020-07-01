@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.addressformat
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -11,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.activity_address_format_settings.*
 
 class AddressFormatSettingsActivity : BaseActivity() {
@@ -71,10 +71,10 @@ class AddressFormatSettingsActivity : BaseActivity() {
             ltcHeader.text = title
         })
         view.btcBipVisibility.observe(this, Observer { isVisible ->
-            btcHeader.showIf(isVisible)
-            btcBip44.showIf(isVisible)
-            btcBip49.showIf(isVisible)
-            btcBip84.showIf(isVisible)
+            btcHeader.isVisible = isVisible
+            btcBip44.isVisible = isVisible
+            btcBip49.isVisible = isVisible
+            btcBip84.isVisible = isVisible
         })
         view.btcBipDerivation.observe(this, Observer { derivation ->
             btcBip44.setChecked(derivation == Derivation.bip44)
@@ -82,10 +82,10 @@ class AddressFormatSettingsActivity : BaseActivity() {
             btcBip84.setChecked(derivation == Derivation.bip84)
         })
         view.ltcBipVisibility.observe(this, Observer { isVisible ->
-            ltcHeader.showIf(isVisible)
-            ltcBip44.showIf(isVisible)
-            ltcBip49.showIf(isVisible)
-            ltcBip84.showIf(isVisible)
+            ltcHeader.isVisible = isVisible
+            ltcBip44.isVisible = isVisible
+            ltcBip49.isVisible = isVisible
+            ltcBip84.isVisible = isVisible
         })
         view.ltcBipDerivation.observe(this, Observer { derivation ->
             ltcBip44.setChecked(derivation == Derivation.bip44)

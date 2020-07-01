@@ -9,6 +9,8 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,17 +73,15 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         })
 
         viewModel.reloadLiveEvent.observe(this, Observer {
-            recyclerTransactionInfo.visibility = View.VISIBLE
+            recyclerTransactionInfo.isVisible = true
             transactionRecordAdapter.notifyDataSetChanged()
         })
 
-        viewModel.loadingLiveData.observe(this, Observer { coinCode ->
-            if (coinCode == true) {
-                progressLoading.visibility = View.VISIBLE
-                recyclerTransactionInfo.visibility = View.INVISIBLE
+        viewModel.loadingLiveData.observe(this, Observer { showLoading ->
+            progressLoading.isInvisible = !showLoading
+            recyclerTransactionInfo.isInvisible = showLoading
+            if (showLoading) {
                 transactionRecordAdapter.notifyDataSetChanged()
-            } else {
-                progressLoading.visibility = View.INVISIBLE
             }
         })
 
@@ -105,7 +105,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
 
         viewModel.hideError.observe(this, Observer {
-            errorContainer.visibility = View.GONE
+            errorContainer.isVisible = false
         })
 
         viewModel.showErrorProviderOffline.observe(this, Observer { providerName ->
@@ -115,7 +115,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             transaction.replace(R.id.errorContainer, fragment)
             transaction.commit()
 
-            errorContainer.visibility = View.VISIBLE
+            errorContainer.isVisible = true
         })
 
         viewModel.showErrorTransactionNotFound.observe(this, Observer { providerName ->
@@ -125,7 +125,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             transaction.replace(R.id.errorContainer, fragment)
             transaction.commit()
 
-            errorContainer.visibility = View.VISIBLE
+            errorContainer.isVisible = true
         })
 
         viewModel.showShareLiveEvent.observe(this, Observer { url ->
@@ -225,10 +225,9 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
             }
             is SectionLinkViewHolder -> {
                 providerName?.let {
-                    if (!viewModel.delegate.canShowTransactionInProviderSite) {
-                        holder.transactionLink.visibility = View.GONE
-                    } else {
-                        holder.transactionLink.visibility = View.VISIBLE
+                    holder.transactionLink.isVisible = viewModel.delegate.canShowTransactionInProviderSite
+
+                    if (viewModel.delegate.canShowTransactionInProviderSite) {
                         val changeProviderStyle = SpannableString(providerName)
                         changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
 

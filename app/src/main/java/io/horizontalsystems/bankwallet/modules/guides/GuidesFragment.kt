@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -49,7 +50,7 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer { loading ->
-            toolbarSpinner.visibility = if (loading) View.VISIBLE else View.INVISIBLE
+            toolbarSpinner.isInvisible = !loading
         })
 
         viewModel.openGuide.observe(viewLifecycleOwner, Observer { guide ->

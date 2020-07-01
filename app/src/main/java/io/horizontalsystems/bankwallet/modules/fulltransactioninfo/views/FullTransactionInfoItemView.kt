@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import kotlinx.android.synthetic.main.view_transaction_full_info_item.view.*
@@ -28,15 +28,15 @@ class FullTransactionInfoItemView : ConstraintLayout {
     fun bind(title: String? = null, value: String? = null, icon: FullTransactionIcon?, dimmed: Boolean = false, bottomBorder: Boolean = false) {
         txtTitle.text = title
 
-        var address = false
+        var isAddress = false
 
         when (icon) {
             FullTransactionIcon.PERSON -> value?.let {
-                address = true
+                isAddress = true
                 addressView.text = it
             }
             FullTransactionIcon.TOKEN -> value?.let {
-                address = true
+                isAddress = true
                 addressView.text = it
                 addressView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.token, 0, 0, 0)
             }
@@ -46,23 +46,18 @@ class FullTransactionInfoItemView : ConstraintLayout {
             FullTransactionIcon.CHECK -> showTypeIcon(R.drawable.checkmark_grey)
         }
 
-        when {
-            address -> {
-                valueText.visibility = View.GONE
-                addressView.visibility = View.VISIBLE
-            }
-            else -> {
-                valueText.text = value
-                valueText.visibility = View.VISIBLE
-                addressView.visibility = View.GONE
-            }
+        valueText.isVisible = !isAddress
+        addressView.isVisible = isAddress
+
+        if (!isAddress){
+            valueText.text = value
         }
 
         if (dimmed) {
             valueText.setTextColor(ContextCompat.getColor(valueText.context, R.color.grey))
         }
 
-        border.visibility = if (bottomBorder) View.VISIBLE else View.GONE
+        border.isVisible = bottomBorder
         invalidate()
     }
 
@@ -70,15 +65,15 @@ class FullTransactionInfoItemView : ConstraintLayout {
         txtTitle.text = title
         sourceProviderText.text = value
 
-        sourceProviderText.visibility = View.VISIBLE
-        rightArrow.visibility = View.VISIBLE
-        valueText.visibility = View.GONE
-        addressView.visibility = View.GONE
+        sourceProviderText.isVisible = true
+        rightArrow.isVisible = true
+        valueText.isVisible = false
+        addressView.isVisible = false
     }
 
     private fun showTypeIcon(icon: Int) {
         typeIcon.setImageDrawable(ContextCompat.getDrawable(context, icon))
-        typeIcon.visibility = View.VISIBLE
+        typeIcon.isVisible = true
     }
 
     private fun loadAttributes(attrs: AttributeSet) {

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,7 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
         recyclerView.adapter = SelectorAdapter(items, this, title != null)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        dialogTitle.visibility = if (title == null) View.GONE else View.VISIBLE
+        dialogTitle.isVisible = title != null
         dialogTitle.text = title
 
         hideKeyBoard()
@@ -101,9 +102,8 @@ class SelectorOptionViewHolder(override val containerView: View, private val lis
     fun bind(item: SelectorItem, showTopDivider: Boolean) {
         itemTitle.text = item.caption
         itemTitle.isSelected = item.selected
-        topDivider.visibility = if (showTopDivider) View.VISIBLE else View.GONE
+        topDivider.isVisible = showTopDivider
     }
 }
 
 data class SelectorItem(val caption: String, val selected: Boolean)
-

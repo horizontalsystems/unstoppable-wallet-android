@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_settings_left.view.*
 import kotlinx.android.synthetic.main.view_settings_item.view.*
@@ -16,7 +17,7 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
 
     fun showSubtitle(text: String?) {
         settingsSubtitle.text = text
-        settingsSubtitle.showIf(text != null)
+        settingsSubtitle.isVisible = text != null
         layoutParams?.height = LayoutHelper.dp(if (text == null) singleLineHeight else doubleLineHeight, context)
     }
 
@@ -25,12 +26,12 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
     }
 
     fun showIcon(drawable: Drawable?) {
-        settingsIcon.showIf(drawable != null)
+        settingsIcon.isVisible = drawable != null
         settingsIcon.setImageDrawable(drawable)
     }
 
     fun showBottomBorder(visible: Boolean) {
-        bottomBorder.showIf(visible)
+        bottomBorder.isVisible = visible
     }
 
     override fun onAttachedToWindow() {

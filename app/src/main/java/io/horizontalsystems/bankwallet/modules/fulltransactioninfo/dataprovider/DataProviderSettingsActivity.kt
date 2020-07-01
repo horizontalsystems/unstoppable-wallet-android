@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -107,23 +108,13 @@ class ViewHolderDataProviderSettings(private val context: Context, override val 
         containerView.setOnSingleClickListener { onClick.invoke() }
         title.text = item.name
         subtitle.text = context.getString(if (item.online) R.string.FullInfo_Source_Online else R.string.FullInfo_Source_Offline)
+        subtitle.setTextColor(ContextCompat.getColor(subtitle.context, if (item.online) R.color.green_d else R.color.red_d))
 
-        if (item.online) {
-            subtitle.setTextColor(ContextCompat.getColor(subtitle.context, R.color.green_d))
-        } else {
-            subtitle.setTextColor(ContextCompat.getColor(subtitle.context, R.color.red_d))
-        }
+        statusChecking.isVisible = item.checking
+        subtitle.isVisible = !item.checking
 
-        if (item.checking) {
-            statusChecking.visibility = View.VISIBLE
-            subtitle.visibility = View.GONE
-        } else {
-            subtitle.visibility = View.VISIBLE
-            statusChecking.visibility = View.GONE
-        }
-
-        checkmarkIcon.visibility = if (item.selected) View.VISIBLE else View.GONE
-        bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
+        checkmarkIcon.isVisible = item.selected
+        bottomShade.isVisible = showBottomShade
     }
 
     companion object {

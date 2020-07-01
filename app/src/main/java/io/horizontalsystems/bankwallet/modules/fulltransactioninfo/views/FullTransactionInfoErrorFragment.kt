@@ -7,6 +7,7 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.fragment_full_transaction_info_error.*
@@ -40,13 +41,11 @@ class FullTransactionInfoErrorFragment : Fragment() {
         changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
         changeProvider.text = changeProviderStyle
 
+        btnRetry.isVisible = showRetry
         if (showRetry) {
-            btnRetry.visibility = View.VISIBLE
             btnRetry.setOnClickListener {
                 listener?.onRetry()
             }
-        } else {
-            btnRetry.visibility = View.GONE
         }
 
         changeProvider.setOnClickListener {

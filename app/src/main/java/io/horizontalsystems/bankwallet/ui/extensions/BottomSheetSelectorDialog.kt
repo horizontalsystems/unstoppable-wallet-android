@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
@@ -34,7 +35,7 @@ class BottomSheetSelectorDialog(
         val itemsAdapter = SelectorItemsAdapter(items, selected)
 
         textWarning.text = warning
-        textWarning.visibility = if (warning == null) View.GONE else View.VISIBLE
+        textWarning.isVisible = warning != null
 
         rvItems.adapter = itemsAdapter
 

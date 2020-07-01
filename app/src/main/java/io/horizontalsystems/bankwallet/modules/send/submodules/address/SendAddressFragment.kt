@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -54,9 +55,9 @@ class SendAddressFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        btnBarcodeScan.visibility = View.VISIBLE
-        btnPaste.visibility = View.VISIBLE
-        btnDeleteAddress.visibility = View.GONE
+        btnBarcodeScan.isVisible = true
+        btnPaste.isVisible = true
+        btnDeleteAddress.isVisible = false
 
         presenter = ViewModelProvider(this, SendAddressModule.Factory(coin, editable, sendHandler))
                 .get(SendAddressPresenter::class.java)
@@ -76,20 +77,20 @@ class SendAddressFragment(
             addAddressChangeListener()
 
             val empty = address?.isEmpty() ?: true
-            btnBarcodeScan.visibility = if (empty) View.VISIBLE else View.GONE
-            btnPaste.visibility = if (empty) View.VISIBLE else View.GONE
-            btnDeleteAddress.visibility = if (empty) View.GONE else View.VISIBLE
+            btnBarcodeScan.isVisible = empty
+            btnPaste.isVisible = empty
+            btnDeleteAddress.isVisible = !empty
         })
 
         presenterView.error.observe(viewLifecycleOwner, Observer { error ->
             when (error) {
-                null -> txtAddressError.visibility = View.GONE
+                null -> txtAddressError.isVisible = false
                 else -> {
                     txtAddressError.text = when (error) {
                         is HodlerPlugin.UnsupportedAddressType -> getString(R.string.Send_Error_UnsupportedAddress)
                         else -> getString(R.string.Send_Error_IncorrectAddress)
                     }
-                    txtAddressError.visibility = View.VISIBLE
+                    txtAddressError.isVisible = true
                 }
             }
         })

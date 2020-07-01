@@ -73,13 +73,11 @@ class ViewHolderCoin(override val containerView: View, listener: CoinRatesAdapte
         txValueInFiat.isActivated = !coinItem.rateDimmed //change color via state: activated/not activated
         txValueInFiat.text = coinItem.rate ?: containerView.context.getString(R.string.NotAvailable)
 
+        txDiff.isVisible = coinItem.diff != null
+        txDiffNa.isVisible = coinItem.diff == null
+
         if (coinItem.diff != null) {
             txDiff.diff = coinItem.diff
-            txDiff.visibility = View.VISIBLE
-            txDiffNa.visibility = View.GONE
-        } else {
-            txDiff.visibility = View.GONE
-            txDiffNa.visibility = View.VISIBLE
         }
     }
 }

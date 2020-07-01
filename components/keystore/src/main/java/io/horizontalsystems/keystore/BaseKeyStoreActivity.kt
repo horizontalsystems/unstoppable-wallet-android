@@ -1,10 +1,10 @@
 package io.horizontalsystems.keystore
 
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_keystore.*
@@ -17,7 +17,7 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
 
     fun observeEvents() {
         viewModel.showNoSystemLockWarning.observe(this, Observer {
-            noSystemLockWarning.visibility = View.VISIBLE
+            noSystemLockWarning.isVisible = true
         })
 
         viewModel.showInvalidKeyWarning.observe(this, Observer {

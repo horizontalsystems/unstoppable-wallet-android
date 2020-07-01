@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ShareCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -197,7 +198,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.isSortOn.observe(viewLifecycleOwner, Observer { visible ->
-            sortButton.visibility = if (visible) View.VISIBLE else View.GONE
+            sortButton.isVisible = visible
         })
 
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer { (coin, predefinedAccount) ->

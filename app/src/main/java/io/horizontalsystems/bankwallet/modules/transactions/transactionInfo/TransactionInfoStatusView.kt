@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import kotlinx.android.synthetic.main.view_transaction_info_status.view.*
@@ -28,17 +28,17 @@ open class TransactionInfoStatusView : ConstraintLayout {
     }
 
     fun bind(transactionStatus: TransactionStatus, incoming: Boolean) {
-        progressBarWrapper.visibility = View.GONE
-        confirmedText.visibility = View.GONE
-        progressText.visibility = View.GONE
-        failedText.visibility = View.GONE
+        progressBarWrapper.isVisible = false
+        confirmedText.isVisible = false
+        progressText.isVisible = false
+        failedText.isVisible = false
 
         when (transactionStatus) {
             is TransactionStatus.Failed -> {
-                failedText.visibility = View.VISIBLE
+                failedText.isVisible = true
             }
             is TransactionStatus.Completed -> {
-                confirmedText.visibility = View.VISIBLE
+                confirmedText.isVisible = true
             }
             is TransactionStatus.Processing -> {
                 fillProgress(transactionStatus.progress, incoming)
@@ -54,10 +54,10 @@ open class TransactionInfoStatusView : ConstraintLayout {
         progressBar1.setImageResource(if (progress >= 0.33) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
         progressBar2.setImageResource(if (progress >= 0.66) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
         progressBar3.setImageResource(if (progress > 1.0) getColoredBar(incoming) else R.drawable.status_progress_bar_grey)
-        progressBarWrapper.visibility = View.VISIBLE
+        progressBarWrapper.isVisible = true
 
         progressText.setText(if (incoming) R.string.Transactions_Receiving else R.string.Transactions_Sending)
-        progressText.visibility = View.VISIBLE
+        progressText.isVisible = true
     }
 
     private fun getColoredBar(incoming: Boolean) = if (incoming) R.drawable.status_progress_bar_green else R.drawable.status_progress_bar_yellow
