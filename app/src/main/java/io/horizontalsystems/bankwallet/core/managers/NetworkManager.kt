@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.*
 import java.security.SecureRandom
 import java.security.cert.CertificateException
@@ -21,6 +23,10 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 class NetworkManager : INetworkManager {
+
+    override fun getGuide(host: String, path: String): Single<String> {
+        return ServiceGuide.service(host).getGuide(path)
+    }
 
     override fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject> {
         return ServiceFullTransaction.service(host, isSafeCall).getFullTransaction(path)
@@ -83,6 +89,17 @@ object ServiceErc20ContractInfo {
 
 }
 
+object ServiceGuide {
+    fun service(apiURL: String): GuidesAPI {
+        return APIClient.retrofit(apiURL, 60, true).create(GuidesAPI::class.java)
+    }
+
+    interface GuidesAPI {
+        @GET
+        fun getGuide(@Url path: String): Single<String>
+    }
+}
+
 object APIClient {
     fun retrofit(apiURL: String, timeout: Long = 60, isSafeCall: Boolean = true): Retrofit {
 
@@ -104,6 +121,7 @@ object APIClient {
         return Retrofit.Builder()
                 .baseUrl(apiURL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
                 .client(httpClient.build())
                 .build()

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.guideview
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -29,6 +30,11 @@ class GuideActivity : BaseActivity() {
 
         viewModel.blocks.observe(this, Observer {
             contentAdapter.submitList(it)
+        })
+
+        viewModel.error.observe(this, Observer {
+            error.isVisible = it != null
+            error.text = it?.message
         })
     }
 }
