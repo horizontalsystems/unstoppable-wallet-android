@@ -19,6 +19,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:padding="24dp"
+        android:id="@+id/error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:text="Error" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBlocks"
         android:layout_width="match_parent"
