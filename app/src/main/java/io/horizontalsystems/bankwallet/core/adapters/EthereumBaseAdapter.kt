@@ -31,34 +31,46 @@ abstract class EthereumBaseAdapter(
 
     // ISendEthereumAdapter
 
-    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
-        val poweredDecimal = amount.scaleByPowerOfTen(decimal)
-        val noScaleDecimal = poweredDecimal.setScale(0, RoundingMode.HALF_DOWN)
+    override fun fee(gasPrice: Long, gasLimit: Long): BigDecimal {
+        val value = BigDecimal(gasPrice) * BigDecimal(gasLimit)
+        return convertToEther(value)
+    }
 
-        return sendSingle(address, noScaleDecimal.toPlainString(), gasPrice, gasLimit)
+    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
+        return sendSingle(address, scaleUp(amount).toString(), gasPrice, gasLimit)
     }
 
     override fun validate(address: String) {
         EthereumKit.validateAddress(address)
     }
 
+    protected fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
+        return amount.movePointLeft(decimals).stripTrailingZeros()
+    }
+
+    protected fun scaleUp(amount: BigDecimal, decimals: Int = decimal): BigInteger {
+        return amount.movePointRight(decimals).toBigInteger()
+    }
+
+    protected fun convertToWei(amount: BigDecimal): BigInteger {
+        return scaleUp(amount, EthereumAdapter.decimal)
+    }
+
+    private fun convertToEther(amount: BigDecimal): BigDecimal {
+        return scaleDown(amount, EthereumAdapter.decimal)
+    }
     // IReceiveAdapter
 
     override val receiveAddress: String get() = ethereumKit.receiveAddress
 
     protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
         balance?.toBigDecimal()?.let {
-            val converted = it.movePointLeft(decimal)
-            return converted.stripTrailingZeros()
+            return scaleDown(it, decimal)
         } ?: return BigDecimal.ZERO
     }
 
     open fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
         return Single.just(Unit)
-    }
-
-    override fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long> {
-        return Single.just(ethereumKit.gasLimit)
     }
 
 }
