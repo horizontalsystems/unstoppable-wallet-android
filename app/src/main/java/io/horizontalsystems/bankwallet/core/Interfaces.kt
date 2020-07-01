@@ -229,11 +229,11 @@ interface ISendEthereumAdapter {
     val minimumRequiredBalance: BigDecimal
     val minimumSendAmount: BigDecimal
 
-    fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal
+    fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
     fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit>
-    fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>
+    fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
 
 }
 

@@ -70,7 +70,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("DAI", "Dai", "DAI", 18, CoinType.Erc20("0x6b175474e89094c44da98b954eedeac495271d0f")),
                 Coin("MANA", "Decentraland", "MANA", 18, CoinType.Erc20("0x0F5D2fB29fb7d3CFeE444a200298f468908cC942")),
                 Coin("DGD", "DigixDAO", "DGD", 9, CoinType.Erc20("0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A")),
-                Coin("DGX", "Digix Gold Token", "DGX", 9, CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF", gasLimit = 300_000, minimumSendAmount = BigDecimal("0.001"))),
+                Coin("DGX", "Digix Gold Token", "DGX", 9, CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF", minimumSendAmount = BigDecimal("0.001"))),
                 Coin("DNT", "District0x", "DNT", 18, CoinType.Erc20("0x0abdace70d3790235af448c88547603b945604ea")),
                 Coin("ENJ", "EnjinCoin", "ENJ", 18, CoinType.Erc20("0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c")),
                 Coin("EOSDT", "EOSDT", "EOSDT", 9, CoinType.Eos("eosdtsttoken", "EOSDT")),

@@ -11,7 +11,7 @@ sealed class CoinType : Parcelable {
     @Parcelize object Dash : CoinType()
     @Parcelize object Ethereum : CoinType()
 
-    @Parcelize class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val gasLimit: Long = 1_000_000, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
+    @Parcelize class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
     @Parcelize class Eos(val token: String, val symbol: String) : CoinType()
     @Parcelize class Binance(val symbol: String) : CoinType()
 

@@ -16,7 +16,7 @@ class SendEthereumInteractor(private val adapter: ISendEthereumAdapter) : SendMo
     override val minimumAmount: BigDecimal
         get() = adapter.minimumSendAmount
 
-    override fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal {
+    override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
         return adapter.availableBalance(gasPrice, gasLimit)
     }
 
@@ -32,7 +32,7 @@ class SendEthereumInteractor(private val adapter: ISendEthereumAdapter) : SendMo
         return adapter.send(amount, address, gasPrice, gasLimit )
     }
 
-    override fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long> {
+    override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {
         return adapter.estimateGasLimit(toAddress, value, gasPrice)
     }
 }
