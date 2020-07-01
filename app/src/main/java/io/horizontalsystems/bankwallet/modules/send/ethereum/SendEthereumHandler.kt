@@ -17,8 +17,7 @@ import java.math.BigDecimal
 class SendEthereumHandler(
         private val interactor: SendModule.ISendEthereumInteractor,
         private val router: SendModule.IRouter)
-    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate,
-      SendFeeModule.IFeeModuleDelegate {
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private var estimateGasLimitState: FeeState = FeeState.Value(0)
     private var disposable: Disposable? = null
@@ -74,12 +73,10 @@ class SendEthereumHandler(
 
         } else if (feeModule.feeRateState is FeeState.Value && estimateGasLimitState is FeeState.Value) {
 
-            amountModule.setAvailableBalance(interactor.availableBalance(
-                    (feeModule.feeRateState as FeeState.Value).value, (estimateGasLimitState as FeeState.Value).value))
+            amountModule.setAvailableBalance(interactor.availableBalance((feeModule.feeRateState as FeeState.Value).value, (estimateGasLimitState as FeeState.Value).value))
 
             feeModule.setError(null)
-            feeModule.setFee(interactor.fee((feeModule.feeRateState as FeeState.Value).value,
-                                            (estimateGasLimitState as FeeState.Value).value))
+            feeModule.setFee(interactor.fee((feeModule.feeRateState as FeeState.Value).value, (estimateGasLimitState as FeeState.Value).value))
         }
     }
 
@@ -89,9 +86,12 @@ class SendEthereumHandler(
 
     private fun syncEstimateGasLimit() {
         try {
-
-            val amount = amountModule.validAmount()
-            val address = addressModule.validAddress()
+            val amount = amountModule.currentAmount
+            val address = try {
+                addressModule.validAddress()
+            } catch (ex: Throwable) {
+                null
+            }
 
             estimateGasLimitState = FeeState.Loading
 
@@ -102,10 +102,10 @@ class SendEthereumHandler(
             disposable = interactor.estimateGasLimit(address, amount, feeModule.feeRate)
                     .subscribeOn(Schedulers.io())
                     .subscribe({ gasLimit ->
-                                   onReceiveGasLimit(gasLimit)
-                               }, { error ->
-                                   onGasLimitError(error as Exception)
-                               })
+                        onReceiveGasLimit(gasLimit)
+                    }, { error ->
+                        onGasLimitError(error as Exception)
+                    })
 
 
         } catch (e: Exception) {
@@ -115,9 +115,7 @@ class SendEthereumHandler(
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
-                                                          amountModule.secondaryAmountInfo(),
-                                                          addressModule.validAddress()),
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
                 SendModule.SendConfirmationDurationViewItem(feeModule.duration))
     }
@@ -129,7 +127,7 @@ class SendEthereumHandler(
         }
 
         return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate,
-                               gasLimit.value)
+                gasLimit.value)
     }
 
     override fun onModulesDidLoad() {

@@ -86,11 +86,11 @@ object SendModule {
         val minimumRequiredBalance: BigDecimal
         val minimumAmount: BigDecimal
 
-        fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal
+        fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
         fun validate(address: String)
         fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
         fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit>
-        fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long>
+        fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
 
     }
 

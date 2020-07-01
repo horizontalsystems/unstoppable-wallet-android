@@ -70,7 +70,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         val myAddress = ethereumKit.receiveAddress
         val fromMine = transaction.from == myAddress
         val toMine = transaction.to == myAddress
-        val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.movePointLeft(decimal)
+        val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.let { scaleDown(it) }
 
         val type = when {
             fromMine && toMine -> TransactionType.SentToSelf
@@ -84,7 +84,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber,
-                amount = transaction.value.toBigDecimal().movePointLeft(decimal),
+                amount = scaleDown(transaction.value.toBigDecimal()),
                 fee = fee,
                 timestamp = transaction.timestamp,
                 from = transaction.from,
@@ -99,14 +99,12 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     override val ethereumBalance: BigDecimal
         get() = balance
 
-    override fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal {
-        if (gasLimit == null)
-            return balance
+    override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
         return BigDecimal.ZERO.max(balance - fee(gasPrice, gasLimit))
     }
 
-    override fun fee(gasPrice: Long, gasLimit: Long): BigDecimal {
-        return ethereumKit.fee(gasPrice).movePointLeft(decimal)
+    override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {
+        return ethereumKit.estimateGas(toAddress, convertToWei(value), gasPrice)
     }
 
     companion object {
