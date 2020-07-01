@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 import android.content.Intent
 import android.os.Bundle
 import android.widget.CompoundButton
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -12,7 +13,6 @@ import io.horizontalsystems.bankwallet.modules.settings.security.privacy.Privacy
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.SingleSwitchListener
 import io.horizontalsystems.views.TopMenuItem
-import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity() {
@@ -53,13 +53,13 @@ class SecuritySettingsActivity : BaseActivity() {
         })
 
         viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->
-            changePin.showIf(pinEnabled)
+            changePin.isVisible = pinEnabled
             enablePin.showBottomBorder(!pinEnabled)
         })
 
         viewModel.biometricSettingsVisibleLiveData.observe(this, Observer { enabled ->
-            biometricAuth.showIf(enabled)
-            txtBiometricAuthInfo.showIf(enabled)
+            biometricAuth.isVisible = enabled
+            txtBiometricAuthInfo.isVisible = enabled
         })
 
         viewModel.biometricEnabledLiveData.observe(this, Observer {

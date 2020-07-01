@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.sub
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
@@ -24,15 +24,15 @@ class ConfirmationSecondaryView : ConstraintLayout {
 
     fun bind(secondaryData: SendConfirmationModule.SecondaryItemData) {
         secondaryData.feeAmount?.let {
-            feeLayout.visibility = View.VISIBLE
+            feeLayout.isVisible = true
             feeValue.text = it
         }
         secondaryData.estimatedTime?.let {
-            timeWrapper.visibility = View.VISIBLE
+            timeWrapper.isVisible = true
             timeValue.text = DateHelper.getTxDurationIntervalString(context, it)
         }
         secondaryData.lockTimeInterval?.let {
-            lockTimeWrapper.visibility = View.VISIBLE
+            lockTimeWrapper.isVisible = true
             textLockTime.setText(it.stringResId())
         }
     }

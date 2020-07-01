@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.cryptonews
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.inflate
-import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_crypto_news_title.*
 
@@ -31,8 +31,8 @@ class CryptoNewsHeaderAdapter : RecyclerView.Adapter<CryptoNewsHeaderAdapter.Tit
 
     class TitleViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(loading: Boolean, notAvailable: Boolean) {
-            this.spinner.showIf(loading)
-            this.notAvailable.showIf(notAvailable)
+            this.spinner.isVisible = loading
+            this.notAvailable.isVisible = notAvailable
         }
 
         companion object {

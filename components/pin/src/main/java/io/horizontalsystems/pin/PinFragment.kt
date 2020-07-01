@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,7 +35,6 @@ import io.horizontalsystems.pin.unlock.UnlockPinModule
 import io.horizontalsystems.pin.unlock.UnlockPinPresenter
 import io.horizontalsystems.pin.unlock.UnlockPinRouter
 import io.horizontalsystems.views.TopMenuItem
-import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.fragment_pin.*
 import java.util.concurrent.Executor
 
@@ -133,7 +133,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         })
 
         pinView.toolbar.observe(viewLifecycleOwner, Observer { (titleRes, showBackButton) ->
-            shadowlessToolbar.visibility = View.VISIBLE
+            shadowlessToolbar.isVisible = true
 
             val backButton = if (showBackButton) TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() }) else null
 
@@ -295,15 +295,15 @@ class PinPageViewHolder(itemView: View, onCancelClick: () -> (Unit)) : RecyclerV
     }
 
     fun bind(pinPage: PinPage, shake: Boolean, pinLockedMessage: String, showCancel: Boolean) {
-        bigError.visibility = View.GONE
-        txtDesc.visibility = View.GONE
-        txtTitle.visibility = View.GONE
-        smallError.visibility = View.GONE
-        cancelButton.visibility = View.GONE
+        bigError.isVisible = false
+        txtDesc.isVisible = false
+        txtTitle.isVisible = false
+        smallError.isVisible = false
+        cancelButton.isVisible = false
 
-        lockMessage.showIf(pinLockedMessage.isNotEmpty())
-        lockImage.showIf(pinLockedMessage.isNotEmpty())
-        pinCirclesWrapper.showIf(pinLockedMessage.isEmpty())
+        lockMessage.isVisible = pinLockedMessage.isNotEmpty()
+        lockImage.isVisible = pinLockedMessage.isNotEmpty()
+        pinCirclesWrapper.isVisible = pinLockedMessage.isEmpty()
 
         if(pinLockedMessage.isNotEmpty()){
             lockMessage.text = pinLockedMessage
@@ -312,25 +312,25 @@ class PinPageViewHolder(itemView: View, onCancelClick: () -> (Unit)) : RecyclerV
 
         when (pinPage.topText) {
             is TopText.Title -> {
-                txtTitle.visibility = View.VISIBLE
+                txtTitle.isVisible = true
                 txtTitle.setText(pinPage.topText.text)
             }
             is TopText.BigError -> {
-                bigError.visibility = View.VISIBLE
+                bigError.isVisible = true
                 bigError.setText(pinPage.topText.text)
             }
             is TopText.Description -> {
-                txtDesc.visibility = View.VISIBLE
+                txtDesc.isVisible = true
                 txtDesc.setText(pinPage.topText.text)
             }
             is TopText.SmallError -> {
-                smallError.visibility = View.VISIBLE
+                smallError.isVisible = true
                 smallError.setText(pinPage.topText.text)
             }
         }
 
         if(showCancel) {
-            cancelButton.visibility = View.VISIBLE
+            cancelButton.isVisible = true
         }
 
         updatePinCircles(pinPage.enteredDigitsLength)

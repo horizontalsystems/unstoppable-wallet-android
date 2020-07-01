@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 
 class AlertDialogFragment(
@@ -28,7 +29,7 @@ class AlertDialogFragment(
 
         rootView.findViewById<TextView>(R.id.txtTitle)?.apply {
             text = title
-            visibility = if (title == null) View.GONE else View.VISIBLE
+            isVisible = title != null
         }
         rootView.findViewById<TextView>(R.id.txtDescription)?.text = description
         rootView.findViewById<TextView>(R.id.actionButtonTextView)?.let { btn ->
@@ -41,7 +42,7 @@ class AlertDialogFragment(
         cancelButtonText?.let{
             rootView.findViewById<TextView>(R.id.cancelButtonTextView)?.let { btn ->
                 btn.setText(it)
-                btn.visibility = View.VISIBLE
+                btn.isVisible = true
                 btn.setOnClickListener {
                     listener?.onCancel()
                     dismiss()

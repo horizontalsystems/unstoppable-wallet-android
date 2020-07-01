@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 
@@ -61,8 +62,8 @@ class ConfirmationDialog(
     private fun bindActions() {
 
         // Set Visibility based on title is NULL or not
-        btnAction.visibility = if(actionButtonTitle == null) View.GONE else View.VISIBLE
-        btnCancel.visibility = if(cancelButtonTitle == null) View.GONE else View.VISIBLE
+        btnAction.isVisible = actionButtonTitle != null
+        btnCancel.isVisible = cancelButtonTitle != null
 
         actionButtonTitle?.let {
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -105,7 +106,7 @@ class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHo
         image.setImageResource(LayoutHelper.getCurrencyDrawableResource(containerView.context, item.code.toLowerCase()))
         title.text = item.code
         subtitle.text = item.symbol
-        checkmarkIcon.visibility = if (item.selected) View.VISIBLE else View.GONE
+        checkmarkIcon.isVisible = item.selected
     }
 
     companion object {

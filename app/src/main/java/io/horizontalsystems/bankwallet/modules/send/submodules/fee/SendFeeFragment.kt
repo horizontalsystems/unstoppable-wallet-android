@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -40,12 +41,12 @@ class SendFeeFragment(
                 .get(SendFeePresenter::class.java)
         val presenterView = presenter?.view as SendFeeView
 
-        txError.visibility = View.GONE
-        txSpeedLayout.visibility = if (feeIsAdjustable) View.VISIBLE else View.GONE
+        txError.isVisible = false
+        txSpeedLayout.isVisible = feeIsAdjustable
         txSpeedLayout.setOnClickListener {
             presenter?.onClickFeeRatePriority()
         }
-        txFeeLoading.visibility = View.GONE
+        txFeeLoading.isVisible = false
         txFeeLoading.text = getString(R.string.Alert_Loading)
 
         customFeeSeekBar.setListener(object : FeeSeekBar.Listener {
@@ -95,13 +96,8 @@ class SendFeeFragment(
         })
 
         presenterView.showCustomFeePriority.observe(viewLifecycleOwner, Observer { isVisible ->
-            if (isVisible) {
-                customFeeSeekBar.visibility = View.VISIBLE
-                txDurationLayout.visibility = View.GONE
-            } else {
-                customFeeSeekBar.visibility = View.GONE
-                txDurationLayout.visibility = View.VISIBLE
-            }
+            customFeeSeekBar.isVisible = isVisible
+            txDurationLayout.isVisible = !isVisible
         })
 
         presenterView.setCustomFeeParams.observe(viewLifecycleOwner, Observer { (value, range) ->
@@ -111,11 +107,11 @@ class SendFeeFragment(
         })
 
         presenterView.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->
-            if (error != null) {
-                feeError.visibility = View.VISIBLE
-                txSpeedLayout.visibility = View.GONE
-                feeLayout.visibility = View.GONE
+            feeError.isVisible = error != null
+            feeLayout.isVisible = error == null
+            txSpeedLayout.isVisible = error == null && feeIsAdjustable
 
+            if (error != null) {
                 val coinCode = error.coin.code
                 val tokenProtocol = error.coinProtocol
                 val feeCoinTitle = error.feeCoin.title
@@ -123,10 +119,6 @@ class SendFeeFragment(
 
                 feeError.text = context?.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol,
                                                    feeCoinTitle, formattedFee)
-            } else {
-                feeError.visibility = View.GONE
-                txSpeedLayout.visibility = if (feeIsAdjustable) View.VISIBLE else View.GONE
-                feeLayout.visibility = View.VISIBLE
             }
         })
 
@@ -145,9 +137,9 @@ class SendFeeFragment(
 
     private fun setLoading(loading: Boolean) {
 
-        txFeePrimary.visibility = if (!loading) View.VISIBLE else View.GONE
-        txFeeSecondary.visibility = if (!loading) View.VISIBLE else View.GONE
-        txFeeLoading.visibility = if (loading) View.VISIBLE else View.GONE
+        txFeePrimary.isVisible = !loading
+        txFeeSecondary.isVisible = !loading
+        txFeeLoading.isVisible = loading
 
         txSpeedMenu.alpha = if (loading) 0.5f else 1f
         txSpeedLayout.isEnabled = (!loading)
@@ -158,11 +150,11 @@ class SendFeeFragment(
         if (error is ApiError)
             txError.text = getString(R.string.Send_Error_WrongParameters)
 
-        txError.visibility = View.VISIBLE
-        txFeeTitle.visibility = View.GONE
-        txFeeLoading.visibility = View.GONE
-        txFeePrimary.visibility = View.GONE
-        txFeeSecondary.visibility = View.GONE
+        txError.isVisible = true
+        txFeeTitle.isVisible = false
+        txFeeLoading.isVisible = false
+        txFeePrimary.isVisible = false
+        txFeeSecondary.isVisible = false
     }
 }
 

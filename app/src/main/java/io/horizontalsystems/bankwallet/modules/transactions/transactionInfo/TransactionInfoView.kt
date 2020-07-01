@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
-import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
@@ -98,7 +98,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             setSubtitle(titleViewItem.date?.let { DateHelper.getFullDate(it) })
             setHeaderIcon(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
 
-            sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
+            sentToSelfIcon.isVisible = sentToSelf
 
             val lockIcon = when {
                 titleViewItem.lockState == null -> 0

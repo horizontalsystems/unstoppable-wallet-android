@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.createwallet.view
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -94,17 +95,17 @@ class CoinItemWithSwitchViewHolder(
         coinIcon.setCoinImage(coin.code, coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
-        bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
+        bottomShade.isVisible = viewItem.showBottomShade
 
         coinTypeLabel.text = coin.type.typeLabel()
-        coinTypeLabel.visibility = if (coin.type.typeLabel() != null) View.VISIBLE else View.GONE
+        coinTypeLabel.isVisible = coin.type.typeLabel() != null
 
         // Disable listener when setting default values
         toggleSwitch.setOnCheckedChangeListener(null)
 
         val checked = (item.type as? CoinManageViewType.CoinWithSwitch)?.enabled ?: false
         toggleSwitch.isChecked = checked
-        toggleSwitch.visibility = View.VISIBLE
+        toggleSwitch.isVisible = true
 
         // Enable listener
         toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -128,13 +129,13 @@ class CoinItemWithArrowViewHolder(
         val viewItem = item.coinViewItem ?: return
         val coin = viewItem.coin
 
-        rightArrow.visibility = View.VISIBLE
+        rightArrow.isVisible = true
         coinIcon.setCoinImage(coin.code, coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.typeLabel()
-        coinTypeLabel.visibility = if (coin.type.typeLabel() != null) View.VISIBLE else View.GONE
-        bottomShade.visibility = if (viewItem.showBottomShade) View.VISIBLE else View.GONE
+        coinTypeLabel.isVisible = coin.type.typeLabel() != null
+        bottomShade.isVisible = viewItem.showBottomShade
     }
 }
 

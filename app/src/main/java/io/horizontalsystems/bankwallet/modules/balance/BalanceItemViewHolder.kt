@@ -3,12 +3,12 @@ package io.horizontalsystems.bankwallet.modules.balance
 import android.content.res.ColorStateList
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.extensions.setCoinImage
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_balance_item.*
 
@@ -75,20 +75,20 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             buttonReceive.isEnabled = receiveEnabled
             buttonSend.isEnabled = sendEnabled
 
-            balanceCoin.showIf(coinValue.visible)
-            balanceFiat.showIf(fiatValue.visible)
-            balanceCoinLocked.showIf(coinValueLocked.visible)
-            balanceFiatLocked.showIf(fiatValueLocked.visible)
+            balanceCoin.isVisible = coinValue.visible
+            balanceFiat.isVisible = fiatValue.visible
+            balanceCoinLocked.isVisible = coinValueLocked.visible
+            balanceFiatLocked.isVisible = fiatValueLocked.visible
 
             balanceCoin.dimIf(coinValue.dimmed, 0.3f)
             balanceFiat.dimIf(fiatValue.dimmed)
             balanceCoinLocked.dimIf(coinValueLocked.dimmed, 0.3f)
             balanceFiatLocked.dimIf(fiatValueLocked.dimmed)
 
-            iconCoin.showIf(coinIconVisible)
-            iconNotSynced.showIf(failedIconVisible)
+            iconCoin.isVisible = coinIconVisible
+            iconNotSynced.isVisible = failedIconVisible
 
-            coinLabel.showIf(coinTypeLabelVisible)
+            coinLabel.isVisible = coinTypeLabelVisible
         }
 
         BalanceCellAnimator.toggleBalanceAndButtons(this, item)
@@ -138,16 +138,16 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
 
             if (coinValue.visible != prev.coinValue.visible) {
-                balanceCoin.showIf(coinValue.visible)
+                balanceCoin.isVisible = coinValue.visible
             }
             if (fiatValue.visible != prev.fiatValue.visible) {
-                balanceFiat.showIf(fiatValue.visible)
+                balanceFiat.isVisible = fiatValue.visible
             }
             if (coinValueLocked.visible != prev.coinValueLocked.visible) {
-                balanceCoinLocked.showIf(coinValueLocked.visible)
+                balanceCoinLocked.isVisible = coinValueLocked.visible
             }
             if (fiatValueLocked.visible != prev.fiatValueLocked.visible) {
-                balanceFiatLocked.showIf(fiatValueLocked.visible)
+                balanceFiatLocked.isVisible = fiatValueLocked.visible
             }
 
             if (coinValue.dimmed != prev.coinValue.dimmed) {
@@ -164,10 +164,10 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
 
             if (coinIconVisible != prev.coinIconVisible) {
-                iconCoin.showIf(coinIconVisible)
+                iconCoin.isVisible = coinIconVisible
             }
             if (failedIconVisible != prev.failedIconVisible) {
-                iconNotSynced.showIf(failedIconVisible)
+                iconNotSynced.isVisible = failedIconVisible
             }
         }
     }
@@ -200,10 +200,10 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
         when (syncingData) {
             is SyncingData.Blockchain -> {
                 iconProgress.setProgressColored(syncingData.spinnerProgress, itemView.context.getColor(R.color.grey))
-                iconProgress.visibility = View.VISIBLE
+                iconProgress.isVisible = true
 
-                textSyncing.showIf(syncingData.syncingTextVisible)
-                textSyncedUntil.showIf(syncingData.syncingTextVisible)
+                textSyncing.isVisible = syncingData.syncingTextVisible
+                textSyncedUntil.isVisible = syncingData.syncingTextVisible
 
 
                 textSyncing.text = if (syncingData.progress != null) {
@@ -220,10 +220,10 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
             is SyncingData.SearchingTxs -> {
                 iconProgress.setProgressColored(10, itemView.context.getColor(R.color.grey_50))
-                iconProgress.visibility = View.VISIBLE
+                iconProgress.isVisible = true
 
-                textSyncing.showIf(syncingData.syncingTextVisible)
-                textSyncedUntil.showIf(syncingData.syncingTextVisible)
+                textSyncing.isVisible = syncingData.syncingTextVisible
+                textSyncedUntil.isVisible = syncingData.syncingTextVisible
 
                 textSyncing.text = containerView.context.getString(R.string.Balance_SearchingTransactions)
                 textSyncedUntil.text = if (syncingData.txCount > 0) {
@@ -233,10 +233,9 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
                 }
             }
             null -> {
-                iconProgress.visibility = View.GONE
-
-                textSyncing.visibility = View.GONE
-                textSyncedUntil.visibility = View.GONE
+                iconProgress.isVisible = false
+                textSyncing.isVisible = false
+                textSyncedUntil.isVisible = false
 
                 textSyncing.text = null
                 textSyncedUntil.text = null

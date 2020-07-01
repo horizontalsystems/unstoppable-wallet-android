@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -59,23 +60,13 @@ class NotificationsActivity : BaseActivity() {
         })
 
         view.toggleWarningLiveData.observe(this, Observer { showWarning ->
-            if (showWarning) {
-                switchNotification.visibility = View.GONE
-                textDescription.visibility = View.GONE
-                notifications.visibility = View.GONE
-                deactivateAll.visibility = View.GONE
+            switchNotification.isVisible = !showWarning
+            textDescription.isVisible = !showWarning
+            notifications.isVisible = !showWarning
+            deactivateAll.isVisible = !showWarning
 
-                textWarning.visibility = View.VISIBLE
-                buttonAndroidSettings.visibility = View.VISIBLE
-            } else {
-                switchNotification.visibility = View.VISIBLE
-                textDescription.visibility = View.VISIBLE
-                notifications.visibility = View.VISIBLE
-                deactivateAll.visibility = View.VISIBLE
-
-                textWarning.visibility = View.GONE
-                buttonAndroidSettings.visibility = View.GONE
-            }
+            textWarning.isVisible = showWarning
+            buttonAndroidSettings.isVisible = showWarning
         })
 
         view.showStateSelectorLiveEvent.observe(this, Observer { (itemPosition, selectedPriceAlert) ->

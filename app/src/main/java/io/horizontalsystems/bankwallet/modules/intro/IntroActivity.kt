@@ -11,6 +11,8 @@ import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
@@ -103,7 +105,7 @@ class IntroActivity : BaseActivity() {
         fadeOut.setAnimationListener(object : AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
-                view.visibility = View.INVISIBLE
+                view.isInvisible = true
             }
             override fun onAnimationRepeat(animation: Animation?) {}
         })
@@ -119,7 +121,7 @@ class IntroActivity : BaseActivity() {
         fadeIn.setAnimationListener(object : AnimationListener {
             override fun onAnimationStart(animation: Animation) {}
             override fun onAnimationEnd(animation: Animation) {
-                view.visibility = View.VISIBLE
+                view.isVisible = true
             }
             override fun onAnimationRepeat(animation: Animation) {}
         })

@@ -2,6 +2,7 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_settings_dropdown.view.*
 import kotlinx.android.synthetic.main.view_settings_dropdown_text.view.*
 
@@ -10,11 +11,11 @@ class SettingsViewDropdown @JvmOverloads constructor(context: Context, attrs: At
 
     fun showDropdownValue(text: String?) {
         dropdownValue.text = text
-        dropdownValue.showIf(text != null)
+        dropdownValue.isVisible = text != null
     }
 
     fun showDropdownIcon(show: Boolean) {
-        dropdownIcon.showIf(show)
+        dropdownIcon.isVisible = show
     }
 
     init {

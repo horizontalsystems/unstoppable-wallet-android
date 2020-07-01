@@ -9,13 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.views.showIf
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
 class BackupWordsFragment : Fragment() {
@@ -34,8 +34,8 @@ class BackupWordsFragment : Fragment() {
         })
 
         viewModel.backedUpLiveData.observe(viewLifecycleOwner, Observer { backedUp ->
-            buttonClose.showIf(backedUp)
-            buttonNext.showIf(!backedUp)
+            buttonClose.isVisible = backedUp
+            buttonNext.isVisible = !backedUp
         })
 
         buttonNext.setOnSingleClickListener {

@@ -10,6 +10,7 @@ import android.view.ViewStub
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -231,7 +232,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                     bottomSheetBehavior.isFitToContents = true
                     bottomSheetDim.alpha = 1f
-                    bottomSheetDim.visibility = View.VISIBLE
+                    bottomSheetDim.isVisible = true
                 }
                 else{
                     messageInfoSnackbar?.dismiss()
@@ -240,13 +241,13 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
 
             override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
                 bottomSheetDim.alpha = slideOffset
-                bottomSheetDim.visibility = if (slideOffset == 0f) View.GONE else View.VISIBLE
+                bottomSheetDim.isGone = slideOffset == 0f
             }
         })
     }
 
     private fun hideDim() {
-        bottomSheetDim.visibility = View.GONE
+        bottomSheetDim.isGone = true
         bottomSheetDim.alpha = 0f
     }
 
