@@ -9,7 +9,7 @@
         android:id="@+id/quotedBg"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?ColorJeremy"
+        android:background="@color/steel_10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +19,7 @@
         android:id="@+id/quotedBorder"
         android:layout_width="4dp"
         android:layout_height="0dp"
-        android:background="@color/green_50"
+        android:background="?ColorRemus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
