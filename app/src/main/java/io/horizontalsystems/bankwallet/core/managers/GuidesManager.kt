@@ -2,9 +2,11 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.reactivex.Single
 import okhttp3.*
+import java.net.URL
 
 object GuidesManager {
 
@@ -29,17 +31,10 @@ object GuidesManager {
         }
     }
 
-    fun getGuideContent(url: String): Single<String> {
-        return Single.fromCallable {
-            val request = Request.Builder()
-                    .url(url)
-                    .build()
+    fun getGuideContent(fileUrl: String): Single<String> {
+        val url = URL(fileUrl)
+        val host = "${url.protocol}://${url.host}"
 
-            val response = httpClient.newCall(request).execute()
-            val content = response.body?.string()
-            response.close()
-
-            content
-        }
+        return App.networkManager.getGuide(host, fileUrl)
     }
 }

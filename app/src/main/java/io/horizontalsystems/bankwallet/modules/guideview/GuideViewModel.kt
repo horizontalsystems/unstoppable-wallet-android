@@ -11,16 +11,23 @@ import org.commonmark.parser.Parser
 class GuideViewModel(private val guide: Guide?, private val guidesManager: GuidesManager) : ViewModel() {
 
     val blocks = MutableLiveData<List<GuideBlock>>()
+    val error = MutableLiveData<Throwable?>()
     private var disposable: Disposable? = null
 
     init {
         guide?.fileUrl?.let {
             disposable = guidesManager.getGuideContent(it)
                     .subscribeOn(Schedulers.io())
-                    .subscribe { content, _ ->
-                        didFetchGuideContent(content)
-                    }
+                    .subscribe({
+                        didFetchGuideContent(it)
+                    }, {
+                        didFail(it)
+                    })
         }
+    }
+
+    private fun didFail(error: Throwable) {
+        this.error.postValue(error)
     }
 
     private fun didFetchGuideContent(content: String) {
