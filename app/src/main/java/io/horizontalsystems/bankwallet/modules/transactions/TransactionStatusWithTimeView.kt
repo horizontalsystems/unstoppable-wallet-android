@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_transaction_status.view.*
 
@@ -27,27 +27,27 @@ class TransactionStatusWithTimeView : ConstraintLayout {
     }
 
     fun bind(transactionStatus: TransactionStatus, incoming: Boolean, time: String?) {
-        txTime.visibility = View.GONE
-        completedIcon.visibility = View.GONE
-        transactionProgressView.visibility = View.GONE
-        failedText.visibility = View.GONE
+        txTime.isVisible = false
+        completedIcon.isVisible = false
+        transactionProgressView.isVisible = false
+        failedText.isVisible = false
 
         when (transactionStatus) {
             is TransactionStatus.Failed -> {
-                failedText.visibility = View.VISIBLE
+                failedText.isVisible = true
             }
             is TransactionStatus.Completed -> {
                 txTime.text = time
-                txTime.visibility = View.VISIBLE
-                completedIcon.visibility = View.VISIBLE
+                txTime.isVisible = true
+                completedIcon.isVisible = true
             }
             is TransactionStatus.Processing -> {
                 transactionProgressView.bind(transactionStatus.progress, incoming)
-                transactionProgressView.visibility = View.VISIBLE
+                transactionProgressView.isVisible = true
             }
             else -> {
                 transactionProgressView.bind(incoming = incoming)
-                transactionProgressView.visibility = View.VISIBLE
+                transactionProgressView.isVisible = true
             }
         }
         invalidate()

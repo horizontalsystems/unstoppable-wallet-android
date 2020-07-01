@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.sub
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
 import kotlinx.android.synthetic.main.view_confirmation_primary_item_view.view.*
@@ -30,7 +30,7 @@ class ConfirmationPrimaryView : ConstraintLayout {
         receiverView.setOnClickListener { onReceiverClick.invoke() }
 
         primaryItemData.memo?.let {
-            memoLayout.visibility = View.VISIBLE
+            memoLayout.isVisible = true
             memoValue.text = it
         }
     }

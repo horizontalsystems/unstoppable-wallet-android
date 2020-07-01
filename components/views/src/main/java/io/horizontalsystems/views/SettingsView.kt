@@ -2,6 +2,7 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_settings_item.view.*
 import kotlinx.android.synthetic.main.view_settings_value_text.view.*
 
@@ -10,11 +11,11 @@ class SettingsView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     fun showValue(text: String?) {
         settingsValueRight.text = text
-        settingsValueRight.showIf(text != null)
+        settingsValueRight.isVisible = text != null
     }
 
     fun showAttention(show: Boolean) {
-        attentionIcon.showIf(show)
+        attentionIcon.isVisible = show
     }
 
     init {

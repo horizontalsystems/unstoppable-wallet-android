@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
@@ -43,8 +44,8 @@ class ManageKeysDialog(
     }
 
     private fun bindActions() {
-        secondaryActionButton.visibility = View.GONE
-        primaryActionButton.visibility = View.VISIBLE
+        secondaryActionButton.isVisible = false
+        primaryActionButton.isVisible = true
 
         if (action == ManageAction.BACKUP) {
             primaryActionButton.text = getString(R.string.ManageKeys_Backup)

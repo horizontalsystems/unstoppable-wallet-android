@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -89,7 +91,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         })
 
         viewModel.showSyncing.observe(viewLifecycleOwner, Observer { show ->
-            toolbarSpinner.visibility = if (show) View.VISIBLE else View.INVISIBLE
+            toolbarSpinner.isInvisible = !show
         })
 
     }
@@ -178,9 +180,9 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, incoming, time)
-        bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
-        sentToSelfIcon.visibility = if (sentToSelf) View.VISIBLE else View.GONE
-        doubleSpendIcon.visibility = if (transactionRecord.doubleSpend) View.VISIBLE else View.GONE
+        bottomShade.isVisible = showBottomShade
+        sentToSelfIcon.isVisible = sentToSelf
+        doubleSpendIcon.isVisible = transactionRecord.doubleSpend
     }
 
     private fun getLockIcon(lockState: TransactionLockState?) = when {
@@ -214,7 +216,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
 
         if (current.doubleSpend != prev.doubleSpend) {
-            doubleSpendIcon.visibility = if (current.doubleSpend) View.VISIBLE else View.GONE
+            doubleSpendIcon.isVisible = current.doubleSpend
         }
     }
 

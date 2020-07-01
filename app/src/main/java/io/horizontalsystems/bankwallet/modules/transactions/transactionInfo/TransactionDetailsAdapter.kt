@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -42,11 +43,11 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             itemView.setOnClickListener(null)
             itemView.isClickable = false
             txtTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-            decoratedText.visibility = View.GONE
-            btnAction.visibility = View.GONE
-            valueText.visibility = View.GONE
+            decoratedText.isVisible = false
+            btnAction.isVisible = false
+            valueText.isVisible = false
             valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-            transactionStatusView.visibility = View.GONE
+            transactionStatusView.isVisible = false
 
             when (detail) {
                 is TransactionDetailViewItem.Rate -> bindRate(detail)
@@ -102,7 +103,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         private fun bindRaw() {
             txtTitle.text = itemView.context.getString(R.string.TransactionInfo_RawTransaction)
             btnAction.setImageResource(R.drawable.ic_copy)
-            btnAction.visibility = View.VISIBLE
+            btnAction.isVisible = true
             btnAction.setOnSingleClickListener {
                 viewModel.delegate.onRawTransaction()
             }
@@ -135,7 +136,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         private fun bindStatus(detail: TransactionDetailViewItem.Status) {
             txtTitle.setText(R.string.TransactionInfo_Status)
             transactionStatusView.bind(detail.status, detail.incoming)
-            transactionStatusView.visibility = View.VISIBLE
+            transactionStatusView.isVisible = true
         }
 
         private fun getFeeText(coinValue: CoinValue, currencyValue: CurrencyValue?): String? {
@@ -151,13 +152,13 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         fun bind(title: String, value: String) {
             txtTitle.text = title
             valueText.text = value
-            valueText.visibility = View.VISIBLE
+            valueText.isVisible = true
         }
 
         fun bindAddress(title: String, address: String, l: ((v: View) -> Unit)) {
             txtTitle.text = title
             decoratedText.text = address
-            decoratedText.visibility = View.VISIBLE
+            decoratedText.isVisible = true
             decoratedText.setOnSingleClickListener(l)
         }
 
@@ -165,19 +166,19 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         fun bindHashId(title: String, address: String) {
             txtTitle.text = title
             decoratedText.text = address
-            decoratedText.visibility = View.VISIBLE
-            btnAction.visibility = View.VISIBLE
+            decoratedText.isVisible = true
+            btnAction.isVisible = true
         }
 
         private fun bindHint(hintText: String, @DrawableRes iconStart: Int = 0, @DrawableRes iconEnd: Int = 0) {
             txtTitle.text = hintText
-            txtTitle.visibility = View.VISIBLE
+            txtTitle.isVisible = true
             txtTitle.setCompoundDrawablesWithIntrinsicBounds(iconStart, 0, 0, 0)
             txtTitle.compoundDrawablePadding = LayoutHelper.dp(11f, itemView.context)
 
             // need to have a view in the right of the title to have title to be aligned to the left
             valueText.text = null
-            valueText.visibility = View.VISIBLE
+            valueText.isVisible = true
             valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, iconEnd, 0)
             valueText.compoundDrawablePadding = LayoutHelper.dp(16f, itemView.context)
         }

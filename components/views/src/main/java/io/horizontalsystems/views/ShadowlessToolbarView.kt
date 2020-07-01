@@ -2,8 +2,8 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_shadowless_toolbar.view.*
 
 class ShadowlessToolbarView : ConstraintLayout {
@@ -24,11 +24,11 @@ class ShadowlessToolbarView : ConstraintLayout {
         rightBtnItem?.let { rightItem ->
             rightItem.icon?.let { imageRes ->
                 rightImageButton.setImageResource(imageRes)
-                rightImageButton.visibility = View.VISIBLE
+                rightImageButton.isVisible = true
                 rightItem.onClick?.let { click -> rightImageButton?.setOnClickListener { click.invoke() } }
             } ?: run {
                 rightItem.text?.let { textRes ->
-                    rightTextButton.visibility = View.VISIBLE
+                    rightTextButton.isVisible = true
                     rightTextButton.setText(textRes)
                     rightItem.onClick?.let { click -> rightTextButton?.setOnClickListener { click.invoke() } }
                 }
@@ -37,17 +37,17 @@ class ShadowlessToolbarView : ConstraintLayout {
     }
 
     fun bindLeftButton(leftBtnItem: TopMenuItem? = null) {
-        leftTextButton.visibility = View.GONE
-        leftImageButton.visibility = View.GONE
+        leftTextButton.isVisible = false
+        leftImageButton.isVisible = false
 
         leftBtnItem?.let { leftItem ->
             leftItem.icon?.let {
                 leftImageButton.setImageResource(it)
-                leftImageButton.visibility = View.VISIBLE
+                leftImageButton.isVisible = true
                 leftItem.onClick?.let { click -> leftImageButton?.setOnClickListener { click.invoke() } }
             } ?: run {
                 leftItem.text?.let {
-                    leftTextButton.visibility = View.VISIBLE
+                    leftTextButton.isVisible = true
                     leftTextButton.setText(it)
                     leftItem.onClick?.let { click -> leftTextButton?.setOnClickListener { click.invoke() } }
                 }

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import io.horizontalsystems.pin.R
@@ -99,12 +101,12 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
         when (item.type) {
             NumPadItemType.DELETE -> {
                 itemView.background = null
-                imgBackSpace.visibility = View.VISIBLE
+                imgBackSpace.isVisible = true
             }
 
             NumPadItemType.NUMBER -> {
-                txtNumber.visibility = View.VISIBLE
-                txtLetters.visibility = if (item.number == 0 || !showLetters) View.GONE else View.VISIBLE
+                txtNumber.isVisible = true
+                txtLetters.isGone = item.number == 0 || !showLetters
                 txtNumber.text = item.number.toString()
                 txtLetters.text = item.letters
                 itemView.setBackgroundResource(R.drawable.numpad_circle)
@@ -112,7 +114,7 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
 
             NumPadItemType.BIOMETRIC -> {
                 itemView.background = null
-                imgFingerprint.visibility = if (isBiometricAuthEnabled) View.VISIBLE else View.GONE
+                imgFingerprint.isVisible = isBiometricAuthEnabled
             }
 
         }

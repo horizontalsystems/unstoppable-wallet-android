@@ -2,8 +2,8 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.widget.CompoundButton
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_settings_switch.view.*
 
 class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -12,7 +12,7 @@ class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: Attr
     fun showSwitch(isChecked: Boolean, listener: CompoundButton.OnCheckedChangeListener) {
         switchSettings.setOnCheckedChangeListener(null)
         switchSettings.isChecked = isChecked
-        switchSettings.visibility = View.VISIBLE
+        switchSettings.isVisible = true
         switchSettings.setOnCheckedChangeListener(listener)
     }
 

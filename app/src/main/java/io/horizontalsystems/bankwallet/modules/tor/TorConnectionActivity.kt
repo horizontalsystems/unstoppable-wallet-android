@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.tor
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -68,9 +68,9 @@ class TorConnectionActivity : AppCompatActivity() {
 
     private fun setStatus(isError: Boolean, statusText: String) {
 
-        imgTorStatus.visibility = if(!isError) View.VISIBLE else View.INVISIBLE
-        pgTorStatus.visibility = if(!isError) View.VISIBLE else View.INVISIBLE
-        imgTorStatusError.visibility = if(isError) View.VISIBLE else View.INVISIBLE
+        imgTorStatus.isInvisible= isError
+        pgTorStatus.isInvisible = isError
+        imgTorStatusError.isInvisible = !isError
         txTorStatus.text = statusText
 
         btnRetry.isEnabled = isError

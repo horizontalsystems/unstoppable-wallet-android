@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -95,8 +97,8 @@ class SendAmountFragment(
     }
 
     private fun setLoading(loading: Boolean) {
-        availableBalanceValue.visibility = if (!loading) View.VISIBLE else View.INVISIBLE
-        processSpinner.visibility = if (loading) View.VISIBLE else View.GONE
+        availableBalanceValue.isInvisible = loading
+        processSpinner.isVisible = loading
     }
 
     private fun setAmount(amount: String) {
@@ -114,7 +116,7 @@ class SendAmountFragment(
 
     private fun setMaxButtonVisibility(visible: Boolean) {
         // since the max button used to align amount field title it may be "invisible" not "gone"
-        btnMax.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        btnMax.isInvisible = !visible
     }
 
     private fun enableAmountChangeListener() {
@@ -134,9 +136,9 @@ class SendAmountFragment(
 
     private fun setValidationError(error: SendAmountModule.ValidationError?) {
 
-        processSpinner.visibility = View.INVISIBLE
-        txtHintError.visibility = if (error == null) View.GONE else View.VISIBLE
-        txtHintInfo.visibility = if (error == null) View.VISIBLE else View.GONE
+        processSpinner.isInvisible = true
+        txtHintError.isVisible = error != null
+        txtHintInfo.isVisible = error == null
 
         txtHintError.text = when (error) {
             is SendAmountModule.ValidationError.InsufficientBalance -> {

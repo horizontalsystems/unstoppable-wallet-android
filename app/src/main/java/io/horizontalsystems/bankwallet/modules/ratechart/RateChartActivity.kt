@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -12,7 +14,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.views.showIf
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.activity_rate_chart.*
 import java.math.BigDecimal
@@ -159,34 +160,34 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         })
 
         presenterView.setSelectedPoint.observe(this, Observer { item ->
-            pointInfoVolume.visibility = View.INVISIBLE
-            pointInfoVolumeTitle.visibility = View.INVISIBLE
+            pointInfoVolume.isInvisible = true
+            pointInfoVolumeTitle.isInvisible = true
 
-            macdHistogram.visibility = View.INVISIBLE
-            macdSignal.visibility = View.INVISIBLE
-            macdValue.visibility = View.INVISIBLE
+            macdHistogram.isInvisible = true
+            macdSignal.isInvisible = true
+            macdValue.isInvisible = true
 
             pointInfoDate.text = DateHelper.getDayAndTime(Date(item.date * 1000))
             pointInfoPrice.text = formatter.formatFiat(item.price.value, item.price.currency.symbol, 2, 4)
 
             item.volume?.let {
-                pointInfoVolumeTitle.visibility = View.VISIBLE
-                pointInfoVolume.visibility = View.VISIBLE
+                pointInfoVolumeTitle.isVisible = true
+                pointInfoVolume.isVisible = true
                 pointInfoVolume.text = formatter.formatFiat(item.volume.value, item.volume.currency.symbol, 0, 2)
             }
 
             item.macdInfo?.let { macdInfo ->
                 macdInfo.histogram?.let {
-                    macdHistogram.visibility = View.VISIBLE
+                    macdHistogram.isVisible = true
                     macdHistogram.setTextColor(getHistogramColor(it))
                     macdHistogram.text = formatter.format(it, 0, 2)
                 }
                 macdInfo.signal?.let {
-                    macdSignal.visibility = View.VISIBLE
+                    macdSignal.isVisible = true
                     macdSignal.text = formatter.format(it, 0, 2)
                 }
                 macdInfo.macd?.let {
-                    macdValue.visibility = View.VISIBLE
+                    macdValue.isVisible = true
                     macdValue.text = formatter.format(it, 0, 2)
                 }
             }
@@ -272,7 +273,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     }
 
     private fun setViewVisibility(vararg views: View, isVisible: Boolean) {
-        views.forEach { it.showIf(isVisible, hideType = View.INVISIBLE) }
+        views.forEach { it.isInvisible = !isVisible }
     }
 
     // Need to move this to helpers

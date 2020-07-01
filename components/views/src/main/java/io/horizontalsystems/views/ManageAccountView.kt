@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_manage_account_view.view.*
 
 class ManageAccountView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
@@ -33,11 +34,11 @@ class ManageAccountView(context: Context, attrs: AttributeSet) : ConstraintLayou
     }
 
     private fun showAttentionIcon(showAttentionIcon: Boolean) {
-        attentionIcon.visibility = if (showAttentionIcon) View.VISIBLE else View.GONE
+        attentionIcon.isVisible = showAttentionIcon
     }
 
     private fun showRightArrow(show: Boolean) {
-        rightArrow.visibility = if (show) View.VISIBLE else View.GONE
+        rightArrow.isVisible = show
     }
 
     private fun setTextColor(type: Int) {

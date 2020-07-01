@@ -5,8 +5,8 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.AlertDialogFragment
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_privacy.*
 import kotlin.system.exitProcess
 
@@ -68,25 +67,25 @@ class PrivacySettingsActivity : BaseActivity() {
             torStatus?.let {
                 when (torStatus) {
                     TorStatus.Connecting -> {
-                        connectionSpinner.visibility = View.VISIBLE
+                        connectionSpinner.isVisible = true
                         controlIcon.imageTintList = getTint(R.color.grey)
                         controlIcon.setImageResource(R.drawable.ic_tor_connected)
                         subtitleText.text = getString(R.string.TorPage_Connecting)
                     }
                     TorStatus.Connected -> {
-                        connectionSpinner.visibility = View.GONE
+                        connectionSpinner.isVisible = false
                         controlIcon.imageTintList = getTint(R.color.yellow_d)
                         controlIcon.setImageResource(R.drawable.ic_tor_connected)
                         subtitleText.text = getString(R.string.TorPage_Connected)
                     }
                     TorStatus.Failed -> {
-                        connectionSpinner.visibility = View.GONE
+                        connectionSpinner.isVisible = false
                         controlIcon.imageTintList = getTint(R.color.yellow_d)
                         controlIcon.setImageResource(R.drawable.ic_tor_status_error)
                         subtitleText.text = getString(R.string.TorPage_Failed)
                     }
                     TorStatus.Closed -> {
-                        connectionSpinner.visibility = View.GONE
+                        connectionSpinner.isVisible = false
                         controlIcon.imageTintList = getTint(R.color.yellow_d)
                         controlIcon.setImageResource(R.drawable.ic_tor)
                         subtitleText.text = getString(R.string.TorPage_ConnectionClosed)
@@ -205,9 +204,9 @@ class PrivacySettingsActivity : BaseActivity() {
             })
         }
 
-        walletRestoreTitle.visibility = if (doCreate) View.VISIBLE else View.GONE
-        walletRestoreSettingsDescription.visibility = if (doCreate) View.VISIBLE else View.GONE
-        walletRestoreSettingsRecyclerview.visibility = if (doCreate) View.VISIBLE else View.GONE
+        walletRestoreTitle.isVisible = doCreate
+        walletRestoreSettingsDescription.isVisible = doCreate
+        walletRestoreSettingsRecyclerview.isVisible = doCreate
     }
 
     private fun getSortingLocalized(sortingType: TransactionDataSortingType): String {

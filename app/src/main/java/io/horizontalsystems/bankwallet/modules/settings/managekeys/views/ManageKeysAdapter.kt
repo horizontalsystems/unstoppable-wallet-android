@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -11,7 +12,6 @@ import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
-import io.horizontalsystems.views.showIf
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_account.*
 
@@ -79,12 +79,12 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
 
             containerView.isActivated = hasAccount
 
-            advancedSettingsButton.showIf(hasAccount && predefinedAccount == PredefinedAccountType.Standard && item.hasDerivationSetting)
-            backupButton.showIf(hasAccount && !isBackedUp)
-            showKeyButton.showIf(hasAccount && isBackedUp)
-            unlinkButton.showIf(hasAccount)
-            createButton.showIf(!hasAccount && predefinedAccount.isCreationSupported())
-            restoreButton.showIf(!hasAccount)
+            advancedSettingsButton.isVisible = hasAccount && predefinedAccount == PredefinedAccountType.Standard && item.hasDerivationSetting
+            backupButton.isVisible = hasAccount && !isBackedUp
+            showKeyButton.isVisible = hasAccount && isBackedUp
+            unlinkButton.isVisible = hasAccount
+            createButton.isVisible = !hasAccount && predefinedAccount.isCreationSupported()
+            restoreButton.isVisible = !hasAccount
 
 
             val padding = if (hasAccount) LayoutHelper.dp(1f, containerView.context) else 0
