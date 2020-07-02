@@ -540,8 +540,8 @@
     <string name="Charts_Volume24">Vol (24h)</string>
     <string name="Charts_inCirculation">In Circ</string>
     <string name="Charts_TotalSupply">Total</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">Launch Date</string>
+    <string name="Charts_Website">Project Website</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="Charts_IndicatorEMA" translatable="false">EMA</string>
     <string name="Charts_IndicatorMACD" translatable="false">MACD</string>
