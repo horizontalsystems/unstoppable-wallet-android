@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">산출값</string>
     <string name="FullInfoEth_Amount">양</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">아카데미</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -412,8 +412,8 @@
     <string name="Charts_Volume24">볼륨 (24 시간)</string>
     <string name="Charts_inCirculation">유통</string>
     <string name="Charts_TotalSupply">총 발행량</string>
-    <string name="Charts_StartDate">시작일</string>
-    <string name="Charts_Website">공식 웹사이트</string>
+    <string name="Charts_StartDate">출시일</string>
+    <string name="Charts_Website">프로젝트 웹사이트</string>
     <string name="Charts_MarketCap_Thousand">천</string>
     <string name="Charts_MarketCap_Million">백만</string>
     <string name="Charts_MarketCap_Billion">십억</string>
