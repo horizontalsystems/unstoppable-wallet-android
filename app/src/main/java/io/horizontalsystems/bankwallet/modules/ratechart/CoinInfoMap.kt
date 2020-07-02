@@ -18,7 +18,7 @@ object CoinInfoMap {
             "ANT" to CoinInfo(BigDecimal(39_609_524), "05/05/2017", "https://aragon.one"),
             "BNT" to CoinInfo(BigDecimal(67_721_371), "13/02/2017", "https://bancor.network"),
             "BAT" to CoinInfo(BigDecimal(1_500_000_000), "31/05/2017", "https://basicattentiontoken.org"),
-            "BNB" to CoinInfo(BigDecimal(187_536_713), "27/06/2017", "https://www.binance.com"),
+            "BNB-ERC20" to CoinInfo(BigDecimal(187_536_713), "27/06/2017", "https://www.binance.com"),
             "BUSD" to CoinInfo(BigDecimal(28_603_822), "10/09/2019", "https://www.paxos.com/busd"),
             "BTCB" to CoinInfo(BigDecimal(9_001), "17/06/2019", "https://bitcoin.org/en/"),
             "CAS" to CoinInfo(BigDecimal(1_000_000_000), "12/10/2017", "https://cashaa.com"),
