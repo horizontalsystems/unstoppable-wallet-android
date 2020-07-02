@@ -411,8 +411,8 @@
     <string name="Charts_Volume24">量(24小时)</string>
     <string name="Charts_inCirculation">流通中</string>
     <string name="Charts_TotalSupply">供应总额</string>
-    <string name="Charts_StartDate">开始日期</string>
-    <string name="Charts_Website">官方网站</string>
+    <string name="Charts_StartDate">Launch Date</string>
+    <string name="Charts_Website">Project Website</string>
     <string name="Charts_MarketCap_Thousand">千</string>
     <string name="Charts_MarketCap_Million">百万</string>
     <string name="Charts_MarketCap_Billion">十亿</string>
