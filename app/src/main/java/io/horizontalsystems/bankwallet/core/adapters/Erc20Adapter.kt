@@ -21,12 +21,11 @@ class Erc20Adapter(
         decimal: Int,
         private val fee: BigDecimal,
         private val contractAddress: String,
-        gasLimit: Long,
         override val minimumRequiredBalance: BigDecimal,
         override val minimumSendAmount: BigDecimal
 ) : EthereumBaseAdapter(kit, decimal) {
 
-    private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress, gasLimit)
+    private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress)
 
     // IAdapter
 
@@ -77,26 +76,16 @@ class Erc20Adapter(
         return erc20Kit.send(address, amount, gasPrice, gasLimit).map { Unit }
     }
 
-    override fun estimateGasLimit(toAddress: String, value: BigDecimal, gasPrice: Long?): Single<Long> {
-
-        val poweredDecimal = value.scaleByPowerOfTen(decimal)
-        val noScaleDecimal = poweredDecimal.setScale(0)
-
-        return erc20Kit.estimateGas(toAddress, contractAddress, noScaleDecimal.toBigInteger(), gasPrice)
+    override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {
+        return erc20Kit.estimateGas(toAddress, contractAddress, scaleUp(value), gasPrice)
     }
 
-    override fun availableBalance(gasPrice: Long, gasLimit: Long?): BigDecimal {
+    override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
         return BigDecimal.ZERO.max(balance - fee)
     }
 
     override val ethereumBalance: BigDecimal
         get() = balanceInBigDecimal(ethereumKit.balance, EthereumAdapter.decimal)
-
-    override fun fee(gasPrice: Long, gasLimit: Long): BigDecimal {
-        val value = BigDecimal(gasPrice) * BigDecimal(gasLimit)
-
-        return value.movePointLeft(EthereumAdapter.decimal)
-    }
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
         val myAddress = ethereumKit.receiveAddress
@@ -115,7 +104,7 @@ class Erc20Adapter(
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = transaction.interTransactionIndex,
                 blockHeight = transaction.blockNumber,
-                amount = transaction.value.toBigDecimal().movePointLeft(decimal),
+                amount = scaleDown(transaction.value.toBigDecimal()),
                 timestamp = transaction.timestamp,
                 from = transaction.from,
                 to = transaction.to,

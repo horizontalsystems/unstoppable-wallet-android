@@ -33,6 +33,9 @@
         <attr name="inputHint" format="string" />
         <attr name="inputMaxLines" format="integer" />
     </declare-styleable>
+    <declare-styleable name="ChartIndicatorView">
+        <attr name="title" />
+    </declare-styleable>
 
     <!--  Custom view themes/styles -->
     <attr name="BallanceCoinNameColor" format="reference|color" />
@@ -67,6 +70,7 @@
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
     <attr name="ShadingBottomGradient" format="reference" />
     <attr name="SecondaryButtonStartGradient" format="reference|color" />
+    <attr name="SecondaryButtonEndGradient" format="reference|color" />
 
     <!--  New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />
@@ -86,6 +90,7 @@
     <attr name="ColorClaude" format="reference|color" />
     <attr name="ColorGwen" format="reference" />
     <attr name="ColorNina" format="reference" />
+    <attr name="ColorTyler" format="reference" />
 
     <!--  New themed gradient colors -->
     <attr name="ColorGradientWhite" format="reference" />

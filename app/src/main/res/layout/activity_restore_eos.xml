@@ -24,7 +24,7 @@
                 android:layout_marginEnd="16dp"
                 app:inputFromClipboard="true"
                 app:inputHint="@string/Restore_EosAccountName"
-                app:inputMaxLines="2" />
+                app:inputMaxLines="1" />
 
             <io.horizontalsystems.views.MultipleInputEditTextView
                 android:id="@+id/eosActivePrivateKey"

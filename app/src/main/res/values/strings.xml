@@ -270,7 +270,7 @@
 
     <!--Guides-->
 
-    <string name="Guides_Title">Guides</string>
+    <string name="Guides_Title">Academy</string>
 
     <!--Settings-->
 
@@ -540,9 +540,12 @@
     <string name="Charts_Volume24">Vol (24h)</string>
     <string name="Charts_inCirculation">In Circ</string>
     <string name="Charts_TotalSupply">Total</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">Launch Date</string>
+    <string name="Charts_Website">Project Website</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
+    <string name="Charts_IndicatorEMA" translatable="false">EMA</string>
+    <string name="Charts_IndicatorMACD" translatable="false">MACD</string>
+    <string name="Charts_IndicatorRSI" translatable="false">RSI</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
@@ -551,10 +554,6 @@
     <string name="Charts_Price">Price</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
     <string name="Charts_LatestNews">Latest News</string>
-
-    <string name="Charts_Trend_Up">Up Trend</string>
-    <string name="Charts_Trend_Down">Down Trend</string>
-    <string name="Charts_Trend_Neutral">Neutral</string>
 
     <!--Rate list-->
 

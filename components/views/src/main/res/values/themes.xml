@@ -49,6 +49,7 @@
         <item name="AddCoinButtonPlaceholder">@color/light</item>
         <item name="ShadingBottomGradient">@drawable/rates_gradient_light</item>
         <item name="SecondaryButtonStartGradient">#ffffffff</item>
+        <item name="SecondaryButtonEndGradient">#00ffffff</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_l</item>
@@ -67,6 +68,7 @@
         <item name="ColorClaude">@color/white</item>
         <item name="ColorGwen">@drawable/light_gradient_background</item>
         <item name="ColorNina">@color/black_50</item>
+        <item name="ColorTyler">@color/light</item>
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
     </style>

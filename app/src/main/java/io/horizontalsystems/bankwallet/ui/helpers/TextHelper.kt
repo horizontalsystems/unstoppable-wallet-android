@@ -55,6 +55,10 @@ object TextHelper : IClipboardManager {
         is FeeRatePriority.Custom -> context.getString(R.string.Send_TxSpeed_Custom)
     }
 
+    fun getUrl(link: String): String{
+        return link.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)".toRegex(),"")
+    }
+
     private val clipboard: ClipboardManager?
         get() = App.instance.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
 

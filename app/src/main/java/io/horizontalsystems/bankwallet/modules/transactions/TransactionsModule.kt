@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
@@ -97,7 +99,6 @@ object TransactionsModule {
 
         fun onBottomReached()
         fun willShow(transactionViewItem: TransactionViewItem)
-        fun onVisible()
     }
 
     interface IInteractor {
@@ -135,5 +136,25 @@ object TransactionsModule {
         interactor.delegate = presenter
         view.delegate = presenter
     }
+
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val viewAndRouter = TransactionsViewModel()
+
+            val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 10, TransactionViewItemFactory(App.feeCoinProvider), TransactionMetadataDataSource())
+            val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
+            val presenter = TransactionsPresenter(interactor, viewAndRouter, dataSource)
+
+            presenter.view = viewAndRouter
+            interactor.delegate = presenter
+            viewAndRouter.delegate = presenter
+
+            presenter.viewDidLoad()
+
+            return viewAndRouter as T
+        }
+    }
+
 
 }

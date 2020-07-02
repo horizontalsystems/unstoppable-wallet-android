@@ -1,16 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.DateHelper
@@ -29,10 +27,6 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
-
-    private var emaTrend = ChartInfoTrend.NEUTRAL
-    private var macdTrend = ChartInfoTrend.NEUTRAL
-    private var rsiTrend = ChartInfoTrend.NEUTRAL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,17 +93,13 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showChartInfo.observe(this, Observer { item ->
             rootView.post {
-                setViewVisibility(chart, emaChartIndicator, macdChartIndicator, rsiChartIndicator, isVisible = true)
+                setViewVisibility(chart, isVisible = true)
                 chart.setData(item.chartData, item.chartType)
             }
 
-            emaTrend = item.emaTrend
-            macdTrend = item.macdTrend
-            rsiTrend = item.rsiTrend
-
-            emaChartIndicator.bind(EMA, false, emaTrend)
-            macdChartIndicator.bind(MACD, false, macdTrend)
-            rsiChartIndicator.bind(RSI, false, rsiTrend)
+            emaChartIndicator.bind(item.emaTrend)
+            macdChartIndicator.bind(item.macdTrend)
+            rsiChartIndicator.bind(item.rsiTrend)
 
             coinRateDiff.diff = item.diffValue
         })
@@ -117,34 +107,54 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         presenterView.showMarketInfo.observe(this, Observer { item ->
             coinRateLast.text = formatter.formatFiat(item.rateValue.value, item.rateValue.currency.symbol, 2, 4)
 
-            coinMarketCap.text = if (item.marketCap.value > BigDecimal.ZERO) {
-                val shortCapValue = shortenValue(item.marketCap.value)
-                formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + shortCapValue.second
-            } else {
-                getString(R.string.NotAvailable)
+            coinMarketCap.apply {
+                if (item.marketCap.value > BigDecimal.ZERO) {
+                    val shortCapValue = shortenValue(item.marketCap.value)
+                    text = formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + shortCapValue.second
+                } else {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
             }
 
-            val shortVolumeValue = shortenValue(item.volume.value)
-            volumeValue.text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + shortVolumeValue.second
-
-            circulationValue.text = if (item.supply.value > BigDecimal.ZERO) {
-                val shortValue = shortenValue(item.supply.value)
-                formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${item.supply.coinCode}")
-            } else {
-                getString(R.string.NotAvailable)
+            volumeValue.apply {
+                val shortVolumeValue = shortenValue(item.volume.value)
+                text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + shortVolumeValue.second
             }
 
-            totalSupplyValue.text = item.maxSupply?.let {
-                val shortValue = shortenValue(it.value)
-                formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${it.coinCode}")
-            } ?: run {
-                getString(R.string.NotAvailable)
+            circulationValue.apply {
+                if (item.supply.value > BigDecimal.ZERO) {
+                    val shortValue = shortenValue(item.supply.value)
+                    text = formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${item.supply.coinCode}")
+                } else {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
             }
 
-            startDateValue.text = item.startDate ?: getString(R.string.NotAvailable)
+            totalSupplyValue.apply {
+                item.maxSupply?.let {
+                    val shortValue = shortenValue(it.value)
+                    text = formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${it.coinCode}")
+                } ?: run {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
+            }
 
-            btnWebsite.isVisible = item.website?.isNotEmpty() == true
-            item.website?.let { url -> btnWebsite.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) } }
+            startDateValue.apply{
+                text = item.startDate ?: getString(R.string.NotAvailable)
+                isEnabled = !item.startDate.isNullOrEmpty()
+            }
+
+            websiteValue.apply {
+                item.website?.let {
+                    text = TextHelper.getUrl(it)
+                } ?: run {
+                    isEnabled = false
+                    text = getString(R.string.NotAvailable)
+                }
+            }
 
         })
 
@@ -188,12 +198,12 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showEma.observe(this, Observer { enabled ->
             chart.showEma(enabled)
-            emaChartIndicator.bind(EMA, enabled, emaTrend)
+            emaChartIndicator.setStateEnabled(enabled)
         })
 
         presenterView.showMacd.observe(this, Observer { enabled ->
             chart.showMacd(enabled)
-            macdChartIndicator.bind(MACD, enabled, macdTrend)
+            macdChartIndicator.setStateEnabled(enabled)
 
             setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !enabled)
             setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = enabled)
@@ -201,7 +211,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showRsi.observe(this, Observer { enabled ->
             chart.showRsi(enabled)
-            rsiChartIndicator.bind(RSI, enabled, rsiTrend)
+            rsiChartIndicator.setStateEnabled(enabled)
         })
 
     }
@@ -295,9 +305,4 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         return Pair(roundedDecimalValue, returnSuffix)
     }
 
-    companion object {
-        private const val EMA = "EMA"
-        private const val MACD = "MACD"
-        private const val RSI = "RSI"
-    }
 }

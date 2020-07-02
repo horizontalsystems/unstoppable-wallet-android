@@ -15,10 +15,6 @@ class ConnectivityManager {
         App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    private val networkCapabilities: NetworkCapabilities? by lazy {
-        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) as NetworkCapabilities
-    }
-
     var isConnected = false
     val networkAvailabilitySignal = PublishSubject.create<Unit>()
 
@@ -54,7 +50,7 @@ class ConnectivityManager {
     }
 
     private fun hasNetworkConnection(): Boolean {
-        networkCapabilities?.let {
+        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.let {
             if (it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                     it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                     it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)){
