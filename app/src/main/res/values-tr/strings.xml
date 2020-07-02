@@ -101,7 +101,7 @@
     <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
-    <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Lütfen kamere erişim izni verin</string>
     <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
     <string name="Send_Error_InsufficientBalance">Yetersiz bakiye.</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">Çıkışlar</string>
     <string name="FullInfoEth_Amount">Tutar</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">Akademi</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
@@ -347,7 +347,7 @@
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Blockchain Seç</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
+    <string name="AddTokenDialog_Subtitle">Token Ekle</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 tokenleri</string>
     <string name="AddTokenDialog_EosTokens">EOS Token</string>
     <string name="AddTokenDialog_BinanceTokens">Binance Token</string>
@@ -409,8 +409,8 @@
     <string name="Charts_Volume24">Birim(24 saat)</string>
     <string name="Charts_inCirculation">dolaşan Arz</string>
     <string name="Charts_TotalSupply">Toplam Arz</string>
-    <string name="Charts_StartDate">Launch Date</string>
-    <string name="Charts_Website">Project Website</string>
+    <string name="Charts_StartDate">Açılış Günü</string>
+    <string name="Charts_Website">Proje Web Sitesi</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
