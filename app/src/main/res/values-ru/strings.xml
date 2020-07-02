@@ -24,6 +24,7 @@
     <string name="Button_Done">Готово</string>
     <string name="Button_Retry">Повторить</string>
     <string name="Button_Change">Изменить</string>
+    <string name="Button_Add">Добавить</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Wallet">%s Кошелек</string>
@@ -36,7 +37,7 @@
     <string name="Intro_Privacy_Description">Увеличивайте свой капитал, оставаясь инкогнито и действуя анонимно</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n Кошелек</string>
-    <string name="Welcome_PrivacySettings">Настройки Приватности</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Rate App-->
@@ -100,6 +101,7 @@
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
@@ -197,6 +199,8 @@
     <string name="FullInfo_SubtitleInputs">Входы</string>
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
     <string name="FullInfoEth_Amount">Сумма</string>
+    <!--Guides-->
+    <string name="Guides_Title">Академия</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
@@ -308,6 +312,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Выберите Токены</string>
     <string name="ManageCoins_save">Сохранить</string>
+    <string name="ManageCoins_AddToken">Добавить Токен</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Кошелек</string>
     <string name="ManageCoins_Alert_CantCreateDescription">В данный момент кошелек Unstoppable не может создавать новый %s кошелек. Вы можете восстановить только существующий.</string>
     <!-- Experimental Feature -->
@@ -341,6 +346,21 @@
     <string name="AddCoin_CreationNotSupportedDescription">Вам нужно настроить кошелек %1$s, чтобы иметь возможность отправлять или получать %2$s.\n\nВ данный момент кошелек Unstoppable не может создавать новый %3$s кошелек. Вы можете восстановить только существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
+    <!-- Add Token Dialog-->
+    <string name="AddTokenDialog_Title">Выбрать Блокчейн</string>
+    <string name="AddTokenDialog_Subtitle">Добавить Токен</string>
+    <string name="AddTokenDialog_Erc20Tokens">Токены ERC20</string>
+    <string name="AddTokenDialog_EosTokens">Токены EOS</string>
+    <string name="AddTokenDialog_BinanceTokens">Токены Binance</string>
+    <!-- Add Erc20 Token -->
+    <string name="AddErc20Token_Title">Добавить ERC20</string>
+    <string name="AddErc20Token_CoinName">Название Токена</string>
+    <string name="AddErc20Token_Symbol">Символ</string>
+    <string name="AddErc20Token_Decimals">Десятичные знаки</string>
+    <string name="AddErc20Token_Dots">…</string>
+    <string name="AddErc20Token_ContractAddressHint">Адрес Контракта</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
+    <string name="AddErc20Token_InvalidAddressError">Неверный Адрес</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <!-- Blockchain Settings -->
@@ -363,7 +383,7 @@
     <string name="TorPage_Title">Соединение с TOR</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Standard</string>
+    <string name="AccountType_Unstoppable">Стандартный</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast_Subtitle">0-2 часа (Рекомендуется)</string>
@@ -390,6 +410,8 @@
     <string name="Charts_Volume24">Объем (24 ч)</string>
     <string name="Charts_inCirculation">В обороте</string>
     <string name="Charts_TotalSupply">Макс.выпуск</string>
+    <string name="Charts_StartDate">Дата Запуска</string>
+    <string name="Charts_Website">Сайт Проекта</string>
     <string name="Charts_MarketCap_Thousand">тыс.</string>
     <string name="Charts_MarketCap_Million">млн.</string>
     <string name="Charts_MarketCap_Billion">млр.</string>
@@ -401,7 +423,9 @@
     <!--Rate list-->
     <string name="RateList_portfolio">Портфель</string>
     <string name="RateList_top100">Топ-100</string>
-    <string name="RateList_prices">Цены</string>
+    <string name="RateList_Rank">Месту</string>
+    <string name="RateList_TopWinners">Топ Победителей</string>
+    <string name="RateList_TopLosers">Топ Проигравших</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
     <string name="BalanceSyncError_Description">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
