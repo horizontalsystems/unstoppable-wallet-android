@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
     <string name="FullInfoEth_Amount">Importe</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">Academia</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
@@ -366,7 +366,7 @@
     <string name="AddErc20Token_Decimals">Decimales</string>
     <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">Dirección del contrato</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddErc20Token_InvalidAddressError">Dirección inválida</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
@@ -417,8 +417,8 @@
     <string name="Charts_Volume24">Volumen (24H)</string>
     <string name="Charts_inCirculation">en circulación</string>
     <string name="Charts_TotalSupply">Suministro total</string>
-    <string name="Charts_StartDate">Fecha de inicio</string>
-    <string name="Charts_Website">Sitio web oficial</string>
+    <string name="Charts_StartDate">Fecha de lanzamiento</string>
+    <string name="Charts_Website">Website del proyecto</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
