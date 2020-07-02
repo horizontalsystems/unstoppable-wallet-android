@@ -24,6 +24,7 @@
     <string name="Button_Done">Fait</string>
     <string name="Button_Retry">Réessayer</string>
     <string name="Button_Change">Changer</string>
+    <string name="Button_Add">Ajouter</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Wallet">%s Portefeuille</string>
@@ -101,6 +102,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
     <string name="Send_ScanQrCode">Scanner le Code QR</string>
     <string name="Send_Success">\u2713 Envoyé</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Veuillez autoriser l\'accès à l\'appareil photo</string>
     <string name="Send_Error_InvalidAddress">L\'adresse semble invalide. Vérifiez et réessayez!</string>
     <string name="Send_Error_InsufficientBalance">Fonds insuffisants.</string>
     <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
@@ -147,7 +149,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_Status">Statut</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
     <string name="TransactionInfo_Id">Identifiant</string>
-    <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
+    <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
     <string name="TransactionInfo_Time">Heure</string>
@@ -198,6 +200,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="FullInfo_SubtitleInputs">Entrées</string>
     <string name="FullInfo_SubtitleOutputs">Sorties</string>
     <string name="FullInfoEth_Amount">Montant</string>
+    <!--Guides-->
+    <string name="Guides_Title">Académie</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
@@ -309,6 +313,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
     <string name="ManageCoins_save">Sauvegarder</string>
+    <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Portefeuille</string>
     <string name="ManageCoins_Alert_CantCreateDescription">À ce stade, Unstoppable n\'est pas en mesure de créer de nouveaux portefeuilles EOS. Vous ne pouvez restaurer que celui déjà existant.</string>
     <!-- Experimental Feature -->
@@ -342,6 +347,21 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddCoin_CreationNotSupportedDescription">Vous devez créer un portefeuille %1$s pour envoyer ou recevoir des %2$s.\n\nÀ ce stade, Unstoppable n\'est pas en mesure de créer de nouveaux portefeuilles %3$s.. Vous ne pouvez restaurer que celui déjà existant.\n\nVous pourrez utiliser ce portefeuille pour: %4$s.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
+    <!-- Add Token Dialog-->
+    <string name="AddTokenDialog_Title">Choisir la blockchain</string>
+    <string name="AddTokenDialog_Subtitle">Ajouter le token</string>
+    <string name="AddTokenDialog_Erc20Tokens">Tokens ERC 20</string>
+    <string name="AddTokenDialog_EosTokens">Tokens EOS</string>
+    <string name="AddTokenDialog_BinanceTokens">Tokens Binance</string>
+    <!-- Add Erc20 Token -->
+    <string name="AddErc20Token_Title">Ajouter ERC20</string>
+    <string name="AddErc20Token_CoinName">Nom de la pièce</string>
+    <string name="AddErc20Token_Symbol">Symbole</string>
+    <string name="AddErc20Token_Decimals">Decimales</string>
+    <string name="AddErc20Token_Dots">…</string>
+    <string name="AddErc20Token_ContractAddressHint">Adresse du contrat</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
+    <string name="AddErc20Token_InvalidAddressError">Adresse invalide</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Format de l\'adresse</string>
     <!-- Blockchain Settings -->
@@ -392,6 +412,8 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="Charts_Volume24">Volume(24h)</string>
     <string name="Charts_inCirculation">Offre en Circulation</string>
     <string name="Charts_TotalSupply">Offre totale</string>
+    <string name="Charts_StartDate">Date de lancement</string>
+    <string name="Charts_Website">Site web du projet</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">G</string>
@@ -403,7 +425,9 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
-    <string name="RateList_prices">Tarifs</string>
+    <string name="RateList_Rank">Rang</string>
+    <string name="RateList_TopWinners">Les grands gagnants</string>
+    <string name="RateList_TopLosers">Les gros perdants</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Erreur de synchronisation</string>
     <string name="BalanceSyncError_Description">Le texte de l\'erreur sera copié dans votre presse-papiers si vous décidez de le signaler.</string>

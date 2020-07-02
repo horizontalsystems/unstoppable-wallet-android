@@ -24,6 +24,7 @@
     <string name="Button_Done">Bitti</string>
     <string name="Button_Retry">Yeniden Dene</string>
     <string name="Button_Change">Değiştir</string>
+    <string name="Button_Add">Ekle</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
@@ -100,6 +101,7 @@
     <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Lütfen kamere erişim izni verin</string>
     <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
     <string name="Send_Error_InsufficientBalance">Yetersiz bakiye.</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
@@ -197,6 +199,8 @@
     <string name="FullInfo_SubtitleInputs">Girişler</string>
     <string name="FullInfo_SubtitleOutputs">Çıkışlar</string>
     <string name="FullInfoEth_Amount">Tutar</string>
+    <!--Guides-->
+    <string name="Guides_Title">Akademi</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
@@ -307,6 +311,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Kripto Parayı Seç</string>
     <string name="ManageCoins_save">Kaydet</string>
+    <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s cüzdanı</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Uygulama henüz %s cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
     <!-- Experimental Feature -->
@@ -340,6 +345,21 @@
     <string name="AddCoin_CreationNotSupportedDescription">Öncelikle %1$s cüzdanınızı yedeklemeniz gerekiyor daha sonra %2$s kripto parasını alabilirsiniz.\n\nUygulama henüz yeni %3$s cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.\n\nBu cüzdanı %4$s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
+    <!-- Add Token Dialog-->
+    <string name="AddTokenDialog_Title">Blockchain Seç</string>
+    <string name="AddTokenDialog_Subtitle">Token Ekle</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 tokenleri</string>
+    <string name="AddTokenDialog_EosTokens">EOS Token</string>
+    <string name="AddTokenDialog_BinanceTokens">Binance Token</string>
+    <!-- Add Erc20 Token -->
+    <string name="AddErc20Token_Title">ERC20 Ekle</string>
+    <string name="AddErc20Token_CoinName">Kripto Para Adı</string>
+    <string name="AddErc20Token_Symbol">Sembol</string>
+    <string name="AddErc20Token_Decimals">Ondalıklar</string>
+    <string name="AddErc20Token_Dots">…</string>
+    <string name="AddErc20Token_ContractAddressHint">Sözleşme Adresi</string>
+    <string name="AddErc20Token_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
+    <string name="AddErc20Token_InvalidAddressError">Geçersiz Adres</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
     <!-- Blockchain Settings -->
@@ -389,6 +409,8 @@
     <string name="Charts_Volume24">Birim(24 saat)</string>
     <string name="Charts_inCirculation">dolaşan Arz</string>
     <string name="Charts_TotalSupply">Toplam Arz</string>
+    <string name="Charts_StartDate">Açılış Günü</string>
+    <string name="Charts_Website">Proje Web Sitesi</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
@@ -400,7 +422,9 @@
     <!--Rate list-->
     <string name="RateList_portfolio">Portföy</string>
     <string name="RateList_top100">En Beğenilen 100</string>
-    <string name="RateList_prices">Fiyatlar</string>
+    <string name="RateList_Rank">Derece</string>
+    <string name="RateList_TopWinners">Çok Kazananlar</string>
+    <string name="RateList_TopLosers">Çok Kaybedenler</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Senk. hatası</string>
     <string name="BalanceSyncError_Description">Bildirmeye karar verirseniz hata metni clipboardnıza kopyalanır.</string>
