@@ -201,7 +201,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="FullInfo_SubtitleOutputs">Sorties</string>
     <string name="FullInfoEth_Amount">Montant</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">Académie</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
@@ -412,8 +412,8 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="Charts_Volume24">Volume(24h)</string>
     <string name="Charts_inCirculation">Offre en Circulation</string>
     <string name="Charts_TotalSupply">Offre totale</string>
-    <string name="Charts_StartDate">Date de début</string>
-    <string name="Charts_Website">Site web officiel</string>
+    <string name="Charts_StartDate">Date de lancement</string>
+    <string name="Charts_Website">Site web du projet</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">G</string>
