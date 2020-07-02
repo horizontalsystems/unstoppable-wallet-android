@@ -37,7 +37,7 @@
     <string name="Intro_Privacy_Description">Увеличивайте свой капитал, оставаясь инкогнито и действуя анонимно</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\n Кошелек</string>
-    <string name="Welcome_PrivacySettings">Настройки Приватности</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Rate App-->
@@ -423,7 +423,7 @@
     <!--Rate list-->
     <string name="RateList_portfolio">Портфель</string>
     <string name="RateList_top100">Топ-100</string>
-    <string name="RateList_Rank">Место</string>
+    <string name="RateList_Rank">Месту</string>
     <string name="RateList_TopWinners">Топ Победителей</string>
     <string name="RateList_TopLosers">Топ Проигравших</string>
     <!-- Balance Sync Error -->
