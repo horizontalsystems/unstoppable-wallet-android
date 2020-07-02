@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">输出</string>
     <string name="FullInfoEth_Amount">金额</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">学院</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
@@ -411,8 +411,8 @@
     <string name="Charts_Volume24">量(24小时)</string>
     <string name="Charts_inCirculation">流通中</string>
     <string name="Charts_TotalSupply">供应总额</string>
-    <string name="Charts_StartDate">Launch Date</string>
-    <string name="Charts_Website">Project Website</string>
+    <string name="Charts_StartDate">上市日期</string>
+    <string name="Charts_Website">网站项目</string>
     <string name="Charts_MarketCap_Thousand">千</string>
     <string name="Charts_MarketCap_Million">百万</string>
     <string name="Charts_MarketCap_Billion">十亿</string>
