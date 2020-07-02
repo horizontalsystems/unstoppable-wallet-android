@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
     <string name="FullInfoEth_Amount">Betrag</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">Akademie</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
@@ -411,7 +411,7 @@
     <string name="Charts_inCirculation">umlaufversorgung</string>
     <string name="Charts_TotalSupply">Gesamtversorgung</string>
     <string name="Charts_StartDate">Startdatum</string>
-    <string name="Charts_Website">Offizielle Website</string>
+    <string name="Charts_Website">Projekt-Webseite</string>
     <string name="Charts_MarketCap_Thousand">Tsd.</string>
     <string name="Charts_MarketCap_Million">Mill.</string>
     <string name="Charts_MarketCap_Billion">Mrd.</string>
