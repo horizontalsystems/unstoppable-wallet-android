@@ -200,7 +200,7 @@
     <string name="FullInfo_SubtitleOutputs">خروجي ها</string>
     <string name="FullInfoEth_Amount">مقدار</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">آکادمی</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -417,7 +417,7 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Charts_inCirculation">در گردش</string>
     <string name="Charts_TotalSupply">موجودی کل</string>
     <string name="Charts_StartDate">تاریخ شروع</string>
-    <string name="Charts_Website">وب سایت رسمی</string>
+    <string name="Charts_Website">وب سایت پروژه</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
