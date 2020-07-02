@@ -409,8 +409,8 @@
     <string name="Charts_Volume24">Birim(24 saat)</string>
     <string name="Charts_inCirculation">dolaşan Arz</string>
     <string name="Charts_TotalSupply">Toplam Arz</string>
-    <string name="Charts_StartDate">Start Date</string>
-    <string name="Charts_Website">Official Website</string>
+    <string name="Charts_StartDate">Launch Date</string>
+    <string name="Charts_Website">Project Website</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
