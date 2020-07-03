@@ -27,7 +27,7 @@ class SettingsView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun showArrow(visible: Boolean) {
-        arrowIcon.showIf(visible)
+        arrowIcon.isVisible = visible
     }
 
     init {
