@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 @Entity
 class PriceAlert(
         @PrimaryKey val coinCode: String,
-        var changeState: ChangeState?,
-        var trendState: TrendState?
+        var changeState: ChangeState,
+        var trendState: TrendState
 ) {
 
     enum class ChangeState(val value: String) {

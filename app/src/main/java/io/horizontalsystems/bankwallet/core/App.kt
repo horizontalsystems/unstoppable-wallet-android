@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
+import com.google.firebase.FirebaseApp
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
@@ -77,6 +78,7 @@ class App : CoreApp() {
         lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
         lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
+        lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
     }
 
     override fun onCreate() {
@@ -168,8 +170,9 @@ class App : CoreApp() {
         addressParserFactory = AddressParserFactory()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
-        priceAlertManager = PriceAlertManager(appDatabase)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
+        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
+        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager)
 
         appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, eosKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
@@ -201,6 +204,8 @@ class App : CoreApp() {
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
         startManagers()
+
+        FirebaseApp.initializeApp(this)
     }
 
     override fun attachBaseContext(base: Context) {
