@@ -2,32 +2,44 @@ package io.horizontalsystems.bankwallet.modules.guideview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
 import io.horizontalsystems.bankwallet.entities.Guide
-import io.reactivex.disposables.Disposable
+import io.horizontalsystems.bankwallet.modules.guides.LoadStatus
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.commonmark.parser.Parser
 
-class GuideViewModel(private val guide: Guide?, private val guidesManager: GuidesManager) : ViewModel() {
+class GuideViewModel(private val guide: Guide?, private val guidesManager: GuidesManager, private val connectivityManager: ConnectivityManager) : ViewModel() {
 
+    val statusLiveData = MutableLiveData<LoadStatus>()
     val blocks = MutableLiveData<List<GuideBlock>>()
-    val error = MutableLiveData<Throwable?>()
-    private var disposable: Disposable? = null
+
+    private var disposables = CompositeDisposable()
+
+    private var status: LoadStatus = LoadStatus.Initial
+        set(value) {
+            field = value
+
+            statusLiveData.postValue(value)
+        }
 
     init {
-        guide?.fileUrl?.let {
-            disposable = guidesManager.getGuideContent(it)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({
-                        didFetchGuideContent(it)
-                    }, {
-                        didFail(it)
-                    })
-        }
+        loadGuide()
+
+        connectivityManager.networkAvailabilitySignal
+                .subscribe {
+                    if (connectivityManager.isConnected && status is LoadStatus.Failed) {
+                        loadGuide()
+                    }
+                }
+                .let {
+                    disposables.add(it)
+                }
     }
 
-    private fun didFail(error: Throwable) {
-        this.error.postValue(error)
+    override fun onCleared() {
+        disposables.dispose()
     }
 
     private fun didFetchGuideContent(content: String) {
@@ -40,7 +52,23 @@ class GuideViewModel(private val guide: Guide?, private val guidesManager: Guide
         blocks.postValue(guideVisitor.blocks + GuideBlock.Footer())
     }
 
-    override fun onCleared() {
-        disposable?.dispose()
+    private fun loadGuide() {
+        guide?.fileUrl?.let {
+            guidesManager.getGuideContent(it)
+                    .subscribeOn(Schedulers.io())
+                    .doOnSubscribe {
+                        status = LoadStatus.Loading
+                    }
+                    .subscribe({
+                        status = LoadStatus.Loaded
+
+                        didFetchGuideContent(it)
+                    }, {
+                        status = LoadStatus.Failed(it)
+                    })
+                    .let {
+                        disposables.add(it)
+                    }
+        }
     }
 }

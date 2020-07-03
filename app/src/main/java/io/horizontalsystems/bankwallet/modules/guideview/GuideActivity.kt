@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Guide
+import io.horizontalsystems.bankwallet.modules.guides.LoadStatus
 import kotlinx.android.synthetic.main.activity_guide.*
 
 
@@ -32,9 +33,9 @@ class GuideActivity : BaseActivity() {
             contentAdapter.submitList(it)
         })
 
-        viewModel.error.observe(this, Observer {
-            error.isVisible = it != null
-            error.text = it?.message
+        viewModel.statusLiveData.observe(this, Observer {
+            error.isVisible = it is LoadStatus.Failed
+            error.text = (it as? LoadStatus.Failed)?.e?.message
         })
     }
 }
