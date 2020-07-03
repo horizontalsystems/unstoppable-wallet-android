@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
+import io.horizontalsystems.bankwallet.entities.SubscriptionJob
 import java.math.BigDecimal
 
 class DatabaseConverters {
@@ -100,6 +101,26 @@ class DatabaseConverters {
     @TypeConverter
     fun toTrendState(value: String?): PriceAlert.TrendState?{
         return PriceAlert.TrendState.valueOf(value)
+    }
+
+    @TypeConverter
+    fun fromStateType(state: SubscriptionJob.StateType): String{
+        return state.value
+    }
+
+    @TypeConverter
+    fun toStateType(value: String?): SubscriptionJob.StateType?{
+        return SubscriptionJob.StateType.valueOf(value)
+    }
+
+    @TypeConverter
+    fun fromJobType(state: SubscriptionJob.JobType): String{
+        return state.value
+    }
+
+    @TypeConverter
+    fun toJobType(value: String?): SubscriptionJob.JobType?{
+        return SubscriptionJob.JobType.valueOf(value)
     }
 
     companion object {

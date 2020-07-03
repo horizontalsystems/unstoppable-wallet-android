@@ -67,6 +67,12 @@ class NotificationsViewModel(
     fun switchAlertNotification(checked: Boolean) {
         notificationIsOn = checked
         setNotificationIsOnSwitch()
+
+        if (checked) {
+            priceAlertManager.enablePriceAlerts()
+        } else {
+            priceAlertManager.disablePriceAlerts()
+        }
     }
 
     fun onDropdownTap(item: NotificationViewItem) {

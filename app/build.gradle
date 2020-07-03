@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 
 androidExtensions {
@@ -118,6 +119,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.2.4'
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.browser:browser:1.2.0"
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
 
     // Room
     def room_version = '2.2.5'
