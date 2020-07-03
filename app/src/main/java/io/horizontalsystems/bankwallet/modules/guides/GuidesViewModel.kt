@@ -2,31 +2,43 @@ package io.horizontalsystems.bankwallet.modules.guides
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class GuidesViewModel(private val guidesManager: GuidesManager) : ViewModel() {
+class GuidesViewModel(private val guidesManager: GuidesManager, private val connectivityManager: ConnectivityManager) : ViewModel() {
 
     val openGuide = SingleLiveEvent<Guide>()
     val guidesLiveData = MutableLiveData<List<Guide>>()
-    val loading = MutableLiveData<Boolean>()
+    val statusLiveData = MutableLiveData<LoadStatus>()
     val filters = MutableLiveData<List<String>>()
 
     private var guideCategories: Array<GuideCategory> = arrayOf()
     private var currentCategoryIndex = 0
+    private var disposables = CompositeDisposable()
 
-    private var disposable: Disposable? = null
+    private var status: LoadStatus = LoadStatus.Initial
+        set(value) {
+            field = value
+
+            statusLiveData.postValue(value)
+        }
 
     init {
-        loading.postValue(true)
-        disposable = guidesManager.getGuideCategories()
-                .subscribeOn(Schedulers.io())
-                .subscribe { categories, _ ->
-                    didFetchGuideCategories(categories)
+        loadGuidesList()
+
+        connectivityManager.networkAvailabilitySignal
+                .subscribe {
+                    if (connectivityManager.isConnected && status is LoadStatus.Failed) {
+                        loadGuidesList()
+                    }
+                }
+                .let {
+                    disposables.add(it)
                 }
     }
 
@@ -42,11 +54,14 @@ class GuidesViewModel(private val guidesManager: GuidesManager) : ViewModel() {
         openGuide.postValue(guide)
     }
 
+    override fun onCleared() {
+        disposables.dispose()
+    }
+
     private fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
         this.guideCategories = guideCategories
 
         filters.postValue(guideCategories.map { it.title })
-        loading.postValue(false)
 
         syncViewItems()
     }
@@ -55,7 +70,21 @@ class GuidesViewModel(private val guidesManager: GuidesManager) : ViewModel() {
         guidesLiveData.postValue(guideCategories[currentCategoryIndex].guides)
     }
 
-    override fun onCleared() {
-        disposable?.dispose()
+    private fun loadGuidesList() {
+        guidesManager.getGuideCategories()
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe {
+                    status = LoadStatus.Loading
+                }
+                .subscribe({
+                    status = LoadStatus.Loaded
+
+                    didFetchGuideCategories(it)
+                }, {
+                    status = LoadStatus.Failed(it)
+                })
+                .let {
+                    disposables.add(it)
+                }
     }
 }
