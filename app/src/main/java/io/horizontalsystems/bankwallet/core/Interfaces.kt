@@ -446,6 +446,7 @@ interface IPriceAlertManager{
 
 interface INotificationSubscriptionManager{
     fun addNewJobs(jobs: List<SubscriptionJob>)
+    fun processJobs()
 }
 
 sealed class FeeRatePriority {
