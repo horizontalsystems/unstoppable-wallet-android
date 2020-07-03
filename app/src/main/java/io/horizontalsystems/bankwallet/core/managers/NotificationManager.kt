@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.app.NotificationChannel
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessaging
 import io.horizontalsystems.bankwallet.R
@@ -35,14 +34,11 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
         return Flowable.create(({ emitter ->
             FirebaseMessaging.getInstance().subscribeToTopic(topicName)
                     .addOnCompleteListener { task ->
-                        var msg = "Subscribed"
                         if (task.isSuccessful){
                            emitter.onNext(Unit)
                         } else {
-                            msg = "Error subscribing"
-                            emitter.onError(task.exception ?: Throwable())
+                            emitter.onError(task.exception ?: Throwable("Error in subscribing to  notification topic"))
                         }
-                        Log.d("TAG", topicName + " "+ msg)
                         emitter.onComplete()
                     }
         }), BackpressureStrategy.BUFFER)
@@ -52,14 +48,11 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
         return Flowable.create(({ emitter ->
             FirebaseMessaging.getInstance().unsubscribeFromTopic(topicName)
                     .addOnCompleteListener { task ->
-                        var msg = "Unsubscribed"
                         if (task.isSuccessful){
                             emitter.onNext(Unit)
                         } else {
-                            msg = "Error unsubscribing"
-                            emitter.onError(task.exception ?: Throwable())
+                            emitter.onError(task.exception ?: Throwable("Error in unsubscribing to  notification topic"))
                         }
-                        Log.d("TAG", topicName + " "+ msg)
                         emitter.onComplete()
                     }
         }), BackpressureStrategy.BUFFER)
