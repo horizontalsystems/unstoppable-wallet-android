@@ -12,6 +12,13 @@ class NotificationSubscriptionManager(appDatabase: AppDatabase,
 
     private val dao = appDatabase.subscriptionJobDao()
 
+    override fun processJobs() {
+        val jobs = dao.all()
+        jobs.forEach {
+            processJob(it)
+        }
+    }
+
     override fun addNewJobs(jobs: List<SubscriptionJob>) {
         jobs.forEach {
             dao.save(it)

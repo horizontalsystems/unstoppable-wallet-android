@@ -224,6 +224,7 @@ class App : CoreApp() {
             walletManager.loadWallets()
             adapterManager.preloadAdapters()
             accountManager.clearAccounts()
+            notificationSubscriptionManager.processJobs()
         }).start()
 
         rateAppManager.onAppBecomeActive()
