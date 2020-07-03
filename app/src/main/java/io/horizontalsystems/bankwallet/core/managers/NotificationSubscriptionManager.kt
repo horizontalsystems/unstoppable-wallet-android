@@ -7,8 +7,9 @@ import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
 import io.reactivex.schedulers.Schedulers
 
-class NotificationSubscriptionManager(appDatabase: AppDatabase,
-                                      private val notificationManager: INotificationManager): INotificationSubscriptionManager {
+class NotificationSubscriptionManager(
+        appDatabase: AppDatabase,
+        private val notificationManager: INotificationManager): INotificationSubscriptionManager {
 
     private val dao = appDatabase.subscriptionJobDao()
 

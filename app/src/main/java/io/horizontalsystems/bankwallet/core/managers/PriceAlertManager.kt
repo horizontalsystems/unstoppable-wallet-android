@@ -23,14 +23,14 @@ class PriceAlertManager(appDatabase: AppDatabase,
     }
 
     override fun savePriceAlert(priceAlert: PriceAlert) {
-        val oldPriceAlert = priceAlert(priceAlert.coinCode)
+        val oldPriceAlert = getPriceAlert(priceAlert.coinCode)
         dao.update(priceAlert)
         notificationChangedSubject.onNext(Unit)
 
         updateSubscription(oldPriceAlert, priceAlert)
     }
 
-    override fun priceAlert(coinCode: String): PriceAlert {
+    override fun getPriceAlert(coinCode: String): PriceAlert {
         val priceAlert = dao.priceAlert(coinCode)
         return priceAlert
                 ?: PriceAlert(coinCode, PriceAlert.ChangeState.OFF, PriceAlert.TrendState.OFF)

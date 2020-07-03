@@ -61,7 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
                             updateBchSyncMode,
                             addCoinRecordTable,
                             removeRateStorageTable,
-                            updatePriceAlertTable
+                            addNotificationTables
                     )
                     .build()
         }
@@ -358,7 +358,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private val updatePriceAlertTable: Migration = object : Migration(19, 20) {
+        private val addNotificationTables: Migration = object : Migration(19, 20) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinCode` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinCode`))")
                 database.execSQL("CREATE TABLE IF NOT EXISTS SubscriptionJob (`coinCode` TEXT NOT NULL, `topicName` TEXT NOT NULL, `stateType` TEXT NOT NULL, `jobType` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `stateType`))")

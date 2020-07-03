@@ -80,7 +80,7 @@ class RateChartInteractor(
     }
 
     override fun getPriceAlert(coinCode: String): PriceAlert {
-        return priceAlertManager.priceAlert(coinCode)
+        return priceAlertManager.getPriceAlert(coinCode)
     }
 
     override fun clear() {

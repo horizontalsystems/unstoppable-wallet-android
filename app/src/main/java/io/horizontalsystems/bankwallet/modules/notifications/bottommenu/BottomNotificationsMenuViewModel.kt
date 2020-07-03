@@ -17,7 +17,7 @@ class BottomNotificationsMenuViewModel(
     private var trendState: PriceAlert.TrendState = PriceAlert.TrendState.OFF
 
     init {
-        val priceAlert = priceAlertManager.priceAlert(coinCode)
+        val priceAlert = priceAlertManager.getPriceAlert(coinCode)
         priceAlert.changeState?.let {
             changeState = it
         }
