@@ -323,6 +323,8 @@ interface IAccountsStorage {
 interface INotificationManager {
     val isEnabled: Boolean
     fun clear()
+    fun subscribe(topicName: String): Flowable<Unit>
+    fun unsubscribe(topicName: String): Flowable<Unit>
 }
 
 interface IEnabledWalletStorage {
@@ -438,6 +440,12 @@ interface IPriceAlertManager{
     fun savePriceAlert(priceAlert: PriceAlert)
     fun priceAlert(coinCode: String): PriceAlert
     fun deactivateAllNotifications()
+    fun enablePriceAlerts()
+    fun disablePriceAlerts()
+}
+
+interface INotificationSubscriptionManager{
+    fun addNewJobs(jobs: List<SubscriptionJob>)
 }
 
 sealed class FeeRatePriority {
