@@ -36,7 +36,18 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     }
 
     override fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
-        return format(value, minimumFractionDigits, maximumFractionDigits, prefix = symbol)
+        val finalMinimumFractionDigits: Int
+        val finalMaximimFractionDigits: Int
+
+        if (value.toInt() >= 1000) {
+            finalMinimumFractionDigits = 0
+            finalMaximimFractionDigits = 0
+        } else {
+            finalMinimumFractionDigits = minimumFractionDigits
+            finalMaximimFractionDigits = maximumFractionDigits
+        }
+
+        return format(value, finalMinimumFractionDigits, finalMaximimFractionDigits, prefix = symbol)
     }
 
     override fun getSignificantDecimalFiat(value: BigDecimal): Int {

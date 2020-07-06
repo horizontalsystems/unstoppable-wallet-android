@@ -58,6 +58,10 @@ class NumberFormatterTest {
 
     @Test
     fun testFormatFiat() {
+        assertFormattedFiat(BigDecimal("1000.51"), 0, 2, "$1,001")
+        assertFormattedFiat(BigDecimal("1000.1234"), 0, 2, "$1,000")
+        assertFormattedFiat(BigDecimal("999.994"), 0, 2, "$999.99")
+        assertFormattedFiat(BigDecimal("999.995"), 0, 2, "$1,000")
         assertFormattedFiat(BigDecimal("0.004"), 0, 2, "< $0.01")
         assertFormattedFiat(BigDecimal("0.009"), 0, 2, "< $0.01")
         assertFormattedFiat(BigDecimal("0.0004"), 0, 3, "< $0.001")
@@ -102,8 +106,8 @@ class NumberFormatterTest {
         assertFormattedFiatSignificant(BigDecimal("1234.000012345678"), "$1,234")
         assertFormattedFiatSignificant(BigDecimal("1234.00012345678"), "$1,234")
         assertFormattedFiatSignificant(BigDecimal("1234.0012345678"), "$1,234")
-        assertFormattedFiatSignificant(BigDecimal("1234.012345678"), "$1,234.01")
-        assertFormattedFiatSignificant(BigDecimal("1234.12345678"), "$1,234.12")
+        assertFormattedFiatSignificant(BigDecimal("1234.012345678"), "$1,234")
+        assertFormattedFiatSignificant(BigDecimal("1234.12345678"), "$1,234")
     }
 
     private fun assertFormattedFiatSignificant(value: BigDecimal, expected: String) {
