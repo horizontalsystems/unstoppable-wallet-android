@@ -228,6 +228,10 @@ class PrivacySettingsPresenter(
         view?.showPrivacySettingsInfo()
     }
 
+    override fun clear() {
+        interactor.clear()
+    }
+
     override fun setTorEnabled(checked: Boolean) {
         interactor.isTorEnabled = checked
         if (checked) {

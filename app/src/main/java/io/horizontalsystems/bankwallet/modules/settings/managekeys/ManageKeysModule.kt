@@ -26,7 +26,6 @@ object ManageKeysModule {
         fun onConfirmBackup()
         fun onConfirmUnlink(accountId: String)
         fun onClickAdvancedSettings(item: ManageAccountItem)
-        fun onClear()
     }
 
     interface Interactor {
