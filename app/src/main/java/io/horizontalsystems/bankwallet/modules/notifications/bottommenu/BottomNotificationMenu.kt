@@ -46,7 +46,7 @@ class BottomNotificationMenu(
 
     }
 
-    override fun onItemClick(item: NotifMenuViewItem) {
+    override fun onItemClick(item: NotificationMenuViewItem) {
         viewModel.onOptionClick(item)
     }
 
@@ -70,10 +70,10 @@ class BottomNotificationMenu(
 class NotificationMenuItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
-        fun onItemClick(item: NotifMenuViewItem)
+        fun onItemClick(item: NotificationMenuViewItem)
     }
 
-    var items = listOf<NotifMenuViewItem>()
+    var items = listOf<NotificationMenuViewItem>()
 
     private val sectionHeader = 1
     private val menuItem = 2
@@ -82,8 +82,8 @@ class NotificationMenuItemsAdapter(private val listener: Listener) : RecyclerVie
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position].type) {
-            NotifViewItemType.BigHeader,
-            NotifViewItemType.SmallHeader -> sectionHeader
+            NotificationViewItemType.BigHeader,
+            NotificationViewItemType.SmallHeader -> sectionHeader
             else -> menuItem
         }
     }
@@ -120,7 +120,7 @@ class NotificationItemViewHolder(override val containerView: View, val onClick: 
         }
     }
 
-    fun bind(item: NotifMenuViewItem) {
+    fun bind(item: NotificationMenuViewItem) {
         itemTitle.setText(item.title)
         checkMark.isVisible = item.enabled
     }
@@ -129,9 +129,9 @@ class NotificationItemViewHolder(override val containerView: View, val onClick: 
 class NotificationBigSectionHeaderViewHolder(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(item: NotifMenuViewItem) {
+    fun bind(item: NotificationMenuViewItem) {
         sectionTitle.setText(item.title)
-        bigSectionHeader.isVisible = item.type == NotifViewItemType.BigHeader
+        bigSectionHeader.isVisible = item.type == NotificationViewItemType.BigHeader
     }
 }
 

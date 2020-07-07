@@ -12,7 +12,7 @@ class BottomNotificationsMenuViewModel(
         private val priceAlertManager: IPriceAlertManager,
         private val mode: NotificationMenuMode) : ViewModel() {
 
-    val menuItemsLiveData = MutableLiveData<List<NotifMenuViewItem>>()
+    val menuItemsLiveData = MutableLiveData<List<NotificationMenuViewItem>>()
     private var changeState: PriceAlert.ChangeState = PriceAlert.ChangeState.OFF
     private var trendState: PriceAlert.TrendState = PriceAlert.TrendState.OFF
 
@@ -27,12 +27,12 @@ class BottomNotificationsMenuViewModel(
         setItems()
     }
 
-    fun onOptionClick(item: NotifMenuViewItem) {
+    fun onOptionClick(item: NotificationMenuViewItem) {
         if (item.enabled) {
             return
         }
 
-        if (item.type == NotifViewItemType.Option) {
+        if (item.type == NotificationViewItemType.Option) {
             when (item.optionValue) {
                 OptionValue.ChangeOff,
                 OptionValue.Change2,
@@ -62,30 +62,30 @@ class BottomNotificationsMenuViewModel(
         menuItemsLiveData.postValue(items)
     }
 
-    private fun getFullList(): List<NotifMenuViewItem> {
-        val items = mutableListOf<NotifMenuViewItem>()
-        items.add(NotifMenuViewItem(R.string.NotificationBottomMenu_Change24h, NotifViewItemType.SmallHeader))
+    private fun getFullList(): List<NotificationMenuViewItem> {
+        val items = mutableListOf<NotificationMenuViewItem>()
+        items.add(NotificationMenuViewItem(R.string.NotificationBottomMenu_Change24h, NotificationViewItemType.SmallHeader))
         items.addAll(getChangeList())
-        items.add(NotifMenuViewItem(R.string.NotificationBottomMenu_PriceTrendChange, NotifViewItemType.BigHeader))
+        items.add(NotificationMenuViewItem(R.string.NotificationBottomMenu_PriceTrendChange, NotificationViewItemType.BigHeader))
         items.addAll(getTrendList())
 
         return items
     }
 
-    private fun getChangeList(): List<NotifMenuViewItem> {
+    private fun getChangeList(): List<NotificationMenuViewItem> {
         return listOf(
-                NotifMenuViewItem(R.string.SettingsNotifications_Off, NotifViewItemType.Option, OptionValue.ChangeOff, changeState == PriceAlert.ChangeState.OFF),
-                NotifMenuViewItem(R.string.NotificationBottomMenu_2, NotifViewItemType.Option, OptionValue.Change2, changeState == PriceAlert.ChangeState.PERCENT_2),
-                NotifMenuViewItem(R.string.NotificationBottomMenu_5, NotifViewItemType.Option, OptionValue.Change5, changeState == PriceAlert.ChangeState.PERCENT_5),
-                NotifMenuViewItem(R.string.NotificationBottomMenu_10, NotifViewItemType.Option, OptionValue.Change10, changeState == PriceAlert.ChangeState.PERCENT_10)
+                NotificationMenuViewItem(R.string.SettingsNotifications_Off, NotificationViewItemType.Option, OptionValue.ChangeOff, changeState == PriceAlert.ChangeState.OFF),
+                NotificationMenuViewItem(R.string.NotificationBottomMenu_2, NotificationViewItemType.Option, OptionValue.Change2, changeState == PriceAlert.ChangeState.PERCENT_2),
+                NotificationMenuViewItem(R.string.NotificationBottomMenu_5, NotificationViewItemType.Option, OptionValue.Change5, changeState == PriceAlert.ChangeState.PERCENT_5),
+                NotificationMenuViewItem(R.string.NotificationBottomMenu_10, NotificationViewItemType.Option, OptionValue.Change10, changeState == PriceAlert.ChangeState.PERCENT_10)
         )
     }
 
-    private fun getTrendList(): List<NotifMenuViewItem> {
+    private fun getTrendList(): List<NotificationMenuViewItem> {
         return listOf(
-                NotifMenuViewItem(R.string.SettingsNotifications_Off, NotifViewItemType.Option, OptionValue.TrendOff, trendState == PriceAlert.TrendState.OFF),
-                NotifMenuViewItem(R.string.NotificationBottomMenu_ShortTerm, NotifViewItemType.Option, OptionValue.TrendShort, trendState == PriceAlert.TrendState.SHORT),
-                NotifMenuViewItem(R.string.NotificationBottomMenu_LongTerm, NotifViewItemType.Option, OptionValue.TrendLong, trendState == PriceAlert.TrendState.LONG)
+                NotificationMenuViewItem(R.string.SettingsNotifications_Off, NotificationViewItemType.Option, OptionValue.TrendOff, trendState == PriceAlert.TrendState.OFF),
+                NotificationMenuViewItem(R.string.NotificationBottomMenu_ShortTerm, NotificationViewItemType.Option, OptionValue.TrendShort, trendState == PriceAlert.TrendState.SHORT),
+                NotificationMenuViewItem(R.string.NotificationBottomMenu_LongTerm, NotificationViewItemType.Option, OptionValue.TrendLong, trendState == PriceAlert.TrendState.LONG)
         )
     }
 
@@ -108,13 +108,13 @@ class BottomNotificationsMenuViewModel(
 
 }
 
-data class NotifMenuViewItem(
+data class NotificationMenuViewItem(
         @StringRes val title: Int,
-        val type: NotifViewItemType,
+        val type: NotificationViewItemType,
         val optionValue: OptionValue? = null,
         val enabled: Boolean = false)
 
-enum class NotifViewItemType {
+enum class NotificationViewItemType {
     SmallHeader,
     BigHeader,
     Option
