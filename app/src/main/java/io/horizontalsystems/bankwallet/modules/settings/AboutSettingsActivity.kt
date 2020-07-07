@@ -3,9 +3,8 @@ package io.horizontalsystems.bankwallet.modules.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.TopMenuItem
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import kotlinx.android.synthetic.main.activity_about_settings.*
 
 class AboutSettingsActivity : BaseActivity() {
@@ -14,10 +13,8 @@ class AboutSettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about_settings)
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.SettingsAbout_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
-        )
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     companion object {
