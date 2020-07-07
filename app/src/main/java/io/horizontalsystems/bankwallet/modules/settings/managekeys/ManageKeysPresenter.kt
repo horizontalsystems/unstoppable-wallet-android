@@ -63,7 +63,7 @@ class ManageKeysPresenter(
         interactor.deleteAccount(accountId)
     }
 
-    override fun onClear() {
+    override fun onCleared() {
         interactor.clear()
     }
 

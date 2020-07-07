@@ -38,6 +38,7 @@ object PrivacySettingsModule {
         fun onTransactionOrderSettingTap()
         fun onSelectTransactionSorting(transactionDataSortingType: TransactionDataSortingType)
         fun onShowPrivacySettingsInfoClick()
+        fun clear()
     }
 
     interface IPrivacySettingsInteractor {

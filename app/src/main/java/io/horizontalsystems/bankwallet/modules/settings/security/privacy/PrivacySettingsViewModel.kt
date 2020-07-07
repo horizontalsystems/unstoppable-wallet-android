@@ -97,4 +97,7 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
         restartApp.call()
     }
 
+    override fun onCleared() {
+        delegate.clear()
+    }
 }
