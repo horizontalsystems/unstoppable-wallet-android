@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.MergeAdapter
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
@@ -35,7 +35,7 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
         coinRatesAdapter = CoinRatesAdapter(this)
 
         coinRatesRecyclerView.itemAnimator = null
-        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter, SourceAdapter())
+        coinRatesRecyclerView.adapter = ConcatAdapter(coinRatesHeaderAdapter, coinRatesAdapter, SourceAdapter())
 
         presenter.viewDidLoad()
         observeView(presenter.view)
