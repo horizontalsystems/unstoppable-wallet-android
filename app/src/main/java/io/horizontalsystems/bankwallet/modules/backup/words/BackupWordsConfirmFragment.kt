@@ -60,7 +60,7 @@ class BackupWordsConfirmFragment : Fragment() {
         val wordOneEntry = wordOne?.getEnteredText()?.toLowerCase()
         val wordTwoEntry = wordTwo?.getEnteredText()?.toLowerCase()
         if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
-            HudHelper.showErrorMessage(this.requireView(), getString(R.string.Backup_Confirmation_Description))
+            HudHelper.showErrorMessage(this.requireView(), getString(R.string.Backup_Confirmation_Description, getString(viewModel.accountTypeTitle)))
         } else {
             viewModel.delegate.validateDidClick(hashMapOf(wordIndex1 to wordOneEntry, wordIndex2 to wordTwoEntry))
         }
