@@ -272,6 +272,10 @@
 
     <string name="Guides_Title">Academy</string>
 
+    <!--Guide-->
+
+    <string name="Guide_Error_NotFound">Guide not found</string>
+
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>

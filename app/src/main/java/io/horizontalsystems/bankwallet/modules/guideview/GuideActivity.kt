@@ -35,7 +35,6 @@ class GuideActivity : BaseActivity() {
 
         viewModel.statusLiveData.observe(this, Observer {
             error.isVisible = it is LoadStatus.Failed
-            error.text = (it as? LoadStatus.Failed)?.e?.message
         })
     }
 }

@@ -20,12 +20,14 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
-        android:padding="24dp"
         android:id="@+id/error"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        tools:text="Error" />
+        android:padding="24dp"
+        android:text="@string/Guide_Error_NotFound"
+        android:textColor="@color/grey" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBlocks"
