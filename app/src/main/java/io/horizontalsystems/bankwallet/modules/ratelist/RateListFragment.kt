@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.MergeAdapter
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.cryptonews.*
@@ -38,7 +38,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
         cryptoNewsAdapter = CryptoNewsAdapter()
 
         coinRatesRecyclerView.itemAnimator = null
-        coinRatesRecyclerView.adapter = MergeAdapter(coinRatesHeaderAdapter, coinRatesAdapter, cryptoNewsHeaderAdapter, cryptoNewsAdapter, SourceAdapter())
+        coinRatesRecyclerView.adapter = ConcatAdapter(coinRatesHeaderAdapter, coinRatesAdapter, cryptoNewsHeaderAdapter, cryptoNewsAdapter, SourceAdapter())
 
         presenter.viewDidLoad()
         observeView(presenter.view)
