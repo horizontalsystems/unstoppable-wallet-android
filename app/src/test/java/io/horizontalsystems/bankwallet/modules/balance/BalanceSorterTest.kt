@@ -1,13 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import org.junit.Assert
 import org.junit.Test
 
 class BalanceSorterTest {
 
     private val sorter = BalanceSorter()
+
+    @Test
+    fun sort_byBalance_equalItemsSortedByName() {
+        val btc = balMock(0f, 0f, "Bitcoin")
+        val zrx = balMock(0f, 0f, "0x Protocol")
+        val eth = balMock(0f, 0f, "Ethereum")
+
+        val items = listOf(btc, zrx, eth)
+        val expected = listOf(zrx, btc, eth)
+
+        val sorted = sorter.sort(items, BalanceSortType.Value)
+        val sortedReversed = sorter.sort(items.reversed(), BalanceSortType.Value)
+
+        Assert.assertArrayEquals(expected.toTypedArray(), sorted.toTypedArray())
+        Assert.assertArrayEquals(expected.toTypedArray(), sortedReversed.toTypedArray())
+    }
 
     @Test
     fun sort_WithZeroAndNull(){
@@ -147,11 +166,12 @@ class BalanceSorterTest {
         Assert.assertEquals(expectedSortedList, sorted)
     }
 
-    private fun balMock(balance: Float?, fiatValue: Float?): BalanceModule.BalanceItem {
-        val mockedItem = mock<BalanceModule.BalanceItem>()
-        whenever(mockedItem.balance).thenReturn(balance?.toBigDecimal())
-        whenever(mockedItem.fiatValue).thenReturn(fiatValue?.toBigDecimal())
-        return mockedItem
-    }
+    private fun balMock(balance: Float?, fiatValue: Float?, title: String = ""): BalanceModule.BalanceItem {
+        return mock {
+            on { this.balance } doReturn balance?.toBigDecimal()
+            on { this.fiatValue } doReturn fiatValue?.toBigDecimal()
 
+            on { wallet } doReturn Wallet(Coin("coinId", title, "code", 8, CoinType.Bitcoin), mock())
+        }
+    }
 }
