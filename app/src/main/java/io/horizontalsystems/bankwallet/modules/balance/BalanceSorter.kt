@@ -13,20 +13,19 @@ class BalanceSorter : BalanceModule.IBalanceSorter {
     }
 
     private fun sortByBalance(items: List<BalanceModule.BalanceItem>): List<BalanceModule.BalanceItem> {
-        return items.sortedWith(compareBy(
-                {
-                    if ((it.balance ?: BigDecimal.ZERO) > BigDecimal.ZERO) 1 else 0
-                },
-                {
-                    if ((it.fiatValue?: BigDecimal.ZERO) > BigDecimal.ZERO) 1 else 0
-                },
-                {
+        val comparator =
+                compareByDescending<BalanceModule.BalanceItem> {
+                    it.balance ?: BigDecimal.ZERO > BigDecimal.ZERO
+                }.thenByDescending {
+                    it.fiatValue ?: BigDecimal.ZERO > BigDecimal.ZERO
+                }.thenByDescending {
                     it.fiatValue
-                },
-                {
+                }.thenByDescending {
                     it.balance
+                }.thenBy {
+                    it.wallet.coin.title
                 }
-        )).reversed()
-    }
 
+        return items.sortedWith(comparator)
+    }
 }
