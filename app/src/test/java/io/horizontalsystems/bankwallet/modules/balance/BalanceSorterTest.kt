@@ -14,9 +14,9 @@ class BalanceSorterTest {
 
     @Test
     fun sort_byBalance_equalItemsSortedByName() {
-        val btc = balMock(0f, 0f, "Bitcoin")
-        val zrx = balMock(0f, 0f, "0x Protocol")
-        val eth = balMock(0f, 0f, "Ethereum")
+        val btc = mockBalanceItem(0f, 0f, "Bitcoin")
+        val zrx = mockBalanceItem(0f, 0f, "0x Protocol")
+        val eth = mockBalanceItem(0f, 0f, "Ethereum")
 
         val items = listOf(btc, zrx, eth)
         val expected = listOf(zrx, btc, eth)
@@ -31,10 +31,10 @@ class BalanceSorterTest {
     @Test
     fun sort_WithZeroAndNull(){
 
-        val item1 = balMock(9f, null)
-        val item2 = balMock(0f, 0f)
-        val item3 = balMock(null, 0f)
-        val item4 = balMock(3f, 1f)
+        val item1 = mockBalanceItem(9f, null)
+        val item2 = mockBalanceItem(0f, 0f)
+        val item3 = mockBalanceItem(null, 0f)
+        val item4 = mockBalanceItem(3f, 1f)
 
         val items = listOf(
                 item1,
@@ -57,8 +57,8 @@ class BalanceSorterTest {
     @Test
     fun sort_WithNullFiatNull(){
 
-        val item1 = balMock(10f, null)
-        val item2 = balMock(9f, null)
+        val item1 = mockBalanceItem(10f, null)
+        val item2 = mockBalanceItem(9f, null)
 
         val items = listOf(
                 item1,
@@ -77,8 +77,8 @@ class BalanceSorterTest {
     @Test
     fun sort_SecondOneHasRate(){
 
-        val item1 = balMock(9f, null)
-        val item2 = balMock(9f, 0f)
+        val item1 = mockBalanceItem(9f, null)
+        val item2 = mockBalanceItem(9f, 0f)
 
         val items = listOf(
                 item1,
@@ -97,9 +97,9 @@ class BalanceSorterTest {
     @Test
     fun sort_WithZeroAndValues(){
 
-        val item1 = balMock(9f, 0f)
-        val item2 = balMock(3f, 12f)
-        val item3 = balMock(40f, null)
+        val item1 = mockBalanceItem(9f, 0f)
+        val item2 = mockBalanceItem(3f, 12f)
+        val item3 = mockBalanceItem(40f, null)
 
         val items = listOf(
                 item1,
@@ -120,10 +120,10 @@ class BalanceSorterTest {
     @Test
     fun sort_WithNullBalance(){
 
-        val item1 = balMock(6f, 1f)
-        val item2 = balMock(3f, 12f)
-        val item3 = balMock(40f, null)
-        val item4 = balMock(0f, null)
+        val item1 = mockBalanceItem(6f, 1f)
+        val item2 = mockBalanceItem(3f, 12f)
+        val item3 = mockBalanceItem(40f, null)
+        val item4 = mockBalanceItem(0f, null)
 
         val items = listOf(
                 item1,
@@ -146,9 +146,9 @@ class BalanceSorterTest {
     @Test
     fun sort_SecondOneHasRateButLessInBalance(){
 
-        val item1 = balMock(15f, null)
-        val item2 = balMock(9f, 0f)
-        val item3 = balMock(3f, 1f)
+        val item1 = mockBalanceItem(15f, null)
+        val item2 = mockBalanceItem(9f, 0f)
+        val item3 = mockBalanceItem(3f, 1f)
 
         val items = listOf(
                 item1,
@@ -166,7 +166,7 @@ class BalanceSorterTest {
         Assert.assertEquals(expectedSortedList, sorted)
     }
 
-    private fun balMock(balance: Float?, fiatValue: Float?, title: String = ""): BalanceModule.BalanceItem {
+    private fun mockBalanceItem(balance: Float?, fiatValue: Float?, title: String = ""): BalanceModule.BalanceItem {
         return mock {
             on { this.balance } doReturn balance?.toBigDecimal()
             on { this.fiatValue } doReturn fiatValue?.toBigDecimal()
