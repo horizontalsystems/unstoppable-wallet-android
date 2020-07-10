@@ -38,6 +38,7 @@
         android:clipToPadding="true"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
+        app:gestureInsetBottomIgnored="true"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="@string/bottom_sheet_behavior"
         >
