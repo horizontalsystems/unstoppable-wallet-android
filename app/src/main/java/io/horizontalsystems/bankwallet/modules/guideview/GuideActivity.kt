@@ -6,14 +6,13 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.guides.LoadStatus
 import kotlinx.android.synthetic.main.activity_guide.*
 
 
-class GuideActivity : BaseActivity() {
+class GuideActivity : BaseActivity(), GuideContentAdapter.Listener {
 
-    private val contentAdapter = GuideContentAdapter()
+    private val contentAdapter = GuideContentAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +25,8 @@ class GuideActivity : BaseActivity() {
 
         rvBlocks.adapter = contentAdapter
 
-        val guide = intent.extras?.getParcelable<Guide>(GuideModule.GuideKey)
-        val viewModel by viewModels<GuideViewModel> { GuideModule.Factory(guide) }
+        val guideUrl = intent.extras?.getString(GuideModule.GuideUrlKey)
+        val viewModel by viewModels<GuideViewModel> { GuideModule.Factory(guideUrl) }
 
         viewModel.blocks.observe(this, Observer {
             contentAdapter.submitList(it)
@@ -36,5 +35,9 @@ class GuideActivity : BaseActivity() {
         viewModel.statusLiveData.observe(this, Observer {
             error.isVisible = it is LoadStatus.Failed
         })
+    }
+
+    override fun onGuideClick(url: String) {
+        GuideModule.start(this, url)
     }
 }

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.guideview
 
-import android.text.Spanned
+import android.text.SpannableStringBuilder
 
 sealed class GuideBlock {
     var quoted = false
@@ -12,11 +12,11 @@ sealed class GuideBlock {
     var listTightTop = false
     var listTightBottom = false
 
-    data class Heading1(val text: Spanned) : GuideBlock()
-    data class Heading2(val text: Spanned) : GuideBlock()
-    data class Heading3(val text: Spanned) : GuideBlock()
-    data class Paragraph(val text: Spanned) : GuideBlock() {
-        constructor(text: Spanned, quoted: Boolean) : this(text) {
+    data class Heading1(val text: SpannableStringBuilder) : GuideBlock()
+    data class Heading2(val text: SpannableStringBuilder) : GuideBlock()
+    data class Heading3(val text: SpannableStringBuilder) : GuideBlock()
+    data class Paragraph(val text: SpannableStringBuilder) : GuideBlock() {
+        constructor(text: SpannableStringBuilder, quoted: Boolean) : this(text) {
             this.quoted = quoted
         }
     }
