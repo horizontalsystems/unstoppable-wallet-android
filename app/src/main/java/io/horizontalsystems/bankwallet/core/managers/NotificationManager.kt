@@ -1,19 +1,19 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.app.NotificationChannel
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.google.firebase.messaging.FirebaseMessaging
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INotificationManager
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.horizontalsystems.bankwallet.entities.AlertNotification
+import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import android.app.NotificationManager as SystemNotificationManager
 
 class NotificationManager(private val androidNotificationManager: NotificationManagerCompat) : INotificationManager {
-
-    private val maxNumberOfNotifications = 2
 
     override val isEnabled: Boolean
         get() = when {
@@ -25,37 +25,33 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
         }
 
     override fun clear() {
-        for(i in 0 until maxNumberOfNotifications){
-            androidNotificationManager.cancel(i)
+        androidNotificationManager.cancelAll()
+    }
+
+    override fun show(notification: AlertNotification) {
+        createNotificationChannel()
+        showNotification(notification)
+    }
+
+    private fun showNotification(notification: AlertNotification) {
+        val builder = NotificationCompat.Builder(App.instance, channelId)
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setContentTitle(notification.title)
+                .setContentText(notification.body)
+                .setStyle(NotificationCompat.BigTextStyle()
+                        .bigText(notification.body))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(getPendingIntent())
+                .setAutoCancel(true)
+
+        androidNotificationManager.notify(notification.id, builder.build())
+    }
+
+    private fun getPendingIntent(): PendingIntent {
+        val intent = Intent(App.instance, LauncherActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-    }
-
-    override fun subscribe(topicName: String): Flowable<Unit> {
-        return Flowable.create(({ emitter ->
-            FirebaseMessaging.getInstance().subscribeToTopic(topicName)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful){
-                           emitter.onNext(Unit)
-                        } else {
-                            emitter.onError(task.exception ?: Throwable("Error in subscribing to  notification topic"))
-                        }
-                        emitter.onComplete()
-                    }
-        }), BackpressureStrategy.BUFFER)
-    }
-
-    override fun unsubscribe(topicName: String): Flowable<Unit> {
-        return Flowable.create(({ emitter ->
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(topicName)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful){
-                            emitter.onNext(Unit)
-                        } else {
-                            emitter.onError(task.exception ?: Throwable("Error in unsubscribing to  notification topic"))
-                        }
-                        emitter.onComplete()
-                    }
-        }), BackpressureStrategy.BUFFER)
+        return PendingIntent.getActivity(App.instance, 0, intent, 0)
     }
 
     private fun createNotificationChannel() {
