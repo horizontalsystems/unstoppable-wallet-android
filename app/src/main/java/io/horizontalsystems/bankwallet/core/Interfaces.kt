@@ -324,8 +324,7 @@ interface IAccountsStorage {
 interface INotificationManager {
     val isEnabled: Boolean
     fun clear()
-    fun subscribe(topicName: String): Flowable<Unit>
-    fun unsubscribe(topicName: String): Flowable<Unit>
+    fun show(notification: AlertNotification)
 }
 
 interface IEnabledWalletStorage {
