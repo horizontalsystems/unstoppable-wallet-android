@@ -55,7 +55,7 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
 
         viewModel.openGuide.observe(viewLifecycleOwner, Observer { guide ->
             context?.let {
-                GuideModule.start(it, guide)
+                GuideModule.start(it, guide.fileUrl)
             }
         })
     }

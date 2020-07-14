@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.ListAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.inflate
 
-class GuideContentAdapter : ListAdapter<GuideBlock, GuideBlockViewHolder>(diffCallback) {
+class GuideContentAdapter(private val listener: Listener) : ListAdapter<GuideBlock, GuideBlockViewHolder>(diffCallback) {
+
+    interface Listener {
+        fun onGuideClick(url: String)
+    }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is GuideBlock.Heading1 -> R.layout.view_holder_guide_h1
@@ -21,7 +25,7 @@ class GuideContentAdapter : ListAdapter<GuideBlock, GuideBlockViewHolder>(diffCa
         R.layout.view_holder_guide_h1 -> ViewHolderH1(inflate(parent, viewType))
         R.layout.view_holder_guide_h2 -> ViewHolderH2(inflate(parent, viewType))
         R.layout.view_holder_guide_h3 -> ViewHolderH3(inflate(parent, viewType))
-        R.layout.view_holder_guide_paragraph -> ViewHolderParagraph(inflate(parent, viewType))
+        R.layout.view_holder_guide_paragraph -> ViewHolderParagraph(inflate(parent, viewType), listener)
         R.layout.view_holder_guide_image -> ViewHolderImage(inflate(parent, viewType))
         R.layout.view_holder_guide_footer -> ViewHolderFooter(inflate(parent, viewType))
         else -> throw Exception("Undefined viewType: $viewType")

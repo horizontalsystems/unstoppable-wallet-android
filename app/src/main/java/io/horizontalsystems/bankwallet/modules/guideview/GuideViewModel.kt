@@ -4,13 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
-import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.guides.LoadStatus
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.commonmark.parser.Parser
 
-class GuideViewModel(private val guide: Guide?, private val guidesManager: GuidesManager, private val connectivityManager: ConnectivityManager) : ViewModel() {
+class GuideViewModel(private val guideUrl: String?, private val guidesManager: GuidesManager, private val connectivityManager: ConnectivityManager) : ViewModel() {
 
     val statusLiveData = MutableLiveData<LoadStatus>()
     val blocks = MutableLiveData<List<GuideBlock>>()
@@ -53,7 +52,7 @@ class GuideViewModel(private val guide: Guide?, private val guidesManager: Guide
     }
 
     private fun loadGuide() {
-        guide?.fileUrl?.let {
+        guideUrl?.let {
             guidesManager.getGuideContent(it)
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {

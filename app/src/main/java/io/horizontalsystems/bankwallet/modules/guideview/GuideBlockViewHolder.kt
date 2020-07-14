@@ -1,10 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.guideview
 
+import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.URLSpan
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.TOP
+import androidx.core.text.getSpans
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Callback
@@ -95,19 +99,42 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
     }
 }
 
-class ViewHolderParagraph(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderParagraph(override val containerView: View, private val listener: GuideContentAdapter.Listener) : GuideBlockViewHolder(containerView), LayoutContainer {
     private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, containerView.context)
     private val listItemIndent = LayoutHelper.dp(24f, containerView.context)
 
     override fun bind(item: GuideBlock) {
         if (item !is GuideBlock.Paragraph) return
 
-        paragraph.text = item.text
+        val text = item.text
+
+        val spans = text.getSpans<URLSpan>(0, text.length)
+        spans.forEach {
+            handleLinkToGuideInApp(text, it)
+        }
+
+        paragraph.text = text
         paragraph.movementMethod = LinkMovementMethod.getInstance()
 
         blockquote(item)
         listItem(item)
     }
+
+    private fun handleLinkToGuideInApp(strBuilder: SpannableStringBuilder, span: URLSpan) {
+        if (!span.url.endsWith("md")) return
+
+        val start = strBuilder.getSpanStart(span)
+        val end = strBuilder.getSpanEnd(span)
+        val flags = strBuilder.getSpanFlags(span)
+        val clickable = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                listener.onGuideClick(span.url)
+            }
+        }
+        strBuilder.setSpan(clickable, start, end, flags)
+        strBuilder.removeSpan(span)
+    }
+
 
     private fun listItem(item: GuideBlock) {
         val leftPadding = if (item.listItem) listItemIndent else 0

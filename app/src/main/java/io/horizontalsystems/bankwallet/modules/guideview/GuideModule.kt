@@ -6,23 +6,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
-import io.horizontalsystems.bankwallet.entities.Guide
-import io.horizontalsystems.core.putParcelableExtra
 
 object GuideModule {
-    const val GuideKey = "GuideKey"
+    const val GuideUrlKey = "GuideUrlKey"
 
-    fun start(context: Context, guide: Guide) {
+    fun start(context: Context, guideUrl: String) {
         val intent = Intent(context, GuideActivity::class.java)
-        intent.putParcelableExtra(GuideKey, guide)
+        intent.putExtra(GuideUrlKey, guideUrl)
 
         context.startActivity(intent)
     }
 
-    class Factory(private val guide: Guide?) : ViewModelProvider.Factory {
+    class Factory(private val guideUrl: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return GuideViewModel(guide, GuidesManager, App.connectivityManager) as T
+            return GuideViewModel(guideUrl, GuidesManager, App.connectivityManager) as T
         }
     }
 }
