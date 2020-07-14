@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.entities.AlertNotification
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import android.app.NotificationManager as SystemNotificationManager
 
-class NotificationManager(private val androidNotificationManager: NotificationManagerCompat) : INotificationManager {
+class NotificationManager(private val androidNotificationManager: NotificationManagerCompat) : INotificationManager, BackgroundManager.Listener {
 
     override val isEnabled: Boolean
         get() = when {
@@ -23,6 +23,11 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
                 notificationChannel?.importance != NotificationManagerCompat.IMPORTANCE_NONE
             }
         }
+
+    override fun willEnterForeground() {
+        super.willEnterForeground()
+        clear()
+    }
 
     override fun clear() {
         androidNotificationManager.cancelAll()

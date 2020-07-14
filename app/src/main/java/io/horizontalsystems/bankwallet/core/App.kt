@@ -170,7 +170,9 @@ class App : CoreApp() {
         addressParserFactory = AddressParserFactory()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
-        notificationManager = NotificationManager(NotificationManagerCompat.from(this))
+        notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
+            backgroundManager.registerListener(this)
+        }
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
         priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager)
 
