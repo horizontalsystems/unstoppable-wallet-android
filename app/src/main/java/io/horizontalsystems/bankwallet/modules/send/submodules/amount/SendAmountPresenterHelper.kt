@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
@@ -22,8 +20,11 @@ class SendAmountPresenterHelper(
                 coinAmount?.setScale(coinDecimal, RoundingMode.DOWN)
             }
             SendModule.InputType.CURRENCY -> {
-                val currencyAmount = rate?.let { coinAmount?.times(it) }
-                currencyAmount?.setScale(currencyDecimal, RoundingMode.DOWN)
+                rate?.let { coinAmount?.times(it) }?.let {
+                    val scale = if (it >= BigDecimal(1000)) 0 else currencyDecimal
+
+                    it.setScale(scale, RoundingMode.DOWN)
+                }
             }
         } ?: BigDecimal.ZERO
 

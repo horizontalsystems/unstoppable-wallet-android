@@ -69,7 +69,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
         if (formatters[formatterId] == null) {
             formatters[formatterId] = NumberFormat.getInstance(locale).apply {
-                this.roundingMode = RoundingMode.HALF_UP
+                this.roundingMode = RoundingMode.FLOOR
 
                 this.minimumFractionDigits = minimumFractionDigits
                 this.maximumFractionDigits = maximumFractionDigits
