@@ -383,8 +383,8 @@
     <string name="SettingsNotifications_PushNotification">Push Notification</string>
 
     <string name="Notification_Title">Notifications</string>
-    <string name="Notification_PriceUp">%1$s price: up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: down %2$s%% ⬇️</string>
+    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
 
     <string name="NotificationBottomMenu_Change24h">Change 24h</string>
     <string name="NotificationBottomMenu_2" translatable="false">2%</string>
@@ -540,6 +540,7 @@
     <string name="Charts_TimeDuration_Day">1D</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
     <string name="Charts_TimeDuration_Month3">3M</string>
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>
