@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -222,6 +223,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         presenterView.setAlertNotificationActive.observe(this, Observer { active ->
             notificationIcon.isVisible = true
             notificationIcon.setImageResource(if (active) R.drawable.ic_notification_enabled_16 else R.drawable.ic_notification_16)
+            setClickListenerForRateDifference()
         })
 
     }
@@ -261,8 +263,23 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             presenter.toggleRsi()
         }
 
+    }
+
+    private fun setClickListenerForRateDifference() {
         notificationClickArea.setOnClickListener {
             BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, coinTitle, coinCode)
+        }
+
+        notificationClickArea.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> v.alpha = 0.5f
+                MotionEvent.ACTION_UP -> {
+                    v.alpha = 1f
+                    v.performClick()
+                }
+                MotionEvent.ACTION_CANCEL -> v.alpha = 1f
+            }
+            return@setOnTouchListener true
         }
     }
 
