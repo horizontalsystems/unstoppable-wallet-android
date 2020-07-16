@@ -18,19 +18,23 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletView
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.AlertDialogFragment
+import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.select_coins.*
 
 class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
     private lateinit var presenter: CreateWalletPresenter
     private lateinit var coinItemsAdapter: CoinItemsAdapter
-    private var buttonEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.select_coins)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        shadowlessToolbar.bind(
+                getString(R.string.ManageCoins_title),
+                leftBtnItem = TopMenuItem(R.drawable.ic_back) { onBackPressed() },
+                rightBtnItem = TopMenuItem(text = R.string.Button_Create, onClick = { presenter.onCreateButtonClick() })
+        )
+        shadowlessToolbar.setRightButtonEnabled(false)
 
         val presentationMode: PresentationMode = intent.getParcelableExtra(ModuleField.PRESENTATION_MODE)
                 ?: PresentationMode.Initial
@@ -45,28 +49,6 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
         coins.adapter = coinItemsAdapter
 
         presenter.onLoad()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.create_menu, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.menuCreate)?.apply {
-            isEnabled = buttonEnabled
-        }
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuCreate -> {
-                presenter.onCreateButtonClick()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     // CoinItemsAdapter.Listener
@@ -90,8 +72,7 @@ class CreateWalletActivity : BaseActivity(), CoinItemsAdapter.Listener {
         })
 
         view.createButtonEnabled.observe(this, Observer { enabled ->
-            buttonEnabled = enabled
-            invalidateOptionsMenu()
+            shadowlessToolbar.setRightButtonEnabled(enabled)
         })
 
         view.showNotSupported.observe(this, Observer { predefinedAccountType ->
