@@ -2,6 +2,7 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_shadowless_toolbar.view.*
@@ -55,8 +56,13 @@ class ShadowlessToolbarView : ConstraintLayout {
         }
     }
 
-    fun bindTitle(title: String) {
-        toolbarTitle.text = title
+    fun setRightButtonEnabled(enabled: Boolean){
+        setViewEnabled(if (rightTextButton.isVisible) rightTextButton else rightImageButton, enabled)
+    }
+
+    private fun setViewEnabled(view: View, enabled: Boolean) {
+        view.alpha = if (enabled) 1f else 0.5f
+        view.isEnabled = enabled
     }
 
 }
