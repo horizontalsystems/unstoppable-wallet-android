@@ -16,6 +16,7 @@
         <item name="actionMenuTextColor">@color/stateful_button_yellow_color</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_d</item>
+        <item name="colorControlHighlight">#6E7899</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
 
         <item name="BallanceCoinNameColor">@color/white</item>
