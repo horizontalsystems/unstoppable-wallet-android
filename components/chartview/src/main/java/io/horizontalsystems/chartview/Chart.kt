@@ -153,7 +153,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         // RSI
         rsiCurve.setShape(chartBottom.shape)
         rsiCurve.setPoints(rsi)
-        rsiCurve.setColor(config.curveFastColor)
+        rsiCurve.setColor(config.curveSlowColor)
 
         rsiRange.setShape(chartBottom.shape)
         rsiRange.setOffset(chartBottom.shape.height() * 0.3f)
