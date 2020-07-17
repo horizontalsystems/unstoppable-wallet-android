@@ -47,7 +47,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var macdLineOffset = dp2px(2f)
     var macdHistogramOffset = dp2px(4f)
 
-    var strokeWidth = dp2px(0.5f)
+    var strokeWidth = dp2px(1f)
     var strokeDash = dp2px(2f)
     var strokeDashWidth = dp2px(0.5f)
 
