@@ -71,9 +71,9 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
                 SelectorItem(getString(it.titleRes), it == selected)
             }
             SelectorDialog
-                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle), { position ->
+                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
                         presenter.onTopListSortTypeChange(sortTypes[position])
-                    }, false)
+                    }
                     .show(parentFragmentManager, "balance_sort_type_selector")
 
         })
