@@ -238,6 +238,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         actions = mapOf(
                 Pair(ChartType.DAILY, button1D),
                 Pair(ChartType.WEEKLY, button1W),
+                Pair(ChartType.WEEKLY2, button2W),
                 Pair(ChartType.MONTHLY, button1M),
                 Pair(ChartType.MONTHLY3, button3M),
                 Pair(ChartType.MONTHLY6, button6M),

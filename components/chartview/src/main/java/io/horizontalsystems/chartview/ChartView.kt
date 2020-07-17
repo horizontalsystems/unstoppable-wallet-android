@@ -5,8 +5,6 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import io.horizontalsystems.chartview.models.ChartPoint
-import java.math.BigDecimal
 
 class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr) {
@@ -14,6 +12,7 @@ class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     enum class ChartType {
         DAILY,
         WEEKLY,
+        WEEKLY2,
         MONTHLY,
         MONTHLY3,
         MONTHLY6,

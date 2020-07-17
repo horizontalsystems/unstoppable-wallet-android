@@ -24,6 +24,7 @@ object GridHelper {
             ChartType.DAILY -> {
             }
             ChartType.WEEKLY,
+            ChartType.WEEKLY2,
             ChartType.MONTHLY -> {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
             }
@@ -55,6 +56,7 @@ object GridHelper {
         when (type) {
             ChartType.DAILY -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
             ChartType.WEEKLY -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
+            ChartType.WEEKLY2 -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
             ChartType.MONTHLY -> calendar.add(Calendar.DAY_OF_MONTH, -6)    // 6 days
             ChartType.MONTHLY3 -> calendar.add(Calendar.DAY_OF_MONTH, -14)  // 6 days
             ChartType.MONTHLY6 -> calendar.add(Calendar.MONTH, -1)          // 1 month
@@ -67,6 +69,7 @@ object GridHelper {
         return when (type) {
             ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
             ChartType.WEEKLY -> formatDate(calendar.time, "EEE")
+            ChartType.WEEKLY2,
             ChartType.MONTHLY,
             ChartType.MONTHLY3 -> calendar.get(Calendar.DAY_OF_MONTH).toString()
             ChartType.MONTHLY6,
