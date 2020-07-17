@@ -115,8 +115,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
             coinMarketCap.apply {
                 if (item.marketCap.value > BigDecimal.ZERO) {
-                    val shortCapValue = shortenValue(item.marketCap.value)
-                    text = formatter.formatFiat(shortCapValue.first, item.marketCap.currency.symbol, 0, 2) + shortCapValue.second
+                    text = formatFiatShortened(item.marketCap.value, item.marketCap.currency.symbol)
                 } else {
                     isEnabled = false
                     text = getString(R.string.NotAvailable)
@@ -124,14 +123,12 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             }
 
             volumeValue.apply {
-                val shortVolumeValue = shortenValue(item.volume.value)
-                text = formatter.formatFiat(shortVolumeValue.first, item.volume.currency.symbol, 0, 2) + shortVolumeValue.second
+                text = formatFiatShortened(item.volume.value, item.volume.currency.symbol)
             }
 
             circulationValue.apply {
                 if (item.supply.value > BigDecimal.ZERO) {
-                    val shortValue = shortenValue(item.supply.value)
-                    text = formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${item.supply.coinCode}")
+                    text = formatter.formatCoin(item.supply.value, item.supply.coinCode, 0, 2)
                 } else {
                     isEnabled = false
                     text = getString(R.string.NotAvailable)
@@ -140,8 +137,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
             totalSupplyValue.apply {
                 item.maxSupply?.let {
-                    val shortValue = shortenValue(it.value)
-                    text = formatter.format(shortValue.first, 0, 2, suffix = "${shortValue.second} ${it.coinCode}")
+                    text = formatter.formatCoin(it.value, it.coinCode, 0, 2)
                 } ?: run {
                     isEnabled = false
                     text = getString(R.string.NotAvailable)
@@ -178,7 +174,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             item.volume?.let {
                 pointInfoVolumeTitle.isVisible = true
                 pointInfoVolume.isVisible = true
-                pointInfoVolume.text = formatter.formatFiat(item.volume.value, item.volume.currency.symbol, 0, 2)
+                pointInfoVolume.text = formatFiatShortened(item.volume.value, item.volume.currency.symbol)
             }
 
             item.macdInfo?.let { macdInfo ->
@@ -226,6 +222,11 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             setClickListenerForRateDifference()
         })
 
+    }
+
+    private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
+        val shortCapValue = shortenValue(value)
+        return formatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
     }
 
     private fun getHistogramColor(value: Float): Int {
