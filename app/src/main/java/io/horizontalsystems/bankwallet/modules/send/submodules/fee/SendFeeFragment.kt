@@ -88,10 +88,11 @@ class SendFeeFragment(
 
                 SelectorItem(caption, selected)
             }
+
             SelectorDialog
-                    .newInstance(selectorItems, getString(R.string.Send_DialogSpeed), { position ->
+                    .newInstance(selectorItems, getString(R.string.Send_DialogSpeed)) { position ->
                         presenter?.onChangeFeeRate(feeRates[position].feeRateInfo)
-                    })
+                    }
                     .show(parentFragmentManager, "fee_rate_priority_selector")
         })
 
