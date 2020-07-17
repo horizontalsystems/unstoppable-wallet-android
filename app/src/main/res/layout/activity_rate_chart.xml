@@ -134,6 +134,13 @@
                         android:layout_height="wrap_content"
                         android:text="@string/Charts_TimeDuration_Week" />
 
+                    <Button
+                        android:id="@+id/button2W"
+                        style="@style/TabComponent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Charts_TimeDuration_TwoWeeks" />
+
                     <TextView
                         android:id="@+id/button1M"
                         style="@style/TabComponent"

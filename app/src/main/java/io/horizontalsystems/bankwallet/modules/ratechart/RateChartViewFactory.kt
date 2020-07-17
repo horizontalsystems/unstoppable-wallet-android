@@ -44,6 +44,7 @@ class RateChartViewFactory {
         val chartType = when (type) {
             ChartType.DAILY -> ChartView.ChartType.DAILY
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
+            ChartType.WEEKLY2 -> ChartView.ChartType.WEEKLY2
             ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
             ChartType.MONTHLY3 -> ChartView.ChartType.MONTHLY3
             ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
