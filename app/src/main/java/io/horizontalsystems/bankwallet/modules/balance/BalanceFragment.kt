@@ -191,9 +191,9 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
                 SelectorItem(getString(it.getTitleRes()), it == selected)
             }
             SelectorDialog
-                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle), { position ->
+                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
                         viewModel.delegate.onSortTypeChange(sortTypes[position])
-                    }, false)
+                    }
                     .show(parentFragmentManager, "balance_sort_type_selector")
         })
 
