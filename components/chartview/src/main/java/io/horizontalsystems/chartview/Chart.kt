@@ -222,6 +222,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         chartTimeline.clear()
         chartTimeline.add(timelineGrid)
+        chartTimeline.invalidate()
 
         animatorMain.start()
         animatorBottom.start()
