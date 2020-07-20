@@ -65,6 +65,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("CAS", "Cashaaa", "CAS", 8, CoinType.Binance("CAS-167")),
                 Coin("LINK", "Chainlink", "LINK", 18, CoinType.Erc20("0x514910771AF9Ca656af840dff83E8264EcF986CA")),
                 Coin("CVC", "Civic", "CVC", 8, CoinType.Erc20("0x41e5560054824ea6b0732e656e3ad64e20e94e45")),
+                Coin("COMP", "Compound", "COMP", 18, CoinType.Erc20("0xc00e94cb662c3520282e6f5717214004a7f26888")),
                 Coin("CRO", "Crypto.com Coin", "CRO", 8, CoinType.Erc20("0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b")),
                 Coin("CRPT", "Crypterium", "CRPT", 8, CoinType.Binance("CRPT-8C9")),
                 Coin("DAI", "Dai", "DAI", 18, CoinType.Erc20("0x6b175474e89094c44da98b954eedeac495271d0f")),
