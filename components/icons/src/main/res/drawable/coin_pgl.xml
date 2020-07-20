@@ -7,10 +7,8 @@
     <path
         android:fillColor="#8A8A8F"
         android:fillType="evenOdd"
-        android:pathData="M8.02,7h5.48a2.5,2.5 0,1 1,0 5H8.2a0.2,0.2 0,0 0,-0.2 0.2v6.6c0,0.11 0.09,0.2 0.2,0.2h1.6a0.2,0.2 0,0 0,0.2 -0.2V14h3.5a4.5,4.5 0,0 0,0 -9H8.2a0.2,0.2 0,0 0,-0.2 0.2V7h0.02H8l3,4h2.5l-3,-4H8.02zM12,24C5.373,24 0,18.627 0,12S5.373,0 12,0s12,5.373 12,12 -5.373,12 -12,12z" />
-    <path
-        android:fillType="nonZero"
-        android:pathData="M11,11h2.5l-3,-4H8z">
+        android:pathData="M8.02 7h5.48a2.5 2.5 0 1 1 0 5H8.2A0.2 0.2 0 0 0 8 12.2v6.6C8 18.91 8.09 19 8.2 19h1.6a0.2 0.2 0 0 0 0.2-0.2V14h3.5a4.5 4.5 0 0 0 0-9H8.2A0.2 0.2 0 0 0 8 5.2V7h0.02H8l3 4h2.5l-3-4H8.02zM12 24C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12z" />
+    <path android:pathData="M11 11h2.5l-3-4H8z">
         <aapt:attr name="android:fillColor">
             <gradient
                 android:endX="10.75"
