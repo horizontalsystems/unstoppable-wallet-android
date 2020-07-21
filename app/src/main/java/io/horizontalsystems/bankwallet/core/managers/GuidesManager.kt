@@ -1,14 +1,15 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
+import com.google.gson.*
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.lang.reflect.Type
 import java.net.URL
+import java.util.*
 
 object GuidesManager {
 
@@ -17,6 +18,7 @@ object GuidesManager {
     private val gson = GsonBuilder()
             .setDateFormat("dd-MM-yyyy")
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .registerTypeAdapter(Guide::class.java, GuideDeserializer(guidesUrl))
             .create()
 
     fun getGuideCategories(): Single<Array<GuideCategory>> {
@@ -29,20 +31,8 @@ object GuidesManager {
             val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategory>::class.java)
             response.close()
 
-            categories.map { category ->
-                GuideCategory(category.title).apply {
-                    this.guides = category.guides.map {
-                        val imageUrl = it.imageUrl?.let { absolutify(it) }
-                        val fileUrl = absolutify(it.fileUrl)
-                        Guide(it.title, it.updatedAt, imageUrl, fileUrl)
-                    }
-                }
-            }.toTypedArray()
+            categories
         }
-    }
-
-    private fun absolutify(relativeUrl: String) : String {
-        return URL(URL(guidesUrl), relativeUrl).toString()
     }
 
     fun getGuideContent(fileUrl: String): Single<String> {
@@ -50,5 +40,24 @@ object GuidesManager {
         val host = "${url.protocol}://${url.host}"
 
         return App.networkManager.getGuide(host, fileUrl)
+    }
+
+    class GuideDeserializer(guidesUrl: String) : JsonDeserializer<Guide> {
+        private val guidesUrlObj = URL(guidesUrl)
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Guide {
+            val jsonObject = json.asJsonObject
+
+            return Guide(
+                    jsonObject.get("title").asString,
+                    context.deserialize(jsonObject.get("updated_at"), Date::class.java),
+                    jsonObject["image_url"].asString?.let { absolutify(it) },
+                    absolutify(jsonObject["file_url"].asString)
+            )
+        }
+
+        private fun absolutify(relativeUrl: String?): String {
+            return URL(guidesUrlObj, relativeUrl).toString()
+        }
     }
 }
