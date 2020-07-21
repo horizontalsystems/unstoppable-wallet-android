@@ -6,8 +6,9 @@ import android.text.Spanned
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import org.commonmark.node.*
+import java.net.URL
 
-class GuideVisitorString : AbstractVisitor() {
+class GuideVisitorString(private val guideUrl: String) : AbstractVisitor() {
     val spannableStringBuilder = SpannableStringBuilder()
 
     override fun visit(text: Text) {
@@ -19,7 +20,9 @@ class GuideVisitorString : AbstractVisitor() {
     }
 
     override fun visit(link: Link) {
-        spannableStringBuilder.append(getWrappedContent(link, URLSpan(link.destination)))
+        val url = URL(URL(guideUrl), link.destination).toString()
+
+        spannableStringBuilder.append(getWrappedContent(link, URLSpan(url)))
     }
 
     override fun visit(emphasis: Emphasis) {
@@ -27,15 +30,15 @@ class GuideVisitorString : AbstractVisitor() {
     }
 
     private fun getWrappedContent(node: Node, span: Any): SpannableStringBuilder {
-        val content = getNodeContent(node)
+        val content = getNodeContent(node, guideUrl)
         content.setSpan(span, 0, content.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         return content
     }
 
     companion object {
-        fun getNodeContent(node: Node): SpannableStringBuilder {
-            val guideVisitor = GuideVisitorString()
+        fun getNodeContent(node: Node, guideUrl: String): SpannableStringBuilder {
+            val guideVisitor = GuideVisitorString(guideUrl)
             guideVisitor.visitChildren(node)
 
             return guideVisitor.spannableStringBuilder

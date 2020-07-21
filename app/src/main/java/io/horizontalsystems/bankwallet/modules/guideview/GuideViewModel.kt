@@ -45,7 +45,8 @@ class GuideViewModel(private val guideUrl: String?, private val guidesManager: G
         val parser = Parser.builder().build()
         val document = parser.parse(content)
 
-        val guideVisitor = GuideVisitorBlock()
+        val guideVisitor = GuideVisitorBlock(guideUrl!!)
+
         document.accept(guideVisitor)
 
         blocks.postValue(guideVisitor.blocks + GuideBlock.Footer())
