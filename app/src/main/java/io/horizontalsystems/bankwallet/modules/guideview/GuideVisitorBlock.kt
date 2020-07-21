@@ -1,14 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.guideview
 
 import org.commonmark.node.*
+import java.net.URL
 
-class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGenerator? = null, val level: Int = 0) : AbstractVisitor() {
+class GuideVisitorBlock(var guideUrl: String, val level: Int = 0, private val listItemMarkerGenerator: ListItemMarkerGenerator? = null) : AbstractVisitor() {
 
     val blocks = mutableListOf<GuideBlock>()
     private var quoted = false
 
     override fun visit(heading: Heading) {
-        val content = GuideVisitorString.getNodeContent(heading)
+        val content = GuideVisitorString.getNodeContent(heading, guideUrl)
 
         val block = when (heading.level) {
             1 -> GuideBlock.Heading1(content)
@@ -28,15 +29,17 @@ class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGener
             return visit(firstChild)
         }
 
-        blocks.add(GuideBlock.Paragraph(GuideVisitorString.getNodeContent(paragraph), quoted))
+        blocks.add(GuideBlock.Paragraph(GuideVisitorString.getNodeContent(paragraph, guideUrl), quoted))
     }
 
     override fun visit(image: Image) {
-        blocks.add(GuideBlock.Image(image.destination, image.title, level == 0 && blocks.isEmpty()))
+        val url = URL(URL(guideUrl), image.destination).toString()
+
+        blocks.add(GuideBlock.Image(url, image.title, level == 0 && blocks.isEmpty()))
     }
 
     override fun visit(blockQuote: BlockQuote) {
-        val guideVisitor = GuideVisitorBlock(level = level + 1)
+        val guideVisitor = GuideVisitorBlock(guideUrl, level + 1)
 
         guideVisitor.visitChildren(blockQuote)
 
@@ -58,7 +61,7 @@ class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGener
     }
 
     override fun visit(listItem: ListItem) {
-        val guideVisitor = GuideVisitorBlock(level = level + 1)
+        val guideVisitor = GuideVisitorBlock(guideUrl, level + 1)
 
         guideVisitor.visitChildren(listItem)
         guideVisitor.blocks.let { subblocks ->
@@ -71,7 +74,7 @@ class GuideVisitorBlock(private val listItemMarkerGenerator: ListItemMarkerGener
     }
 
     private fun visitListBlock(listBlock: ListBlock, listItemMarkerGenerator: ListItemMarkerGenerator) {
-        val guideVisitor = GuideVisitorBlock(listItemMarkerGenerator, level = level + 1)
+        val guideVisitor = GuideVisitorBlock(guideUrl, level + 1, listItemMarkerGenerator)
         guideVisitor.visitChildren(listBlock)
         guideVisitor.blocks.let { subblocks ->
             if (listBlock.isTight) {
