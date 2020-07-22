@@ -55,7 +55,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/SettingsContact_AppStatus" />
+                app:title="@string/Settings_AppStatus" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

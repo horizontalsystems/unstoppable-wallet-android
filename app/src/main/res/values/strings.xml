@@ -286,11 +286,12 @@
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
     <string name="Settings_LightMode">Light Mode</string>
-    <string name="Settings_About">About</string>
+    <string name="Settings_Terms">Terms</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_Report">Contact</string>
+    <string name="Settings_AppStatus">App Status</string>
 
     <string name="SettingsOption_Enabled">Enabled</string>
     <string name="SettingsOption_Disabled">Disabled</string>
@@ -371,7 +372,6 @@
     <string name="SettingsContact_Title">Contact</string>
     <string name="SettingsContact_Email">Mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
-    <string name="SettingsContact_AppStatus">App Status</string>
 
     <!--Setting_Notifications-->
 

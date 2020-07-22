@@ -5,7 +5,6 @@ import io.horizontalsystems.core.SingleLiveEvent
 class ContactRouter : ContactModule.IRouter {
     val sendEmailLiveEvent = SingleLiveEvent<String>()
     val openTelegramGroupEvent = SingleLiveEvent<String>()
-    val openAppStatusLiveEvent = SingleLiveEvent<Unit>()
 
     override fun openSendMail(recipient: String) {
         sendEmailLiveEvent.postValue(recipient)
@@ -13,10 +12,6 @@ class ContactRouter : ContactModule.IRouter {
 
     override fun openTelegram(group: String) {
         openTelegramGroupEvent.postValue(group)
-    }
-
-    override fun openAppStatus() {
-        openAppStatusLiveEvent.postValue(Unit)
     }
 
 }

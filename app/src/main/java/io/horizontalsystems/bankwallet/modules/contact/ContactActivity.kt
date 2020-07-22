@@ -45,10 +45,6 @@ class ContactActivity : BaseActivity() {
             openTelegramGroup(it)
         })
 
-        router.openAppStatusLiveEvent.observe(this, Observer {
-            AppStatusModule.start(this)
-        })
-
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsContact_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back) { onBackPressed() }
@@ -60,10 +56,6 @@ class ContactActivity : BaseActivity() {
 
         walletHelpTelegramGroup.setOnSingleClickListener {
             presenter.didTapWalletHelpTelegram()
-        }
-
-        appStatus.setOnSingleClickListener {
-            presenter.didTapAppStatus()
         }
 
         presenter.viewDidLoad()
