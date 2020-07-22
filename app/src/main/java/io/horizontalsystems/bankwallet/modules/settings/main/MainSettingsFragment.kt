@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.modules.contact.ContactModule
+import io.horizontalsystems.bankwallet.modules.contact.appstatus.AppStatusModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
@@ -67,7 +68,7 @@ class MainSettingsFragment : Fragment() {
 
         notifications.setOnSingleClickListener { presenter.didTapNotifications() }
 
-        experimentalFeatures.setOnSingleClickListener { presenter.didTapExperimentalFeatures() }
+        appStatus.setOnSingleClickListener { presenter.didTapAppStatus() }
 
         baseCurrency.setOnSingleClickListener { presenter.didTapBaseCurrency() }
 
@@ -75,9 +76,11 @@ class MainSettingsFragment : Fragment() {
 
         lightMode.setOnSingleClickListener { lightMode.switchToggle() }
 
-        about.setOnSingleClickListener { presenter.didTapAbout() }
+        experimentalFeatures.setOnSingleClickListener { presenter.didTapExperimentalFeatures() }
 
-        report.setOnSingleClickListener { presenter.didTapReportProblem() }
+        terms.setOnSingleClickListener { presenter.didTapAbout() }
+
+        contact.setOnSingleClickListener { presenter.didTapReportProblem() }
 
         shareApp.setOnSingleClickListener { presenter.didTapTellFriends() }
 
@@ -177,6 +180,10 @@ class MainSettingsFragment : Fragment() {
                 AppCompatDelegate.MODE_NIGHT_YES
 
             AppCompatDelegate.setDefaultNightMode(nightMode)
+        })
+
+        router.openAppStatusLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let { AppStatusModule.start(it) }
         })
     }
 }

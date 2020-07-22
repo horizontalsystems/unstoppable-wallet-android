@@ -18,7 +18,6 @@ object ContactModule {
         fun viewDidLoad()
         fun didTapEmail()
         fun didTapWalletHelpTelegram()
-        fun didTapAppStatus()
     }
 
     interface IInteractor {
@@ -30,7 +29,6 @@ object ContactModule {
     interface IRouter {
         fun openSendMail(recipient: String)
         fun openTelegram(group: String)
-        fun openAppStatus()
     }
 
     interface IRouterDelegate {
