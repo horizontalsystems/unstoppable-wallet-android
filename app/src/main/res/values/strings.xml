@@ -177,6 +177,10 @@
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
 
+    <!--Swap-->
+
+    <string name="Swap_Title">Swap</string>
+
     <!--Deposit-->
 
     <string name="Deposit_Title">Receive %s</string>
