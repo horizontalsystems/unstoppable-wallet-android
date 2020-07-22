@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.notifications
+package io.horizontalsystems.bankwallet.modules.settings.notifications
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.NotificationMenuMode
+import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
