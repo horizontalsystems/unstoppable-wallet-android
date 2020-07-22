@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contact
+package io.horizontalsystems.bankwallet.modules.settings.contact
 
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.core.SingleLiveEvent

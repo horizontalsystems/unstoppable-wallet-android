@@ -83,7 +83,7 @@
             android:name=".modules.notifications.NotificationsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.contact.ContactActivity"
+            android:name="io.horizontalsystems.bankwallet.modules.settings.contact.ContactActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.lockscreen.LockScreenActivity"
@@ -123,7 +123,7 @@
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.contact.appstatus.AppStatusActivity"
+            android:name="io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.settings.experimental.ExperimentalFeaturesActivity"
