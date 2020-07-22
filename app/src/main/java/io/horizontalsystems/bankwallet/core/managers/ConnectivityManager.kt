@@ -15,51 +15,44 @@ class ConnectivityManager {
         App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    var isConnected = false
+    var isConnected = getInitialConnectionStatus()
     val networkAvailabilitySignal = PublishSubject.create<Unit>()
+    private var callback = ConnectionStatusCallback()
 
     init {
-        listenNetworkViaConnectivityManager()
+        try {
+            connectivityManager.unregisterNetworkCallback(callback)
+        } catch (e: Exception) {
+            //was not registered, or already unregistered
+        }
+        connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
     }
 
-    private fun onUpdateStatus() {
-        val hasConnection = hasNetworkConnection()
-        if (isConnected != hasConnection) {
-            isConnected = hasConnection
+    private fun getInitialConnectionStatus(): Boolean {
+        val network = connectivityManager.activeNetwork
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+    }
+
+    inner class ConnectionStatusCallback : ConnectivityManager.NetworkCallback() {
+
+        private val activeNetworks: MutableList<Network> = mutableListOf()
+
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            activeNetworks.removeAll { activeNetwork -> activeNetwork == network }
+            isConnected = activeNetworks.isNotEmpty()
             networkAvailabilitySignal.onNext(Unit)
         }
-    }
 
-    private fun listenNetworkViaConnectivityManager() {
-        val request = NetworkRequest.Builder()
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
-                .build()
-
-        connectivityManager.registerNetworkCallback(request, object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                onUpdateStatus()
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            if (activeNetworks.none { activeNetwork -> activeNetwork == network }) {
+                activeNetworks.add(network)
             }
-
-            override fun onLost(network: Network?) {
-                onUpdateStatus()
-            }
-
-        })
-
-    }
-
-    private fun hasNetworkConnection(): Boolean {
-        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.let {
-            if (it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                    it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)){
-
-                return true
-            }
+            isConnected = activeNetworks.isNotEmpty()
+            networkAvailabilitySignal.onNext(Unit)
         }
-
-        return false
     }
 
 }
