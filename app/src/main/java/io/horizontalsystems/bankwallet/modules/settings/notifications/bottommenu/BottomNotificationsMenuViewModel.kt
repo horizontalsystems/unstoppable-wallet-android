@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.notifications.bottommenu
+package io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData

@@ -80,7 +80,7 @@
             android:name=".modules.settings.AboutSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.notifications.NotificationsActivity"
+            android:name="io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="io.horizontalsystems.bankwallet.modules.settings.contact.ContactActivity"

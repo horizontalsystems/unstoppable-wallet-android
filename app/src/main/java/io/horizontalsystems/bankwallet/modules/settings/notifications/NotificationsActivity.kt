@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.notifications
+package io.horizontalsystems.bankwallet.modules.settings.notifications
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.BottomNotificationMenu
+import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer

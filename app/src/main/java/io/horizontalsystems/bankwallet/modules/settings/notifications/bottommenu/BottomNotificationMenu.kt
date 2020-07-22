@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.notifications.bottommenu
+package io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 
 import android.os.Bundle
 import android.view.View
