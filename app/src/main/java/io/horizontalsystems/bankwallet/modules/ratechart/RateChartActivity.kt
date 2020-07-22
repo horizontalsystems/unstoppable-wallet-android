@@ -11,8 +11,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.BottomNotificationMenu
-import io.horizontalsystems.bankwallet.modules.notifications.bottommenu.NotificationMenuMode
+import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
+import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo

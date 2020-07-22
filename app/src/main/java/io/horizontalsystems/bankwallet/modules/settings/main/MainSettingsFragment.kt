@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
+import io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
