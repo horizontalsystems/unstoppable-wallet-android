@@ -72,6 +72,10 @@ class BalancePresenter(
         router.openSend(viewItem.wallet)
     }
 
+    override fun onSwap(viewItem: BalanceViewItem) {
+        router.openSwap(viewItem.wallet)
+    }
+
     override fun onChart(viewItem: BalanceViewItem) {
         val balanceItem = items.firstOrNull { it.wallet == viewItem.wallet }
         if (balanceItem?.marketInfo != null) {

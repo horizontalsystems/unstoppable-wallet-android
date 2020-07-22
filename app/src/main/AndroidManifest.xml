@@ -152,6 +152,9 @@
         <activity
             android:name=".modules.guideview.GuideActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.swap.SwapActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".core.fcm.MyFirebaseMessagingService"

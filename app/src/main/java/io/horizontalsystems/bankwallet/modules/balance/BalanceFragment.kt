@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -105,10 +106,10 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
     override fun shareReceiveAddress(address: String) {
         activity?.let {
             ShareCompat.IntentBuilder
-                .from(it)
-                .setType("text/plain")
-                .setText(address)
-                .startChooser()
+                    .from(it)
+                    .setType("text/plain")
+                    .setText(address)
+                    .startChooser()
         }
     }
 
@@ -120,6 +121,10 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
 
     override fun onReceiveClicked(viewItem: BalanceViewItem) {
         viewModel.delegate.onReceive(viewItem)
+    }
+
+    override fun onSwapClicked(viewItem: BalanceViewItem) {
+        viewModel.delegate.onSwap(viewItem)
     }
 
     override fun onItemClicked(viewItem: BalanceViewItem) {
@@ -162,6 +167,10 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
 
         viewModel.openSendDialog.observe(viewLifecycleOwner, Observer {
             (activity as? MainActivity)?.openSend(it)
+        })
+
+        viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
+            context?.let { context -> SwapModule.start(context, wallet) }
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -244,8 +253,8 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage, sourceChangeable) ->
-            activity?.let{ fragmentActivity ->
-                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, sourceChangeable, object : SyncErrorDialog.Listener{
+            activity?.let { fragmentActivity ->
+                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, sourceChangeable, object : SyncErrorDialog.Listener {
                     override fun onClickRetry() {
                         viewModel.delegate.refreshByWallet(wallet)
                     }

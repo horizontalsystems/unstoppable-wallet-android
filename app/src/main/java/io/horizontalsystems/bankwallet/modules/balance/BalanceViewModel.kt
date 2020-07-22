@@ -14,6 +14,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     val openReceiveDialog = SingleLiveEvent<Wallet>()
     val openSendDialog = SingleLiveEvent<Wallet>()
+    val openSwap = SingleLiveEvent<Wallet>()
     val openManageCoinsLiveEvent = SingleLiveEvent<Void>()
     val openSortingTypeDialogLiveEvent = SingleLiveEvent<BalanceSortType>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
@@ -39,6 +40,10 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun openSend(wallet: Wallet) {
         openSendDialog.postValue(wallet)
+    }
+
+    override fun openSwap(wallet: Wallet) {
+        openSwap.postValue(wallet)
     }
 
     override fun openManageCoins() {
