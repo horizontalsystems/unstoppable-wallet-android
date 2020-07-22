@@ -14,11 +14,10 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.modules.contact.ContactModule
-import io.horizontalsystems.bankwallet.modules.contact.appstatus.AppStatusModule
+import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
+import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contact
+package io.horizontalsystems.bankwallet.modules.settings.contact
 
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.contact.appstatus.AppStatusModule
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.activity_contact.*
