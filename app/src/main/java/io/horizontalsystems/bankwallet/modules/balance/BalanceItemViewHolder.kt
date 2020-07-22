@@ -74,6 +74,8 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
 
             buttonReceive.isEnabled = receiveEnabled
             buttonSend.isEnabled = sendEnabled
+            buttonSwap.isVisible = swapVisible
+            buttonSwap.isEnabled = swapEnabled
 
             balanceCoin.isVisible = coinValue.visible
             balanceFiat.isVisible = fiatValue.visible
@@ -135,6 +137,9 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
             if (sendEnabled != prev.sendEnabled) {
                 buttonSend.isEnabled = sendEnabled
+            }
+            if (swapEnabled != prev.swapEnabled) {
+                buttonSwap.isEnabled = swapEnabled
             }
 
             if (coinValue.visible != prev.coinValue.visible) {

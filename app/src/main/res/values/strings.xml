@@ -103,6 +103,7 @@
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Receive</string>
     <string name="Balance_Send">Send</string>
+    <string name="Balance_Swap">Swap</string>
     <string name="Balance_RatePerCoin">%s per %s</string>
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>

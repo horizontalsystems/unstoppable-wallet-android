@@ -41,11 +41,11 @@
             android:id="@+id/iconCoin"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            tools:src="@drawable/coin_btc"
             app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
             app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
             app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
-            app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
+            app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
+            tools:src="@drawable/coin_btc" />
 
         <ImageView
             android:id="@+id/iconNotSynced"
@@ -185,9 +185,9 @@
                 style="@style/Headline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="12dp"
-                android:layout_gravity="end"
                 android:includeFontPadding="false"
                 android:textColor="?ColorJacob"
                 tools:text="$52.50" />
@@ -197,11 +197,11 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginStart="12dp"
-                android:includeFontPadding="false"
                 android:layout_marginTop="11dp"
+                android:includeFontPadding="false"
                 android:textColor="@color/grey"
+                android:visibility="gone"
                 tools:text="Syncing... 45%" />
 
             <TextView
@@ -209,12 +209,12 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_gravity="end"
                 android:layout_marginTop="11dp"
                 android:layout_marginEnd="12dp"
                 android:includeFontPadding="false"
                 android:textColor="@color/grey"
+                android:visibility="gone"
                 tools:text="Until Dec 17. 2018" />
         </FrameLayout>
 
@@ -264,8 +264,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginEnd="4dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
                     android:layout_marginBottom="8dp"
                     android:textColor="?ColorLeah"
                     tools:text="$52.50" />
@@ -288,10 +288,23 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:text="@string/Balance_Send"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSwap"
                 app:layout_constraintStart_toEndOf="@id/buttonReceive"
                 app:layout_constraintTop_toTopOf="@+id/buttonReceive" />
+
+            <Button
+                android:id="@+id/buttonSwap"
+                style="@style/ButtonPrimarySteel"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="4dp"
+                android:text="@string/Balance_Swap"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/buttonSend"
+                app:layout_constraintTop_toTopOf="@+id/buttonSend" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
