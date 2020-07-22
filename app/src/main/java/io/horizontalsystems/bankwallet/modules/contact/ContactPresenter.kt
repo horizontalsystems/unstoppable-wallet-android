@@ -21,10 +21,6 @@ class ContactPresenter(
         router.openTelegram(interactor.walletHelpTelegramGroup)
     }
 
-    override fun didTapAppStatus() {
-        router.openAppStatus()
-    }
-
     override fun didFailSendMail() {
         interactor.copyToClipboard(interactor.email)
         view.showCopied()

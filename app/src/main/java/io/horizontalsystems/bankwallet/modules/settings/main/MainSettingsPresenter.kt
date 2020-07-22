@@ -27,6 +27,10 @@ class MainSettingsPresenter(
         router.showManageKeys()
     }
 
+    override fun didTapAppStatus() {
+        router.openAppStatus()
+    }
+
     override fun didTapSecurity() {
         router.showSecuritySettings()
     }

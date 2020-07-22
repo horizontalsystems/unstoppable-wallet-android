@@ -36,15 +36,4 @@
         app:layout_constraintTop_toBottomOf="@+id/mail"
         app:title="@string/SettingsContact_Telegram" />
 
-    <io.horizontalsystems.views.SettingsView
-        android:id="@+id/appStatus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:bottomBorder="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/walletHelpTelegramGroup"
-        app:title="@string/SettingsContact_AppStatus" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,7 @@ object MainSettingsModule {
         fun didTapNotifications()
         fun didTapExperimentalFeatures()
         fun didTapManageKeys()
+        fun didTapAppStatus()
     }
 
     interface IMainSettingsInteractor {
@@ -59,6 +60,7 @@ object MainSettingsModule {
         fun showNotifications()
         fun showExperimentalFeatures()
         fun showManageKeys()
+        fun openAppStatus()
     }
 
     class Factory : ViewModelProvider.Factory {
