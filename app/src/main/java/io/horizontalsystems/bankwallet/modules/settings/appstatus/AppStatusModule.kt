@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contact.appstatus
+package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import android.app.Activity
 import android.content.Intent

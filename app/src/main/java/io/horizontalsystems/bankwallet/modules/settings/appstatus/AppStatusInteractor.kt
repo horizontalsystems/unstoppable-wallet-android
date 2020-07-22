@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contact.appstatus
+package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import io.horizontalsystems.bankwallet.core.IAppStatusManager
 import io.horizontalsystems.bankwallet.core.IClipboardManager
