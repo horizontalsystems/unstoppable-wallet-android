@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Timestamp-->
-    <string name="Timestamp_JustNow">همين الان</string>
-    <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
-    <string name="Timestamp_HoursAgo">%dساعت پيش</string>
-    <string name="Timestamp_Today">امروز</string>
-    <string name="Timestamp_Yesterday">ديروز</string>
-    <string name="Duration_instant">فوری</string>
-    <string name="Duration_Within">در %s</string>
-    <string name="Duration_Hours">%d ساعت.</string>
-    <string name="Duration_Minutes">%d دقیقه.</string>
-    <string name="Duration_Seconds">%d ثانیه.</string>
+    <string name="Timestamp_JustNow">just now</string>
+    <string name="Timestamp_MinAgo">%dm. ago</string>
+    <string name="Timestamp_HoursAgo">%dh. ago</string>
+    <string name="Timestamp_Today">Тoday</string>
+    <string name="Timestamp_Yesterday">Yesterday</string>
+    <string name="Duration_instant">instant</string>
+    <string name="Duration_Within">within %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_Seconds">%d sec.</string>
 </resources>
