@@ -15,6 +15,7 @@ class BalanceItemsAdapter(private val listener: Listener) : ListAdapter<BalanceV
     interface Listener {
         fun onSendClicked(viewItem: BalanceViewItem)
         fun onReceiveClicked(viewItem: BalanceViewItem)
+        fun onSwapClicked(viewItem: BalanceViewItem)
         fun onChartClicked(viewItem: BalanceViewItem)
         fun onItemClicked(viewItem: BalanceViewItem)
         fun onSyncErrorClicked(viewItem: BalanceViewItem)

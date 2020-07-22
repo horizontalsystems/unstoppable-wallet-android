@@ -31,6 +31,7 @@ object BalanceModule {
 
         fun onReceive(viewItem: BalanceViewItem)
         fun onPay(viewItem: BalanceViewItem)
+        fun onSwap(viewItem: BalanceViewItem)
         fun onChart(viewItem: BalanceViewItem)
         fun onItem(viewItem: BalanceViewItem)
 
@@ -98,6 +99,7 @@ object BalanceModule {
     interface IRouter {
         fun openReceive(wallet: Wallet)
         fun openSend(wallet: Wallet)
+        fun openSwap(wallet: Wallet)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
         fun openBackup(account: Account, coinCodesStringRes: Int)

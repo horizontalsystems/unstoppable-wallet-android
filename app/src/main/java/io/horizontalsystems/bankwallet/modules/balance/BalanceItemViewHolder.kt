@@ -41,6 +41,12 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
         }
 
+        buttonSwap.setOnSingleClickListener {
+            balanceViewItem?.let {
+                listener.onSwapClicked(it)
+            }
+        }
+
         iconNotSynced.setOnSingleClickListener {
             balanceViewItem?.let {
                 listener.onSyncErrorClicked(it)
