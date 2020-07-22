@@ -109,7 +109,7 @@ object BalanceModule {
         fun sort(items: List<BalanceItem>, sortType: BalanceSortType): List<BalanceItem>
     }
 
-    data class BalanceItem(val wallet: Wallet) {
+    data class BalanceItem(val wallet: Wallet, val swappable: Boolean) {
         var balance: BigDecimal? = null
         var balanceLocked: BigDecimal? = null
         val balanceTotal: BigDecimal?

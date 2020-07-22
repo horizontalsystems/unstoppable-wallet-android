@@ -263,8 +263,12 @@ class BalancePresenter(
         }
     }
 
+    private fun coinSwappable(coinType: CoinType): Boolean {
+        return coinType is CoinType.Ethereum || coinType is CoinType.Erc20
+    }
+
     private fun handleUpdate(wallets: List<Wallet>) {
-        items = wallets.map { BalanceItem(it) }
+        items = wallets.map { BalanceItem(it, coinSwappable(it.coin.type)) }
 
         handleAdaptersReady()
         handleRates()

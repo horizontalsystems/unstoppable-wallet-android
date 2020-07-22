@@ -30,7 +30,9 @@ data class BalanceViewItem(
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
         val coinTypeLabelVisible: Boolean,
-        var hideBalance: Boolean
+        var hideBalance: Boolean,
+        val swapVisible: Boolean,
+        val swapEnabled: Boolean = false
 )
 
 data class RateDiff(
@@ -138,7 +140,9 @@ class BalanceViewItemFactory {
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
-                hideBalance = hideBalance
+                hideBalance = hideBalance,
+                swapVisible = item.swappable,
+                swapEnabled = state is AdapterState.Synced
         )
     }
 
