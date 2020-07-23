@@ -43,6 +43,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
+    private val CHECKED_TERMS = "checked_terms"
 
     val gson by lazy { Gson() }
 
@@ -251,5 +252,16 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getBoolean(BALANCE_HIDDEN, false)
         set(value) {
             preferences.edit().putBoolean(BALANCE_HIDDEN, value).apply()
+        }
+
+    override var checkedTerms: List<Term>
+        get() {
+            val termsString = preferences.getString(CHECKED_TERMS, null) ?: return listOf()
+            val type = object : TypeToken<ArrayList<Term>>() {}.type
+            return gson.fromJson(termsString, type)
+        }
+        set(value) {
+            val termsString = gson.toJson(value)
+            preferences.edit().putString(CHECKED_TERMS, termsString).apply()
         }
 }

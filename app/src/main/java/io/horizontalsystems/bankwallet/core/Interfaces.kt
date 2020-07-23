@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
@@ -17,6 +18,7 @@ import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import java.math.BigDecimal
 import java.util.*
@@ -56,6 +58,7 @@ interface ILocalStorage {
     var rateAppLastRequestTime: Long
     var transactionSortingType: TransactionDataSortingType
     var balanceHidden: Boolean
+    var checkedTerms: List<Term>
 
     fun clear()
 }
@@ -448,6 +451,13 @@ interface IPriceAlertManager{
 interface INotificationSubscriptionManager{
     fun addNewJobs(jobs: List<SubscriptionJob>)
     fun processJobs()
+}
+
+interface ITermsManager{
+    val termsAcceptedSignal: Subject<Boolean>
+    val terms: List<Term>
+    val termsAccepted: Boolean
+    fun update(term: Term)
 }
 
 sealed class FeeRatePriority {
