@@ -79,6 +79,7 @@ class App : CoreApp() {
         lateinit var coinManager: ICoinManager
         lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
+        lateinit var termsManager: ITermsManager
     }
 
     override fun onCreate() {
@@ -194,6 +195,8 @@ class App : CoreApp() {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
         erc20ContractInfoProvider = Erc20ContractInfoProvider(appConfigTestMode, appConfigProvider, networkManager)
+
+        termsManager = TermsManager(localStorage)
 
         val nightMode = if (CoreApp.themeStorage.isLightModeOn)
             AppCompatDelegate.MODE_NIGHT_NO else
