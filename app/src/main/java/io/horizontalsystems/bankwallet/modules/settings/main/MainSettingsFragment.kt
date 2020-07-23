@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModul
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsModule
-import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsActivity
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
@@ -133,7 +133,7 @@ class MainSettingsFragment : Fragment() {
 
         router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
-                AboutSettingsActivity.start(it)
+                TermsActivity.start(it)
             }
         })
 

@@ -77,7 +77,7 @@
             android:name=".modules.settings.security.SecuritySettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.AboutSettingsActivity"
+            android:name=".modules.settings.terms.TermsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsActivity"
