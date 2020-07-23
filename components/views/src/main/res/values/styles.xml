@@ -170,4 +170,14 @@
         <item name="android:textColor">@color/stateful_button_lightgrey_color</item>
         <item name="android:background">@drawable/stateful_button_jeremy_color</item>
     </style>
+
+    <style name="TermsCheckbox">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">top</item>
+        <item name="android:textColor">?ColorLeah</item>
+        <item name="android:buttonTint">?ColorRemus</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
 </resources>
