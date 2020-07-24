@@ -271,6 +271,7 @@ interface IAppStatusManager {
 interface IAppConfigProvider {
     val companyWebPageLink: String
     val appWebPageLink: String
+    val appGithubLink: String
     val reportEmail: String
     val walletHelpTelegramGroup: String
     val ipfsId: String
