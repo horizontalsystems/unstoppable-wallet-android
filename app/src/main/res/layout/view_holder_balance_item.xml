@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="4dp"
-                android:src="@drawable/ic_down_red" />
+                android:src="@drawable/ic_up_positive" />
 
             <View
                 android:layout_width="0.5dp"

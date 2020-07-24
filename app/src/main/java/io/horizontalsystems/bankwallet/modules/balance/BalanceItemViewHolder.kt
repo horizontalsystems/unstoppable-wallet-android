@@ -175,7 +175,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
     private fun setRateDiff(rDiff: RateDiff) {
         rateDiff.text = rDiff.deemedValue.text ?: containerView.context.getString(R.string.NotAvailable)
         rateDiff.setTextColor(getRateDiffTextColor(rDiff.deemedValue.dimmed))
-        rateDiffIcon.setImageResource(if (rDiff.positive) R.drawable.ic_up_green else R.drawable.ic_down_red)
+        rateDiffIcon.setImageResource(if (rDiff.positive) R.drawable.ic_up_positive else R.drawable.ic_down_negative)
         rateDiffIcon.imageTintList = getRateDiffTintList(rDiff.deemedValue.dimmed)
     }
 
