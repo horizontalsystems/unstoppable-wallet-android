@@ -3,9 +3,12 @@ package io.horizontalsystems.bankwallet.modules.swap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import kotlinx.android.synthetic.main.activity_guide.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
+import kotlinx.android.synthetic.main.activity_swap.*
 
 class SwapActivity : BaseActivity() {
 
@@ -17,6 +20,17 @@ class SwapActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(getDrawable(R.drawable.ic_info))
         supportActionBar?.title = getString(R.string.Swap_Title)
+
+        val tokenIn = intent.extras?.getParcelable<Coin>(SwapModule.tokenInKey)
+        val viewModel by viewModels<SwapViewModel> { SwapModule.Factory(tokenIn) }
+
+        fromAmount.onTokenButtonClick {
+            SelectSwapCoinModule.start(this, viewModel.tokenIn)
+        }
+
+        toAmount.onTokenButtonClick {
+            SelectSwapCoinModule.start(this, viewModel.tokenOut)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
