@@ -13,6 +13,7 @@ object MainSettingsModule {
         fun setLanguage(language: String)
         fun setLightMode(lightMode: Boolean)
         fun setAppVersion(appVersion: String)
+        fun setTermsAccepted(termsAccepted: Boolean)
     }
 
     interface IMainSettingsViewDelegate {
@@ -39,6 +40,7 @@ object MainSettingsModule {
         val baseCurrency: Currency
         val appVersion: String
         var lightMode: Boolean
+        val termsAccepted: Boolean
 
         fun clear()
     }
@@ -46,6 +48,7 @@ object MainSettingsModule {
     interface IMainSettingsInteractorDelegate {
         fun didUpdateAllBackedUp(allBackedUp: Boolean)
         fun didUpdateBaseCurrency()
+        fun didUpdateTermsAccepted(allAccepted: Boolean)
     }
 
     interface IMainSettingsRouter {
@@ -74,7 +77,8 @@ object MainSettingsModule {
                     languageManager = App.languageManager,
                     systemInfoManager = App.systemInfoManager,
                     currencyManager = App.currencyManager,
-                    appConfigProvider = App.appConfigProvider
+                    appConfigProvider = App.appConfigProvider,
+                    termsManager = App.termsManager
             )
             val presenter = MainSettingsPresenter(view, router, interactor)
             interactor.delegate = presenter

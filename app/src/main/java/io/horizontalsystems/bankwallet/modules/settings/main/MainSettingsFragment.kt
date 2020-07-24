@@ -115,6 +115,10 @@ class MainSettingsFragment : Fragment() {
             }
         })
 
+        presenterView.termsAccepted.observe(viewLifecycleOwner, Observer { termsAccepted ->
+            terms.showAttention(!termsAccepted)
+        })
+
     }
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {

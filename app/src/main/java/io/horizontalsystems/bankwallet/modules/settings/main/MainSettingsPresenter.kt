@@ -21,6 +21,7 @@ class MainSettingsPresenter(
         view.setLanguage(interactor.currentLanguageDisplayName)
         view.setLightMode(interactor.lightMode)
         view.setAppVersion(interactor.appVersion)
+        view.setTermsAccepted(interactor.termsAccepted)
     }
 
     override fun didTapManageKeys() {
@@ -80,6 +81,10 @@ class MainSettingsPresenter(
 
     override fun didUpdateBaseCurrency() {
         view.setBaseCurrency(helper.displayName(interactor.baseCurrency))
+    }
+
+    override fun didUpdateTermsAccepted(allAccepted: Boolean) {
+        view.setTermsAccepted(allAccepted)
     }
 
     // ViewModel
