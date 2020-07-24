@@ -17,7 +17,10 @@ class ConnectivityManager {
 
     var isConnected = getInitialConnectionStatus()
     val networkAvailabilitySignal = PublishSubject.create<Unit>()
+
     private var callback = ConnectionStatusCallback()
+    private var hasValidInternet = false
+    private var hasConnection = false
 
     init {
         try {
@@ -29,9 +32,15 @@ class ConnectivityManager {
     }
 
     private fun getInitialConnectionStatus(): Boolean {
-        val network = connectivityManager.activeNetwork
+        val network = connectivityManager.activeNetwork ?: return false
+
+        hasConnection = true
         val capabilities = connectivityManager.getNetworkCapabilities(network)
-        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+        hasValidInternet = capabilities?.let {
+            it.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) && it.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        } ?: false
+
+        return hasValidInternet
     }
 
     inner class ConnectionStatusCallback : ConnectivityManager.NetworkCallback() {
@@ -41,8 +50,15 @@ class ConnectivityManager {
         override fun onLost(network: Network) {
             super.onLost(network)
             activeNetworks.removeAll { activeNetwork -> activeNetwork == network }
-            isConnected = activeNetworks.isNotEmpty()
-            networkAvailabilitySignal.onNext(Unit)
+            hasConnection = activeNetworks.isNotEmpty()
+            updatedConnectionState()
+        }
+
+        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+            super.onCapabilitiesChanged(network, networkCapabilities)
+            hasValidInternet = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            updatedConnectionState()
         }
 
         override fun onAvailable(network: Network) {
@@ -50,7 +66,16 @@ class ConnectivityManager {
             if (activeNetworks.none { activeNetwork -> activeNetwork == network }) {
                 activeNetworks.add(network)
             }
-            isConnected = activeNetworks.isNotEmpty()
+            hasConnection = activeNetworks.isNotEmpty()
+            updatedConnectionState()
+        }
+
+    }
+
+    private fun updatedConnectionState() {
+        val oldValue = isConnected
+        isConnected = hasConnection && hasValidInternet
+        if (oldValue != isConnected) {
             networkAvailabilitySignal.onNext(Unit)
         }
     }
