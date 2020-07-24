@@ -14,6 +14,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
 
     override val companyWebPageLink: String = "https://horizontalsystems.io"
     override val appWebPageLink: String = "https://unstoppable.money"
+    override val appGithubLink: String = "https://github.com/horizontalsystems/unstoppable-wallet-android"
     override val reportEmail = "hsdao@protonmail.ch"
     override val walletHelpTelegramGroup = "UnstoppableWallet"
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
