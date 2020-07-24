@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_attention"
+        android:src="@drawable/ic_attention_filled_24"
         android:tint="?ColorLucian"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

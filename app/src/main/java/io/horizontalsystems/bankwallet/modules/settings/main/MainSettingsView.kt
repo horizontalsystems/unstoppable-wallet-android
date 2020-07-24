@@ -9,6 +9,7 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
     val language = MutableLiveData<String>()
     val lightMode = MutableLiveData<Boolean>()
     val appVersion = MutableLiveData<String>()
+    val termsAccepted = MutableLiveData<Boolean>()
 
     override fun setBackedUp(backedUp: Boolean) {
         this.backedUp.postValue(backedUp)
@@ -28,5 +29,9 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
 
     override fun setAppVersion(appVersion: String) {
         this.appVersion.postValue(appVersion)
+    }
+
+    override fun setTermsAccepted(termsAccepted: Boolean) {
+        this.termsAccepted.postValue(termsAccepted)
     }
 }
