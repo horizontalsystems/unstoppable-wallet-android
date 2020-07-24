@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/rootView">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -44,6 +44,192 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/headline"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/steel_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startBorder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endBorder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="16dp" />
+
+            <TextView
+                android:id="@+id/fromAmountTitle"
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/Swap_FromAmountTitle"
+                android:textColor="?ColorOz"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/headline" />
+
+            <TextView
+                android:id="@+id/fromEstimatedLabel"
+                style="@style/TextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/Swap_Estimated"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/fromAmountTitle"
+                app:layout_constraintStart_toEndOf="@+id/fromAmountTitle"
+                app:layout_constraintTop_toTopOf="@+id/fromAmountTitle" />
+
+            <io.horizontalsystems.bankwallet.modules.swap.views.SwapAmountView
+                android:id="@+id/fromAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/fromAmountTitle"
+                app:showMax="true" />
+
+            <TextView
+                android:id="@+id/availableBalanceTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_Balance"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/fromAmount" />
+
+            <TextView
+                android:id="@+id/availableBalanceValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?ColorLeah"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/availableBalanceTitle"
+                tools:text="0.12345678 BTC" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/steel_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/availableBalanceTitle" />
+
+            <TextView
+                android:id="@+id/toAmountTitle"
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/Swap_ToAmountTitle"
+                android:textColor="?ColorOz"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <TextView
+                android:id="@+id/toEstimatedLabel"
+                style="@style/TextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/Swap_Estimated"
+                app:layout_constraintBottom_toBottomOf="@+id/toAmountTitle"
+                app:layout_constraintStart_toEndOf="@+id/toAmountTitle"
+                app:layout_constraintTop_toTopOf="@+id/toAmountTitle" />
+
+            <io.horizontalsystems.bankwallet.modules.swap.views.SwapAmountView
+                android:id="@+id/toAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/toAmountTitle" />
+
+            <TextView
+                android:id="@+id/priceTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_Price"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/toAmount" />
+
+            <TextView
+                android:id="@+id/priceValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?ColorLeah"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/priceTitle"
+                tools:text="0.12345678 ETH/COMP" />
+
+            <TextView
+                android:id="@+id/priceImpactTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_PriceImpact"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/priceTitle" />
+
+            <TextView
+                android:id="@+id/priceImpactValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?ColorLeah"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/priceImpactTitle"
+                tools:text="0.01%" />
+
+            <TextView
+                android:id="@+id/minMaxTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_MinimumReceived"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/priceImpactTitle" />
+
+            <TextView
+                android:id="@+id/minMaxValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?ColorLeah"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/minMaxTitle"
+                tools:text="0.112 Token" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
