@@ -170,7 +170,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
-            context?.let { context -> SwapModule.start(context, wallet) }
+            context?.let { context -> SwapModule.start(context, wallet.coin) }
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {

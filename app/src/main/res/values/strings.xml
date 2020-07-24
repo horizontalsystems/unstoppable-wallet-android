@@ -192,6 +192,10 @@
     <string name="Swap_MinimumReceived">Minimum received</string>
     <string name="Swap_MaximiumSold">Maximum sold</string>
 
+    <!--Swap Coin Select-->
+
+    <string name="SwapCoinSelect_Title">Choose Coin</string>
+
     <!--Deposit-->
 
     <string name="Deposit_Title">Receive %s</string>
