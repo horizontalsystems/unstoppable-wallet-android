@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.terms
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.CheckBox
 import androidx.activity.viewModels
@@ -23,6 +24,14 @@ class TermsActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        githubLink.setOnClickListener {
+            viewModel.onGithubButtonClick()
+        }
+
+        siteLink.setOnClickListener {
+            viewModel.onSiteButtonClick()
+        }
+
         observeLiveData()
     }
 
@@ -35,6 +44,12 @@ class TermsActivity : BaseActivity() {
             setCheckbox(checkboxPhone, TermsManager.termIds[4], terms)
             setCheckbox(checkboxRoot, TermsManager.termIds[5], terms)
             setCheckbox(checkboxBugs, TermsManager.termIds[6], terms)
+        })
+
+        viewModel.openLink.observe(this, Observer { link ->
+            val uri = Uri.parse(link)
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
         })
     }
 
