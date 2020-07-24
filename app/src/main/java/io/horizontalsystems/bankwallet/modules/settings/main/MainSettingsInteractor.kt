@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBackupManager
+import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.ISystemInfoManager
@@ -15,7 +16,8 @@ class MainSettingsInteractor(
         private val languageManager: ILanguageManager,
         private val systemInfoManager: ISystemInfoManager,
         private val currencyManager: ICurrencyManager,
-        private val appConfigProvider: IAppConfigProvider)
+        private val appConfigProvider: IAppConfigProvider,
+        private val termsManager: ITermsManager)
     : MainSettingsModule.IMainSettingsInteractor {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -30,6 +32,11 @@ class MainSettingsInteractor(
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
             delegate?.didUpdateBaseCurrency()
         })
+
+        disposables.add(termsManager.termsAcceptedSignal
+                .subscribe { allAccepted ->
+                    delegate?.didUpdateTermsAccepted(allAccepted)
+                })
     }
 
     override val companyWebPageLink: String
@@ -52,6 +59,9 @@ class MainSettingsInteractor(
         set(value) {
             themeStorage.isLightModeOn = value
         }
+
+    override val termsAccepted: Boolean
+        get() = termsManager.termsAccepted
 
     override val appVersion: String
         get() = systemInfoManager.appVersion
