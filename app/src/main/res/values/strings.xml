@@ -180,6 +180,17 @@
     <!--Swap-->
 
     <string name="Swap_Title">Swap</string>
+    <string name="Swap_FromAmountTitle">You Pay</string>
+    <string name="Swap_ToAmountTitle">You Get</string>
+    <string name="Swap_AmountHint" translatable="false">0</string>
+    <string name="Swap_Estimated">ESTIMATED</string>
+    <string name="Swap_MaxButtonTitle">Max</string>
+    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_Balance">Balance</string>
+    <string name="Swap_Price">Price</string>
+    <string name="Swap_PriceImpact">Price Impact</string>
+    <string name="Swap_MinimumReceived">Minimum received</string>
+    <string name="Swap_MaximiumSold">Maximum sold</string>
 
     <!--Deposit-->
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/input_background_themed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/amountText"
+        style="@style/Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/Swap_AmountHint"
+        android:inputType="number|numberDecimal"
+        android:maxLines="1"
+        android:textColor="?attr/TextColorBarsToDark"
+        android:textColorHint="@color/grey_50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/maxButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="0.123" />
+
+    <Button
+        android:id="@+id/maxButton"
+        style="@style/ButtonSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_margin="8dp"
+        android:text="@string/Swap_MaxButtonTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tokenSelectorButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/tokenSelectorButton"
+        style="@style/ButtonSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_margin="8dp"
+        android:drawableEnd="@drawable/ic_down"
+        android:drawablePadding="4dp"
+        android:text="@string/Swap_TokenSelectorTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
