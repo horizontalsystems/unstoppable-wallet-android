@@ -5,7 +5,10 @@ import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -110,6 +113,12 @@ class BalanceViewItemFactory {
         return coinType.typeLabel() != null
     }
 
+    private fun buttonSwapVisible(balanceItem: BalanceModule.BalanceItem): Boolean {
+        val coinType = balanceItem.wallet.coin.type
+        val balance = balanceItem.balance ?: BigDecimal.ZERO
+        return coinType.swappable && balance > BigDecimal.ZERO
+    }
+
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
@@ -141,7 +150,7 @@ class BalanceViewItemFactory {
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
                 hideBalance = hideBalance,
-                swapVisible = item.swappable,
+                swapVisible = buttonSwapVisible(item),
                 swapEnabled = state is AdapterState.Synced
         )
     }
