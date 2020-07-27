@@ -14,6 +14,7 @@ object CoinInfoMap {
             "EOS" to CoinInfo(BigDecimal(1_035_000_004), "26/06/2017", "https://eos.io"),
             "ZRX" to CoinInfo(BigDecimal(1_000_000_000), "15/08/2017", "https://www.0xproject.com"),
             "ELF" to CoinInfo(BigDecimal(880_000_000), "18/12/2017", "http://aelf.io"),
+            "AMPL" to CoinInfo(BigDecimal(38_207_563), "14/06/2019", "https://www.ampleforth.org"),
             "ANKR" to CoinInfo(BigDecimal(10_000_000_000), "21/02/2019", "https://www.ankr.com"),
             "ANT" to CoinInfo(BigDecimal(39_609_524), "05/05/2017", "https://aragon.one"),
             "BNT" to CoinInfo( null,  "13/02/2017", "https://bancor.network"),
