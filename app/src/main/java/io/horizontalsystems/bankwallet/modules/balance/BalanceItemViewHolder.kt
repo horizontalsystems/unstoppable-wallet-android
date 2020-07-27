@@ -144,6 +144,9 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             if (sendEnabled != prev.sendEnabled) {
                 buttonSend.isEnabled = sendEnabled
             }
+            if (swapVisible != prev.swapVisible) {
+                buttonSwap.isVisible = swapVisible
+            }
             if (swapEnabled != prev.swapEnabled) {
                 buttonSwap.isEnabled = swapEnabled
             }
