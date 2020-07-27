@@ -202,14 +202,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
-                android:layout_marginBottom="42dp"
                 android:background="?android:selectableItemBackground"
                 android:padding="6dp"
-                android:src="@drawable/hs_center"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/ic_company_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/decentralizedAppBy" />
+
+            <TextView
+                android:id="@+id/companyName"
+                style="@style/Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="32dp"
+                android:textColor="@color/grey"
+                android:text="@string/Settings_CompanyName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/companyLogo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
