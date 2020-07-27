@@ -29,8 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_attention"
-        android:tint="?ColorJacob"
+        android:src="@drawable/ic_attention_red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/rightArrow"
         app:layout_constraintTop_toTopOf="parent" />
