@@ -57,6 +57,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("EOS", "EOS", "EOS", 4, CoinType.Eos("eosio.token", "EOS")),
                 Coin("ZRX", "0x Protocol", "ZRX", 18, CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),
                 Coin("ELF", "Aelf", "ELF", 18, CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e")),
+                Coin("AMPL", "Ampleforth", "AMPL", 9, CoinType.Erc20("0xd46ba6d942050d489dbd938a2c909a5d5039a161")),
                 Coin("ANKR", "Ankr Network", "ANKR", 8, CoinType.Binance("ANKR-E97")),
                 Coin("ANT", "Aragon", "ANT", 18, CoinType.Erc20("0x960b236A07cf122663c4303350609A66A7B288C0")),
                 Coin("BNT", "Bancor", "BNT", 18, CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C")),
