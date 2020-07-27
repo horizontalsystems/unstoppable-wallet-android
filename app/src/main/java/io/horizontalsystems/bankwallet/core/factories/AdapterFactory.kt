@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.adapters.*
+import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -16,7 +17,8 @@ class AdapterFactory(
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager,
-        private val blockchainSettingsManager: IBlockchainSettingsManager) {
+        private val blockchainSettingsManager: IBlockchainSettingsManager,
+        private val backgroundManager: BackgroundManager) {
 
     fun adapter(wallet: Wallet): IAdapter? {
         val derivation = blockchainSettingsManager.derivationSetting(wallet.coin.type)?.derivation
@@ -24,10 +26,10 @@ class AdapterFactory(
         val communicationMode = blockchainSettingsManager.communicationSetting(wallet.coin.type)?.communicationMode
 
         return when (val coinType = wallet.coin.type) {
-            is CoinType.Bitcoin -> BitcoinAdapter(wallet, derivation, syncMode, testMode)
-            is CoinType.Litecoin -> LitecoinAdapter(wallet, derivation, syncMode, testMode)
-            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, testMode)
-            is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode)
+            is CoinType.Bitcoin -> BitcoinAdapter(wallet, derivation, syncMode, testMode, backgroundManager)
+            is CoinType.Litecoin -> LitecoinAdapter(wallet, derivation, syncMode, testMode, backgroundManager)
+            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
+            is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
             is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet, communicationMode))
