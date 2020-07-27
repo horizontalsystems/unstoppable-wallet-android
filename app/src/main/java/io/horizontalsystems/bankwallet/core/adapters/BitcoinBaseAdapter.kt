@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
@@ -24,10 +25,25 @@ import kotlin.math.absoluteValue
 abstract class BitcoinBaseAdapter(
         open val kit: AbstractKit,
         open val derivation: AccountType.Derivation? = null,
-        open val syncMode: SyncMode? = null
-) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+        open val syncMode: SyncMode? = null,
+        backgroundManager: BackgroundManager
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
+
+    init {
+        backgroundManager.registerListener(this)
+    }
 
     abstract val satoshisInBitcoin: BigDecimal
+
+    override fun willEnterForeground() {
+        super.willEnterForeground()
+        kit.onEnterForeground()
+    }
+
+    override fun didEnterBackground() {
+        super.didEnterBackground()
+        kit.onEnterBackground()
+    }
 
     //
     // Adapter implementation
