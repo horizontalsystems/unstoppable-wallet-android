@@ -61,6 +61,9 @@ sealed class CoinType : Parcelable {
             is Eos -> PredefinedAccountType.Eos
         }
 
+    val swappable: Boolean
+        get() = this is Ethereum || this is Erc20
+
 }
 
 @Parcelize
