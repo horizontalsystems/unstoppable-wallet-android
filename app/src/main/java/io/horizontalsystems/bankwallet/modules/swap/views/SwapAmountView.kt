@@ -23,6 +23,10 @@ class SwapAmountView @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
+    fun setSelectedCoin(title: String) {
+        coinSelectorButton.text = title
+    }
+
     fun onMaxButtonClick(callback: () -> Unit) {
         maxButton.setOnClickListener {
             callback()
@@ -30,7 +34,7 @@ class SwapAmountView @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     fun onTokenButtonClick(callback: () -> Unit) {
-        tokenSelectorButton.setOnClickListener {
+        coinSelectorButton.setOnClickListener {
             callback()
         }
     }
