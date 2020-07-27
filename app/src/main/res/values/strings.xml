@@ -196,6 +196,22 @@
 
     <string name="SwapCoinSelect_Title">Choose Coin</string>
 
+    <!--Uniwwap Info -->
+
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
+    <string name="UniswapInfo_Description">
+Uniswap is a fully decentralized protocol for automated liquidity provision on Ethereum.
+\n\nA simple formalized equation drives unstoppable liquidity for thousands of users and hundreds of applications.
+\n\nUniswap empowers developers, liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.
+    </string>
+    <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
+    <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
+    <string name="UniswapInfo_PriceImpactDescription">The difference between the market price and estimated price due to trade size.</string>
+    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
+    <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
+    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
+
     <!--Deposit-->
 
     <string name="Deposit_Title">Receive %s</string>
