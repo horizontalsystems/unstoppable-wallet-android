@@ -158,6 +158,9 @@
         <activity
             android:name=".modules.swap.coinselect.SelectSwapCoinActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.swap.UniswapInfoActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".core.fcm.MyFirebaseMessagingService"
