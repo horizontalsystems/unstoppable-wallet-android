@@ -45,6 +45,7 @@ class SwapActivity : BaseActivity() {
                 return true
             }
             android.R.id.home -> {
+                UniswapInfoActivity.start(this)
                 return true
             }
         }
