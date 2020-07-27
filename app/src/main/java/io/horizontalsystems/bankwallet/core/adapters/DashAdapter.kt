@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -11,21 +11,20 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
 import io.reactivex.Single
 import java.math.BigDecimal
-import java.util.*
 
 class DashAdapter(
         override val kit: DashKit,
-        syncMode: SyncMode?
-) : BitcoinBaseAdapter(kit, syncMode = syncMode), DashKit.Listener, ISendDashAdapter {
+        syncMode: SyncMode?,
+        backgroundManager: BackgroundManager
+) : BitcoinBaseAdapter(kit, syncMode = syncMode, backgroundManager = backgroundManager), DashKit.Listener, ISendDashAdapter {
 
-    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean) :
-            this(createKit(wallet, syncMode, testMode), syncMode)
+    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) :
+            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager)
 
     init {
         kit.listener = this
