@@ -46,6 +46,10 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
 
         switchNotification.setOnClickListener { switchNotification.switchToggle() }
 
+        switchNotification.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            viewModel.switchAlertNotification(isChecked)
+        })
+
         observeViewModel()
     }
 
@@ -85,9 +89,7 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
         })
 
         viewModel.notificationIsOnLiveData.observe(this, Observer { enabled ->
-            switchNotification.showSwitch(enabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                viewModel.switchAlertNotification(isChecked)
-            })
+            switchNotification.setChecked(enabled)
         })
 
         viewModel.openOptionsDialog.observe(this, Observer { (coinName, coinCode, mode) ->

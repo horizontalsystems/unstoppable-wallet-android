@@ -9,15 +9,29 @@ import kotlinx.android.synthetic.main.view_settings_switch.view.*
 class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : SettingsViewBase(context, attrs, defStyleAttr) {
 
+    private var onCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
+
     fun showSwitch(isChecked: Boolean, listener: CompoundButton.OnCheckedChangeListener) {
-        switchSettings.setOnCheckedChangeListener(null)
-        switchSettings.isChecked = isChecked
-        switchSettings.isVisible = true
-        switchSettings.setOnCheckedChangeListener(listener)
+        setOnCheckedChangeListener(listener)
+        setChecked(isChecked)
     }
 
     fun switchToggle() {
         switchSettings.toggle()
+    }
+
+    fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener?) {
+        switchSettings.setOnCheckedChangeListener(listener)
+        switchSettings.isVisible = true
+
+        onCheckedChangeListener = listener
+    }
+
+    fun setChecked(checked: Boolean) {
+        // set listener to null and set it back to prevent it from triggering
+        switchSettings.setOnCheckedChangeListener(null)
+        switchSettings.isChecked = checked
+        switchSettings.setOnCheckedChangeListener(onCheckedChangeListener)
     }
 
     init {
