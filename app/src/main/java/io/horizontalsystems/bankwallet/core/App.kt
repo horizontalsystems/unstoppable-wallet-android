@@ -157,7 +157,7 @@ class App : CoreApp() {
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
-        connectivityManager = ConnectivityManager()
+        connectivityManager = ConnectivityManager(backgroundManager)
 
         val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager, backgroundManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)

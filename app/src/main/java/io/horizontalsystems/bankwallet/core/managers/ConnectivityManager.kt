@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.reactivex.subjects.PublishSubject
 
 
-class ConnectivityManager {
+class ConnectivityManager(backgroundManager: BackgroundManager): BackgroundManager.Listener {
 
     private val connectivityManager: ConnectivityManager by lazy {
         App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -23,12 +23,34 @@ class ConnectivityManager {
     private var hasConnection = false
 
     init {
+        backgroundManager.registerListener(this)
+    }
+
+    override fun willEnterForeground() {
+        super.willEnterForeground()
+        setInitialValues()
         try {
             connectivityManager.unregisterNetworkCallback(callback)
         } catch (e: Exception) {
             //was not registered, or already unregistered
         }
         connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
+    }
+
+    override fun didEnterBackground() {
+        super.didEnterBackground()
+        try {
+            connectivityManager.unregisterNetworkCallback(callback)
+        } catch (e: Exception) {
+            //already unregistered
+        }
+    }
+
+    private fun setInitialValues() {
+        hasConnection = false
+        hasValidInternet = false
+        isConnected = getInitialConnectionStatus()
+        networkAvailabilitySignal.onNext(Unit)
     }
 
     private fun getInitialConnectionStatus(): Boolean {
