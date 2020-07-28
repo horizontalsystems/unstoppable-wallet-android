@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swap.views
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
+import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
@@ -23,6 +22,9 @@ class SwapAmountView @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
+    val editText: EditText
+        get() = amountText
+
     fun setSelectedCoin(title: String) {
         coinSelectorButton.text = title
     }
@@ -37,17 +39,6 @@ class SwapAmountView @JvmOverloads constructor(context: Context, attrs: Attribut
         coinSelectorButton.setOnClickListener {
             callback()
         }
-    }
-
-    fun onAmountChange(callback: (String) -> Unit) {
-        amountText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                callback(s.toString())
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
-        })
     }
 
 }
