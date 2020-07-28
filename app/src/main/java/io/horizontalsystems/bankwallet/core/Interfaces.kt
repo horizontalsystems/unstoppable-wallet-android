@@ -14,6 +14,7 @@ import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -162,6 +163,11 @@ interface IEthereumKitManager {
     val statusInfo: Map<String, Any>?
 
     fun ethereumKit(wallet: Wallet, communicationMode: CommunicationMode?): EthereumKit
+    fun unlink()
+}
+
+interface IUniswapKitManager {
+    fun uniswapKit(): UniswapKit
     fun unlink()
 }
 
