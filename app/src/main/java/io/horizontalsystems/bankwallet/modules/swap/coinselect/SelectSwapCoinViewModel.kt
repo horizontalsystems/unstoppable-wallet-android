@@ -27,7 +27,7 @@ class SelectSwapCoinViewModel(
             if (!coin.type.swappable || coin == excludedCoin || (hideZeroBalance == true && balance <= BigDecimal.ZERO)) {
                 null
             } else {
-                SwapCoinItem(coin, balance)
+                SwapCoinItem(coin, if (balance <= BigDecimal.ZERO) null else balance)
             }
         }
 

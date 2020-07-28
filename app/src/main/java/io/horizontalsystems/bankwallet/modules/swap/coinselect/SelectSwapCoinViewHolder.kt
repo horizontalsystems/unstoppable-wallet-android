@@ -30,7 +30,7 @@ class SelectSwapCoinViewHolder(
             coinIcon.setCoinImage(coin.code, coin.type)
             coinTitle.text = coin.title
             coinSubtitle.text = coin.code
-            coinBalance.text = App.numberFormatter.formatCoin(balance, coin.code, 0, 8)
+            coinBalance.text = balance?.let { App.numberFormatter.formatCoin(it, coin.code, 0, 8) }
         }
     }
 
