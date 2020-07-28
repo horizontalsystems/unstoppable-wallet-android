@@ -13,8 +13,13 @@ class EthereumKitManager(
         private val infuraProjectId: String,
         private val infuraSecretKey: String,
         private val etherscanApiKey: String,
-        private val testMode: Boolean
-) : IEthereumKitManager {
+        private val testMode: Boolean,
+        private val backgroundManager: BackgroundManager
+) : IEthereumKitManager, BackgroundManager.Listener {
+
+    init {
+        backgroundManager.registerListener(this)
+    }
 
     private var kit: EthereumKit? = null
     private var useCount = 0
@@ -56,5 +61,19 @@ class EthereumKitManager(
             kit?.stop()
             kit = null
         }
+    }
+
+    //
+    // BackgroundManager.Listener
+    //
+
+    override fun willEnterForeground() {
+        super.willEnterForeground()
+        kit?.onEnterForeground()
+    }
+
+    override fun didEnterBackground() {
+        super.didEnterBackground()
+        kit?.onEnterBackground()
     }
 }
