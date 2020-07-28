@@ -3,15 +3,21 @@ package io.horizontalsystems.bankwallet.modules.swap
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
+import io.horizontalsystems.uniswapkit.models.TradeType
 import kotlinx.android.synthetic.main.activity_swap.*
+import java.math.BigDecimal
 
 class SwapActivity : BaseActivity() {
 
@@ -29,25 +35,138 @@ class SwapActivity : BaseActivity() {
         val tokenIn = intent.extras?.getParcelable<Coin>(SwapModule.tokenInKey)
         viewModel = ViewModelProvider(this, SwapModule.Factory(tokenIn)).get(SwapViewModel::class.java)
 
-        fromAmount.onTokenButtonClick {
-            SelectSwapCoinModule.start(this, requestSelectFromCoin, true, viewModel.toCoinLiveData.value)
+        fromAmount.apply {
+            onTokenButtonClick {
+                SelectSwapCoinModule.start(this@SwapActivity, requestSelectFromCoin, true, viewModel.toCoinLiveData.value?.coin)
+            }
+
+            onMaxButtonClick {
+                viewModel.onFromAmountMaxButtonClick()
+            }
+
+            editText.addTextChangedListener(fromAmountListener)
         }
 
-        toAmount.onTokenButtonClick {
-            SelectSwapCoinModule.start(this, requestSelectToCoin, false, viewModel.fromCoinLiveData.value)
+        toAmount.apply {
+            onTokenButtonClick {
+                SelectSwapCoinModule.start(this@SwapActivity, requestSelectToCoin, false, viewModel.fromCoinLiveData.value?.coin)
+            }
+
+            editText.addTextChangedListener(toAmountListener)
         }
 
-        viewModel.fromCoinLiveData.observe(this, Observer { coin ->
-            coin?.let {
-                fromAmount.setSelectedCoin(it.code)
+        viewModel.fromAmountLiveData.observe(this, Observer { amount ->
+            fromAmount.editText.setText(amount?.toPlainString())
+        })
+
+        viewModel.tradeTypeLiveData.observe(this, Observer { tradeType ->
+            when (tradeType) {
+                TradeType.ExactIn -> {
+                    fromEstimatedLabel.isVisible = false
+                    toEstimatedLabel.isVisible = true
+                    setToAmount(null)
+                }
+                TradeType.ExactOut -> {
+                    fromEstimatedLabel.isVisible = true
+                    toEstimatedLabel.isVisible = false
+                    setFromAmount(null)
+                }
             }
         })
 
-        viewModel.toCoinLiveData.observe(this, Observer { coin ->
-            coin?.let {
-                toAmount.setSelectedCoin(it.code)
+        viewModel.fromCoinLiveData.observe(this, Observer { coinWithBalance ->
+            coinWithBalance?.let {
+                fromAmount.setSelectedCoin(coinWithBalance.coin.code)
+                availableBalanceValue.text = formatCoinAmount(coinWithBalance.balance, coinWithBalance.coin)
             }
         })
+
+        viewModel.toCoinLiveData.observe(this, Observer { coinWithBalance ->
+            coinWithBalance?.let {
+                toAmount.setSelectedCoin(coinWithBalance.coin.code)
+            }
+        })
+
+        viewModel.tradeLiveData.observe(this, Observer { tradeData ->
+            if (tradeData != null) {
+                val fromCoin = viewModel.fromCoinLiveData.value?.coin ?: return@Observer
+                val toCoin = viewModel.toCoinLiveData.value?.coin ?: return@Observer
+
+                when (tradeData.type) {
+                    TradeType.ExactIn -> {
+                        setToAmount(tradeData.amountOut)
+                        minMaxTitle.text = getString(R.string.Swap_MinimumReceived)
+                        minMaxValue.text = tradeData.amountOutMin?.let { formatCoinAmount(it, toCoin) }
+                    }
+                    TradeType.ExactOut -> {
+                        setFromAmount(tradeData.amountIn)
+                        minMaxTitle.text = getString(R.string.Swap_MaximiumSold)
+                        minMaxValue.text = tradeData.amountInMax?.let { formatCoinAmount(it, fromCoin) }
+                    }
+                }
+
+                priceValue.text = tradeData.executionPrice?.let {
+                    "${formatCoinAmount(it, toCoin)} / ${fromCoin.code} "
+                }
+
+                priceImpactValue.text = "${tradeData.priceImpact?.toPlainString() ?: ""}%"
+            } else {
+                clearTradeData()
+            }
+        })
+    }
+
+    private fun clearTradeData() {
+        when (viewModel.tradeTypeLiveData.value) {
+            TradeType.ExactIn -> {
+                setToAmount(null)
+            }
+            TradeType.ExactOut -> {
+                setFromAmount(null)
+            }
+        }
+        minMaxValue.text = null
+        priceValue.text = null
+        priceImpactValue.text = null
+    }
+
+    private fun formatCoinAmount(amount: BigDecimal, coin: Coin): String {
+        val maxFraction = if (coin.decimal < 8) coin.decimal else 8
+        return App.numberFormatter.formatCoin(amount, coin.code, 0, maxFraction)
+    }
+
+    private val fromAmountListener = object : TextWatcher {
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.onFromAmountChange(s?.toString())
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+    }
+
+    private val toAmountListener = object : TextWatcher {
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.onToAmountChange(s?.toString())
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+    }
+
+    private fun setFromAmount(amount: BigDecimal?) {
+        fromAmount.editText.apply {
+            removeTextChangedListener(fromAmountListener)
+            setText(amount?.toPlainString())
+            addTextChangedListener(fromAmountListener)
+        }
+    }
+
+    private fun setToAmount(amount: BigDecimal?) {
+        toAmount.editText.apply {
+            removeTextChangedListener(toAmountListener)
+            setText(amount?.toPlainString())
+            addTextChangedListener(toAmountListener)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
