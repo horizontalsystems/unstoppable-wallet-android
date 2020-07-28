@@ -2,12 +2,12 @@
 <resources>
     <!--Common-->
     <string name="Alert_Ok">OK</string>
-    <string name="Alert_Cancel">Cancel</string>
-    <string name="Alert_Copy">Copy</string>
-    <string name="Alert_Share">Forward</string>
-    <string name="Alert_Close">Close</string>
-    <string name="Alert_Success">Success</string>
-    <string name="Alert_Copied">Copied</string>
+    <string name="Alert_Cancel">Отменить</string>
+    <string name="Alert_Copy">Скопировать</string>
+    <string name="Alert_Share">Переслать</string>
+    <string name="Alert_Close">Закрыть</string>
+    <string name="Alert_Success">Успешно</string>
+    <string name="Alert_Copied">Скопировано</string>
     <string name="Alert_Loading">Loading...</string>
     <string name="Alert_Restart">Restart</string>
     <string name="Button_Cancel">Cancel</string>
@@ -30,33 +30,33 @@
     <string name="Wallet">%s Wallet</string>
     <!--Intro-->
     <string name="Intro_Independence_Title">Independence</string>
-    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times</string>
-    <string name="Intro_Knowledge_Title">Knowledge</string>
-    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages</string>
-    <string name="Intro_Privacy_Title">Privacy</string>
-    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth</string>
+    <string name="Intro_Independence_Description">Надежно храните криптоактивы, их невозможно конфисковать и они всегда в вашем распоряжении</string>
+    <string name="Intro_Knowledge_Title">Знания</string>
+    <string name="Intro_Knowledge_Description">Оставайтесь в курсе новостей и узнавайте о растущих блокчейн-проектах на ранних стадиях</string>
+    <string name="Intro_Privacy_Title">Приватность</string>
+    <string name="Intro_Privacy_Description">Увеличивайте свой капитал, оставаясь инкогнито и действуя анонимно</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable\nWallet</string>
+    <string name="Welcome_Title">Unstoppable\n Кошелек</string>
     <string name="Welcome_PrivacySettings">Privacy Settings</string>
-    <string name="Welcome_CreateWallet">Create Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_CreateWallet">Создать Кошелек</string>
+    <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
-    <string name="RateApp_Button_RateIt">Rate It</string>
-    <string name="RateApp_Button_NotNow">Not now</string>
+    <string name="RateApp_Title_Rate_This_App">Оценить приложение</string>
+    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable Wallet? Пожалуйста, найдите минутку, чтобы оценить это приложение</string>
+    <string name="RateApp_Button_RateIt">Оценить</string>
+    <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
-    <string name="Restore_ChooseWallet">Choose Wallet</string>
-    <string name="Restore_Enter_Key_Title">Enter Key</string>
-    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
-    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
-    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
-    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
-    <string name="Select_Coins">Choose Crypto</string>
+    <string name="Restore_ChooseWallet">Выберите Кошелек</string>
+    <string name="Restore_Enter_Key_Title">Введите ключ</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Введите ваш приватный ключ для %1s кошелька, который состоит из %2s слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
+    <string name="Restore_ValidationFailed">Неверный Ключ</string>
+    <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
+    <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
+    <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
+    <string name="Select_Coins">Выберите Валюту</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_TitleShow">Show Key</string>
+    <string name="Backup_Intro_Title">Резервная Копия</string>
+    <string name="Backup_Intro_TitleShow">Показать Ключ</string>
     <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
