@@ -28,17 +28,14 @@ class NotificationsViewModel(
     val setWarningVisible = MutableLiveData<Boolean>()
     val notificationIsOnLiveData = MutableLiveData<Boolean>()
     val openOptionsDialog = SingleLiveEvent<Triple<String, String, NotificationMenuMode>>()
-
-    private var notificationIsOn: Boolean
-        get() = localStorage.isAlertNotificationOn
-        set(value) {
-            localStorage.isAlertNotificationOn = value
-        }
+    val controlsVisible = MutableLiveData<Boolean>()
 
     init {
         loadAlerts()
         checkPriceAlertsEnabled()
-        setNotificationIsOnSwitch()
+        updateControlsVisibility()
+
+        notificationIsOnLiveData.postValue(localStorage.isAlertNotificationOn)
 
         disposable = priceAlertManager.notificationChangedFlowable
                 .subscribeOn(Schedulers.io())
@@ -62,11 +59,12 @@ class NotificationsViewModel(
 
     fun onResume() {
         checkPriceAlertsEnabled()
+        updateControlsVisibility()
     }
 
     fun switchAlertNotification(checked: Boolean) {
-        notificationIsOn = checked
-        setNotificationIsOnSwitch()
+        localStorage.isAlertNotificationOn = checked
+        updateControlsVisibility()
 
         if (checked) {
             priceAlertManager.enablePriceAlerts()
@@ -84,8 +82,8 @@ class NotificationsViewModel(
         openOptionsDialog.postValue(Triple(item.coinName, coinCode, mode))
     }
 
-    private fun setNotificationIsOnSwitch() {
-        notificationIsOnLiveData.postValue(notificationIsOn)
+    private fun updateControlsVisibility() {
+        controlsVisible.postValue(notificationManager.isEnabled && localStorage.isAlertNotificationOn)
     }
 
     private fun loadAlerts() {
