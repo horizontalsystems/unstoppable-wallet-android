@@ -71,9 +71,12 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
             startActivity(intent)
         })
 
+        viewModel.controlsVisible.observe(this, Observer {
+            notifications.isVisible = it
+            deactivateAll.isVisible = it
+        })
+
         viewModel.setWarningVisible.observe(this, Observer { showWarning ->
-            notifications.isVisible = !showWarning
-            deactivateAll.isVisible = !showWarning
             switchNotification.isVisible = !showWarning
             textDescription.isVisible = !showWarning
 
@@ -85,9 +88,6 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
             switchNotification.showSwitch(enabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 viewModel.switchAlertNotification(isChecked)
             })
-
-            notifications.isVisible = enabled
-            deactivateAll.isVisible = enabled
         })
 
         viewModel.openOptionsDialog.observe(this, Observer { (coinName, coinCode, mode) ->
