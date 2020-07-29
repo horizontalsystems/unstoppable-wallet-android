@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import kotlinx.android.synthetic.main.view_button_proceed.view.*
 
 class ProceedButtonView : ConstraintLayout {
@@ -20,7 +21,7 @@ class ProceedButtonView : ConstraintLayout {
 
     fun bind(onClick: (() -> (Unit))? = null) {
         btnProceed.isEnabled = false
-        btnProceed.setOnClickListener { onClick?.invoke() }
+        btnProceed.setOnSingleClickListener { onClick?.invoke() }
     }
 
     fun updateState(enabled: Boolean) {
