@@ -35,6 +35,9 @@ class SwapViewModel(
     private var fromAmount: BigDecimal? = null
     private var toAmount: BigDecimal? = null
 
+    val priceImpactDesirableThreshold = BigDecimal("1")
+    val priceImpactAllowedThreshold = BigDecimal("5")
+
     val fromAmountLiveData = MutableLiveData<BigDecimal>()
     val fromAmountErrorLiveData = MutableLiveData<Throwable>()
     val fromCoinLiveData = MutableLiveData<CoinWithBalance>()

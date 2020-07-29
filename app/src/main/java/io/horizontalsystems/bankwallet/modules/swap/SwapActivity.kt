@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
 import io.horizontalsystems.uniswapkit.models.TradeType
+import io.horizontalsystems.views.R.attr
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_swap.*
 import java.math.BigDecimal
 
@@ -60,7 +62,7 @@ class SwapActivity : BaseActivity() {
         })
 
         viewModel.fromAmountErrorLiveData.observe(this, Observer { error ->
-            fromAmount.setError(error?.let { getErrorText(error) })
+            fromAmount.setError(error?.let { errorText(error) })
         })
 
         viewModel.tradeTypeLiveData.observe(this, Observer { tradeType ->
@@ -113,14 +115,27 @@ class SwapActivity : BaseActivity() {
                     "${formatCoinAmount(it, toCoin)} / ${fromCoin.code} "
                 }
 
-                priceImpactValue.text = "${tradeData.priceImpact?.toPlainString() ?: ""}%"
+                priceImpactValue.text = tradeData.priceImpact?.let {
+                    getString(R.string.Swap_Percent, it.toPlainString())
+                }
+                priceImpactValue.setTextColor(colorForPriceImpact(tradeData.priceImpact))
             } else {
                 clearTradeData()
             }
         })
     }
 
-    private fun getErrorText(error: Throwable): String = when (error) {
+    private fun colorForPriceImpact(priceImpact: BigDecimal?) = when {
+        priceImpact == null -> LayoutHelper.getAttr(attr.ColorLeah, theme)
+                ?: R.color.steel_light
+        priceImpact < viewModel.priceImpactDesirableThreshold -> LayoutHelper.getAttr(attr.ColorRemus, theme)
+                ?: R.color.green_d
+        priceImpact < viewModel.priceImpactAllowedThreshold -> LayoutHelper.getAttr(attr.ColorJacob, theme)
+                ?: R.color.yellow_d
+        else -> LayoutHelper.getAttr(attr.ColorLucian, theme) ?: R.color.red_d
+    }
+
+    private fun errorText(error: Throwable): String = when (error) {
         is SwapModule.ValidationError.InsufficientBalance -> getString(R.string.Swap_ErrorInsufficientBalance)
         else -> ""
     }
