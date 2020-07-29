@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
@@ -74,7 +75,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
         presenterView?.addSendButton?.observe(viewLifecycleOwner, Observer {
             context?.let {
                 sendButtonView = ConfirmationSendButtonView(it)
-                sendButtonView?.setOnClickListener {
+                sendButtonView?.setOnSingleClickListener {
                     sendButtonView?.bind(SendConfirmationModule.SendButtonState.SENDING)
                     sendView?.delegate?.onSendConfirmed()
                 }
