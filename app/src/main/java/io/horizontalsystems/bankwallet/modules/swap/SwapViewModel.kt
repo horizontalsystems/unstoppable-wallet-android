@@ -27,45 +27,65 @@ class SwapViewModel(
 ) : ViewModel() {
 
     private val logger = Logger.getLogger("SwapViewModel")
+    private val disposables = CompositeDisposable()
 
     private val kit = uniswapKitManager.uniswapKit()
-    private val disposables = CompositeDisposable()
 
     private var swapData: SwapData? = null
     private var fromAmount: BigDecimal? = null
     private var toAmount: BigDecimal? = null
 
     val fromAmountLiveData = MutableLiveData<BigDecimal>()
+    val fromAmountErrorLiveData = MutableLiveData<Throwable>()
     val fromCoinLiveData = MutableLiveData<CoinWithBalance>()
     val toCoinLiveData = MutableLiveData<CoinWithBalance>()
     val tradeLiveData = MutableLiveData<TradeData>()
     val tradeTypeLiveData = MutableLiveData<TradeType>()
 
+    private var fromCoin: CoinWithBalance?
+        get() = fromCoinLiveData.value
+        set(value) {
+            fromCoinLiveData.value = value
+        }
+
+    private var toCoin: CoinWithBalance?
+        get() = toCoinLiveData.value
+        set(value) {
+            toCoinLiveData.value = value
+        }
+
+    private var tradeType: TradeType?
+        get() = tradeTypeLiveData.value
+        set(value) {
+            tradeTypeLiveData.value = value
+        }
+
     init {
-        fromCoinLiveData.postValue(fromCoin?.let { coinWithBalance(it) })
+        this.fromCoin = fromCoin?.let { coinWithBalance(it) }
     }
 
     fun onSelectFromCoin(selectedCoin: Coin) {
-        fromCoinLiveData.value = coinWithBalance(selectedCoin)
+        fromCoin = coinWithBalance(selectedCoin)
 
         syncSwapData()
     }
 
     fun onSelectToCoin(selectedCoin: Coin) {
-        toCoinLiveData.value = coinWithBalance(selectedCoin)
+        toCoin = coinWithBalance(selectedCoin)
 
         syncSwapData()
     }
 
     fun onFromAmountMaxButtonClick() {
-        fromAmountLiveData.value = fromCoinLiveData.value?.balance
+        fromAmountLiveData.value = fromCoin?.balance
     }
 
     fun onFromAmountChange(amount: String?) {
         fromAmount = getNonZeroAmount(amount)
         toAmount = null
 
-        tradeTypeLiveData.value = TradeType.ExactIn
+        tradeType = TradeType.ExactIn
+        validateFromAmount(fromAmount)
         syncTradeData()
     }
 
@@ -73,7 +93,7 @@ class SwapViewModel(
         toAmount = getNonZeroAmount(amount)
         fromAmount = null
 
-        tradeTypeLiveData.value = TradeType.ExactOut
+        tradeType = TradeType.ExactOut
         syncTradeData()
     }
 
@@ -91,8 +111,8 @@ class SwapViewModel(
     private fun syncSwapData() {
         swapData = null
 
-        val tokenIn = fromCoinLiveData.value?.let { uniswapToken(it.coin) } ?: return
-        val tokenOut = toCoinLiveData.value?.let { uniswapToken(it.coin) } ?: return
+        val tokenIn = fromCoin?.let { uniswapToken(it.coin) } ?: return
+        val tokenOut = toCoin?.let { uniswapToken(it.coin) } ?: return
 
         kit.swapData(tokenIn, tokenOut)
                 .subscribeOn(Schedulers.io())
@@ -109,20 +129,34 @@ class SwapViewModel(
     }
 
     private fun syncTradeData() {
-        tradeLiveData.value = swapData?.let { swapData ->
+        val tradeData = swapData?.let { swapData ->
             try {
-                if (tradeTypeLiveData.value == TradeType.ExactIn) {
-                    fromAmount?.let {
-                        kit.bestTradeExactIn(swapData, it)
-                    }
-                } else {
-                    toAmount?.let {
-                        kit.bestTradeExactOut(swapData, it)
-                    }
+                when (tradeType) {
+                    TradeType.ExactIn -> fromAmount?.let { kit.bestTradeExactIn(swapData, it) }
+                    TradeType.ExactOut -> toAmount?.let { kit.bestTradeExactOut(swapData, it) }
+                    else -> null
                 }
             } catch (error: Throwable) {
-                logger.info("bestTrade ${tradeTypeLiveData.value} error: ${error.javaClass.simpleName} (${error.localizedMessage})")
+                logger.info("bestTrade$tradeType error: ${error.javaClass.simpleName} (${error.localizedMessage})")
                 null
+            }
+        }
+
+        tradeData?.let {
+            validateFromAmount(tradeData.amountIn)
+        }
+
+        tradeLiveData.value = tradeData
+    }
+
+    private fun validateFromAmount(fromAmount: BigDecimal?) {
+        fromAmountErrorLiveData.value = fromAmount?.let {
+            fromCoin?.balance?.let { balance ->
+                if (fromAmount > balance) {
+                    SwapModule.ValidationError.InsufficientBalance()
+                } else
+                    null
+
             }
         }
     }
@@ -133,9 +167,7 @@ class SwapViewModel(
             is CoinType.Erc20 -> {
                 kit.token(coinType.address.hexStringToByteArray(), coin.decimal)
             }
-            else -> {
-                null
-            }
+            else -> null
         }
     }
 

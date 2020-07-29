@@ -20,13 +20,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@android:color/transparent"
         android:hint="@string/Swap_AmountHint"
         android:inputType="number|numberDecimal"
         android:maxLines="1"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/error"
         app:layout_constraintEnd_toStartOf="@+id/maxButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,9 +41,9 @@
         android:layout_height="28dp"
         android:layout_margin="8dp"
         android:text="@string/Swap_MaxButtonTitle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/amountText"
         app:layout_constraintEnd_toStartOf="@+id/coinSelectorButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/amountText" />
 
     <Button
         android:id="@+id/coinSelectorButton"
@@ -52,8 +54,21 @@
         android:drawableEnd="@drawable/ic_down"
         android:drawablePadding="4dp"
         android:text="@string/Swap_TokenSelectorTitle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/amountText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/amountText" />
+
+    <TextView
+        android:id="@+id/error"
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:textColor="?ColorLucian"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/amountText"
+        app:layout_constraintTop_toBottomOf="@+id/amountText"
+        tools:text="@string/Swap_ErrorInsufficientBalance" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

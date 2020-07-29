@@ -28,4 +28,8 @@ object SwapModule {
 
     data class CoinWithBalance(val coin: Coin, val balance: BigDecimal)
 
+    sealed class ValidationError : Throwable() {
+        class InsufficientBalance : ValidationError()
+    }
+
 }

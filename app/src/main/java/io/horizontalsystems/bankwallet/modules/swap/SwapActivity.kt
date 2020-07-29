@@ -59,6 +59,10 @@ class SwapActivity : BaseActivity() {
             fromAmount.editText.setText(amount?.toPlainString())
         })
 
+        viewModel.fromAmountErrorLiveData.observe(this, Observer { error ->
+            fromAmount.setError(error?.let { getErrorText(error) })
+        })
+
         viewModel.tradeTypeLiveData.observe(this, Observer { tradeType ->
             when (tradeType) {
                 TradeType.ExactIn -> {
@@ -114,6 +118,11 @@ class SwapActivity : BaseActivity() {
                 clearTradeData()
             }
         })
+    }
+
+    private fun getErrorText(error: Throwable): String = when (error) {
+        is SwapModule.ValidationError.InsufficientBalance -> getString(R.string.Swap_ErrorInsufficientBalance)
+        else -> ""
     }
 
     private fun clearTradeData() {
