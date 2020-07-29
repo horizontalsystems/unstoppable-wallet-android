@@ -229,6 +229,15 @@
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintTop_toTopOf="@+id/minMaxTitle"
                 tools:text="0.112 Token" />
+
+            <io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
+                android:id="@+id/proceedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/minMaxTitle"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintEnd_toEndOf="@id/endBorder"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
