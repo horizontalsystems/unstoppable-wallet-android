@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling
 
 import android.os.Bundle
-import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -24,13 +23,15 @@ class BitcoinHodlingActivity : BaseActivity() {
         view = presenter.view as BitcoinHodlingView
 
         view.lockTimeEnabledLiveEvent.observe(this, Observer { enabled ->
-            switchLockTime.showSwitch(enabled, CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                presenter.onSwitchLockTime(isChecked)
-            })
+            switchLockTime.setChecked(enabled)
         })
 
         switchLockTime.setOnClickListener {
             switchLockTime.switchToggle()
+        }
+
+        switchLockTime.setOnCheckedChangeListener {
+            presenter.onSwitchLockTime(it)
         }
 
         presenter.onLoad()
