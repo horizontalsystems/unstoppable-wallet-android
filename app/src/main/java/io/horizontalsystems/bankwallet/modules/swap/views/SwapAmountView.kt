@@ -25,6 +25,11 @@ class SwapAmountView @JvmOverloads constructor(context: Context, attrs: Attribut
     val editText: EditText
         get() = amountText
 
+    fun setError(text: String?) {
+        error.text = text
+        error.isVisible = text != null
+    }
+
     fun setSelectedCoin(title: String) {
         coinSelectorButton.text = title
     }
