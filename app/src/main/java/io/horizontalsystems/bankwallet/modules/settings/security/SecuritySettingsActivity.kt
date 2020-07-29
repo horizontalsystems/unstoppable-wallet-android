@@ -38,18 +38,22 @@ class SecuritySettingsActivity : BaseActivity() {
             biometricAuth.switchToggle()
         }
 
+        biometricAuth.setOnCheckedChangeListener {
+            viewModel.delegate.didSwitchBiometricEnabled(it)
+        }
+
         enablePin.setOnSingleClickListener {
             enablePin.switchToggle()
+        }
+
+        enablePin.setOnCheckedChangeListenerSingle {
+            viewModel.delegate.didSwitchPinSet(it)
         }
 
         //  Handling view model live events
 
         viewModel.pinSetLiveData.observe(this, Observer { pinEnabled ->
-            enablePin.showSwitch(pinEnabled, object: SingleSwitchListener(){
-                override fun onSingleSwitch(buttonView: CompoundButton?, isChecked: Boolean) {
-                    viewModel.delegate.didSwitchPinSet(isChecked)
-                }
-            })
+            enablePin.setChecked(pinEnabled)
         })
 
         viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->
@@ -63,9 +67,7 @@ class SecuritySettingsActivity : BaseActivity() {
         })
 
         viewModel.biometricEnabledLiveData.observe(this, Observer {
-            biometricAuth.showSwitch(it, CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                viewModel.delegate.didSwitchBiometricEnabled(isChecked)
-            })
+            biometricAuth.setChecked(it)
         })
 
         //router

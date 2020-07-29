@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -75,6 +74,10 @@ class MainSettingsFragment : Fragment() {
 
         lightMode.setOnSingleClickListener { lightMode.switchToggle() }
 
+        lightMode.setOnCheckedChangeListener {
+            presenter.didSwitchLightMode(it)
+        }
+
         experimentalFeatures.setOnSingleClickListener { presenter.didTapExperimentalFeatures() }
 
         terms.setOnSingleClickListener { presenter.didTapAbout() }
@@ -100,9 +103,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         presenterView.lightMode.observe(viewLifecycleOwner, Observer {
-            lightMode.showSwitch(it, CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                presenter.didSwitchLightMode(isChecked)
-            })
+            lightMode.setChecked(it)
         })
 
         presenterView.appVersion.observe(viewLifecycleOwner, Observer { version ->
