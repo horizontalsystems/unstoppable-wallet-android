@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinWithBalance
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ValidationError.*
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.Token
@@ -39,11 +40,12 @@ class SwapViewModel(
     val priceImpactAllowedThreshold = BigDecimal("5")
 
     val fromAmountLiveData = MutableLiveData<BigDecimal>()
-    val fromAmountErrorLiveData = MutableLiveData<Throwable>()
     val fromCoinLiveData = MutableLiveData<CoinWithBalance>()
     val toCoinLiveData = MutableLiveData<CoinWithBalance>()
     val tradeLiveData = MutableLiveData<TradeData>()
     val tradeTypeLiveData = MutableLiveData<TradeType>()
+    val proceedButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val errorLiveData = MutableLiveData<Throwable>()
 
     private var fromCoin: CoinWithBalance?
         get() = fromCoinLiveData.value
@@ -57,14 +59,28 @@ class SwapViewModel(
             toCoinLiveData.value = value
         }
 
-    private var tradeType: TradeType?
-        get() = tradeTypeLiveData.value
+    private var tradeType: TradeType
+        get() = tradeTypeLiveData.value ?: TradeType.ExactIn
         set(value) {
             tradeTypeLiveData.value = value
         }
 
+    private var tradeData: TradeData?
+        get() = tradeLiveData.value
+        set(value) {
+            tradeLiveData.value = value
+        }
+
+    private var error: Throwable?
+        get() = errorLiveData.value
+        set(value) {
+            errorLiveData.value = value
+            proceedButtonEnabledLiveData.value = canProceed()
+        }
+
     init {
         this.fromCoin = fromCoin?.let { coinWithBalance(it) }
+        tradeType = TradeType.ExactIn
     }
 
     fun onSelectFromCoin(selectedCoin: Coin) {
@@ -84,11 +100,12 @@ class SwapViewModel(
     }
 
     fun onFromAmountChange(amount: String?) {
-        fromAmount = getNonZeroAmount(amount)
+        fromAmount = getNonZeroAmount(amount).apply {
+            error = validateFromAmount(this)
+        }
         toAmount = null
 
         tradeType = TradeType.ExactIn
-        validateFromAmount(fromAmount)
         syncTradeData()
     }
 
@@ -100,10 +117,14 @@ class SwapViewModel(
         syncTradeData()
     }
 
+    fun onProceedButtonClick() {
+        //todo
+    }
+
     private fun coinWithBalance(coin: Coin): CoinWithBalance {
-        val balance = walletManager.wallet(coin)?.let { wallet ->
-            adapterManager.getBalanceAdapterForWallet(wallet)?.balance
-        }
+        val wallet = walletManager.wallet(coin)
+        val balanceAdapter = wallet?.let { adapterManager.getBalanceAdapterForWallet(it) }
+        val balance = balanceAdapter?.balance ?: BigDecimal.ZERO
         return CoinWithBalance(coin, balance ?: BigDecimal.ZERO)
     }
 
@@ -131,37 +152,51 @@ class SwapViewModel(
                 }
     }
 
-    private fun syncTradeData() {
-        val tradeData = swapData?.let { swapData ->
-            try {
-                when (tradeType) {
-                    TradeType.ExactIn -> fromAmount?.let { kit.bestTradeExactIn(swapData, it) }
-                    TradeType.ExactOut -> toAmount?.let { kit.bestTradeExactOut(swapData, it) }
-                    else -> null
-                }
-            } catch (error: Throwable) {
-                logger.info("bestTrade$tradeType error: ${error.javaClass.simpleName} (${error.localizedMessage})")
-                null
-            }
-        }
+    private fun canProceed(): Boolean {
+        val priceImpact = tradeData?.priceImpact
 
-        tradeData?.let {
-            validateFromAmount(tradeData.amountIn)
-        }
-
-        tradeLiveData.value = tradeData
+        return error != null &&
+                tradeData != null &&
+                priceImpact != null && priceImpact < priceImpactAllowedThreshold
     }
 
-    private fun validateFromAmount(fromAmount: BigDecimal?) {
-        fromAmountErrorLiveData.value = fromAmount?.let {
-            fromCoin?.balance?.let { balance ->
-                if (fromAmount > balance) {
-                    SwapModule.ValidationError.InsufficientBalance()
-                } else
-                    null
-
+    private fun syncTradeData() {
+        val swapData = swapData ?: return
+        try {
+            tradeData = when (tradeType) {
+                TradeType.ExactIn -> fromAmount?.let { kit.bestTradeExactIn(swapData, it) }
+                TradeType.ExactOut -> toAmount?.let { kit.bestTradeExactOut(swapData, it) }
             }
+            error = validateTradeData(tradeData)
+        } catch (throwable: Throwable) {
+            logger.info("bestTrade$tradeType error: ${throwable.javaClass.simpleName} (${throwable.localizedMessage})")
+            error = throwable
+            tradeData = null
         }
+    }
+
+    private fun validateTradeData(tradeData: TradeData?): Throwable? {
+        if (tradeData == null) {
+            return NoTradeData()
+        }
+        validateFromAmount(tradeData.amountIn)?.let { fromAmountError ->
+            return fromAmountError
+        }
+        val priceImpact = tradeData.priceImpact ?: return PriceImpactInvalid()
+        if (priceImpact < priceImpactAllowedThreshold) {
+            return PriceImpactTooHigh()
+        }
+        return null
+    }
+
+    private fun validateFromAmount(fromAmount: BigDecimal?): Throwable? {
+        val fromAmount = fromAmount ?: return null
+        val balance = fromCoin?.balance ?: return null
+
+        return if (fromAmount > balance)
+            InsufficientBalance()
+        else
+            null
     }
 
     private fun uniswapToken(coin: Coin): Token? {
