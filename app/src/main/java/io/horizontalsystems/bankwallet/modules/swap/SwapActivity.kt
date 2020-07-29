@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ValidationError.*
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
 import io.horizontalsystems.uniswapkit.models.TradeType
 import io.horizontalsystems.views.R.attr
@@ -57,12 +58,26 @@ class SwapActivity : BaseActivity() {
             editText.addTextChangedListener(toAmountListener)
         }
 
+        proceedButton.bind(onClick = {
+            viewModel.onProceedButtonClick()
+        })
+
         viewModel.fromAmountLiveData.observe(this, Observer { amount ->
             fromAmount.editText.setText(amount?.toPlainString())
         })
 
-        viewModel.fromAmountErrorLiveData.observe(this, Observer { error ->
-            fromAmount.setError(error?.let { errorText(error) })
+        viewModel.errorLiveData.observe(this, Observer { error ->
+            when (error) {
+                is InsufficientBalance -> {
+                    fromAmount.setError(errorText(error))
+                }
+                is PriceImpactTooHigh, is PriceImpactInvalid, is NoTradeData -> {
+                    //todo show error message
+                }
+                null -> {
+                    fromAmount.setError(null)
+                }
+            }
         })
 
         viewModel.tradeTypeLiveData.observe(this, Observer { tradeType ->
@@ -123,6 +138,10 @@ class SwapActivity : BaseActivity() {
                 clearTradeData()
             }
         })
+
+        viewModel.proceedButtonEnabledLiveData.observe(this, Observer { enabled ->
+            proceedButton.updateState(enabled)
+        })
     }
 
     private fun colorForPriceImpact(priceImpact: BigDecimal?) = when {
@@ -136,7 +155,7 @@ class SwapActivity : BaseActivity() {
     }
 
     private fun errorText(error: Throwable): String = when (error) {
-        is SwapModule.ValidationError.InsufficientBalance -> getString(R.string.Swap_ErrorInsufficientBalance)
+        is InsufficientBalance -> getString(R.string.Swap_ErrorInsufficientBalance)
         else -> ""
     }
 

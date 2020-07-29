@@ -30,6 +30,9 @@ object SwapModule {
 
     sealed class ValidationError : Throwable() {
         class InsufficientBalance : ValidationError()
+        class PriceImpactTooHigh : ValidationError()
+        class PriceImpactInvalid : ValidationError()
+        class NoTradeData : ValidationError()
     }
 
 }
