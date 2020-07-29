@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -46,9 +45,9 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
 
         switchNotification.setOnClickListener { switchNotification.switchToggle() }
 
-        switchNotification.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            viewModel.switchAlertNotification(isChecked)
-        })
+        switchNotification.setOnCheckedChangeListener {
+            viewModel.switchAlertNotification(it)
+        }
 
         observeViewModel()
     }

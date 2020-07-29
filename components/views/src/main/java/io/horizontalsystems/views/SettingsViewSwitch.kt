@@ -7,35 +7,47 @@ import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_settings_switch.view.*
 
 class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : SettingsViewBase(context, attrs, defStyleAttr) {
+    : SettingsViewBase(context, attrs, defStyleAttr), CompoundButton.OnCheckedChangeListener {
 
     private var onCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
+    private var notifyListener = true
 
-    fun showSwitch(isChecked: Boolean, listener: CompoundButton.OnCheckedChangeListener) {
-        setOnCheckedChangeListener(listener)
-        setChecked(isChecked)
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+        if (notifyListener) {
+            onCheckedChangeListener?.onCheckedChanged(buttonView, isChecked)
+        }
+    }
+
+    fun setOnCheckedChangeListener(listener: (Boolean) -> Unit) {
+        onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            listener(isChecked)
+        }
+    }
+
+    fun setOnCheckedChangeListenerSingle(listener: (Boolean) -> Unit) {
+        onCheckedChangeListener = object : SingleSwitchListener() {
+            override fun onSingleSwitch(buttonView: CompoundButton?, isChecked: Boolean) {
+                listener(isChecked)
+            }
+        }
+    }
+
+    fun setChecked(checked: Boolean) {
+        switchSettings.isVisible = true
+
+        notifyListener = false
+        switchSettings.isChecked = checked
+        notifyListener = true
     }
 
     fun switchToggle() {
         switchSettings.toggle()
     }
 
-    fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener?) {
-        switchSettings.setOnCheckedChangeListener(listener)
-        switchSettings.isVisible = true
-
-        onCheckedChangeListener = listener
-    }
-
-    fun setChecked(checked: Boolean) {
-        // set listener to null and set it back to prevent it from triggering
-        switchSettings.setOnCheckedChangeListener(null)
-        switchSettings.isChecked = checked
-        switchSettings.setOnCheckedChangeListener(onCheckedChangeListener)
-    }
-
     init {
         inflate(context, R.layout.view_settings_switch, this)
+
+        switchSettings.setOnCheckedChangeListener(this)
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.SettingsViewSwitch)
         try {
