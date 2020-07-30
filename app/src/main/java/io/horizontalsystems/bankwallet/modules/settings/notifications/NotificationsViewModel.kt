@@ -32,7 +32,6 @@ class NotificationsViewModel(
 
     init {
         loadAlerts()
-        checkPriceAlertsEnabled()
         updateControlsVisibility()
 
         notificationIsOnLiveData.postValue(localStorage.isAlertNotificationOn)
