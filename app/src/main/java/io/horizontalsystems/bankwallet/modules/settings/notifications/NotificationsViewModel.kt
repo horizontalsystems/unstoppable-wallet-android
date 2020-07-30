@@ -57,8 +57,8 @@ class NotificationsViewModel(
     }
 
     fun onResume() {
-        checkPriceAlertsEnabled()
         updateControlsVisibility()
+        setWarningVisible.postValue(!notificationManager.isEnabled)
     }
 
     fun switchAlertNotification(checked: Boolean) {
@@ -142,9 +142,6 @@ class NotificationsViewModel(
         }
     }
 
-    private fun checkPriceAlertsEnabled() {
-        setWarningVisible.postValue(!notificationManager.isEnabled)
-    }
 }
 
 data class NotificationViewItem(
