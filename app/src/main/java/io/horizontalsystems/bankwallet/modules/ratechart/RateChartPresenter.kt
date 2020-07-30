@@ -49,7 +49,10 @@ class RateChartPresenter(
         interactor.observeAlertNotification(coinCode)
 
         fetchChartInfo()
-        setAlertNotificationIcon()
+    }
+
+    override fun onResume() {
+        setAlertNotificationIconVisible()
     }
 
     override fun onSelect(type: ChartType) {
@@ -102,13 +105,18 @@ class RateChartPresenter(
         setAlertNotificationIcon()
     }
 
-    private fun setAlertNotificationIcon() {
-        if (interactor.notificationIsOn) {
-            val priceAlert = interactor.getPriceAlert(coinCode)
-            val active = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
-
-            view.setAlertNotificationActive(active)
+    private fun setAlertNotificationIconVisible() {
+        view.showNotificationIcon(interactor.notificationsAreEnabled)
+        if (interactor.notificationsAreEnabled) {
+            setAlertNotificationIcon()
         }
+    }
+
+    private fun setAlertNotificationIcon() {
+        val priceAlert = interactor.getPriceAlert(coinCode)
+        val active = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
+
+        view.setAlertNotificationActive(active)
     }
 
     private fun fetchChartInfo() {
