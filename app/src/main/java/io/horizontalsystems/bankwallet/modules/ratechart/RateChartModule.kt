@@ -24,6 +24,7 @@ object RateChartModule {
         fun setMacdEnabled(enabled: Boolean)
         fun setRsiEnabled(enabled: Boolean)
         fun setAlertNotificationActive(active: Boolean)
+        fun showNotificationIcon(visible: Boolean)
     }
 
     interface ViewDelegate {
@@ -33,11 +34,12 @@ object RateChartModule {
         fun toggleEma()
         fun toggleMacd()
         fun toggleRsi()
+        fun onResume()
     }
 
     interface Interactor {
         var defaultChartType: ChartType?
-        var notificationIsOn: Boolean
+        val notificationsAreEnabled: Boolean
 
         fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun getChartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
@@ -64,7 +66,7 @@ object RateChartModule {
             val rateFormatter = RateFormatter(currency)
 
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.localStorage)
+            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage)
             val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, currency, RateChartViewFactory())
 
             interactor.delegate = presenter

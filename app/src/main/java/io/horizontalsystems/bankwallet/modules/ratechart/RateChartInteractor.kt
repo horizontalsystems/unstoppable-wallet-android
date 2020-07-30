@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
-import io.horizontalsystems.bankwallet.core.IChartTypeStorage
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IPriceAlertManager
-import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -17,6 +14,7 @@ class RateChartInteractor(
         private val xRateManager: IRateManager,
         private val chartTypeStorage: IChartTypeStorage,
         private val priceAlertManager: IPriceAlertManager,
+        private val notificationManager: INotificationManager,
         private val localStorage: ILocalStorage)
     : RateChartModule.Interactor {
 
@@ -26,11 +24,8 @@ class RateChartInteractor(
     private var cInfoDisposable: Disposable? = null
     private var alertNotificationDisposable: Disposable? = null
 
-    override var notificationIsOn: Boolean
-        get() = localStorage.isAlertNotificationOn
-        set(value) {
-            localStorage.isAlertNotificationOn = value
-        }
+    override val notificationsAreEnabled: Boolean
+        get() = notificationManager.isEnabled && localStorage.isAlertNotificationOn
 
     override var defaultChartType: ChartType?
         get() = chartTypeStorage.chartType

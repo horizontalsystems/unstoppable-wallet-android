@@ -57,6 +57,11 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         bindActions()
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
+    }
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         presenter.viewDidLoad()
@@ -216,10 +221,13 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             rsiChartIndicator.setStateEnabled(enabled)
         })
 
-        presenterView.setAlertNotificationActive.observe(this, Observer { active ->
-            notificationIcon.isVisible = true
+        presenterView.alertNotificationVisible.observe(this, Observer { visible ->
+            notificationIcon.isVisible = visible
+            setClickListenerForPriceAlert(visible)
+        })
+
+        presenterView.alertNotificationActive.observe(this, Observer { active ->
             notificationIcon.setImageResource(if (active) R.drawable.ic_notification_enabled_16 else R.drawable.ic_notification_16)
-            setClickListenerForRateDifference()
         })
 
     }
@@ -267,21 +275,25 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
     }
 
-    private fun setClickListenerForRateDifference() {
-        notificationClickArea.setOnClickListener {
-            BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, coinTitle, coinCode)
-        }
-
-        notificationClickArea.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> v.alpha = 0.5f
-                MotionEvent.ACTION_UP -> {
-                    v.alpha = 1f
-                    v.performClick()
-                }
-                MotionEvent.ACTION_CANCEL -> v.alpha = 1f
+    private fun setClickListenerForPriceAlert(notificationIconIsVisible: Boolean) {
+        if (notificationIconIsVisible) {
+            notificationClickArea.setOnClickListener {
+                BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, coinTitle, coinCode)
             }
-            return@setOnTouchListener true
+
+            notificationClickArea.setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> v.alpha = 0.5f
+                    MotionEvent.ACTION_UP -> {
+                        v.alpha = 1f
+                        v.performClick()
+                    }
+                    MotionEvent.ACTION_CANCEL -> v.alpha = 1f
+                }
+                return@setOnTouchListener true
+            }
+        } else {
+            notificationClickArea.setOnClickListener(null)
         }
     }
 
