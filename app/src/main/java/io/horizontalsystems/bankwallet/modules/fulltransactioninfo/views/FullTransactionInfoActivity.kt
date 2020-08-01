@@ -72,24 +72,23 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             )
         })
 
-        viewModel.reloadLiveEvent.observe(this, Observer {
-            recyclerTransactionInfo.isVisible = true
+        viewModel.reloadEvent.observe(this, Observer {
             transactionRecordAdapter.notifyDataSetChanged()
         })
 
-        viewModel.loadingLiveData.observe(this, Observer { showLoading ->
-            progressLoading.isInvisible = !showLoading
-            recyclerTransactionInfo.isInvisible = showLoading
-            if (showLoading) {
-                transactionRecordAdapter.notifyDataSetChanged()
-            }
+        viewModel.showTransactionInfoEvent.observe(this, Observer {
+            setVisible(recyclerTransactionInfo)
         })
 
-        viewModel.showCopiedLiveEvent.observe(this, Observer {
+        viewModel.showLoadingEvent.observe(this, Observer {
+            setVisible(progressLoading)
+        })
+
+        viewModel.showCopiedEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Copied)
         })
 
-        viewModel.openLinkLiveEvent.observe(this, Observer { url ->
+        viewModel.openLinkEvent.observe(this, Observer { url ->
             url?.let {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(url)
@@ -103,32 +102,17 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             }
         })
 
-
-        viewModel.hideError.observe(this, Observer {
-            errorContainer.isVisible = false
-        })
-
         viewModel.showErrorProviderOffline.observe(this, Observer { providerName ->
-            val errorMessage = getString(R.string.FullInfo_Error_ProviderOffline)
-            val fragment = FullTransactionInfoErrorFragment.newInstance(providerName, errorMessage, R.drawable.dragon_icon)
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.errorContainer, fragment)
-            transaction.commit()
-
-            errorContainer.isVisible = true
+            setError(providerName, R.string.FullInfo_Error_ProviderOffline, R.drawable.dragon_icon, true)
+            setVisible(errorContainer)
         })
 
         viewModel.showErrorTransactionNotFound.observe(this, Observer { providerName ->
-            val errorMessage = getString(R.string.FullInfo_Error_TransactionNotFound)
-            val fragment = FullTransactionInfoErrorFragment.newInstance(providerName, errorMessage, R.drawable.ic_attention, showRetry = false)
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.errorContainer, fragment)
-            transaction.commit()
-
-            errorContainer.isVisible = true
+            setError(providerName, R.string.FullInfo_Error_TransactionNotFound, R.drawable.ic_attention, false)
+            setVisible(errorContainer)
         })
 
-        viewModel.showShareLiveEvent.observe(this, Observer { url ->
+        viewModel.showShareEvent.observe(this, Observer { url ->
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, url)
@@ -153,6 +137,20 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
     override fun onChangeProvider() {
         viewModel.changeProvider()
+    }
+
+    private fun setError(providerName: String, errorText: Int, icon: Int, showRetry: Boolean) {
+        val errorMessage = getString(errorText)
+        val fragment = FullTransactionInfoErrorFragment.newInstance(providerName, errorMessage, icon, showRetry)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.errorContainer, fragment)
+        transaction.commit()
+    }
+
+    private fun setVisible(view: View){
+        listOf(errorContainer, progressLoading, recyclerTransactionInfo).forEach {
+            it.isInvisible = it != view
+        }
     }
 
     companion object {

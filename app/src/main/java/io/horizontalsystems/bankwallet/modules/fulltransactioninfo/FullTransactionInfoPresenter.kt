@@ -97,17 +97,15 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
 
     override fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord) {
         state.transactionRecord = transactionRecord
-        view?.hideLoading()
         view?.reload()
+        view?.showTransactionInfo()
     }
 
     override fun onProviderOffline(providerName: String) {
-        view?.hideLoading()
         view?.showErrorProviderOffline(providerName)
     }
 
     override fun onTransactionNotFound(providerName: String) {
-        view?.hideLoading()
         view?.showErrorTransactionNotFound(providerName)
     }
 
@@ -121,9 +119,7 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     // Private
     //
     private fun tryLoadInfo() {
-        view?.hideError()
         view?.showLoading()
-
         interactor.retrieveTransactionInfo(state.transactionHash)
     }
 }

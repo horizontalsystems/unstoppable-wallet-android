@@ -15,8 +15,6 @@ object FullTransactionInfoModule {
     interface View {
         fun reload()
         fun showLoading()
-        fun hideLoading()
-        fun hideError()
         fun showErrorProviderOffline(providerName: String)
         fun showErrorTransactionNotFound(providerName: String)
         fun showCopied()
@@ -24,6 +22,7 @@ object FullTransactionInfoModule {
         fun openProviderSettings(coin: Coin, transactionHash: String)
         fun share(url: String)
         fun setShareButtonVisibility(visible: Boolean)
+        fun showTransactionInfo()
     }
 
     interface ViewDelegate {
