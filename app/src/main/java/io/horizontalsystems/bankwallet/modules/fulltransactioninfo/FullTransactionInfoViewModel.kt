@@ -10,14 +10,14 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
 
     lateinit var delegate: FullTransactionInfoModule.ViewDelegate
 
-    val loadingLiveData = MutableLiveData<Boolean>()
-    val reloadLiveEvent = SingleLiveEvent<Void>()
-    val showCopiedLiveEvent = SingleLiveEvent<Unit>()
+    val showLoadingEvent = SingleLiveEvent<Void>()
+    val showTransactionInfoEvent = SingleLiveEvent<Void>()
+    val reloadEvent = SingleLiveEvent<Void>()
+    val showCopiedEvent = SingleLiveEvent<Unit>()
     val showErrorProviderOffline = SingleLiveEvent<String>()
     val showErrorTransactionNotFound = SingleLiveEvent<String>()
-    val hideError = SingleLiveEvent<Unit>()
-    val showShareLiveEvent = SingleLiveEvent<String>()
-    val openLinkLiveEvent = SingleLiveEvent<String>()
+    val showShareEvent = SingleLiveEvent<String>()
+    val openLinkEvent = SingleLiveEvent<String>()
     val openProviderSettingsEvent = SingleLiveEvent<Pair<Coin, String>>()
     val shareButtonVisibility = MutableLiveData<Boolean>()
 
@@ -47,11 +47,7 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     }
 
     override fun showLoading() {
-        loadingLiveData.value = true
-    }
-
-    override fun hideLoading() {
-        loadingLiveData.value = false
+        showLoadingEvent.call()
     }
 
     override fun showErrorProviderOffline(providerName: String) {
@@ -62,16 +58,12 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         showErrorTransactionNotFound.value = providerName
     }
 
-    override fun hideError() {
-        hideError.call()
-    }
-
     override fun reload() {
-        reloadLiveEvent.call()
+        reloadEvent.call()
     }
 
     override fun showCopied() {
-        showCopiedLiveEvent.call()
+        showCopiedEvent.call()
     }
 
     override fun openProviderSettings(coin: Coin, transactionHash: String) {
@@ -79,15 +71,18 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     }
 
     override fun openUrl(url: String) {
-        openLinkLiveEvent.value = url
+        openLinkEvent.value = url
     }
 
     override fun share(url: String) {
-        showShareLiveEvent.value = url
+        showShareEvent.value = url
     }
 
     override fun onCleared() {
         delegate.onClear()
     }
 
+    override fun showTransactionInfo() {
+        showTransactionInfoEvent.call()
+    }
 }
