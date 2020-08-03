@@ -67,6 +67,9 @@ class SwapActivity : BaseActivity() {
         })
 
         viewModel.errorLiveData.observe(this, Observer { error ->
+            //reset previous errors
+            fromAmount.setError(null)
+
             when (error) {
                 is InsufficientBalance -> {
                     fromAmount.setError(errorText(error))
@@ -74,8 +77,8 @@ class SwapActivity : BaseActivity() {
                 is PriceImpactTooHigh, is PriceImpactInvalid, is NoTradeData -> {
                     //todo show error message
                 }
-                null -> {
-                    fromAmount.setError(null)
+                else -> {
+                    //todo show error message
                 }
             }
         })
