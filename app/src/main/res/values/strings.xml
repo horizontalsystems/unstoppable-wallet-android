@@ -190,8 +190,8 @@
     <string name="Swap_Balance">Balance</string>
     <string name="Swap_Price">Price</string>
     <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_MinimumReceived">Minimum received</string>
-    <string name="Swap_MaximiumSold">Maximum sold</string>
+    <string name="Swap_MinimumReceived">Minimum Got</string>
+    <string name="Swap_MaximiumSold">Maximum Paid</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
 
     <!--Swap Coin Select-->
