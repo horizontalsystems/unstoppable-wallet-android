@@ -101,16 +101,21 @@ object ServiceGuide {
 }
 
 object APIClient {
+
+    private val logger = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BASIC
+    }
+
+    //share OkHttpClient
+    val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(logger)
+            .build()
+
     fun retrofit(apiURL: String, timeout: Long = 60, isSafeCall: Boolean = true): Retrofit {
 
-        val logger = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
-        }
-
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logger)
-        httpClient.connectTimeout(timeout, TimeUnit.SECONDS)
-        httpClient.readTimeout(timeout, TimeUnit.SECONDS)
+        val httpClient = okHttpClient.newBuilder()
+                .connectTimeout(timeout, TimeUnit.SECONDS)
+                .readTimeout(timeout, TimeUnit.SECONDS)
 
         //TODO Replace this implementation with Manifest file settings when support for SDK 26 removed
         if (!isSafeCall) // if host name cannot be verified, has no or self signed certificate, do unsafe request
