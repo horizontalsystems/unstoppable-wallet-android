@@ -14,7 +14,7 @@ import java.util.*
 object GuidesManager {
 
     private val guidesUrl = App.appConfigProvider.guidesUrl
-    private val httpClient = OkHttpClient()
+
     private val gson = GsonBuilder()
             .setDateFormat("dd-MM-yyyy")
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -27,7 +27,7 @@ object GuidesManager {
                     .url(guidesUrl)
                     .build()
 
-            val response = httpClient.newCall(request).execute()
+            val response = APIClient.okHttpClient.newCall(request).execute()
             val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategory>::class.java)
             response.close()
 
