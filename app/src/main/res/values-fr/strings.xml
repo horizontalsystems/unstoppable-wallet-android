@@ -74,6 +74,7 @@
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Receive</string>
     <string name="Balance_Send">Send</string>
+    <string name="Balance_Swap">Swap</string>
     <string name="Balance_RatePerCoin">%s per %s</string>
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
@@ -131,6 +132,35 @@
     <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
+    <!--Swap-->
+    <string name="Swap_Title">Swap</string>
+    <string name="Swap_FromAmountTitle">You Pay</string>
+    <string name="Swap_ToAmountTitle">You Get</string>
+    <string name="Swap_Percent">%s%%</string>
+    <string name="Swap_Estimated">ESTIMATED</string>
+    <string name="Swap_MaxButtonTitle">Max</string>
+    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_Balance">Balance</string>
+    <string name="Swap_Price">Price</string>
+    <string name="Swap_PriceImpact">Price Impact</string>
+    <string name="Swap_MinimumReceived">Minimum Got</string>
+    <string name="Swap_MaximiumSold">Maximum Paid</string>
+    <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <!--Swap Coin Select-->
+    <string name="SwapCoinSelect_Title">Choose Coin</string>
+    <!--Uniwwap Info -->
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
+    <string name="UniswapInfo_Description">Uniswap is a fully decentralized protocol for automated liquidity provision on Ethereum.
+\n\nA simple formalized equation drives unstoppable liquidity for thousands of users and hundreds of applications.
+\n\nUniswap empowers developers, liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.
+    </string>
+    <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
+    <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
+    <string name="UniswapInfo_PriceImpactDescription">The difference between the market price and estimated price due to trade size.</string>
+    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
+    <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
+    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
     <string name="Deposit_Share">Share</string>
