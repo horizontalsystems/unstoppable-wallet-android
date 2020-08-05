@@ -3,10 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.ILanguageManager
-import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.core.IThemeStorage
+import io.horizontalsystems.core.*
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.CompositeDisposable
 
@@ -17,7 +14,8 @@ class MainSettingsInteractor(
         private val systemInfoManager: ISystemInfoManager,
         private val currencyManager: ICurrencyManager,
         private val appConfigProvider: IAppConfigProvider,
-        private val termsManager: ITermsManager)
+        private val termsManager: ITermsManager,
+        private val pinComponent: IPinComponent)
     : MainSettingsModule.IMainSettingsInteractor {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -65,6 +63,9 @@ class MainSettingsInteractor(
 
     override val appVersion: String
         get() = systemInfoManager.appVersion
+
+    override val isPinSet: Boolean
+        get() = pinComponent.isPinSet
 
     override fun clear() {
         disposables.clear()

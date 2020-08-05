@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 class MainSettingsView : MainSettingsModule.IMainSettingsView {
 
     val backedUp = MutableLiveData<Boolean>()
+    val pinSet = MutableLiveData<Boolean>()
     val baseCurrency = MutableLiveData<String>()
     val language = MutableLiveData<String>()
     val lightMode = MutableLiveData<Boolean>()
@@ -13,6 +14,10 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
 
     override fun setBackedUp(backedUp: Boolean) {
         this.backedUp.postValue(backedUp)
+    }
+
+    override fun setPinIsSet(pinSet: Boolean) {
+        this.pinSet.postValue(pinSet)
     }
 
     override fun setBaseCurrency(currency: String) {
