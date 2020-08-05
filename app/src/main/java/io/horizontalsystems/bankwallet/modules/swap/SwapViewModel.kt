@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinWithBalance
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ValidationError.*
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.Token
@@ -221,7 +221,7 @@ class SwapViewModel(
         return when (val coinType = coin.type) {
             is CoinType.Ethereum -> kit.etherToken()
             is CoinType.Erc20 -> {
-                kit.token(coinType.address.hexStringToByteArray(), coin.decimal)
+                kit.token(Address(coinType.address), coin.decimal)
             }
             else -> null
         }

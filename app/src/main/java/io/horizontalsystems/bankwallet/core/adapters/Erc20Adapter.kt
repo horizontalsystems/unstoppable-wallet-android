@@ -3,29 +3,33 @@ package io.horizontalsystems.bankwallet.core.adapters
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
 import io.horizontalsystems.erc20kit.core.TransactionKey
-import io.horizontalsystems.erc20kit.models.TransactionInfo
+import io.horizontalsystems.erc20kit.models.Transaction
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
+import java.math.BigInteger
 
 class Erc20Adapter(
         context: Context,
         kit: EthereumKit,
         decimal: Int,
+        contractAddress: String,
         private val fee: BigDecimal,
-        private val contractAddress: String,
         override val minimumRequiredBalance: BigDecimal,
         override val minimumSendAmount: BigDecimal
 ) : EthereumBaseAdapter(kit, decimal) {
 
-    private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress)
+    private val contractAddress: Address = Address(contractAddress)
+    private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, this.contractAddress)
 
     // IAdapter
 
@@ -72,12 +76,12 @@ class Erc20Adapter(
 
     // ISendEthereumAdapter
 
-    override fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
+    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long): Single<Unit> {
         return erc20Kit.send(address, amount, gasPrice, gasLimit).map { Unit }
     }
 
-    override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {
-        return erc20Kit.estimateGas(toAddress, contractAddress, scaleUp(value), gasPrice)
+    override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
+        return erc20Kit.estimateGas(toAddress, contractAddress, value, gasPrice)
     }
 
     override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
@@ -87,7 +91,7 @@ class Erc20Adapter(
     override val ethereumBalance: BigDecimal
         get() = balanceInBigDecimal(ethereumKit.balance, EthereumAdapter.decimal)
 
-    private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
+    private fun transactionRecord(transaction: Transaction): TransactionRecord {
         val myAddress = ethereumKit.receiveAddress
         val fromMine = transaction.from == myAddress
         val toMine = transaction.to == myAddress
@@ -98,16 +102,17 @@ class Erc20Adapter(
             else -> TransactionType.Incoming
         }
 
+        val txHashHex = transaction.transactionHash.toHexString()
         return TransactionRecord(
-                uid = "${transaction.transactionHash}${transaction.interTransactionIndex}",
-                transactionHash = transaction.transactionHash,
+                uid = "$txHashHex${transaction.interTransactionIndex}",
+                transactionHash = txHashHex,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = transaction.interTransactionIndex,
                 blockHeight = transaction.blockNumber,
                 amount = scaleDown(transaction.value.toBigDecimal()),
                 timestamp = transaction.timestamp,
-                from = transaction.from,
-                to = transaction.to,
+                from = transaction.from.hex,
+                to = transaction.to.hex,
                 type = type,
                 failed = transaction.isError
         )
