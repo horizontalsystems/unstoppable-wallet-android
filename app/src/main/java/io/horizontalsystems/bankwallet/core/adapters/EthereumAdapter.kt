@@ -2,13 +2,17 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.TransactionInfo
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionWithInternal
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
+import java.math.BigInteger
 
 class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
@@ -35,8 +39,12 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
-    override fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
+    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long): Single<Unit> {
         return ethereumKit.send(address, amount, gasPrice, gasLimit).map { Unit }
+    }
+
+    override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
+        return ethereumKit.estimateGas(toAddress, value, gasPrice)
     }
 
     override val stateUpdatedFlowable: Flowable<Unit>
@@ -57,7 +65,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     // ITransactionsAdapter
 
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return ethereumKit.transactions(from?.transactionHash, limit).map {
+        return ethereumKit.transactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
@@ -66,29 +74,37 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         get() = ethereumKit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
 
-    private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
+    private fun transactionRecord(transactionWithInternal: TransactionWithInternal): TransactionRecord {
+        val transaction = transactionWithInternal.transaction
         val myAddress = ethereumKit.receiveAddress
         val fromMine = transaction.from == myAddress
         val toMine = transaction.to == myAddress
         val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.let { scaleDown(it) }
 
+        var amount = if (fromMine) transaction.value.negate() else transaction.value
+        transactionWithInternal.internalTransactions.forEach { internalTransaction ->
+            var internalAmount = internalTransaction.value
+            internalAmount = if (internalTransaction.from == myAddress) internalAmount.negate() else internalAmount
+            amount += internalAmount
+        }
         val type = when {
             fromMine && toMine -> TransactionType.SentToSelf
-            fromMine -> TransactionType.Outgoing
+            amount < BigInteger.ZERO -> TransactionType.Outgoing
             else -> TransactionType.Incoming
         }
 
+        val txHashHex = transaction.hash.toHexString()
         return TransactionRecord(
-                uid = transaction.hash,
-                transactionHash = transaction.hash,
+                uid = txHashHex,
+                transactionHash = txHashHex,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber,
-                amount = scaleDown(transaction.value.toBigDecimal()),
+                amount = scaleDown(amount.abs().toBigDecimal()),
                 fee = fee,
                 timestamp = transaction.timestamp,
-                from = transaction.from,
-                to = transaction.to,
+                from = transaction.from.hex,
+                to = transaction.to.hex,
                 type = type,
                 failed = transaction.isError?.let { it != 0 } ?: false
         )
@@ -103,9 +119,6 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         return BigDecimal.ZERO.max(balance - fee(gasPrice, gasLimit))
     }
 
-    override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {
-        return ethereumKit.estimateGas(toAddress, convertToWei(value), gasPrice)
-    }
 
     companion object {
         const val decimal = 18
