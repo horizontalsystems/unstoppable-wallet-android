@@ -18,6 +18,10 @@ class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
+    fun showAttention(show: Boolean) {
+        attentionIcon.isVisible = show
+    }
+
     fun setOnCheckedChangeListener(listener: (Boolean) -> Unit) {
         onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             listener(isChecked)

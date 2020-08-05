@@ -30,6 +30,8 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 
 class MainSettingsFragment : Fragment() {
 
+    private var presenter: MainSettingsPresenter? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
@@ -48,6 +50,13 @@ class MainSettingsFragment : Fragment() {
         subscribeToRouterEvents(router)
 
         presenter.viewDidLoad()
+
+        this.presenter = presenter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter?.onViewResume()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -96,6 +105,10 @@ class MainSettingsFragment : Fragment() {
 
         presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
             manageKeys.showAttention(!wordListBackedUp)
+        })
+
+        presenterView.pinSet.observe(viewLifecycleOwner, Observer { pinSet ->
+            privacySettings.showAttention(!pinSet)
         })
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
