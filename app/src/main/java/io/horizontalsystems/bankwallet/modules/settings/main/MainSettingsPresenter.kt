@@ -24,6 +24,10 @@ class MainSettingsPresenter(
         view.setTermsAccepted(interactor.termsAccepted)
     }
 
+    override fun onViewResume() {
+        view.setPinIsSet(interactor.isPinSet)
+    }
+
     override fun didTapManageKeys() {
         router.showManageKeys()
     }

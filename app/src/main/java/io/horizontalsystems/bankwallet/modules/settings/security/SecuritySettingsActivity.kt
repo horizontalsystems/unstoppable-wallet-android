@@ -54,6 +54,7 @@ class SecuritySettingsActivity : BaseActivity() {
 
         viewModel.pinSetLiveData.observe(this, Observer { pinEnabled ->
             enablePin.setChecked(pinEnabled)
+            enablePin.showAttention(!pinEnabled)
         })
 
         viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->

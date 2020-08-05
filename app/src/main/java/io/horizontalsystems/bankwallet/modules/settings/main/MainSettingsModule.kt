@@ -14,10 +14,12 @@ object MainSettingsModule {
         fun setLightMode(lightMode: Boolean)
         fun setAppVersion(appVersion: String)
         fun setTermsAccepted(termsAccepted: Boolean)
+        fun setPinIsSet(pinSet: Boolean)
     }
 
     interface IMainSettingsViewDelegate {
         fun viewDidLoad()
+        fun onViewResume()
         fun didTapSecurity()
         fun didTapBaseCurrency()
         fun didTapLanguage()
@@ -41,6 +43,7 @@ object MainSettingsModule {
         val appVersion: String
         var lightMode: Boolean
         val termsAccepted: Boolean
+        val isPinSet: Boolean
 
         fun clear()
     }
@@ -78,7 +81,8 @@ object MainSettingsModule {
                     systemInfoManager = App.systemInfoManager,
                     currencyManager = App.currencyManager,
                     appConfigProvider = App.appConfigProvider,
-                    termsManager = App.termsManager
+                    termsManager = App.termsManager,
+                    pinComponent = App.pinComponent
             )
             val presenter = MainSettingsPresenter(view, router, interactor)
             interactor.delegate = presenter
