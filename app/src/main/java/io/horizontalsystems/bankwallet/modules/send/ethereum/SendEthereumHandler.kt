@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
-import io.horizontalsystems.ethereumkit.models.ValidationError
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -81,7 +80,7 @@ class SendEthereumHandler(
     }
 
     private fun processFee(error: Exception) {
-        feeModule.setError(if (error is ValidationError) null else error)
+        feeModule.setError(error)
     }
 
     private fun syncEstimateGasLimit() {

@@ -3,12 +3,13 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.math.RoundingMode
 
 abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
@@ -37,11 +38,24 @@ abstract class EthereumBaseAdapter(
     }
 
     override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
-        return sendSingle(address, scaleUp(amount).toString(), gasPrice, gasLimit)
+        return try {
+            sendInternal(Address(address), scaleUp(amount), gasPrice, gasLimit)
+        } catch (error: Throwable) {
+            Single.error(error)
+        }
     }
 
+    override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {
+        return try {
+            estimateGasLimitInternal(toAddress?.let { Address(it) }, scaleUp(value), gasPrice)
+        } catch (error: Throwable) {
+            Single.error(error)
+        }
+    }
+
+    @Throws
     override fun validate(address: String) {
-        EthereumKit.validateAddress(address)
+        AddressValidator.validate(address)
     }
 
     protected fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
@@ -61,7 +75,8 @@ abstract class EthereumBaseAdapter(
     }
     // IReceiveAdapter
 
-    override val receiveAddress: String get() = ethereumKit.receiveAddress
+    override val receiveAddress: String
+        get() = ethereumKit.receiveAddress.eip55
 
     protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
         balance?.toBigDecimal()?.let {
@@ -69,8 +84,8 @@ abstract class EthereumBaseAdapter(
         } ?: return BigDecimal.ZERO
     }
 
-    open fun sendSingle(address: String, amount: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
-        return Single.just(Unit)
-    }
+    protected abstract fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long): Single<Unit>
+
+    protected abstract fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long>
 
 }

@@ -6,10 +6,9 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IErc20ContractInfoProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 
 class AddErc20TokenViewModel(
         private val coinManager: ICoinManager,
@@ -96,7 +95,7 @@ class AddErc20TokenViewModel(
 
     @Throws
     private fun validateAddress(contractAddress: String) {
-        EthereumKit.validateAddress(contractAddress)
+        AddressValidator.validate(contractAddress)
     }
 
     fun onAddClick() {
