@@ -55,7 +55,7 @@ class SendEosHandler(
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
 
-    override fun sendSingle(): Single<Unit> {
+    override fun sendSingle(actionId: String): Single<Unit> {
         return interactor.send(amountModule.validAmount(), addressModule.validAddress(), memoModule.memo)
     }
 
