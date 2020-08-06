@@ -59,8 +59,8 @@ class SendBitcoinInteractor(
     }
 
     override fun send(amount: BigDecimal, address: String, feeRate: Long,
-                      pluginData: Map<Byte, IPluginData>?): Single<Unit> {
-        return adapter.send(amount, address, feeRate, pluginData, storage.transactionSortingType)
+                      pluginData: Map<Byte, IPluginData>?, actionId: String): Single<Unit> {
+        return adapter.send(amount, address, feeRate, pluginData, storage.transactionSortingType, actionId)
     }
 
     override fun clear() {

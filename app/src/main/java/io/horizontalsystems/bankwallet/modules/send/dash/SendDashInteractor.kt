@@ -45,8 +45,8 @@ class SendDashInteractor(private val adapter: ISendDashAdapter) : SendModule.ISe
                 .let { disposables.add(it) }
     }
 
-    override fun send(amount: BigDecimal, address: String): Single<Unit> {
-        return adapter.send(amount, address)
+    override fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit> {
+        return adapter.send(amount, address, actionId)
     }
 
     override fun clear() {

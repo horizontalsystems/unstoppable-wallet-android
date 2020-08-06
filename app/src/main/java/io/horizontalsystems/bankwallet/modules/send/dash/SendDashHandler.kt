@@ -74,8 +74,8 @@ class SendDashHandler(
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
     }
 
-    override fun sendSingle(): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress())
+    override fun sendSingle(actionId: String): Single<Unit> {
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), actionId)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate
