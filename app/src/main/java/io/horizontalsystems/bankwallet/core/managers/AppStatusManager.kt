@@ -26,6 +26,7 @@ class AppStatusManager(
             val status = LinkedHashMap<String, Any>()
 
             status["App Info"] = getAppInfo()
+            status["App Log"] = AppLog.getLog()
             status["Version History"] = getVersionHistory()
             status["Wallets Status"] = getWalletsStatus()
             status["Blockchain Status"] = getBlockchainStatus()

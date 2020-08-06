@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AppLog
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
@@ -76,9 +77,13 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
             context?.let {
                 sendButtonView = ConfirmationSendButtonView(it)
                 sendButtonView?.setOnSingleClickListener {
+                    val actionId = AppLog.generateId("send")
+
+                    AppLog.log(actionId, "click")
+
                     sendButtonView?.isEnabled = false
                     sendButtonView?.bind(SendConfirmationModule.SendButtonState.SENDING)
-                    sendView?.delegate?.onSendConfirmed()
+                    sendView?.delegate?.onSendConfirmed(actionId)
                 }
 
                 confirmationLinearLayout.addView(sendButtonView)

@@ -19,7 +19,6 @@ import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import java.math.BigDecimal
 import java.util.*
@@ -222,7 +221,7 @@ interface ISendBitcoinAdapter {
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
     fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?): Single<Unit>
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?, actionId: String): Single<Unit>
 }
 
 interface ISendDashAdapter {
@@ -230,7 +229,7 @@ interface ISendDashAdapter {
     fun minimumSendAmount(address: String?): BigDecimal
     fun fee(amount: BigDecimal, address: String?): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String): Single<Unit>
+    fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit>
 }
 
 interface ISendEthereumAdapter {

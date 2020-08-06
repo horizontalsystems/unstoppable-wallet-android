@@ -119,7 +119,7 @@ class SendEthereumHandler(
                 SendModule.SendConfirmationDurationViewItem(feeModule.duration))
     }
 
-    override fun sendSingle(): Single<Unit> {
+    override fun sendSingle(actionId: String): Single<Unit> {
         val gasLimit = estimateGasLimitState
         if (gasLimit !is FeeState.Value) {
             throw Exception("SendTransactionError.unknown")

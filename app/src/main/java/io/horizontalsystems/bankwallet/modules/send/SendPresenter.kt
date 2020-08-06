@@ -37,8 +37,8 @@ class SendPresenter(
         view.showConfirmation(handler.confirmationViewItems())
     }
 
-    override fun onSendConfirmed() {
-        interactor.send(handler.sendSingle())
+    override fun onSendConfirmed(actionId: String) {
+        interactor.send(handler.sendSingle(actionId), actionId)
     }
 
     override fun onClear() {

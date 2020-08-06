@@ -133,9 +133,9 @@ class SendBitcoinHandler(
 
     }
 
-    override fun sendSingle(): Single<Unit> {
+    override fun sendSingle(actionId: String): Single<Unit> {
         return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate,
-                               hodlerModule?.pluginData())
+                               hodlerModule?.pluginData(), actionId)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate

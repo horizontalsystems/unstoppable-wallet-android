@@ -84,8 +84,8 @@ class DashAdapter(
         validate(address, mapOf())
     }
 
-    override fun send(amount: BigDecimal, address: String): Single<Unit> {
-        return send(amount, address, feeRate, mapOf(), null)
+    override fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit> {
+        return send(amount, address, feeRate, mapOf(), null, actionId)
     }
 
     companion object {

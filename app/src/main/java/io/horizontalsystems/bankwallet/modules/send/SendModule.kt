@@ -45,7 +45,7 @@ object SendModule {
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
         fun onProceedClicked()
-        fun onSendConfirmed()
+        fun onSendConfirmed(actionId: String)
         fun onClear()
     }
 
@@ -57,7 +57,7 @@ object SendModule {
         fun fetchMaximumAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
         fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
         fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?): Single<Unit>
+        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, actionId: String): Single<Unit>
         fun clear()
     }
 
@@ -71,7 +71,7 @@ object SendModule {
         fun fetchMinimumAmount(address: String?): BigDecimal
         fun fetchFee(amount: BigDecimal, address: String?)
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String): Single<Unit>
+        fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit>
         fun clear()
     }
 
@@ -117,7 +117,7 @@ object SendModule {
     interface ISendInteractor {
         var delegate: ISendInteractorDelegate
 
-        fun send(sendSingle: Single<Unit>)
+        fun send(sendSingle: Single<Unit>, actionId: String)
         fun clear()
     }
 
@@ -144,7 +144,7 @@ object SendModule {
 
         @Throws
         fun confirmationViewItems(): List<SendConfirmationViewItem>
-        fun sendSingle(): Single<Unit>
+        fun sendSingle(actionId: String): Single<Unit>
     }
 
     interface ISendHandlerDelegate {
