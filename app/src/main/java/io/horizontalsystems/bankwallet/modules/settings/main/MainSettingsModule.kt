@@ -19,7 +19,6 @@ object MainSettingsModule {
 
     interface IMainSettingsViewDelegate {
         fun viewDidLoad()
-        fun onViewResume()
         fun didTapSecurity()
         fun didTapBaseCurrency()
         fun didTapLanguage()
@@ -52,6 +51,7 @@ object MainSettingsModule {
         fun didUpdateAllBackedUp(allBackedUp: Boolean)
         fun didUpdateBaseCurrency()
         fun didUpdateTermsAccepted(allAccepted: Boolean)
+        fun didUpdatePinSet()
     }
 
     interface IMainSettingsRouter {

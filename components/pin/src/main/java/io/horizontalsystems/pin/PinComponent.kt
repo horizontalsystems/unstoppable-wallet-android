@@ -7,6 +7,8 @@ import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISecuredStorage
 import io.horizontalsystems.pin.core.LockManager
 import io.horizontalsystems.pin.core.PinManager
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 
 class PinComponent(
         application: Application,
@@ -28,6 +30,9 @@ class PinComponent(
     private val appLockManager: LockManager by lazy {
         LockManager(pinManager, application.applicationContext)
     }
+
+    override val pinSetFlowable: Flowable<Unit>
+        get() = pinManager.pinSetSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val isLocked: Boolean
         get() = appLockManager.isLocked

@@ -3,6 +3,7 @@ package io.horizontalsystems.core
 import android.content.SharedPreferences
 import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.core.entities.Currency
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import java.util.*
 import javax.crypto.SecretKey
@@ -59,6 +60,7 @@ interface IPinComponent {
     var isBiometricAuthEnabled: Boolean
     val isPinSet: Boolean
     val isLocked: Boolean
+    val pinSetFlowable: Flowable<Unit>
 
     fun updateLastExitDateBeforeRestart()
     fun store(pin: String)

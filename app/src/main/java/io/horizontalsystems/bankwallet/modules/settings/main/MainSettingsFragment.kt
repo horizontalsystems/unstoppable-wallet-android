@@ -54,11 +54,6 @@ class MainSettingsFragment : Fragment() {
         this.presenter = presenter
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter?.onViewResume()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

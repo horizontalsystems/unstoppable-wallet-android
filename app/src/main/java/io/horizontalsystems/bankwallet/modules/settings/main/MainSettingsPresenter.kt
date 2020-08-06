@@ -22,9 +22,6 @@ class MainSettingsPresenter(
         view.setLightMode(interactor.lightMode)
         view.setAppVersion(interactor.appVersion)
         view.setTermsAccepted(interactor.termsAccepted)
-    }
-
-    override fun onViewResume() {
         view.setPinIsSet(interactor.isPinSet)
     }
 
@@ -89,6 +86,10 @@ class MainSettingsPresenter(
 
     override fun didUpdateTermsAccepted(allAccepted: Boolean) {
         view.setTermsAccepted(allAccepted)
+    }
+
+    override fun didUpdatePinSet() {
+        view.setPinIsSet(interactor.isPinSet)
     }
 
     // ViewModel
