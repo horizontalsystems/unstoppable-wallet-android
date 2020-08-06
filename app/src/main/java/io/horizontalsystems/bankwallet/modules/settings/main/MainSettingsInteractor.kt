@@ -35,6 +35,9 @@ class MainSettingsInteractor(
                 .subscribe { allAccepted ->
                     delegate?.didUpdateTermsAccepted(allAccepted)
                 })
+        disposables.add(pinComponent.pinSetFlowable.subscribe {
+            delegate?.didUpdatePinSet()
+        })
     }
 
     override val companyWebPageLink: String
