@@ -2,8 +2,11 @@ package io.horizontalsystems.pin.core
 
 import android.security.keystore.UserNotAuthenticatedException
 import io.horizontalsystems.core.ISecuredStorage
+import io.reactivex.subjects.PublishSubject
 
 class PinManager(private val securedStorage: ISecuredStorage) {
+
+    val pinSetSubject = PublishSubject.create<Unit>()
 
     val isPinSet: Boolean
         get() = !securedStorage.pinIsEmpty()
@@ -17,6 +20,7 @@ class PinManager(private val securedStorage: ISecuredStorage) {
     @Throws(UserNotAuthenticatedException::class)
     fun store(pin: String) {
         securedStorage.savePin(pin)
+        pinSetSubject.onNext(Unit)
     }
 
     fun validate(pin: String): Boolean {
@@ -26,5 +30,6 @@ class PinManager(private val securedStorage: ISecuredStorage) {
     fun clear() {
         securedStorage.removePin()
         securedStorage.isBiometricAuthEnabled = false
+        pinSetSubject.onNext(Unit)
     }
 }
