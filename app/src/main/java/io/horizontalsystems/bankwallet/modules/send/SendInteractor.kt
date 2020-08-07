@@ -15,11 +15,11 @@ class SendInteractor : SendModule.ISendInteractor {
         sendSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    AppLog.log(actionId, "success")
+                    AppLog.info(actionId, "success")
 
                     delegate.didSend()
                 }, { error ->
-                    AppLog.log(actionId, "failed")
+                    AppLog.info(actionId, "failed")
 
                     delegate.didFailToSend(error)
                 }).let {

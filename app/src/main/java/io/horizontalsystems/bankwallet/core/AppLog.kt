@@ -1,51 +1,43 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.util.Log
-import java.io.File
-import java.io.FileOutputStream
+import io.horizontalsystems.bankwallet.core.storage.LogsDao
+import io.horizontalsystems.bankwallet.entities.LogEntry
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 
 object AppLog {
-    private val file = File(App.instance.filesDir, "app.log").apply {
-        createNewFile()
-    }
+    lateinit var logsDao: LogsDao
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).apply {
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
 
-    fun log(actionId: String, message: String) {
+    fun info(actionId: String, message: String) {
         executor.submit {
-            FileOutputStream(file, true).use {
-                it.write(String.format("%s: %s: %s", sdf.format(Date()), actionId, message).toByteArray())
-            }
-
-            Log.e("AAA", "$actionId: $message")
+            logsDao.insert(LogEntry(System.currentTimeMillis(), Log.INFO, actionId, message))
         }
     }
 
     fun generateId(prefix: String): String {
-        return prefix + "-" + UUID.randomUUID().toString()
+        return prefix + ":" + UUID.randomUUID().toString()
     }
 
     fun getLog(): Map<String, Any> {
-        var i = 0
-        val res = mutableMapOf<String, String>()
+        val res = mutableMapOf<String, MutableMap<String, String>>()
 
-        file.forEachLine {
-//            val parts = it.split(": ")
-//
-//            val date = parts[0]
-//            val actionId = parts[1]
-//            val message = parts[2]
+        logsDao.getAll().forEach { logEntry ->
+            if (!res.containsKey(logEntry.actionId)) {
+                res[logEntry.actionId] = mutableMapOf()
+            }
 
-            res[i++.toString()] = it
+            val logMessage = sdf.format(Date(logEntry.date)) + " " + logEntry.message
+
+            res[logEntry.actionId]?.set(logEntry.id.toString(), logMessage)
         }
-
 
         return res
     }

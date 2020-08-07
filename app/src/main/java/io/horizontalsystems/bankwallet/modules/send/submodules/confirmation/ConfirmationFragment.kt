@@ -79,7 +79,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
                 sendButtonView?.setOnSingleClickListener {
                     val actionId = AppLog.generateId("send")
 
-                    AppLog.log(actionId, "click")
+                    AppLog.info(actionId, "click")
 
                     sendButtonView?.isEnabled = false
                     sendButtonView?.bind(SendConfirmationModule.SendButtonState.SENDING)
