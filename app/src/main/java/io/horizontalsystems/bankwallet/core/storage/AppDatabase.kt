@@ -15,13 +15,14 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 20, exportSchema = false, entities = [
+@Database(version = 21, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
     BlockchainSetting::class,
     CoinRecord::class,
-    SubscriptionJob::class]
+    SubscriptionJob::class,
+    LogEntry::class]
 )
 
 @TypeConverters(DatabaseConverters::class)
@@ -33,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun blockchainSettingDao(): BlockchainSettingDao
     abstract fun coinRecordDao(): CoinRecordDao
     abstract fun subscriptionJobDao(): SubscriptionJobDao
+    abstract fun logsDao(): LogsDao
 
     companion object {
 
@@ -61,7 +63,8 @@ abstract class AppDatabase : RoomDatabase() {
                             updateBchSyncMode,
                             addCoinRecordTable,
                             removeRateStorageTable,
-                            addNotificationTables
+                            addNotificationTables,
+                            addLogsTable
                     )
                     .build()
         }
@@ -398,5 +401,12 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("DROP TABLE IF EXISTS PriceAlertRecord")
             }
         }
+
+        private val addLogsTable: Migration = object : Migration(20, 21) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS `LogEntry` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` INTEGER NOT NULL, `level` INTEGER NOT NULL, `actionId` TEXT NOT NULL, `message` TEXT NOT NULL)")
+            }
+        }
+
     }
 }

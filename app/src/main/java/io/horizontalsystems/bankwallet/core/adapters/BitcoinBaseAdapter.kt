@@ -136,9 +136,7 @@ abstract class BitcoinBaseAdapter(
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
-                val dataHash = Objects.hash(address, amount)
-                AppLog.log(actionId, "call btc-kit.send $dataHash")
-
+                AppLog.info(actionId, "call btc-kit.send")
                 kit.send(address, (amount * satoshisInBitcoin).toLong(),  true, feeRate.toInt(), sortingType, pluginData ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
