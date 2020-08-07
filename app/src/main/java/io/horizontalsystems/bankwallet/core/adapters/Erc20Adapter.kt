@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLog
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
@@ -76,7 +77,8 @@ class Erc20Adapter(
 
     // ISendEthereumAdapter
 
-    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long): Single<Unit> {
+    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit> {
+        AppLog.info(actionId, "call erc20Kit.send")
         return erc20Kit.send(address, amount, gasPrice, gasLimit).map { Unit }
     }
 

@@ -28,8 +28,8 @@ class SendEthereumInteractor(private val adapter: ISendEthereumAdapter) : SendMo
         return adapter.fee(gasPrice, gasLimit)
     }
 
-    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
-        return adapter.send(amount, address, gasPrice, gasLimit )
+    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit> {
+        return adapter.send(amount, address, gasPrice, gasLimit, actionId)
     }
 
     override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {

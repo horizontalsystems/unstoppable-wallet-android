@@ -37,9 +37,9 @@ abstract class EthereumBaseAdapter(
         return convertToEther(value)
     }
 
-    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long): Single<Unit> {
+    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit> {
         return try {
-            sendInternal(Address(address), scaleUp(amount), gasPrice, gasLimit)
+            sendInternal(Address(address), scaleUp(amount), gasPrice, gasLimit, actionId)
         } catch (error: Throwable) {
             Single.error(error)
         }
@@ -84,7 +84,7 @@ abstract class EthereumBaseAdapter(
         } ?: return BigDecimal.ZERO
     }
 
-    protected abstract fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long): Single<Unit>
+    protected abstract fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit>
 
     protected abstract fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long>
 
