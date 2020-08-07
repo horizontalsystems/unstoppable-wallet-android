@@ -19,7 +19,7 @@ class SendInteractor : SendModule.ISendInteractor {
 
                     delegate.didSend()
                 }, { error ->
-                    AppLog.info(actionId, "failed")
+                    AppLog.warning(actionId, "failed", error)
 
                     delegate.didFailToSend(error)
                 }).let {
