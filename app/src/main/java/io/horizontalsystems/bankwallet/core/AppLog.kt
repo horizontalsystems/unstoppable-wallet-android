@@ -11,14 +11,19 @@ object AppLog {
     lateinit var logsDao: LogsDao
 
     private val executor = Executors.newSingleThreadExecutor()
-
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).apply {
+    private val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
 
     fun info(actionId: String, message: String) {
         executor.submit {
             logsDao.insert(LogEntry(System.currentTimeMillis(), Log.INFO, actionId, message))
+        }
+    }
+
+    fun warning(actionId: String, message: String, e: Throwable) {
+        executor.submit {
+            logsDao.insert(LogEntry(System.currentTimeMillis(), Log.WARN, actionId, message + ": " + getStackTraceString(e)))
         }
     }
 
@@ -40,6 +45,20 @@ object AppLog {
         }
 
         return res
+    }
+
+    private fun getStackTraceString(error: Throwable): String {
+        val sb = StringBuilder()
+
+        sb.appendln(error)
+
+        error.stackTrace.forEachIndexed { index, stackTraceElement ->
+            if (index < 5) {
+                sb.appendln(stackTraceElement)
+            }
+        }
+
+        return sb.toString()
     }
 }
 
