@@ -114,6 +114,8 @@ class App : CoreApp() {
         appDatabase = AppDatabase.getInstance(this)
         accountsStorage = AccountsStorage(appDatabase)
 
+        AppLog.logsDao = appDatabase.logsDao()
+
         coinRecordStorage = CoinRecordStorage(appDatabase)
         coinManager = CoinManager(appConfigProvider, coinRecordStorage)
 
