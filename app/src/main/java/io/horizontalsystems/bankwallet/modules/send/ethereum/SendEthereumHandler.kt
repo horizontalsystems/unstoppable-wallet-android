@@ -125,8 +125,7 @@ class SendEthereumHandler(
             throw Exception("SendTransactionError.unknown")
         }
 
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate,
-                gasLimit.value)
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, gasLimit.value, actionId)
     }
 
     override fun onModulesDidLoad() {
