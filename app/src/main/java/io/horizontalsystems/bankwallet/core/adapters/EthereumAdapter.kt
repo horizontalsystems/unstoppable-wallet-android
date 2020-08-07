@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLog
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
@@ -39,7 +40,8 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
-    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long): Single<Unit> {
+    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit> {
+        AppLog.info(actionId, "call ethereumKit.send")
         return ethereumKit.send(address, amount, gasPrice, gasLimit).map { Unit }
     }
 
