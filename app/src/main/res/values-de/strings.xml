@@ -140,8 +140,8 @@
     <string name="Swap_Estimated">ESTIMATED</string>
     <string name="Swap_MaxButtonTitle">Max</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
-    <string name="Swap_Balance">Balance</string>
-    <string name="Swap_Price">Price</string>
+    <string name="Swap_Balance">Guthaben</string>
+    <string name="Swap_Price">Preis</string>
     <string name="Swap_PriceImpact">Price Impact</string>
     <string name="Swap_MinimumReceived">Minimum Got</string>
     <string name="Swap_MaximiumSold">Maximum Paid</string>
@@ -182,9 +182,9 @@
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
     <string name="TransactionInfo_Time">Zeit</string>
-    <string name="TransactionInfo_ButtonVerify">Verify</string>
-    <string name="TransactionInfo_LockedUntil">Locked until %s</string>
-    <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
+    <string name="TransactionInfo_ButtonVerify">Prüfen</string>
+    <string name="TransactionInfo_LockedUntil">Gesperrt bis %s</string>
+    <string name="TransactionInfo_UnlockedAt">Freigegeben am %s</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historischer Rate</string>
     <string name="TransactionInfo_Fee">Gebühr</string>
@@ -216,37 +216,37 @@
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
     <string name="FullInfo_Error_ProviderOffline">Offline</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaction can not be found on the blockchain</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Error_TransactionNotFound">Transaktion kann in der Blockchain nicht gefunden werden</string>
+    <string name="FullInfo_Error_Retry">Wiederholen</string>
+    <string name="FullInfo_Error_ChangeSource">Quelle ändern</string>
     <!--no used-->
-    <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
-    <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">Empty Address</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfoEth_Amount">Amount</string>
+    <string name="FullInfo_Id">Transaktion ID</string>
+    <string name="FullInfo_TotalInput">Insgesamt Eingang</string>
+    <string name="FullInfo_TotalOutput">Insgesamte Ausgänge</string>
+    <string name="FullInfo_FeePerByte">Gebühr pro byte</string>
+    <string name="FullInfo_FeeRate">Gebührenrate</string>
+    <string name="FullInfo_NoAddress">Leere Adresse</string>
+    <string name="FullInfo_SubtitleInputs">Eingänge</string>
+    <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
+    <string name="FullInfoEth_Amount">Betrag</string>
     <!--Guides-->
-    <string name="Guides_Title">Academy</string>
+    <string name="Guides_Title">Akademie</string>
     <!--Guide-->
     <string name="Guide_Error_NotFound">Guide not found</string>
     <!--Settings-->
-    <string name="Settings_Title">Settings</string>
-    <string name="Settings_SecurityCenter">Security Center</string>
-    <string name="Settings_Notifications">Notifications</string>
-    <string name="Settings_ExperimentalFeatures">Experimental Features</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
-    <string name="Settings_BaseCurrency">Base Currency</string>
-    <string name="Settings_Language">Language</string>
-    <string name="Settings_LightMode">Light Mode</string>
+    <string name="Settings_Title">Einstellungen</string>
+    <string name="Settings_SecurityCenter">Sicherheit</string>
+    <string name="Settings_Notifications">Benachrichtigungen</string>
+    <string name="Settings_ExperimentalFeatures">Experimentelles Feature</string>
+    <string name="Settings_RestoreWallet">Wallet Wiederherstellen</string>
+    <string name="Settings_BaseCurrency">Währung</string>
+    <string name="Settings_Language">Sprache</string>
+    <string name="Settings_LightMode">Licht Modus</string>
     <string name="Settings_Terms">Terms</string>
-    <string name="Settings_ShareThisWallet">Tell Friends</string>
-    <string name="Settings_Report">Contact</string>
+    <string name="Settings_ShareThisWallet">Freunden erzählen</string>
+    <string name="Settings_Report">Problem melden</string>
     <string name="Settings_AppStatus">App-Status</string>
-    <string name="SettingsOption_Enabled">Enabled</string>
+    <string name="SettingsOption_Enabled">Aktiviert</string>
     <string name="SettingsOption_Disabled">Deaktiviert</string>
     <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können einige öffentliche Daten wie z. B. die IP-Adresse möglicherweise durchsickern. Benutzen Sie den Info-Knopf oben rechts, um detaillierte Informationen über jeden Abschnitt zu erhalten.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
@@ -414,7 +414,7 @@
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Settings</string>
+    <string name="BlockchainSettings_CoinSettings">%s Einstellungen</string>
     <!-- Tor -->
     <string name="Tor_Status_Starting">Tor starten...</string>
     <string name="Tor_Status_Error">Fehler beim Starten von Tor!</string>
