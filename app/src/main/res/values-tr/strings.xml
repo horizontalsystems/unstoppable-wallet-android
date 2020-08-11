@@ -137,30 +137,29 @@
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
     <string name="Swap_ToAmountTitle">Kazandığınız</string>
     <string name="Swap_Percent">%s%%</string>
-    <string name="Swap_Estimated">ESTIMATED</string>
-    <string name="Swap_MaxButtonTitle">Max</string>
+    <string name="Swap_Estimated">TAHMİNİ</string>
+    <string name="Swap_MaxButtonTitle">Azami</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
     <string name="Swap_Balance">Bakiye</string>
     <string name="Swap_Price">Fiyat</string>
-    <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_MinimumReceived">Minimum Got</string>
-    <string name="Swap_MaximiumSold">Maximum Paid</string>
-    <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_PriceImpact">Fiyat Etkisi</string>
+    <string name="Swap_MinimumReceived">Minimum Kazanılan</string>
+    <string name="Swap_MaximiumSold">Maksimum Ödenen</string>
+    <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <!--Swap Coin Select-->
-    <string name="SwapCoinSelect_Title">Choose Coin</string>
+    <string name="SwapCoinSelect_Title">Kripto Parayı Seç</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap is a fully decentralized protocol for automated liquidity provision on Ethereum.
-\n\nA simple formalized equation drives unstoppable liquidity for thousands of users and hundreds of applications.
-\n\nUniswap empowers developers, liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.
-    </string>
-    <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
-    <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
-    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="UniswapInfo_PriceImpactDescription">The difference between the market price and estimated price due to trade size.</string>
-    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
-    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
+    <string name="UniswapInfo_Description">Uniswap, Ethereum\'da otomatik likidite tedariki için tamamen merkezi olmayan bir protokoldür.
+\n\nBasit biçimlendirilmiş bir denklem, binlerce kullanıcı ve yüzlerce uygulama için durdurulamaz likidite sağlar.
+\n\nUniswap, geliştiricilere, likidite sağlayıcılarına ve tüccarlara herkese açık ve erişilebilir bir finans piyasasına katılma yetkisi verir.    </string>
+    <string name="UniswapInfo_MinReceivedTitle">Minimum Alınan</string>
+    <string name="UniswapInfo_MinReceivedDescription">Onaylanmadan önce büyük, olumsuz bir fiyat hareketi varsa alım satım işleminiz geri alınacaktır.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Fiyat Etkisi</string>
+    <string name="UniswapInfo_PriceImpactDescription">Ticaret hacmine bağlı olarak piyasa fiyatı ile tahmini fiyat arasındaki fark.</string>
+    <string name="UniswapInfo_SwapFeeTitle">Takas Ücreti</string>
+    <string name="UniswapInfo_SwapFeeDescription">Her işlemin bir kısmı (% 0.30) bir protokol teşvik primi olarak likidite sağlayıcılarına gider.</string>
+    <string name="UniswapInfo_UniswapSite">Uniswap Web Sitesi</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Paylaş</string>
@@ -232,7 +231,7 @@
     <!--Guides-->
     <string name="Guides_Title">Akademi</string>
     <!--Guide-->
-    <string name="Guide_Error_NotFound">Guide not found</string>
+    <string name="Guide_Error_NotFound">Kılavuz bulunamadı</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
@@ -242,7 +241,7 @@
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
     <string name="Settings_LightMode">Aydınlık mod</string>
-    <string name="Settings_Terms">Terms</string>
+    <string name="Settings_Terms">Şartlar</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_Report">Sorunu Bildir</string>
     <string name="Settings_AppStatus">Uygulama Durumu</string>
@@ -298,19 +297,19 @@
     <!--Setting_Terms-->
     <string name="SettingsTerms_AppTitle">Unstoppable</string>
     <string name="SettingsTerms_Github">Github</string>
-    <string name="SettingsTerms_Site">Site</string>
-    <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
-\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over funds. It doesn\'t collect any data and keeps user independent by not locking his/her wallet to a specific wallet app.
-\n\nThe Unstoppable wallet is fully open-source and anyone can confirm that the app works exactly as it claims to.
-\n\nWe built Unstoppable for ourselves as the available solutions were not up to par. Both from engineering and usability perspective we believe this wallet to be significantly ahead of alternative products.</string>
-    <string name="SettingsTerms_TermAcademy">I went through the Academy section of this app and got familiar with the fundamental aspects of storing cryptocurrencies.</string>
-    <string name="SettingsTerms_TermBackup">I have backed up the private key(s) for my wallets that were shown to me in a form of 12-24 words. I understand that these private keys are stored on my smartphone and not elsewhere.</string>
-    <string name="SettingsTerms_TermOwner">I understand that only the owner of my private key(s) can access and spend funds on my wallet and therefore these keys should never be shared with anyone.</string>
-    <string name="SettingsTerms_TermRecover">I understand that I will need my private keys in order to restore access to my funds should I loose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermPhone">I understand that passing my phone to untrusted entities or leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRoot">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermBugs">I understand there may be undiscovered software issues in the code powering this wallet app which may lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
+    <string name="SettingsTerms_Site">Web Sitesi</string>
+    <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
+\n\n Bu, yalnızca kullanıcının fonlar üzerinde kontrol sahibi olduğu, gözetim dışı, uçtan uca bir cüzdandır. Herhangi bir veri toplamaz ve kullanıcının cüzdanını belirli bir cüzdan uygulamasına bağlamadan kullanıcıyı bağımsız tutar.
+\n\nDurdurulamaz cüzdan tamamen açık kaynaklıdır ve herkes uygulamanın tam olarak iddia edildiği gibi çalıştığını doğrulayabilir.
+\n\nMevcut çözümler yeterli olmadığından kendimiz için Durdurulamaz\'ı geliştirdik. Hem mühendislik hem de kullanılabilirlik açısından bu cüzdanın alternatif ürünlerin çok önünde olduğuna inanıyoruz.</string>
+    <string name="SettingsTerms_TermAcademy">Bu uygulamanın Akademi kısmını inceledim ve kripto para birimlerini biriktirmenin temel hususlarına aşina oldum.</string>
+    <string name="SettingsTerms_TermBackup">Bana 12-24 sözcük şeklinde gösterilen cüzdanlarım için özel anahtar(lar) ın yedeğini aldım. Bu özel anahtarların başka bir yerde değil akıllı telefonumda kaydedileceğini anladım.</string>
+    <string name="SettingsTerms_TermOwner">Sadece özel anahtar(lar) ıma sahip olanın cüzdanıma erişip fonları harcayabileceğini ve bu nedenle bu anahtarların asla kimseyle paylaşılmaması gerektiğini anladım.</string>
+    <string name="SettingsTerms_TermRecover">Telefonumu kaybedersem veya uygulama kullanım dışı kalırsa fonlarıma tekrar erişim sağlamak için özel anahtarlarıma ihtiyacım olacağını anladım. Özel anahtarlarım olmadan cüzdanıma erişimi kurtarmak imkansız olacaktır.</string>
+    <string name="SettingsTerms_TermPhone">Telefonumu güvenilmeyen kişilere vermenin veya cüzdan uygulamasından güvenli PIN kilidi olmadan çıkmanın fonlarımın güvenliğini potansiyel olarak tehlikeye atabileceğini anladım.</string>
+    <string name="SettingsTerms_TermRoot">Telefonumun yazılımını kırmanın (rootlama), bilinmeyen kaynaklardan üçüncü taraf uygulamaları yüklemenin, işletim sistemini güncel tutmamanın fonlarımın güvenliğini potansiyel olarak tehlikeye atabileceğini anladım.</string>
+    <string name="SettingsTerms_TermBugs">Bu cüzdan uygulamasını çalıştıran kodda beklenmeyen durumlara veya uygulamanın hatalı çalışmasına neden olabilecek keşfedilmemiş yazılım sorunları olabileceğini anladım.</string>
+    <string name="SettingsTerms_BottomThankYou">Bu cüzdanı \nseçtiğiniz için \n teşekkür ederiz!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
@@ -326,14 +325,14 @@
     <string name="SettingsNotifications_DeactivateAll">Etkisizleştir</string>
     <string name="SettingsNotifications_PushNotification">Anlık bildirimler</string>
     <string name="Notification_Title">Bildirimler</string>
-    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
-    <string name="NotificationBottomMenu_Change24h">Change 24h</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
-    <string name="NotificationBottomMenu_ShortTerm">Short Term 7D</string>
-    <string name="NotificationBottomMenu_Short">Short</string>
-    <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
-    <string name="NotificationBottomMenu_Long">Long</string>
+    <string name="Notification_PriceUp">%1$s fiyat: Yukarı %2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s fiyat: Aşağı %2$s%% ⬇️</string>
+    <string name="NotificationBottomMenu_Change24h">Değişim 24s</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Fiyat Trend Değişimi</string>
+    <string name="NotificationBottomMenu_ShortTerm">Kısa Vade 7G</string>
+    <string name="NotificationBottomMenu_Short">Kısa</string>
+    <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
+    <string name="NotificationBottomMenu_Long">Uzun</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
     <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
@@ -425,7 +424,7 @@
     <string name="TorPage_Title">Tor Bağlantısı</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Standard</string>
+    <string name="AccountType_Unstoppable">Standart</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
     <string name="CoinOption_Fast_Subtitle">0-2 saat (Tavsiye edilen)</string>
@@ -440,7 +439,7 @@
     <string name="Charts_TimeDuration_Day">1G</string>
     <string name="Charts_TimeDuration_Week">7G</string>
     <string name="Charts_TimeDuration_Month">1A</string>
-    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2H</string>
     <string name="Charts_TimeDuration_Month3">3A</string>
     <string name="Charts_TimeDuration_Quartal">3A</string>
     <string name="Charts_TimeDuration_HalfYear">6A</string>
