@@ -145,7 +145,7 @@
     <string name="Swap_PriceImpact">Impacto en el precio</string>
     <string name="Swap_MinimumReceived">Mínimo Obtenido</string>
     <string name="Swap_MaximiumSold">Máximo Pagado</string>
-    <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Elegir moneda</string>
     <!--Uniwwap Info -->
@@ -231,7 +231,7 @@
     <!--Guides-->
     <string name="Guides_Title">Academia</string>
     <!--Guide-->
-    <string name="Guide_Error_NotFound">Guide not found</string>
+    <string name="Guide_Error_NotFound">Guía no encontrada</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
@@ -326,14 +326,14 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="SettingsNotifications_DeactivateAll">Desactivar todo</string>
     <string name="SettingsNotifications_PushNotification">Notificaciones push</string>
     <string name="Notification_Title">Notificaciones</string>
-    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
-    <string name="NotificationBottomMenu_Change24h">Change 24h</string>
+    <string name="Notification_PriceUp">Precio %1$s: Subió %2$s%% ⬆</string>
+    <string name="Notification_PriceDown">Precio %1$s: Bajó %2$s%% ⬇</string>
+    <string name="NotificationBottomMenu_Change24h">Variación 24h</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Variación de Tendencia de Precios</string>
     <string name="NotificationBottomMenu_ShortTerm">Corto plazo 7D</string>
-    <string name="NotificationBottomMenu_Short">Short</string>
+    <string name="NotificationBottomMenu_Short">Corto plazo</string>
     <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
-    <string name="NotificationBottomMenu_Long">Long</string>
+    <string name="NotificationBottomMenu_Long">Largo plazo</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
     <string name="Eos_Backend_Error_SelfTransfer">No se puede transferir el token a su propia cuenta</string>
