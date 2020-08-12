@@ -49,8 +49,8 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
             filterAdapter.setFilters(it.map { FilterAdapter.FilterItem(it) })
         })
 
-        viewModel.statusLiveData.observe(viewLifecycleOwner, Observer {
-            toolbarSpinner.isVisible = it is LoadStatus.Loading
+        viewModel.loading.observe(viewLifecycleOwner, Observer {
+            toolbarSpinner.isVisible = it
         })
 
         viewModel.openGuide.observe(viewLifecycleOwner, Observer { guide ->
