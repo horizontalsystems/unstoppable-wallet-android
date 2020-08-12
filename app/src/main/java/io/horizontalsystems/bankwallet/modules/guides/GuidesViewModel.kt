@@ -9,7 +9,6 @@ import io.reactivex.disposables.CompositeDisposable
 
 class GuidesViewModel(val service: GuidesService) : ViewModel() {
 
-    val openGuide = SingleLiveEvent<Guide>()
     val guidesLiveData = MutableLiveData<List<Guide>>()
     val loading = MutableLiveData<Boolean>(false)
     val filters = MutableLiveData<List<String>>()
@@ -43,10 +42,6 @@ class GuidesViewModel(val service: GuidesService) : ViewModel() {
         }
 
         syncViewItems()
-    }
-
-    fun onGuideClick(guide: Guide) {
-        openGuide.postValue(guide)
     }
 
     override fun onCleared() {
