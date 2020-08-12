@@ -98,6 +98,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("MCO", "MCO", "MCO", 8, CoinType.Erc20("0xB63B606Ac810a52cCa15e44bB630fd42D8d1d83d")),
                 Coin("MEETONE", "MEET.ONE", "MEETONE", 4, CoinType.Eos("eosiomeetone", "MEETONE")),
                 Coin("MITH", "Mithril", "MITH", 18, CoinType.Erc20("0x3893b9422Cd5D70a81eDeFfe3d5A1c6A978310BB")),
+                Coin("TKN", "Monolith", "TKN", 8, CoinType.Erc20("0xaaaf91d9b90df800df4f55c205fd6989c977e73a")),
                 Coin("NEXO", "Nexo", "NEXO", 18, CoinType.Erc20("0xB62132e35a6c13ee1EE0f84dC5d40bad8d815206")),
                 Coin("NDX", "Newdex", "NDX", 4, CoinType.Eos("newdexissuer", "NDX")),
                 Coin("NUT", "Native Utility Token", "NUT", 9, CoinType.Eos("eosdtnutoken", "NUT")),
