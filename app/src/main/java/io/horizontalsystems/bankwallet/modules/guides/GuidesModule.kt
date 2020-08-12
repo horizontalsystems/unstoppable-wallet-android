@@ -11,7 +11,9 @@ object GuidesModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            return GuidesViewModel(GuidesManager, App.connectivityManager) as T
+            val guidesService = GuidesService(GuidesManager, App.connectivityManager)
+
+            return GuidesViewModel(guidesService) as T
         }
     }
 }
