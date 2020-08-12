@@ -42,7 +42,7 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
     }
 
     private fun observeLiveData() {
-        viewModel.guidesLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.guides.observe(viewLifecycleOwner, Observer {
             adapter.items = it
             adapter.notifyDataSetChanged()
         })

@@ -4,12 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class GuidesViewModel(val service: GuidesService) : ViewModel() {
 
-    val guidesLiveData = MutableLiveData<List<Guide>>()
+    val guides = MutableLiveData<List<Guide>>()
     val loading = MutableLiveData<Boolean>(false)
     val filters = MutableLiveData<List<String>>()
 
@@ -59,6 +58,6 @@ class GuidesViewModel(val service: GuidesService) : ViewModel() {
     }
 
     private fun syncViewItems() {
-        guidesLiveData.postValue(guideCategories[currentCategoryIndex].guides)
+        guides.postValue(guideCategories[currentCategoryIndex].guides)
     }
 }
