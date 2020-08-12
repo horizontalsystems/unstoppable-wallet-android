@@ -36,7 +36,9 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
     }
 
     override fun onItemClick(guide: Guide) {
-        viewModel.onGuideClick(guide)
+        context?.let {
+            GuideModule.start(it, guide.fileUrl)
+        }
     }
 
     private fun observeLiveData() {
@@ -51,12 +53,6 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
             toolbarSpinner.isVisible = it
-        })
-
-        viewModel.openGuide.observe(viewLifecycleOwner, Observer { guide ->
-            context?.let {
-                GuideModule.start(it, guide.fileUrl)
-            }
         })
     }
 
