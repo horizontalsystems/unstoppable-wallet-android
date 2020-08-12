@@ -18,7 +18,7 @@ class GuidesService(private val guidesManager: GuidesManager, private val connec
     val guideCategories : Observable<GuideCategoryResult>
         get() = guideCategoriesSubject
 
-    private val guideCategoriesSubject = BehaviorSubject.createDefault<GuideCategoryResult>(GuideCategoryResult.Loading)
+    private val guideCategoriesSubject = BehaviorSubject.create<GuideCategoryResult>()
     private var disposables = CompositeDisposable()
 
     init {
@@ -40,6 +40,8 @@ class GuidesService(private val guidesManager: GuidesManager, private val connec
     }
 
     private fun fetch() {
+        guideCategoriesSubject.onNext(GuideCategoryResult.Loading)
+
         GuidesManager.getGuideCategories()
                 .subscribe({
                     guideCategoriesSubject.onNext(GuideCategoryResult.Success(it))
