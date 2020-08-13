@@ -61,6 +61,7 @@ object CoinInfoMap {
             "OMG" to CoinInfo( null,"23/06/2017", "https://nexo.io") ,
             "ORBS" to CoinInfo(BigDecimal(10_000_000_000), "14/03/2018", "https://www.orbs.com"),
             "OXT" to CoinInfo(BigDecimal(10_000_000_000), "03/12/2019", "https://www.orchid.com"),
+            "PAR" to CoinInfo(BigDecimal(999_628_334), null, "https://www.parachutetoken.com"),
             "PAX" to CoinInfo(BigDecimal(249_952_065), "10/09/2018", "https://www.paxos.com/pax"),
             "PAXG" to CoinInfo(BigDecimal(2_410), "29/08/2019", "https://www.paxos.com/paxgold"),
             "PGL" to CoinInfo(BigDecimal(220_000_000), "19/04/2017", "https://prospectors.io/en"),
