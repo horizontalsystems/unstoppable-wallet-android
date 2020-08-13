@@ -76,6 +76,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
             context?.let {
                 sendButtonView = ConfirmationSendButtonView(it)
                 sendButtonView?.setOnSingleClickListener {
+                    sendButtonView?.isEnabled = false
                     sendButtonView?.bind(SendConfirmationModule.SendButtonState.SENDING)
                     sendView?.delegate?.onSendConfirmed()
                 }
@@ -107,6 +108,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
 
         presenterView?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->
             sendButtonView?.bind(state)
+            sendButtonView?.isEnabled = state == SendConfirmationModule.SendButtonState.ACTIVE
         })
 
 
