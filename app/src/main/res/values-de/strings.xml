@@ -134,33 +134,32 @@
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <!--Swap-->
     <string name="Swap_Title">Swap</string>
-    <string name="Swap_FromAmountTitle">You Pay</string>
-    <string name="Swap_ToAmountTitle">You Get</string>
+    <string name="Swap_FromAmountTitle">Sie bezahlen</string>
+    <string name="Swap_ToAmountTitle">Sie erhalten</string>
     <string name="Swap_Percent">%s %%</string>
     <string name="Swap_Estimated">ESTIMATED</string>
     <string name="Swap_MaxButtonTitle">Max</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
     <string name="Swap_Balance">Guthaben</string>
     <string name="Swap_Price">Preis</string>
-    <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_MinimumReceived">Minimum Got</string>
-    <string name="Swap_MaximiumSold">Maximum Paid</string>
+    <string name="Swap_PriceImpact">Preisauswirkungen</string>
+    <string name="Swap_MinimumReceived">Mindestens erhalten</string>
+    <string name="Swap_MaximiumSold">Maximal bezahlt</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <!--Swap Coin Select-->
-    <string name="SwapCoinSelect_Title">Choose Coin</string>
+    <string name="SwapCoinSelect_Title">Coins auswählen</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap is a fully decentralized protocol for automated liquidity provision on Ethereum.
-\n\nA simple formalized equation drives unstoppable liquidity for thousands of users and hundreds of applications.
-\n\nUniswap empowers developers, liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.
-    </string>
-    <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
-    <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
-    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="UniswapInfo_PriceImpactDescription">The difference between the market price and estimated price due to trade size.</string>
-    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
-    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
+    <string name="UniswapInfo_Description">Uniswap ist ein vollständig dezentralisiertes Protokoll zur automatisierten Liquiditätsbereitstellung für Ethereum.
+\n\nEine einfache festgeschriebene Gleichung treibt unaufhaltsame Liquidität für tausende Benutzer und hunderte Anwendungen an.
+\n\nUniswap ermöglicht Entwicklern, Liquiditätsanbietern und Händlern die Teilnahme an einem offenen und für alle zugänglichen Finanzmarkt.</string>
+    <string name="UniswapInfo_MinReceivedTitle">Mindestens erhalten</string>
+    <string name="UniswapInfo_MinReceivedDescription">Ihre Transaktion wird rückgängig gemacht, wenn es eine große, ungünstige Kursbewegung gibt, bevor sie bestätigt wird.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Preisauswirkungen</string>
+    <string name="UniswapInfo_PriceImpactDescription">Die Differenz zwischen dem Marktpreis und dem geschätzten Preis aufgrund der Handelsgröße.</string>
+    <string name="UniswapInfo_SwapFeeTitle">Tauschgebühr</string>
+    <string name="UniswapInfo_SwapFeeDescription">Ein Teil jedes Handels (0,30%) geht als Protokollanreiz an Liquiditätsanbieter.</string>
+    <string name="UniswapInfo_UniswapSite">Uniswap-Seite</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s Anfordern</string>
     <string name="Deposit_Share">Teilen</string>
@@ -185,7 +184,7 @@
     <string name="TransactionInfo_ButtonVerify">Prüfen</string>
     <string name="TransactionInfo_LockedUntil">Gesperrt bis %s</string>
     <string name="TransactionInfo_UnlockedAt">Freigegeben am %s</string>
-    <string name="TransactionInfo_RecipientHash">Recipient</string>
+    <string name="TransactionInfo_RecipientHash">Empfänger</string>
     <string name="TransactionInfo_HistoricalRate">Historischer Rate</string>
     <string name="TransactionInfo_Fee">Gebühr</string>
     <string name="TransactionInfo_SentToSelfNote">Diese Transaktion wurde an die eigene Adresse gesendet</string>
@@ -242,7 +241,7 @@
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_LightMode">Licht Modus</string>
-    <string name="Settings_Terms">Terms</string>
+    <string name="Settings_Terms">Bedingungen</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_Report">Problem melden</string>
     <string name="Settings_AppStatus">App-Status</string>
@@ -298,19 +297,19 @@
     <!--Setting_Terms-->
     <string name="SettingsTerms_AppTitle">Unstoppable</string>
     <string name="SettingsTerms_Github">Github</string>
-    <string name="SettingsTerms_Site">Site</string>
-    <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
-\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over funds. It doesn\'t collect any data and keeps user independent by not locking his/her wallet to a specific wallet app.
-\n\nThe Unstoppable wallet is fully open-source and anyone can confirm that the app works exactly as it claims to.
-\n\nWe built Unstoppable for ourselves as the available solutions were not up to par. Both from engineering and usability perspective we believe this wallet to be significantly ahead of alternative products.</string>
-    <string name="SettingsTerms_TermAcademy">I went through the Academy section of this app and got familiar with the fundamental aspects of storing cryptocurrencies.</string>
-    <string name="SettingsTerms_TermBackup">I have backed up the private key(s) for my wallets that were shown to me in a form of 12-24 words. I understand that these private keys are stored on my smartphone and not elsewhere.</string>
-    <string name="SettingsTerms_TermOwner">I understand that only the owner of my private key(s) can access and spend funds on my wallet and therefore these keys should never be shared with anyone.</string>
-    <string name="SettingsTerms_TermRecover">I understand that I will need my private keys in order to restore access to my funds should I loose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermPhone">I understand that passing my phone to untrusted entities or leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRoot">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermBugs">I understand there may be undiscovered software issues in the code powering this wallet app which may lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
+    <string name="SettingsTerms_Site">Seite</string>
+    <string name="SettingsTerms_Text">Das Unstoppable Wallet ist für diejenigen gedacht, die in Kryptowährungen auf private und unabhängige Weise investieren und diese sparen möchten.
+\n\nEs ist ein Non-Custodial, Peer-to-Peer Wallet, bei dem nur der Benutzer die Kontrolle über das Guthaben hat. Es sammelt keine Daten und hält Benutzer unabhängig, indem es sein Wallet nicht an eine bestimmte Wallet-App verknüpft.
+\n\nDas Unstoppable Wallet ist vollständig Open Source und jeder kann bestätigen, dass die App genau so funktioniert, wie sie es vorgibt.
+\n\nWir haben Unstoppable für uns selbst entwickelt, da die verfügbaren Lösungen nicht gut waren. Sowohl aus technischer Sicht als auch aus Sicht der Nutzbarkeit sind wir der Meinung, dass diese Wallets den alternativen Produkten deutlich voraus ist.</string>
+    <string name="SettingsTerms_TermAcademy">Ich bin durch den Academy-Bereich dieser App gegangen und machte mich mit den grundlegenden Aspekten der Aufbewahrung von Kryptowährungen vertraut.</string>
+    <string name="SettingsTerms_TermBackup">Ich habe den/die Private Key(s) für meine Wallets gesichert, die mir in Form von 12-24 Wörtern angezeigt wurden. Mir ist bewusst, dass diese Private Keys auf meinem Smartphone und nirgendwo anders gespeichert werden.</string>
+    <string name="SettingsTerms_TermOwner">Mir ist bewusst, dass nur der Eigentümer meines/meiner Private Key(s) auf mein Wallet zugreifen und Geld ausgeben kann und dass diese Keys daher niemals mit irgendjemandem geteilt werden sollten.</string>
+    <string name="SettingsTerms_TermRecover">Mir ist bewusst, dass ich meine Private Keys benötige, um den Zugriff auf mein Geld wiederherzustellen, falls ich mein Mobiltelefon verlieren sollte oder wenn die App nicht funktioniert. Ohne meine Private Keys wird es unmöglich sein, den Zugriff auf mein Wallet wiederherzustellen.</string>
+    <string name="SettingsTerms_TermPhone">Mir ist bewusst, dass das Übergeben meines Mobiltelefons an nicht vertrauenswürdige Personen oder das Verlassen der Wallet-App ohne sichere PIN-Sperre die Sicherheit meines Guthabens gefährden könnte.</string>
+    <string name="SettingsTerms_TermRoot">Mir ist bewusst, dass Jailbreaking (Rooting) meines Mobiltelefons, Installieren von Apps von Drittanbietern aus unbekannten Quellen und die Veraltung des Betriebssystems die Sicherheit meines Geldes gefährden kann.</string>
+    <string name="SettingsTerms_TermBugs">Mir ist bewusst, dass es möglicherweise ungelöste Softwarefehler in dem Code gibt, mit dem diese Wallet-App betrieben wird, was zu unerwartetem Verhalten oder zu Fehlfunktionen der App führen kann.</string>
+    <string name="SettingsTerms_BottomThankYou">Vielen Dank, \ndass Sie \ndieses Wallet nutzen!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - eine krypto Wallet, die ich empfehle</string>
@@ -325,14 +324,14 @@
     <string name="SettingsNotifications_Off">Aus</string>
     <string name="SettingsNotifications_DeactivateAll">Alle deaktivieren</string>
     <string name="SettingsNotifications_PushNotification">Push-Benachrichtigung</string>
-    <string name="Notification_Title">Notifications</string>
+    <string name="Notification_Title">Benachrichtigungen</string>
     <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
     <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
     <string name="NotificationBottomMenu_Change24h">Change 24h</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
-    <string name="NotificationBottomMenu_ShortTerm">Short Term 7D</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Preistrendänderung</string>
+    <string name="NotificationBottomMenu_ShortTerm">Kurzfristig 7T</string>
     <string name="NotificationBottomMenu_Short">Short</string>
-    <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
+    <string name="NotificationBottomMenu_LongTerm">Langfristig 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Nicht unterstützte Währung</string>
