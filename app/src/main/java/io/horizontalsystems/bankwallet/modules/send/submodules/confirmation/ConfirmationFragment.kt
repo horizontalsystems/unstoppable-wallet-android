@@ -92,20 +92,6 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
             presenter?.onSendError()
         })
 
-        sendView?.errorInDialog?.observe(viewLifecycleOwner, Observer { coinThrowable ->
-            val errorText = getString(coinThrowable.errorTextRes)
-            AlertDialogFragment.newInstance(
-                    descriptionString = errorText,
-                    buttonText = R.string.Alert_Ok,
-                    listener = object : AlertDialogFragment.Listener {
-                        override fun onButtonClick() {
-                            activity?.onBackPressed()
-                        }
-
-                        override fun onCancel() {}
-                    }).show(parentFragmentManager, "alert_dialog")
-        })
-
         presenterView?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->
             sendButtonView?.bind(state)
             sendButtonView?.isEnabled = state == SendConfirmationModule.SendButtonState.ACTIVE
