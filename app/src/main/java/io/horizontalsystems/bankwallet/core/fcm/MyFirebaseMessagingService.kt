@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.AlertNotification
 import java.lang.Exception
 
 
-class MyFirebaseMessagingService: FirebaseMessagingService() {
+class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         App.priceAlertManager.enablePriceAlerts()
@@ -22,35 +22,61 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             try {
                 val title = remoteMessage.data["title-loc-key"] ?: return
                 val topic = remoteMessage.data["loc-key"] ?: return
+                val type = getNotificationType(topic) ?: return
+
                 val stringListType = object : TypeToken<List<String>>() {}.type
                 val args = Gson().fromJson<List<String>>(remoteMessage.data["loc-args"], stringListType)
 
                 val coinCode = args[0]
-                val changeValue = args[1]
-                val isUp = changeValue.toFloat() > 0
-
                 val notificationId = getNotificationId(topic, coinCode)
-                val notification = getAlertNotification(notificationId, title, coinCode, changeValue, isUp)
-                App.notificationManager.show(notification)
-            } catch (e: Exception){
+                val body = getBodyText(type, coinCode, topic, args)
+
+                App.notificationManager.show(AlertNotification(notificationId, title, body))
+            } catch (e: Exception) {
                 Log.e(TAG, "Message parsing error", e)
             }
         }
     }
 
-    private fun getNotificationId(topic: String, coinCode: String): Int {
-        val cleanTopic = topic.replace("_down", "").replace("_up", "")
-        return "$cleanTopic$coinCode".hashCode()
+    private fun getBodyText(type: NotificationType, coinCode: String, topic: String, args: List<String>): String {
+        return when (type) {
+            NotificationType.Trend -> {
+                val isDown = topic.contains("down")
+                val stringRes = if (isDown) R.string.Notification_TrendDown else R.string.Notification_TrendUp
+                App.instance.getString(stringRes, coinCode)
+            }
+            NotificationType.Change -> {
+                val changeValue = args[1]
+                val isUp = changeValue.toFloat() > 0
+                val stringRes = if (isUp) R.string.Notification_PriceUp else R.string.Notification_PriceDown
+                App.instance.getString(stringRes, coinCode, changeValue)
+            }
+        }
     }
 
-    private fun getAlertNotification(notificationId: Int, title: String, coinCode: String, value: String, isUp: Boolean) : AlertNotification {
-        val stringRes = if (isUp) R.string.Notification_PriceUp else R.string.Notification_PriceDown
-        val body = App.instance.getString(stringRes, coinCode, value)
+    private fun getNotificationType(topic: String): NotificationType? {
+        if (topic.contains("trend")) {
+            return NotificationType.Trend
+        } else if (topic.contains("change")) {
+            return NotificationType.Change
+        }
+        return null
+    }
 
-        return AlertNotification(id = notificationId, title = title, body = body)
+    private fun getNotificationId(topic: String, coinCode: String): Int {
+        val cleanTopic = topic
+                .replace("_down", "")
+                .replace("_up", "")
+                .replace("_shortterm", "")
+                .replace("_longterm", "")
+        return "$cleanTopic$coinCode".hashCode()
     }
 
     companion object {
         private const val TAG = "MyFirebaseMsgService"
+    }
+
+    enum class NotificationType {
+        Change, Trend
     }
 }
