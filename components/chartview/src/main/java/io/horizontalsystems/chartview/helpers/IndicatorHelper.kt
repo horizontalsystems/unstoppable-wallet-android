@@ -42,7 +42,6 @@ object IndicatorHelper {
 
         val emaUp = mutableListOf<Float>()
         val emaDown = mutableListOf<Float>()
-        val relativeStrength = mutableListOf<Float>()
         val rsi = mutableListOf<Float>()
 
         var maUp = 0f
@@ -67,7 +66,6 @@ object IndicatorHelper {
 
                 emaUp.add(maUp)
                 emaDown.add(maDown)
-                relativeStrength.add(rStrength)
                 rsi.add(100 - 100 / (rStrength + 1))
             }
 
@@ -78,7 +76,6 @@ object IndicatorHelper {
 
             emaUp.add(maUp)
             emaDown.add(maDown)
-            relativeStrength.add(rStrength)
             rsi.add(100 - 100 / (rStrength + 1))
         }
 
