@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.guideview.GuideModule
@@ -19,7 +20,8 @@ import kotlinx.android.synthetic.main.fragment_guides.toolbarSpinner
 class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listener {
 
     private val viewModel by viewModels<GuidesViewModel> { GuidesModule.Factory() }
-    private val adapter = GuidesAdapter(this)
+    private val errorAdapter = ErrorAdapter()
+    private val guidesAdapter = GuidesAdapter(this)
     private val filterAdapter = FilterAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,7 +32,7 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
         super.onViewCreated(view, savedInstanceState)
 
         recyclerTags.adapter = filterAdapter
-        recyclerGuides.adapter = adapter
+        recyclerGuides.adapter = ConcatAdapter(errorAdapter, guidesAdapter)
 
         observeLiveData()
     }
@@ -43,8 +45,8 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
 
     private fun observeLiveData() {
         viewModel.guides.observe(viewLifecycleOwner, Observer {
-            adapter.items = it
-            adapter.notifyDataSetChanged()
+            guidesAdapter.items = it
+            guidesAdapter.notifyDataSetChanged()
         })
 
         viewModel.filters.observe(viewLifecycleOwner, Observer {
@@ -53,6 +55,10 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
             toolbarSpinner.isVisible = it
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            errorAdapter.error = it
         })
     }
 
