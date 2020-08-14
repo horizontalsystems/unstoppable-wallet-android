@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
@@ -37,8 +38,8 @@ class SendPresenter(
         view.showConfirmation(handler.confirmationViewItems())
     }
 
-    override fun onSendConfirmed(actionId: String) {
-        interactor.send(handler.sendSingle(actionId), actionId)
+    override fun onSendConfirmed(logger: AppLogger) {
+        interactor.send(handler.sendSingle(logger), logger)
     }
 
     override fun onClear() {

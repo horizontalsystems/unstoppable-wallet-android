@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.eos
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ISendEosAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.Single
@@ -14,8 +15,8 @@ class SendEosInteractor(private val adapter: ISendEosAdapter) : SendModule.ISend
         adapter.validate(account)
     }
 
-    override fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit> {
-        return adapter.send(amount, account, memo)
+    override fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit> {
+        return adapter.send(amount, account, memo, logger)
     }
 
 }

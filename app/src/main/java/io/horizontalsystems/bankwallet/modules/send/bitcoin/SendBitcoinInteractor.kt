@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -59,8 +60,8 @@ class SendBitcoinInteractor(
     }
 
     override fun send(amount: BigDecimal, address: String, feeRate: Long,
-                      pluginData: Map<Byte, IPluginData>?, actionId: String): Single<Unit> {
-        return adapter.send(amount, address, feeRate, pluginData, storage.transactionSortingType, actionId)
+                      pluginData: Map<Byte, IPluginData>?, logger: AppLogger): Single<Unit> {
+        return adapter.send(amount, address, feeRate, pluginData, storage.transactionSortingType, logger)
     }
 
     override fun clear() {

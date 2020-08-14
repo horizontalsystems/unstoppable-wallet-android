@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.dash
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.Single
@@ -45,8 +46,8 @@ class SendDashInteractor(private val adapter: ISendDashAdapter) : SendModule.ISe
                 .let { disposables.add(it) }
     }
 
-    override fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit> {
-        return adapter.send(amount, address, actionId)
+    override fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit> {
+        return adapter.send(amount, address, logger)
     }
 
     override fun clear() {

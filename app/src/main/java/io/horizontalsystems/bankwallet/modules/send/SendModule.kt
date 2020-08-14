@@ -45,7 +45,7 @@ object SendModule {
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
         fun onProceedClicked()
-        fun onSendConfirmed(actionId: String)
+        fun onSendConfirmed(logger: AppLogger)
         fun onClear()
     }
 
@@ -57,7 +57,7 @@ object SendModule {
         fun fetchMaximumAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
         fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
         fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, actionId: String): Single<Unit>
+        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, logger: AppLogger): Single<Unit>
         fun clear()
     }
 
@@ -71,7 +71,7 @@ object SendModule {
         fun fetchMinimumAmount(address: String?): BigDecimal
         fun fetchFee(amount: BigDecimal, address: String?)
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit>
+        fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit>
         fun clear()
     }
 
@@ -88,7 +88,7 @@ object SendModule {
         fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
         fun validate(address: String)
         fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
-        fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit>
+        fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit>
         fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
 
     }
@@ -99,14 +99,14 @@ object SendModule {
         val fee: BigDecimal
 
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit>
+        fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
     }
 
     interface ISendEosInteractor {
         val availableBalance: BigDecimal
 
         fun validate(account: String)
-        fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit>
+        fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
     }
 
     interface IRouter {
@@ -117,7 +117,7 @@ object SendModule {
     interface ISendInteractor {
         var delegate: ISendInteractorDelegate
 
-        fun send(sendSingle: Single<Unit>, actionId: String)
+        fun send(sendSingle: Single<Unit>, logger: AppLogger)
         fun clear()
     }
 
@@ -144,7 +144,7 @@ object SendModule {
 
         @Throws
         fun confirmationViewItems(): List<SendConfirmationViewItem>
-        fun sendSingle(actionId: String): Single<Unit>
+        fun sendSingle(logger: AppLogger): Single<Unit>
     }
 
     interface ISendHandlerDelegate {
