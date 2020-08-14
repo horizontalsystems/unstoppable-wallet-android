@@ -10,10 +10,15 @@ object GuidesModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-            val guidesService = GuidesService(GuidesManager, App.connectivityManager)
+            val guidesService = GuidesRepository(GuidesManager, App.connectivityManager)
 
             return GuidesViewModel(guidesService) as T
         }
     }
+}
+
+sealed class DataState<T> {
+    class Loading<T> : DataState<T>()
+    class Success<T>(val data: T) : DataState<T>()
+    class Error<T>(val throwable: Throwable) : DataState<T>()
 }
