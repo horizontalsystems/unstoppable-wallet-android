@@ -6,29 +6,27 @@ import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.reactivex.disposables.CompositeDisposable
 
-class GuidesViewModel(val service: GuidesService) : ViewModel() {
+class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
 
     val guides = MutableLiveData<List<Guide>>()
     val loading = MutableLiveData<Boolean>(false)
     val filters = MutableLiveData<List<String>>()
+    val error = MutableLiveData<Throwable?>()
 
     private var guideCategories: Array<GuideCategory> = arrayOf()
     private var currentCategoryIndex = 0
     private var disposables = CompositeDisposable()
 
     init {
-        service.guideCategories
+        repository.guideCategories
                 .subscribe {
-                    loading.postValue(it is GuidesService.GuideCategoryResult.Loading)
+                    loading.postValue(it is DataState.Loading)
 
-                    when (it) {
-                        is GuidesService.GuideCategoryResult.Success -> {
-                            didFetchGuideCategories(it.guideCategories)
-                        }
-                        is GuidesService.GuideCategoryResult.Error -> {
-
-                        }
+                    if (it is DataState.Success) {
+                        didFetchGuideCategories(it.data)
                     }
+
+                    error.postValue((it as? DataState.Error)?.throwable)
                 }
                 .let {
                     disposables.add(it)
@@ -46,7 +44,7 @@ class GuidesViewModel(val service: GuidesService) : ViewModel() {
     override fun onCleared() {
         disposables.dispose()
 
-        service.clear()
+        repository.clear()
     }
 
     private fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
