@@ -328,6 +328,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Notification_Title">Notificaciones</string>
     <string name="Notification_PriceUp">Precio %1$s: Subió %2$s%% ⬆</string>
     <string name="Notification_PriceDown">Precio %1$s: Bajó %2$s%% ⬇</string>
+    <string name="Notification_TrendUp">%s trend: Up 📈</string>
+    <string name="Notification_TrendDown">%s trend: Down 📉</string>
     <string name="NotificationBottomMenu_Change24h">Variación 24h</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Variación de Tendencia de Precios</string>
     <string name="NotificationBottomMenu_ShortTerm">Corto plazo 7D</string>
