@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.AppLog
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -11,15 +11,15 @@ class SendInteractor : SendModule.ISendInteractor {
 
     override lateinit var delegate: SendModule.ISendInteractorDelegate
 
-    override fun send(sendSingle: Single<Unit>, actionId: String) {
+    override fun send(sendSingle: Single<Unit>, logger: AppLogger) {
         sendSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    AppLog.info(actionId, "success")
+                    logger.info("success")
 
                     delegate.didSend()
                 }, { error ->
-                    AppLog.warning(actionId, "failed", error)
+                    logger.warning("failed", error)
 
                     delegate.didFailToSend(error)
                 }).let {

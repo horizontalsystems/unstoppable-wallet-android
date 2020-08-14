@@ -132,11 +132,11 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?, actionId: String): Single<Unit> {
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?, logger: AppLogger): Single<Unit> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
-                AppLog.info(actionId, "call btc-kit.send")
+                logger.info("call btc-kit.send")
                 kit.send(address, (amount * satoshisInBitcoin).toLong(),  true, feeRate.toInt(), sortingType, pluginData ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {

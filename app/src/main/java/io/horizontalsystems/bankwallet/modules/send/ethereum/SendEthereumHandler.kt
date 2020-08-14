@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.ethereum
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.entities.FeeState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
@@ -119,13 +120,13 @@ class SendEthereumHandler(
                 SendModule.SendConfirmationDurationViewItem(feeModule.duration))
     }
 
-    override fun sendSingle(actionId: String): Single<Unit> {
+    override fun sendSingle(logger: AppLogger): Single<Unit> {
         val gasLimit = estimateGasLimitState
         if (gasLimit !is FeeState.Value) {
             throw Exception("SendTransactionError.unknown")
         }
 
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, gasLimit.value, actionId)
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, gasLimit.value, logger)
     }
 
     override fun onModulesDidLoad() {

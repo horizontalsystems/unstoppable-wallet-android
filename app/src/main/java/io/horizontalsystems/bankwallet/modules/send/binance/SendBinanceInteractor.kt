@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.binance
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.Single
@@ -20,8 +21,8 @@ class SendBinanceInteractor(private val adapter: ISendBinanceAdapter) : SendModu
         adapter.validate(address)
     }
 
-    override fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit> {
-        return adapter.send(amount, address, memo)
+    override fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit> {
+        return adapter.send(amount, address, memo, logger)
     }
 
 }

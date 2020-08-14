@@ -221,7 +221,7 @@ interface ISendBitcoinAdapter {
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
     fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?, actionId: String): Single<Unit>
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?, logger: AppLogger): Single<Unit>
 }
 
 interface ISendDashAdapter {
@@ -229,7 +229,7 @@ interface ISendDashAdapter {
     fun minimumSendAmount(address: String?): BigDecimal
     fun fee(amount: BigDecimal, address: String?): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit>
+    fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit>
 }
 
 interface ISendEthereumAdapter {
@@ -240,7 +240,7 @@ interface ISendEthereumAdapter {
     fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
     fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit>
+    fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit>
     fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
 
 }
@@ -251,14 +251,14 @@ interface ISendBinanceAdapter {
     val fee: BigDecimal
 
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit>
+    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
 }
 
 interface ISendEosAdapter {
     val availableBalance: BigDecimal
 
     fun validate(account: String)
-    fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit>
+    fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
 }
 
 interface IAdapter {

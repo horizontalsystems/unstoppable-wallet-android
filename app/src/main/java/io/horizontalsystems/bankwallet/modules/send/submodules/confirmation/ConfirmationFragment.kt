@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.AppLog
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subv
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
@@ -28,6 +27,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
     private var presenter: SendConfirmationPresenter? = null
     private var sendView: SendView? = null
     private var presenterView: SendConfirmationView? = null
+    private val logger = AppLogger("send")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation, container, false)
@@ -77,13 +77,13 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment
             context?.let {
                 sendButtonView = ConfirmationSendButtonView(it)
                 sendButtonView?.setOnSingleClickListener {
-                    val actionId = AppLog.generateId("send")
+                    val actionLogger = logger.getScopedUnique()
 
-                    AppLog.info(actionId, "click")
+                    actionLogger.info("click")
 
                     sendButtonView?.isEnabled = false
                     sendButtonView?.bind(SendConfirmationModule.SendButtonState.SENDING)
-                    sendView?.delegate?.onSendConfirmed(actionId)
+                    sendView?.delegate?.onSendConfirmed(actionLogger)
                 }
 
                 confirmationLinearLayout.addView(sendButtonView)

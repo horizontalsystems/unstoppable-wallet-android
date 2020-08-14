@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.ethereum
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.Single
@@ -28,8 +29,8 @@ class SendEthereumInteractor(private val adapter: ISendEthereumAdapter) : SendMo
         return adapter.fee(gasPrice, gasLimit)
     }
 
-    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit> {
-        return adapter.send(amount, address, gasPrice, gasLimit, actionId)
+    override fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
+        return adapter.send(amount, address, gasPrice, gasLimit, logger)
     }
 
     override fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long> {

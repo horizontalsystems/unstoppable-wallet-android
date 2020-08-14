@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.AppLog
-import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -40,9 +37,12 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
-    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, actionId: String): Single<Unit> {
-        AppLog.info(actionId, "call ethereumKit.send")
-        return ethereumKit.send(address, amount, gasPrice, gasLimit).map { Unit }
+    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
+        return ethereumKit.send(address, amount, gasPrice, gasLimit)
+                .doOnSubscribe {
+                    logger.info("call ethereumKit.send")
+                }
+                .map { Unit }
     }
 
     override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
