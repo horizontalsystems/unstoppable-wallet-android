@@ -335,6 +335,8 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Notification_Title">اطلاعیه ها</string>
     <string name="Notification_PriceUp">%1$s قیمت: بالاترین %2$s%%⬆️</string>
     <string name="Notification_PriceDown">%1$s قیمت: پایین ترین %2$s%%⬇️</string>
+    <string name="Notification_TrendUp">%s trend: Up 📈</string>
+    <string name="Notification_TrendDown">%s trend: Down 📉</string>
     <string name="NotificationBottomMenu_Change24h">تغییر 24 ساعت</string>
     <string name="NotificationBottomMenu_PriceTrendChange">تغییر روند قیمت</string>
     <string name="NotificationBottomMenu_ShortTerm">کوتاه مدت 7D</string>
