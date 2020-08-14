@@ -431,6 +431,8 @@ Uniswap is a fully decentralized protocol for automated liquidity provision on E
     <string name="Notification_Title">Notifications</string>
     <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
     <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
+    <string name="Notification_TrendUp">%s trend: Up 📈</string>
+    <string name="Notification_TrendDown">%s trend: Down 📉</string>
 
     <string name="NotificationBottomMenu_Change24h">Change 24h</string>
     <string name="NotificationBottomMenu_2" translatable="false">2%</string>
