@@ -66,15 +66,15 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
         return ethereumKit.transactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
-            it.map { tx -> transactionRecord(tx) }
+            it.mapNotNull { tx -> transactionRecord(tx) }
         }
     }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = ethereumKit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+        get() = ethereumKit.transactionsFlowable.map { it.mapNotNull { tx -> transactionRecord(tx) } }
 
 
-    private fun transactionRecord(transactionWithInternal: TransactionWithInternal): TransactionRecord {
+    private fun transactionRecord(transactionWithInternal: TransactionWithInternal): TransactionRecord? {
         val transaction = transactionWithInternal.transaction
         val myAddress = ethereumKit.receiveAddress
         val fromMine = transaction.from == myAddress
@@ -87,6 +87,11 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
             internalAmount = if (internalTransaction.from == myAddress) internalAmount.negate() else internalAmount
             amount += internalAmount
         }
+
+        if (amount == BigInteger.ZERO){
+            return null
+        }
+
         val type = when {
             fromMine && toMine -> TransactionType.SentToSelf
             amount < BigInteger.ZERO -> TransactionType.Outgoing
