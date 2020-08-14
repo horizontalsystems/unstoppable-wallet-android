@@ -110,9 +110,12 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
                 .blockingGet()
     }
 
-    override fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit> {
+    override fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit> {
         val scaledAmount = amount.setScale(decimal, RoundingMode.HALF_EVEN)
         return eosKit.send(token, account, scaledAmount, memo ?: "")
+                .doOnSubscribe {
+                    logger.info("call eosKit.send")
+                }
                 .onErrorResumeNext { Single.error(getException(it)) }
                 .map { Unit }
     }

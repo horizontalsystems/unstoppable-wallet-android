@@ -120,8 +120,11 @@ class BinanceAdapter(
     override val fee: BigDecimal
         get() = transferFee
 
-    override fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit> {
+    override fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit> {
         return binanceKit.send(symbol, address, amount, memo ?: "")
+                .doOnSubscribe {
+                    logger.info("call binanceKit.send")
+                }
                 .onErrorResumeNext { Single.error(getException(it)) }
                 .map { Unit }
     }

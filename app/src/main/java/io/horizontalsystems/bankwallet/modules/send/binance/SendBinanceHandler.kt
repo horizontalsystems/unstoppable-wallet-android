@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.binance
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -55,8 +56,8 @@ class SendBinanceHandler(
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
 
-    override fun sendSingle(actionId: String): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), memoModule.memo)
+    override fun sendSingle(logger: AppLogger): Single<Unit> {
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), memoModule.memo, logger)
     }
 
     override fun onModulesDidLoad() {

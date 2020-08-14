@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.dash
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -74,8 +75,8 @@ class SendDashHandler(
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
     }
 
-    override fun sendSingle(actionId: String): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), actionId)
+    override fun sendSingle(logger: AppLogger): Single<Unit> {
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), logger)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate

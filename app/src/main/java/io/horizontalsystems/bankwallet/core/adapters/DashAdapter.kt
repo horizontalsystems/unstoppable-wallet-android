@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
@@ -84,8 +85,8 @@ class DashAdapter(
         validate(address, mapOf())
     }
 
-    override fun send(amount: BigDecimal, address: String, actionId: String): Single<Unit> {
-        return send(amount, address, feeRate, mapOf(), null, actionId)
+    override fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit> {
+        return send(amount, address, feeRate, mapOf(), null, logger)
     }
 
     companion object {

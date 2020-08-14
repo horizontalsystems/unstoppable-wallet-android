@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.FeeState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -133,9 +134,9 @@ class SendBitcoinHandler(
 
     }
 
-    override fun sendSingle(actionId: String): Single<Unit> {
+    override fun sendSingle(logger: AppLogger): Single<Unit> {
         return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate,
-                               hodlerModule?.pluginData(), actionId)
+                               hodlerModule?.pluginData(), logger)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate
