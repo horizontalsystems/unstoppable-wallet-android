@@ -145,7 +145,7 @@
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">最小获取金额</string>
     <string name="Swap_MaximiumSold">最大支付金额</string>
-    <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">选择代币</string>
     <!--Uniwwap Info -->
@@ -229,7 +229,7 @@
     <!--Guides-->
     <string name="Guides_Title">学院</string>
     <!--Guide-->
-    <string name="Guide_Error_NotFound">Guide not found</string>
+    <string name="Guide_Error_NotFound">找不到指南</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
@@ -323,16 +323,16 @@
     <string name="SettingsNotifications_DeactivateAll">全部停用</string>
     <string name="SettingsNotifications_PushNotification">推送通知</string>
     <string name="Notification_Title">通知</string>
-    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
-    <string name="Notification_TrendUp">%s trend: Up 📈</string>
-    <string name="Notification_TrendDown">%s trend: Down 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Change 24h</string>
+    <string name="Notification_PriceUp">%1$s 价格：上升%2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s 价格：下跌%2$s%% ⬇️</string>
+    <string name="Notification_TrendUp">%s 趋势：上升 📈</string>
+    <string name="Notification_TrendDown">%s 趋势：下跌 📉</string>
+    <string name="NotificationBottomMenu_Change24h">24小时变动</string>
     <string name="NotificationBottomMenu_PriceTrendChange">价格趋势变动</string>
     <string name="NotificationBottomMenu_ShortTerm">短期7天</string>
-    <string name="NotificationBottomMenu_Short">Short</string>
+    <string name="NotificationBottomMenu_Short">做空</string>
     <string name="NotificationBottomMenu_LongTerm">长期6个月</string>
-    <string name="NotificationBottomMenu_Long">Long</string>
+    <string name="NotificationBottomMenu_Long">做多</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">不获支持货币</string>
     <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
