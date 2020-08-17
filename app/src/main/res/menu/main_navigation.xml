@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_balance"
+        android:icon="@drawable/ic_balance"
+        android:title="@string/Balance_Title" />
+
+    <item
+        android:id="@+id/navigation_transactions"
+        android:icon="@drawable/ic_transactions"
+        android:title="@string/Transactions_Title" />
+
+    <item
+        android:id="@+id/navigation_guides"
+        android:icon="@drawable/ic_guide"
+        android:title="@string/Guides_Title" />
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/Settings_Title" />
+
+</menu>
