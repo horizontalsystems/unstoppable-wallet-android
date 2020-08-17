@@ -74,7 +74,7 @@
     <string name="Balance_Title">잔액</string>
     <string name="Balance_Deposit">수신</string>
     <string name="Balance_Send">전송</string>
-    <string name="Balance_Swap">Swap</string>
+    <string name="Balance_Swap">스왑</string>
     <string name="Balance_RatePerCoin">%s 당 %s</string>
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
@@ -133,34 +133,31 @@
     <string name="Send_ERC_Alert">%@ (ERC20) 에 대한 거래 수수료는 Ethereum 로 지불되었습니다. 귀하는 %@ ETH 가 필요합니다.</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <!--Swap-->
-    <string name="Swap_Title">Swap</string>
-    <string name="Swap_FromAmountTitle">You Pay</string>
-    <string name="Swap_ToAmountTitle">You Get</string>
+    <string name="Swap_Title">스왑</string>
+    <string name="Swap_FromAmountTitle">지불하기</string>
+    <string name="Swap_ToAmountTitle">얻기</string>
     <string name="Swap_Percent">%s%%</string>
-    <string name="Swap_Estimated">ESTIMATED</string>
+    <string name="Swap_Estimated">예상</string>
     <string name="Swap_MaxButtonTitle">최대</string>
-    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_TokenSelectorTitle">토큰</string>
     <string name="Swap_Balance">잔액</string>
     <string name="Swap_Price">금액</string>
-    <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_MinimumReceived">Minimum Got</string>
-    <string name="Swap_MaximiumSold">Maximum Paid</string>
+    <string name="Swap_PriceImpact">가격 영향</string>
+    <string name="Swap_MinimumReceived">최대 지급액</string>
+    <string name="Swap_MaximiumSold">최대 지불액</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <!--Swap Coin Select-->
-    <string name="SwapCoinSelect_Title">Choose Coin</string>
+    <string name="SwapCoinSelect_Title">코인 선택</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap is a fully decentralized protocol for automated liquidity provision on Ethereum.
-\n\nA simple formalized equation drives unstoppable liquidity for thousands of users and hundreds of applications.
-\n\nUniswap empowers developers, liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.
-    </string>
-    <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
-    <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
-    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="UniswapInfo_PriceImpactDescription">The difference between the market price and estimated price due to trade size.</string>
-    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
-    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
+    <string name="UniswapInfo_Description">Uniswap는 Ethereum에서 자동화된 유동성 제공을 위한 완전 분산형 프로토콜입니다.\n\nA 간단한 공식화 등식은 수천 명의 사용자와 수백 개의 애플리케이션을 위해 막을 수 없는 유동성을 촉진합니다. \n\nUniswap의 개발자, 유동성 제공자 및 거래자가 모두에게 개방되고 접근 가능한 금융 시장에 참여할 수 있는 권한을 부여합니다.</string>
+    <string name="UniswapInfo_MinReceivedTitle">최소 지급액</string>
+    <string name="UniswapInfo_MinReceivedDescription">귀하의 거래가 확정되기 전에, 만약 크고 불리한 가격 움직임이 있다면, 귀하의 거래는 반환됩니다.</string>
+    <string name="UniswapInfo_PriceImpactTitle">가격 영향</string>
+    <string name="UniswapInfo_PriceImpactDescription">거래 규모에 따른 시장가격과 예상가격의 차이.</string>
+    <string name="UniswapInfo_SwapFeeTitle">스왑 비용</string>
+    <string name="UniswapInfo_SwapFeeDescription">각 거래의 일부(0.30%) 는 프로토콜 인센티브로 유동성 제공자에게 전달됩니다.</string>
+    <string name="UniswapInfo_UniswapSite">Uniswap 사이트</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">공유</string>
@@ -242,7 +239,7 @@
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
     <string name="Settings_LightMode">밝은 모드</string>
-    <string name="Settings_Terms">Terms</string>
+    <string name="Settings_Terms">약관</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_Report">문제점 보고</string>
     <string name="Settings_AppStatus">앱 상태</string>
@@ -298,19 +295,19 @@
     <!--Setting_Terms-->
     <string name="SettingsTerms_AppTitle">Unstoppable</string>
     <string name="SettingsTerms_Github">Github</string>
-    <string name="SettingsTerms_Site">Site</string>
-    <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
-\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over funds. It doesn\'t collect any data and keeps user independent by not locking his/her wallet to a specific wallet app.
-\n\nThe Unstoppable wallet is fully open-source and anyone can confirm that the app works exactly as it claims to.
-\n\nWe built Unstoppable for ourselves as the available solutions were not up to par. Both from engineering and usability perspective we believe this wallet to be significantly ahead of alternative products.</string>
-    <string name="SettingsTerms_TermAcademy">I went through the Academy section of this app and got familiar with the fundamental aspects of storing cryptocurrencies.</string>
-    <string name="SettingsTerms_TermBackup">I have backed up the private key(s) for my wallets that were shown to me in a form of 12-24 words. I understand that these private keys are stored on my smartphone and not elsewhere.</string>
-    <string name="SettingsTerms_TermOwner">I understand that only the owner of my private key(s) can access and spend funds on my wallet and therefore these keys should never be shared with anyone.</string>
-    <string name="SettingsTerms_TermRecover">I understand that I will need my private keys in order to restore access to my funds should I loose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermPhone">I understand that passing my phone to untrusted entities or leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRoot">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermBugs">I understand there may be undiscovered software issues in the code powering this wallet app which may lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
+    <string name="SettingsTerms_Site">사이트</string>
+    <string name="SettingsTerms_Text">Unstoppable 지갑은 개인적이고 독립적인 방식으로 암호화폐를 투자하고 보관하려는 사람들을 위해 만들어졌습니다.
+\n\n이는 오직 사용자만이 자금을 통제할 수 있는 비관세적인 P2P 지갑입니다. 데이터를 수집하지 않고 특정 지갑 앱에 지갑을 잠그지 않아 사용자의 독립성을 유지합니다.
+\n\nUnstoppable 지갑은 완전한 오픈소스여서 누구나 앱이 요구하는 대로 정확히 작동하는지 확인할 수 있습니다.
+\n\n귀사는 이용 가능한 해결책이 기대에 미치지 못했기 때문에 스스로 Unstoppable 을 구축했습니다. 엔지니어링과 사용 편의성 측면에서 모두 귀사는 이 지갑이 대체 제품보다 상당히 앞서 있다고 믿고 있습니다.</string>
+    <string name="SettingsTerms_TermAcademy">나는 이 앱의 아카데미 부문을 거치면서 가상화폐 저장의 근본적인 측면에 대해 알게 되었다.</string>
+    <string name="SettingsTerms_TermBackup">나는 12-24 단어 형식으로 보여 준 지갑의 개인 암호를 백업했습니다. 나는 이 개인 암호가 다른 곳이 아닌 내 스마트폰에 저장되어 있다는 것을 인지합니다.</string>
+    <string name="SettingsTerms_TermOwner">나는 내 개인 암호의 소유자만이 내 지갑에 접근하여 자금을 쓸 수 있고 따라서 이 암호들은 절대 누구와도 공유되어서는 안 된다는 것을 이해합니다.</string>
+    <string name="SettingsTerms_TermRecover">만약 내가 핸드폰을 풀거나 앱이 오작동한다면 나는 내 자금에 대한 접근을 복구하기 위해 내 개인 암호가 필요할 것이라는 것을 이해합니다. 내 개인 암호가 없으면 내 지갑에 대한 접근을 복구하는 것은 불가능할 것입니다.</string>
+    <string name="SettingsTerms_TermPhone">신뢰할 수 없는 단체에게 핸드폰을 건네거나 안전한 PIN 잠금 없이 지갑 앱을 탈퇴하는 것은 잠재적으로 내 자금의 안전을 위협할 수 있다는 것을 알고 있습니다.</string>
+    <string name="SettingsTerms_TermRoot">나는 내 전화기를 탈선하고(루팅), 출처를 알 수 없는 제3자 앱을 설치하고, 운영 체제를 구식 상태로 유지하면 잠재적으로 내 자금의 안전을 위태롭게 할 수 있다는 것을 이해합니다.</string>
+    <string name="SettingsTerms_TermBugs">나는 이 지갑 앱에 전원을 공급하는 코드에서 예기치 않은 동작이나 앱 오작동으로 이어질 수 있는 미발견된 소프트웨어 문제가 있을 수 있다는 것을 알고 있습니다.</string>
+    <string name="SettingsTerms_BottomThankYou">이 지갑을 선택해주셔서 감사합니다!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
@@ -325,16 +322,16 @@
     <string name="SettingsNotifications_Off">끄기</string>
     <string name="SettingsNotifications_DeactivateAll">전부 비활성화</string>
     <string name="SettingsNotifications_PushNotification">푸시 알림</string>
-    <string name="Notification_Title">Notifications</string>
+    <string name="Notification_Title">알림</string>
     <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
     <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s trend: Up 📈</string>
     <string name="Notification_TrendDown">%s trend: Down 📉</string>
     <string name="NotificationBottomMenu_Change24h">Change 24h</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
-    <string name="NotificationBottomMenu_ShortTerm">Short Term 7D</string>
+    <string name="NotificationBottomMenu_ShortTerm">단기 7D</string>
     <string name="NotificationBottomMenu_Short">Short</string>
-    <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
+    <string name="NotificationBottomMenu_LongTerm">장기 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">지원되지 않는 통화</string>
