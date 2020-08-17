@@ -15,8 +15,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -28,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
-import io.horizontalsystems.views.helpers.LayoutHelper
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.main_activity_view_pager_layout.*
@@ -153,26 +150,11 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
         setTopMarginByStatusBarHeight(viewPager)
 
         viewPager.offscreenPageLimit = 3
-        viewPager.setPagingEnabled(true)
         viewPager.adapter = adapter
 
-        LayoutHelper.getAttr(R.attr.BottomNavigationBackgroundColor, theme)
-                ?.let { ahBottomNavigation.defaultBackgroundColor = it }
-
-        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Balance_Title, R.drawable.ic_balance, 0))
-        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Transactions_Title, R.drawable.ic_transactions, 0))
-        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Guides_Title, R.drawable.ic_guide, 0))
-        ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Settings_Title, R.drawable.ic_settings, 0))
-
-        ahBottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_d)
-        ahBottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
-        ahBottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
-        ahBottomNavigation.setUseElevation(false)
-
-        ahBottomNavigation.setOnTabSelectedListener { position, wasSelected ->
-            if (!wasSelected) {
-                viewPager.setCurrentItem(position, false)
-            }
+        bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+            val index = getBottomMenuItemIndex(menuItem.itemId)
+            viewPager.setCurrentItem(index, false)
             true
         }
 
@@ -181,19 +163,38 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 if (positionOffset == 0f) {
-                    adapter?.currentItem = ahBottomNavigation.currentItem
+                    adapter?.currentItem = getBottomMenuItemIndex(bottomNavigation.selectedItemId)
                 }
             }
 
             override fun onPageSelected(position: Int) {
-                ahBottomNavigation.currentItem = position
+                setBottomNavigationCurrentItem(position)
             }
         })
 
         val activeTab = intent?.extras?.getInt(ACTIVE_TAB_KEY)
-        activeTab?.let { ahBottomNavigation.currentItem = it }
+        activeTab?.let { setBottomNavigationCurrentItem(it) }
 
         preloadBottomSheets()
+    }
+
+    private fun setBottomNavigationCurrentItem(position: Int) {
+        when (position) {
+            0 -> bottomNavigation.menu.findItem(R.id.navigation_balance).isChecked = true
+            1 -> bottomNavigation.menu.findItem(R.id.navigation_transactions).isChecked = true
+            2 -> bottomNavigation.menu.findItem(R.id.navigation_guides).isChecked = true
+            3 -> bottomNavigation.menu.findItem(R.id.navigation_settings).isChecked = true
+        }
+    }
+
+    private fun getBottomMenuItemIndex(itemId: Int): Int {
+        return when (itemId) {
+            R.id.navigation_balance -> 0
+            R.id.navigation_transactions -> 1
+            R.id.navigation_guides -> 2
+            R.id.navigation_settings -> 3
+            else -> throw Exception("No such BottomNavigation page")
+        }
     }
 
     private fun preloadBottomSheets() {
