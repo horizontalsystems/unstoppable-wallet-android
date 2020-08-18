@@ -145,7 +145,7 @@
     <string name="Swap_PriceImpact">가격 영향</string>
     <string name="Swap_MinimumReceived">최대 지급액</string>
     <string name="Swap_MaximiumSold">최대 지불액</string>
-    <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">코인 선택</string>
     <!--Uniwwap Info -->
@@ -229,7 +229,7 @@
     <!--Guides-->
     <string name="Guides_Title">아카데미</string>
     <!--Guide-->
-    <string name="Guide_Error_NotFound">Guide not found</string>
+    <string name="Guide_Error_NotFound">가이드 찾을 수 없음</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -323,16 +323,16 @@
     <string name="SettingsNotifications_DeactivateAll">전부 비활성화</string>
     <string name="SettingsNotifications_PushNotification">푸시 알림</string>
     <string name="Notification_Title">알림</string>
-    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
-    <string name="Notification_TrendUp">%s trend: Up 📈</string>
-    <string name="Notification_TrendDown">%s trend: Down 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Change 24h</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
+    <string name="Notification_PriceUp">%1$s 가격: 상승 %2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s 가격: 하락 %2$s%% ⬇️</string>
+    <string name="Notification_TrendUp">%s 동향: 상승 📈</string>
+    <string name="Notification_TrendDown">%s 동향: 하락 📉</string>
+    <string name="NotificationBottomMenu_Change24h">24시간 변동</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">가격 동향 변동</string>
     <string name="NotificationBottomMenu_ShortTerm">단기 7D</string>
-    <string name="NotificationBottomMenu_Short">Short</string>
+    <string name="NotificationBottomMenu_Short">단기</string>
     <string name="NotificationBottomMenu_LongTerm">장기 6M</string>
-    <string name="NotificationBottomMenu_Long">Long</string>
+    <string name="NotificationBottomMenu_Long">장기</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">지원되지 않는 통화</string>
     <string name="Eos_Backend_Error_SelfTransfer">토큰을 개인계정으로 옮길 수 없습니다</string>
