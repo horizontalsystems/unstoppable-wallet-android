@@ -72,6 +72,7 @@
         <item name="ColorGwen">@color/dark</item>
         <item name="ColorNina">@color/white_50</item>
         <item name="ColorTyler">@color/dark</item>
+        <item name="ColorRaina">@color/steel_10</item>
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white_20</item>
     </style>
