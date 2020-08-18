@@ -92,6 +92,7 @@
     <attr name="ColorGwen" format="reference" />
     <attr name="ColorNina" format="reference" />
     <attr name="ColorTyler" format="reference" />
+    <attr name="ColorRaina" format="reference" />
 
     <!--  New themed gradient colors -->
     <attr name="ColorGradientWhite" format="reference" />
