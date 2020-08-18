@@ -45,7 +45,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(null) //null prevents fragments restoration on theme switch
 
         setContentView(R.layout.activity_dashboard)
         setTransparentStatusBar()
