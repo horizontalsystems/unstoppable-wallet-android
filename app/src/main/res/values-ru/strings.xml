@@ -138,7 +138,7 @@
     <string name="Swap_ToAmountTitle">You Get</string>
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">ESTIMATED</string>
-    <string name="Swap_MaxButtonTitle">Max</string>
+    <string name="Swap_MaxButtonTitle">Макс</string>
     <string name="Swap_TokenSelectorTitle">Токен</string>
     <string name="Swap_Balance">Баланс</string>
     <string name="Swap_Price">Цена</string>
@@ -157,10 +157,10 @@
     <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
     <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
     <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="UniswapInfo_PriceImpactDescription">The difference between the market price and estimated price due to trade size.</string>
+    <string name="UniswapInfo_PriceImpactDescription">Разница между рыночной и скользящей ценой возникает из-за размера сделки.</string>
     <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
     <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
-    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
+    <string name="UniswapInfo_UniswapSite">Веб-сайт Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -242,7 +242,7 @@
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_LightMode">Светлый Режим</string>
-    <string name="Settings_Terms">Terms</string>
+    <string name="Settings_Terms">Условия использования</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_Report">Сообщить о Проблеме</string>
     <string name="Settings_AppStatus">Статус Приложения</string>
@@ -331,7 +331,7 @@
     <string name="Notification_TrendUp">%s trend: Up 📈</string>
     <string name="Notification_TrendDown">%s trend: Down 📉</string>
     <string name="NotificationBottomMenu_Change24h">Изменения (24ч)</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Изменение Ценового Тренда</string>
     <string name="NotificationBottomMenu_ShortTerm">Краткосрочный 7Д</string>
     <string name="NotificationBottomMenu_Short">Short</string>
     <string name="NotificationBottomMenu_LongTerm">Долгосрочный 6М</string>
@@ -442,7 +442,7 @@
     <string name="Charts_TimeDuration_Day">1Д</string>
     <string name="Charts_TimeDuration_Week">7Д</string>
     <string name="Charts_TimeDuration_Month">1М</string>
-    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2Н</string>
     <string name="Charts_TimeDuration_Month3">3М</string>
     <string name="Charts_TimeDuration_Quartal">3М</string>
     <string name="Charts_TimeDuration_HalfYear">6М</string>
