@@ -74,7 +74,7 @@
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Send">Отправить</string>
-    <string name="Balance_Swap">Swap</string>
+    <string name="Balance_Swap">Обменять</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
@@ -133,32 +133,29 @@
     <string name="Send_ERC_Alert">Комиссии за транзакцию %s (ERC20) взимаются в ETH. Вам нужно %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
     <!--Swap-->
-    <string name="Swap_Title">Swap</string>
-    <string name="Swap_FromAmountTitle">You Pay</string>
-    <string name="Swap_ToAmountTitle">You Get</string>
+    <string name="Swap_Title">Обменять</string>
+    <string name="Swap_FromAmountTitle">Вы платите</string>
+    <string name="Swap_ToAmountTitle">Вы получите</string>
     <string name="Swap_Percent">%s%%</string>
-    <string name="Swap_Estimated">ESTIMATED</string>
+    <string name="Swap_Estimated">ПРИБЛИЗИТЕЛЬНО</string>
     <string name="Swap_MaxButtonTitle">Макс</string>
     <string name="Swap_TokenSelectorTitle">Токен</string>
     <string name="Swap_Balance">Баланс</string>
     <string name="Swap_Price">Цена</string>
-    <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_MinimumReceived">Minimum Got</string>
-    <string name="Swap_MaximiumSold">Maximum Paid</string>
-    <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_PriceImpact">Разница в цене</string>
+    <string name="Swap_MinimumReceived">Минимальная выплата</string>
+    <string name="Swap_MaximiumSold">Максимальная выплата</string>
+    <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <!--Swap Coin Select-->
-    <string name="SwapCoinSelect_Title">Choose Coin</string>
+    <string name="SwapCoinSelect_Title">Выберите Токен</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap is a fully decentralized protocol for automated liquidity provision on Ethereum.
-\n\nA simple formalized equation drives unstoppable liquidity for thousands of users and hundreds of applications.
-\n\nUniswap empowers developers, liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.
-    </string>
-    <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
-    <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
-    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
+    <string name="UniswapInfo_Description">Uniswap - это полностью децентрализованный протокол для автоматического предоставления ликвидности на Ethereum.\n\nПростая формула обеспечивает постоянную ликвидность для тысячи пользователей и сотен приложений.\n\nUniswap дает возможность разработчикам, поставщикам ликвидности и трейдерам участвовать в открытом и доступном для всех финансовом рынке.</string>
+    <string name="UniswapInfo_MinReceivedTitle">Получено минимум</string>
+    <string name="UniswapInfo_MinReceivedDescription">Ваша транзакция будет отменена в случае возникновения большого и неблагоприятного ценового движения до её подтверждения.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Разница в цене</string>
     <string name="UniswapInfo_PriceImpactDescription">Разница между рыночной и скользящей ценой возникает из-за размера сделки.</string>
-    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
+    <string name="UniswapInfo_SwapFeeTitle">Комиссия за обмен</string>
     <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
     <string name="UniswapInfo_UniswapSite">Веб-сайт Uniswap</string>
     <!--Deposit-->
@@ -326,8 +323,8 @@
     <string name="SettingsNotifications_DeactivateAll">Отключить всё</string>
     <string name="SettingsNotifications_PushNotification">Push уведомления</string>
     <string name="Notification_Title">Уведомления</string>
-    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
+    <string name="Notification_PriceUp">%1$s цена: повысилась на %2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s цена: понизилась на %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s trend: Up 📈</string>
     <string name="Notification_TrendDown">%s trend: Down 📉</string>
     <string name="NotificationBottomMenu_Change24h">Изменения (24ч)</string>
