@@ -146,7 +146,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_PriceImpact">Impact prix</string>
     <string name="Swap_MinimumReceived">Montant minimum reçu</string>
     <string name="Swap_MaximiumSold">Montant maximum payé</string>
-    <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Choisir la pièce</string>
     <!--Uniwwap Info -->
@@ -230,7 +230,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Guides-->
     <string name="Guides_Title">Académie</string>
     <!--Guide-->
-    <string name="Guide_Error_NotFound">Guide not found</string>
+    <string name="Guide_Error_NotFound">Tutoriel introuvable</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
@@ -324,11 +324,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsNotifications_DeactivateAll">Tout désactiver</string>
     <string name="SettingsNotifications_PushNotification">Notification push</string>
     <string name="Notification_Title">Notifications</string>
-    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
-    <string name="Notification_TrendUp">%s trend: Up 📈</string>
-    <string name="Notification_TrendDown">%s trend: Down 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Change 24h</string>
+    <string name="Notification_PriceUp">%1$s prix : Hausse %2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s prix : Baisse %2$s%% ⬇️</string>
+    <string name="Notification_TrendUp">%s tendance : Hausse 📈</string>
+    <string name="Notification_TrendDown">%s tendance : Baisse 📉</string>
+    <string name="NotificationBottomMenu_Change24h">Changement 24h</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Changement de tendance de prix</string>
     <string name="NotificationBottomMenu_ShortTerm">Court terme 7J</string>
     <string name="NotificationBottomMenu_Short">Court</string>
