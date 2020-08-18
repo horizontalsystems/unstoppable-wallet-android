@@ -9,6 +9,7 @@ class MainViewModel : ViewModel(), MainModule.IView {
     lateinit var delegate: MainModule.IViewDelegate
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
+    val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
 
     fun init() {
         MainModule.init(this)
@@ -21,6 +22,10 @@ class MainViewModel : ViewModel(), MainModule.IView {
 
     override fun hideContent(hide: Boolean) {
         hideContentLiveData.postValue(hide)
+    }
+
+    override fun toggleBagdeVisibility(visible: Boolean) {
+        setBadgeVisibleLiveData.postValue(visible)
     }
 
     override fun onCleared() {

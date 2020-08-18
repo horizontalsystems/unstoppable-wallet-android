@@ -10,6 +10,7 @@ object MainModule {
     interface IView {
         fun showRateApp()
         fun hideContent(hide: Boolean)
+        fun toggleBagdeVisibility(visible: Boolean)
     }
 
     interface IViewDelegate {
@@ -20,15 +21,19 @@ object MainModule {
 
     interface IInteractor {
         fun onStart()
+        val allBackedUp: Boolean
+        val termsAccepted: Boolean
+        val isPinSet: Boolean
         fun clear()
     }
 
     interface IInteractorDelegate {
         fun didShowRateApp()
+        fun updateBadgeVisibility()
     }
 
     fun init(view: MainViewModel) {
-        val interactor = MainInteractor(App.rateAppManager)
+        val interactor = MainInteractor(App.rateAppManager, App.backupManager, App.termsManager, App.pinComponent)
         val presenter = MainPresenter(App.pinComponent, interactor)
 
         view.delegate = presenter
