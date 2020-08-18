@@ -11,6 +11,7 @@ class MainPresenter(private val pinComponent: IPinComponent,
 
     override fun viewDidLoad() {
         interactor.onStart()
+        updateBadgeVisibility()
     }
 
     override fun didShowRateApp() {
@@ -22,6 +23,11 @@ class MainPresenter(private val pinComponent: IPinComponent,
             view?.hideContent(pinComponent.isLocked)
         }
         contentHidden = pinComponent.isLocked
+    }
+
+    override fun updateBadgeVisibility() {
+        val visible = !(interactor.allBackedUp && interactor.termsAccepted && interactor.isPinSet)
+        view?.toggleBagdeVisibility(visible)
     }
 
     override fun onClear() {

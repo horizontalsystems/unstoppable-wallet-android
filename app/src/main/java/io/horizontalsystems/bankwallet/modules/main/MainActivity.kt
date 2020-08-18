@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
@@ -15,6 +16,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -37,6 +40,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     private var transInfoViewModel: TransactionInfoViewModel? = null
     private var txInfoBottomSheetBehavior: BottomSheetBehavior<View>? = null
     private var messageInfoSnackbar: Snackbar? = null
+    private var bottomBadgeView: View? = null
 
     private lateinit var viewModel: MainViewModel
 
@@ -55,6 +59,19 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
 
         viewModel.hideContentLiveData.observe(this, Observer { hide ->
             screenSecureDim.isVisible = hide
+        })
+
+        viewModel.setBadgeVisibleLiveData.observe(this, Observer { visible ->
+            val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
+            val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
+
+            if (visible) {
+                if(bottomBadgeView?.parent == null) {
+                    settingsNavigationViewItem?.addView(getBottomBadge())
+                }
+            } else {
+                settingsNavigationViewItem?.removeView(bottomBadgeView)
+            }
         })
 
         adapter = MainTabsAdapter(supportFragmentManager)
@@ -176,6 +193,19 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
         activeTab?.let { setBottomNavigationCurrentItem(it) }
 
         preloadBottomSheets()
+    }
+
+    private fun getBottomBadge(): View? {
+        if (bottomBadgeView != null){
+            return bottomBadgeView
+        }
+
+        val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
+
+        bottomBadgeView = LayoutInflater.from(this).inflate(R.layout.view_bottom_navigation_badge,
+                bottomMenu,false)
+
+        return bottomBadgeView
     }
 
     private fun setBottomNavigationCurrentItem(position: Int) {
