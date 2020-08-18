@@ -74,6 +74,7 @@
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Deposit">Recibir</string>
     <string name="Balance_Send">Enviar</string>
+    <string name="Balance_Swap">Permutar</string>
     <string name="Balance_RatePerCoin">%s por %s</string>
     <string name="Balance_SyncedUntil">hasta: %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
@@ -131,6 +132,34 @@
     <string name="Send_Sending">Enviando</string>
     <string name="Send_ERC_Alert">Las comisiones de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
+    <!--Swap-->
+    <string name="Swap_Title">Permutar</string>
+    <string name="Swap_FromAmountTitle">Usted paga</string>
+    <string name="Swap_ToAmountTitle">Obtienes</string>
+    <string name="Swap_Percent">%s%%</string>
+    <string name="Swap_Estimated">ESTIMADO</string>
+    <string name="Swap_MaxButtonTitle">Máx.</string>
+    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_Balance">Saldo</string>
+    <string name="Swap_Price">Precio</string>
+    <string name="Swap_PriceImpact">Impacto en el precio</string>
+    <string name="Swap_MinimumReceived">Mínimo Obtenido</string>
+    <string name="Swap_MaximiumSold">Máximo Pagado</string>
+    <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
+    <!--Swap Coin Select-->
+    <string name="SwapCoinSelect_Title">Elegir moneda</string>
+    <!--Uniwwap Info -->
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
+    <string name="UniswapInfo_Description">Uniswap es un protocolo totalmente descentralizado para la provisión automatizada de liquidez en Ethereum.
+\n\nUna simple ecuación formalizada impulsa una liquidez imparable para miles de usuarios y cientos de aplicaciones.
+\n\nUniswap potencia a desarrolladores, proveedores de liquidez y operadores a participar en un mercado financiero abierto y accesible para todos.</string>
+    <string name="UniswapInfo_MinReceivedTitle">Mínimo Recibido</string>
+    <string name="UniswapInfo_MinReceivedDescription">Su transacción se revertirá si hay un movimiento de precios grande y desfavorable antes de que se confirme.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Impacto en el precio</string>
+    <string name="UniswapInfo_PriceImpactDescription">La diferencia entre el precio de mercado y el precio estimado debido al tamaño de la operación.</string>
+    <string name="UniswapInfo_SwapFeeTitle">Tarifa por permutar</string>
+    <string name="UniswapInfo_SwapFeeDescription">Una porción de cada transacción (0,30%) va a parar a los proveedores de liquidez como incentivo de protocolo.</string>
+    <string name="UniswapInfo_UniswapSite">Website de Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
     <string name="Deposit_Share">Compartir</string>
@@ -201,6 +230,8 @@
     <string name="FullInfoEth_Amount">Importe</string>
     <!--Guides-->
     <string name="Guides_Title">Academia</string>
+    <!--Guide-->
+    <string name="Guide_Error_NotFound">Guía no encontrada</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
@@ -210,9 +241,10 @@
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_LightMode">Modo ligero</string>
-    <string name="Settings_About">Acerca de</string>
+    <string name="Settings_Terms">Términos</string>
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
     <string name="Settings_Report">Reportar un problema</string>
+    <string name="Settings_AppStatus">Estado de la aplicación</string>
     <string name="SettingsOption_Enabled">Habilitado</string>
     <string name="SettingsOption_Disabled">Desabilitado</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
@@ -262,24 +294,23 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Desde Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Más Privado</string>
-    <!--Setting_About-->
-    <string name="SettingsAbout_Title">Acerca de</string>
-    <string name="SettingsAbout_AppTitle">Unstoppable</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Términos &amp; privacidad:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Esta aplicación es de servidor a servidor. No depende de ningún servidor web o personal de soporte técnico para funcionar.
-
-\n\nFunciona en cualquier lugar siempre que haya conexión a internet. Ninguna entidad puede bloquear el funcionamiento de esta aplicación o impedir el acceso de un usuario.
-
-\n\nLas claves secretas criptográficas que controlan sus fondos de criptomonedas están almacenados de forma en el propio teléfono y en ningún otro lugar.
-
-\n\nEs su responsabilidad recordar su clave secreta y mantenerla en privado. Nunca la muestre a nadie. Si la pierde, la olvida o es sustraída, sus fondos pueden ser utilizados por la persona que consiga su clave secreta.
-
-\n\nNo modifique la seguridad del software de su teléfono, no instale aplicaciones de orígenes desconocidos (no confiable), no entregue su dispositivo a desconocidos y mantenga actualizado el sistema operativo de tu teléfono. La seguridad de su monedero depende de ello.
-
-\n\nLa totalidad del código que soporta esta aplicación está abierta al escrutinio público desde el inicio de la aplicación. Creemos que 
- nuestra aplicación es significativamente más segura que cualquier otra aplicación de monedero para teléfonos inteligente en el mercado; sin embargo, no hay ninguna garantía de que no se produzca algún problema de software no deseado.
-
-\n\nToda su información, por ejemplo transacciones, balances, etc., están disponibles solo dentro de su aplicación de monedero y nunca abandona su dispositivo.</string>
+    <!--Setting_Terms-->
+    <string name="SettingsTerms_AppTitle">Unstoppable</string>
+    <string name="SettingsTerms_Github">GitHub</string>
+    <string name="SettingsTerms_Site">Sitio</string>
+    <string name="SettingsTerms_Text">El monedero Unstoppable fue creado para aquellos que buscan invertir y almacenar criptomonedas de forma privada e independiente.
+\n\nEs un monedero peer-to-peer sin custodio, donde sólo el usuario tiene control sobre los fondos. No recopila ningún dato y mantiene al usuario independiente al no enlazar su cartera a un único monedero.
+\n\nEl monedero Unstoppable es completamente de código abierto y cualquiera puede verificar que la aplicación funciona exactamente como se afirma.
+\n\nDesarrollamos Unstoppable para nosotros mismos ya que las soluciones disponibles no estaban a la altura. Desde una perspectiva de ingenieria y practicidad, creemos que este monedero está significativamente por delante de los productos alternativos.</string>
+    <string name="SettingsTerms_TermAcademy">He pasado por la sección Academia de esta aplicación y me he familiarizado con los aspectos fundamentales del almacenamiento de criptomonedas.</string>
+    <string name="SettingsTerms_TermBackup">He respaldado la(s) clave(s) privada(s) para mis monederos que se me mostraron en forma de 12-24 palabras. Entiendo que estas claves privadas se almacenan en mi smartphone y no en ningún otro lugar.</string>
+    <string name="SettingsTerms_TermOwner">Entiendo que sólo el propietario de mi(s) clave(s) privada(s) puede acceder y gastar fondos en mi monedero y, por lo tanto, estas claves no deben ser compartidas con nadie.</string>
+    <string name="SettingsTerms_TermRecover">Entiendo que necesitaré mis claves privadas para restaurar el acceso a mis fondos si pierdo mi teléfono o si la aplicación no funciona correctamente. Sin mis claves privadas será imposible recuperar el acceso a mi monedero.</string>
+    <string name="SettingsTerms_TermPhone">Entiendo que dar mi teléfono a entidades no fiables o dejar la aplicación de monedero sin bloqueo seguro por PIN podría, potencialmente, poner en peligro la seguridad de mis fondos.</string>
+    <string name="SettingsTerms_TermRoot">Entiendo que rootear mi teléfono (rooting), instalando aplicaciones de terceros de fuentes desconocidas o mantener el sistema operativo desactualizado puede, potencialmente,
+poner en peligro la seguridad de mis fondos.</string>
+    <string name="SettingsTerms_TermBugs">Entiendo que puede haber problemas de software sin descubrir en el código que hace funcionar esta aplicación, lo que puede llevar a un comportamiento inesperado o al mal funcionamiento de la aplicación.</string>
+    <string name="SettingsTerms_BottomThankYou">¡Gracias \npor elegir \neste monedero!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
@@ -287,18 +318,24 @@
     <string name="SettingsContact_Title">Contacto</string>
     <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
-    <string name="SettingsContact_AppStatus">Estado de la aplicación</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notificaciones</string>
     <string name="SettingsNotifications_Description">Establezca alertas de cambio de precio para las monedas que desea ver.\n\nSe le avisará cuando el cambio de precio, durante las últimas 24 horas, supere el umbral seleccionado.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero Unstoppable están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
     <string name="SettingsNotifications_TurnOn">Activar en ajustes</string>
     <string name="SettingsNotifications_Off">Desactivado</string>
     <string name="SettingsNotifications_DeactivateAll">Desactivar todo</string>
     <string name="SettingsNotifications_PushNotification">Notificaciones push</string>
-    <string name="Notification_Notifications">Notificaciones %s</string>
-    <string name="Notification_Up">Arriba</string>
-    <string name="Notification_Down">Abajo</string>
+    <string name="Notification_Title">Notificaciones</string>
+    <string name="Notification_PriceUp">Precio %1$s: Subió %2$s%% ⬆</string>
+    <string name="Notification_PriceDown">Precio %1$s: Bajó %2$s%% ⬇</string>
+    <string name="Notification_TrendUp">%s tendencia: Alcista 📈</string>
+    <string name="Notification_TrendDown">%s tendencia: Bajista 📉</string>
+    <string name="NotificationBottomMenu_Change24h">Variación 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Variación de Tendencia de Precios</string>
+    <string name="NotificationBottomMenu_ShortTerm">Corto plazo 7D</string>
+    <string name="NotificationBottomMenu_Short">Corto plazo</string>
+    <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
+    <string name="NotificationBottomMenu_Long">Largo plazo</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
     <string name="Eos_Backend_Error_SelfTransfer">No se puede transferir el token a su propia cuenta</string>
@@ -405,6 +442,7 @@
     <string name="Charts_TimeDuration_Day">1D</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
     <string name="Charts_TimeDuration_Month3">3M</string>
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>

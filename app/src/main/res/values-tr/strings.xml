@@ -74,6 +74,7 @@
     <string name="Balance_Title">Bakiye</string>
     <string name="Balance_Deposit">Al</string>
     <string name="Balance_Send">Gönder</string>
+    <string name="Balance_Swap">Takas</string>
     <string name="Balance_RatePerCoin">%s = 1 %s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
@@ -131,6 +132,34 @@
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
+    <!--Swap-->
+    <string name="Swap_Title">Takas</string>
+    <string name="Swap_FromAmountTitle">Ödediğiniz</string>
+    <string name="Swap_ToAmountTitle">Kazandığınız</string>
+    <string name="Swap_Percent">%s%%</string>
+    <string name="Swap_Estimated">TAHMİNİ</string>
+    <string name="Swap_MaxButtonTitle">Azami</string>
+    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_Balance">Bakiye</string>
+    <string name="Swap_Price">Fiyat</string>
+    <string name="Swap_PriceImpact">Fiyat Etkisi</string>
+    <string name="Swap_MinimumReceived">Minimum Kazanılan</string>
+    <string name="Swap_MaximiumSold">Maksimum Ödenen</string>
+    <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
+    <!--Swap Coin Select-->
+    <string name="SwapCoinSelect_Title">Kripto Parayı Seç</string>
+    <!--Uniwwap Info -->
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
+    <string name="UniswapInfo_Description">Uniswap, Ethereum\'da otomatik likidite tedariki için tamamen merkezi olmayan bir protokoldür.
+\n\nBasit biçimlendirilmiş bir denklem, binlerce kullanıcı ve yüzlerce uygulama için durdurulamaz likidite sağlar.
+\n\nUniswap, geliştiricilere, likidite sağlayıcılarına ve tüccarlara herkese açık ve erişilebilir bir finans piyasasına katılma yetkisi verir.    </string>
+    <string name="UniswapInfo_MinReceivedTitle">Minimum Alınan</string>
+    <string name="UniswapInfo_MinReceivedDescription">Onaylanmadan önce büyük, olumsuz bir fiyat hareketi varsa alım satım işleminiz geri alınacaktır.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Fiyat Etkisi</string>
+    <string name="UniswapInfo_PriceImpactDescription">Ticaret hacmine bağlı olarak piyasa fiyatı ile tahmini fiyat arasındaki fark.</string>
+    <string name="UniswapInfo_SwapFeeTitle">Takas Ücreti</string>
+    <string name="UniswapInfo_SwapFeeDescription">Her işlemin bir kısmı (% 0.30) bir protokol teşvik primi olarak likidite sağlayıcılarına gider.</string>
+    <string name="UniswapInfo_UniswapSite">Uniswap Web Sitesi</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Paylaş</string>
@@ -201,6 +230,8 @@
     <string name="FullInfoEth_Amount">Tutar</string>
     <!--Guides-->
     <string name="Guides_Title">Akademi</string>
+    <!--Guide-->
+    <string name="Guide_Error_NotFound">Kılavuz bulunamadı</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
@@ -210,9 +241,10 @@
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
     <string name="Settings_LightMode">Aydınlık mod</string>
-    <string name="Settings_About">Hakkında</string>
+    <string name="Settings_Terms">Şartlar</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_Report">Sorunu Bildir</string>
+    <string name="Settings_AppStatus">Uygulama Durumu</string>
     <string name="SettingsOption_Enabled">Etkinleştirildi</string>
     <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
     <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
@@ -262,16 +294,22 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Tavsiye Edilen</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain çıkışlı</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Daha Gizli</string>
-    <!--Setting_About-->
-    <string name="SettingsAbout_Title">Hakkında</string>
-    <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Şartlar &amp; Gizlilik Politikası:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Bu uygulama peer-to-peer uygulamasıdır. Çalışması için herhangi bir web sunucusu veya teknik personeli gerektirmiyor. \n\nInternet olduğu sürece her yerde çalışır. Hiçkimse bu uygulamanın çalışmasını engelleyemez veya birisinin onu kullanmasını sansürleyemez.
-\n\nKripto paranızı kontrol eden gizli şifreleme anahtarları sadece telefonun kendisinde güvenle saklanır, başka hiçbir yerde saklanmaz.
- \n\nGizli şifreleme anahtarlarınızı yedeklemek ve gizli tutmak sizin sorumluluğunuzdur. Anahtarlarınızı asla kimseye göstermeyin. Anahtarlar kaybolur, unutulur veya çalınırsa, paranızı anahtarınızı bulan kişi kullanabilir.
-\n\nTelefonunuzu kesinlikte jailbreak etmeyin, bilinmeyen (güvenilmeyen) kaynaklardan uygulama yüklemeyin, cihazınızı güvenilmeyen kişilere vermeyin ve telefonunuzdaki işletim sistemini güncel tutun. Cüzdanınızın güvenliği buna bağlıdır.
-\n\nBu uygulamayı destekleyen kodun tamamı kamu incelemesine açıktır. Herhangi bir akıllı telefon cüzdan uygulamasından önemli ölçüde daha güvenli olduğuna inanmamıza rağmen, istenmeyen yazılım sorunlarının olmadığının garantisi yoktur.
-\n\nTüm verileriniz, yani işlemler, bakiye vb. yalnızca cüzdan uygulamanız tarafından kullanılabilir ve cihazınızdan asla ayrılmaz.</string>
+    <!--Setting_Terms-->
+    <string name="SettingsTerms_AppTitle">Unstoppable</string>
+    <string name="SettingsTerms_Github">Github</string>
+    <string name="SettingsTerms_Site">Web Sitesi</string>
+    <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
+\n\n Bu, yalnızca kullanıcının fonlar üzerinde kontrol sahibi olduğu, gözetim dışı, uçtan uca bir cüzdandır. Herhangi bir veri toplamaz ve kullanıcının cüzdanını belirli bir cüzdan uygulamasına bağlamadan kullanıcıyı bağımsız tutar.
+\n\nDurdurulamaz cüzdan tamamen açık kaynaklıdır ve herkes uygulamanın tam olarak iddia edildiği gibi çalıştığını doğrulayabilir.
+\n\nMevcut çözümler yeterli olmadığından kendimiz için Durdurulamaz\'ı geliştirdik. Hem mühendislik hem de kullanılabilirlik açısından bu cüzdanın alternatif ürünlerin çok önünde olduğuna inanıyoruz.</string>
+    <string name="SettingsTerms_TermAcademy">Bu uygulamanın Akademi kısmını inceledim ve kripto para birimlerini biriktirmenin temel hususlarına aşina oldum.</string>
+    <string name="SettingsTerms_TermBackup">Bana 12-24 sözcük şeklinde gösterilen cüzdanlarım için özel anahtar(lar) ın yedeğini aldım. Bu özel anahtarların başka bir yerde değil akıllı telefonumda kaydedileceğini anladım.</string>
+    <string name="SettingsTerms_TermOwner">Sadece özel anahtar(lar) ıma sahip olanın cüzdanıma erişip fonları harcayabileceğini ve bu nedenle bu anahtarların asla kimseyle paylaşılmaması gerektiğini anladım.</string>
+    <string name="SettingsTerms_TermRecover">Telefonumu kaybedersem veya uygulama kullanım dışı kalırsa fonlarıma tekrar erişim sağlamak için özel anahtarlarıma ihtiyacım olacağını anladım. Özel anahtarlarım olmadan cüzdanıma erişimi kurtarmak imkansız olacaktır.</string>
+    <string name="SettingsTerms_TermPhone">Telefonumu güvenilmeyen kişilere vermenin veya cüzdan uygulamasından güvenli PIN kilidi olmadan çıkmanın fonlarımın güvenliğini potansiyel olarak tehlikeye atabileceğini anladım.</string>
+    <string name="SettingsTerms_TermRoot">Telefonumun yazılımını kırmanın (rootlama), bilinmeyen kaynaklardan üçüncü taraf uygulamaları yüklemenin, işletim sistemini güncel tutmamanın fonlarımın güvenliğini potansiyel olarak tehlikeye atabileceğini anladım.</string>
+    <string name="SettingsTerms_TermBugs">Bu cüzdan uygulamasını çalıştıran kodda beklenmeyen durumlara veya uygulamanın hatalı çalışmasına neden olabilecek keşfedilmemiş yazılım sorunları olabileceğini anladım.</string>
+    <string name="SettingsTerms_BottomThankYou">Bu cüzdanı \nseçtiğiniz için \n teşekkür ederiz!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
@@ -279,18 +317,24 @@
     <string name="SettingsContact_Title">Iletişim</string>
     <string name="SettingsContact_Email">E-posta</string>
     <string name="SettingsContact_Telegram">Telegram</string>
-    <string name="SettingsContact_AppStatus">Uygulama Durumu</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Bildirimler</string>
     <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın.\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarılırsınız.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
     <string name="SettingsNotifications_TurnOn">Ayarlardan aç</string>
     <string name="SettingsNotifications_Off">Kapat</string>
     <string name="SettingsNotifications_DeactivateAll">Etkisizleştir</string>
     <string name="SettingsNotifications_PushNotification">Anlık bildirimler</string>
-    <string name="Notification_Notifications">Bildirimler %s</string>
-    <string name="Notification_Up">Yukarı</string>
-    <string name="Notification_Down">Aşağı</string>
+    <string name="Notification_Title">Bildirimler</string>
+    <string name="Notification_PriceUp">%1$s fiyat: Yukarı %2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s fiyat: Aşağı %2$s%% ⬇️</string>
+    <string name="Notification_TrendUp">%s trend: Yukarı 📈</string>
+    <string name="Notification_TrendDown">%s trend: Aşağı 📉</string>
+    <string name="NotificationBottomMenu_Change24h">Değişim 24s</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Fiyat Trend Değişimi</string>
+    <string name="NotificationBottomMenu_ShortTerm">Kısa Vade 7G</string>
+    <string name="NotificationBottomMenu_Short">Kısa</string>
+    <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
+    <string name="NotificationBottomMenu_Long">Uzun</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
     <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
@@ -382,7 +426,7 @@
     <string name="TorPage_Title">Tor Bağlantısı</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Unstoppable">Standart</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
     <string name="CoinOption_Fast_Subtitle">0-2 saat (Tavsiye edilen)</string>
@@ -397,6 +441,7 @@
     <string name="Charts_TimeDuration_Day">1G</string>
     <string name="Charts_TimeDuration_Week">7G</string>
     <string name="Charts_TimeDuration_Month">1A</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2H</string>
     <string name="Charts_TimeDuration_Month3">3A</string>
     <string name="Charts_TimeDuration_Quartal">3A</string>
     <string name="Charts_TimeDuration_HalfYear">6A</string>
