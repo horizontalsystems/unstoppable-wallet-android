@@ -327,8 +327,8 @@
     <string name="Notification_Title">Bildirimler</string>
     <string name="Notification_PriceUp">%1$s fiyat: Yukarı %2$s%% ⬆️</string>
     <string name="Notification_PriceDown">%1$s fiyat: Aşağı %2$s%% ⬇️</string>
-    <string name="Notification_TrendUp">%s trend: Up 📈</string>
-    <string name="Notification_TrendDown">%s trend: Down 📉</string>
+    <string name="Notification_TrendUp">%s trend: Yukarı 📈</string>
+    <string name="Notification_TrendDown">%s trend: Aşağı 📉</string>
     <string name="NotificationBottomMenu_Change24h">Değişim 24s</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Fiyat Trend Değişimi</string>
     <string name="NotificationBottomMenu_ShortTerm">Kısa Vade 7G</string>
