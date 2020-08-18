@@ -209,12 +209,15 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
     }
 
     private fun setBottomNavigationCurrentItem(position: Int) {
-        when (position) {
-            0 -> bottomNavigation.menu.findItem(R.id.navigation_balance).isChecked = true
-            1 -> bottomNavigation.menu.findItem(R.id.navigation_transactions).isChecked = true
-            2 -> bottomNavigation.menu.findItem(R.id.navigation_guides).isChecked = true
-            3 -> bottomNavigation.menu.findItem(R.id.navigation_settings).isChecked = true
+        val itemId = when (position) {
+            0 -> R.id.navigation_balance
+            1 -> R.id.navigation_transactions
+            2 -> R.id.navigation_guides
+            3 -> R.id.navigation_settings
+            else -> throw Exception("BottomNavigation position exceeded")
         }
+
+        bottomNavigation.menu.findItem(itemId).isChecked = true
     }
 
     private fun getBottomMenuItemIndex(itemId: Int): Int {
