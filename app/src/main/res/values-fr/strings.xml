@@ -75,6 +75,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Recevoir</string>
     <string name="Balance_Send">Envoyer</string>
+    <string name="Balance_Swap">Echanger</string>
     <string name="Balance_RatePerCoin">%s par %s</string>
     <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
     <string name="Balance_Syncing">Synchronisation…</string>
@@ -132,6 +133,32 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Sending">En attente</string>
     <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %s (%s) payé en %s. Il est nécessaire %s.</string>
+    <!--Swap-->
+    <string name="Swap_Title">Echanger</string>
+    <string name="Swap_FromAmountTitle">Vous payez</string>
+    <string name="Swap_ToAmountTitle">Vous recevez</string>
+    <string name="Swap_Percent"> %s%%</string>
+    <string name="Swap_Estimated">ESTIMÉ</string>
+    <string name="Swap_MaxButtonTitle">Max</string>
+    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_Balance">Balance</string>
+    <string name="Swap_Price">Prix</string>
+    <string name="Swap_PriceImpact">Impact prix</string>
+    <string name="Swap_MinimumReceived">Montant minimum reçu</string>
+    <string name="Swap_MaximiumSold">Montant maximum payé</string>
+    <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
+    <!--Swap Coin Select-->
+    <string name="SwapCoinSelect_Title">Choisir la pièce</string>
+    <!--Uniwwap Info -->
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
+    <string name="UniswapInfo_Description">Uniswap est un protocole entièrement décentralisé pour la provision automatisée de liquidités sur Ethereum.\n\nUne simple équation formalisée entraîne une liquidité imparable pour des milliers d\'utilisateurs et des centaines d\'applications.\n\nUniswap permet aux développeurs, aux fournisseurs de liquidités et aux traders de participer à un marché financier ouvert et accessible à tous    </string>
+    <string name="UniswapInfo_MinReceivedTitle">Minimum reçu</string>
+    <string name="UniswapInfo_MinReceivedDescription">Votre transaction sera reprise s\'il y a un mouvement de prix important et défavorable avant de confirmer.</string>
+    <string name="UniswapInfo_PriceImpactTitle">Impact prix</string>
+    <string name="UniswapInfo_PriceImpactDescription">La différence entre le prix du marché et le prix estimé en raison de la taille des échanges.</string>
+    <string name="UniswapInfo_SwapFeeTitle">Frais d\'échange</string>
+    <string name="UniswapInfo_SwapFeeDescription">Une fraction de chaque transaction (0,30 %) est versée aux fournisseurs de liquidité à titre d\'incitation au protocole.</string>
+    <string name="UniswapInfo_UniswapSite">Site Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
@@ -202,6 +229,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="FullInfoEth_Amount">Montant</string>
     <!--Guides-->
     <string name="Guides_Title">Académie</string>
+    <!--Guide-->
+    <string name="Guide_Error_NotFound">Tutoriel introuvable</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
@@ -211,9 +240,10 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
     <string name="Settings_LightMode">Mode lumineux</string>
-    <string name="Settings_About">À propos de</string>
+    <string name="Settings_Terms">Conditions</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_Report">Signaler un problème</string>
+    <string name="Settings_AppStatus">Statut de l\'appli</string>
     <string name="SettingsOption_Enabled">Activé</string>
     <string name="SettingsOption_Disabled">Désactivé</string>
     <string name="SettingsPrivacy_Info">Cette application ne partage aucune de vos données. Cependant, comme elle communique avec des blockchains, certaines données publiques comme l\'adresse IP peuvent potentiellement être divulguées. Utilisez le bouton \"info\" en haut à droite pour obtenir des informations détaillées sur chaque section.</string>
@@ -263,17 +293,22 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommandé</string>
     <string name="SettingsSecurity_SyncModeBlockchain">De la Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
-    <!--Setting_About-->
-    <string name="SettingsAbout_Title">À propos de</string>
-    <string name="SettingsAbout_AppTitle">Unstoppable</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Cette application est de type peer-to-peer. Elle ne dépend pas d\'un serveur web ou du support des techniciens pour fonctionner.
-\n\nIt fonctionne partout tant qu\'il y a une connexion internet. Aucune entité ne peut empêcher cette application de fonctionner ou censurer quelqu\'un qui voudrait l\'utiliser.
-\n\nLes clés cryptographiques secrètes qui contrôlent vos fonds cryptographiques sont stockées en toute sécurité sur le téléphone lui-même, et nulle part ailleurs.
-\n\nSauvegarder vos clés cryptographiques secrètes et les garder privées est de votre responsabilité. Ne montrez jamais vos clés à qui que ce soit. Si les clés sont perdues, oubliées ou volées, vos fonds pourront être utilisés par la personne qui trouvera votre clé.
-\n\nNe débridez pas votre téléphone, n\'installez pas d\'applications provenant de sources inconnues (non fiables), ne donnez pas votre appareil à des personnes non fiables, et gardez le système d\'exploitation de votre téléphone à jour. La sécurité de votre portefeuille en dépend.
-\n\nL\'ensemble du code qui alimente cette application est ouvert au regard du public. Bien que nous soyons convaincus que cette application est bien plus sûre que toutes les autres applications pour smartphones, il n\'y a aucune garantie qu\'il n\'y ait pas de problèmes logiciels fortuits.
-\n\nToutes vos données, c\'est-à-dire vos transactions, votre solde, etc. ne sont accessibles que par votre application portefeuille et ne quittent jamais votre appareil.</string>
+    <!--Setting_Terms-->
+    <string name="SettingsTerms_AppTitle">Unstoppable</string>
+    <string name="SettingsTerms_Github">Github</string>
+    <string name="SettingsTerms_Site">Site</string>
+    <string name="SettingsTerms_Text">Unstoppable Wallet est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.
+\n\nIl s\'agit d\'un portefeuille non privatif de liberté, de type pair à pair, où seul l\'utilisateur a le contrôle des fonds. Il ne collecte aucune donnée et permet à l\'utilisateur de rester indépendant en ne verrouillant pas son portefeuille à une application de portefeuille spécifique.
+\n\nL\'application Unstoppable Wallet est entièrement open-source et tout le monde peut confirmer que l\'application fonctionne exactement comme elle le prétend.
+\n\nNous avons construit Unstoppable à notre intention car les solutions disponibles n\'étaient pas à la hauteur de nos attentes. Tant du point de vue de l\'ingénierie que de la convivialité, nous pensons que ce portefeuille a une avance considérable sur les produits alternatifs.</string>
+    <string name="SettingsTerms_TermAcademy">J\'ai parcouru la section Académie de cette application et me suis familiarisé avec les aspects fondamentaux du stockage des cryptomonnaies.</string>
+    <string name="SettingsTerms_TermBackup">J\'ai sauvegardé la/les clé(s) privée(s) de mes portefeuilles qui m\'ont été présentées sous une formule de 12 à 24 mots. Je comprends que ces clés privées sont stockées sur mon smartphone et non ailleurs.</string>
+    <string name="SettingsTerms_TermOwner">Je comprends que seul le propriétaire de ma (mes) clé(s) privée(s) peut accéder à mon portefeuille et y dépenser des fonds, et que ces clés ne doivent donc jamais être partagées avec qui que ce soit.</string>
+    <string name="SettingsTerms_TermRecover">Je comprends que j\'aurai besoin de mes clés privées afin de rétablir l\'accès à mes fonds si je perds mon téléphone ou si l\'application fonctionne mal. Sans mes clés privées, il me sera impossible de récupérer l\'accès à mon portefeuille.</string>
+    <string name="SettingsTerms_TermPhone">Je comprends que le fait de confier mon téléphone à des entités non fiables ou de laisser l\'application portefeuille sans verrouillage du code PIN peut potentiellement compromettre la sécurité de mes fonds.</string>
+    <string name="SettingsTerms_TermRoot">Je comprends que le fait débrider (rooting) mon téléphone, d\'installer des applications tierces de sources inconnues, de conserver un système d\'exploitation obsolète peut potentiellement mettre en danger la sécurité de mes fonds.</string>
+    <string name="SettingsTerms_TermBugs">Je suis conscient qu\'il pourrait y avoir des problèmes non détectés dans le code de cette application de portefeuille, ce qui pourrait entraîner un comportement inattendu ou un dysfonctionnement de l\'application.</string>
+    <string name="SettingsTerms_BottomThankYou">Merci d\'avoir choisi ce portefeuille !</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
@@ -281,18 +316,24 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SettingsContact_Title">Contact</string>
     <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
-    <string name="SettingsContact_AppStatus">Statut de l\'appli</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notifications</string>
     <string name="SettingsNotifications_Description">Définissez des alertes de changement de prix pour les pièces que vous voulez surveiller. \n\nVous serez averti lorsque le changement de prix pour les dernières 24 heures dépasse le seuil sélectionné.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Les notifications pour l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour pouvoir recevoir des alertes de changement de prix.</string>
     <string name="SettingsNotifications_TurnOn">Activer dans Paramètres</string>
     <string name="SettingsNotifications_Off">Désactivé</string>
     <string name="SettingsNotifications_DeactivateAll">Tout désactiver</string>
     <string name="SettingsNotifications_PushNotification">Notification push</string>
-    <string name="Notification_Notifications">Notification : %s</string>
-    <string name="Notification_Up">Monter</string>
-    <string name="Notification_Down">Descendre</string>
+    <string name="Notification_Title">Notifications</string>
+    <string name="Notification_PriceUp">%1$s prix : Hausse %2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s prix : Baisse %2$s%% ⬇️</string>
+    <string name="Notification_TrendUp">%s tendance : Hausse 📈</string>
+    <string name="Notification_TrendDown">%s tendance : Baisse 📉</string>
+    <string name="NotificationBottomMenu_Change24h">Changement 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Changement de tendance de prix</string>
+    <string name="NotificationBottomMenu_ShortTerm">Court terme 7J</string>
+    <string name="NotificationBottomMenu_Short">Court</string>
+    <string name="NotificationBottomMenu_LongTerm">Long terme 6M</string>
+    <string name="NotificationBottomMenu_Long">Long</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
     <string name="Eos_Backend_Error_SelfTransfer">Impossible de transférer des tokens sur votre propre compte</string>
@@ -385,7 +426,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="TorPage_Title">Connection Tor</string>
     <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Unstoppable">Standard</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast_Subtitle">0-2 heures (Recommandé)</string>
@@ -400,6 +441,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="Charts_TimeDuration_Day">1J</string>
     <string name="Charts_TimeDuration_Week">7J</string>
     <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
     <string name="Charts_TimeDuration_Month3">3M</string>
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>

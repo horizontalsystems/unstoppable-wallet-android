@@ -74,6 +74,7 @@
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">接收</string>
     <string name="Balance_Send">发送​​</string>
+    <string name="Balance_Swap">掉期交易</string>
     <string name="Balance_RatePerCoin">%s / %s</string>
     <string name="Balance_SyncedUntil">直至：%s</string>
     <string name="Balance_Syncing">正在同步...</string>
@@ -131,6 +132,32 @@
     <string name="Send_Sending">正在发送</string>
     <string name="Send_ERC_Alert">用Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
+    <!--Swap-->
+    <string name="Swap_Title">掉期交易</string>
+    <string name="Swap_FromAmountTitle">您支付</string>
+    <string name="Swap_ToAmountTitle">您获得</string>
+    <string name="Swap_Percent">%s%%</string>
+    <string name="Swap_Estimated">估计</string>
+    <string name="Swap_MaxButtonTitle">最多</string>
+    <string name="Swap_TokenSelectorTitle">令牌</string>
+    <string name="Swap_Balance">余额</string>
+    <string name="Swap_Price">价格</string>
+    <string name="Swap_PriceImpact">价格影响</string>
+    <string name="Swap_MinimumReceived">最小获取金额</string>
+    <string name="Swap_MaximiumSold">最大支付金额</string>
+    <string name="Swap_ErrorInsufficientBalance">余额不足</string>
+    <!--Swap Coin Select-->
+    <string name="SwapCoinSelect_Title">选择代币</string>
+    <!--Uniwwap Info -->
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
+    <string name="UniswapInfo_Description">Uniswap是对以太币（Ethereum）实现流动性供给自动化的一种完全去中心化协议。\n\n一个简单的形式化方程为成千上百的用户和应用程序推动了不可阻挡的流动性。\n\nUniswap为开发人员、流动性提供着和交易者赋予了参与到对所有人开放的金融市场中的能力。</string>
+    <string name="UniswapInfo_MinReceivedTitle">收到的最小金额</string>
+    <string name="UniswapInfo_MinReceivedDescription">如果在确认之前出现大幅度不利的价格变动，您的交易将会还原。</string>
+    <string name="UniswapInfo_PriceImpactTitle">价格影响</string>
+    <string name="UniswapInfo_PriceImpactDescription">市场价格和估计价格由于交易规模引起的差额。</string>
+    <string name="UniswapInfo_SwapFeeTitle">掉期交易费用</string>
+    <string name="UniswapInfo_SwapFeeDescription">每一交易的一部分（0.30%）将作为协议奖励授予流动性提供着。</string>
+    <string name="UniswapInfo_UniswapSite">Uniswap网站</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">分享</string>
@@ -201,6 +228,8 @@
     <string name="FullInfoEth_Amount">金额</string>
     <!--Guides-->
     <string name="Guides_Title">学院</string>
+    <!--Guide-->
+    <string name="Guide_Error_NotFound">找不到指南</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
@@ -210,9 +239,10 @@
     <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
     <string name="Settings_LightMode">简单模式</string>
-    <string name="Settings_About">关于</string>
+    <string name="Settings_Terms">条款</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_Report">报告问题</string>
+    <string name="Settings_AppStatus">应用状态</string>
     <string name="SettingsOption_Enabled">已启用</string>
     <string name="SettingsOption_Disabled">已禁用</string>
     <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
@@ -262,17 +292,22 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">推荐</string>
     <string name="SettingsSecurity_SyncModeBlockchain">来自区块链</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">更私密</string>
-    <!--Setting_About-->
-    <string name="SettingsAbout_Title">关于</string>
-    <string name="SettingsAbout_AppTitle">Unstoppable</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">条款和隐私：</string>
-    <string name="SettingsAbout_TermsPrivacyText">此应用是一款点对点应用。其运作不依赖于任何网络服务器或技术支持人员。
-\n\n应用能在任何有网络的地方工作。没有实体能够阻止此应用工作或者阻止任何人使用它。
-\n\n控制着您资金的加密密钥安全地保存在电话上，而不是其他地方。
-\n\n您的职责是备份加密密钥并保证其私密性。绝不要向任何人展示密钥。如果密钥丢失、遗忘或被盗，您的资金将会被拥有密钥的人使用。
-\n\n不要对您的电话进行越狱，不要安装来源不明（不可靠）的应用，不要把您的电话交给不可靠的人，保证电话的操作系统是最新版本。您钱包的安全将取决于此。
-\n\n支持此应用的完整代码对公众监督开放。尽管我们相信比市面上任何智能手机钱包应用都安全得多，但这不保证其中不会存在意外的软件问题。
-\n\n像交易、余额等所有数据将仅保存在您的钱包应用且绝不会从您的设备上外泄。</string>
+    <!--Setting_Terms-->
+    <string name="SettingsTerms_AppTitle">Unstoppable</string>
+    <string name="SettingsTerms_Github">Github</string>
+    <string name="SettingsTerms_Site">网站</string>
+    <string name="SettingsTerms_Text">Unstoppable钱包是为寻求以私密和独立的方式投资和储存加密货币的人士而创立。
+\n\n这是一个非监护式对等钱包，只有用户能够对资金进行控制。它不收集任何数据并通过不把用户钱包锁定至特定的钱包应用来保证他/她的独立性。
+\n\nUnstoppable钱包完全开源且任何人都可以确定应用按照其宣称的方式运行。
+\n\n我们为我们自己创立了Unstoppable作为符合标准的可用的解决方案。从工程和可用性角度而言，我们相信此钱包远远领先于其他产品。</string>
+    <string name="SettingsTerms_TermAcademy">我浏览了此应用的“学院”（Academy）部分并掌握了储存加密货币的基础知识。</string>
+    <string name="SettingsTerms_TermBackup">我已对我钱包的私钥备份，该私钥以12-24字的格式展示给我。我理解这些私钥将保存在我的智能手机而不是其他地方。</string>
+    <string name="SettingsTerms_TermOwner">我理解只有私钥的所有人可以访问和消费我钱包上的资金，因此不得和任何人共享这些私钥。</string>
+    <string name="SettingsTerms_TermRecover">我理解如果我丢失了手机或者应用出现故障时，我需要私钥才能恢复对我资金的访问。没有私钥，将无法恢复对我钱包的访问。</string>
+    <string name="SettingsTerms_TermPhone">我理解，将我的手机交给不可信的实体或者在未设置安全PIN码锁定的情况下离开钱包应用可能会危害我的资金安全。</string>
+    <string name="SettingsTerms_TermRoot">我理解对我的手机进行越狱（root）、安装来源不明的第三方应用、未及时更新操作系统可能会危害我的资金安全。</string>
+    <string name="SettingsTerms_TermBugs">我理解，在实现此钱包应用的代码中可能存在未发现的软件问题，这可能会导致意外行为或应用故障的发生。</string>
+    <string name="SettingsTerms_BottomThankYou">感谢您选择我们的钱包！</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
@@ -280,18 +315,24 @@
     <string name="SettingsContact_Title">联系信息</string>
     <string name="SettingsContact_Email">邮件</string>
     <string name="SettingsContact_Telegram">电报</string>
-    <string name="SettingsContact_AppStatus">应用状态</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">通知</string>
     <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格的变化在24小时内超出选定的临界值时，您将收到警报。</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsNotifications_TurnOn">在设置中开启</string>
     <string name="SettingsNotifications_Off">关</string>
     <string name="SettingsNotifications_DeactivateAll">全部停用</string>
     <string name="SettingsNotifications_PushNotification">推送通知</string>
-    <string name="Notification_Notifications">通知 %s</string>
-    <string name="Notification_Up">上</string>
-    <string name="Notification_Down">下</string>
+    <string name="Notification_Title">通知</string>
+    <string name="Notification_PriceUp">%1$s 价格：上升%2$s%% ⬆️</string>
+    <string name="Notification_PriceDown">%1$s 价格：下跌%2$s%% ⬇️</string>
+    <string name="Notification_TrendUp">%s 趋势：上升 📈</string>
+    <string name="Notification_TrendDown">%s 趋势：下跌 📉</string>
+    <string name="NotificationBottomMenu_Change24h">24小时变动</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">价格趋势变动</string>
+    <string name="NotificationBottomMenu_ShortTerm">短期7天</string>
+    <string name="NotificationBottomMenu_Short">做空</string>
+    <string name="NotificationBottomMenu_LongTerm">长期6个月</string>
+    <string name="NotificationBottomMenu_Long">做多</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">不获支持货币</string>
     <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
@@ -399,6 +440,7 @@
     <string name="Charts_TimeDuration_Day">1天</string>
     <string name="Charts_TimeDuration_Week">7天</string>
     <string name="Charts_TimeDuration_Month">1个月</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2周</string>
     <string name="Charts_TimeDuration_Month3">3个月</string>
     <string name="Charts_TimeDuration_Quartal">3个月</string>
     <string name="Charts_TimeDuration_HalfYear">6个月</string>

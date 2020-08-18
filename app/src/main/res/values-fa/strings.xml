@@ -74,6 +74,7 @@
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Deposit">دريافت</string>
     <string name="Balance_Send">ارسال</string>
+    <string name="Balance_Swap">جابجایی</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
     <string name="Balance_SyncedUntil">تا: %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
@@ -131,6 +132,35 @@
     <string name="Send_Sending">در حال ارسال</string>
     <string name="Send_ERC_Alert">هزینه تراکنش برای %s (ERC20) در اتریوم پرداخت شده است. شما به %s ETH نیاز دارید.</string>
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
+    <!--Swap-->
+    <string name="Swap_Title">جابجایی</string>
+    <string name="Swap_FromAmountTitle">شما می پردازید</string>
+    <string name="Swap_ToAmountTitle">شما دریافت می کنید</string>
+    <string name="Swap_Percent">%s%%</string>
+    <string name="Swap_Estimated">تخمینی</string>
+    <string name="Swap_MaxButtonTitle">حداکثر</string>
+    <string name="Swap_TokenSelectorTitle">توکن</string>
+    <string name="Swap_Balance">بالانس</string>
+    <string name="Swap_Price">قیمت</string>
+    <string name="Swap_PriceImpact">تأثیر قیمت</string>
+    <string name="Swap_MinimumReceived">حداقل دریافت</string>
+    <string name="Swap_MaximiumSold">حداکثر پرداخت</string>
+    <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
+    <!--Swap Coin Select-->
+    <string name="SwapCoinSelect_Title">سکه را انتخاب کنید</string>
+    <!--Uniwwap Info -->
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
+    <string name="UniswapInfo_Description">Uniswap یک پروتکل کاملاً غیرمتمرکز برای تأمین خودکار نقدینگی در اتریوم است.
+\n\nیک معادله رسمی ساده نقدینگی غیر قابل توقف را برای هزاران کاربر و صدها برنامه هدایت می کند.
+\n\nUniswap این قابلیت را به توسعه دهندگان، ارائه دهندگان نقدینگی و تجار می دهد تا در بازار مالی مشارکت کنند که برای همه باز و در دسترس می باشد.
+    </string>
+    <string name="UniswapInfo_MinReceivedTitle">حداقل دریافت شده</string>
+    <string name="UniswapInfo_MinReceivedDescription">اگر اقدامی بزرگ و نامطلوب درباره قیمت قبل از تأیید وجود داشته باشد، تراکنش شما برگشت خواهد خورد.</string>
+    <string name="UniswapInfo_PriceImpactTitle">تأثیر قیمت</string>
+    <string name="UniswapInfo_PriceImpactDescription">تفاوت بین قیمت بازار و قیمت تخمینی به دلیل اندازه تجارت است.</string>
+    <string name="UniswapInfo_SwapFeeTitle">هزینه جابجایی</string>
+    <string name="UniswapInfo_SwapFeeDescription">بخشی از هر تجارت (0.30%) به عنوان یک مشوق پروتکل به ارائه دهندگان نقدینگی اختصاص داده می شود.</string>
+    <string name="UniswapInfo_UniswapSite">سایت Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت %s</string>
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
@@ -201,6 +231,8 @@
     <string name="FullInfoEth_Amount">مقدار</string>
     <!--Guides-->
     <string name="Guides_Title">آکادمی</string>
+    <!--Guide-->
+    <string name="Guide_Error_NotFound">راهنما یافت نشد</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -210,14 +242,15 @@
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
     <string name="Settings_LightMode">حالت روشن</string>
-    <string name="Settings_About">درباره</string>
+    <string name="Settings_Terms">شرایط</string>
     <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
     <string name="Settings_Report">گزارش مشکل</string>
+    <string name="Settings_AppStatus">وضعیت برنامه</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
     <string name="SettingsPrivacy_Info">این برنامه هیچ یک از داده های شما را به اشتراک نمی گذارد. با این حال، بخاطر ارتباط با زنجیره های بلوکی، برخی از داده های عمومی مانند آدرس آی پی می توانند به طور بالقوه فاش شوند. برای کسب اطلاعات دقیق در مورد هر بخش از دکمه اطلاعات در سمت راست بالا استفاده کنید.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
+    <string name="SettingsPrivacy_CommunicationSettingsTitle">همزمانی بلوک چین</string>
     <string name="SettingsPrivacy_CommunicationDescription">بعضی از زنجیره های بلوکی هنوز وسیله ای برای برنامه های تلفن همراه برای کار به روش همتا به همتا ارائه نمی دهند. ارتباطات با زنجیره های بلوکی BTC ، BCH ، LTC ، DASH کاملاً همتا به همتا است.</string>
     <string name="SettingsPrivacy_WalletRestore">بازیابی زنجیره بلوکی</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">منبع داده را برای بازیابی کیف پول با تراکنش ها انتخاب کنید.</string>
@@ -269,16 +302,22 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsSecurity_SyncModeAPIDescription">توصیه شده</string>
     <string name="SettingsSecurity_SyncModeBlockchain">از زنجیره بلوکی</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">خصوصی تر</string>
-    <!--Setting_About-->
-    <string name="SettingsAbout_Title">درباره</string>
-    <string name="SettingsAbout_AppTitle">غیرقابل توقف</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">شرايط &amp; حريم خصوصي:</string>
-    <string name="SettingsAbout_TermsPrivacyText">این برنامه به صورت همتا به همتا است. کارکرد این برنامه به عملکرد سرور وب یا پرسنل پشتیبانی فنی بستگی ندارد. \n\n تا زمانی که اینترنت وجود داشته باشد ، در همه جا کار می کند. هیچ نهادی نمی تواند این برنامه را از کار بیندازد یا کسی را از استفاده از آن بازدارد.
-\n\nکلیدهای رمزنگاری محرمانه که سرمایه رمزنگاری شده شما را کنترل می کنند ، کاملا مطمین در گوشی ذخیره می شوند ، و نه در هیچ جای دیگر.
-\n\nمسئولیت تهیه نسخه پشتیبان از کلیدهای رمزنگاری محرمانه و خصوصی نگه داشتن آنها با شما است. هرگز کلیدهای خود را به کسی نشان ندهید. در صورت گم شدن، فراموش کردن یا دزدیده شدن کلید ها، سرمایه شما توسط شخصی که کلید شما را پیدا می کند قابل استفاده است.
-\n\nتلفن خود را جیلبریک نکنید ، برنامه ای را از منابع ناشناخته (غیر قابل اعتماد) نصب نکنید ، موبایل خود را به افراد غیرقابل اعتماد ندهید و سیستم عامل تلفن خود را به روز نگه دارید. امنیت کیف پول شما به اینها بستگی دارد.
-\n\n کل کد قدرت این برنامه در معرض بررسی عموم قرار دارد. در حالی که ما اعتقاد داریم که این برنامه به طور قابل توجهی از دیگر برنامه های کیف پول گوشی های هوشمند ایمن تر است ، هیچ تضمینی برای عدم وجود مشکلات نرم افزاری ناخواسته وجود ندارد.
-\n\nتمام داده های شما برای مثال تراکنش ها ، موجودی و غیره فقط در برنامه کیف پول شما موجود است و هرگز دستگاه شما را ترک نمی کند.</string>
+    <!--Setting_Terms-->
+    <string name="SettingsTerms_AppTitle">Unstoppable</string>
+    <string name="SettingsTerms_Github">Github</string>
+    <string name="SettingsTerms_Site">سایت</string>
+    <string name="SettingsTerms_Text">کیف پول غیرقابل توقف برای افرادی که به دنبال سرمایه گذاری و ذخیره رمزارز ها به صورت خصوصی و مستقل هستند ساخته شده است.
+\n\nاین کیف پول بدون حساب امانی و همپایه است که فقط کاربر کنترل وجوه را در اختیار دارد. این کیف پول اطلاعات را جمع آوری نمی کند و با قفل کردن کیف پول خود در یک برنامه کیف پول خاص ، مستقل کاربر را نگه می دارد.
+\n\nکیف پول غیرقابل توقف کاملاً منبع باز است و هرکسی می تواند تأیید کند که این برنامه دقیقاً مطابق ادعای خود کار می کند.
+\n\nما این کیف پول غیرقابل توقف را برای خودمان ساختیم زیرا راه حل های موجود کافی نبود نبود. از نظر مهندسی و قابلیت استفاده، ما معتقدیم که این کیف پول از محصولات جایگزین بسیار چشمگیرتر است.</string>
+    <string name="SettingsTerms_TermAcademy">من بخش آکادمی این برنامه را گذرانده ام و با جنبه های اساسی ذخیره رمزارز آشنا هستم.</string>
+    <string name="SettingsTerms_TermBackup">من از کلید(های) خصوصی کیف پول های خود که به شکل ۲۴-۱۲ کلمه به من نشان داده شده اند نسخه پشتیبان تهیه کردم. من می دانم که این کلیدهای خصوصی در تلفن هوشمند من ذخیره می شوند و نه جای دیگر.</string>
+    <string name="SettingsTerms_TermOwner">من آگاه هستم که فقط صاحب کلید (های) خصوصی من می تواند به کیف پول من دسترسی پیدا کند و مبلغی را خرج کند، به همین دلیل این کلیدها هرگز نباید با کسی به اشتراک گذاشته شوند.</string>
+    <string name="SettingsTerms_TermRecover">من آگاه هستم که برای دسترسی دوباره به بودجه خود، باید تلفن خود را از دست بدهم یا در صورت خرابی برنامه، به کلیدهای خصوصی خود نیاز داشته باشم. بدون کلیدهای شخصی من بازیابی دسترسی به کیف پول من غیرممکن خواهد بود.</string>
+    <string name="SettingsTerms_TermPhone">من آگاه هستم که انتقال تلفن من به اشخاص غیر قابل اعتماد یا ترک برنامه کیف پول بدون قفل پین ایمنی ممکن است به طور بالقوه امنیت بودجه من را به خطر بیندازد.</string>
+    <string name="SettingsTerms_TermRoot">من آگاه هستم که که جیلبرینگ (ریشه کنی) تلفن من، نصب برنامه های شخص ثالث از منابع ناشناخته، نگه داشتن سیستم عامل منسوخ شده می تواند به طور بالقوه امنیت بودجه من را به خطر بیندازد.</string>
+    <string name="SettingsTerms_TermBugs">من آگاه هستم که ممکن است در کد منبع اصلی این برنامه کیف پول مشکل نرم افزاری کشف نشده ای وجود داشته باشد که منجر به رفتار غیر منتظره یا نقص برنامه شود.</string>
+    <string name="SettingsTerms_BottomThankYou">از شما \nبخاطر انتخاب\n این کیف پول متشکریم!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
@@ -286,18 +325,24 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsContact_Title">تماس</string>
     <string name="SettingsContact_Email">ايميل</string>
     <string name="SettingsContact_Telegram">تلگرام (توسعه دهندگان)</string>
-    <string name="SettingsContact_AppStatus">وضعیت برنامه</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">اطلاعیه ها</string>
     <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت را برای سکه هایی که می خواهید تماشا کنید تنظیم کنید.\n\nوقتی تغییر قیمت برای ۲۴ ساعت گذشته بیش از آستانه انتخاب شده باشد ، به شما هشدار داده می شود.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. برای اینکه بتوانید هشدارهای تغییر قیمت را دریافت کنید ، باید آنها را فعال کنید.</string>
     <string name="SettingsNotifications_TurnOn">روشن کردن در تنظیمات</string>
     <string name="SettingsNotifications_Off">خاموش</string>
     <string name="SettingsNotifications_DeactivateAll">غیر فعال کردن همه</string>
     <string name="SettingsNotifications_PushNotification">ارسال یادآوری</string>
-    <string name="Notification_Notifications">اطلاعیه ها%s</string>
-    <string name="Notification_Up">بالا</string>
-    <string name="Notification_Down">پایین</string>
+    <string name="Notification_Title">اطلاعیه ها</string>
+    <string name="Notification_PriceUp">%1$s قیمت: بالاترین %2$s%%⬆️</string>
+    <string name="Notification_PriceDown">%1$s قیمت: پایین ترین %2$s%%⬇️</string>
+    <string name="Notification_TrendUp">%s روند: صعودی📈</string>
+    <string name="Notification_TrendDown">%sروند: نزولی 📉</string>
+    <string name="NotificationBottomMenu_Change24h">تغییر 24 ساعت</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">تغییر روند قیمت</string>
+    <string name="NotificationBottomMenu_ShortTerm">کوتاه مدت 7D</string>
+    <string name="NotificationBottomMenu_Short">کوتاه</string>
+    <string name="NotificationBottomMenu_LongTerm">بلندمدت 6M</string>
+    <string name="NotificationBottomMenu_Long">بلند</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">ارز پشتیبانی نشده</string>
     <string name="Eos_Backend_Error_SelfTransfer">مبلغ نمی تواند به حساب خودتان منتقل شود</string>
@@ -404,6 +449,7 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Charts_TimeDuration_Day">۱روز</string>
     <string name="Charts_TimeDuration_Week">۷روز</string>
     <string name="Charts_TimeDuration_Month">۱دقیقه</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
     <string name="Charts_TimeDuration_Month3">3M</string>
     <string name="Charts_TimeDuration_Quartal">۳دقیقه</string>
     <string name="Charts_TimeDuration_HalfYear">۶دقیقه</string>
@@ -418,10 +464,10 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Charts_TotalSupply">موجودی کل</string>
     <string name="Charts_StartDate">تاریخ شروع</string>
     <string name="Charts_Website">وب سایت پروژه</string>
-    <string name="Charts_MarketCap_Thousand">k</string>
-    <string name="Charts_MarketCap_Million">M</string>
-    <string name="Charts_MarketCap_Billion">B</string>
-    <string name="Charts_MarketCap_Trillion">T</string>
+    <string name="Charts_MarketCap_Thousand">هزار</string>
+    <string name="Charts_MarketCap_Million">میلیون</string>
+    <string name="Charts_MarketCap_Billion">بیلیون</string>
+    <string name="Charts_MarketCap_Trillion">تریلیون</string>
     <string name="Charts_Volume">درجه صدا</string>
     <string name="Charts_Price">قیمت</string>
     <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
