@@ -70,6 +70,7 @@
         <item name="ColorGwen">@drawable/light_gradient_background</item>
         <item name="ColorNina">@color/black_50</item>
         <item name="ColorTyler">@color/light</item>
+        <item name="ColorRaina">@color/white_50</item>
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
     </style>
