@@ -156,7 +156,7 @@
     <string name="UniswapInfo_PriceImpactTitle">Разница в цене</string>
     <string name="UniswapInfo_PriceImpactDescription">Разница между рыночной и скользящей ценой возникает из-за размера сделки.</string>
     <string name="UniswapInfo_SwapFeeTitle">Комиссия за обмен</string>
-    <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
+    <string name="UniswapInfo_SwapFeeDescription">Часть с каждой сделки (0,30%) идет поставщикам ликвидности как протокольный стимул.</string>
     <string name="UniswapInfo_UniswapSite">Веб-сайт Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
@@ -229,7 +229,7 @@
     <!--Guides-->
     <string name="Guides_Title">Академия</string>
     <!--Guide-->
-    <string name="Guide_Error_NotFound">Guide not found</string>
+    <string name="Guide_Error_NotFound">Файл не найден</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
@@ -305,7 +305,7 @@
     <string name="SettingsTerms_TermOwner">Я понимаю, что только владелец моего приватного ключа(-ей) может получить доступ к моему кошельку и потратить доступные в нем средства, и поэтому эти ключи никогда не должны передаваться посторонним людям.</string>
     <string name="SettingsTerms_TermRecover">Я понимаю, что мне нужны приватные ключи для восстановления доступа к моим средствам, если я потеряю телефон или не будет работать приложение. Я не смогу восстановить доступ к моему кошельку без своих приватных ключей.</string>
     <string name="SettingsTerms_TermPhone">Я понимаю, что передача моего телефона ненадежным организациям или выход из кошелька без безопасной блокировки PIN-кода может поставить под угрозу безопасность моих средств.</string>
-    <string name="SettingsTerms_TermRoot">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermRoot">Я понимаю, что джейлбрейк (или рутинг) моего телефона, установка приложений из неизвестных источников, устаревшая операционная система могут поставить под угрозу безопасность моих средств.</string>
     <string name="SettingsTerms_TermBugs">Я понимаю, что могут возникнуть проблемы с ПО в коде этого приложения с кошельком, что в свою очередь может привести к неожиданному поведению приложения или сбоям в его работе.</string>
     <string name="SettingsTerms_BottomThankYou">Благодарим вас \nза выбор \nэтого кошелька!</string>
     <!--Setting_Tell Friends-->
@@ -325,8 +325,8 @@
     <string name="Notification_Title">Уведомления</string>
     <string name="Notification_PriceUp">%1$s цена: повысилась на %2$s%% ⬆️</string>
     <string name="Notification_PriceDown">%1$s цена: понизилась на %2$s%% ⬇️</string>
-    <string name="Notification_TrendUp">%s trend: Up 📈</string>
-    <string name="Notification_TrendDown">%s trend: Down 📉</string>
+    <string name="Notification_TrendUp">%s тренд: Вверх 📈</string>
+    <string name="Notification_TrendDown">%s тренд: Вниз 📉</string>
     <string name="NotificationBottomMenu_Change24h">Изменения (24ч)</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Изменение Ценового Тренда</string>
     <string name="NotificationBottomMenu_ShortTerm">Краткосрочный 7Д</string>
