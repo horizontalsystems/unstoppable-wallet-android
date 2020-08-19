@@ -23,12 +23,16 @@ object GuidesManager {
 
     fun getGuideCategories(): Single<Array<GuideCategory>> {
         return Single.fromCallable {
-
-            val inputStream = getGuides()
-            val categories = gson.fromJson(inputStream.bufferedReader(), Array<GuideCategory>::class.java)
-            inputStream.close()
-
-            categories
+            URL(guidesUrl)
+                    .openConnection()
+                    .apply {
+                        connectTimeout = 5000
+                        readTimeout = 60000
+                        setRequestProperty("Accept", "application/json")
+                    }.getInputStream()
+                    .use {
+                        gson.fromJson(it.bufferedReader(), Array<GuideCategory>::class.java)
+                    }
         }
     }
 
@@ -39,16 +43,6 @@ object GuidesManager {
         return App.networkManager.getGuide(host, fileUrl)
     }
 
-    @Throws
-    private fun getGuides(): InputStream {
-        return URL(guidesUrl)
-                .openConnection()
-                .apply {
-                    connectTimeout = 5000
-                    readTimeout = 60000
-                    setRequestProperty("Accept", "application/json")
-                }.getInputStream()
-    }
 
     class GuideDeserializer(guidesUrl: String) : JsonDeserializer<Guide> {
         private val guidesUrlObj = URL(guidesUrl)
