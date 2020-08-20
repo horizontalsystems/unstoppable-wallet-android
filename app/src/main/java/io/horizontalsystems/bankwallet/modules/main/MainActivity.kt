@@ -185,12 +185,15 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
             }
 
             override fun onPageSelected(position: Int) {
-                setBottomNavigationCurrentItem(position)
+                val itemId = getBottomNavigationItemId(position)
+                bottomNavigation.menu.findItem(itemId).isChecked = true
             }
         })
 
         val activeTab = intent?.extras?.getInt(ACTIVE_TAB_KEY)
-        activeTab?.let { setBottomNavigationCurrentItem(it) }
+        activeTab?.let { position ->
+            bottomNavigation.selectedItemId = getBottomNavigationItemId(position)
+        }
 
         preloadBottomSheets()
     }
@@ -208,16 +211,14 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener, RateAppDialog
         return bottomBadgeView
     }
 
-    private fun setBottomNavigationCurrentItem(position: Int) {
-        val itemId = when (position) {
+    private fun getBottomNavigationItemId(position: Int): Int {
+        return when (position) {
             0 -> R.id.navigation_balance
             1 -> R.id.navigation_transactions
             2 -> R.id.navigation_guides
             3 -> R.id.navigation_settings
             else -> throw Exception("BottomNavigation position exceeded")
         }
-
-        bottomNavigation.menu.findItem(itemId).isChecked = true
     }
 
     private fun getBottomMenuItemIndex(itemId: Int): Int {
