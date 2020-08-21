@@ -27,10 +27,10 @@ class SwapAmountView @JvmOverloads constructor(context: Context, attrs: Attribut
 
     fun setError(text: String?) {
         error.text = text
-        error.isVisible = text != null
+        error.isVisible = text != null && text.isNotBlank()
     }
 
-    fun setSelectedCoin(title: String) {
+    fun setSelectedCoin(title: String?) {
         coinSelectorButton.text = title
     }
 
