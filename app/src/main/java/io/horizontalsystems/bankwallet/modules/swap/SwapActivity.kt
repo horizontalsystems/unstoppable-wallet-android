@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ValidationError.*
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
@@ -58,9 +59,9 @@ class SwapActivity : BaseActivity() {
             editText.addTextChangedListener(toAmountListener)
         }
 
-        proceedButton.bind(onClick = {
+        proceedButton.setOnSingleClickListener {
             viewModel.onProceedButtonClick()
-        })
+        }
 
         viewModel.fromAmountLiveData.observe(this, Observer { amount ->
             fromAmount.editText.setText(amount?.toPlainString())
@@ -86,13 +87,13 @@ class SwapActivity : BaseActivity() {
         viewModel.tradeTypeLiveData.observe(this, Observer { tradeType ->
             when (tradeType) {
                 TradeType.ExactIn -> {
-                    fromEstimatedLabel.isVisible = false
-                    toEstimatedLabel.isVisible = true
+                    fromAmountLabel.isVisible = false
+                    toAmountLabel.isVisible = true
                     setToAmount(null)
                 }
                 TradeType.ExactOut -> {
-                    fromEstimatedLabel.isVisible = true
-                    toEstimatedLabel.isVisible = false
+                    fromAmountLabel.isVisible = true
+                    toAmountLabel.isVisible = false
                     setFromAmount(null)
                 }
             }
@@ -143,7 +144,7 @@ class SwapActivity : BaseActivity() {
         })
 
         viewModel.proceedButtonEnabledLiveData.observe(this, Observer { enabled ->
-            proceedButton.updateState(enabled)
+//            proceedButton.updateState(enabled)
         })
     }
 

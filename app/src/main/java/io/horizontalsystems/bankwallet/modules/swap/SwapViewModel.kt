@@ -131,7 +131,7 @@ class SwapViewModel(
         val wallet = walletManager.wallet(coin)
         val balanceAdapter = wallet?.let { adapterManager.getBalanceAdapterForWallet(it) }
         val balance = balanceAdapter?.balance ?: BigDecimal.ZERO
-        return CoinWithBalance(coin, balance ?: BigDecimal.ZERO)
+        return CoinWithBalance(coin, balance)
     }
 
     private fun getNonZeroAmount(amount: String?): BigDecimal? {

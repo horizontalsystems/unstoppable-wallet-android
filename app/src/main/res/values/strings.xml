@@ -189,11 +189,15 @@
     <string name="Swap_MaxButtonTitle">Max</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
     <string name="Swap_Balance">Balance</string>
+    <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Price</string>
     <string name="Swap_PriceImpact">Price Impact</string>
     <string name="Swap_MinimumReceived">Minimum Got</string>
     <string name="Swap_MaximiumSold">Maximum Paid</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_ErrorNoLiquidity">No Liquidity</string>
+    <string name="Swap_Proceed">Proceed</string>
+    <string name="Swap_Approve">Approve</string>
 
     <!--Swap Coin Select-->
 

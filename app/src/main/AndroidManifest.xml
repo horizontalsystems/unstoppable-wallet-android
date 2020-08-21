@@ -161,6 +161,9 @@
         <activity
             android:name=".modules.swap.UniswapInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.swapnew.view.SwapActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".core.fcm.MyFirebaseMessagingService"
