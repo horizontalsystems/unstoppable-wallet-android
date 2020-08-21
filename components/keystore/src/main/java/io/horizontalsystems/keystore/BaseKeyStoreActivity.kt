@@ -48,6 +48,13 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
         })
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (noSystemLockWarning.isVisible) {
+            finishAffinity()
+        }
+    }
+
     private fun showBiometricPrompt() {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle(getString(R.string.OSPin_Confirm_Title))
