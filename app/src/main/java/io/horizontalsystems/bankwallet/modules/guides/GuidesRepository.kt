@@ -3,10 +3,13 @@ package io.horizontalsystems.bankwallet.modules.guides
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
 import io.horizontalsystems.bankwallet.entities.GuideCategory
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.TimeUnit
 
 class GuidesRepository(private val guidesManager: GuidesManager, private val connectivityManager: ConnectivityManager) {
 
@@ -15,6 +18,7 @@ class GuidesRepository(private val guidesManager: GuidesManager, private val con
 
     private val guideCategoriesSubject = BehaviorSubject.create<DataState<Array<GuideCategory>>>()
     private val disposables = CompositeDisposable()
+    private val retryLimit = 3
 
     init {
         fetch()
@@ -39,6 +43,21 @@ class GuidesRepository(private val guidesManager: GuidesManager, private val con
         guideCategoriesSubject.onNext(DataState.Loading())
 
         guidesManager.getGuideCategories()
+                //retry on error java.lang.AssertionError: No System TLS
+                .retryWhen { errors ->
+                    errors.zipWith(
+                            Flowable.range(1, retryLimit + 1),
+                            BiFunction<Throwable, Int, Int> { error: Throwable, retryCount: Int ->
+                                if (retryCount < retryLimit && (error is AssertionError)) {
+                                    retryCount
+                                } else {
+                                    throw error
+                                }
+                            }
+                    ).flatMap {
+                        Flowable.timer(1, TimeUnit.SECONDS)
+                    }
+                }
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     guideCategoriesSubject.onNext(DataState.Success(it))

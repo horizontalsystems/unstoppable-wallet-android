@@ -5,11 +5,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.reactivex.Single
-import java.io.InputStream
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.lang.reflect.Type
 import java.net.URL
 import java.util.*
-
 
 object GuidesManager {
 
@@ -23,16 +23,15 @@ object GuidesManager {
 
     fun getGuideCategories(): Single<Array<GuideCategory>> {
         return Single.fromCallable {
-            URL(guidesUrl)
-                    .openConnection()
-                    .apply {
-                        connectTimeout = 5000
-                        readTimeout = 60000
-                        setRequestProperty("Accept", "application/json")
-                    }.getInputStream()
-                    .use {
-                        gson.fromJson(it.bufferedReader(), Array<GuideCategory>::class.java)
-                    }
+            val request = Request.Builder()
+                    .url(guidesUrl)
+                    .build()
+
+            val response = OkHttpClient().newCall(request).execute()
+            val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategory>::class.java)
+            response.close()
+
+            categories
         }
     }
 
@@ -42,7 +41,6 @@ object GuidesManager {
 
         return App.networkManager.getGuide(host, fileUrl)
     }
-
 
     class GuideDeserializer(guidesUrl: String) : JsonDeserializer<Guide> {
         private val guidesUrlObj = URL(guidesUrl)
