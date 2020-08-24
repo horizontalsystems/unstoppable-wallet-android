@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.swapnew.repository
+package io.horizontalsystems.bankwallet.modules.swap.repository
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.modules.swapnew.DataState
-import io.horizontalsystems.bankwallet.modules.swapnew.model.AmountType
-import io.horizontalsystems.bankwallet.modules.swapnew.model.PriceImpact
-import io.horizontalsystems.bankwallet.modules.swapnew.model.Trade
+import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
+import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
+import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData

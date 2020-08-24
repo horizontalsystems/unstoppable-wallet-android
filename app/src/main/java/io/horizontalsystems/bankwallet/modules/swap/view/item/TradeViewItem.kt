@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapnew.view.item
+package io.horizontalsystems.bankwallet.modules.swap.view.item
 
 data class TradeViewItem(
         val price: String? = null,

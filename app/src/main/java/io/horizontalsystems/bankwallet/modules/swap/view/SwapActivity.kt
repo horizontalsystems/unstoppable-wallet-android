@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapnew.view
+package io.horizontalsystems.bankwallet.modules.swap.view
 
 import android.app.Activity
 import android.content.Intent
@@ -14,10 +14,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.swap.UniswapInfoActivity
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
-import io.horizontalsystems.bankwallet.modules.swapnew.SwapModuleNew
-import io.horizontalsystems.bankwallet.modules.swapnew.view.item.TradeViewItem
+import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import kotlinx.android.synthetic.main.activity_swap.*
 
 class SwapActivity : BaseActivity() {
@@ -33,8 +32,8 @@ class SwapActivity : BaseActivity() {
         supportActionBar?.setHomeAsUpIndicator(getDrawable(R.drawable.ic_info))
         supportActionBar?.title = getString(R.string.Swap_Title)
 
-        val coinSending = intent.extras?.getParcelable<Coin>(SwapModuleNew.tokenInKey)
-        viewModel = ViewModelProvider(this, SwapModuleNew.Factory(coinSending!!)).get(SwapViewModel::class.java)
+        val coinSending = intent.extras?.getParcelable<Coin>(SwapModule.tokenInKey)
+        viewModel = ViewModelProvider(this, SwapModule.Factory(coinSending!!)).get(SwapViewModel::class.java)
 
         fromAmount.apply {
             onTokenButtonClick {
