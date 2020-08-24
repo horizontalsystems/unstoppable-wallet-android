@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.views
+package io.horizontalsystems.bankwallet.modules.swap.view
 
 import android.content.Context
 import android.util.AttributeSet

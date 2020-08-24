@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapnew
+package io.horizontalsystems.bankwallet.modules.swap
 
 import android.content.Context
 import android.content.res.Resources

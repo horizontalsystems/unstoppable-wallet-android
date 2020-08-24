@@ -5,12 +5,54 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.EthereumKitNotCreated
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
+import io.horizontalsystems.bankwallet.modules.swap.model.Trade
+import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceRepository
+import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
+import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
+import io.horizontalsystems.bankwallet.modules.swap.view.SwapActivity
+import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
+import io.horizontalsystems.uniswapkit.UniswapKit
+import io.reactivex.Observable
 import java.math.BigDecimal
 
 object SwapModule {
-
     const val tokenInKey = "tokenInKey"
+
+    interface ISwapService {
+        val coinSending: Observable<Coin>
+        val coinReceiving: Observable<Coin>
+        val amountSending: Observable<BigDecimal>
+        val amountReceiving: Observable<BigDecimal>
+        val amountType: Observable<AmountType>
+        val balance: Observable<CoinValue>
+        val allowance: Observable<DataState<CoinValue?>>
+        val trade: Observable<DataState<Trade?>>
+        val errors: Observable<List<SwapError>>
+        val state: Observable<SwapState>
+
+        fun setCoinSending(coin: Coin)
+        fun setCoinReceiving(coin: Coin)
+        fun setAmountSending(amount: BigDecimal)
+        fun setAmountReceiving(amount: BigDecimal)
+    }
+
+    sealed class SwapError {
+        object InsufficientBalance : SwapError()
+        object InsufficientAllowance : SwapError()
+        object TooHighPriceImpact : SwapError()
+        object NoLiquidity : SwapError()
+    }
+
+    sealed class SwapState {
+        object Idle : SwapState()
+        object ApproveRequired : SwapState()
+        object WaitingForApprove : SwapState()
+        object SwapAllowed : SwapState()
+    }
 
     fun start(context: Context, tokenIn: Coin) {
         val intent = Intent(context, SwapActivity::class.java)
@@ -19,20 +61,17 @@ object SwapModule {
         context.startActivity(intent)
     }
 
-    class Factory(private val tokenIn: Coin?) : ViewModelProvider.Factory {
+    class Factory(private val coinSending: Coin) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapViewModel(App.uniswapKitManager, App.walletManager, App.adapterManager, tokenIn) as T
+            val ethereumKit = App.ethereumKitManager.ethereumKit ?: throw EthereumKitNotCreated()
+            val uniswapKit = UniswapKit.getInstance(ethereumKit)
+            val swapRepository = UniswapRepository(uniswapKit)
+            val allowanceRepository = AllowanceRepository(ethereumKit, ethereumKit.receiveAddress, uniswapKit.routerAddress)
+            val swapService = UniswapService(coinSending, swapRepository, allowanceRepository, App.walletManager, App.adapterManager)
+            val stringProvider = ResourceProvider(App.instance)
+
+            return SwapViewModel(swapService, stringProvider) as T
         }
     }
-
-    data class CoinWithBalance(val coin: Coin, val balance: BigDecimal)
-
-    sealed class ValidationError : Throwable() {
-        class InsufficientBalance : ValidationError()
-        class PriceImpactTooHigh : ValidationError()
-        class PriceImpactInvalid : ValidationError()
-        class NoTradeData : ValidationError()
-    }
-
 }
