@@ -107,7 +107,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintTop_toTopOf="@+id/fromAmountTitle" />
 
-            <io.horizontalsystems.bankwallet.modules.swap.views.SwapAmountView
+            <io.horizontalsystems.bankwallet.modules.swap.view.SwapAmountView
                 android:id="@+id/fromAmount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                 app:layout_constraintStart_toEndOf="@+id/toAmountTitle"
                 app:layout_constraintTop_toTopOf="@+id/toAmountTitle" />
 
-            <io.horizontalsystems.bankwallet.modules.swap.views.SwapAmountView
+            <io.horizontalsystems.bankwallet.modules.swap.view.SwapAmountView
                 android:id="@+id/toAmount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

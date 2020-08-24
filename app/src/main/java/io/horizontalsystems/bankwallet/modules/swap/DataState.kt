@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapnew
+package io.horizontalsystems.bankwallet.modules.swap
 
 sealed class DataState<out T> {
     data class Success<out T>(val data: T) : DataState<T>()

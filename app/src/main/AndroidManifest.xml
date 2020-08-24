@@ -23,8 +23,9 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_icon" />
 
-        <activity android:name=".modules.tor.TorConnectionActivity"
-                  android:launchMode="singleTask"/>
+        <activity
+            android:name=".modules.tor.TorConnectionActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".modules.launcher.LauncherActivity"
             android:theme="@style/LauncherTheme"
@@ -151,18 +152,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.guideview.GuideActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.swap.SwapActivity"
+            android:name=".modules.swap.view.SwapActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.swap.coinselect.SelectSwapCoinActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.swap.UniswapInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.swapnew.view.SwapActivity"
+            android:name=".modules.swap.view.UniswapInfoActivity"
             android:screenOrientation="portrait" />
 
         <service

@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.swapnew.repository
+package io.horizontalsystems.bankwallet.modules.swap.repository
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.modules.swapnew.DataState
+import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.erc20kit.core.AllowanceManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address

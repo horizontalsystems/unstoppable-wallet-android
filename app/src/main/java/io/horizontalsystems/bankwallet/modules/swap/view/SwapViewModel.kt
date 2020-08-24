@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapnew.view
+package io.horizontalsystems.bankwallet.modules.swap.view
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.swapnew.DataState
-import io.horizontalsystems.bankwallet.modules.swapnew.ResourceProvider
-import io.horizontalsystems.bankwallet.modules.swapnew.SwapModuleNew.ISwapService
-import io.horizontalsystems.bankwallet.modules.swapnew.SwapModuleNew.SwapError
-import io.horizontalsystems.bankwallet.modules.swapnew.SwapModuleNew.SwapState
-import io.horizontalsystems.bankwallet.modules.swapnew.model.AmountType
-import io.horizontalsystems.bankwallet.modules.swapnew.model.PriceImpact
-import io.horizontalsystems.bankwallet.modules.swapnew.model.Trade
-import io.horizontalsystems.bankwallet.modules.swapnew.view.item.TradeViewItem
+import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.bankwallet.modules.swap.ResourceProvider
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ISwapService
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
+import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
+import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
+import io.horizontalsystems.bankwallet.modules.swap.model.Trade
+import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.reactivex.BackpressureStrategy
 import java.math.BigDecimal
 import java.util.logging.Logger

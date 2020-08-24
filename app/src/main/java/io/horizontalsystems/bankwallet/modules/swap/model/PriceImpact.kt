@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapnew.model
+package io.horizontalsystems.bankwallet.modules.swap.model
 
 import java.math.BigDecimal
 

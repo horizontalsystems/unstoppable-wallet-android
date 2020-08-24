@@ -1,19 +1,19 @@
-package io.horizontalsystems.bankwallet.modules.swapnew.service
+package io.horizontalsystems.bankwallet.modules.swap.service
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.swapnew.DataState
-import io.horizontalsystems.bankwallet.modules.swapnew.SwapModuleNew
-import io.horizontalsystems.bankwallet.modules.swapnew.SwapModuleNew.SwapError
-import io.horizontalsystems.bankwallet.modules.swapnew.SwapModuleNew.SwapState
-import io.horizontalsystems.bankwallet.modules.swapnew.model.AmountType
-import io.horizontalsystems.bankwallet.modules.swapnew.model.PriceImpact
-import io.horizontalsystems.bankwallet.modules.swapnew.model.Trade
-import io.horizontalsystems.bankwallet.modules.swapnew.repository.AllowanceRepository
-import io.horizontalsystems.bankwallet.modules.swapnew.repository.UniswapRepository
+import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
+import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
+import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
+import io.horizontalsystems.bankwallet.modules.swap.model.Trade
+import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceRepository
+import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.uniswapkit.TradeError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -27,7 +27,7 @@ class UniswapService(
         private val allowanceRepository: AllowanceRepository,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager
-) : SwapModuleNew.ISwapService {
+) : SwapModule.ISwapService {
     private var tradeDisposable: Disposable? = null
     private var allowanceDisposable: Disposable? = null
 
