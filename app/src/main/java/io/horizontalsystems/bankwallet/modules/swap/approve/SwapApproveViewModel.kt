@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
@@ -13,6 +14,9 @@ class SwapApproveViewModel(private val service: ISwapApproveService) : ViewModel
 
     val coinTitle: String
         get() = service.coin.title
+
+    val txSpeed: String
+        get() = TextHelper.getFeeRatePriorityString(App.instance, service.feeService.feeRatePriority)
 
     private val disposables = CompositeDisposable()
 
