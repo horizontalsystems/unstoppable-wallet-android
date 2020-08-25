@@ -28,7 +28,8 @@ object SwapApproveModule {
 
             val baseCurrency = App.currencyManager.baseCurrency
 
-            val service = SwapApproveService(coin, amount, spenderAddress, feeCoin, baseCurrency, erc20Adapter!!, feeRateProvider!!, App.xRateManager)
+            val feeService = FeeService(amount, spenderAddress, feeCoin, baseCurrency, erc20Adapter!!, feeRateProvider!!, App.xRateManager)
+            val service = SwapApproveService(coin, amount, spenderAddress, erc20Adapter!!, feeService)
             return SwapApproveViewModel(service) as T
         }
     }
@@ -42,6 +43,13 @@ interface ISwapApproveService {
     val feeValues: Observable<DataState<Pair<CoinValue, CurrencyValue?>>>
 
     fun approve()
+}
+
+interface IFeeService {
+    var gasPrice: Long
+    var gasLimit: Long
+
+    val feeValues: Observable<DataState<Pair<CoinValue, CurrencyValue?>>>
 }
 
 sealed class SwapApproveState {
