@@ -35,6 +35,7 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
 
         coinAmount.text = viewModel.coinAmount
         coinCode.text = viewModel.coinTitle
+        txSpeedValue.text = viewModel.txSpeed
 
         btnApprove.setOnSingleClickListener {
             viewModel.onApprove()

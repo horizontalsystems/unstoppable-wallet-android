@@ -21,12 +21,12 @@ class FeeService(
         private val baseCurrency: Currency,
         private val erc20Adapter: Erc20Adapter,
         private val feeRateProvider: IFeeRateProvider,
-        private val rateManager: IRateManager,
-        val feeRatePriority: FeeRatePriority.HIGH = FeeRatePriority.HIGH
+        private val rateManager: IRateManager
 ) : IFeeService {
 
     override var gasPrice: Long = 0
     override var gasLimit: Long = 0
+    override val feeRatePriority = FeeRatePriority.HIGH
 
     override val feeValues = BehaviorSubject.create<DataState<Pair<CoinValue, CurrencyValue?>>>()
 
