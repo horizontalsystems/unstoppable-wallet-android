@@ -37,10 +37,11 @@ object SwapApproveModule {
 }
 
 interface ISwapApproveService {
+    val feeService: IFeeService
+
     val coin: Coin
     val amount: BigDecimal
     val approveState: Observable<SwapApproveState>
-    val feeValues: Observable<DataState<Pair<CoinValue, CurrencyValue?>>>
 
     fun approve()
 }

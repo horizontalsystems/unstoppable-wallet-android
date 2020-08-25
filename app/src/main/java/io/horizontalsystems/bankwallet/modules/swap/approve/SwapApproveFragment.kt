@@ -40,11 +40,11 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
             viewModel.onApprove()
         }
 
-        viewModel.feeValue.observe(viewLifecycleOwner, Observer {
+        viewModel.feePresenter.feeValue.observe(viewLifecycleOwner, Observer {
             feeValue.text = it
         })
 
-        viewModel.feeLoading.observe(viewLifecycleOwner, Observer {
+        viewModel.feePresenter.feeLoading.observe(viewLifecycleOwner, Observer {
             txFeeLoading.isVisible = it
         })
 
@@ -60,6 +60,9 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
             HudHelper.showErrorMessage(requireView(), it.message ?: it.toString())
         })
 
+        viewModel.feePresenter.errorLiveEvent.observe(viewLifecycleOwner, Observer {
+            HudHelper.showErrorMessage(requireView(), it.message ?: it.toString())
+        })
     }
 
     companion object {
