@@ -21,7 +21,7 @@ class RateManager(
         private val rateCoinMapper: IRateCoinMapper) : IRateManager {
 
     private val disposables = CompositeDisposable()
-    private val coinMarketCapApiKey = "51a3a136-adc9-4e38-8fc2-8c175c810e74"
+    private val coinMarketCapApiKey = "f33ccd44-6545-4cbb-991c-4584b9501251"
     private val kit: XRatesKit by lazy {
         XRatesKit.create(
                 context,
