@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -49,6 +50,7 @@ interface ISwapApproveService {
 interface IFeeService {
     var gasPrice: Long
     var gasLimit: Long
+    val feeRatePriority: FeeRatePriority
 
     val feeValues: Observable<DataState<Pair<CoinValue, CurrencyValue?>>>
 }
