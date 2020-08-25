@@ -13,13 +13,10 @@ class SwapApproveService(
         override val amount: BigDecimal,
         private val spenderAddress: String,
         private val erc20Adapter: Erc20Adapter,
-        private val feeService: IFeeService
+        override val feeService: IFeeService
 ) : ISwapApproveService {
 
     override val approveState = BehaviorSubject.create<SwapApproveState>()
-
-    override val feeValues
-        get() = feeService.feeValues
 
     private val disposables = CompositeDisposable()
 
