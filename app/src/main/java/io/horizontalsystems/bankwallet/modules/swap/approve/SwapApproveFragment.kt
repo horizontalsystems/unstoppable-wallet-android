@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
@@ -53,8 +54,10 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
             btnApprove.isEnabled = it
         })
 
-        viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
-            close()
+        viewModel.successLiveEvent.observe(viewLifecycleOwner, Observer {
+            setFragmentResult(requestKey, bundleOf(resultKey to true))
+
+            dismiss()
         })
 
         viewModel.errorLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -67,6 +70,9 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
     }
 
     companion object {
+        val requestKey = "approve"
+        val resultKey = "result"
+
         fun newInstance(coin: Coin, amount: BigDecimal, spenderAddress: String): SwapApproveFragment {
             return SwapApproveFragment().apply {
                 arguments = Bundle(3).apply {

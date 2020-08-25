@@ -21,7 +21,7 @@ class SwapApproveViewModel(private val service: ISwapApproveService) : ViewModel
     private val disposables = CompositeDisposable()
 
     val approveAllowed = MutableLiveData<Boolean>()
-    val closeLiveEvent = SingleLiveEvent<Unit>()
+    val successLiveEvent = SingleLiveEvent<Unit>()
     val errorLiveEvent = SingleLiveEvent<Throwable>()
 
     val feePresenter = FeePresenter(service.feeService)
@@ -36,7 +36,7 @@ class SwapApproveViewModel(private val service: ISwapApproveService) : ViewModel
 
                         }
                         is SwapApproveState.Success -> {
-                            closeLiveEvent.postValue(Unit)
+                            successLiveEvent.postValue(Unit)
                         }
                         is SwapApproveState.Error -> {
                             errorLiveEvent.postValue(it.e)
