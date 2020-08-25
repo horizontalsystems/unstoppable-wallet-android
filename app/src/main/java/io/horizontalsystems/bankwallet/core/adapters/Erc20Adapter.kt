@@ -11,6 +11,7 @@ import io.horizontalsystems.erc20kit.models.Transaction
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionWithInternal
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -118,6 +119,14 @@ class Erc20Adapter(
                 type = type,
                 failed = transaction.isError
         )
+    }
+
+    fun approve(address: String, amount: BigDecimal, gasPrice: Long, gasLimit: Long): Single<TransactionWithInternal> {
+        return erc20Kit.approve(Address(address), scaleUp(amount), gasPrice, gasLimit)
+    }
+
+    fun estimateApprove(address: String, amount: BigDecimal, gasPrice: Long): Single<Long> {
+        return erc20Kit.estimateApprove(Address(address), scaleUp(amount), gasPrice)
     }
 
     companion object {
