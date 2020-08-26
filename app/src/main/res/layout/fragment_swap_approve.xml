@@ -38,6 +38,27 @@
         app:layout_constraintTop_toBottomOf="@id/coinCode" />
 
     <TextView
+        android:id="@+id/feeError"
+        style="@style/Subhead2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        tools:text="Transaction fees for approve paid in Ether. You need 0.001113 ETH"
+        android:textColor="?ColorLucian"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/border" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/feeDataGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="feeTitle,feeValue,txSpeedTitle,txSpeedValue"
+        />
+
+    <TextView
         android:id="@+id/feeTitle"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
@@ -47,7 +68,7 @@
         android:text="@string/Approve_FeeTitle"
         android:textColor="@color/grey"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border" />
+        app:layout_constraintTop_toBottomOf="@id/feeError" />
 
     <TextView
         android:id="@+id/txFeeLoading"

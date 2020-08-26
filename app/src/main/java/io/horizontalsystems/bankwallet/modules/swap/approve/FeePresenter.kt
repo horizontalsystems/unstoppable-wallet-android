@@ -13,7 +13,7 @@ class FeePresenter(private val service: IFeeService) {
 
     val feeValue = MutableLiveData<String>()
     val feeLoading = MutableLiveData<Boolean>()
-    val errorLiveEvent = SingleLiveEvent<Throwable>()
+    val errorLiveEvent = SingleLiveEvent<Throwable?>()
 
     val txSpeed: String
         get() = TextHelper.getFeeRatePriorityString(App.instance, service.feeRatePriority)
@@ -24,22 +24,19 @@ class FeePresenter(private val service: IFeeService) {
                 .subscribe {
                     feeLoading.postValue(it is DataState.Loading)
 
-                    when (it) {
-                        is DataState.Success -> {
-                            val coinValue = it.data.first
+                    errorLiveEvent.postValue((it as? DataState.Error)?.throwable)
 
-                            var res = App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, min(coinValue.coin.decimal, 8))
+                    if (it is DataState.Success) {
+                        val coinValue = it.data.first
 
-                            it.data.second?.let { fiatValue ->
-                                res += " | "
-                                res += App.numberFormatter.formatFiat(fiatValue.value, fiatValue.currency.symbol, 0, 2)
-                            }
+                        var res = App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, min(coinValue.coin.decimal, 8))
 
-                            feeValue.postValue(res)
+                        it.data.second?.let { fiatValue ->
+                            res += " | "
+                            res += App.numberFormatter.formatFiat(fiatValue.value, fiatValue.currency.symbol, 0, 2)
                         }
-                        is DataState.Error -> {
-                            errorLiveEvent.postValue(it.throwable)
-                        }
+
+                        feeValue.postValue(res)
                     }
                 }
                 .let {
