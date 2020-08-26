@@ -62,7 +62,6 @@ class App : CoreApp() {
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var ethereumKitManager: IEthereumKitManager
-        lateinit var uniswapKitManager: IUniswapKitManager
         lateinit var eosKitManager: IEosKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
@@ -107,7 +106,6 @@ class App : CoreApp() {
         backgroundManager = BackgroundManager(this)
 
         ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode, backgroundManager)
-        uniswapKitManager = UniswapKitManager(ethereumKitManager)
         eosKitManager = EosKitManager(appConfigTestMode.testMode)
         binanceKitManager = BinanceKitManager(appConfigTestMode.testMode)
 
