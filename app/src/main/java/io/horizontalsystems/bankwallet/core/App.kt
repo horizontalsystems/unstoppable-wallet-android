@@ -185,7 +185,6 @@ class App : CoreApp() {
             backgroundManager.registerListener(this)
         }
         pinComponent = PinComponent(
-                application = this,
                 pinStorage = pinStorage,
                 encryptionManager = encryptionManager,
                 excludedActivityNames = listOf(
@@ -196,7 +195,9 @@ class App : CoreApp() {
                         RateChartActivity::class.java.name
                 ),
                 onFire = { activity, requestCode -> LockScreenModule.startForUnlock(activity, requestCode) }
-        )
+        ).apply {
+            backgroundManager.registerListener(this)
+        }
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
         erc20ContractInfoProvider = Erc20ContractInfoProvider(appConfigTestMode, appConfigProvider, networkManager)

@@ -1,31 +1,22 @@
 package io.horizontalsystems.pin.core
 
-import android.content.Context
-import android.content.SharedPreferences
+import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.helpers.DateHelper
 import java.util.*
 
-class LockManager(private val pinManager: PinManager, private val context: Context) {
+class LockManager(
+        private val pinManager: PinManager,
+        private val pinStorage: IPinStorage) {
 
     var isLocked: Boolean = false
     private val lockTimeout = 60L
-    private var lastExitDate: Long
-        get() {
-            return getPreferences(context).getLong(BackgroundedTime, 0)
-        }
-        set(value) {
-            getPreferences(context)
-                    .edit()
-                    .putLong(BackgroundedTime, value)
-                    .commit()
-        }
 
     fun didEnterBackground() {
         if (isLocked) {
             return
         }
 
-        lastExitDate = Date().time
+        pinStorage.appLastVisitTime = Date().time
     }
 
     fun willEnterForeground() {
@@ -33,7 +24,7 @@ class LockManager(private val pinManager: PinManager, private val context: Conte
             return
         }
 
-        val secondsAgo = DateHelper.getSecondsAgo(lastExitDate)
+        val secondsAgo = DateHelper.getSecondsAgo(pinStorage.appLastVisitTime)
         if (secondsAgo > lockTimeout) {
             isLocked = true
         }
@@ -43,16 +34,8 @@ class LockManager(private val pinManager: PinManager, private val context: Conte
         isLocked = false
     }
 
-    private fun getPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(LockManager::class.java.name, Context.MODE_PRIVATE)
-    }
-
     fun updateLastExitDate() {
-        lastExitDate = Date().time
-    }
-
-    companion object{
-        private const val BackgroundedTime = "LockManager.BackgroundedTime"
+        pinStorage.appLastVisitTime = Date().time
     }
 
 }

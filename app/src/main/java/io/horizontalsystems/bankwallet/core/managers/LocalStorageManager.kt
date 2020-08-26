@@ -44,6 +44,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
+    private val APP_LAST_VISIT_TIME = "app_last_visit_time"
     private val BIOMETRIC_ENABLED = "biometric_enabled"
     private val PIN = "pin_code"
 
@@ -186,6 +187,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             value?.let {
                 preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
             } ?: preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
+        }
+
+    override var appLastVisitTime: Long
+        get() = preferences.getLong(APP_LAST_VISIT_TIME, 0)
+        set(value) {
+            preferences.edit().putLong(APP_LAST_VISIT_TIME, value).commit()
         }
 
     override var biometricAuthEnabled: Boolean
