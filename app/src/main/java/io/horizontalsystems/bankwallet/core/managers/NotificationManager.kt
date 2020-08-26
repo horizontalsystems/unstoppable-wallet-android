@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.entities.AlertNotification
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
+import io.horizontalsystems.core.BackgroundManager
 import android.app.NotificationManager as SystemNotificationManager
 
 class NotificationManager(private val androidNotificationManager: NotificationManagerCompat) : INotificationManager, BackgroundManager.Listener {

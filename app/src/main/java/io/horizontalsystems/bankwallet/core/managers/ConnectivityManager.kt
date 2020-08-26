@@ -6,6 +6,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.subjects.PublishSubject
 
 
