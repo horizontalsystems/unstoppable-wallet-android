@@ -45,8 +45,8 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
     private val APP_LAST_VISIT_TIME = "app_last_visit_time"
-    private val BIOMETRIC_ENABLED = "biometric_enabled"
-    private val PIN = "pin_code"
+    private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
+    private val PIN = "lock_pin"
 
     val gson by lazy { Gson() }
 
