@@ -3,8 +3,9 @@ package io.horizontalsystems.pin
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import io.horizontalsystems.core.IEncryptionManager
 import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.core.ISecuredStorage
+import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.pin.core.LockManager
 import io.horizontalsystems.pin.core.PinManager
 import io.reactivex.BackpressureStrategy
@@ -12,7 +13,8 @@ import io.reactivex.Flowable
 
 class PinComponent(
         application: Application,
-        securedStorage: ISecuredStorage,
+        private val pinStorage: IPinStorage,
+        private val encryptionManager: IEncryptionManager,
         private val excludedActivityNames: List<String>,
         private val onFire: (activity: Activity, requestCode: Int) -> Unit
 ) : Application.ActivityLifecycleCallbacks, IPinComponent {
@@ -22,9 +24,8 @@ class PinComponent(
     }
 
     private var refs: Int = 0
-    private var foregroundActivity: Activity? = null
     private val pinManager: PinManager by lazy {
-        PinManager(securedStorage)
+        PinManager(encryptionManager, pinStorage)
     }
 
     private val appLockManager: LockManager by lazy {
@@ -35,7 +36,7 @@ class PinComponent(
         get() = pinManager.pinSetSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val isLocked: Boolean
-        get() = appLockManager.isLocked
+        get() = appLockManager.isLocked && isPinSet
 
     //IPinComponent
 
@@ -73,16 +74,12 @@ class PinComponent(
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
 
     override fun onActivityResumed(activity: Activity) {
-        foregroundActivity = activity
-
-        if (appLockManager.isLocked && !excludedActivityNames.contains(activity::class.java.name)) {
+        if (isLocked && !excludedActivityNames.contains(activity::class.java.name)) {
             onFire.invoke(activity, 1)
         }
     }
 
-    override fun onActivityPaused(activity: Activity) {
-        foregroundActivity = null
-    }
+    override fun onActivityPaused(activity: Activity) {}
 
     override fun onActivityDestroyed(activity: Activity) {}
 

@@ -13,6 +13,7 @@ import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.UnrecoverableKeyException
 import java.util.logging.Logger
+import javax.crypto.BadPaddingException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
@@ -39,7 +40,10 @@ class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner:
             false
         } catch (ex: Exception) {
             logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
-            ex is KeyPermanentlyInvalidatedException || ex is UnrecoverableKeyException
+            ex is KeyPermanentlyInvalidatedException
+                    || ex is UnrecoverableKeyException
+                    || ex is InvalidKeyException
+                    || ex is BadPaddingException
         }
 
     override val isUserNotAuthenticated: Boolean

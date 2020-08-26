@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
+import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
@@ -26,7 +27,6 @@ import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.pin.PinComponent
-import io.horizontalsystems.pin.core.SecureStorage
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -145,13 +145,12 @@ class App : CoreApp() {
         accountCreator = AccountCreator(AccountFactory(), wordsManager)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
 
-        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
+        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, pinStorage, accountManager, walletManager)).apply {
             keyStoreManager = this
             keyProvider = this
         }
 
         encryptionManager = EncryptionManager(keyProvider)
-        secureStorage = SecureStorage(encryptionManager)
 
         systemInfoManager = SystemInfoManager()
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
@@ -187,8 +186,10 @@ class App : CoreApp() {
         }
         pinComponent = PinComponent(
                 application = this,
-                securedStorage = secureStorage,
+                pinStorage = pinStorage,
+                encryptionManager = encryptionManager,
                 excludedActivityNames = listOf(
+                        KeyStoreActivity::class.java.name,
                         LockScreenActivity::class.java.name,
                         LauncherActivity::class.java.name,
                         TorConnectionActivity::class.java.name,
