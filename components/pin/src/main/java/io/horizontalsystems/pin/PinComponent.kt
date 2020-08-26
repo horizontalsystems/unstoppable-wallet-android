@@ -1,8 +1,7 @@
 package io.horizontalsystems.pin
 
 import android.app.Activity
-import android.app.Application
-import android.os.Bundle
+import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.IEncryptionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.IPinStorage
@@ -12,24 +11,18 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 
 class PinComponent(
-        application: Application,
         private val pinStorage: IPinStorage,
         private val encryptionManager: IEncryptionManager,
         private val excludedActivityNames: List<String>,
         private val onFire: (activity: Activity, requestCode: Int) -> Unit
-) : Application.ActivityLifecycleCallbacks, IPinComponent {
+) : BackgroundManager.Listener, IPinComponent {
 
-    init {
-        application.registerActivityLifecycleCallbacks(this)
-    }
-
-    private var refs: Int = 0
     private val pinManager: PinManager by lazy {
         PinManager(encryptionManager, pinStorage)
     }
 
     private val appLockManager: LockManager by lazy {
-        LockManager(pinManager, application.applicationContext)
+        LockManager(pinManager, pinStorage)
     }
 
     override val pinSetFlowable: Flowable<Unit>
@@ -41,9 +34,9 @@ class PinComponent(
     //IPinComponent
 
     override var isBiometricAuthEnabled: Boolean
-        get() = pinManager.isBiometricAuthEnabled
+        get() = pinStorage.biometricAuthEnabled
         set(value) {
-            pinManager.isBiometricAuthEnabled = value
+            pinStorage.biometricAuthEnabled = value
         }
 
     override val isPinSet: Boolean
@@ -69,35 +62,16 @@ class PinComponent(
         appLockManager.updateLastExitDate()
     }
 
-    //Application.ActivityLifecycleCallbacks
+    //BackgroundManager.Listener
+    override fun willEnterForeground(activity: Activity) {
+        appLockManager.willEnterForeground()
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
-
-    override fun onActivityResumed(activity: Activity) {
         if (isLocked && !excludedActivityNames.contains(activity::class.java.name)) {
             onFire.invoke(activity, 1)
         }
     }
 
-    override fun onActivityPaused(activity: Activity) {}
-
-    override fun onActivityDestroyed(activity: Activity) {}
-
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-
-    override fun onActivityStarted(activity: Activity) {
-        if (refs == 0) {
-            appLockManager.willEnterForeground()
-        }
-        refs++
+    override fun didEnterBackground() {
+        appLockManager.didEnterBackground()
     }
-
-    override fun onActivityStopped(activity: Activity) {
-        refs--
-
-        if (refs == 0) {
-            appLockManager.didEnterBackground()
-        }
-    }
-
 }
