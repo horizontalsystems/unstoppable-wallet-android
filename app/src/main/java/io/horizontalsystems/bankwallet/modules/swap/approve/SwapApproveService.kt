@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
-import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.guides.DataState
@@ -14,8 +13,7 @@ class SwapApproveService(
         override val amount: BigDecimal,
         private val spenderAddress: String,
         private val feeService: IFeeService,
-        private val erc20Adapter: Erc20Adapter,
-        private val feeBalanceAdapter: IBalanceAdapter
+        private val erc20Adapter: Erc20Adapter
 ) : ISwapApproveService {
 
     override val approveState = BehaviorSubject.create<SwapApproveState>()
@@ -28,17 +26,8 @@ class SwapApproveService(
         feeService.feeValues
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    when (it) {
-                        is DataState.Success -> {
-                            if (feeBalanceAdapter.balance < it.data.first.value) {
-                                approveState.onNext(SwapApproveState.Error(SwapApproveModule.InsufficientBalance()))
-                            } else {
-                                approveState.onNext(SwapApproveState.ApproveAllowed)
-                            }
-                        }
-                        is DataState.Error -> {
-                            approveState.onNext(SwapApproveState.Error(it.throwable))
-                        }
+                    if (it is DataState.Success) {
+                        approveState.onNext(SwapApproveState.ApproveAllowed)
                     }
                 }
                 .let {
