@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
 import androidx.lifecycle.MutableLiveData
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.guides.DataState
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import kotlin.math.min
 
@@ -13,7 +15,7 @@ class FeePresenter(private val service: IFeeService) {
 
     val feeValue = MutableLiveData<String>()
     val feeLoading = MutableLiveData<Boolean>()
-    val errorLiveEvent = SingleLiveEvent<Throwable?>()
+    val error = MutableLiveData<String?>()
 
     val txSpeed: String
         get() = TextHelper.getFeeRatePriorityString(App.instance, service.feeRatePriority)
@@ -24,7 +26,7 @@ class FeePresenter(private val service: IFeeService) {
                 .subscribe {
                     feeLoading.postValue(it is DataState.Loading)
 
-                    errorLiveEvent.postValue((it as? DataState.Error)?.throwable)
+                    error.postValue(getErrorMessage(it))
 
                     if (it is DataState.Success) {
                         val coinValue = it.data.first
@@ -42,5 +44,19 @@ class FeePresenter(private val service: IFeeService) {
                 .let {
                     disposables.add(it)
                 }
+    }
+
+    private fun getErrorMessage(fee: DataState<Pair<CoinValue, CurrencyValue?>>?): String? {
+        if (fee !is DataState.Error) {
+            return null
+        }
+
+        if (fee.throwable !is SwapApproveModule.InsufficientFeeBalance) {
+            return fee.throwable.message ?: fee.throwable.toString()
+        }
+
+        val coinValue = fee.throwable.coinValue
+
+        return App.instance.getString(R.string.Approve_InsufficientFeeAlert, coinValue.coin.title, App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8))
     }
 }
