@@ -18,7 +18,6 @@ interface ICoreApp {
     var currencyManager: ICurrencyManager
     var keyStoreManager: IKeyStoreManager
     var keyProvider: IKeyProvider
-    var secureStorage: ISecuredStorage
     var pinComponent: IPinComponent
     var pinStorage: IPinStorage
     var themeStorage: IThemeStorage
@@ -46,14 +45,6 @@ interface ISystemInfoManager {
     val biometricAuthSupported: Boolean
     val deviceModel: String
     val osVersion: String
-}
-
-interface ISecuredStorage {
-    var isBiometricAuthEnabled: Boolean
-    val savedPin: String?
-    fun savePin(pin: String)
-    fun removePin()
-    fun pinIsEmpty(): Boolean
 }
 
 interface IPinComponent {
@@ -87,6 +78,10 @@ interface ICurrencyManager {
 interface IPinStorage {
     var failedAttempts: Int?
     var lockoutUptime: Long?
+    var biometricAuthEnabled: Boolean
+    var pin: String?
+
+    fun clearPin()
 }
 
 interface IThemeStorage {
