@@ -4,11 +4,9 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.core.IKeyStoreCleaner
-import io.horizontalsystems.core.IPinStorage
 
 class KeyStoreCleaner(
         private val localStorage: ILocalStorage,
-        private val pinStorage: IPinStorage,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager)
     : IKeyStoreCleaner {
@@ -20,7 +18,6 @@ class KeyStoreCleaner(
         }
 
     override fun cleanApp() {
-        pinStorage.clearPin()
         accountManager.clear()
         walletManager.enable(listOf())
         localStorage.clear()

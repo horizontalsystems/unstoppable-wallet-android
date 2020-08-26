@@ -145,7 +145,7 @@ class App : CoreApp() {
         accountCreator = AccountCreator(AccountFactory(), wordsManager)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
 
-        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, pinStorage, accountManager, walletManager)).apply {
+        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
             keyStoreManager = this
             keyProvider = this
         }
