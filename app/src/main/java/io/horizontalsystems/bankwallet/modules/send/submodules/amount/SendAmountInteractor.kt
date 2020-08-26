@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal

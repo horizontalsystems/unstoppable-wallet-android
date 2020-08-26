@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.ISystemInfoManager
 import java.util.*
