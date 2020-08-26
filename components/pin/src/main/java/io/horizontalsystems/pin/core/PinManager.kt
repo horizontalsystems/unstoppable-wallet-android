@@ -14,12 +14,6 @@ class PinManager(
     val isPinSet: Boolean
         get() = !pinStorage.pin.isNullOrEmpty()
 
-    var isBiometricAuthEnabled: Boolean
-        get() = pinStorage.biometricAuthEnabled
-        set(value) {
-            pinStorage.biometricAuthEnabled = value
-        }
-
     private val savedPin: String?
         get() {
             val string = pinStorage.pin ?: return null
