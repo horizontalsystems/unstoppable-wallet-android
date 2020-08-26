@@ -3,16 +3,21 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.guides.DataState
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import kotlin.math.min
 
-class FeePresenter(service: IFeeService) {
+class FeePresenter(private val service: IFeeService) {
     private val disposables = CompositeDisposable()
 
     val feeValue = MutableLiveData<String>()
     val feeLoading = MutableLiveData<Boolean>()
     val errorLiveEvent = SingleLiveEvent<Throwable>()
+
+    val txSpeed: String
+        get() = TextHelper.getFeeRatePriorityString(App.instance, service.feeRatePriority)
+
 
     init {
         service.feeValues
