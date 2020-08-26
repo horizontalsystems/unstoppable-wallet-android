@@ -205,6 +205,7 @@
     <string name="Approve_Subtitle">Swap</string>
     <string name="Approve_FeeTitle">Fee</string>
     <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
 
     <!--Uniwwap Info -->
 

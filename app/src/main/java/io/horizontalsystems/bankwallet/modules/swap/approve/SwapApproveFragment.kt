@@ -8,6 +8,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
@@ -50,6 +51,18 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
             txFeeLoading.isVisible = it
         })
 
+        viewModel.feePresenter.errorLiveEvent.observe(viewLifecycleOwner, Observer {
+            feeDataGroup.isVisible = it == null
+            feeError.isVisible = it != null
+
+            feeError.text = when (it) {
+                is SwapApproveModule.InsufficientFeeBalance -> {
+                    getString(R.string.Approve_InsufficientFeeAlert, it.coinValue.coin.title, App.numberFormatter.formatCoin(it.coinValue.value, it.coinValue.coin.code, 0, 8))
+                }
+                else -> it?.message ?: it.toString()
+            }
+        })
+
         viewModel.approveAllowed.observe(viewLifecycleOwner, Observer {
             btnApprove.isEnabled = it
         })
@@ -64,9 +77,6 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
             HudHelper.showErrorMessage(requireView(), it.message ?: it.toString())
         })
 
-        viewModel.feePresenter.errorLiveEvent.observe(viewLifecycleOwner, Observer {
-            HudHelper.showErrorMessage(requireView(), it.message ?: it.toString())
-        })
     }
 
     companion object {
