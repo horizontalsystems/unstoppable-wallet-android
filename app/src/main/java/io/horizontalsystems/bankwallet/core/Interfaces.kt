@@ -165,11 +165,6 @@ interface IEthereumKitManager {
     fun unlink()
 }
 
-interface IUniswapKitManager {
-    fun uniswapKit(): UniswapKit
-    fun unlink()
-}
-
 interface IEosKitManager {
     val eosKit: EosKit?
     val statusInfo: Map<String, Any>?
