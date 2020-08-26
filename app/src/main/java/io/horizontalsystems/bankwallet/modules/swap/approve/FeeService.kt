@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
@@ -21,7 +22,8 @@ class FeeService(
         private val baseCurrency: Currency,
         private val erc20Adapter: Erc20Adapter,
         private val feeRateProvider: IFeeRateProvider,
-        private val rateManager: IRateManager
+        private val rateManager: IRateManager,
+        private val feeBalanceAdapter: IBalanceAdapter
 ) : IFeeService {
 
     override var gasPrice: Long = 0
@@ -48,14 +50,16 @@ class FeeService(
                     gasLimit = it
 
                     val fee = erc20Adapter.fee(gasPrice, gasLimit)
-
                     val coinValue = CoinValue(feeCoin, fee)
 
-                    val currencyValue = rateManager.getLatestRate(feeCoin.code, baseCurrency.code)?.let {
-                        CurrencyValue(baseCurrency, it * fee)
+                    if (feeBalanceAdapter.balance < fee) {
+                        feeValues.onNext(DataState.Error(SwapApproveModule.InsufficientFeeBalance(coinValue)))
+                    } else {
+                        val currencyValue = rateManager.getLatestRate(feeCoin.code, baseCurrency.code)?.let {
+                            CurrencyValue(baseCurrency, it * fee)
+                        }
+                        feeValues.onNext(DataState.Success(Pair(coinValue, currencyValue)))
                     }
-
-                    feeValues.onNext(DataState.Success(Pair(coinValue, currencyValue)))
                 }, {
                     feeValues.onNext(DataState.Error(it))
                 })

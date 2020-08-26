@@ -32,14 +32,14 @@ object SwapApproveModule {
 
             val baseCurrency = App.currencyManager.baseCurrency
 
-            val feeService = FeeService(amount, spenderAddress, feeCoin, baseCurrency, erc20Adapter!!, feeRateProvider!!, App.xRateManager)
-            val service = SwapApproveService(coin, amount, spenderAddress, feeService, erc20Adapter, feeBalanceAdapter)
+            val feeService = FeeService(amount, spenderAddress, feeCoin, baseCurrency, erc20Adapter!!, feeRateProvider!!, App.xRateManager, feeBalanceAdapter)
+            val service = SwapApproveService(coin, amount, spenderAddress, feeService, erc20Adapter)
 
             return SwapApproveViewModel(service, FeePresenter(feeService)) as T
         }
     }
 
-    class InsufficientBalance : Exception()
+    class InsufficientFeeBalance(val coinValue: CoinValue) : Exception()
 
 }
 
