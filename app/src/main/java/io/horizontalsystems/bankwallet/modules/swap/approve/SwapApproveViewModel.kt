@@ -21,7 +21,7 @@ class SwapApproveViewModel(
 
     val approveAllowed = MutableLiveData<Boolean>()
     val successLiveEvent = SingleLiveEvent<Unit>()
-    val errorLiveEvent = SingleLiveEvent<Throwable>()
+    val error = SingleLiveEvent<String>()
 
     init {
         service.approveState
@@ -36,7 +36,7 @@ class SwapApproveViewModel(
                             successLiveEvent.postValue(Unit)
                         }
                         is SwapApproveState.Error -> {
-                            errorLiveEvent.postValue(it.e)
+                            error.postValue(it.e.message ?: it.e.toString())
                         }
                     }
                 }

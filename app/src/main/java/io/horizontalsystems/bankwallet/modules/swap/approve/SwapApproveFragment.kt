@@ -51,16 +51,11 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
             txFeeLoading.isVisible = it
         })
 
-        viewModel.feePresenter.errorLiveEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.feePresenter.error.observe(viewLifecycleOwner, Observer {
             feeDataGroup.isVisible = it == null
             feeError.isVisible = it != null
 
-            feeError.text = when (it) {
-                is SwapApproveModule.InsufficientFeeBalance -> {
-                    getString(R.string.Approve_InsufficientFeeAlert, it.coinValue.coin.title, App.numberFormatter.formatCoin(it.coinValue.value, it.coinValue.coin.code, 0, 8))
-                }
-                else -> it?.message ?: it.toString()
-            }
+            feeError.text = it
         })
 
         viewModel.approveAllowed.observe(viewLifecycleOwner, Observer {
@@ -73,10 +68,9 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
             dismiss()
         })
 
-        viewModel.errorLiveEvent.observe(viewLifecycleOwner, Observer {
-            HudHelper.showErrorMessage(requireView(), it.message ?: it.toString())
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            HudHelper.showErrorMessage(requireView(), it)
         })
-
     }
 
     companion object {
