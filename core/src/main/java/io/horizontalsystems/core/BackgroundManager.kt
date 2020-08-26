@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.managers
+package io.horizontalsystems.core
 
 import android.app.Activity
 import android.app.Application

@@ -12,6 +12,7 @@ abstract class CoreApp : Application() {
         override lateinit var preferences: SharedPreferences
         override lateinit var appConfigTestMode: IAppConfigTestMode
         override lateinit var languageConfigProvider: ILanguageConfigProvider
+        override lateinit var backgroundManager: BackgroundManager
         override lateinit var encryptionManager: IEncryptionManager
         override lateinit var systemInfoManager: ISystemInfoManager
         override lateinit var languageManager: ILanguageManager

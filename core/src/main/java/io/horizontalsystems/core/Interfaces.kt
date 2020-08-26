@@ -12,6 +12,7 @@ interface ICoreApp {
     var preferences: SharedPreferences
     var appConfigTestMode: IAppConfigTestMode
     var languageConfigProvider: ILanguageConfigProvider
+    var backgroundManager: BackgroundManager
     var encryptionManager: IEncryptionManager
     var systemInfoManager: ISystemInfoManager
     var languageManager: ILanguageManager

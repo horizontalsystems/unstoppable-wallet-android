@@ -6,10 +6,10 @@ import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.adapters.*
-import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.BackgroundManager
 
 class AdapterFactory(
         private val context: Context,
