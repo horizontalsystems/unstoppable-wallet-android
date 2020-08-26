@@ -18,7 +18,6 @@ abstract class CoreApp : Application() {
         override lateinit var currencyManager: ICurrencyManager
         override lateinit var keyStoreManager: IKeyStoreManager
         override lateinit var keyProvider: IKeyProvider
-        override lateinit var secureStorage: ISecuredStorage
         override lateinit var pinComponent: IPinComponent
         override lateinit var pinStorage: IPinStorage
         override lateinit var themeStorage: IThemeStorage

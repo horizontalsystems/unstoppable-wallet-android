@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
-import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
 import io.horizontalsystems.pin.PinModule
 
 class LauncherActivity : AppCompatActivity() {

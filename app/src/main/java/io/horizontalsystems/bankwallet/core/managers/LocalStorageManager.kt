@@ -44,6 +44,8 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
+    private val BIOMETRIC_ENABLED = "biometric_enabled"
+    private val PIN = "pin_code"
 
     val gson by lazy { Gson() }
 
@@ -185,6 +187,22 @@ class LocalStorageManager(private val preferences: SharedPreferences)
                 preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
             } ?: preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
         }
+
+    override var biometricAuthEnabled: Boolean
+        get() = preferences.getBoolean(BIOMETRIC_ENABLED, false)
+        set(value) {
+            preferences.edit().putBoolean(BIOMETRIC_ENABLED, value).apply()
+        }
+
+    override var pin: String?
+        get() = preferences.getString(PIN, null)
+        set(value) {
+            preferences.edit().putString(PIN, value).apply()
+        }
+
+    override fun clearPin() {
+        preferences.edit().remove(PIN).apply()
+    }
 
     //used only in db migration
     override var syncMode: SyncMode?
