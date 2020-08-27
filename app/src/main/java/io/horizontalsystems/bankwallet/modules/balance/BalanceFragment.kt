@@ -35,7 +35,7 @@ import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener {
+class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, ManageKeysDialog.Listener {
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
@@ -113,6 +113,12 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         }
     }
 
+    //  ManageKeysDialog Listener
+
+    override fun onClickBackupKey() {
+        viewModel.delegate.onBackupClick()
+    }
+
     // BalanceAdapter listener
 
     override fun onSendClicked(viewItem: BalanceViewItem) {
@@ -145,6 +151,8 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
 
     override fun onAttachFragment(childFragment: Fragment) {
         if (childFragment is ReceiveFragment) {
+            childFragment.setListener(this)
+        } else if (childFragment is ManageKeysDialog) {
             childFragment.setListener(this)
         }
     }
@@ -211,16 +219,10 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer { (coin, predefinedAccount) ->
-            activity?.let { activity ->
-                val title = getString(R.string.ManageKeys_Delete_Alert_Title)
-                val subtitle = getString(predefinedAccount.title)
-                val description = getString(R.string.Balance_Backup_Alert, getString(predefinedAccount.title), coin.title)
-                ManageKeysDialog.show(title, subtitle, description, activity, object : ManageKeysDialog.Listener {
-                    override fun onClickBackupKey() {
-                        viewModel.delegate.onBackupClick()
-                    }
-                }, ManageKeysDialog.ManageAction.BACKUP)
-            }
+            val title = getString(R.string.ManageKeys_Delete_Alert_Title)
+            val subtitle = getString(predefinedAccount.title)
+            val description = getString(R.string.Balance_Backup_Alert, getString(predefinedAccount.title), coin.title)
+            ManageKeysDialog.show(childFragmentManager, title, subtitle, description, ManageKeysDialog.ManageAction.BACKUP)
         })
 
         viewModel.openBackup.observe(viewLifecycleOwner, Observer { (account, coinCodesStringRes) ->

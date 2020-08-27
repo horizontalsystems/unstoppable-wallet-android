@@ -5,17 +5,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 
-class ManageKeysDialog(
-        private val listener: Listener,
-        private val title: String,
-        private val subtitle: String,
-        private val content: String,
-        private val action: ManageAction)
-    : BaseBottomSheetDialogFragment() {
+class ManageKeysDialog : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onClickBackupKey() {}
@@ -25,9 +19,16 @@ class ManageKeysDialog(
     private lateinit var primaryActionButton: Button
     private lateinit var secondaryActionButton: Button
 
+    private var listener: Listener? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setContentView(R.layout.fragment_bottom_manage_keys)
+
+        val title = requireArguments().getString("title")
+        val subtitle = requireArguments().getString("subtitle")
+        val content = requireArguments().getString("content")
+        val action = requireArguments().getSerializable("action") as ManageAction
 
         setTitle(title)
         setSubtitle(subtitle)
@@ -40,17 +41,21 @@ class ManageKeysDialog(
 
         alertText.text = content
 
-        bindActions()
+        bindActions(action)
     }
 
-    private fun bindActions() {
+    fun setListener(listener: Listener) {
+        this.listener = listener
+    }
+
+    private fun bindActions(action: ManageAction) {
         secondaryActionButton.isVisible = false
         primaryActionButton.isVisible = true
 
         if (action == ManageAction.BACKUP) {
             primaryActionButton.text = getString(R.string.ManageKeys_Backup)
             primaryActionButton.setOnClickListener {
-                listener.onClickBackupKey()
+                listener?.onClickBackupKey()
                 dismiss()
             }
         }
@@ -62,9 +67,17 @@ class ManageKeysDialog(
     }
 
     companion object {
-        fun show(title: String, subtitle: String, content: String, activity: FragmentActivity, listener: Listener, action: ManageAction) {
-            val fragment = ManageKeysDialog(listener, title, subtitle, content, action)
-            val transaction = activity.supportFragmentManager.beginTransaction()
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, content: String, action: ManageAction) {
+            val fragment = ManageKeysDialog().apply {
+                arguments = Bundle(4).apply {
+                    putString("title", title)
+                    putString("subtitle", subtitle)
+                    putString("content", content)
+                    putSerializable("action", action)
+                }
+            }
+
+            val transaction = fragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_create_key_dialog")
             transaction.commitAllowingStateLoss()

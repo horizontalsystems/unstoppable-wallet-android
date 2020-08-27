@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -57,10 +58,16 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
             val description = getString(R.string.ManageKeys_Delete_Alert)
-            ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.BACKUP)
+            ManageKeysDialog.show(supportFragmentManager, title, subtitle, description, ManageAction.BACKUP)
         })
 
         presenter.onLoad()
+    }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        if (fragment is ManageKeysDialog){
+            fragment.setListener(this)
+        }
     }
 
     private fun observeView(view: ManageKeysView) {
