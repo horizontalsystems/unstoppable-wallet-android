@@ -25,6 +25,7 @@
     <string name="Button_Retry">重试</string>
     <string name="Button_Change">更改</string>
     <string name="Button_Add">添加</string>
+    <string name="Button_Approve">Approve</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
@@ -148,6 +149,12 @@
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">选择代币</string>
+    <!--Approve-->
+    <string name="Approve_Title">Approve</string>
+    <string name="Approve_Subtitle">Swap</string>
+    <string name="Approve_FeeTitle">Fee</string>
+    <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap是对以太币（Ethereum）实现流动性供给自动化的一种完全去中心化协议。\n\n一个简单的形式化方程为成千上百的用户和应用程序推动了不可阻挡的流动性。\n\nUniswap为开发人员、流动性提供着和交易者赋予了参与到对所有人开放的金融市场中的能力。</string>
