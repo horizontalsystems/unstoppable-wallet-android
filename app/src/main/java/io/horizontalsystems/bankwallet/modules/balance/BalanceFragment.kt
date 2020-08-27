@@ -222,7 +222,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(predefinedAccount.title)
             val description = getString(R.string.Balance_Backup_Alert, getString(predefinedAccount.title), coin.title)
-            ManageKeysDialog.show(childFragmentManager, title, subtitle, description, ManageKeysDialog.ManageAction.BACKUP)
+            ManageKeysDialog.show(childFragmentManager, title, subtitle, description)
         })
 
         viewModel.openBackup.observe(viewLifecycleOwner, Observer { (account, coinCodesStringRes) ->

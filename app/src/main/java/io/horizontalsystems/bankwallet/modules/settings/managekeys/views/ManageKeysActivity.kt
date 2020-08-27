@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreMode
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog.ManageAction
 import kotlinx.android.synthetic.main.activity_manage_keys.*
 
 class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeysAdapter.Listener {
@@ -58,7 +57,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
             val description = getString(R.string.ManageKeys_Delete_Alert)
-            ManageKeysDialog.show(supportFragmentManager, title, subtitle, description, ManageAction.BACKUP)
+            ManageKeysDialog.show(supportFragmentManager, title, subtitle, description)
         })
 
         presenter.onLoad()
