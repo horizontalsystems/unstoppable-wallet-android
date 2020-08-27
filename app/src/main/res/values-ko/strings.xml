@@ -25,6 +25,7 @@
     <string name="Button_Retry">재시도</string>
     <string name="Button_Change">변경하기</string>
     <string name="Button_Add">추가</string>
+    <string name="Button_Approve">Approve</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Wallet">%s 지갑</string>
@@ -148,6 +149,12 @@
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">코인 선택</string>
+    <!--Approve-->
+    <string name="Approve_Title">Approve</string>
+    <string name="Approve_Subtitle">Swap</string>
+    <string name="Approve_FeeTitle">Fee</string>
+    <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap는 Ethereum에서 자동화된 유동성 제공을 위한 완전 분산형 프로토콜입니다.\n\nA 간단한 공식화 등식은 수천 명의 사용자와 수백 개의 애플리케이션을 위해 막을 수 없는 유동성을 촉진합니다. \n\nUniswap의 개발자, 유동성 제공자 및 거래자가 모두에게 개방되고 접근 가능한 금융 시장에 참여할 수 있는 권한을 부여합니다.</string>
