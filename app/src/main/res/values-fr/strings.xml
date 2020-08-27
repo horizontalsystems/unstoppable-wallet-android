@@ -25,6 +25,7 @@
     <string name="Button_Retry">Réessayer</string>
     <string name="Button_Change">Changer</string>
     <string name="Button_Add">Ajouter</string>
+    <string name="Button_Approve">Approve</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Wallet">%s Portefeuille</string>
@@ -149,6 +150,12 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Choisir la pièce</string>
+    <!--Approve-->
+    <string name="Approve_Title">Approve</string>
+    <string name="Approve_Subtitle">Swap</string>
+    <string name="Approve_FeeTitle">Fee</string>
+    <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap est un protocole entièrement décentralisé pour la provision automatisée de liquidités sur Ethereum.\n\nUne simple équation formalisée entraîne une liquidité imparable pour des milliers d\'utilisateurs et des centaines d\'applications.\n\nUniswap permet aux développeurs, aux fournisseurs de liquidités et aux traders de participer à un marché financier ouvert et accessible à tous    </string>
