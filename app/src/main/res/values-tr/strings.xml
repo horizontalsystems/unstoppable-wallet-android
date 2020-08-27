@@ -25,6 +25,7 @@
     <string name="Button_Retry">Yeniden Dene</string>
     <string name="Button_Change">Değiştir</string>
     <string name="Button_Add">Ekle</string>
+    <string name="Button_Approve">Approve</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
@@ -148,6 +149,12 @@
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Kripto Parayı Seç</string>
+    <!--Approve-->
+    <string name="Approve_Title">Approve</string>
+    <string name="Approve_Subtitle">Swap</string>
+    <string name="Approve_FeeTitle">Fee</string>
+    <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap, Ethereum\'da otomatik likidite tedariki için tamamen merkezi olmayan bir protokoldür.
