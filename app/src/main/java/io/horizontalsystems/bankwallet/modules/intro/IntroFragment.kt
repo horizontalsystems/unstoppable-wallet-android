@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.fragment_intro.*
 
-class IntroFragment(private val titleResId: Int, private val descriptionResId: Int) : Fragment() {
+class IntroFragment : Fragment() {
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_intro, container, false)
     }
@@ -16,7 +17,21 @@ class IntroFragment(private val titleResId: Int, private val descriptionResId: I
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val titleResId = requireArguments().getInt("title")
+        val descriptionResId = requireArguments().getInt("description")
+
         title.text = getString(titleResId)
         description.text = getString(descriptionResId)
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(titleResId: Int, descriptionResId: Int) =
+                IntroFragment().apply {
+                    arguments = Bundle(2).apply {
+                        putInt("title", titleResId)
+                        putInt("description", descriptionResId)
+                    }
+                }
     }
 }
