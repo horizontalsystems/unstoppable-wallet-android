@@ -3,6 +3,7 @@ package io.horizontalsystems.core
 import android.content.SharedPreferences
 import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.security.KeyStoreValidationResult
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import java.util.*
@@ -91,9 +92,7 @@ interface IThemeStorage {
 }
 
 interface IKeyStoreManager {
-    val isKeyInvalidated: Boolean
-    val isUserNotAuthenticated: Boolean
-
+    fun validateKeyStore(): KeyStoreValidationResult
     fun removeKey()
     fun resetApp()
 }
