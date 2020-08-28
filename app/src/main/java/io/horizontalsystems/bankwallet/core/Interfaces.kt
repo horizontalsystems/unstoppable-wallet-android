@@ -473,3 +473,7 @@ sealed class FeeRatePriority {
 
     class Custom(val value: Int, val range: IntRange) : FeeRatePriority()
 }
+
+interface Clearable {
+    fun clear()
+}
