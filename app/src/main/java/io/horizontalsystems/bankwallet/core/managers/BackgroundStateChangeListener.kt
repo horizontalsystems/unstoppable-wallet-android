@@ -4,21 +4,38 @@ import android.app.Activity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.IKeyStoreManager
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 
-class KeyStoreChangeListener(private val systemInfoManager: ISystemInfoManager, private val keyStoreManager: IKeyStoreManager)
+class BackgroundStateChangeListener(
+        private val systemInfoManager: ISystemInfoManager,
+        private val keyStoreManager: IKeyStoreManager,
+        private val pinComponent: IPinComponent)
     : BackgroundManager.Listener {
 
     override fun willEnterForeground(activity: Activity) {
         if (systemInfoManager.isSystemLockOff){
             KeyStoreActivity.startForNoSystemLock(activity)
+            return
         }
 
         when(keyStoreManager.validateKeyStore()) {
-            KeyStoreValidationResult.UserNotAuthenticated -> KeyStoreActivity.startForUserAuthentication(activity)
-            KeyStoreValidationResult.KeyIsInvalid -> KeyStoreActivity.startForInvalidKey(activity)
+            KeyStoreValidationResult.UserNotAuthenticated -> {
+                KeyStoreActivity.startForUserAuthentication(activity)
+                return
+            }
+            KeyStoreValidationResult.KeyIsInvalid -> {
+                KeyStoreActivity.startForInvalidKey(activity)
+                return
+            }
             KeyStoreValidationResult.KeyIsValid -> { /* Do nothing */}
         }
+
+        pinComponent.willEnterForeground(activity)
+    }
+
+    override fun didEnterBackground() {
+        pinComponent.didEnterBackground()
     }
 }
