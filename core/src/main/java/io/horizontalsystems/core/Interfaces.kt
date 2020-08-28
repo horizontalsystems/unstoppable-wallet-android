@@ -63,6 +63,7 @@ interface IPinComponent {
     fun validate(pin: String): Boolean
     fun clear()
     fun onUnlock()
+    fun shouldShowPin(activity: Activity): Boolean
 }
 
 interface ILanguageManager {
