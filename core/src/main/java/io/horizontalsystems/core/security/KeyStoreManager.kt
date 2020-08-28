@@ -34,27 +34,6 @@ class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner:
         keyStore.load(null)
     }
 
-    override val isKeyInvalidated: Boolean
-        get() = try {
-            validateKey()
-            false
-        } catch (ex: Exception) {
-            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
-            ex is KeyPermanentlyInvalidatedException
-                    || ex is UnrecoverableKeyException
-                    || ex is InvalidKeyException
-                    || ex is BadPaddingException
-        }
-
-    override val isUserNotAuthenticated: Boolean
-        get() = try {
-            validateKey()
-            false
-        } catch (ex: Exception) {
-            logger.warning("isUserNotAuthenticated: \n ${Log.getStackTraceString(ex)}")
-            ex is UserNotAuthenticatedException
-        }
-
     override fun getKey(): SecretKey {
         try {
             keyStore.getKey(keyAlias, null)?.let {
@@ -76,6 +55,28 @@ class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner:
 
     override fun resetApp() {
         keyStoreCleaner.cleanApp()
+    }
+
+    override fun validateKeyStore(): KeyStoreValidationResult {
+        return try {
+            validateKey()
+            KeyStoreValidationResult.KeyIsValid
+        } catch (ex: UserNotAuthenticatedException) {
+            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            KeyStoreValidationResult.UserNotAuthenticated
+        } catch (ex: KeyPermanentlyInvalidatedException) {
+            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            KeyStoreValidationResult.KeyIsInvalid
+        } catch (ex: UnrecoverableKeyException) {
+            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            KeyStoreValidationResult.KeyIsInvalid
+        } catch (ex: InvalidKeyException) {
+            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            KeyStoreValidationResult.KeyIsInvalid
+        } catch (ex: BadPaddingException) {
+            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            KeyStoreValidationResult.KeyIsInvalid
+        }
     }
 
     @Synchronized
@@ -103,4 +104,8 @@ class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner:
         }
     }
 
+}
+
+enum class KeyStoreValidationResult {
+    UserNotAuthenticated, KeyIsInvalid, KeyIsValid
 }

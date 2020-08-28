@@ -8,15 +8,6 @@ class KeyStoreInteractor(private val systemInfoManager: ISystemInfoManager, priv
 
     var delegate: KeyStoreModule.IInteractorDelegate? = null
 
-    override val isSystemLockOff: Boolean
-        get() = systemInfoManager.isSystemLockOff
-
-    override val isKeyInvalidated: Boolean
-        get() = keyStoreManager.isKeyInvalidated
-
-    override val isUserNotAuthenticated: Boolean
-        get() = keyStoreManager.isUserNotAuthenticated
-
     override fun resetApp() {
         keyStoreManager.resetApp()
     }

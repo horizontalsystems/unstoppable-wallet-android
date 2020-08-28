@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
+import io.horizontalsystems.core.security.KeyStoreValidationResult
+
 class LaunchPresenter(private val interactor: LaunchModule.IInteractor,
                       private val router: LaunchModule.IRouter) : LaunchModule.IViewDelegate, LaunchModule.IInteractorDelegate {
 
@@ -8,10 +10,24 @@ class LaunchPresenter(private val interactor: LaunchModule.IInteractor,
     // IViewDelegate methods
 
     override fun viewDidLoad() {
+        if (interactor.isSystemLockOff){
+            router.openNoSystemLockModule()
+            return
+        }
+
+        when(interactor.validateKeyStore()) {
+            KeyStoreValidationResult.UserNotAuthenticated -> {
+                router.openUserAuthenticationModule()
+                return
+            }
+            KeyStoreValidationResult.KeyIsInvalid -> {
+                router.openKeyInvalidatedModule()
+                return
+            }
+            KeyStoreValidationResult.KeyIsValid -> { /* Do nothing */}
+        }
+
         when {
-            interactor.isSystemLockOff -> router.openNoSystemLockModule()
-            interactor.isKeyInvalidated -> router.openKeyInvalidatedModule()
-            interactor.isUserNotAuthenticated -> router.openUserAuthenticationModule()
             interactor.isAccountsEmpty -> router.openWelcomeModule()
             interactor.isPinNotSet -> router.openMainModule()
             else -> router.openUnlockModule()

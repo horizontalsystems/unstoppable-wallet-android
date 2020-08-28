@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.launcher
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.core.security.KeyStoreValidationResult
 
 object LaunchModule {
 
@@ -18,8 +19,8 @@ object LaunchModule {
         val isPinNotSet: Boolean
         val isAccountsEmpty: Boolean
         val isSystemLockOff: Boolean
-        val isKeyInvalidated: Boolean
-        val isUserNotAuthenticated: Boolean
+
+        fun validateKeyStore(): KeyStoreValidationResult
     }
 
     interface IInteractorDelegate
