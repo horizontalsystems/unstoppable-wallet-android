@@ -12,8 +12,7 @@ import io.reactivex.Flowable
 class PinComponent(
         private val pinStorage: IPinStorage,
         private val encryptionManager: IEncryptionManager,
-        private val excludedActivityNames: List<String>,
-        private val onFire: (activity: Activity, requestCode: Int) -> Unit
+        private val excludedActivityNames: List<String>
 ) : IPinComponent {
 
     private val pinManager: PinManager by lazy {
@@ -63,13 +62,13 @@ class PinComponent(
 
     override fun willEnterForeground(activity: Activity) {
         appLockManager.willEnterForeground()
-
-        if (isLocked && !excludedActivityNames.contains(activity::class.java.name)) {
-            onFire.invoke(activity, 1)
-        }
     }
 
     override fun didEnterBackground() {
         appLockManager.didEnterBackground()
+    }
+
+    override fun shouldShowPin(activity: Activity): Boolean {
+        return isLocked && !excludedActivityNames.contains(activity::class.java.name)
     }
 }
