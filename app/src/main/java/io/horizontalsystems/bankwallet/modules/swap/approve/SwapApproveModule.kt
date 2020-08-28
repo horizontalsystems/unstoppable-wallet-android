@@ -33,9 +33,10 @@ object SwapApproveModule {
             val baseCurrency = App.currencyManager.baseCurrency
 
             val feeService = FeeService(amount, spenderAddress, feeCoin, baseCurrency, erc20Adapter!!, feeRateProvider!!, App.xRateManager, feeBalanceAdapter)
-            val service = SwapApproveService(coin, amount, spenderAddress, feeService, erc20Adapter)
+            val feePresenter = FeePresenter(feeService)
+            val swapApproveService = SwapApproveService(coin, amount, spenderAddress, feeService, erc20Adapter)
 
-            return SwapApproveViewModel(service, FeePresenter(feeService)) as T
+            return SwapApproveViewModel(feePresenter, swapApproveService, listOf(feeService, feePresenter, swapApproveService)) as T
         }
     }
 

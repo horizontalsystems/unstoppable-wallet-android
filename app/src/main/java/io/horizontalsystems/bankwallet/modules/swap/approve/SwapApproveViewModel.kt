@@ -3,12 +3,14 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class SwapApproveViewModel(
+        val feePresenter: FeePresenter,
         private val service: ISwapApproveService,
-        val feePresenter: FeePresenter
+        private val clearables: List<Clearable>
 ) : ViewModel() {
 
     val coinAmount: String
@@ -51,5 +53,9 @@ class SwapApproveViewModel(
 
     override fun onCleared() {
         disposables.dispose()
+
+        clearables.forEach {
+            it.clear()
+        }
     }
 }
