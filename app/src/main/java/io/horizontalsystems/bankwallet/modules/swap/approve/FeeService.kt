@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.IBalanceAdapter
-import io.horizontalsystems.bankwallet.core.IFeeRateProvider
-import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -24,7 +21,7 @@ class FeeService(
         private val feeRateProvider: IFeeRateProvider,
         private val rateManager: IRateManager,
         private val feeBalanceAdapter: IBalanceAdapter
-) : IFeeService {
+) : IFeeService, Clearable {
 
     override var gasPrice: Long = 0
     override var gasLimit: Long = 0
@@ -66,5 +63,9 @@ class FeeService(
                 .let {
                     disposables.add(it)
                 }
+    }
+
+    override fun clear() {
+        disposables.clear()
     }
 }

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.guides.DataState
@@ -14,7 +15,7 @@ class SwapApproveService(
         private val spenderAddress: String,
         private val feeService: IFeeService,
         private val erc20Adapter: Erc20Adapter
-) : ISwapApproveService {
+) : ISwapApproveService, Clearable {
 
     override val approveState = BehaviorSubject.create<SwapApproveState>()
 
@@ -50,4 +51,7 @@ class SwapApproveService(
                 }
     }
 
+    override fun clear() {
+        disposables.clear()
+    }
 }

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.guides.DataState
@@ -10,7 +11,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.reactivex.disposables.CompositeDisposable
 import kotlin.math.min
 
-class FeePresenter(private val service: IFeeService) {
+class FeePresenter(private val service: IFeeService) : Clearable {
     private val disposables = CompositeDisposable()
 
     val feeValue = MutableLiveData<String>()
@@ -44,6 +45,10 @@ class FeePresenter(private val service: IFeeService) {
                 .let {
                     disposables.add(it)
                 }
+    }
+
+    override fun clear() {
+        disposables.clear()
     }
 
     private fun getErrorMessage(fee: DataState<Pair<CoinValue, CurrencyValue?>>?): String? {
