@@ -1,5 +1,6 @@
 package io.horizontalsystems.core
 
+import android.app.Activity
 import android.content.SharedPreferences
 import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.core.entities.Currency
@@ -55,6 +56,8 @@ interface IPinComponent {
     val isLocked: Boolean
     val pinSetFlowable: Flowable<Unit>
 
+    fun willEnterForeground(activity: Activity)
+    fun didEnterBackground()
     fun updateLastExitDateBeforeRestart()
     fun store(pin: String)
     fun validate(pin: String): Boolean

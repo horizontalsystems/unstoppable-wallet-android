@@ -43,7 +43,7 @@ class App : CoreApp() {
 
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
-        lateinit var keyStoreChangeListener: KeyStoreChangeListener
+        lateinit var backgroundStateChangeListener: BackgroundStateChangeListener
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var walletManager: IWalletManager
@@ -153,9 +153,7 @@ class App : CoreApp() {
         encryptionManager = EncryptionManager(keyProvider)
 
         systemInfoManager = SystemInfoManager()
-        keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
-            backgroundManager.registerListener(this)
-        }
+
         languageManager = LanguageManager()
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
@@ -195,7 +193,9 @@ class App : CoreApp() {
                         RateChartActivity::class.java.name
                 ),
                 onFire = { activity, requestCode -> LockScreenModule.startForUnlock(activity, requestCode) }
-        ).apply {
+        )
+
+        backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {
             backgroundManager.registerListener(this)
         }
 
