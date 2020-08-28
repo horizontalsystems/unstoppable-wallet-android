@@ -1,7 +1,6 @@
 package io.horizontalsystems.pin
 
 import android.app.Activity
-import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.IEncryptionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.IPinStorage
@@ -15,7 +14,7 @@ class PinComponent(
         private val encryptionManager: IEncryptionManager,
         private val excludedActivityNames: List<String>,
         private val onFire: (activity: Activity, requestCode: Int) -> Unit
-) : BackgroundManager.Listener, IPinComponent {
+) : IPinComponent {
 
     private val pinManager: PinManager by lazy {
         PinManager(encryptionManager, pinStorage)
@@ -62,7 +61,6 @@ class PinComponent(
         appLockManager.updateLastExitDate()
     }
 
-    //BackgroundManager.Listener
     override fun willEnterForeground(activity: Activity) {
         appLockManager.willEnterForeground()
 
