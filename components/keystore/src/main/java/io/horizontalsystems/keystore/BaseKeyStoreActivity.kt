@@ -31,7 +31,9 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
                             viewModel.delegate.onCloseInvalidKeyWarning()
                         }
 
-                        override fun onCancel() {}
+                        override fun onCancel() {
+                            finishAffinity()
+                        }
                     }).show(supportFragmentManager, "keys_invalidated_alert")
         })
 
