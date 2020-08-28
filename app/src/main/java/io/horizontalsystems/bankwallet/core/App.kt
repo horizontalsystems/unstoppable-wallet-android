@@ -191,8 +191,7 @@ class App : CoreApp() {
                         LauncherActivity::class.java.name,
                         TorConnectionActivity::class.java.name,
                         RateChartActivity::class.java.name
-                ),
-                onFire = { activity, requestCode -> LockScreenModule.startForUnlock(activity, requestCode) }
+                )
         )
 
         backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {
