@@ -22,10 +22,6 @@ object KeyStoreModule {
     }
 
     interface IInteractor {
-        val isSystemLockOff: Boolean
-        val isKeyInvalidated: Boolean
-        val isUserNotAuthenticated: Boolean
-
         fun resetApp()
         fun removeKey()
     }

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.core.security.KeyStoreValidationResult
 
 class LaunchInteractor(
         private val accountManager: IAccountManager,
@@ -23,10 +24,7 @@ class LaunchInteractor(
     override val isSystemLockOff: Boolean
         get() = systemInfoManager.isSystemLockOff
 
-    override val isKeyInvalidated: Boolean
-        get() = keyStoreManager.isKeyInvalidated
-
-    override val isUserNotAuthenticated: Boolean
-        get() = keyStoreManager.isUserNotAuthenticated
-
+    override fun validateKeyStore(): KeyStoreValidationResult {
+        return keyStoreManager.validateKeyStore()
+    }
 }
