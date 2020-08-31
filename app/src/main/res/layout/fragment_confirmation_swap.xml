@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?ColorGwen">
+
+    <io.horizontalsystems.views.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startBorder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endBorder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="16dp" />
+
+            <TextView
+                android:id="@+id/payTitle"
+                style="@style/Headline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="?ColorOz"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Pay Ethereum" />
+            <TextView
+                android:id="@+id/payValue"
+                style="@style/Subhead1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?ColorOz"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/payTitle"
+                tools:text="0.00751234 ETH" />
+
+            <TextView
+                android:id="@+id/getTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/payTitle"
+                tools:text="Get Chainlink" />
+            <TextView
+                android:id="@+id/getValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/getTitle"
+                tools:text="0.37765412 LINK" />
+
+            <TextView
+                android:id="@+id/minMaxTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/getTitle"
+                tools:text="Minimum Got" />
+            <TextView
+                android:id="@+id/minMaxValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/minMaxTitle" />
+
+            <TextView
+                android:id="@+id/priceTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_Price"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/minMaxTitle" />
+            <TextView
+                android:id="@+id/price"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/priceTitle" />
+
+            <TextView
+                android:id="@+id/priceImpactTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_PriceImpact"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/priceTitle" />
+            <TextView
+                android:id="@+id/priceImpact"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/priceImpactTitle" />
+            <TextView
+                android:id="@+id/swapFeeTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_SwapFee"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/priceImpactTitle" />
+            <TextView
+                android:id="@+id/swapFee"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/swapFeeTitle" />
+            <TextView
+                android:id="@+id/txSpeedTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_TransactionSpeed"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/swapFeeTitle" />
+            <TextView
+                android:id="@+id/txSpeed"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/txSpeedTitle" />
+            <TextView
+                android:id="@+id/txFeeTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_TransactionFee"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/txSpeedTitle" />
+            <TextView
+                android:id="@+id/txFee"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/txFeeTitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
