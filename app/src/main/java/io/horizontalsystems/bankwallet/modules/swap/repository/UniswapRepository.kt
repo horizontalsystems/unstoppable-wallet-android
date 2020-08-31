@@ -4,14 +4,11 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
-import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
-import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
-import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import java.math.BigDecimal
@@ -20,15 +17,13 @@ class UniswapRepository(
         private val uniswapKit: UniswapKit
 ) {
     private val swapDataCache = HashMap<Pair<Coin, Coin>, SwapData>()
-    private val priceImpactDesirableThreshold = BigDecimal("1")
-    private val priceImpactAllowedThreshold = BigDecimal("5")
 
     fun trade(
             coinSending: Coin,
             coinReceiving: Coin,
             amount: BigDecimal,
             amountType: AmountType
-    ): Flowable<DataState<Trade>> = Flowable.create({ emitter ->
+    ): Flowable<DataState<TradeData>> = Flowable.create({ emitter ->
         val cacheKey = Pair(coinSending, coinReceiving)
         try {
             val swapData: SwapData = swapDataCache[cacheKey] ?: kotlin.run {
@@ -50,39 +45,13 @@ class UniswapRepository(
                     uniswapKit.bestTradeExactOut(swapData, amount)
                 }
             }
-            emitter.onNext(DataState.Success(swapModel(coinSending, coinReceiving, tradeData)))
+            emitter.onNext(DataState.Success(tradeData))
 
         } catch (error: Throwable) {
             emitter.onNext(DataState.Error(error))
         }
         emitter.onComplete()
     }, BackpressureStrategy.BUFFER)
-
-
-    private fun swapModel(fromCoin: Coin, toCoin: Coin, tradeData: TradeData): Trade {
-        tradeData.apply {
-            return Trade(
-                    fromCoin,
-                    toCoin,
-                    if (tradeData.type == TradeType.ExactIn) AmountType.ExactSending else AmountType.ExactReceiving,
-                    amountIn,
-                    amountOut,
-                    executionPrice,
-                    priceImpact(priceImpact),
-                    if (tradeData.type == TradeType.ExactIn) amountOutMin else amountInMax
-            )
-        }
-    }
-
-    private fun priceImpact(value: BigDecimal?): PriceImpact? {
-        return value?.let {
-            when {
-                value < priceImpactDesirableThreshold -> PriceImpact(value, PriceImpact.Level.Normal)
-                value < priceImpactAllowedThreshold -> PriceImpact(value, PriceImpact.Level.Warning)
-                else -> PriceImpact(value, PriceImpact.Level.Forbidden)
-            }
-        }
-    }
 
     private fun uniswapToken(coin: Coin): Token {
         return when (val coinType = coin.type) {

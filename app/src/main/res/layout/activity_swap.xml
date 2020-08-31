@@ -107,6 +107,18 @@
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintTop_toTopOf="@+id/fromAmountTitle" />
 
+            <ProgressBar
+                android:id="@+id/feeProgressBar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:indeterminate="true"
+                android:indeterminateDrawable="@drawable/circular_spinner"
+                android:indeterminateTint="@color/grey"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/fromAmountTitle"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/fromAmountTitle" />
+
             <io.horizontalsystems.bankwallet.modules.swap.view.SwapAmountView
                 android:id="@+id/fromAmount"
                 android:layout_width="0dp"

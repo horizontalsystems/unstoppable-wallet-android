@@ -5,7 +5,4 @@ data class TradeViewItem(
         val priceImpact: String? = null,
         val minMaxTitle: String? = null,
         val minMaxAmount: String? = null
-) {
-    val isEmpty: Boolean
-        get() = price == null && priceImpact == null && minMaxAmount == null
-}
+)

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isVisible
@@ -16,8 +17,10 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import kotlinx.android.synthetic.main.activity_swap.*
+import java.math.BigDecimal
 
 class SwapActivity : BaseActivity() {
 
@@ -53,90 +56,129 @@ class SwapActivity : BaseActivity() {
 
         proceedButton.setOnSingleClickListener {
             // open confirmation module
+            viewModel.onProceedClick()
         }
 
         approveButton.setOnSingleClickListener {
             // open approve module
         }
 
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
         viewModel.proceedButtonVisible.observe(this, Observer { proceedButtonVisible ->
+            Log.e("AAA", "proceedButtonVisible: $proceedButtonVisible")
             proceedButton.isVisible = proceedButtonVisible
         })
 
         viewModel.proceedButtonEnabled.observe(this, Observer { proceedButtonEnabled ->
+            Log.e("AAA", "proceedButtonEnabled: $proceedButtonEnabled")
             proceedButton.isEnabled = proceedButtonEnabled
         })
 
         viewModel.approveButtonVisible.observe(this, Observer { approveButtonVisible ->
+            Log.e("AAA", "approveButtonVisible: $approveButtonVisible")
             approveButton.isVisible = approveButtonVisible
         })
 
-        viewModel.coinSending.observe(this, Observer { coinSending ->
-            fromAmount.setSelectedCoin(coinSending?.code)
+        viewModel.openConfirmation.observe(this, Observer { requireConfirmation ->
+            Log.e("AAA", "requireConfirmation: $requireConfirmation")
+            if (requireConfirmation) {
+                supportFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
+                                R.anim.slide_in_from_right, R.anim.slide_out_to_right)
+                        .add(R.id.rootView, SwapConfirmationFragment())
+                        .addToBackStack("confirmFragment")
+                        .commit()
+            }
         })
 
-        viewModel.coinReceiving.observe(this, Observer { coinReceiving ->
-            toAmount.setSelectedCoin(coinReceiving?.code)
+        viewModel.coinSending.observe(this, Observer { coin ->
+            Log.e("AAA", "coinSending: $coin")
+            fromAmount.setSelectedCoin(coin?.code)
         })
 
-        viewModel.amountSending.observe(this, Observer { amountSending ->
-            setAmountSendingIfChanged(amountSending)
+        viewModel.coinReceiving.observe(this, Observer { coin ->
+            Log.e("AAA", "coinReceiving: $coin")
+            toAmount.setSelectedCoin(coin?.code)
         })
 
-        viewModel.amountReceiving.observe(this, Observer { amountReceiving ->
-            setAmountReceivingIfChanged(amountReceiving)
+        viewModel.amountSending.observe(this, Observer { amount ->
+            Log.e("AAA", "amountSending: $amount")
+            setAmountSendingIfChanged(amount)
+        })
+
+        viewModel.amountReceiving.observe(this, Observer { amount ->
+            Log.e("AAA", "amountReceiving: $amount")
+            setAmountReceivingIfChanged(amount)
         })
 
         viewModel.balance.observe(this, Observer { balance ->
+            Log.e("AAA", "balance: $balance")
             availableBalanceValue.text = balance
         })
 
         viewModel.amountSendingError.observe(this, Observer { amountSendingError ->
+            Log.e("AAA", "amountSendingError: $amountSendingError")
             fromAmount.setError(amountSendingError)
         })
 
         viewModel.amountSendingLabelVisible.observe(this, Observer { isVisible ->
+            Log.e("AAA", "amountSendingLabelVisible: $isVisible")
             fromAmountLabel.isVisible = isVisible
         })
 
         viewModel.amountReceivingLabelVisible.observe(this, Observer { isVisible ->
+            Log.e("AAA", "amountReceivingLabelVisible: $isVisible")
             toAmountLabel.isVisible = isVisible
         })
 
         viewModel.tradeViewItem.observe(this, Observer { tradeViewItem ->
+            Log.e("AAA", "tradeViewItem: $tradeViewItem")
             setTradeViewItem(tradeViewItem)
         })
 
         viewModel.tradeViewItemLoading.observe(this, Observer { isLoading ->
+            Log.e("AAA", "tradeViewItemLoading: $isLoading")
             tradeViewItemProgressBar.isVisible = isLoading
         })
 
+        viewModel.feeLoading.observe(this, Observer { isLoading ->
+            Log.e("AAA", "feeLoading: $isLoading")
+            feeProgressBar.isVisible = isLoading
+        })
+
         viewModel.allowance.observe(this, Observer { allowance ->
+            Log.e("AAA", "allowance: $allowance")
             setAllowance(allowance)
         })
 
         viewModel.allowanceLoading.observe(this, Observer { isLoading ->
+            Log.e("AAA", "allowanceLoading: $isLoading")
             setAllowanceLoading(isLoading)
         })
 
         viewModel.allowanceColor.observe(this, Observer { color ->
+            Log.e("AAA", "allowanceColor: $color")
             allowanceValue.setTextColor(color)
         })
 
         viewModel.priceImpactColor.observe(this, Observer { color ->
+            Log.e("AAA", "priceImpactColor: $color")
             priceImpactValue.setTextColor(color)
         })
 
         viewModel.error.observe(this, Observer { error ->
-            commonError.text =  error
-            commonError.isVisible = error.isNotBlank()
+            Log.e("AAA", "error: $error")
+            commonError.text = error
+            commonError.isVisible = error != null
         })
-
     }
 
-    private fun setAllowance(allowance: String) {
+    private fun setAllowance(allowance: String?) {
         allowanceValue.text = allowance
-        val isVisible = allowance.isNotBlank()
+        val isVisible = allowance != null
         allowanceTitle.isVisible = isVisible
         allowanceValue.isVisible = isVisible
     }
@@ -147,13 +189,13 @@ class SwapActivity : BaseActivity() {
         allowanceValue.isVisible = !isLoading
     }
 
-    private fun setTradeViewItem(tradeViewItem: TradeViewItem) {
-        priceValue.text = tradeViewItem.price
-        priceImpactValue.text = tradeViewItem.priceImpact
-        minMaxTitle.text = tradeViewItem.minMaxTitle
-        minMaxValue.text = tradeViewItem.minMaxAmount
+    private fun setTradeViewItem(tradeViewItem: TradeViewItem?) {
+        priceValue.text = tradeViewItem?.price
+        priceImpactValue.text = tradeViewItem?.priceImpact
+        minMaxTitle.text = tradeViewItem?.minMaxTitle
+        minMaxValue.text = tradeViewItem?.minMaxAmount
 
-        setTradeViewItemVisibility(visible = !tradeViewItem.isEmpty)
+        setTradeViewItemVisibility(visible = tradeViewItem != null)
     }
 
     private fun setTradeViewItemVisibility(visible: Boolean) {
@@ -183,10 +225,9 @@ class SwapActivity : BaseActivity() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
     }
 
-    private fun setAmountSendingIfChanged(amount: String) {
+    private fun setAmountSendingIfChanged(amount: String?) {
         fromAmount.editText.apply {
-            if (text.toString().toBigDecimalOrNull() == amount.toBigDecimalOrNull()) return
-            if (text.isNullOrEmpty() && amount == "0") return
+            if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
 
             removeTextChangedListener(fromAmountListener)
             setText(amount)
@@ -194,14 +235,21 @@ class SwapActivity : BaseActivity() {
         }
     }
 
-    private fun setAmountReceivingIfChanged(amount: String) {
+    private fun setAmountReceivingIfChanged(amount: String?) {
         toAmount.editText.apply {
-            if (text.toString().toBigDecimalOrNull() == amount.toBigDecimalOrNull()) return
-            if (text.isNullOrEmpty() && amount == "0") return
+            if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
 
             removeTextChangedListener(toAmountListener)
             setText(amount)
             addTextChangedListener(toAmountListener)
+        }
+    }
+
+    private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
+        return when {
+            amount1 == null && amount2 == null -> true
+            amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
+            else -> false
         }
     }
 

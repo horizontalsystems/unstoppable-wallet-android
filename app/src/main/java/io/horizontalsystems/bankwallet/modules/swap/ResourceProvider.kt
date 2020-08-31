@@ -18,6 +18,10 @@ class ResourceProvider(
         return context.getString(id)
     }
 
+    fun string(@StringRes id: Int, vararg params: Any): String {
+        return context.getString(id, *params)
+    }
+
     fun color(@ColorRes id: Int): Int {
         return context.getColor(id)
     }
