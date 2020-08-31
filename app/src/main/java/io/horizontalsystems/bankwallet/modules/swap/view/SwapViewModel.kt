@@ -1,210 +1,227 @@
 package io.horizontalsystems.bankwallet.modules.swap.view
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap.ResourceProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ISwapService
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
-import io.reactivex.BackpressureStrategy
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
-import java.util.logging.Logger
 
 class SwapViewModel(
         private val swapService: ISwapService,
-        private val resourceProvider: ResourceProvider
+        private val resourceProvider: ResourceProvider,
+        private val numberFormatter: IAppNumberFormatter
 ) : ViewModel() {
 
-    private val logger = Logger.getLogger("SwapViewModel")
+    private val disposables = CompositeDisposable()
+
+    val confirmationPresenter by lazy {
+        ConfirmationPresenter(swapService, resourceProvider, numberFormatter)
+    }
 
     // region Outputs
-    val coinSending: LiveData<Coin> = LiveDataReactiveStreams.fromPublisher(swapService.coinSending.toFlowable(BackpressureStrategy.BUFFER))
-    val coinReceiving: LiveData<Coin> = LiveDataReactiveStreams.fromPublisher(swapService.coinReceiving.toFlowable(BackpressureStrategy.BUFFER))
+    private val _coinSending = MutableLiveData<Coin>()
+    val coinSending: LiveData<Coin> = _coinSending
 
-    val allowance: LiveData<String>
-    val allowanceLoading: LiveData<Boolean>
+    private val _coinReceiving = MutableLiveData<Coin>()
+    val coinReceiving: LiveData<Coin> = _coinReceiving
 
-    val balance: LiveData<String> = LiveDataReactiveStreams.fromPublisher(
-            swapService.balance
-                    .map { formatCoinAmount(it.value, it.coin) }
-                    .toFlowable(BackpressureStrategy.BUFFER)
-    )
-    val amountSending: LiveData<String> = LiveDataReactiveStreams.fromPublisher(
-            swapService.amountSending
-                    .map { it.toPlainString() }
-                    .toFlowable(BackpressureStrategy.BUFFER)
-    )
-    val amountReceiving: LiveData<String> = LiveDataReactiveStreams.fromPublisher(
-            swapService.amountReceiving
-                    .map { it.toPlainString() }
-                    .toFlowable(BackpressureStrategy.BUFFER)
-    )
-    val amountSendingLabelVisible: LiveData<Boolean>
-    val amountReceivingLabelVisible: LiveData<Boolean>
+    private val _allowance = MutableLiveData<String?>()
+    val allowance: LiveData<String?> = _allowance
 
-    val tradeViewItem: LiveData<TradeViewItem>
-    val tradeViewItemLoading: LiveData<Boolean>
+    private val _allowanceLoading = MutableLiveData<Boolean>()
+    val allowanceLoading: LiveData<Boolean> = _allowanceLoading
 
-    val amountSendingError: LiveData<String>
-    val allowanceColor: LiveData<Int>
-    val priceImpactColor: LiveData<Int>
+    private val _balance = MutableLiveData<String>()
+    val balance: LiveData<String> = _balance
 
-    val approveButtonVisible: LiveData<Boolean>
-    val proceedButtonVisible: LiveData<Boolean>
-    val proceedButtonEnabled: LiveData<Boolean>
+    private val _amountSending = MutableLiveData<String?>()
+    val amountSending: LiveData<String?> = _amountSending
 
-    val error: LiveData<String>
+    private val _amountReceiving = MutableLiveData<String?>()
+    val amountReceiving: LiveData<String?> = _amountReceiving
+
+    private val _amountSendingLabelVisible = MutableLiveData<Boolean>()
+    val amountSendingLabelVisible: LiveData<Boolean> = _amountSendingLabelVisible
+
+    private val _amountReceivingLabelVisible = MutableLiveData<Boolean>()
+    val amountReceivingLabelVisible: LiveData<Boolean> = _amountReceivingLabelVisible
+
+    private val _tradeViewItem = MutableLiveData<TradeViewItem?>()
+    val tradeViewItem: LiveData<TradeViewItem?> = _tradeViewItem
+
+    private val _tradeViewItemLoading = MutableLiveData<Boolean>()
+    val tradeViewItemLoading: LiveData<Boolean> = _tradeViewItemLoading
+
+    private val _priceImpactColor = MutableLiveData<Int>()
+    val priceImpactColor: LiveData<Int> = _priceImpactColor
+
+    private val _allowanceColor = MutableLiveData<Int>()
+    val allowanceColor: LiveData<Int> = _allowanceColor
+
+    private val _amountSendingError = MutableLiveData<String?>()
+    val amountSendingError: LiveData<String?> = _amountSendingError
+
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
+    private val _approveButtonVisible = MutableLiveData<Boolean>()
+    val approveButtonVisible: LiveData<Boolean> = _approveButtonVisible
+
+    private val _proceedButtonVisible = MutableLiveData<Boolean>()
+    val proceedButtonVisible: LiveData<Boolean> = _proceedButtonVisible
+
+    private val _proceedButtonEnabled = MutableLiveData<Boolean>()
+    val proceedButtonEnabled: LiveData<Boolean> = _proceedButtonEnabled
+
+    private val _openConfirmation = MutableLiveData<Boolean>()
+    val openConfirmation: LiveData<Boolean> = _openConfirmation
+
+    private val _feeLoading = MutableLiveData<Boolean>()
+    val feeLoading: LiveData<Boolean> = _feeLoading
     // endregion
 
     init {
-        val allowanceObservable = swapService.allowance
-        allowance = LiveDataReactiveStreams.fromPublisher(
-                allowanceObservable
-                        .filter { it is DataState.Success }
-                        .map {
-                            (it as? DataState.Success)?.data?.let { coinValue ->
-                                formatCoinAmount(coinValue.value, coinValue.coin)
-                            } ?: ""
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        allowanceLoading = LiveDataReactiveStreams.fromPublisher(
-                allowanceObservable
-                        .map { it is DataState.Loading }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
+        swapService.coinSendingObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _coinSending.postValue(it)
+                }
+                .let { disposables.add(it) }
 
-        val tradeObservable = swapService.trade
-        tradeViewItem = LiveDataReactiveStreams.fromPublisher(
-                tradeObservable
-                        .map { tradeViewItem(it.dataOrNull) }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        tradeViewItemLoading = LiveDataReactiveStreams.fromPublisher(
-                tradeObservable
-                        .map { it is DataState.Loading }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        priceImpactColor = LiveDataReactiveStreams.fromPublisher(
-                tradeObservable
-                        .map { priceImpactColor(it.dataOrNull?.priceImpact) }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
+        swapService.coinReceivingObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _coinReceiving.postValue(it.orElse(null))
+                }
+                .let { disposables.add(it) }
 
-        val errorsObservable = swapService.errors
-        amountSendingError = LiveDataReactiveStreams.fromPublisher(
-                errorsObservable
-                        .map { errors ->
-                            when {
-                                errors.contains(SwapError.InsufficientBalance) -> resourceProvider.string(R.string.Swap_ErrorInsufficientBalance)
-                                else -> ""
-                            }
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        allowanceColor = LiveDataReactiveStreams.fromPublisher(
-                errorsObservable
-                        .map { errors ->
-                            when {
-                                errors.contains(SwapError.InsufficientAllowance) -> resourceProvider.colorLucian()
-                                else -> resourceProvider.color(R.color.grey)
-                            }
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        error = LiveDataReactiveStreams.fromPublisher(
-                errorsObservable
-                        .map { errors ->
-                            when {
-                                errors.contains(SwapError.NoLiquidity) -> resourceProvider.string(R.string.Swap_ErrorNoLiquidity)
-                                else -> ""
-                            }
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
+        swapService.balance
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _balance.postValue(formatCoinAmount(it.value, it.coin))
+                }
+                .let { disposables.add(it) }
 
-        val amountTypeObservable = swapService.amountType
-        amountSendingLabelVisible = LiveDataReactiveStreams.fromPublisher(
-                amountTypeObservable
-                        .map {
-                            it == AmountType.ExactReceiving
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        amountReceivingLabelVisible = LiveDataReactiveStreams.fromPublisher(
-                amountTypeObservable
-                        .map {
-                            it == AmountType.ExactSending
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
+        swapService.amountReceivingObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _amountReceiving.postValue(if (it.isPresent) it.get().toPlainString() else null)
+                }
+                .let { disposables.add(it) }
 
-        val stateObservable = swapService.state
-        approveButtonVisible = LiveDataReactiveStreams.fromPublisher(
-                stateObservable
-                        .map {
-                            it == SwapState.ApproveRequired
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        proceedButtonVisible = LiveDataReactiveStreams.fromPublisher(
-                stateObservable
-                        .map {
-                            it == SwapState.SwapAllowed || it == SwapState.Idle
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
-        proceedButtonEnabled = LiveDataReactiveStreams.fromPublisher(
-                stateObservable
-                        .map {
-                            it == SwapState.SwapAllowed
-                        }
-                        .toFlowable(BackpressureStrategy.BUFFER)
-        )
+        swapService.amountSendingObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _amountSending.postValue(if (it.isPresent) it.get().toPlainString() else null)
+                }
+                .let { disposables.add(it) }
+
+        swapService.allowance
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _allowance.postValue(it.dataOrNull?.let { coinValue ->
+                        formatCoinAmount(coinValue.value, coinValue.coin)
+                    })
+                    _allowanceLoading.postValue(it is DataState.Loading)
+                }
+                .let { disposables.add(it) }
+
+        swapService.tradeObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe { dataState ->
+                    _tradeViewItem.postValue(dataState.dataOrNull?.let { tradeViewItem(it) })
+                    _tradeViewItemLoading.postValue(dataState is DataState.Loading)
+                    _priceImpactColor.postValue(priceImpactColor(dataState.dataOrNull?.priceImpact))
+                }
+                .let { disposables.add(it) }
+
+        swapService.errors
+                .subscribeOn(Schedulers.io())
+                .subscribe { errors ->
+                    val amountSendingError = if (errors.contains(SwapError.InsufficientBalance)) resourceProvider.string(R.string.Swap_ErrorInsufficientBalance) else null
+                    _amountSendingError.postValue(amountSendingError)
+
+                    val allowanceColor = if (errors.contains(SwapError.InsufficientAllowance)) resourceProvider.colorLucian() else resourceProvider.color(R.color.grey)
+                    _allowanceColor.postValue(allowanceColor)
+
+                    _error.postValue(errorText(errors))
+                }
+                .let { disposables.add(it) }
+
+        swapService.amountType
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _amountSendingLabelVisible.postValue(it == AmountType.ExactReceiving)
+                    _amountReceivingLabelVisible.postValue(it == AmountType.ExactSending)
+                }
+                .let { disposables.add(it) }
+
+        swapService.state
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _approveButtonVisible.postValue(it == SwapState.ApproveRequired)
+
+                    _proceedButtonVisible.postValue(it != SwapState.ApproveRequired)
+                    _proceedButtonEnabled.postValue(it == SwapState.ProceedAllowed)
+
+                    _openConfirmation.postValue(it == SwapState.SwapAllowed)
+                }
+                .let { disposables.add(it) }
+
+        swapService.fee
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    _feeLoading.postValue(it == DataState.Loading)
+                }
+                .let { disposables.add(it) }
     }
-
 
     // region Inputs
     fun setCoinSending(coin: Coin) {
-        swapService.setCoinSending(coin)
+        swapService.enterCoinSending(coin)
     }
 
     fun setCoinReceiving(coin: Coin) {
-        swapService.setCoinReceiving(coin)
+        swapService.enterCoinReceiving(coin)
     }
 
     fun setAmountSending(amount: String?) {
-        swapService.setAmountSending(nonZeroAmountOrNull(amount) ?: BigDecimal.ZERO)
+        swapService.enterAmountSending(if (amount.isNullOrBlank()) null else BigDecimal(amount))
     }
 
     fun setAmountReceiving(amount: String?) {
-        swapService.setAmountReceiving(nonZeroAmountOrNull(amount) ?: BigDecimal.ZERO)
+        swapService.enterAmountReceiving(if (amount.isNullOrBlank()) null else BigDecimal(amount))
     }
-// endregion
 
-    private fun nonZeroAmountOrNull(amount: String?): BigDecimal? {
-        return if (amount?.trimEnd { it == '0' || it == '.' }.isNullOrBlank()) null else BigDecimal(amount)
+    fun onProceedClick() {
+        swapService.proceed()
+    }
+    // endregion
+
+    override fun onCleared() {
+        disposables.dispose()
     }
 
     private fun formatCoinAmount(amount: BigDecimal, coin: Coin): String {
         val maxFraction = if (coin.decimal < 8) coin.decimal else 8
-        return App.numberFormatter.formatCoin(amount, coin.code, 0, maxFraction)
+        return numberFormatter.formatCoin(amount, coin.code, 0, maxFraction)
     }
 
-    private fun tradeViewItem(trade: Trade?): TradeViewItem {
-        if (trade == null) {
-            return TradeViewItem()
-        }
-
+    private fun tradeViewItem(trade: Trade): TradeViewItem {
         val minMaxTitle: String?
         val minMaxAmount: String?
 
@@ -214,14 +231,13 @@ class SwapViewModel(
                 minMaxAmount = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinReceiving) }
             }
             AmountType.ExactReceiving -> {
-                minMaxTitle = resourceProvider.string(R.string.Swap_MaximiumSold)
+                minMaxTitle = resourceProvider.string(R.string.Swap_MaximumSold)
                 minMaxAmount = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinSending) }
             }
         }
-
         return TradeViewItem(
-                trade.executionPrice?.let { "${formatCoinAmount(it, trade.coinReceiving)} / ${trade.coinSending.code} " },
-                trade.priceImpact?.value?.toPlainString(),
+                trade.executionPrice?.let { "${trade.coinSending.code} = ${formatCoinAmount(it, trade.coinReceiving)} " },
+                trade.priceImpact?.value?.toPlainString()?.let { resourceProvider.string(R.string.Swap_Percent, it) },
                 minMaxTitle,
                 minMaxAmount
         )
@@ -233,6 +249,16 @@ class SwapViewModel(
             PriceImpact.Level.Warning -> resourceProvider.colorJacob()
             PriceImpact.Level.Forbidden -> resourceProvider.colorLucian()
             else -> resourceProvider.color(R.color.grey)
+        }
+    }
+
+    private fun errorText(errors: List<SwapError>): String? {
+        return when {
+            errors.contains(SwapError.NoLiquidity) -> resourceProvider.string(R.string.Swap_ErrorNoLiquidity)
+            errors.contains(SwapError.CouldNotFetchTrade) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchTrade)
+            errors.contains(SwapError.CouldNotFetchAllowance) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchAllowance)
+            errors.contains(SwapError.CouldNotFetchFee) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchFee)
+            else -> null
         }
     }
 
