@@ -23,8 +23,7 @@ object RateChartModule {
         fun setEmaEnabled(enabled: Boolean)
         fun setMacdEnabled(enabled: Boolean)
         fun setRsiEnabled(enabled: Boolean)
-        fun setAlertNotificationActive(active: Boolean)
-        fun showNotificationIcon(visible: Boolean)
+        fun notificationIconUpdated()
         fun openNotificationMenu(coinId: String, coinName: String)
     }
 
@@ -35,7 +34,6 @@ object RateChartModule {
         fun toggleEma()
         fun toggleMacd()
         fun toggleRsi()
-        fun onResume()
         fun onNotificationClick()
     }
 
@@ -56,7 +54,7 @@ object RateChartModule {
         fun onUpdate(chartInfo: ChartInfo)
         fun onUpdate(marketInfo: MarketInfo)
         fun onError(ex: Throwable)
-        fun alertNotificationsUpdated()
+        fun updateAlertNotificationIconState()
     }
 
     interface Router

@@ -70,7 +70,7 @@ class RateChartInteractor(
         alertNotificationDisposable = priceAlertManager.notificationChangedFlowable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    delegate?.alertNotificationsUpdated()
+                    delegate?.updateAlertNotificationIconState()
                 }
     }
 
