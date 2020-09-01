@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -35,7 +36,7 @@ class ConfirmationPresenter(
         private val swapService: SwapModule.ISwapService,
         private val resourceProvider: ResourceProvider,
         private val numberFormatter: IAppNumberFormatter
-) {
+) : Clearable {
 
     private val disposables = CompositeDisposable()
 
@@ -103,6 +104,10 @@ class ConfirmationPresenter(
                 transactionSpeed = transactionSpeed,
                 transactionFee = transactionFee ?: ""
         )
+    }
+
+    override fun clear() {
+        disposables.dispose()
     }
 
     private fun sendingInfo(): Pair<String, String>? {
