@@ -15,8 +15,7 @@ class RateChartView : RateChartModule.View {
     val showEma = SingleLiveEvent<Boolean>()
     val showMacd = SingleLiveEvent<Boolean>()
     val showRsi = SingleLiveEvent<Boolean>()
-    val alertNotificationActive = MutableLiveData<Boolean>()
-    val alertNotificationVisible = MutableLiveData<Boolean>()
+    val alertNotificationUpdated = SingleLiveEvent<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<String, String>>()
 
     override fun showSpinner() {
@@ -59,12 +58,8 @@ class RateChartView : RateChartModule.View {
         showRsi.postValue(visible)
     }
 
-    override fun setAlertNotificationActive(active: Boolean) {
-        alertNotificationActive.postValue(active)
-    }
-
-    override fun showNotificationIcon(visible: Boolean) {
-        alertNotificationVisible.postValue(visible)
+    override fun notificationIconUpdated() {
+        alertNotificationUpdated.call()
     }
 
     override fun openNotificationMenu(coinId: String, coinName: String) {

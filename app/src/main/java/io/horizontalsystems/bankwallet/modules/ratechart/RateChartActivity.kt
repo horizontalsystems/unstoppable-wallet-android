@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
-import android.view.MotionEvent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -57,14 +59,33 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         bindActions()
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.onResume()
-    }
-
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         presenter.viewDidLoad()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.rate_chart_menu, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.menuNotification)?.apply {
+            isVisible = presenter.notificationIconVisible
+            val iconRes = if (presenter.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_inactive_24
+            icon = ContextCompat.getDrawable(this@RateChartActivity, iconRes)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuNotification -> {
+                presenter.onNotificationClick()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     //  ChartView Listener
@@ -221,13 +242,8 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             rsiChartIndicator.setStateEnabled(enabled)
         })
 
-        presenterView.alertNotificationVisible.observe(this, Observer { visible ->
-            notificationIcon.isVisible = visible
-            setClickListenerForPriceAlert(visible)
-        })
-
-        presenterView.alertNotificationActive.observe(this, Observer { active ->
-            notificationIcon.setImageResource(if (active) R.drawable.ic_notification_enabled_16 else R.drawable.ic_notification_16)
+        presenterView.alertNotificationUpdated.observe(this, Observer { visible ->
+            invalidateOptionsMenu()
         })
 
         presenterView.showNotificationMenu.observe(this, Observer { (coinId, coinName) ->
@@ -277,28 +293,6 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             presenter.toggleRsi()
         }
 
-    }
-
-    private fun setClickListenerForPriceAlert(notificationIconIsVisible: Boolean) {
-        if (notificationIconIsVisible) {
-            notificationClickArea.setOnClickListener {
-                presenter.onNotificationClick()
-            }
-
-            notificationClickArea.setOnTouchListener { v, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> v.alpha = 0.5f
-                    MotionEvent.ACTION_UP -> {
-                        v.alpha = 1f
-                        v.performClick()
-                    }
-                    MotionEvent.ACTION_CANCEL -> v.alpha = 1f
-                }
-                return@setOnTouchListener true
-            }
-        } else {
-            notificationClickArea.setOnClickListener(null)
-        }
     }
 
     private fun resetActions(current: View, setDefault: Boolean = false) {
