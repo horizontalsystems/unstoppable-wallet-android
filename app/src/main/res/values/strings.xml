@@ -180,7 +180,7 @@
 
     <!--Swap-->
 
-    <string name="Swap_Title">Swap</string>
+    <string name="Swap">Swap</string>
     <string name="Swap_FromAmountTitle">You Pay</string>
     <string name="Swap_ToAmountTitle">You Get</string>
     <string name="Swap_AmountHint" translatable="false">0</string>
@@ -204,6 +204,7 @@
     <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>
     <string name="Swap_Proceed">Proceed</string>
     <string name="Swap_Approve">Approve</string>
+    <string name="Swap_Swapping">Swapping</string>
 
     <string name="Swap_Confirmation">Confirmation</string>
     <string name="Swap_Confirmation_Pay">Pay %s</string>

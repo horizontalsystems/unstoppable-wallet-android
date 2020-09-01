@@ -183,6 +183,18 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintTop_toTopOf="@+id/txFeeTitle" />
+
+            <Button
+                android:id="@+id/swapButton"
+                style="@style/ButtonPrimaryYellow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/Swap"
+                app:layout_constraintEnd_toEndOf="@id/endBorder"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/txFeeTitle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -11,6 +11,13 @@ import io.horizontalsystems.uniswapkit.models.TradeData
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 
+data class SwapFeeInfo(
+        val gasPrice: Long,
+        val gasLimit: Long,
+        val coinAmount: CoinValue,
+        val fiatAmount: CurrencyValue?
+)
+
 class UniswapFeeService(
         private val uniswapKit: UniswapKit,
         private val walletManager: IWalletManager,
@@ -22,7 +29,7 @@ class UniswapFeeService(
 
     val feeRatePriority = FeeRatePriority.HIGH
 
-    fun swapFee(coinSending: Coin, coinFee: Coin, tradeData: TradeData): Flowable<DataState<Pair<CoinValue, CurrencyValue?>>> {
+    fun swapFeeInfo(coinSending: Coin, coinFee: Coin, tradeData: TradeData): Flowable<DataState<SwapFeeInfo>> {
         return Flowable.create({ emitter ->
             emitter.onNext(DataState.Loading)
 
@@ -51,7 +58,7 @@ class UniswapFeeService(
                 val xRate = rateManager.getLatestRate(coinFee.code, baseCurrency.code)
                 val currencyValue = xRate?.times(fee)?.let { CurrencyValue(baseCurrency, it) }
 
-                emitter.onNext(DataState.Success(Pair(coinValue, currencyValue)))
+                emitter.onNext(DataState.Success(SwapFeeInfo(gasPrice, gasLimit, coinValue, currencyValue)))
 
             } catch (throwable: Throwable) {
                 emitter.onNext(DataState.Error(throwable))

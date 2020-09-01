@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -92,6 +93,13 @@ class SwapViewModel(
 
     private val _feeLoading = MutableLiveData<Boolean>()
     val feeLoading: LiveData<Boolean> = _feeLoading
+
+    private val _closeWithSuccess = SingleLiveEvent<Int>()
+    val closeWithSuccess: LiveData<Int> = _closeWithSuccess
+
+    private val _closeWithError = SingleLiveEvent<String>()
+    val closeWithError: LiveData<String> = _closeWithError
+
     // endregion
 
     init {
@@ -179,6 +187,13 @@ class SwapViewModel(
                     _proceedButtonEnabled.postValue(it == SwapState.ProceedAllowed)
 
                     _openConfirmation.postValue(it == SwapState.SwapAllowed)
+
+                    if (it == SwapState.Success) {
+                        _closeWithSuccess.postValue(R.string.Hud_Text_Success)
+                    } else if (it is SwapState.Failed) {
+                        _closeWithError.postValue(errorText(listOf(it.error)))
+                    }
+
                 }
                 .let { disposables.add(it) }
 
@@ -258,6 +273,10 @@ class SwapViewModel(
             errors.contains(SwapError.CouldNotFetchTrade) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchTrade)
             errors.contains(SwapError.CouldNotFetchAllowance) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchAllowance)
             errors.contains(SwapError.CouldNotFetchFee) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchFee)
+            errors.any { it is SwapError.Other } -> {
+                val error = errors.first { it is SwapError.Other } as SwapError.Other
+                error.error.message ?: error.error.javaClass.simpleName
+            }
             else -> null
         }
     }
