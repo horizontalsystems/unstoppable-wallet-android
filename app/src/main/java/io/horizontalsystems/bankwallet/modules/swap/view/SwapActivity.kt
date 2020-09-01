@@ -3,12 +3,14 @@ package io.horizontalsystems.bankwallet.modules.swap.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -16,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
@@ -60,8 +63,13 @@ class SwapActivity : BaseActivity() {
             viewModel.onProceedClick()
         }
 
-        approveButton.setOnSingleClickListener {
-            // open approve module
+        supportFragmentManager.setFragmentResultListener(SwapApproveFragment.requestKey, this) { requestKey, bundle ->
+            if (requestKey == SwapApproveFragment.requestKey) {
+                val resultOk = bundle.getBoolean(SwapApproveFragment.resultKey)
+                if (resultOk) {
+                    viewModel.onApproved()
+                }
+            }
         }
 
         observeViewModel()
@@ -78,9 +86,22 @@ class SwapActivity : BaseActivity() {
             proceedButton.isEnabled = proceedButtonEnabled
         })
 
-        viewModel.approveButtonVisible.observe(this, Observer { approveButtonVisible ->
-            Log.e("AAA", "approveButtonVisible: $approveButtonVisible")
-            approveButton.isVisible = approveButtonVisible
+        viewModel.approving.observe(this, Observer { approving ->
+            Log.e("AAA", "approving: $approving")
+            approvingButton.isVisible = approving
+            approvingProgressBar.isVisible = approving
+        })
+
+        viewModel.approveData.observe(this, Observer { approveData ->
+            Log.e("AAA", "approveData: [${approveData?.coin?.code}, ${approveData?.amount}, ${approveData?.spenderAddress}]")
+            approveButton.isVisible = approveData != null
+            approveButton.setOnSingleClickListener {
+                approveData?.let {
+                    SwapApproveFragment
+                            .newInstance(it.coin, it.amount, it.spenderAddress)
+                            .show(supportFragmentManager, "SwapApproveFragment")
+                }
+            }
         })
 
         viewModel.openConfirmation.observe(this, Observer { requireConfirmation ->
@@ -177,13 +198,13 @@ class SwapActivity : BaseActivity() {
         })
 
         viewModel.closeWithSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), it)
-            finish()
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), it, HudHelper.SnackbarDuration.LONG)
+            Handler().postDelayed({ finish() }, 1200)
         })
 
         viewModel.closeWithError.observe(this, Observer {
             HudHelper.showErrorMessage(findViewById(android.R.id.content), it)
-            finish()
+            Handler().postDelayed({ finish() }, 1200)
         })
     }
 

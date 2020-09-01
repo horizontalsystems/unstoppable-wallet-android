@@ -62,11 +62,12 @@ object SwapModule {
         fun proceed()
         fun cancelProceed()
         fun swap()
+        fun approved()
     }
 
     sealed class SwapError {
         object InsufficientBalance : SwapError()
-        object InsufficientAllowance : SwapError()
+        class InsufficientAllowance(val approveData: ApproveData) : SwapError()
         object InsufficientBalanceForFee : SwapError()
         object TooHighPriceImpact : SwapError()
         object NoLiquidity : SwapError()
@@ -77,9 +78,11 @@ object SwapModule {
         class Other(val error: Throwable) : SwapError()
     }
 
+    data class ApproveData(val coin: Coin, val amount: BigDecimal, val spenderAddress: String)
+
     sealed class SwapState {
         object Idle : SwapState()
-        object ApproveRequired : SwapState()
+        class ApproveRequired(val data: ApproveData) : SwapState()
         object WaitingForApprove : SwapState()
         object ProceedAllowed : SwapState()
         object FetchingFee : SwapState()

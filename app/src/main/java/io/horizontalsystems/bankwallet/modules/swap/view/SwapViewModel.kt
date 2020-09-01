@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap.ResourceProvider
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ISwapService
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
@@ -79,8 +80,11 @@ class SwapViewModel(
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    private val _approveButtonVisible = MutableLiveData<Boolean>()
-    val approveButtonVisible: LiveData<Boolean> = _approveButtonVisible
+    private val _approving = MutableLiveData<Boolean>()
+    val approving: LiveData<Boolean> = _approving
+
+    private val _approveData = MutableLiveData<SwapModule.ApproveData?>()
+    val approveData: LiveData<SwapModule.ApproveData?> = _approveData
 
     private val _proceedButtonVisible = MutableLiveData<Boolean>()
     val proceedButtonVisible: LiveData<Boolean> = _proceedButtonVisible
@@ -163,7 +167,7 @@ class SwapViewModel(
                     val amountSendingError = if (errors.contains(SwapError.InsufficientBalance)) resourceProvider.string(R.string.Swap_ErrorInsufficientBalance) else null
                     _amountSendingError.postValue(amountSendingError)
 
-                    val allowanceColor = if (errors.contains(SwapError.InsufficientAllowance)) resourceProvider.colorLucian() else resourceProvider.color(R.color.grey)
+                    val allowanceColor = if (errors.any { it is SwapError.InsufficientAllowance }) resourceProvider.colorLucian() else resourceProvider.color(R.color.grey)
                     _allowanceColor.postValue(allowanceColor)
 
                     _error.postValue(errorText(errors))
@@ -181,9 +185,10 @@ class SwapViewModel(
         swapService.state
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    _approveButtonVisible.postValue(it == SwapState.ApproveRequired)
+                    _approving.postValue(it is SwapState.WaitingForApprove)
+                    _approveData.postValue((it as? SwapState.ApproveRequired)?.data)
 
-                    _proceedButtonVisible.postValue(it != SwapState.ApproveRequired)
+                    _proceedButtonVisible.postValue(it !is SwapState.ApproveRequired && it !is SwapState.WaitingForApprove)
                     _proceedButtonEnabled.postValue(it == SwapState.ProceedAllowed)
 
                     _openConfirmation.postValue(it == SwapState.SwapAllowed)
@@ -225,6 +230,11 @@ class SwapViewModel(
     fun onProceedClick() {
         swapService.proceed()
     }
+
+    fun onApproved() {
+        swapService.approved()
+    }
+
     // endregion
 
     override fun onCleared() {
