@@ -37,6 +37,13 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
         observeLiveData()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        recyclerTags.adapter = null
+        recyclerGuides.adapter = null
+    }
+
     override fun onItemClick(guide: Guide) {
         context?.let {
             GuideModule.start(it, guide.fileUrl)

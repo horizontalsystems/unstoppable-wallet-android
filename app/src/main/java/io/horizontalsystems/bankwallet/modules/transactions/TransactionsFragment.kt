@@ -36,8 +36,8 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = NpaLinearLayoutManager(context)
         transactionsAdapter.viewModel = viewModel
@@ -94,6 +94,14 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             toolbarSpinner.isInvisible = !show
         })
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        recyclerTags.adapter = null
+        recyclerTransactions.adapter = null
+        recyclerTransactions.layoutManager = null
     }
 
     override fun onItemClick(item: TransactionViewItem) {
@@ -276,7 +284,8 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
     }
 
     fun bind(filterId: String?, active: Boolean) {
-        buttonFilter.text = filterId ?: containerView.context.getString(R.string.Transactions_FilterAll)
+        buttonFilter.text = filterId
+                ?: containerView.context.getString(R.string.Transactions_FilterAll)
         buttonFilter.isActivated = active
         buttonFilter.setOnClickListener { l.onClickItem(adapterPosition) }
     }
