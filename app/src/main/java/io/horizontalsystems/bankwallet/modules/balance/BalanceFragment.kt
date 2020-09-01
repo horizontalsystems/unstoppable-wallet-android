@@ -88,7 +88,9 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         recyclerCoins.adapter = null
+        recyclerCoins.layoutManager = null
     }
 
     private fun setSwipeBackground() {
