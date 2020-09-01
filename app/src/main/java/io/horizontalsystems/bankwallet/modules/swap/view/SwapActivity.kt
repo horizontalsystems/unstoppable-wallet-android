@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isVisible
@@ -77,23 +76,19 @@ class SwapActivity : BaseActivity() {
 
     private fun observeViewModel() {
         viewModel.proceedButtonVisible.observe(this, Observer { proceedButtonVisible ->
-            Log.e("AAA", "proceedButtonVisible: $proceedButtonVisible")
             proceedButton.isVisible = proceedButtonVisible
         })
 
         viewModel.proceedButtonEnabled.observe(this, Observer { proceedButtonEnabled ->
-            Log.e("AAA", "proceedButtonEnabled: $proceedButtonEnabled")
             proceedButton.isEnabled = proceedButtonEnabled
         })
 
         viewModel.approving.observe(this, Observer { approving ->
-            Log.e("AAA", "approving: $approving")
             approvingButton.isVisible = approving
             approvingProgressBar.isVisible = approving
         })
 
         viewModel.approveData.observe(this, Observer { approveData ->
-            Log.e("AAA", "approveData: [${approveData?.coin?.code}, ${approveData?.amount}, ${approveData?.spenderAddress}]")
             approveButton.isVisible = approveData != null
             approveButton.setOnSingleClickListener {
                 approveData?.let {
@@ -105,7 +100,6 @@ class SwapActivity : BaseActivity() {
         })
 
         viewModel.openConfirmation.observe(this, Observer { requireConfirmation ->
-            Log.e("AAA", "requireConfirmation: $requireConfirmation")
             if (requireConfirmation) {
                 supportFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
@@ -117,82 +111,66 @@ class SwapActivity : BaseActivity() {
         })
 
         viewModel.coinSending.observe(this, Observer { coin ->
-            Log.e("AAA", "coinSending: $coin")
             fromAmount.setSelectedCoin(coin?.code)
         })
 
         viewModel.coinReceiving.observe(this, Observer { coin ->
-            Log.e("AAA", "coinReceiving: $coin")
             toAmount.setSelectedCoin(coin?.code)
         })
 
         viewModel.amountSending.observe(this, Observer { amount ->
-            Log.e("AAA", "amountSending: $amount")
             setAmountSendingIfChanged(amount)
         })
 
         viewModel.amountReceiving.observe(this, Observer { amount ->
-            Log.e("AAA", "amountReceiving: $amount")
             setAmountReceivingIfChanged(amount)
         })
 
         viewModel.balance.observe(this, Observer { balance ->
-            Log.e("AAA", "balance: $balance")
             availableBalanceValue.text = balance
         })
 
         viewModel.amountSendingError.observe(this, Observer { amountSendingError ->
-            Log.e("AAA", "amountSendingError: $amountSendingError")
             fromAmount.setError(amountSendingError)
         })
 
         viewModel.amountSendingLabelVisible.observe(this, Observer { isVisible ->
-            Log.e("AAA", "amountSendingLabelVisible: $isVisible")
             fromAmountLabel.isVisible = isVisible
         })
 
         viewModel.amountReceivingLabelVisible.observe(this, Observer { isVisible ->
-            Log.e("AAA", "amountReceivingLabelVisible: $isVisible")
             toAmountLabel.isVisible = isVisible
         })
 
         viewModel.tradeViewItem.observe(this, Observer { tradeViewItem ->
-            Log.e("AAA", "tradeViewItem: $tradeViewItem")
             setTradeViewItem(tradeViewItem)
         })
 
         viewModel.tradeViewItemLoading.observe(this, Observer { isLoading ->
-            Log.e("AAA", "tradeViewItemLoading: $isLoading")
             tradeViewItemProgressBar.isVisible = isLoading
         })
 
         viewModel.feeLoading.observe(this, Observer { isLoading ->
-            Log.e("AAA", "feeLoading: $isLoading")
             feeProgressBar.isVisible = isLoading
         })
 
         viewModel.allowance.observe(this, Observer { allowance ->
-            Log.e("AAA", "allowance: $allowance")
             setAllowance(allowance)
         })
 
         viewModel.allowanceLoading.observe(this, Observer { isLoading ->
-            Log.e("AAA", "allowanceLoading: $isLoading")
             setAllowanceLoading(isLoading)
         })
 
         viewModel.allowanceColor.observe(this, Observer { color ->
-            Log.e("AAA", "allowanceColor: $color")
             allowanceValue.setTextColor(color)
         })
 
         viewModel.priceImpactColor.observe(this, Observer { color ->
-            Log.e("AAA", "priceImpactColor: $color")
             priceImpactValue.setTextColor(color)
         })
 
         viewModel.error.observe(this, Observer { error ->
-            Log.e("AAA", "error: $error")
             commonError.text = error
             commonError.isVisible = error != null
         })

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swap.service
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -196,16 +195,13 @@ class UniswapService(
                 .subscribe { swappingState ->
                     when (swappingState) {
                         is DataState.Success -> {
-                            Log.e("AAA", "swap success :${swappingState.data}")
                             state.onNext(SwapState.Success)
                         }
                         is DataState.Error -> {
                             swappingState.error.printStackTrace()
-                            Log.e("AAA", "swap failed :${swappingState.error.message}")
                             state.onNext(SwapState.Failed(SwapError.Other(swappingState.error)))
                         }
                         DataState.Loading -> {
-                            Log.e("AAA", "swap loading")
                             state.onNext(SwapState.Swapping)
                         }
                     }
@@ -278,7 +274,6 @@ class UniswapService(
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     val feeData = it.dataOrNull
-                    Log.e("AAA", "fee: gasprice=${feeData?.gasPrice}, gaslimit=${feeData?.gasLimit}")
                     fee.onNext(it)
                     validateState()
                 }
@@ -399,8 +394,6 @@ class UniswapService(
             }
             else -> oldState
         }
-
-        Log.e("AAA", "oldState: ${oldState.javaClass.simpleName}, newState: ${newState.javaClass.simpleName}")
 
         state.onNext(newState)
         errors.onNext(newErrors)
