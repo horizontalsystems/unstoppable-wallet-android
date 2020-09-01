@@ -19,6 +19,9 @@ class UniswapRepository(
 ) {
     private val swapDataCache = HashMap<Pair<Coin, Coin>, SwapData>()
 
+    val routerAddress: Address
+        get() = uniswapKit.routerAddress
+
     fun trade(
             coinSending: Coin,
             coinReceiving: Coin,
