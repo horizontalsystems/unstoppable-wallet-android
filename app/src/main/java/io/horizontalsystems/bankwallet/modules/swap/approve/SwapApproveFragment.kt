@@ -8,7 +8,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
@@ -32,7 +31,7 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
         }
 
         setTitle(getString(R.string.Approve_Title))
-        setSubtitle(getString(R.string.Swap_Title))
+        setSubtitle(getString(R.string.Swap))
         setHeaderIcon(R.drawable.ic_swap)
 
         coinAmount.text = viewModel.coinAmount

@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.confirmation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -7,8 +9,11 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.ResourceProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.*
 
@@ -32,8 +37,38 @@ class ConfirmationPresenter(
         private val numberFormatter: IAppNumberFormatter
 ) {
 
+    private val disposables = CompositeDisposable()
+
+    private val _swapButtonEnabled = MutableLiveData<Boolean>()
+    val swapButtonEnabled: LiveData<Boolean> = _swapButtonEnabled
+
+    private val _swapButtonTitle = MutableLiveData<String>()
+    val swapButtonTitle: LiveData<String> = _swapButtonTitle
+
+    init {
+        swapService.state
+                .subscribeOn(Schedulers.io())
+                .subscribe { swapState ->
+                    _swapButtonEnabled.postValue(swapState == SwapState.SwapAllowed)
+
+                    val swapButtonTitle = if (swapState == SwapState.SwapAllowed) {
+                        resourceProvider.string(R.string.Swap)
+                    } else {
+                        resourceProvider.string(R.string.Swap_Swapping)
+                    }
+                    _swapButtonTitle.postValue(swapButtonTitle)
+                }
+                .let { disposables.add(it) }
+    }
+
     fun onCancelConfirmation() {
         swapService.cancelProceed()
+    }
+
+    fun onSwap() {
+        _swapButtonEnabled.postValue(false)
+
+        swapService.swap()
     }
 
     fun confirmationViewItem(): ConfirmationViewItem {

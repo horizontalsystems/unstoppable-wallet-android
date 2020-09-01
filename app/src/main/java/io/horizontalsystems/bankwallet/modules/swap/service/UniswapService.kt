@@ -42,6 +42,7 @@ class UniswapService(
     private var tradeDisposable: Disposable? = null
     private var allowanceDisposable: Disposable? = null
     private var feeDisposable: Disposable? = null
+    private var swapDisposable: Disposable? = null
 
     private var tradeData: DataState<TradeData?> = DataState.Success(null)
         set(value) {
@@ -103,7 +104,7 @@ class UniswapService(
     override val allowance = BehaviorSubject.create<DataState<CoinValue?>>()
     override val errors = BehaviorSubject.create<List<SwapError>>()
     override val state = BehaviorSubject.createDefault<SwapState>(SwapState.Idle)
-    override val fee = BehaviorSubject.create<DataState<Pair<CoinValue, CurrencyValue?>>>()
+    override val fee = BehaviorSubject.create<DataState<SwapFeeInfo>>()
 
     override val swapFee: CoinValue?
         get() = amountSending?.multiply(BigDecimal("0.003"))?.let { CoinValue(coinSending, it) }
@@ -112,7 +113,7 @@ class UniswapService(
         get() = uniswapFeeService.feeRatePriority
 
     override val transactionFee: Pair<CoinValue, CurrencyValue?>?
-        get() = fee.value?.dataOrNull
+        get() = fee.value?.dataOrNull?.let { Pair(it.coinAmount, it.fiatAmount) }
 
     init {
         enterCoinSending(coinSending)
@@ -152,14 +153,6 @@ class UniswapService(
         }
     }
 
-    private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
-        return when {
-            amount1 == null && amount2 == null -> true
-            amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
-            else -> false
-        }
-    }
-
     override fun proceed() {
         check(state.value == SwapState.ProceedAllowed) {
             throw IllegalStateException("Cannot proceed when at state: ${state.value}")
@@ -170,6 +163,38 @@ class UniswapService(
 
     override fun cancelProceed() {
         state.onNext(SwapState.ProceedAllowed)
+    }
+
+    override fun swap() {
+        val tradeData = tradeData.dataOrNull
+        val feeInfo = fee.value?.dataOrNull
+
+        if (tradeData == null || feeInfo == null) {
+            errors.onNext(listOf(SwapError.NotEnoughDataToSwap))
+            return
+        }
+
+        state.onNext(SwapState.Swapping)
+
+        swapDisposable = uniswapRepository.swap(tradeData, feeInfo.gasPrice, feeInfo.gasLimit)
+                .subscribeOn(Schedulers.io())
+                .subscribe { swappingState ->
+                    when (swappingState) {
+                        is DataState.Success -> {
+                            Log.e("AAA", "swap success :${swappingState.data}")
+                            state.onNext(SwapState.Success)
+                        }
+                        is DataState.Error -> {
+                            swappingState.error.printStackTrace()
+                            Log.e("AAA", "swap failed :${swappingState.error.message}")
+                            state.onNext(SwapState.Failed(SwapError.Other(swappingState.error)))
+                        }
+                        DataState.Loading -> {
+                            Log.e("AAA", "swap loading")
+                            state.onNext(SwapState.Swapping)
+                        }
+                    }
+                }
     }
 
     private fun syncTrade() {
@@ -234,9 +259,11 @@ class UniswapService(
         feeDisposable?.dispose()
         feeDisposable = null
 
-        feeDisposable = uniswapFeeService.swapFee(coinSending, coinFee, tradeData)
+        feeDisposable = uniswapFeeService.swapFeeInfo(coinSending, coinFee, tradeData)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
+                    val feeData = it.dataOrNull
+                    Log.e("AAA", "fee: gasprice=${feeData?.gasPrice}, gaslimit=${feeData?.gasLimit}")
                     fee.onNext(it)
                     validateState()
                 }
@@ -290,7 +317,7 @@ class UniswapService(
         if (feeDataState is DataState.Error) {
             newErrors.add(SwapError.CouldNotFetchFee)
         } else if (feeDataState is DataState.Success) {
-            val fee = feeDataState.data.first.value
+            val fee = feeDataState.data.coinAmount.value
             val feeCoin = feeCoinProvider.feeCoinData(coinSending)?.first ?: coinSending
             val feeCoinBalance = balance(feeCoin)
             val feeCoinSpendingAmount = if (coinSending.type == feeCoin.type) amountSending else BigDecimal.ZERO
@@ -342,6 +369,9 @@ class UniswapService(
             }
             SwapState.WaitingForApprove -> TODO()
             SwapState.SwapAllowed -> TODO()
+            SwapState.Swapping -> TODO()
+            is SwapState.Failed -> TODO()
+            SwapState.Success -> TODO()
         }
 
         Log.e("AAA", "oldState: ${oldState.javaClass.simpleName}, newState: ${newState.javaClass.simpleName}")
@@ -379,6 +409,14 @@ class UniswapService(
                 value < priceImpactAllowedThreshold -> PriceImpact(value, PriceImpact.Level.Warning)
                 else -> PriceImpact(value, PriceImpact.Level.Forbidden)
             }
+        }
+    }
+
+    private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
+        return when {
+            amount1 == null && amount2 == null -> true
+            amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
+            else -> false
         }
     }
 

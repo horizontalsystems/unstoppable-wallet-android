@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_swap.*
 import java.math.BigDecimal
 
@@ -33,7 +34,7 @@ class SwapActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(getDrawable(R.drawable.ic_info))
-        supportActionBar?.title = getString(R.string.Swap_Title)
+        supportActionBar?.title = getString(R.string.Swap)
 
         val coinSending = intent.extras?.getParcelable<Coin>(SwapModule.tokenInKey)
         viewModel = ViewModelProvider(this, SwapModule.Factory(coinSending!!)).get(SwapViewModel::class.java)
@@ -173,6 +174,16 @@ class SwapActivity : BaseActivity() {
             Log.e("AAA", "error: $error")
             commonError.text = error
             commonError.isVisible = error != null
+        })
+
+        viewModel.closeWithSuccess.observe(this, Observer {
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), it)
+            finish()
+        })
+
+        viewModel.closeWithError.observe(this, Observer {
+            HudHelper.showErrorMessage(findViewById(android.R.id.content), it)
+            finish()
         })
     }
 

@@ -30,7 +30,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
                 app:layout_collapseMode="pin"
-                tools:title="@string/Swap_Title" />
+                tools:title="@string/Swap" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
