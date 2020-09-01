@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.service
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -34,7 +35,7 @@ class UniswapService(
         private val adapterManager: IAdapterManager,
         private val feeCoinProvider: FeeCoinProvider,
         private val uniswapFeeService: UniswapFeeService
-) : SwapModule.ISwapService {
+) : SwapModule.ISwapService, Clearable {
     private val priceImpactDesirableThreshold = BigDecimal("1")
     private val priceImpactAllowedThreshold = BigDecimal("5")
 
@@ -208,6 +209,15 @@ class UniswapService(
                 }
     }
 
+    override fun clear() {
+        tradeDisposable?.dispose()
+        allowanceDisposable?.dispose()
+        feeDisposable?.dispose()
+        swapDisposable?.dispose()
+
+        timer.cancel()
+    }
+
     private fun syncTrade() {
         val amountType = amountType.value
         val amount = when (amountType) {
@@ -273,7 +283,6 @@ class UniswapService(
         feeDisposable = uniswapFeeService.swapFeeInfo(coinSending, coinFee, tradeData)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    val feeData = it.dataOrNull
                     fee.onNext(it)
                     validateState()
                 }

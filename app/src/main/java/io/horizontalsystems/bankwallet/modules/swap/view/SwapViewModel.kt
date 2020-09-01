@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.DataState
@@ -23,16 +24,14 @@ import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
 class SwapViewModel(
+        val confirmationPresenter: ConfirmationPresenter,
         private val swapService: ISwapService,
         private val resourceProvider: ResourceProvider,
-        private val numberFormatter: IAppNumberFormatter
+        private val numberFormatter: IAppNumberFormatter,
+        private val clearables: List<Clearable>
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-
-    val confirmationPresenter by lazy {
-        ConfirmationPresenter(swapService, resourceProvider, numberFormatter)
-    }
 
     // region Outputs
     private val _coinSending = MutableLiveData<Coin>()
@@ -239,6 +238,10 @@ class SwapViewModel(
 
     override fun onCleared() {
         disposables.dispose()
+
+        clearables.forEach {
+            it.clear()
+        }
     }
 
     private fun formatCoinAmount(amount: BigDecimal, coin: Coin): String {

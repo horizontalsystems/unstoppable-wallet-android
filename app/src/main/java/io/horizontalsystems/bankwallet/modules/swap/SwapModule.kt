@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceRepository
@@ -104,14 +105,19 @@ object SwapModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val ethereumKit = App.ethereumKitManager.ethereumKit ?: throw EthereumKitNotCreated()
             val uniswapKit = UniswapKit.getInstance(ethereumKit)
+
             val swapRepository = UniswapRepository(uniswapKit)
             val allowanceRepository = AllowanceRepository(ethereumKit, ethereumKit.receiveAddress, uniswapKit.routerAddress)
             val feeRateProvider = FeeRateProviderFactory.provider(coinSending)
+
             val uniswapFeeService = UniswapFeeService(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider!!)
             val swapService = UniswapService(coinSending, swapRepository, allowanceRepository, App.walletManager, App.adapterManager, App.feeCoinProvider, uniswapFeeService)
+
             val resourceProvider = ResourceProvider(App.instance)
 
-            return SwapViewModel(swapService, resourceProvider, App.numberFormatter) as T
+            val confirmationPresenter = ConfirmationPresenter(swapService, resourceProvider, App.numberFormatter)
+
+            return SwapViewModel(confirmationPresenter, swapService, resourceProvider, App.numberFormatter, listOf(swapService, confirmationPresenter)) as T
         }
     }
 }
