@@ -44,6 +44,9 @@ class UniswapService(
     private var feeDisposable: Disposable? = null
     private var swapDisposable: Disposable? = null
 
+    private val timer = Timer()
+    private val allowanceRefreshInterval = 10_000L // milliseconds
+
     private var tradeData: DataState<TradeData?> = DataState.Success(null)
         set(value) {
             field = value
@@ -117,6 +120,14 @@ class UniswapService(
 
     init {
         enterCoinSending(coinSending)
+
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                if (state.value == SwapState.WaitingForApprove) {
+                    syncAllowance()
+                }
+            }
+        }, 1000, allowanceRefreshInterval)
     }
 
     override fun enterCoinSending(coin: Coin) {
@@ -163,6 +174,10 @@ class UniswapService(
 
     override fun cancelProceed() {
         state.onNext(SwapState.ProceedAllowed)
+    }
+
+    override fun approved() {
+        state.onNext(SwapState.WaitingForApprove)
     }
 
     override fun swap() {
@@ -309,7 +324,7 @@ class UniswapService(
             else amountSending
 
             if (maxSendingAmount != null && allowanceData != null && maxSendingAmount > allowanceData.value) {
-                newErrors.add(SwapError.InsufficientAllowance)
+                newErrors.add(SwapError.InsufficientAllowance(SwapModule.ApproveData(coinSending, maxSendingAmount, uniswapRepository.routerAddress.hex)))
             }
         }
 
@@ -331,7 +346,7 @@ class UniswapService(
         val oldState = state.value ?: SwapState.Idle
         val newState = when (oldState) {
             SwapState.Idle,
-            SwapState.ApproveRequired,
+            is SwapState.ApproveRequired,
             SwapState.ProceedAllowed -> {
                 when {
                     tradeDataState == DataState.Loading || allowanceDataState == DataState.Loading -> {
@@ -340,8 +355,23 @@ class UniswapService(
                     feeDataState == DataState.Loading -> {
                         SwapState.FetchingFee
                     }
-                    newErrors.size == 1 && newErrors.first() == SwapError.InsufficientAllowance -> {
-                        SwapState.ApproveRequired
+                    newErrors.size == 1 && newErrors.first() is SwapError.InsufficientAllowance -> {
+                        val insufficientAllowanceError = newErrors.first { it is SwapError.InsufficientAllowance } as SwapError.InsufficientAllowance
+                        SwapState.ApproveRequired(insufficientAllowanceError.approveData)
+                    }
+                    tradeDataState is DataState.Success && tradeDataState.data != null && newErrors.isEmpty() -> {
+                        SwapState.ProceedAllowed
+                    }
+                    else -> {
+                        SwapState.Idle
+                    }
+                }
+            }
+            SwapState.WaitingForApprove -> {
+                when {
+                    tradeDataState == DataState.Loading -> SwapState.Idle
+                    allowanceDataState == DataState.Loading || newErrors.size == 1 && newErrors.first() is SwapError.InsufficientAllowance -> {
+                        SwapState.WaitingForApprove
                     }
                     tradeDataState is DataState.Success && tradeDataState.data != null && newErrors.isEmpty() -> {
                         SwapState.ProceedAllowed
@@ -367,11 +397,7 @@ class UniswapService(
                     }
                 }
             }
-            SwapState.WaitingForApprove -> TODO()
-            SwapState.SwapAllowed -> TODO()
-            SwapState.Swapping -> TODO()
-            is SwapState.Failed -> TODO()
-            SwapState.Success -> TODO()
+            else -> oldState
         }
 
         Log.e("AAA", "oldState: ${oldState.javaClass.simpleName}, newState: ${newState.javaClass.simpleName}")
