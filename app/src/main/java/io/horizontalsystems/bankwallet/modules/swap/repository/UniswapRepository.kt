@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.repository
 
+import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.DataState
@@ -49,9 +50,27 @@ class UniswapRepository(
 
         } catch (error: Throwable) {
             emitter.onNext(DataState.Error(error))
+        } finally {
+            emitter.onComplete()
         }
-        emitter.onComplete()
     }, BackpressureStrategy.BUFFER)
+
+    fun swap(tradeData: TradeData, gasPrice: Long, gasLimit: Long): Flowable<DataState<String>> =
+            Flowable.create({ emitter ->
+                try {
+                    emitter.onNext(DataState.Loading)
+
+                    val transactionWithInternal = uniswapKit.swap(tradeData, gasPrice, gasLimit).blockingGet()
+                    val txHash = transactionWithInternal.transaction.hash.toHexString()
+
+                    emitter.onNext(DataState.Success(txHash))
+                } catch (error: Throwable) {
+                    error.printStackTrace()
+                    emitter.onNext(DataState.Error(error))
+                } finally {
+                    emitter.onComplete()
+                }
+            }, BackpressureStrategy.BUFFER)
 
     private fun uniswapToken(coin: Coin): Token {
         return when (val coinType = coin.type) {

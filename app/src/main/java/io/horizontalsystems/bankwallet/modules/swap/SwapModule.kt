@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceRepository
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
+import io.horizontalsystems.bankwallet.modules.swap.service.SwapFeeInfo
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapFeeService
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapActivity
@@ -48,7 +49,7 @@ object SwapModule {
         val allowance: Observable<DataState<CoinValue?>>
         val errors: Observable<List<SwapError>>
         val state: Observable<SwapState>
-        val fee: Observable<DataState<Pair<CoinValue, CurrencyValue?>>>
+        val fee: Observable<DataState<SwapFeeInfo>>
 
         val swapFee: CoinValue?
         val feeRatePriority: FeeRatePriority
@@ -60,6 +61,7 @@ object SwapModule {
         fun enterAmountReceiving(amount: BigDecimal?)
         fun proceed()
         fun cancelProceed()
+        fun swap()
     }
 
     sealed class SwapError {
@@ -71,6 +73,8 @@ object SwapModule {
         object CouldNotFetchTrade : SwapError()
         object CouldNotFetchAllowance : SwapError()
         object CouldNotFetchFee : SwapError()
+        object NotEnoughDataToSwap : SwapError()
+        class Other(val error: Throwable) : SwapError()
     }
 
     sealed class SwapState {
@@ -80,6 +84,9 @@ object SwapModule {
         object ProceedAllowed : SwapState()
         object FetchingFee : SwapState()
         object SwapAllowed : SwapState()
+        object Swapping : SwapState()
+        class Failed(val error: SwapError) : SwapState()
+        object Success : SwapState()
     }
 
     fun start(context: Context, tokenIn: Coin) {

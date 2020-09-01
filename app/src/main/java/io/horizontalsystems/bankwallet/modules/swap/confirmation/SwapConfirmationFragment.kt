@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_confirmation.shadowlessToolbar
@@ -22,16 +24,20 @@ class SwapConfirmationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel = activity?.let { ViewModelProvider(it).get(SwapViewModel::class.java) }
-        val confirmationPresenter = viewModel?.confirmationPresenter
+        val presenter = viewModel?.confirmationPresenter
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = {
-                    confirmationPresenter?.onCancelConfirmation()
+                    presenter?.onCancelConfirmation()
                     activity?.onBackPressed()
                 }))
 
-        confirmationPresenter?.confirmationViewItem()?.let {
+        swapButton.setOnSingleClickListener {
+            presenter?.onSwap()
+        }
+
+        presenter?.confirmationViewItem()?.let {
             payTitle.text = it.sendingTitle
             payValue.text = it.sendingValue
             getTitle.text = it.receivingTitle
@@ -44,6 +50,14 @@ class SwapConfirmationFragment : Fragment() {
             txSpeed.text = it.transactionSpeed
             txFee.text = it.transactionFee
         }
+
+        presenter?.swapButtonEnabled?.observe(viewLifecycleOwner, Observer { isEnabled ->
+            swapButton.isEnabled = isEnabled
+        })
+
+        presenter?.swapButtonTitle?.observe(viewLifecycleOwner, Observer { title ->
+            swapButton.text = title
+        })
     }
 
 }
