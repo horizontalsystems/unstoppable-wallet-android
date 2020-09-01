@@ -16,6 +16,8 @@ import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
 class SwapConfirmationFragment : Fragment() {
 
+    private var presenter: ConfirmationPresenter? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
     }
@@ -24,11 +26,15 @@ class SwapConfirmationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel = activity?.let { ViewModelProvider(it).get(SwapViewModel::class.java) }
-        val presenter = viewModel?.confirmationPresenter
+        presenter = viewModel?.confirmationPresenter
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = {
+                    presenter?.onCancelConfirmation()
+                    activity?.onBackPressed()
+                }),
+                rightBtnItem = TopMenuItem(text = R.string.Button_Cancel, onClick = {
                     presenter?.onCancelConfirmation()
                     activity?.onBackPressed()
                 }))
