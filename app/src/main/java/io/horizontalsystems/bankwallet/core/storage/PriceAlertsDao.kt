@@ -14,8 +14,8 @@ interface PriceAlertsDao {
     @Query("SELECT * FROM PriceAlert")
     fun all(): List<PriceAlert>
 
-    @Query("SELECT * FROM PriceAlert WHERE coinCode = :coinCode")
-    fun priceAlert(coinCode: String): PriceAlert?
+    @Query("SELECT * FROM PriceAlert WHERE coinId = :coinId")
+    fun priceAlert(coinId: String): PriceAlert?
 
     @Query("SELECT COUNT(*) FROM PriceAlert")
     fun count(): Int

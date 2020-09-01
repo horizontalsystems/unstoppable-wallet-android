@@ -448,7 +448,7 @@ interface IPriceAlertManager{
     val notificationChangedFlowable: Flowable<Unit>
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(priceAlert: PriceAlert)
-    fun getPriceAlert(coinCode: String): PriceAlert
+    fun getPriceAlert(coinId: String): PriceAlert
     fun deactivateAllNotifications()
     fun enablePriceAlerts()
     fun disablePriceAlerts()

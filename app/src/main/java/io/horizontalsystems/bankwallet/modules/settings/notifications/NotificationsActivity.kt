@@ -91,8 +91,8 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
             switchNotification.setChecked(enabled)
         })
 
-        viewModel.openOptionsDialog.observe(this, Observer { (coinName, coinCode, mode) ->
-            BottomNotificationMenu.show(supportFragmentManager, mode, coinName, coinCode)
+        viewModel.openOptionsDialog.observe(this, Observer { (coinName, coinId, mode) ->
+            BottomNotificationMenu.show(supportFragmentManager, mode, coinName, coinId)
         })
     }
 

@@ -27,8 +27,6 @@ import java.util.*
 class RateChartActivity : BaseActivity(), Chart.Listener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
-    private lateinit var coinCode: String
-    private lateinit var coinTitle: String
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
@@ -37,17 +35,19 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rate_chart)
 
-        coinCode = intent.getStringExtra(ModuleField.COIN_CODE) ?: run {
+        val coinId = intent.getStringExtra(ModuleField.COIN_ID)
+
+        val coinCode = intent.getStringExtra(ModuleField.COIN_CODE) ?: run {
             finish()
             return
         }
 
-        coinTitle = intent.getStringExtra(ModuleField.COIN_TITLE) ?: ""
+        val coinTitle = intent.getStringExtra(ModuleField.COIN_TITLE) ?: ""
         toolbar.title = coinTitle
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        presenter = ViewModelProvider(this, RateChartModule.Factory(coinCode)).get(RateChartPresenter::class.java)
+        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         chart.setListener(this)
@@ -230,6 +230,10 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             notificationIcon.setImageResource(if (active) R.drawable.ic_notification_enabled_16 else R.drawable.ic_notification_16)
         })
 
+        presenterView.showNotificationMenu.observe(this, Observer { (coinId, coinName) ->
+            BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, coinName, coinId)
+        })
+
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
@@ -278,7 +282,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     private fun setClickListenerForPriceAlert(notificationIconIsVisible: Boolean) {
         if (notificationIconIsVisible) {
             notificationClickArea.setOnClickListener {
-                BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, coinTitle, coinCode)
+                presenter.onNotificationClick()
             }
 
             notificationClickArea.setOnTouchListener { v, event ->
