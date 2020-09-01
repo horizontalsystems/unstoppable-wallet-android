@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
 class BottomNotificationsMenuViewModel(
-        private val coinCode: String,
+        private val coinId: String,
         private val priceAlertManager: IPriceAlertManager,
         private val mode: NotificationMenuMode) : ViewModel() {
 
@@ -17,7 +17,7 @@ class BottomNotificationsMenuViewModel(
     private var trendState: PriceAlert.TrendState = PriceAlert.TrendState.OFF
 
     init {
-        val priceAlert = priceAlertManager.getPriceAlert(coinCode)
+        val priceAlert = priceAlertManager.getPriceAlert(coinId)
         priceAlert.changeState?.let {
             changeState = it
         }
@@ -49,7 +49,7 @@ class BottomNotificationsMenuViewModel(
         }
 
         setItems()
-        priceAlertManager.savePriceAlert(PriceAlert(coinCode, changeState, trendState))
+        priceAlertManager.savePriceAlert(PriceAlert(coinId, changeState, trendState))
     }
 
     private fun setItems() {

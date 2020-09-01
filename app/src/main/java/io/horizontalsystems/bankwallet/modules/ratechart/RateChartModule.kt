@@ -25,6 +25,7 @@ object RateChartModule {
         fun setRsiEnabled(enabled: Boolean)
         fun setAlertNotificationActive(active: Boolean)
         fun showNotificationIcon(visible: Boolean)
+        fun openNotificationMenu(coinId: String, coinName: String)
     }
 
     interface ViewDelegate {
@@ -35,6 +36,7 @@ object RateChartModule {
         fun toggleMacd()
         fun toggleRsi()
         fun onResume()
+        fun onNotificationClick()
     }
 
     interface Interactor {
@@ -59,7 +61,7 @@ object RateChartModule {
 
     interface Router
 
-    class Factory(private val coinCode: String) : ViewModelProvider.Factory {
+    class Factory(private val coinTitle: String, private val coinCode: String, private val coinId: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
@@ -67,7 +69,7 @@ object RateChartModule {
 
             val view = RateChartView()
             val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage)
-            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, currency, RateChartViewFactory())
+            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, coinTitle, coinId, currency, RateChartViewFactory())
 
             interactor.delegate = presenter
 

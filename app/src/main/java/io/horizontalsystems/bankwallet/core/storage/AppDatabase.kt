@@ -363,8 +363,8 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val addNotificationTables: Migration = object : Migration(19, 20) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinCode` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinCode`))")
-                database.execSQL("CREATE TABLE IF NOT EXISTS SubscriptionJob (`coinCode` TEXT NOT NULL, `topicName` TEXT NOT NULL, `stateType` TEXT NOT NULL, `jobType` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `stateType`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinId` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinId`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS SubscriptionJob (`coinId` TEXT NOT NULL, `topicName` TEXT NOT NULL, `stateType` TEXT NOT NULL, `jobType` TEXT NOT NULL, PRIMARY KEY(`coinId`, `stateType`))")
 
                 val dbConverter = DatabaseConverters()
                 val alertsCursor = database.query("SELECT * FROM PriceAlertRecord")
@@ -386,13 +386,13 @@ abstract class AppDatabase : RoomDatabase() {
                         val changeStateValue = dbConverter.fromChangeState(newState)
 
                         database.execSQL("""
-                                                INSERT INTO PriceAlert (`coinCode`,`changeState`,`trendState`) 
+                                                INSERT INTO PriceAlert (`coinId`,`changeState`,`trendState`) 
                                                 VALUES ('$coinCode', '$changeStateValue', 'off')
                                                 """.trimIndent())
 
                         val topic = "${coinCode}_24hour_${newState.value}percent"
                         database.execSQL("""
-                                                INSERT INTO SubscriptionJob (`coinCode`,`topicName`,`stateType`,`jobType`) 
+                                                INSERT INTO SubscriptionJob (`coinId`,`topicName`,`stateType`,`jobType`) 
                                                 VALUES ('$coinCode', '$topic', 'change', 'subscribe')
                                                 """.trimIndent())
                     }

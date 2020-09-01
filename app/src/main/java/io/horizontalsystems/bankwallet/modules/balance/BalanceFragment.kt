@@ -231,6 +231,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
             startActivity(Intent(activity, RateChartActivity::class.java).apply {
+                putExtra(ModuleField.COIN_ID, coin.coinId)
                 putExtra(ModuleField.COIN_CODE, coin.code)
                 putExtra(ModuleField.COIN_TITLE, coin.title)
             })
