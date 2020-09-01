@@ -24,6 +24,9 @@ class RateChartPresenter(
         private val factory: RateChartViewFactory)
     : ViewModel(), ViewDelegate, InteractorDelegate {
 
+    var notificationIconVisible = coinId != null && interactor.notificationsAreEnabled
+    var notificationIconActive = false
+
     private var chartType = interactor.defaultChartType ?: ChartType.DAILY
     private var emaIsEnabled = false
     private var macdIsEnabled = false
@@ -51,10 +54,7 @@ class RateChartPresenter(
         interactor.observeAlertNotification(coinCode)
 
         fetchChartInfo()
-    }
-
-    override fun onResume() {
-        setAlertNotificationIconVisible()
+        updateAlertNotificationIconState()
     }
 
     override fun onSelect(type: ChartType) {
@@ -109,24 +109,11 @@ class RateChartPresenter(
         view.setRsiEnabled(rsiIsEnabled)
     }
 
-    override fun alertNotificationsUpdated() {
-        setAlertNotificationIcon()
-    }
-
-    private fun setAlertNotificationIconVisible() {
-        val visible = interactor.notificationsAreEnabled && coinId != null
-
-        view.showNotificationIcon(visible)
-        if (visible) {
-            setAlertNotificationIcon()
-        }
-    }
-
-    private fun setAlertNotificationIcon() {
-        val priceAlert = interactor.getPriceAlert(coinCode)
-        val active = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
-
-        view.setAlertNotificationActive(active)
+    override fun updateAlertNotificationIconState() {
+        val coinId = coinId ?: return
+        val priceAlert = interactor.getPriceAlert(coinId)
+        notificationIconActive = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
+        view.notificationIconUpdated()
     }
 
     private fun fetchChartInfo() {
