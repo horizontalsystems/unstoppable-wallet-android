@@ -73,12 +73,12 @@ class NotificationsViewModel(
     }
 
     fun onDropdownTap(item: NotificationViewItem) {
-        val coinCode = item.coinCode ?: return
+        val coinId = item.coinId ?: return
         val mode = when (item.type) {
             NotificationViewItemType.ChangeOption -> NotificationMenuMode.Change
             else -> NotificationMenuMode.Trend
         }
-        openOptionsDialog.postValue(Triple(item.coinName, coinCode, mode))
+        openOptionsDialog.postValue(Triple(item.coinName, coinId, mode))
     }
 
     private fun updateControlsVisibility() {
@@ -90,12 +90,12 @@ class NotificationsViewModel(
 
         val priceAlerts = priceAlertManager.getPriceAlerts()
         portfolioCoins.forEach { coin ->
-            val priceAlert = priceAlerts.firstOrNull { it.coinCode == coin.code }
+            val priceAlert = priceAlerts.firstOrNull { it.coinId == coin.coinId }
             viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
         }
 
         getOtherCoinsWithAlert(priceAlerts).forEach { coin ->
-            priceAlerts.firstOrNull { it.coinCode == coin.code }?.let { priceAlert ->
+            priceAlerts.firstOrNull { it.coinId == coin.coinId }?.let { priceAlert ->
                 viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
             }
         }
@@ -104,22 +104,22 @@ class NotificationsViewModel(
     }
 
     private fun getOtherCoinsWithAlert(priceAlerts: List<PriceAlert>): List<Coin> {
-        val portfolioCoinCodes = portfolioCoins.map { it.code }
+        val portfolioCoinCodes = portfolioCoins.map { it.coinId }
         val allCoins = coinManager.coins
         val nonPortfolioCoinAlerts = priceAlerts.filter { alert ->
-            portfolioCoinCodes.indexOf(alert.coinCode) == -1
+            portfolioCoinCodes.indexOf(alert.coinId) == -1
         }
 
         return nonPortfolioCoinAlerts.mapNotNull { priceAlert ->
-            allCoins.firstOrNull { priceAlert.coinCode == it.code }
+            allCoins.firstOrNull { priceAlert.coinId == it.coinId }
         }
     }
 
     private fun getPriceAlertViewItems(coin: Coin, priceAlert: PriceAlert?): List<NotificationViewItem> {
         val items = mutableListOf<NotificationViewItem>()
         items.add(NotificationViewItem(coin.title, NotificationViewItemType.CoinName))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.ChangeOption, coin.code, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert?.changeState)))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.TrendOption, coin.code, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert?.trendState)))
+        items.add(NotificationViewItem(coin.title, NotificationViewItemType.ChangeOption, coin.coinId, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert?.changeState)))
+        items.add(NotificationViewItem(coin.title, NotificationViewItemType.TrendOption, coin.coinId, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert?.trendState)))
         return items
     }
 
@@ -147,7 +147,7 @@ class NotificationsViewModel(
 data class NotificationViewItem(
         val coinName: String,
         val type: NotificationViewItemType,
-        val coinCode: String? = null,
+        val coinId: String? = null,
         @StringRes val titleRes: Int? = null,
         @StringRes val dropdownValue: Int = R.string.SettingsNotifications_Off)
 

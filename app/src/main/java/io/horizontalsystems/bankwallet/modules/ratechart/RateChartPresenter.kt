@@ -18,6 +18,8 @@ class RateChartPresenter(
         val rateFormatter: RateFormatter,
         private val interactor: Interactor,
         private val coinCode: String,
+        private val coinTitle: String,
+        private val coinId: String?,
         private val currency: Currency,
         private val factory: RateChartViewFactory)
     : ViewModel(), ViewDelegate, InteractorDelegate {
@@ -78,6 +80,12 @@ class RateChartPresenter(
         }
     }
 
+    override fun onNotificationClick() {
+        coinId?.let{
+            view.openNotificationMenu(it, coinTitle)
+        }
+    }
+
     override fun toggleEma() {
         emaIsEnabled = !emaIsEnabled
         view.setEmaEnabled(emaIsEnabled)
@@ -106,8 +114,10 @@ class RateChartPresenter(
     }
 
     private fun setAlertNotificationIconVisible() {
-        view.showNotificationIcon(interactor.notificationsAreEnabled)
-        if (interactor.notificationsAreEnabled) {
+        val visible = interactor.notificationsAreEnabled && coinId != null
+
+        view.showNotificationIcon(visible)
+        if (visible) {
             setAlertNotificationIcon()
         }
     }

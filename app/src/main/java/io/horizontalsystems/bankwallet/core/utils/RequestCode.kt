@@ -23,6 +23,7 @@ object ModuleField {
     const val RESTORE_MODE = "RESTORE_MODE"
     const val PREDEFINED_ACCOUNT_TYPE = "PREDEFINED_ACCOUNT_TYPE"
     const val COIN_CODE = "COIN_CODE"
+    const val COIN_ID = "COIN_ID"
     const val COIN_TITLE = "COIN_TITLE"
     const val COIN_TYPES = "COIN_TYPES"
     const val SHOW_CLOSE_BUTTON = "SHOW_CLOSE_BUTTON"

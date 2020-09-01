@@ -21,10 +21,10 @@ import kotlinx.android.synthetic.main.view_holder_notification_menu_section_head
 class BottomNotificationMenu(
         private val mode: NotificationMenuMode,
         private val coinName: String,
-        private val coinCode: String
+        private val coinId: String
 ) : BaseBottomSheetDialogFragment(), NotificationMenuItemsAdapter.Listener {
 
-    private val viewModel by viewModels<BottomNotificationsMenuViewModel> { NotificationBottomMenuModule.Factory(coinCode, mode) }
+    private val viewModel by viewModels<BottomNotificationsMenuViewModel> { NotificationBottomMenuModule.Factory(coinId, mode) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,8 +60,8 @@ class BottomNotificationMenu(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, mode: NotificationMenuMode, coinName: String, coinCode: String) {
-            BottomNotificationMenu(mode, coinName, coinCode)
+        fun show(fragmentManager: FragmentManager, mode: NotificationMenuMode, coinName: String, coinId: String) {
+            BottomNotificationMenu(mode, coinName, coinId)
                     .show(fragmentManager, "notification_menu_dialog")
         }
     }
