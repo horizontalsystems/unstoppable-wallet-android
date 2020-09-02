@@ -245,10 +245,10 @@ class UniswapService(
     }
 
     private fun syncAllowance() {
-        if (coinSending.type is CoinType.Erc20) {
-            allowanceDisposable?.dispose()
-            allowanceDisposable = null
+        allowanceDisposable?.dispose()
+        allowanceDisposable = null
 
+        if (coinSending.type is CoinType.Erc20) {
             allowanceDisposable = allowanceRepository.allowance(coinSending)
                     .subscribeOn(Schedulers.io())
                     .map { dataState ->
@@ -347,8 +347,7 @@ class UniswapService(
         }
 
         // set new state
-        val oldState = state.value ?: SwapState.Idle
-        val newState = when (oldState) {
+        val newState = when (val oldState = state.value ?: SwapState.Idle) {
             SwapState.Idle,
             is SwapState.ApproveRequired,
             SwapState.ProceedAllowed -> {

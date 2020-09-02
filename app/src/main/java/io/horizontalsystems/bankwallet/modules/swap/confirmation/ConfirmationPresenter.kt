@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.ResourceProvider
+import io.horizontalsystems.bankwallet.modules.swap.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
@@ -34,7 +34,7 @@ data class ConfirmationViewItem(
 
 class ConfirmationPresenter(
         private val swapService: SwapModule.ISwapService,
-        private val resourceProvider: ResourceProvider,
+        private val stringProvider: StringProvider,
         private val numberFormatter: IAppNumberFormatter
 ) : Clearable {
 
@@ -53,9 +53,9 @@ class ConfirmationPresenter(
                     _swapButtonEnabled.postValue(swapState == SwapState.SwapAllowed)
 
                     val swapButtonTitle = if (swapState == SwapState.SwapAllowed) {
-                        resourceProvider.string(R.string.Swap)
+                        stringProvider.string(R.string.Swap)
                     } else {
-                        resourceProvider.string(R.string.Swap_Swapping)
+                        stringProvider.string(R.string.Swap_Swapping)
                     }
                     _swapButtonTitle.postValue(swapButtonTitle)
                 }
@@ -83,7 +83,7 @@ class ConfirmationPresenter(
             "${trade.coinSending.code} = ${formatCoinAmount(it, trade.coinReceiving)}"
         }
         val priceImpact = trade?.priceImpact?.value?.toPlainString()?.let {
-            resourceProvider.string(R.string.Swap_Percent, it)
+            stringProvider.string(R.string.Swap_Percent, it)
         }
         val swapFee = swapService.swapFee?.let {
             formatCoinAmount(it.value, it.coin)
@@ -113,14 +113,14 @@ class ConfirmationPresenter(
     private fun sendingInfo(): Pair<String, String>? {
         val coinSending = swapService.coinSending
         val amountReceiving = swapService.amountSending ?: return null
-        val title = resourceProvider.string(R.string.Swap_Confirmation_Pay, coinSending.title)
+        val title = stringProvider.string(R.string.Swap_Confirmation_Pay, coinSending.title)
         return Pair(title, formatCoinAmount(amountReceiving, coinSending))
     }
 
     private fun receivingInfo(): Pair<String, String>? {
         val coinReceiving = swapService.coinReceiving ?: return null
         val amountReceiving = swapService.amountReceiving ?: return null
-        val title = resourceProvider.string(R.string.Swap_Confirmation_Get, coinReceiving.title)
+        val title = stringProvider.string(R.string.Swap_Confirmation_Get, coinReceiving.title)
         val value = formatCoinAmount(amountReceiving, coinReceiving)
         return Pair(title, value)
     }
@@ -130,11 +130,11 @@ class ConfirmationPresenter(
         var value: String? = null
         when (trade.amountType) {
             AmountType.ExactSending -> {
-                title = resourceProvider.string(R.string.Swap_MinimumReceived)
+                title = stringProvider.string(R.string.Swap_MinimumReceived)
                 value = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinReceiving) }
             }
             AmountType.ExactReceiving -> {
-                title = resourceProvider.string(R.string.Swap_MaximumSold)
+                title = stringProvider.string(R.string.Swap_MaximumSold)
                 value = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinSending) }
             }
         }
