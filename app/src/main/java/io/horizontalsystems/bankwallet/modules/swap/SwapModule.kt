@@ -113,11 +113,11 @@ object SwapModule {
             val uniswapFeeService = UniswapFeeService(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider!!)
             val swapService = UniswapService(coinSending, swapRepository, allowanceRepository, App.walletManager, App.adapterManager, App.feeCoinProvider, uniswapFeeService)
 
-            val resourceProvider = ResourceProvider(App.instance)
+            val stringProvider = StringProvider(App.instance)
 
-            val confirmationPresenter = ConfirmationPresenter(swapService, resourceProvider, App.numberFormatter)
+            val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, App.numberFormatter)
 
-            return SwapViewModel(confirmationPresenter, swapService, resourceProvider, App.numberFormatter, listOf(swapService, confirmationPresenter)) as T
+            return SwapViewModel(confirmationPresenter, swapService, stringProvider, App.numberFormatter, listOf(swapService, confirmationPresenter)) as T
         }
     }
 }
