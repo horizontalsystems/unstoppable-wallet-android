@@ -20,8 +20,10 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_swap.*
 import java.math.BigDecimal
 
@@ -162,12 +164,12 @@ class SwapActivity : BaseActivity() {
             setAllowanceLoading(isLoading)
         })
 
-        viewModel.allowanceColor.observe(this, Observer { color ->
-            allowanceValue.setTextColor(color)
-        })
+        viewModel.insufficientAllowance.observe(this, Observer { error ->
+            val color = if (error)
+                LayoutHelper.getAttr(R.attr.ColorLucian, theme) ?: getColor(R.color.red_d)
+            else getColor(R.color.grey)
 
-        viewModel.priceImpactColor.observe(this, Observer { color ->
-            priceImpactValue.setTextColor(color)
+            allowanceValue.setTextColor(color)
         })
 
         viewModel.error.observe(this, Observer { error ->
@@ -201,11 +203,26 @@ class SwapActivity : BaseActivity() {
 
     private fun setTradeViewItem(tradeViewItem: TradeViewItem?) {
         priceValue.text = tradeViewItem?.price
+
         priceImpactValue.text = tradeViewItem?.priceImpact
+        priceImpactValue.setTextColor(priceImpactColor(tradeViewItem?.priceImpactLevel))
+
         minMaxTitle.text = tradeViewItem?.minMaxTitle
         minMaxValue.text = tradeViewItem?.minMaxAmount
 
         setTradeViewItemVisibility(visible = tradeViewItem != null)
+    }
+
+    private fun priceImpactColor(priceImpactLevel: PriceImpact.Level?): Int {
+        return when (priceImpactLevel) {
+            PriceImpact.Level.Normal -> LayoutHelper.getAttr(R.attr.ColorRemus, theme)
+                    ?: getColor(R.color.green_d)
+            PriceImpact.Level.Warning -> LayoutHelper.getAttr(R.attr.ColorJacob, theme)
+                    ?: getColor(R.color.yellow_d)
+            PriceImpact.Level.Forbidden -> LayoutHelper.getAttr(R.attr.ColorLucian, theme)
+                    ?: getColor(R.color.red_d)
+            else -> getColor(R.color.grey)
+        }
     }
 
     private fun setTradeViewItemVisibility(visible: Boolean) {

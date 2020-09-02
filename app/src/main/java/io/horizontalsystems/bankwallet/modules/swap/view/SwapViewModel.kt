@@ -8,14 +8,13 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.DataState
-import io.horizontalsystems.bankwallet.modules.swap.ResourceProvider
+import io.horizontalsystems.bankwallet.modules.swap.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ISwapService
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
-import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.SingleLiveEvent
@@ -26,7 +25,7 @@ import java.math.BigDecimal
 class SwapViewModel(
         val confirmationPresenter: ConfirmationPresenter,
         private val swapService: ISwapService,
-        private val resourceProvider: ResourceProvider,
+        private val stringProvider: StringProvider,
         private val numberFormatter: IAppNumberFormatter,
         private val clearables: List<Clearable>
 ) : ViewModel() {
@@ -67,11 +66,8 @@ class SwapViewModel(
     private val _tradeViewItemLoading = MutableLiveData<Boolean>()
     val tradeViewItemLoading: LiveData<Boolean> = _tradeViewItemLoading
 
-    private val _priceImpactColor = MutableLiveData<Int>()
-    val priceImpactColor: LiveData<Int> = _priceImpactColor
-
-    private val _allowanceColor = MutableLiveData<Int>()
-    val allowanceColor: LiveData<Int> = _allowanceColor
+    private val _insufficientAllowance = MutableLiveData<Boolean>()
+    val insufficientAllowance: LiveData<Boolean> = _insufficientAllowance
 
     private val _amountSendingError = MutableLiveData<String?>()
     val amountSendingError: LiveData<String?> = _amountSendingError
@@ -102,7 +98,6 @@ class SwapViewModel(
 
     private val _closeWithError = SingleLiveEvent<String>()
     val closeWithError: LiveData<String> = _closeWithError
-
     // endregion
 
     init {
@@ -156,18 +151,16 @@ class SwapViewModel(
                 .subscribe { dataState ->
                     _tradeViewItem.postValue(dataState.dataOrNull?.let { tradeViewItem(it) })
                     _tradeViewItemLoading.postValue(dataState is DataState.Loading)
-                    _priceImpactColor.postValue(priceImpactColor(dataState.dataOrNull?.priceImpact))
                 }
                 .let { disposables.add(it) }
 
         swapService.errors
                 .subscribeOn(Schedulers.io())
                 .subscribe { errors ->
-                    val amountSendingError = if (errors.contains(SwapError.InsufficientBalance)) resourceProvider.string(R.string.Swap_ErrorInsufficientBalance) else null
+                    val amountSendingError = if (errors.contains(SwapError.InsufficientBalance)) stringProvider.string(R.string.Swap_ErrorInsufficientBalance) else null
                     _amountSendingError.postValue(amountSendingError)
 
-                    val allowanceColor = if (errors.any { it is SwapError.InsufficientAllowance }) resourceProvider.colorLucian() else resourceProvider.color(R.color.grey)
-                    _allowanceColor.postValue(allowanceColor)
+                    _insufficientAllowance.postValue(errors.any { it is SwapError.InsufficientAllowance })
 
                     _error.postValue(errorText(errors))
                 }
@@ -197,7 +190,6 @@ class SwapViewModel(
                     } else if (it is SwapState.Failed) {
                         _closeWithError.postValue(errorText(listOf(it.error)))
                     }
-
                 }
                 .let { disposables.add(it) }
 
@@ -255,42 +247,34 @@ class SwapViewModel(
 
         when (trade.amountType) {
             AmountType.ExactSending -> {
-                minMaxTitle = resourceProvider.string(R.string.Swap_MinimumReceived)
+                minMaxTitle = stringProvider.string(R.string.Swap_MinimumReceived)
                 minMaxAmount = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinReceiving) }
             }
             AmountType.ExactReceiving -> {
-                minMaxTitle = resourceProvider.string(R.string.Swap_MaximumSold)
+                minMaxTitle = stringProvider.string(R.string.Swap_MaximumSold)
                 minMaxAmount = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinSending) }
             }
         }
         return TradeViewItem(
                 trade.executionPrice?.let { "${trade.coinSending.code} = ${formatCoinAmount(it, trade.coinReceiving)} " },
-                trade.priceImpact?.value?.toPlainString()?.let { resourceProvider.string(R.string.Swap_Percent, it) },
+                trade.priceImpact?.value?.toPlainString()?.let { stringProvider.string(R.string.Swap_Percent, it) },
+                trade.priceImpact?.level,
                 minMaxTitle,
                 minMaxAmount
         )
     }
 
-    private fun priceImpactColor(priceImpact: PriceImpact?): Int {
-        return when (priceImpact?.level) {
-            PriceImpact.Level.Normal -> resourceProvider.colorRemus()
-            PriceImpact.Level.Warning -> resourceProvider.colorJacob()
-            PriceImpact.Level.Forbidden -> resourceProvider.colorLucian()
-            else -> resourceProvider.color(R.color.grey)
-        }
-    }
-
-    private fun errorText(errors: List<SwapError>): String? {
+    private fun errorText(errors: List<SwapError>): String {
         return when {
-            errors.contains(SwapError.NoLiquidity) -> resourceProvider.string(R.string.Swap_ErrorNoLiquidity)
-            errors.contains(SwapError.CouldNotFetchTrade) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchTrade)
-            errors.contains(SwapError.CouldNotFetchAllowance) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchAllowance)
-            errors.contains(SwapError.CouldNotFetchFee) -> resourceProvider.string(R.string.Swap_ErrorCouldNotFetchFee)
+            errors.contains(SwapError.NoLiquidity) -> stringProvider.string(R.string.Swap_ErrorNoLiquidity)
+            errors.contains(SwapError.CouldNotFetchTrade) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchTrade)
+            errors.contains(SwapError.CouldNotFetchAllowance) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchAllowance)
+            errors.contains(SwapError.CouldNotFetchFee) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchFee)
             errors.any { it is SwapError.Other } -> {
                 val error = errors.first { it is SwapError.Other } as SwapError.Other
                 error.error.message ?: error.error.javaClass.simpleName
             }
-            else -> null
+            else -> errors.firstOrNull()?.javaClass?.simpleName ?: ""
         }
     }
 
