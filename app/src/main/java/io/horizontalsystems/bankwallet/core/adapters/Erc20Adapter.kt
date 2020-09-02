@@ -107,7 +107,7 @@ class Erc20Adapter(
 
         val txHashHex = transaction.transactionHash.toHexString()
         return TransactionRecord(
-                uid = "$txHashHex${transaction.interTransactionIndex}",
+                uid = "$txHashHex${transaction.interTransactionIndex}${contractAddress.hex}",
                 transactionHash = txHashHex,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = transaction.interTransactionIndex,
