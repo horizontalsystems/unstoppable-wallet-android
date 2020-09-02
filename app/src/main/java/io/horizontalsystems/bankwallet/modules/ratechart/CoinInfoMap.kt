@@ -12,6 +12,7 @@ object CoinInfoMap {
             "DASH" to CoinInfo(BigDecimal(18_900_000), "18/01/2014", "http://dash.org"),
             "BNB" to CoinInfo(BigDecimal(187_536_713), "27/06/2017", "https://www.binance.com"),
             "EOS" to CoinInfo(BigDecimal(1_035_000_004), "26/06/2017", "https://eos.io"),
+            "AKRO" to CoinInfo(BigDecimal(4_000_000_000), "06/07/2019", "https://akropolis.io"),
             "AMPL" to CoinInfo(BigDecimal(38_207_563), "14/06/2019", "https://www.ampleforth.org"),
             "ANKR" to CoinInfo(BigDecimal(10_000_000_000), "21/02/2019", "https://www.ankr.com"),
             "ANT" to CoinInfo(BigDecimal(39_609_524), "05/05/2017", "https://aragon.one"),
