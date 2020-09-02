@@ -27,7 +27,9 @@ data class TransactionRecord(
         return when {
             timestamp != other.timestamp -> timestamp.compareTo(other.timestamp)
             transactionIndex != other.transactionIndex -> transactionIndex.compareTo(other.transactionIndex)
-            else -> interTransactionIndex.compareTo(other.interTransactionIndex)
+            interTransactionIndex != other.interTransactionIndex -> interTransactionIndex.compareTo(other.interTransactionIndex)
+            type != other.type -> type.compareTo(other.type)
+            else -> uid.compareTo(uid)
         }
     }
 
@@ -72,6 +74,6 @@ data class TransactionRecord(
 }
 
 enum class TransactionType {
-    Incoming, Outgoing, SentToSelf
+     Outgoing, SentToSelf, Incoming
 }
 
