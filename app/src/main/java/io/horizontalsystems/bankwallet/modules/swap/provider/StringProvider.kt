@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap
+package io.horizontalsystems.bankwallet.modules.swap.provider
 
 import android.content.Context
 import androidx.annotation.StringRes

@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.DataState
-import io.horizontalsystems.bankwallet.modules.swap.StringProvider
+import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ISwapService
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
@@ -149,7 +149,9 @@ class SwapViewModel(
         swapService.tradeObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe { dataState ->
-                    _tradeViewItem.postValue(dataState.dataOrNull?.let { tradeViewItem(it) })
+                    if (dataState is DataState.Success) {
+                        _tradeViewItem.postValue(dataState.data?.let { tradeViewItem(it) })
+                    }
                     _tradeViewItemLoading.postValue(dataState is DataState.Loading)
                 }
                 .let { disposables.add(it) }
