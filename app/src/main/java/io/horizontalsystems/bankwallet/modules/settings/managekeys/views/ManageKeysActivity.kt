@@ -45,7 +45,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
 
                 val confirmListener = object : ManageKeysDeleteAlert.Listener {
                     override fun onConfirmationSuccess() {
-                        presenter.onConfirmUnlink(account.id)
+                        presenter.onConfirmUnlink(account)
                     }
                 }
 

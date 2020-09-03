@@ -174,7 +174,7 @@ class App : CoreApp() {
             backgroundManager.registerListener(this)
         }
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
-        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager)
+        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, coinManager)
 
         appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, eosKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
