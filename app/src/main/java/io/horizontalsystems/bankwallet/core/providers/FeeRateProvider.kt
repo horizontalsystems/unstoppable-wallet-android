@@ -29,16 +29,18 @@ class FeeRateProvider(appConfig: IAppConfigProvider) {
     }
 
     fun ethereumGasPrice(): Single<List<FeeRateInfo>> {
-        return feeRateKit.ethereum().map { feeRates(it) }
+        return feeRateKit.ethereum().map { feeRates(it, addLowPriority = false) }
     }
 
     fun dashFeeRates(): Single<List<FeeRateInfo>> {
         return feeRateKit.dash().map { feeRates(it) }
     }
 
-    private fun feeRates(feeRate: FeeRate, addCustom: Boolean = false): List<FeeRateInfo> {
+    private fun feeRates(feeRate: FeeRate, addLowPriority: Boolean = true, addCustom: Boolean = false): List<FeeRateInfo> {
         return mutableListOf<FeeRateInfo>().apply {
-            add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
+            if (addLowPriority) {
+                add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
+            }
             add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, feeRate.mediumPriorityDuration))
             add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
 
