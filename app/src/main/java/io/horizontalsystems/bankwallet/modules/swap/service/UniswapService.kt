@@ -190,23 +190,13 @@ class UniswapService(
         }
 
         state.onNext(SwapState.Swapping)
-
         swapDisposable = uniswapRepository.swap(tradeData, feeInfo.gasPrice, feeInfo.gasLimit)
                 .subscribeOn(Schedulers.io())
-                .subscribe { swappingState ->
-                    when (swappingState) {
-                        is DataState.Success -> {
-                            state.onNext(SwapState.Success)
-                        }
-                        is DataState.Error -> {
-                            swappingState.error.printStackTrace()
-                            state.onNext(SwapState.Failed(SwapError.Other(swappingState.error)))
-                        }
-                        DataState.Loading -> {
-                            state.onNext(SwapState.Swapping)
-                        }
-                    }
-                }
+                .subscribe({
+                    state.onNext(SwapState.Success)
+                }, {
+                    state.onNext(SwapState.Failed(SwapError.Other(it)))
+                })
     }
 
     override fun clear() {
@@ -236,12 +226,16 @@ class UniswapService(
         tradeDisposable?.dispose()
         tradeDisposable = null
 
-        tradeDisposable = uniswapRepository.trade(coinSending, coinReceiving, amount, amountType)
+        tradeData = DataState.Loading
+        tradeDisposable = uniswapRepository.getTradeData(coinSending, coinReceiving, amount, amountType)
                 .subscribeOn(Schedulers.io())
-                .subscribe {
-                    tradeData = it
+                .subscribe({
+                    tradeData = DataState.Success(it)
                     validateState()
-                }
+                }, {
+                    tradeData = DataState.Error(it)
+                    validateState()
+                })
     }
 
     private fun syncAllowance() {
