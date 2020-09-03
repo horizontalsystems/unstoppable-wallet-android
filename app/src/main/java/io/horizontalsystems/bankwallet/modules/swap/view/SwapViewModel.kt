@@ -87,7 +87,7 @@ class SwapViewModel(
     private val _proceedButtonEnabled = MutableLiveData<Boolean>()
     val proceedButtonEnabled: LiveData<Boolean> = _proceedButtonEnabled
 
-    private val _openConfirmation = MutableLiveData<Boolean>()
+    private val _openConfirmation = SingleLiveEvent<Boolean>()
     val openConfirmation: LiveData<Boolean> = _openConfirmation
 
     private val _feeLoading = MutableLiveData<Boolean>()
@@ -95,9 +95,6 @@ class SwapViewModel(
 
     private val _closeWithSuccess = SingleLiveEvent<Int>()
     val closeWithSuccess: LiveData<Int> = _closeWithSuccess
-
-    private val _closeWithError = SingleLiveEvent<String>()
-    val closeWithError: LiveData<String> = _closeWithError
     // endregion
 
     init {
@@ -190,8 +187,6 @@ class SwapViewModel(
 
                     if (it == SwapState.Success) {
                         _closeWithSuccess.postValue(R.string.Hud_Text_Success)
-                    } else if (it is SwapState.Failed) {
-                        _closeWithError.postValue(errorText(listOf(it.error)) ?: "")
                     }
                 }
                 .let { disposables.add(it) }
