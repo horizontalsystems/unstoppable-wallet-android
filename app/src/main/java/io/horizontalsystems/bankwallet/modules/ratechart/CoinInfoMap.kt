@@ -47,6 +47,7 @@ object CoinInfoMap {
             "IDEX" to CoinInfo(BigDecimal(1_000_000_000), "28/09/2017", "https://auroradao.com"),
             "KCS" to CoinInfo(BigDecimal(176_863_551), "15/09/2017", "https://www.kucoin.com"),
             "KNC" to CoinInfo(BigDecimal(210_590_429), "20/09/2017", "https://kyber.network"),
+            "LEND" to CoinInfo(BigDecimal(1_299_999_942), "15/08/2017", "https://aave.com"),
             "LINK" to CoinInfo(BigDecimal(1_000_000_000), "19/09/2017", "https://link.smartcontract.com"),
             "LOOM" to CoinInfo(BigDecimal(1_000_000_000), "03/03/2018", "https://loomx.io"),
             "LRC" to CoinInfo(BigDecimal(1_374_513_897), "06/08/2017", "https://loopring.org"),
