@@ -134,7 +134,7 @@
     <string name="Send_ERC_Alert">Комиссии за транзакцию %s (ERC20) взимаются в ETH. Вам нужно %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
     <!--Swap-->
-    <string name="Swap_Title">Обменять</string>
+    <string name="Swap">Swap</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
     <string name="Swap_ToAmountTitle">Вы получите</string>
     <string name="Swap_Percent">%s%%</string>
@@ -142,11 +142,26 @@
     <string name="Swap_MaxButtonTitle">Макс</string>
     <string name="Swap_TokenSelectorTitle">Токен</string>
     <string name="Swap_Balance">Баланс</string>
+    <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Цена</string>
     <string name="Swap_PriceImpact">Разница в цене</string>
     <string name="Swap_MinimumReceived">Минимальная выплата</string>
-    <string name="Swap_MaximiumSold">Максимальная выплата</string>
+    <string name="Swap_MaximumSold">Maximum Paid</string>
+    <string name="Swap_SwapFee">Swap Fee</string>
+    <string name="Swap_TransactionSpeed">Transaction Speed</string>
+    <string name="Swap_TransactionFee">Transaction Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
+    <string name="Swap_ErrorNoLiquidity">No Liquidity</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
+    <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>
+    <string name="Swap_Proceed">Proceed</string>
+    <string name="Swap_Approve">Approve</string>
+    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Confirmation_Pay">Pay %s</string>
+    <string name="Swap_Confirmation_Get">Get %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Выберите Токен</string>
     <!--Approve-->
