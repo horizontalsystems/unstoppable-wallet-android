@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
@@ -59,8 +60,8 @@ class ManageKeysPresenter(
         }
     }
 
-    override fun onConfirmUnlink(accountId: String) {
-        interactor.deleteAccount(accountId)
+    override fun onConfirmUnlink(account: Account) {
+        interactor.deleteAccount(account)
     }
 
     override fun onCleared() {

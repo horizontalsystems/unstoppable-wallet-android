@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -15,7 +12,8 @@ class ManageKeysInteractor(
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
         private val blockchainSettingsManager: IBlockchainSettingsManager,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val priceAlertManager: IPriceAlertManager)
     : ManageKeysModule.Interactor {
 
     var delegate: ManageKeysModule.InteractorDelegate? = null
@@ -45,8 +43,9 @@ class ManageKeysInteractor(
         return walletManager.wallets
     }
 
-    override fun deleteAccount(id: String) {
-        accountManager.delete(id)
+    override fun deleteAccount(account: Account) {
+        accountManager.delete(account.id)
+        priceAlertManager.deleteAlertsByAccountType(account.type)
     }
 
     override fun clear() {

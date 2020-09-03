@@ -24,7 +24,7 @@ object ManageKeysModule {
         fun onClickUnlink(accountItem: ManageAccountItem)
 
         fun onConfirmBackup()
-        fun onConfirmUnlink(accountId: String)
+        fun onConfirmUnlink(account: Account)
         fun onClickAdvancedSettings(item: ManageAccountItem)
     }
 
@@ -34,7 +34,7 @@ object ManageKeysModule {
 
         fun getWallets(): List<Wallet>
         fun loadAccounts()
-        fun deleteAccount(id: String)
+        fun deleteAccount(account: Account)
         fun clear()
     }
 
@@ -55,7 +55,7 @@ object ManageKeysModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageKeysView()
             val router = ManageKeysRouter()
-            val interactor = ManageKeysInteractor(App.accountManager, App.walletManager, App.blockchainSettingsManager, App.predefinedAccountTypeManager)
+            val interactor = ManageKeysInteractor(App.accountManager, App.walletManager, App.blockchainSettingsManager, App.predefinedAccountTypeManager, App.priceAlertManager)
             val presenter = ManageKeysPresenter(view, router, interactor)
 
             interactor.delegate = presenter
