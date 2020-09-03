@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.StringProvider
+import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.repository
+package io.horizontalsystems.bankwallet.modules.swap.provider
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType

@@ -14,10 +14,11 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
-import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceProvider
+import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
+import io.horizontalsystems.bankwallet.modules.swap.provider.AllowanceProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
-import io.horizontalsystems.bankwallet.modules.swap.service.SwapFeeInfo
-import io.horizontalsystems.bankwallet.modules.swap.service.UniswapFeeService
+import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
+import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapActivity
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
@@ -106,14 +107,13 @@ object SwapModule {
             val ethereumKit = App.ethereumKitManager.ethereumKit ?: throw EthereumKitNotCreated()
             val uniswapKit = UniswapKit.getInstance(ethereumKit)
 
-            val swapRepository = UniswapRepository(uniswapKit)
             val allowanceProvider = AllowanceProvider(ethereumKit, ethereumKit.receiveAddress)
             val feeRateProvider = FeeRateProviderFactory.provider(coinSending)
-
-            val uniswapFeeService = UniswapFeeService(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider!!)
-            val swapService = UniswapService(coinSending, swapRepository, allowanceProvider, App.walletManager, App.adapterManager, App.feeCoinProvider, uniswapFeeService)
-
+            val uniswapFeeProvider = UniswapFeeProvider(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider!!)
             val stringProvider = StringProvider(App.instance)
+
+            val swapRepository = UniswapRepository(uniswapKit)
+            val swapService = UniswapService(coinSending, swapRepository, allowanceProvider, App.walletManager, App.adapterManager, App.feeCoinProvider, uniswapFeeProvider)
 
             val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, App.numberFormatter)
 

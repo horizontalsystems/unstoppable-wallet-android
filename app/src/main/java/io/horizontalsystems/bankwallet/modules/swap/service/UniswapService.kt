@@ -16,7 +16,9 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
-import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceProvider
+import io.horizontalsystems.bankwallet.modules.swap.provider.AllowanceProvider
+import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
+import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.TradeData
@@ -34,7 +36,7 @@ class UniswapService(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val feeCoinProvider: FeeCoinProvider,
-        private val uniswapFeeService: UniswapFeeService
+        private val uniswapFeeProvider: UniswapFeeProvider
 ) : SwapModule.ISwapService, Clearable {
     private val priceImpactDesirableThreshold = BigDecimal("1")
     private val priceImpactAllowedThreshold = BigDecimal("5")
@@ -113,7 +115,7 @@ class UniswapService(
         get() = amountSending?.multiply(BigDecimal("0.003"))?.let { CoinValue(coinSending, it) }
 
     override val feeRatePriority: FeeRatePriority
-        get() = uniswapFeeService.feeRatePriority
+        get() = uniswapFeeProvider.feeRatePriority
 
     override val transactionFee: Pair<CoinValue, CurrencyValue?>?
         get() = fee.value?.dataOrNull?.let { Pair(it.coinAmount, it.fiatAmount) }
@@ -271,12 +273,19 @@ class UniswapService(
         feeDisposable?.dispose()
         feeDisposable = null
 
-        feeDisposable = uniswapFeeService.swapFeeInfo(coinSending, coinFee, tradeData)
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    fee.onNext(it)
+        feeDisposable = uniswapFeeProvider.getSwapFeeInfo(coinSending, coinFee, tradeData)
+                .doOnSubscribe {
+                    fee.onNext(DataState.Loading)
+                }
+                .doFinally {
                     validateState()
                 }
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    fee.onNext(DataState.Success(it))
+                }, {
+                    fee.onNext(DataState.Error(it))
+                })
     }
 
     @Synchronized
