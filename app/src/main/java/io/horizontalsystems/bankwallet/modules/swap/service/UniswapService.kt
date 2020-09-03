@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
-import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceRepository
+import io.horizontalsystems.bankwallet.modules.swap.repository.AllowanceProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.TradeData
@@ -30,7 +30,7 @@ import java.util.*
 class UniswapService(
         coinSending: Coin,
         private val uniswapRepository: UniswapRepository,
-        private val allowanceRepository: AllowanceRepository,
+        private val allowanceProvider: AllowanceProvider,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val feeCoinProvider: FeeCoinProvider,
@@ -226,15 +226,18 @@ class UniswapService(
         tradeDisposable?.dispose()
         tradeDisposable = null
 
-        tradeData = DataState.Loading
         tradeDisposable = uniswapRepository.getTradeData(coinSending, coinReceiving, amount, amountType)
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe {
+                    tradeData = DataState.Loading
+                }
+                .doFinally {
+                    validateState()
+                }
                 .subscribe({
                     tradeData = DataState.Success(it)
-                    validateState()
                 }, {
                     tradeData = DataState.Error(it)
-                    validateState()
                 })
     }
 
@@ -243,25 +246,19 @@ class UniswapService(
         allowanceDisposable = null
 
         if (coinSending.type is CoinType.Erc20) {
-            allowanceDisposable = allowanceRepository.allowance(coinSending)
+            allowanceDisposable = allowanceProvider.getAllowance(coinSending, uniswapRepository.routerAddress)
                     .subscribeOn(Schedulers.io())
-                    .map { dataState ->
-                        when (dataState) {
-                            is DataState.Success -> {
-                                DataState.Success(CoinValue(coinSending, dataState.data))
-                            }
-                            is DataState.Error -> {
-                                DataState.Error(dataState.error)
-                            }
-                            is DataState.Loading -> {
-                                DataState.Loading
-                            }
-                        }
+                    .doOnSubscribe {
+                        allowance.onNext(DataState.Loading)
                     }
-                    .subscribe {
-                        allowance.onNext(it)
+                    .doFinally {
                         validateState()
                     }
+                    .subscribe({
+                        allowance.onNext(DataState.Success(CoinValue(coinSending, it)))
+                    }, {
+                        allowance.onNext(DataState.Error(it))
+                    })
         } else {
             allowance.onNext(DataState.Success(null))
         }
