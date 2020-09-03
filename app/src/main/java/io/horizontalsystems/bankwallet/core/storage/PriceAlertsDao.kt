@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
 @Dao
@@ -22,5 +19,8 @@ interface PriceAlertsDao {
 
     @Query("DELETE FROM PriceAlert")
     fun deleteAll()
+
+    @Delete()
+    fun delete(it: PriceAlert)
 
 }

@@ -1,16 +1,21 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
 import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
-class PriceAlertManager(appDatabase: AppDatabase,
-                        private val notificationSubscriptionManager: INotificationSubscriptionManager) : IPriceAlertManager {
+class PriceAlertManager(
+        appDatabase: AppDatabase,
+        private val notificationSubscriptionManager: INotificationSubscriptionManager,
+        private val coinManager: ICoinManager
+) : IPriceAlertManager {
 
     private val dao = appDatabase.priceAlertsDao()
     private val notificationChangedSubject = PublishSubject.create<Unit>()
@@ -53,13 +58,28 @@ class PriceAlertManager(appDatabase: AppDatabase,
         updateSubscription(alerts, SubscriptionJob.JobType.Unsubscribe)
     }
 
+    override fun deleteAlertsByAccountType(accountType: AccountType) {
+        val alerts = dao.all()
+        val coins = coinManager.coins
+        val selectedAlerts = alerts.filter { alert ->
+            coins.firstOrNull { it.coinId == alert.coinId }?.type?.canSupport(accountType) == true
+        }
+
+        updateSubscription(selectedAlerts, SubscriptionJob.JobType.Unsubscribe)
+        selectedAlerts.forEach {
+            dao.delete(it)
+        }
+
+        notificationChangedSubject.onNext(Unit)
+    }
+
     private fun updateSubscription(alerts: List<PriceAlert>, jobType: SubscriptionJob.JobType) {
         val jobs = mutableListOf<SubscriptionJob>()
         alerts.forEach { alert ->
-            if (alert.changeState != PriceAlert.ChangeState.OFF){
+            if (alert.changeState != PriceAlert.ChangeState.OFF) {
                 jobs.add(SubscriptionJob(alert.coinId, "${alert.coinId}_24hour_${alert.changeState.value}percent", SubscriptionJob.StateType.Change, jobType))
             }
-            if (alert.trendState != PriceAlert.TrendState.OFF){
+            if (alert.trendState != PriceAlert.TrendState.OFF) {
                 jobs.add(SubscriptionJob(alert.coinId, "${alert.coinId}_${alert.trendState.value}term_trend_change", SubscriptionJob.StateType.Trend, jobType))
             }
         }
