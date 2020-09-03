@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.swap.confirmation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
 class SwapConfirmationFragment : Fragment() {
 
-    private var presenter: ConfirmationPresenter? = null
+    private lateinit var presenter: ConfirmationPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
@@ -25,25 +27,25 @@ class SwapConfirmationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = activity?.let { ViewModelProvider(it).get(SwapViewModel::class.java) }
-        presenter = viewModel?.confirmationPresenter
+        val viewModel = ViewModelProvider(requireActivity()).get(SwapViewModel::class.java)
+        presenter = viewModel.confirmationPresenter
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = {
-                    presenter?.onCancelConfirmation()
-                    activity?.onBackPressed()
+                    presenter.onCancelConfirmation()
+                    requireActivity().onBackPressed()
                 }),
                 rightBtnItem = TopMenuItem(text = R.string.Button_Cancel, onClick = {
-                    presenter?.onCancelConfirmation()
-                    activity?.onBackPressed()
+                    presenter.onCancelConfirmation()
+                    requireActivity().onBackPressed()
                 }))
 
         swapButton.setOnSingleClickListener {
-            presenter?.onSwap()
+            presenter.onSwap()
         }
 
-        presenter?.confirmationViewItem()?.let {
+        presenter.confirmationViewItem().let {
             payTitle.text = it.sendingTitle
             payValue.text = it.sendingValue
             getTitle.text = it.receivingTitle
@@ -57,13 +59,30 @@ class SwapConfirmationFragment : Fragment() {
             txFee.text = it.transactionFee
         }
 
-        presenter?.swapButtonEnabled?.observe(viewLifecycleOwner, Observer { isEnabled ->
+        presenter.swapButtonEnabled.observe(viewLifecycleOwner, Observer { isEnabled ->
             swapButton.isEnabled = isEnabled
         })
 
-        presenter?.swapButtonTitle?.observe(viewLifecycleOwner, Observer { title ->
+        presenter.swapButtonTitle.observe(viewLifecycleOwner, Observer { title ->
             swapButton.text = title
         })
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        presenter.onCancelConfirmation()
+
+                        if (isEnabled) {
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                        }
+                    }
+                }
+        )
     }
 
 }
