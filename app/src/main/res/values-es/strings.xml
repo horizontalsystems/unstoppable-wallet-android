@@ -134,7 +134,7 @@
     <string name="Send_ERC_Alert">Las comisiones de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <!--Swap-->
-    <string name="Swap_Title">Permutar</string>
+    <string name="Swap">Swap</string>
     <string name="Swap_FromAmountTitle">Usted paga</string>
     <string name="Swap_ToAmountTitle">Obtienes</string>
     <string name="Swap_Percent">%s%%</string>
@@ -142,11 +142,26 @@
     <string name="Swap_MaxButtonTitle">Máx.</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
     <string name="Swap_Balance">Saldo</string>
+    <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Precio</string>
     <string name="Swap_PriceImpact">Impacto en el precio</string>
     <string name="Swap_MinimumReceived">Mínimo Obtenido</string>
-    <string name="Swap_MaximiumSold">Máximo Pagado</string>
+    <string name="Swap_MaximumSold">Maximum Paid</string>
+    <string name="Swap_SwapFee">Swap Fee</string>
+    <string name="Swap_TransactionSpeed">Transaction Speed</string>
+    <string name="Swap_TransactionFee">Transaction Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
+    <string name="Swap_ErrorNoLiquidity">No Liquidity</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
+    <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>
+    <string name="Swap_Proceed">Proceed</string>
+    <string name="Swap_Approve">Approve</string>
+    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Confirmation_Pay">Pay %s</string>
+    <string name="Swap_Confirmation_Get">Get %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Elegir moneda</string>
     <!--Approve-->
