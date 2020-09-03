@@ -8,14 +8,15 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
+import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
+import java.net.UnknownHostException
 import java.util.*
 
 data class ConfirmationViewItem(
@@ -46,18 +47,27 @@ class ConfirmationPresenter(
     private val _swapButtonTitle = MutableLiveData<String>()
     val swapButtonTitle: LiveData<String> = _swapButtonTitle
 
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
     init {
         swapService.state
                 .subscribeOn(Schedulers.io())
                 .subscribe { swapState ->
-                    _swapButtonEnabled.postValue(swapState == SwapState.SwapAllowed)
+                    _swapButtonEnabled.postValue(swapState != SwapState.Swapping)
 
-                    val swapButtonTitle = if (swapState == SwapState.SwapAllowed) {
-                        stringProvider.string(R.string.Swap)
-                    } else {
+                    val swapButtonTitle = if (swapState == SwapState.Swapping) {
                         stringProvider.string(R.string.Swap_Swapping)
+                    } else {
+                        stringProvider.string(R.string.Swap)
                     }
                     _swapButtonTitle.postValue(swapButtonTitle)
+
+                    if (swapState is SwapState.Failed) {
+                        _error.postValue(errorText(swapState.error))
+                    } else {
+                        _error.postValue(null)
+                    }
                 }
                 .let { disposables.add(it) }
     }
@@ -67,8 +77,6 @@ class ConfirmationPresenter(
     }
 
     fun onSwap() {
-        _swapButtonEnabled.postValue(false)
-
         swapService.swap()
     }
 
@@ -152,6 +160,18 @@ class ConfirmationPresenter(
             numberFormatter.formatFiat(it.value, it.currency.symbol, 2, 2)
         }
         return "$coinAmount${if (fiatAmount != null) " | $fiatAmount" else ""}"
+    }
+
+    private fun errorText(swapError: SwapModule.SwapError): String {
+        return if (swapError is SwapModule.SwapError.Other) {
+            if (swapError.error.cause is UnknownHostException) {
+                stringProvider.string(R.string.Hud_Text_NoInternet)
+            } else {
+                swapError.error.message ?: swapError.error.javaClass.simpleName
+            }
+        } else {
+            swapError.javaClass.simpleName
+        }
     }
 
 }
