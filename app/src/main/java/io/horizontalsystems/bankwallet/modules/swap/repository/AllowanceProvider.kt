@@ -2,38 +2,30 @@ package io.horizontalsystems.bankwallet.modules.swap.repository
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.erc20kit.core.AllowanceManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Single
 import java.math.BigDecimal
 
-class AllowanceRepository(
+class AllowanceProvider(
         private val ethereumKit: EthereumKit,
-        private val address: Address,
-        private val spenderAddress: Address
+        private val address: Address
 ) {
     private val allowanceManagerMap = HashMap<Coin, AllowanceManager>()
 
-    fun allowance(coin: Coin): Flowable<DataState<BigDecimal>> {
-        return Flowable.create({ emitter ->
-            try {
-                emitter.onNext(DataState.Loading)
+    fun getAllowance(coin: Coin, spenderAddress: Address): Single<BigDecimal> =
+            Single.create { emitter ->
+                try {
+                    val allowanceManager = getAllowanceManager(coin)
+                    val allowance = allowanceManager.allowance(spenderAddress).blockingGet()
+                    val allowanceDecimal = allowance.toBigDecimal().movePointLeft(coin.decimal).stripTrailingZeros()
 
-                val allowanceManager = getAllowanceManager(coin)
-
-                val allowance = allowanceManager.allowance(spenderAddress).blockingGet()
-                val allowanceDecimal = allowance.toBigDecimal().movePointLeft(coin.decimal).stripTrailingZeros()
-
-                emitter.onNext(DataState.Success(allowanceDecimal))
-            } catch (error: Throwable) {
-                emitter.onNext(DataState.Error(error))
+                    emitter.onSuccess(allowanceDecimal)
+                } catch (error: Throwable) {
+                    emitter.onError(error)
+                }
             }
-            emitter.onComplete()
-        }, BackpressureStrategy.BUFFER)
-    }
 
     @Synchronized
     private fun getAllowanceManager(coin: Coin): AllowanceManager =
