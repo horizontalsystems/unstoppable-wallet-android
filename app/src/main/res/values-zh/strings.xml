@@ -134,7 +134,7 @@
     <string name="Send_ERC_Alert">用Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
     <!--Swap-->
-    <string name="Swap_Title">掉期交易</string>
+    <string name="Swap">Swap</string>
     <string name="Swap_FromAmountTitle">您支付</string>
     <string name="Swap_ToAmountTitle">您获得</string>
     <string name="Swap_Percent">%s%%</string>
@@ -142,11 +142,26 @@
     <string name="Swap_MaxButtonTitle">最多</string>
     <string name="Swap_TokenSelectorTitle">令牌</string>
     <string name="Swap_Balance">余额</string>
+    <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">价格</string>
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">最小获取金额</string>
-    <string name="Swap_MaximiumSold">最大支付金额</string>
+    <string name="Swap_MaximumSold">Maximum Paid</string>
+    <string name="Swap_SwapFee">Swap Fee</string>
+    <string name="Swap_TransactionSpeed">Transaction Speed</string>
+    <string name="Swap_TransactionFee">Transaction Fee</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
+    <string name="Swap_ErrorNoLiquidity">No Liquidity</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
+    <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>
+    <string name="Swap_Proceed">Proceed</string>
+    <string name="Swap_Approve">Approve</string>
+    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Confirmation_Pay">Pay %s</string>
+    <string name="Swap_Confirmation_Get">Get %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">选择代币</string>
     <!--Approve-->
