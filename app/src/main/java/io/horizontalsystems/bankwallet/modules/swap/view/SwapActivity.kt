@@ -167,7 +167,8 @@ class SwapActivity : BaseActivity() {
         viewModel.insufficientAllowance.observe(this, Observer { error ->
             val color = if (error)
                 LayoutHelper.getAttr(R.attr.ColorLucian, theme) ?: getColor(R.color.red_d)
-            else getColor(R.color.grey)
+            else
+                getColor(R.color.grey)
 
             allowanceValue.setTextColor(color)
         })
@@ -179,11 +180,6 @@ class SwapActivity : BaseActivity() {
 
         viewModel.closeWithSuccess.observe(this, Observer {
             HudHelper.showSuccessMessage(findViewById(android.R.id.content), it, HudHelper.SnackbarDuration.LONG)
-            Handler().postDelayed({ finish() }, 1200)
-        })
-
-        viewModel.closeWithError.observe(this, Observer {
-            HudHelper.showErrorMessage(findViewById(android.R.id.content), it)
             Handler().postDelayed({ finish() }, 1200)
         })
     }

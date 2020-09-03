@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_confirmation.shadowlessToolbar
 import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
@@ -42,6 +43,7 @@ class SwapConfirmationFragment : Fragment() {
                 }))
 
         swapButton.setOnSingleClickListener {
+            swapButton.isEnabled = false
             presenter.onSwap()
         }
 
@@ -65,6 +67,10 @@ class SwapConfirmationFragment : Fragment() {
 
         presenter.swapButtonTitle.observe(viewLifecycleOwner, Observer { title ->
             swapButton.text = title
+        })
+
+        presenter.error.observe(viewLifecycleOwner, Observer { error ->
+            error?.let { HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it) }
         })
     }
 
