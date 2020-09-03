@@ -3,15 +3,13 @@ package io.horizontalsystems.bankwallet.modules.swap.repository
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Single
 import java.math.BigDecimal
 
 class UniswapRepository(
@@ -22,58 +20,43 @@ class UniswapRepository(
     val routerAddress: Address
         get() = uniswapKit.routerAddress
 
-    fun trade(
-            coinSending: Coin,
-            coinReceiving: Coin,
-            amount: BigDecimal,
-            amountType: AmountType
-    ): Flowable<DataState<TradeData>> = Flowable.create({ emitter ->
-        val cacheKey = Pair(coinSending, coinReceiving)
-        try {
-            val swapData: SwapData = swapDataCache[cacheKey] ?: kotlin.run {
-
-                emitter.onNext(DataState.Loading)
-
-                val tokenIn = uniswapToken(coinSending)
-                val tokenOut = uniswapToken(coinReceiving)
-                uniswapKit.swapData(tokenIn, tokenOut).blockingGet().also {
-                    swapDataCache[cacheKey] = it
-                }
-            }
-
-            val tradeData = when (amountType) {
-                AmountType.ExactSending -> {
-                    uniswapKit.bestTradeExactIn(swapData, amount)
-                }
-                AmountType.ExactReceiving -> {
-                    uniswapKit.bestTradeExactOut(swapData, amount)
-                }
-            }
-            emitter.onNext(DataState.Success(tradeData))
-
-        } catch (error: Throwable) {
-            emitter.onNext(DataState.Error(error))
-        } finally {
-            emitter.onComplete()
-        }
-    }, BackpressureStrategy.BUFFER)
-
-    fun swap(tradeData: TradeData, gasPrice: Long, gasLimit: Long): Flowable<DataState<String>> =
-            Flowable.create({ emitter ->
+    fun getTradeData(coinSending: Coin, coinReceiving: Coin, amount: BigDecimal, amountType: AmountType): Single<TradeData> =
+            Single.create { emitter ->
                 try {
-                    emitter.onNext(DataState.Loading)
+                    val cacheKey = Pair(coinSending, coinReceiving)
+                    val swapData: SwapData = swapDataCache[cacheKey] ?: kotlin.run {
+                        val tokenIn = uniswapToken(coinSending)
+                        val tokenOut = uniswapToken(coinReceiving)
+                        uniswapKit.swapData(tokenIn, tokenOut).blockingGet().also {
+                            swapDataCache[cacheKey] = it
+                        }
+                    }
 
+                    val tradeData = when (amountType) {
+                        AmountType.ExactSending -> {
+                            uniswapKit.bestTradeExactIn(swapData, amount)
+                        }
+                        AmountType.ExactReceiving -> {
+                            uniswapKit.bestTradeExactOut(swapData, amount)
+                        }
+                    }
+                    emitter.onSuccess(tradeData)
+                } catch (error: Throwable) {
+                    emitter.onError(error)
+                }
+            }
+
+    fun swap(tradeData: TradeData, gasPrice: Long, gasLimit: Long): Single<String> =
+            Single.create { emitter ->
+                try {
                     val transactionWithInternal = uniswapKit.swap(tradeData, gasPrice, gasLimit).blockingGet()
                     val txHash = transactionWithInternal.transaction.hash.toHexString()
 
-                    emitter.onNext(DataState.Success(txHash))
+                    emitter.onSuccess(txHash)
                 } catch (error: Throwable) {
-                    error.printStackTrace()
-                    emitter.onNext(DataState.Error(error))
-                } finally {
-                    emitter.onComplete()
+                    emitter.onError(error)
                 }
-            }, BackpressureStrategy.BUFFER)
+            }
 
     private fun uniswapToken(coin: Coin): Token {
         return when (val coinType = coin.type) {

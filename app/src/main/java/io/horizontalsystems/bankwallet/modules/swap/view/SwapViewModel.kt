@@ -157,10 +157,11 @@ class SwapViewModel(
         swapService.errors
                 .subscribeOn(Schedulers.io())
                 .subscribe { errors ->
-                    val amountSendingError = if (errors.contains(SwapError.InsufficientBalance)) stringProvider.string(R.string.Swap_ErrorInsufficientBalance) else null
-                    _amountSendingError.postValue(amountSendingError)
+                    val insufficientBalanceError = errors.firstOrNull { it == SwapError.InsufficientBalance }
+                    _amountSendingError.postValue(insufficientBalanceError?.let { stringProvider.string(R.string.Swap_ErrorInsufficientBalance) })
 
-                    _insufficientAllowance.postValue(errors.any { it is SwapError.InsufficientAllowance })
+                    val insufficientAllowanceError = errors.firstOrNull { it is SwapError.InsufficientAllowance }
+                    _insufficientAllowance.postValue(insufficientAllowanceError != null)
 
                     _error.postValue(errorText(errors))
                 }
@@ -188,7 +189,7 @@ class SwapViewModel(
                     if (it == SwapState.Success) {
                         _closeWithSuccess.postValue(R.string.Hud_Text_Success)
                     } else if (it is SwapState.Failed) {
-                        _closeWithError.postValue(errorText(listOf(it.error)))
+                        _closeWithError.postValue(errorText(listOf(it.error)) ?: "")
                     }
                 }
                 .let { disposables.add(it) }
@@ -264,7 +265,7 @@ class SwapViewModel(
         )
     }
 
-    private fun errorText(errors: List<SwapError>): String {
+    private fun errorText(errors: List<SwapError>): String? {
         return when {
             errors.contains(SwapError.NoLiquidity) -> stringProvider.string(R.string.Swap_ErrorNoLiquidity)
             errors.contains(SwapError.CouldNotFetchTrade) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchTrade)
@@ -274,7 +275,7 @@ class SwapViewModel(
                 val error = errors.first { it is SwapError.Other } as SwapError.Other
                 error.error.message ?: error.error.javaClass.simpleName
             }
-            else -> errors.firstOrNull()?.javaClass?.simpleName ?: ""
+            else -> null
         }
     }
 
