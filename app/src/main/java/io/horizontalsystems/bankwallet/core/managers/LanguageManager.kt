@@ -6,6 +6,8 @@ import java.util.*
 
 class LanguageManager : ILanguageManager {
 
+    override var fallbackLocale: Locale = Locale.ENGLISH
+
     override var currentLocale: Locale = App.instance.getLocale()
         set(value) {
             field = value

@@ -35,7 +35,7 @@ class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
 
     fun onSelectFilter(filterId: String) {
         currentCategoryIndex = guideCategories.indexOfFirst {
-            it.title == filterId
+            it.category == filterId
         }
 
         syncViewItems()
@@ -50,7 +50,7 @@ class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
     private fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
         this.guideCategories = guideCategories
 
-        filters.postValue(guideCategories.map { it.title })
+        filters.postValue(guideCategories.map { it.category })
 
         syncViewItems()
     }
