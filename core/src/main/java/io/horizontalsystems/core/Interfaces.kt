@@ -67,6 +67,7 @@ interface IPinComponent {
 }
 
 interface ILanguageManager {
+    var fallbackLocale: Locale
     var currentLocale: Locale
     var currentLanguage: String
     val currentLanguageName: String

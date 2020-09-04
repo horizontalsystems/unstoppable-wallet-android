@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.guides
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
 import io.horizontalsystems.bankwallet.entities.GuideCategory
+import io.horizontalsystems.bankwallet.entities.GuideCategoryMultiLang
+import io.horizontalsystems.core.ILanguageManager
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -11,7 +13,10 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
-class GuidesRepository(private val guidesManager: GuidesManager, private val connectivityManager: ConnectivityManager) {
+class GuidesRepository(
+        private val guidesManager: GuidesManager,
+        private val connectivityManager: ConnectivityManager,
+        private val languageManager: ILanguageManager) {
 
     val guideCategories: Observable<DataState<Array<GuideCategory>>>
         get() = guideCategoriesSubject
@@ -60,12 +65,24 @@ class GuidesRepository(private val guidesManager: GuidesManager, private val con
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    guideCategoriesSubject.onNext(DataState.Success(it))
+                    val categories = getCategoriesByLocalLanguage(it, languageManager.currentLocale.language, languageManager.fallbackLocale.language)
+                    guideCategoriesSubject.onNext(DataState.Success(categories))
                 }, {
                     guideCategoriesSubject.onNext(DataState.Error(it))
                 })
                 .let {
                     disposables.add(it)
                 }
+    }
+
+    private fun getCategoriesByLocalLanguage(categoriesMultiLanguage: Array<GuideCategoryMultiLang>, language: String, fallbackLanguage: String): Array<GuideCategory> {
+        val categories = categoriesMultiLanguage.map { categoriesMultiLang ->
+            val categoryTitle = categoriesMultiLang.category[language] ?: categoriesMultiLang.category[fallbackLanguage] ?: ""
+            val guides = categoriesMultiLang.guides.mapNotNull { it[language] ?: it[fallbackLanguage] }
+
+            GuideCategory(categoriesMultiLang.id, categoryTitle, guides)
+        }
+
+        return categories.toTypedArray()
     }
 }
