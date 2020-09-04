@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import com.google.gson.*
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Guide
-import io.horizontalsystems.bankwallet.entities.GuideCategory
+import io.horizontalsystems.bankwallet.entities.GuideCategoryMultiLang
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,14 +21,14 @@ object GuidesManager {
             .registerTypeAdapter(Guide::class.java, GuideDeserializer(guidesUrl))
             .create()
 
-    fun getGuideCategories(): Single<Array<GuideCategory>> {
+    fun getGuideCategories(): Single<Array<GuideCategoryMultiLang>> {
         return Single.fromCallable {
             val request = Request.Builder()
                     .url(guidesUrl)
                     .build()
 
             val response = OkHttpClient().newCall(request).execute()
-            val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategory>::class.java)
+            val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategoryMultiLang>::class.java)
             response.close()
 
             categories
@@ -51,8 +51,8 @@ object GuidesManager {
             return Guide(
                     jsonObject.get("title").asString,
                     context.deserialize(jsonObject.get("updated_at"), Date::class.java),
-                    jsonObject["image_url"].asString?.let { absolutify(it) },
-                    absolutify(jsonObject["file_url"].asString)
+                    jsonObject["image"].asString?.let { absolutify(it) },
+                    absolutify(jsonObject["file"].asString)
             )
         }
 

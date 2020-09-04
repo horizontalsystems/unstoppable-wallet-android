@@ -9,6 +9,13 @@ data class Guide(
         val fileUrl: String
 )
 
-data class GuideCategory(val title: String) {
-    var guides = listOf<Guide>()
+data class GuideCategory(
+        val id: String,
+        val category: String,
+        val guides: List<Guide>)
+
+data class GuideCategoryMultiLang(
+        val id: String,
+        val category: Map<String,String>){
+        var guides = listOf<Map<String, Guide>>()
 }
