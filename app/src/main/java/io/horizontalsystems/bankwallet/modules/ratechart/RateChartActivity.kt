@@ -125,7 +125,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         presenterView.showChartInfo.observe(this, Observer { item ->
             rootView.post {
-                setViewVisibility(chart, isVisible = true)
+                chart.showChart()
                 chart.setData(item.chartData, item.chartType)
             }
 
@@ -170,7 +170,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
                 }
             }
 
-            startDateValue.apply{
+            startDateValue.apply {
                 text = item.startDate ?: getString(R.string.NotAvailable)
                 isEnabled = !item.startDate.isNullOrEmpty()
             }
