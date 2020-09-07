@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IRateCoinMapper
 
 class RateCoinMapper : IRateCoinMapper {
-    private val disabledCoins = setOf("SAI", "PGL", "PPT", "EOSDT", "WBTC", "WETH")
+    private val disabledCoins = setOf("SAI", "PGL", "PPT", "EOSDT", "WBTC", "WETH", "SWAP")
     private val convertedCoins = mapOf("HOT" to "HOLO")
 
     override fun convert(coinCode: String): String? {
