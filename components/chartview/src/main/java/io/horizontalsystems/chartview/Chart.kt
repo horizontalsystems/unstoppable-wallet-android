@@ -2,8 +2,8 @@ package io.horizontalsystems.chartview
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.helpers.ChartAnimator
@@ -88,14 +88,12 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     }
 
     fun hideSinner() {
-        chartViewSpinner.isVisible  = false
+        chartViewSpinner.isVisible = false
         loadingShade.isVisible = false
     }
 
     fun showError(error: String) {
-        listOf(chartMain, chartBottom, chartTimeline).forEach {
-            it.isInvisible = true
-        }
+        showChart(false)
         chartError.isVisible = true
         chartError.text = error
     }
@@ -115,6 +113,10 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         setVisible(rsiCurve, rsiRange, isVisible = visible)
         setVisible(bottomVolume, isVisible = !visible)
         animatorBottom.start()
+    }
+
+    fun showChart(visible: Boolean = true) {
+        setVisible(chartMain, chartBottom, chartTimeline, isVisible = visible)
     }
 
     fun setData(data: ChartData, chartType: ChartView.ChartType) {
@@ -230,6 +232,10 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
     private fun setVisible(vararg draw: ChartDraw, isVisible: Boolean) {
         draw.forEach { it.isVisible = isVisible }
+    }
+
+    private fun setVisible(vararg view: View, isVisible: Boolean) {
+        view.forEach { it.isVisible = isVisible }
     }
 
     private fun formatRate(value: Float): String {
