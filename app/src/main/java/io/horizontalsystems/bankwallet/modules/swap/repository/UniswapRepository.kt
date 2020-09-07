@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.repository
 
-import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
@@ -50,7 +50,7 @@ class UniswapRepository(
             Single.create { emitter ->
                 try {
                     val transactionWithInternal = uniswapKit.swap(tradeData, gasPrice, gasLimit).blockingGet()
-                    val txHash = transactionWithInternal.transaction.hash.toHexString()
+                    val txHash = transactionWithInternal.transaction.hash.toRawHexString()
 
                     emitter.onSuccess(txHash)
                 } catch (error: Throwable) {
