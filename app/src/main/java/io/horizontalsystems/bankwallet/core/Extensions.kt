@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Parcelable
 import android.view.View
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.views.SingleClickListener
 
@@ -28,10 +29,15 @@ fun String.hexToByteArray(): ByteArray {
 
 // ByteArray
 
-fun ByteArray.toHexString(): String {
+fun ByteArray.toRawHexString(): String {
     return this.joinToString(separator = "") {
         it.toInt().and(0xff).toString(16).padStart(2, '0')
     }
+}
+
+fun ByteArray?.toHexString(): String {
+    val rawHex = this?.toRawHexString() ?: return ""
+    return "0x$rawHex"
 }
 
 // Intent & Parcelable Enum
