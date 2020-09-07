@@ -38,17 +38,20 @@ class SendEthereumHandler(
                 SendModule.Input.Fee(true),
                 SendModule.Input.ProceedButton)
 
-    private fun syncValidation() {
+    private fun syncValidation(): Boolean {
+        var success = false
         try {
             amountModule.validAmount()
             addressModule.validAddress()
 
             val currentState = feeModule.isValid && feeModule.feeRateState.isValid && estimateGasLimitState.isValid
             delegate.onChange(currentState)
-
+            success = true
         } catch (e: Exception) {
             delegate.onChange(false)
         }
+
+        return success
     }
 
     private fun syncState() {
@@ -96,7 +99,6 @@ class SendEthereumHandler(
             estimateGasLimitState = FeeState.Loading
 
             syncState()
-            syncValidation()
 
             disposable?.dispose()
             disposable = interactor.estimateGasLimit(address, amount, feeModule.feeRate)
@@ -149,8 +151,9 @@ class SendEthereumHandler(
     // SendAmountModule.IAmountModuleDelegate
 
     override fun onChangeAmount() {
-        syncValidation()
-        syncEstimateGasLimit()
+        if (syncValidation()) {
+            syncEstimateGasLimit()
+        }
     }
 
     override fun onChangeInputType(inputType: SendModule.InputType) {
@@ -164,8 +167,9 @@ class SendEthereumHandler(
     }
 
     override fun onUpdateAddress() {
-        syncValidation()
-        syncEstimateGasLimit()
+        if (syncValidation()) {
+            syncEstimateGasLimit()
+        }
     }
 
     override fun onUpdateAmount(amount: BigDecimal) {
@@ -200,7 +204,8 @@ class SendEthereumHandler(
     // SendFeeModule.IFeeModuleDelegate
     override fun onUpdateFeeRate() {
         syncState()
-        syncValidation()
-        syncEstimateGasLimit()
+        if (syncValidation()) {
+            syncEstimateGasLimit()
+        }
     }
 }
