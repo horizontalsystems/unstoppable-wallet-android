@@ -300,16 +300,16 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         actions.values.forEach { it.isActivated = false }
         current.isActivated = true
 
-        val inLeftSide = chart.width / 2 < current.left
+        val inLeftSide = chartActions.width / 2 < current.left
         if (setDefault) {
-            chartActionsWrap.scrollTo(if (inLeftSide) chart.width else 0, 0)
+            chartActionsWrap.scrollTo(if (inLeftSide) chartActions.width else 0, 0)
             return
         }
 
         val by = if (inLeftSide) {
-            chart.scrollX + current.width
+            chartActions.scrollX + current.width
         } else {
-            chart.scrollX - current.width
+            chartActions.scrollX - current.width
         }
 
         chartActionsWrap.smoothScrollBy(by, 0)
