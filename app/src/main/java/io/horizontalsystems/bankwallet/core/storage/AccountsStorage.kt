@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
 import io.horizontalsystems.bankwallet.core.hexToByteArray
-import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -92,7 +92,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
     private fun getKey(accountType: AccountType): String? {
         return when (accountType) {
-            is AccountType.PrivateKey -> accountType.key.toHexString()
+            is AccountType.PrivateKey -> accountType.key.toRawHexString()
             is AccountType.Eos -> accountType.activePrivateKey
             else -> null
         }
