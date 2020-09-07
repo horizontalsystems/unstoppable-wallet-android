@@ -24,13 +24,16 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
     }
 
     fun diff(): BigDecimal {
-        if (items.isEmpty()) return BigDecimal.ZERO
+        val values = items.mapNotNull { it.values[Indicator.Candle]?.value }
+        if (values.isEmpty()) {
+            return BigDecimal.ZERO
+        }
 
-        val first = items.first().values[Indicator.Candle]
-        val firstValue = first?.value ?: 0f
-
-        val last = items.last().values[Indicator.Candle]
-        val lastValue = last?.value ?: 0f
+        val firstValue = values.find { it != 0f }
+        val lastValue = values.last()
+        if (lastValue == 0f || firstValue == null) {
+            return BigDecimal.ZERO
+        }
 
         return ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
     }
