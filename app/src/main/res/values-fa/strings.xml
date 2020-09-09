@@ -77,7 +77,7 @@
     <string name="Balance_Send">ارسال</string>
     <string name="Balance_Swap">جابجایی</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
-    <string name="Balance_SyncedUntil">تا: %s</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
     <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -345,10 +345,10 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">تماس</string>
-    <string name="SettingsContact_Email">ايميل</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">تلگرام (توسعه دهندگان)</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت را برای سکه هایی که می خواهید تماشا کنید تنظیم کنید.\n\nوقتی تغییر قیمت برای ۲۴ ساعت گذشته بیش از آستانه انتخاب شده باشد ، به شما هشدار داده می شود.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. برای اینکه بتوانید هشدارهای تغییر قیمت را دریافت کنید ، باید آنها را فعال کنید.</string>
     <string name="SettingsNotifications_TurnOn">روشن کردن در تنظیمات</string>
     <string name="SettingsNotifications_Off">خاموش</string>
@@ -359,8 +359,8 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Notification_PriceDown">%1$s قیمت: پایین ترین %2$s%%⬇️</string>
     <string name="Notification_TrendUp">%s روند: صعودی📈</string>
     <string name="Notification_TrendDown">%sروند: نزولی 📉</string>
-    <string name="NotificationBottomMenu_Change24h">تغییر 24 ساعت</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">تغییر روند قیمت</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">کوتاه مدت 7D</string>
     <string name="NotificationBottomMenu_Short">کوتاه</string>
     <string name="NotificationBottomMenu_LongTerm">بلندمدت 6M</string>
