@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.contact
 
-import android.app.Activity
-import android.content.Intent
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -47,8 +46,7 @@ object ContactModule {
         }
     }
 
-    fun start(context: Activity) {
-        val intent = Intent(context, ContactActivity::class.java)
-        context.startActivity(intent)
+    fun start(activity: FragmentActivity) {
+        ContactFragment.start(activity)
     }
 }

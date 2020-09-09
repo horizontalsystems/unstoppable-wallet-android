@@ -84,9 +84,6 @@
             android:name=".modules.settings.notifications.NotificationsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.contact.ContactActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity
