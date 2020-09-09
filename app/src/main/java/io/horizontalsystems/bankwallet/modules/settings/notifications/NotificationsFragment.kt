@@ -2,34 +2,41 @@ package io.horizontalsystems.bankwallet.modules.settings.notifications
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_alerts.*
+import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.view_holder_notification_coin_name.*
 
-class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener {
+class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener {
 
     private val viewModel by viewModels<NotificationsViewModel> { NotificationsModule.Factory() }
 
     private lateinit var notificationItemsAdapter: NotificationItemsAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_alerts)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_notifications, container, false)
+    }
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         buttonAndroidSettings.setOnSingleClickListener {
             viewModel.openSettings()
@@ -38,6 +45,7 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
         deactivateAll.setOnSingleClickListener {
             viewModel.deactivateAll()
         }
+
         deactivateAll.setTitleRed()
 
         notificationItemsAdapter = NotificationItemsAdapter(this)
@@ -62,24 +70,26 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
     }
 
     private fun observeViewModel() {
-        viewModel.itemsLiveData.observe(this, Observer {
+        viewModel.itemsLiveData.observe(viewLifecycleOwner, Observer {
             notificationItemsAdapter.items = it
             notificationItemsAdapter.notifyDataSetChanged()
         })
 
-        viewModel.openNotificationSettings.observe(this, Observer {
-            val intent = Intent()
-            intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-            intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
-            startActivity(intent)
+        viewModel.openNotificationSettings.observe(viewLifecycleOwner, Observer {
+            context?.let {
+                val intent = Intent()
+                intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                intent.putExtra("android.provider.extra.APP_PACKAGE", it.packageName)
+                startActivity(intent)
+            }
         })
 
-        viewModel.controlsVisible.observe(this, Observer {
+        viewModel.controlsVisible.observe(viewLifecycleOwner, Observer {
             notifications.isVisible = it
             deactivateAll.isVisible = it
         })
 
-        viewModel.setWarningVisible.observe(this, Observer { showWarning ->
+        viewModel.setWarningVisible.observe(viewLifecycleOwner, Observer { showWarning ->
             switchNotification.isVisible = !showWarning
             textDescription.isVisible = !showWarning
 
@@ -87,15 +97,14 @@ class NotificationsActivity : BaseActivity(), NotificationItemsAdapter.Listener 
             buttonAndroidSettings.isVisible = showWarning
         })
 
-        viewModel.notificationIsOnLiveData.observe(this, Observer { enabled ->
+        viewModel.notificationIsOnLiveData.observe(viewLifecycleOwner, Observer { enabled ->
             switchNotification.setChecked(enabled)
         })
 
-        viewModel.openOptionsDialog.observe(this, Observer { (coinName, coinId, mode) ->
-            BottomNotificationMenu.show(supportFragmentManager, mode, coinName, coinId)
+        viewModel.openOptionsDialog.observe(viewLifecycleOwner, Observer { (coinName, coinId, mode) ->
+            BottomNotificationMenu.show(childFragmentManager, mode, coinName, coinId)
         })
     }
-
 }
 
 class NotificationItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
