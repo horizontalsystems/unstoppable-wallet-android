@@ -77,7 +77,7 @@
     <string name="Balance_Send">Senden</string>
     <string name="Balance_Swap">Tauschen</string>
     <string name="Balance_RatePerCoin">%s pro %s</string>
-    <string name="Balance_SyncedUntil">bis: %s</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -337,10 +337,10 @@
     <string name="SettingsShare_Text">Unstoppable Wallet - eine krypto Wallet, die ich empfehle</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Kontakt</string>
-    <string name="SettingsContact_Email">E-Mail</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">Legen Sie einen Preisänderungsalarm für die Coins fest, die Sie beobachten möchten. \n\nSie werden benachrichtigt, wenn die Preisänderung in den letzten 24 Stunden die von Ihnen festgesetzte Grenze übersteigt.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Die Benachrichtigungen für das Unstoppable Wallet sind ausgeschaltet. Sie müssen die Benachrichtigungen einschalten und eine Aktualisierung im Hintergrund erlauben, um Benachrichtigungen bei Preisänderungn zu erhalten.</string>
     <string name="SettingsNotifications_TurnOn">In Einstellungen einschalten</string>
     <string name="SettingsNotifications_Off">Aus</string>
@@ -351,8 +351,8 @@
     <string name="Notification_PriceDown">%1$s Preis: Unten %2$s%% :down_pfeile:</string>
     <string name="Notification_TrendUp">%s Trend: Hoch 📈</string>
     <string name="Notification_TrendDown">%s Trend: Unten 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Änderung 24 Std.</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Preistrendänderung</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">Kurzfristig 7T</string>
     <string name="NotificationBottomMenu_Short">Kurz</string>
     <string name="NotificationBottomMenu_LongTerm">Langfristig 6M</string>
