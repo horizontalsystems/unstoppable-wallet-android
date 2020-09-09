@@ -77,7 +77,7 @@
     <string name="Balance_Send">Enviar</string>
     <string name="Balance_Swap">Permutar</string>
     <string name="Balance_RatePerCoin">%s por %s</string>
-    <string name="Balance_SyncedUntil">hasta: %s</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_SearchingTransactions">Buscando transacciones…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -341,7 +341,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">Establezca alertas de cambio de precio para las monedas que desea ver.\n\nSe le avisará cuando el cambio de precio, durante las últimas 24 horas, supere el umbral seleccionado.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero Unstoppable están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
     <string name="SettingsNotifications_TurnOn">Activar en ajustes</string>
     <string name="SettingsNotifications_Off">Desactivado</string>
@@ -352,8 +352,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Notification_PriceDown">Precio %1$s: Bajó %2$s%% ⬇</string>
     <string name="Notification_TrendUp">%s tendencia: Alcista 📈</string>
     <string name="Notification_TrendDown">%s tendencia: Bajista 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Variación 24h</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Variación de Tendencia de Precios</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">Corto plazo 7D</string>
     <string name="NotificationBottomMenu_Short">Corto plazo</string>
     <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
