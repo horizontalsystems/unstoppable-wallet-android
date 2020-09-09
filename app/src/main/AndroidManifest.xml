@@ -78,9 +78,6 @@
             android:name=".modules.settings.security.SecuritySettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.notifications.NotificationsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity

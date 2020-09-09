@@ -1,16 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.settings.notifications
 
-import android.content.Context
-import android.content.Intent
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object NotificationsModule {
 
-    fun start(context: Context) {
-        val intent = Intent(context, NotificationsActivity::class.java)
-        context.startActivity(intent)
+    fun start(activity: FragmentActivity) {
+        activity.supportFragmentManager.commit {
+            add(R.id.fragmentContainerView, NotificationsFragment())
+            addToBackStack(null)
+        }
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -21,4 +24,3 @@ object NotificationsModule {
         }
     }
 }
-
