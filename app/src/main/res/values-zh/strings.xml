@@ -77,7 +77,7 @@
     <string name="Balance_Send">发送​​</string>
     <string name="Balance_Swap">掉期交易</string>
     <string name="Balance_RatePerCoin">%s / %s</string>
-    <string name="Balance_SyncedUntil">直至：%s</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">正在同步...</string>
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -335,10 +335,10 @@
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系信息</string>
-    <string name="SettingsContact_Email">邮件</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">电报</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格的变化在24小时内超出选定的临界值时，您将收到警报。</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsNotifications_TurnOn">在设置中开启</string>
     <string name="SettingsNotifications_Off">关</string>
@@ -349,8 +349,8 @@
     <string name="Notification_PriceDown">%1$s 价格：下跌%2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s 趋势：上升 📈</string>
     <string name="Notification_TrendDown">%s 趋势：下跌 📉</string>
-    <string name="NotificationBottomMenu_Change24h">24小时变动</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">价格趋势变动</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">短期7天</string>
     <string name="NotificationBottomMenu_Short">做空</string>
     <string name="NotificationBottomMenu_LongTerm">长期6个月</string>
