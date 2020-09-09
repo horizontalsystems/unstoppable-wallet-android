@@ -77,7 +77,7 @@
     <string name="Balance_Send">Gönder</string>
     <string name="Balance_Swap">Takas</string>
     <string name="Balance_RatePerCoin">%s = 1 %s</string>
-    <string name="Balance_SyncedUntil">%s kadar</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -337,10 +337,10 @@
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
-    <string name="SettingsContact_Email">E-posta</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın.\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarılırsınız.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
     <string name="SettingsNotifications_TurnOn">Ayarlardan aç</string>
     <string name="SettingsNotifications_Off">Kapat</string>
@@ -351,8 +351,8 @@
     <string name="Notification_PriceDown">%1$s fiyat: Aşağı %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s trend: Yukarı 📈</string>
     <string name="Notification_TrendDown">%s trend: Aşağı 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Değişim 24s</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Fiyat Trend Değişimi</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">Kısa Vade 7G</string>
     <string name="NotificationBottomMenu_Short">Kısa</string>
     <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
