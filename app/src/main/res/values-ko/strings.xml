@@ -77,7 +77,7 @@
     <string name="Balance_Send">전송</string>
     <string name="Balance_Swap">스왑</string>
     <string name="Balance_RatePerCoin">%s 당 %s</string>
-    <string name="Balance_SyncedUntil">%s 까지</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -335,10 +335,10 @@
     <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">연락처</string>
-    <string name="SettingsContact_Email">메일</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">귀하께서 보고싶으신 코인들의 가격 변동 설정 알람 설정을 하십시오.\n\n귀하께서는 24시간 전의 가격 변동이 선택하신 기대치에 도달할 경우에 알림을 받을 것 입니다.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
     <string name="SettingsNotifications_TurnOn">설정에서 켜십시오</string>
     <string name="SettingsNotifications_Off">끄기</string>
@@ -349,8 +349,8 @@
     <string name="Notification_PriceDown">%1$s 가격: 하락 %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s 동향: 상승 📈</string>
     <string name="Notification_TrendDown">%s 동향: 하락 📉</string>
-    <string name="NotificationBottomMenu_Change24h">24시간 변동</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">가격 동향 변동</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">단기 7D</string>
     <string name="NotificationBottomMenu_Short">단기</string>
     <string name="NotificationBottomMenu_LongTerm">장기 6M</string>
