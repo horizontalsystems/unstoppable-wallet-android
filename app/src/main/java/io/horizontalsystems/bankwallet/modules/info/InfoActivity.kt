@@ -6,11 +6,11 @@ import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.activity_app_status.toolbar
 import kotlinx.android.synthetic.main.activity_info.*
+import kotlinx.android.synthetic.main.fragment_app_status.toolbar
 
 class InfoActivity : BaseActivity() {
     private lateinit var presenter: InfoPresenter
