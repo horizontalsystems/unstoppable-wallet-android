@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling.BitcoinHodlingModule
-import kotlinx.android.synthetic.main.activity_app_status.toolbar
 import kotlinx.android.synthetic.main.activity_experimental_features.*
 
 class ExperimentalFeaturesActivity : BaseActivity() {

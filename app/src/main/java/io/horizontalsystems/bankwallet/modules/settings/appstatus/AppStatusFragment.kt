@@ -1,43 +1,47 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.activity_app_status.*
+import kotlinx.android.synthetic.main.fragment_app_status.*
 import java.util.*
 
-class AppStatusActivity : BaseActivity() {
+class AppStatusFragment : BaseFragment() {
 
-    private lateinit var presenter: AppStatusPresenter
+    private val presenter by viewModels<AppStatusPresenter> { AppStatusModule.Factory() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app_status)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_app_status, container, false)
+    }
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
-        presenter = ViewModelProvider(this, AppStatusModule.Factory()).get(AppStatusPresenter::class.java)
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         observeView(presenter.view as AppStatusView)
 
         presenter.viewDidLoad()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.app_status_menu, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_status_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.menuCopy ->  {
+        when (item.itemId) {
+            R.id.menuCopy -> {
                 presenter.didTapCopy(textAppStatus.text.toString())
                 return true
             }
@@ -46,12 +50,14 @@ class AppStatusActivity : BaseActivity() {
     }
 
     private fun observeView(view: AppStatusView) {
-        view.appStatusLiveData.observe(this, Observer { appStatusMap ->
+        view.appStatusLiveData.observe(viewLifecycleOwner, Observer { appStatusMap ->
             textAppStatus.text = formatMapToString(appStatusMap)
         })
 
-        view.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Copied)
+        view.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Copied)
+            }
         })
     }
 
@@ -82,5 +88,4 @@ class AppStatusActivity : BaseActivity() {
 
         return if (statusString.isEmpty()) "" else "$statusString\n"
     }
-
 }
