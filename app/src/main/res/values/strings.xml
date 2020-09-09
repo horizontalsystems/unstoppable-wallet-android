@@ -106,7 +106,7 @@
     <string name="Balance_Send">Send</string>
     <string name="Balance_Swap">Swap</string>
     <string name="Balance_RatePerCoin">%s per %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Syncing…</string>
     <string name="Balance_SearchingTransactions">Searching transactions…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -441,12 +441,12 @@ Uniswap is a fully decentralized protocol for automated liquidity provision on E
     <!--Setting_Contact-->
 
     <string name="SettingsContact_Title">Contact</string>
-    <string name="SettingsContact_Email">Mail</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
 
     <!--Setting_Notifications-->
 
-    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
     <string name="SettingsNotifications_Off">Off</string>
@@ -459,11 +459,11 @@ Uniswap is a fully decentralized protocol for automated liquidity provision on E
     <string name="Notification_TrendUp">%s trend: Up 📈</string>
     <string name="Notification_TrendDown">%s trend: Down 📉</string>
 
-    <string name="NotificationBottomMenu_Change24h">Change 24h</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
     <string name="NotificationBottomMenu_2" translatable="false">2%</string>
     <string name="NotificationBottomMenu_5" translatable="false">5%</string>
     <string name="NotificationBottomMenu_10" translatable="false">10%</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Price Trend Change</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">Short Term 7D</string>
     <string name="NotificationBottomMenu_Short">Short</string>
     <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
