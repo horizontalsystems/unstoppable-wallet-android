@@ -1,28 +1,38 @@
 package io.horizontalsystems.bankwallet.modules.settings.terms
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
-import kotlinx.android.synthetic.main.activity_terms_settings.*
+import kotlinx.android.synthetic.main.fragment_terms_settings.*
 
-class TermsActivity : BaseActivity() {
+class TermsFragment : BaseFragment() {
 
     private val viewModel by viewModels<TermsViewModel> { TermsModule.Factory() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_terms_settings)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_terms_settings, container, false)
+    }
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         githubLink.setOnClickListener {
             viewModel.onGithubButtonClick()
@@ -32,11 +42,7 @@ class TermsActivity : BaseActivity() {
             viewModel.onSiteButtonClick()
         }
 
-        observeLiveData()
-    }
-
-    private fun observeLiveData() {
-        viewModel.termsLiveData.observe(this, Observer { terms ->
+        viewModel.termsLiveData.observe(viewLifecycleOwner, Observer { terms ->
             setCheckbox(checkboxAcademy, TermsManager.termIds[0], terms)
             setCheckbox(checkboxBackup, TermsManager.termIds[1], terms)
             setCheckbox(checkboxOwner, TermsManager.termIds[2], terms)
@@ -46,7 +52,7 @@ class TermsActivity : BaseActivity() {
             setCheckbox(checkboxBugs, TermsManager.termIds[6], terms)
         })
 
-        viewModel.openLink.observe(this, Observer { link ->
+        viewModel.openLink.observe(viewLifecycleOwner, Observer { link ->
             val uri = Uri.parse(link)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
@@ -55,7 +61,7 @@ class TermsActivity : BaseActivity() {
 
     private fun setCheckbox(chechkbox: CheckBox, termKey: String, terms: List<Term>) {
         val index = terms.indexOfFirst { it.id == termKey }
-        if (index < 0){
+        if (index < 0) {
             throw Exception("No such item in terms")
         }
         chechkbox.isChecked = terms[index].checked
@@ -65,9 +71,11 @@ class TermsActivity : BaseActivity() {
     }
 
     companion object {
-        fun start(context: Activity) {
-            val intent = Intent(context, TermsActivity::class.java)
-            context.startActivity(intent)
+        fun start(activity: FragmentActivity) {
+            activity.supportFragmentManager.commit {
+                add(R.id.fragmentContainerView, TermsFragment())
+                addToBackStack(null)
+            }
         }
     }
 }

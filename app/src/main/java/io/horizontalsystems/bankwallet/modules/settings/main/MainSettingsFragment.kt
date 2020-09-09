@@ -18,10 +18,10 @@ import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModul
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsModule
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsActivity
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.currencyswitcher.CurrencySwitcherModule
@@ -146,7 +146,7 @@ class MainSettingsFragment : Fragment() {
 
         router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
-                TermsActivity.start(it)
+                TermsFragment.start(it)
             }
         })
 
