@@ -77,7 +77,7 @@
     <string name="Balance_Send">Отправить</string>
     <string name="Balance_Swap">Обменять</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
-    <string name="Balance_SyncedUntil">до: %s</string>
+    <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -335,10 +335,10 @@
     <string name="SettingsShare_Text">Unstoppable Wallet - криптокошелек, который я рекомендую</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Kонтакты</string>
-    <string name="SettingsContact_Email">Эл. почта</string>
+    <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram </string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для токенов, которые вы бы хотели отслеживать.\n\nВы будете предупреждены, когда ценовое изменение за последние 24 часа превысит выбранный порог.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Кошелек отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
     <string name="SettingsNotifications_TurnOn">Включить в настройках</string>
     <string name="SettingsNotifications_Off">Выкл.</string>
@@ -349,8 +349,8 @@
     <string name="Notification_PriceDown">%1$s цена: понизилась на %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s тренд: Вверх 📈</string>
     <string name="Notification_TrendDown">%s тренд: Вниз 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Изменения (24ч)</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Изменение Ценового Тренда</string>
+    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
     <string name="NotificationBottomMenu_ShortTerm">Краткосрочный 7Д</string>
     <string name="NotificationBottomMenu_Short">Short</string>
     <string name="NotificationBottomMenu_LongTerm">Долгосрочный 6М</string>
