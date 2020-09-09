@@ -3,50 +3,63 @@ package io.horizontalsystems.bankwallet.modules.settings.contact
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
-import kotlinx.android.synthetic.main.activity_contact.*
+import kotlinx.android.synthetic.main.fragment_contact.*
 
-class ContactActivity : BaseActivity() {
+class ContactFragment : BaseFragment() {
 
     lateinit var presenter: ContactPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_contact)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_contact, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         presenter = ViewModelProvider(this, ContactModule.Factory()).get(ContactPresenter::class.java)
+
         val presenterView = presenter.view as ContactView
         val router = presenter.router as ContactRouter
 
-        presenterView.emailLiveData.observe(this, Observer {
+        presenterView.emailLiveData.observe(viewLifecycleOwner, Observer {
             mail.showSubtitle(it)
         })
 
-        presenterView.walletHelpTelegramGroupLiveData.observe(this, Observer {
+        presenterView.walletHelpTelegramGroupLiveData.observe(viewLifecycleOwner, Observer {
             walletHelpTelegramGroup.showSubtitle(it)
         })
 
-        presenterView.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Copied)
+        presenterView.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Copied)
+            }
         })
 
-        router.sendEmailLiveEvent.observe(this, Observer {
+        router.sendEmailLiveEvent.observe(viewLifecycleOwner, Observer {
             sendEmail(it)
         })
 
-        router.openTelegramGroupEvent.observe(this, Observer {
+        router.openTelegramGroupEvent.observe(viewLifecycleOwner, Observer {
             openTelegramGroup(it)
         })
 
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsContact_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back) { onBackPressed() }
+                leftBtnItem = TopMenuItem(R.drawable.ic_back) {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
         )
 
         mail.setOnSingleClickListener {
@@ -62,7 +75,8 @@ class ContactActivity : BaseActivity() {
 
     private fun openTelegramGroup(group: String) {
         val tgIntent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$group"))
-        if (tgIntent.resolveActivity(packageManager) != null) {
+        val packageManager = activity?.packageManager
+        if (packageManager != null && tgIntent.resolveActivity(packageManager) != null) {
             startActivity(tgIntent)
         } else {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/$group"))
@@ -76,11 +90,20 @@ class ContactActivity : BaseActivity() {
             putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
         }
 
-        if (intent.resolveActivity(packageManager) != null) {
+        val packageManager = activity?.packageManager
+        if (packageManager != null && intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         } else {
             presenter.didFailSendMail()
         }
     }
 
+    companion object {
+        fun start(activity: FragmentActivity) {
+            activity.supportFragmentManager.commit {
+                add(R.id.fragmentContainerView, ContactFragment())
+                addToBackStack(null)
+            }
+        }
+    }
 }
