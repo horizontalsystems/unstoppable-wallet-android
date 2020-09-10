@@ -182,18 +182,6 @@
                 app:layout_constraintTop_toTopOf="@+id/allowanceTitle"
                 tools:text="0.12345678 XRP" />
 
-            <ProgressBar
-                android:id="@+id/allowanceProgressBar"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/circular_spinner"
-                android:indeterminateTint="@color/grey"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/allowanceTitle"
-                app:layout_constraintEnd_toStartOf="@+id/endBorder"
-                app:layout_constraintTop_toTopOf="@+id/allowanceTitle" />
-
             <View
                 android:id="@+id/divider"
                 android:layout_width="0dp"
