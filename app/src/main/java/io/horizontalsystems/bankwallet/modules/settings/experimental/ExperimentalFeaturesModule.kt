@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.experimental
 
-import android.app.Activity
-import android.content.Intent
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 
 object ExperimentalFeaturesModule {
 
@@ -25,9 +26,10 @@ object ExperimentalFeaturesModule {
         }
     }
 
-    fun start(context: Activity) {
-        val intent = Intent(context, ExperimentalFeaturesActivity::class.java)
-        context.startActivity(intent)
+    fun start(activity: FragmentActivity) {
+        activity.supportFragmentManager.commit {
+            add(R.id.fragmentContainerView, ExperimentalFeaturesFragment())
+            addToBackStack(null)
+        }
     }
-
 }
