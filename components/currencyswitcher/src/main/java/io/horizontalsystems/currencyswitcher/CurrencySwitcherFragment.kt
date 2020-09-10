@@ -1,12 +1,14 @@
 package io.horizontalsystems.currencyswitcher
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,9 +19,9 @@ import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_currency_switcher.*
+import kotlinx.android.synthetic.main.fragment_currency_switcher.*
 
-class CurrencySwitcherActivity : CoreActivity(), CurrencySwitcherAdapter.Listener {
+class CurrencySwitcherFragment : Fragment(), CurrencySwitcherAdapter.Listener {
 
     private lateinit var presenter: CurrencySwitcherPresenter
     private lateinit var presenterView: CurrencySwitcherView
@@ -28,21 +30,28 @@ class CurrencySwitcherActivity : CoreActivity(), CurrencySwitcherAdapter.Listene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.slide_right)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_currency_switcher, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         presenter = ViewModelProvider(this, CurrencySwitcherModule.Factory()).get(CurrencySwitcherPresenter::class.java)
         presenterView = presenter.view as CurrencySwitcherView
         presenterRouter = presenter.router as CurrencySwitcherRouter
 
-        setContentView(R.layout.activity_currency_switcher)
-
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsCurrency_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
+                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() })
         )
 
         adapter = CurrencySwitcherAdapter(this)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         presenterView.currencyItems.observe(this, Observer { items ->
             adapter?.items = items
@@ -50,7 +59,7 @@ class CurrencySwitcherActivity : CoreActivity(), CurrencySwitcherAdapter.Listene
         })
 
         presenterRouter.closeLiveEvent.observe(this, Observer {
-            finish()
+            activity?.onBackPressed()
         })
 
         presenter.viewDidLoad()
