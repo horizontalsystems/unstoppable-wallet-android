@@ -192,9 +192,12 @@ class SwapActivity : BaseActivity() {
     }
 
     private fun setAllowanceLoading(isLoading: Boolean) {
-        allowanceTitle.isVisible = allowanceTitle.isVisible || isLoading
-        allowanceProgressBar.isVisible = isLoading
-        allowanceValue.isVisible = !isLoading
+        if (isLoading) {
+            allowanceTitle.isVisible = true
+            allowanceValue.isVisible = true
+            allowanceValue.text = getString(R.string.Alert_Loading)
+            allowanceValue.setTextColor(getColor(R.color.grey_50))
+        }
     }
 
     private fun setTradeViewItem(tradeViewItem: TradeViewItem?) {
