@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restore
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -70,7 +70,7 @@ object RestoreModule {
         context.startActivity(Intent(context, RestoreActivity::class.java))
     }
 
-    fun start(context: Context, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
+    fun start(context: FragmentActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
         val intent = Intent(context, RestoreActivity::class.java).apply {
             putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
             putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
@@ -79,7 +79,7 @@ object RestoreModule {
         context.startActivity(intent)
     }
 
-    fun startForResult(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
+    fun startForResult(context: FragmentActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
         val intent = Intent(context, RestoreActivity::class.java).apply {
             putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
             putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
@@ -87,6 +87,7 @@ object RestoreModule {
 
         context.startActivityForResult(intent, ModuleCode.RESTORE)
     }
+
 }
 
 @Parcelize

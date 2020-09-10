@@ -383,6 +383,7 @@ interface IDerivationSettingsManager {
     fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
     fun derivationSetting(coinType: CoinType): DerivationSetting?
     fun updateSetting(derivationSetting: DerivationSetting)
+    fun reset()
 }
 
 interface ISyncModeSettingsManager {
