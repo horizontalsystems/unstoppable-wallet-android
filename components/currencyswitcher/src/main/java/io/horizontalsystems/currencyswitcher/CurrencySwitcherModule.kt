@@ -27,11 +27,6 @@ object CurrencySwitcherModule {
         var baseCurrency: Currency
     }
 
-    fun start(context: Context) {
-        val intent = Intent(context, CurrencySwitcherActivity::class.java)
-        context.startActivity(intent)
-    }
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

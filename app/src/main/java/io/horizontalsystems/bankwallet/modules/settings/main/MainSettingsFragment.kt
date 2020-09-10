@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySetting
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.currencyswitcher.CurrencySwitcherModule
+import io.horizontalsystems.currencyswitcher.CurrencySwitcherFragment
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -121,7 +121,10 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> CurrencySwitcherModule.start(context) }
+            activity?.supportFragmentManager?.commit {
+                add(R.id.fragmentContainerView, CurrencySwitcherFragment())
+                addToBackStack(null)
+            }
         })
 
         router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
