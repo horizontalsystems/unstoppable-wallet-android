@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling
 
-import android.app.Activity
-import android.content.Intent
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object BitcoinHodlingModule {
@@ -32,9 +33,10 @@ object BitcoinHodlingModule {
         }
     }
 
-    fun start(context: Activity) {
-        val intent = Intent(context, BitcoinHodlingActivity::class.java)
-        context.startActivity(intent)
+    fun start(activity: FragmentActivity) {
+        activity.supportFragmentManager.commit {
+            add(R.id.fragmentContainerView, BitcoinHodlingFragment())
+            addToBackStack(null)
+        }
     }
-
 }
