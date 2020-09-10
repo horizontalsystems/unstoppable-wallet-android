@@ -297,10 +297,11 @@
             <Button
                 android:id="@+id/buttonSwap"
                 style="@style/ButtonPrimarySteel"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="4dp"
-                android:text="@string/Balance_Swap"
+                android:drawableTop="@drawable/ic_swap"
+                android:drawableTint="@color/black"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/buttonSend"
