@@ -6,6 +6,26 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/approveInfo"
+        style="@style/ImportantText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/Approve_Info"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/borderInfo"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="11dp"
+        android:background="@color/steel_20"
+        app:layout_constraintTop_toBottomOf="@id/approveInfo" />
+
+    <TextView
         android:id="@+id/coinAmount"
         style="@style/Headline1"
         android:layout_width="wrap_content"
@@ -15,7 +35,7 @@
         android:drawablePadding="4dp"
         android:textColor="?ColorJacob"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/borderInfo"
         tools:text="0.00123456 ZRX" />
 
     <TextView
