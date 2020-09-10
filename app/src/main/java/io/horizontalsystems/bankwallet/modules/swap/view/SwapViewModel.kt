@@ -137,9 +137,11 @@ class SwapViewModel(
         swapService.allowance
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    _allowance.postValue(it.dataOrNull?.let { coinValue ->
-                        formatCoinAmount(coinValue.value, coinValue.coin)
-                    })
+                    if (it is DataState.Success) {
+                        _allowance.postValue(it.data?.let { coinValue ->
+                            formatCoinAmount(coinValue.value, coinValue.coin)
+                        })
+                    }
                     _allowanceLoading.postValue(it is DataState.Loading)
                 }
                 .let { disposables.add(it) }
