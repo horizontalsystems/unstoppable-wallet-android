@@ -118,9 +118,6 @@
             android:name=".modules.settings.appstatus.AppStatusActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.experimental.ExperimentalFeaturesActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.settings.experimental.bitcoinhodling.BitcoinHodlingActivity"
             android:screenOrientation="portrait" />
         <activity
