@@ -40,8 +40,8 @@ class ManageWalletsFragment : Fragment(), ManageWalletItemsAdapter.Listener, NoA
         super.onViewCreated(view, savedInstanceState)
         shadowlessToolbar.bind(
                 getString(R.string.ManageCoins_title),
-                leftBtnItem = TopMenuItem(text = R.string.ManageCoins_AddToken, onClick = {  }),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Done, onClick = {  })
+                leftBtnItem = TopMenuItem(text = R.string.ManageCoins_AddToken, onClick = { }),
+                rightBtnItem = TopMenuItem(text = R.string.Button_Done, onClick = { })
         )
 
         viewModel = ViewModelProvider(this, ManageWalletsModule.Factory())
@@ -50,22 +50,17 @@ class ManageWalletsFragment : Fragment(), ManageWalletItemsAdapter.Listener, NoA
         adapter = ManageWalletItemsAdapter(this)
         recyclerView.adapter = adapter
 
+        searchView.bind(
+                hint = getString(R.string.ManageCoins_Search),
+                onTextChanged = { query ->
+                    viewModel.updateFilter(query)
+                })
+
         observe()
-
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.updateFilter(newText)
-                return false
-            }
-        })
     }
 
     override fun onAttachFragment(childFragment: Fragment) {
-        if(childFragment is NoAccountDialog){
+        if (childFragment is NoAccountDialog) {
             childFragment.setListener(this)
         }
     }
@@ -101,7 +96,8 @@ class ManageWalletsFragment : Fragment(), ManageWalletItemsAdapter.Listener, NoA
 
         viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->
             val items = AccountType.Derivation.values().toList()
-            val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) } ?: return@Observer
+            val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) }
+                    ?: return@Observer
 
             BottomSheetSelectorDialog.show(
                     childFragmentManager,
