@@ -223,6 +223,7 @@
     <string name="Approve_FeeTitle">Fee</string>
     <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
     <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
+    <string name="Approve_Info">You should grant a permission to a smart contract to execute the trade using your funds. This permission doesn\’t affect funds on your balance</string>
 
     <!--Uniwwap Info -->
 
