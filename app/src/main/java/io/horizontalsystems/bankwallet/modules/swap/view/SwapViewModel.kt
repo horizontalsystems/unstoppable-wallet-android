@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -268,6 +269,12 @@ class SwapViewModel(
             errors.contains(SwapError.CouldNotFetchTrade) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchTrade)
             errors.contains(SwapError.CouldNotFetchAllowance) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchAllowance)
             errors.contains(SwapError.CouldNotFetchFee) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchFee)
+            errors.any { it is SwapError.InsufficientBalanceForFee} -> {
+                val error = errors.first { it is SwapError.InsufficientBalanceForFee } as SwapError.InsufficientBalanceForFee
+                val coinValue = error.coinValue
+
+                stringProvider.string(R.string.Approve_InsufficientFeeAlert, coinValue.coin.title, App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8))
+            }
             errors.any { it is SwapError.Other } -> {
                 val error = errors.first { it is SwapError.Other } as SwapError.Other
                 error.error.message ?: error.error.javaClass.simpleName
