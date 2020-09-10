@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
@@ -109,7 +110,7 @@ class UniswapService(
     override val allowance = BehaviorSubject.create<DataState<CoinValue?>>()
     override val errors = BehaviorSubject.create<List<SwapError>>()
     override val state = BehaviorSubject.createDefault<SwapState>(SwapState.Idle)
-    override val fee = BehaviorSubject.create<DataState<SwapFeeInfo>>()
+    override val fee = BehaviorSubject.create<DataState<SwapFeeInfo?>>()
 
     override val swapFee: CoinValue?
         get() = amountSending?.multiply(BigDecimal("0.003"))?.let { CoinValue(coinSending, it) }
@@ -211,6 +212,8 @@ class UniswapService(
     }
 
     private fun syncTrade() {
+        fee.onNext(DataState.Success(null))
+
         val amountType = amountType.value
         val amount = when (amountType) {
             AmountType.ExactSending -> amountSending
@@ -333,16 +336,22 @@ class UniswapService(
         }
 
         // validate fee
-        if (feeDataState is DataState.Error) {
-            newErrors.add(SwapError.CouldNotFetchFee)
-        } else if (feeDataState is DataState.Success) {
-            val fee = feeDataState.data.coinAmount.value
-            val feeCoin = feeCoinProvider.feeCoinData(coinSending)?.first ?: coinSending
-            val feeCoinBalance = balance(feeCoin)
-            val feeCoinSpendingAmount = if (coinSending.type == feeCoin.type) amountSending else BigDecimal.ZERO
-
-            if (amountSending != null && fee > feeCoinBalance.subtract(feeCoinSpendingAmount)) {
-                newErrors.add(SwapError.InsufficientBalanceForFee)
+        when (feeDataState) {
+            is DataState.Success -> {
+                feeDataState.data?.let { swapFeeInfo ->
+                    if (coinSending == swapFeeInfo.coinAmount.coin) {
+                        if (amountSending != null && balance(coinSending) - amountSending < swapFeeInfo.coinAmount.value) {
+                            newErrors.add(SwapError.InsufficientBalanceForFee(swapFeeInfo.coinAmount))
+                        }
+                    }
+                }
+            }
+            is DataState.Error -> {
+                val error = when(feeDataState.error) {
+                    is SwapApproveModule.InsufficientFeeBalance -> SwapError.InsufficientBalanceForFee(feeDataState.error.coinValue)
+                    else -> SwapError.CouldNotFetchFee
+                }
+                newErrors.add(error)
             }
         }
 
