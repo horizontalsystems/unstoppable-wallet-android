@@ -19,6 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme.DayNight"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".modules.managewallets.ManageWalletsActivityMvvm"/>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_icon" />

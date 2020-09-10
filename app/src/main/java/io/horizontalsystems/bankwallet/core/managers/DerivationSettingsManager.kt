@@ -30,4 +30,7 @@ class DerivationSettingsManager(
         appDatabase.blockchainSettingDao().insert(BlockchainSetting(derivationSetting.coinType, derivationSettingKey, derivationSetting.derivation.value))
     }
 
+    override fun reset() {
+        appDatabase.blockchainSettingDao().deleteAll()
+    }
 }

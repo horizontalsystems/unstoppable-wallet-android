@@ -1,30 +1,29 @@
-package io.horizontalsystems.bankwallet.modules.managecoins.views
+package io.horizontalsystems.bankwallet.modules.noaccount
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.android.synthetic.main.fragment_bottom_manage_wallets.*
 
-class ManageWalletsDialog : BaseBottomSheetDialogFragment() {
+class NoAccountDialog: BaseBottomSheetDialogFragment() {
 
     interface Listener {
-        fun onClickCreateKey(predefinedAccountType: PredefinedAccountType)
         fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {}
         fun onCancel() {}
     }
 
-    private lateinit var addKeyInfo: TextView
-    private lateinit var btnCreateKey: Button
-    private lateinit var btnRestoreKey: Button
-
+    private lateinit var viewModel: NoAccountViewModel
     private var listener: Listener? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,17 +31,17 @@ class ManageWalletsDialog : BaseBottomSheetDialogFragment() {
         setContentView(R.layout.fragment_bottom_manage_wallets)
 
         val coin = requireArguments().getParcelable<Coin>("coin")!!
-        val predefinedAccountType = requireArguments().getParcelable<PredefinedAccountType>("predefinedAccountType")!!
+
+        viewModel = ViewModelProvider(this, NoAccountModule.Factory(coin))
+                .get(NoAccountViewModel::class.java)
+
+        val predefinedAccountType = coin.type.predefinedAccountType
 
         setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
         setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
         context?.let { setHeaderIconDrawable(AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type)) }
 
-        addKeyInfo = view.findViewById(R.id.addKeyInfo)
-        btnCreateKey = view.findViewById(R.id.createBtn)
-        btnRestoreKey = view.findViewById(R.id.restoreBtn)
-
-        btnCreateKey.isVisible = predefinedAccountType.isCreationSupported()
+        createBtn.isVisible = predefinedAccountType.isCreationSupported()
 
         val walletName = getString(predefinedAccountType.title)
         val descriptionText = if (predefinedAccountType.isCreationSupported()) R.string.AddCoin_Description else R.string.AddCoin_CreationNotSupportedDescription
@@ -54,7 +53,32 @@ class ManageWalletsDialog : BaseBottomSheetDialogFragment() {
                 getString(predefinedAccountType.coinCodes)
         )
 
-        bindActions(predefinedAccountType)
+        if (predefinedAccountType.isCreationSupported()) {
+            createBtn.setOnClickListener {
+                viewModel.onClickCreateKey()
+            }
+        }
+
+        restoreBtn.setOnClickListener {
+            listener?.onClickRestoreKey(coin.type.predefinedAccountType)
+            dismiss()
+        }
+
+        observe()
+    }
+
+    private fun observe() {
+        viewModel.accountCreateErrorLiveEvent.observe(viewLifecycleOwner, Observer {
+            listener?.onCancel()
+            dismiss()
+        })
+
+        viewModel.accountCreateSuccessLiveEvent.observe(viewLifecycleOwner, Observer {
+            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Done)
+            Handler().postDelayed({
+                dismiss()
+            }, 1500)
+        })
     }
 
     override fun close() {
@@ -67,35 +91,23 @@ class ManageWalletsDialog : BaseBottomSheetDialogFragment() {
         listener?.onCancel()
     }
 
-    private fun bindActions(predefinedAccountType: PredefinedAccountType) {
-        btnCreateKey.setOnClickListener {
-            listener?.onClickCreateKey(predefinedAccountType)
-            dismiss()
-        }
-
-        btnRestoreKey.setOnClickListener {
-            listener?.onClickRestoreKey(predefinedAccountType)
-            dismiss()
-        }
-    }
-
     fun setListener(listener: Listener) {
         this.listener = listener
     }
 
+
     companion object {
         @JvmStatic
-        fun show(supportFragmentManager: FragmentManager, coin: Coin, predefinedAccountType: PredefinedAccountType) {
-            val fragment = ManageWalletsDialog().apply {
-                arguments = Bundle(2).apply {
+        fun show(supportFragmentManager: FragmentManager, coin: Coin) {
+            val fragment = NoAccountDialog().apply {
+                arguments = Bundle(1).apply {
                     putParcelable("coin", coin)
-                    putParcelable("predefinedAccountType", predefinedAccountType)
                 }
             }
 
             val transaction = supportFragmentManager.beginTransaction()
 
-            transaction.add(fragment, "bottom_manage_wallets_dialog")
+            transaction.add(fragment, "bottom_no_account_dialog")
             transaction.commitAllowingStateLoss()
         }
     }

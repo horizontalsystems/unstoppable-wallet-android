@@ -58,7 +58,7 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
         })
 
         view.showManageKeysDialog.observe(this, Observer { (coin, predefinedAccountType) ->
-            ManageWalletsDialog.show(this, coin, predefinedAccountType)
+            ManageWalletsDialog.show(supportFragmentManager, coin, predefinedAccountType)
         })
 
         view.showErrorEvent.observe(this, Observer {
