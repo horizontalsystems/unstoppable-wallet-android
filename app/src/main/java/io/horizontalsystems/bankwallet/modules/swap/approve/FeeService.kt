@@ -19,8 +19,7 @@ class FeeService(
         private val baseCurrency: Currency,
         private val erc20Adapter: Erc20Adapter,
         private val feeRateProvider: IFeeRateProvider,
-        private val rateManager: IRateManager,
-        private val feeBalanceAdapter: IBalanceAdapter
+        private val rateManager: IRateManager
 ) : IFeeService, Clearable {
 
     override var gasPrice: Long = 0
@@ -49,7 +48,7 @@ class FeeService(
                     val fee = erc20Adapter.fee(gasPrice, gasLimit)
                     val coinValue = CoinValue(feeCoin, fee)
 
-                    if (feeBalanceAdapter.balance < fee) {
+                    if (erc20Adapter.ethereumBalance < fee) {
                         feeValues.onNext(DataState.Error(SwapApproveModule.InsufficientFeeBalance(coinValue)))
                     } else {
                         val currencyValue = rateManager.getLatestRate(feeCoin.code, baseCurrency.code)?.let {
