@@ -198,6 +198,7 @@
     <string name="Swap_TransactionSpeed">Transaction Speed</string>
     <string name="Swap_TransactionFee">Transaction Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_ErrorInsufficientBalanceForFee">Transaction fees for swap paid in %s. You need %s.</string>
     <string name="Swap_ErrorNoLiquidity">No Liquidity</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
