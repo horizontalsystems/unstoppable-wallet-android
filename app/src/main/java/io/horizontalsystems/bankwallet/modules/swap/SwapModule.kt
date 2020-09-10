@@ -51,7 +51,7 @@ object SwapModule {
         val allowance: Observable<DataState<CoinValue?>>
         val errors: Observable<List<SwapError>>
         val state: Observable<SwapState>
-        val fee: Observable<DataState<SwapFeeInfo>>
+        val fee: Observable<DataState<SwapFeeInfo?>>
 
         val swapFee: CoinValue?
         val feeRatePriority: FeeRatePriority
@@ -70,7 +70,7 @@ object SwapModule {
     sealed class SwapError {
         object InsufficientBalance : SwapError()
         class InsufficientAllowance(val approveData: ApproveData) : SwapError()
-        object InsufficientBalanceForFee : SwapError()
+        class InsufficientBalanceForFee(val coinValue: CoinValue) : SwapError()
         object TooHighPriceImpact : SwapError()
         object NoLiquidity : SwapError()
         object CouldNotFetchTrade : SwapError()

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.TradeData
@@ -36,20 +37,18 @@ class UniswapFeeProvider(
 
                     val gasLimit = uniswapKit.estimateSwap(tradeData, gasPrice).blockingGet()
 
-                    val wallet = walletManager.wallet(coinFee)
-                    if (wallet == null) {
-                        emitter.onError(IllegalStateException("No wallet for coinFee: $coinFee"))
-                        return@create
-                    }
+                    val wallet = walletManager.wallet(coinSending)
+                            ?: throw IllegalStateException("No wallet for coin: $coinSending")
 
                     val adapter = adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter
-                    if (adapter == null) {
-                        emitter.onError(IllegalStateException("No adapter for coinFee: $coinFee"))
-                        return@create
-                    }
+                            ?: throw IllegalStateException("No adapter for coin: $coinSending")
 
                     val fee = adapter.fee(gasPrice, gasLimit)
-                    val coinValue = CoinValue(coinSending, fee)
+                    val coinValue = CoinValue(coinFee, fee)
+
+                    if (adapter.ethereumBalance < fee) {
+                        throw SwapApproveModule.InsufficientFeeBalance(coinValue)
+                    }
 
                     val xRate = rateManager.getLatestRate(coinFee.code, baseCurrency.code)
                     val currencyValue = xRate?.times(fee)?.let { CurrencyValue(baseCurrency, it) }
