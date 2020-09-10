@@ -301,13 +301,15 @@
             <TextView
                 android:id="@+id/commonError"
                 style="@style/Subhead2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:textColor="?ColorLucian"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintTop_toBottomOf="@+id/minMaxTitle"
+                tools:visibility="visible"
                 tools:text="No Liquidity" />
 
             <Button
