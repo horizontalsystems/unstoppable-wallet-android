@@ -72,9 +72,6 @@
             android:name=".modules.fulltransactioninfo.dataprovider.DataProviderSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="io.horizontalsystems.languageswitcher.LanguageSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.settings.security.SecuritySettingsActivity"
             android:screenOrientation="portrait" />
         <activity

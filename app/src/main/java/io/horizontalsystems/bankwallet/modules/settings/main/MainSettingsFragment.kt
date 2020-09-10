@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule
@@ -25,12 +26,12 @@ import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.currencyswitcher.CurrencySwitcherModule
-import io.horizontalsystems.languageswitcher.LanguageSwitcherModule
+import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class MainSettingsFragment : Fragment() {
 
-    private var presenter: MainSettingsPresenter? = null
+    private val presenter by viewModels<MainSettingsPresenter> { MainSettingsModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -39,31 +40,16 @@ class MainSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val presenter = ViewModelProvider(this, MainSettingsModule.Factory()).get(MainSettingsPresenter::class.java)
-        val presenterView = presenter.view as MainSettingsView
-        val router = presenter.router as MainSettingsRouter
+        bindViewListeners()
 
-        bindViewListeners(presenter)
-
-        subscribeToViewEvents(presenterView, presenter)
-
-        subscribeToRouterEvents(router)
+        subscribeToViewEvents(presenter.view as MainSettingsView)
+        subscribeToRouterEvents(presenter.router as MainSettingsRouter)
+        subscribeFragmentResult()
 
         presenter.viewDidLoad()
-
-        this.presenter = presenter
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == ModuleCode.LANGUAGE_SWITCH && resultCode == LanguageSwitcherModule.LANGUAGE_CHANGED) {
-            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
-        }
-    }
-
-    private fun bindViewListeners(presenter: MainSettingsPresenter) {
-
+    private fun bindViewListeners() {
         manageKeys.setOnSingleClickListener { presenter.didTapManageKeys() }
 
         privacySettings.setOnSingleClickListener { presenter.didTapSecurity() }
@@ -93,7 +79,7 @@ class MainSettingsFragment : Fragment() {
         companyLogo.setOnSingleClickListener { presenter.didTapCompanyLogo() }
     }
 
-    private fun subscribeToViewEvents(presenterView: MainSettingsView, presenter: MainSettingsPresenter) {
+    private fun subscribeToViewEvents(presenterView: MainSettingsView) {
         presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
             baseCurrency.showValue(currency)
         })
@@ -127,11 +113,9 @@ class MainSettingsFragment : Fragment() {
         presenterView.termsAccepted.observe(viewLifecycleOwner, Observer { termsAccepted ->
             terms.showAttention(!termsAccepted)
         })
-
     }
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
-
         router.showManageKeysLiveEvent.observe(this, Observer {
             context?.let { context -> ManageKeysModule.start(context) }
         })
@@ -141,7 +125,10 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            LanguageSwitcherModule.start(this, ModuleCode.LANGUAGE_SWITCH)
+            activity?.supportFragmentManager?.commit {
+                add(R.id.fragmentContainerView, LanguageSettingsFragment())
+                addToBackStack(null)
+            }
         })
 
         router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -197,5 +184,13 @@ class MainSettingsFragment : Fragment() {
         router.openAppStatusLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let { AppStatusModule.start(it) }
         })
+    }
+
+    private fun subscribeFragmentResult() {
+        activity?.supportFragmentManager?.setFragmentResultListener(LanguageSettingsFragment.LANGUAGE_CHANGE, viewLifecycleOwner) { requestKey, _ ->
+            if (requestKey == LanguageSettingsFragment.LANGUAGE_CHANGE) {
+                activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
+            }
+        }
     }
 }
