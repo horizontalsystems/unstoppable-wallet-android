@@ -171,6 +171,7 @@
     <string name="Approve_FeeTitle">Fee</string>
     <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
     <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
+    <string name="Approve_Info">You should grant a permission to a smart contract to execute the trade using your funds. This permission doesn\’t affect funds on your balance</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap는 Ethereum에서 자동화된 유동성 제공을 위한 완전 분산형 프로토콜입니다.\n\nA 간단한 공식화 등식은 수천 명의 사용자와 수백 개의 애플리케이션을 위해 막을 수 없는 유동성을 촉진합니다. \n\nUniswap의 개발자, 유동성 제공자 및 거래자가 모두에게 개방되고 접근 가능한 금융 시장에 참여할 수 있는 권한을 부여합니다.</string>
