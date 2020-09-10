@@ -1,14 +1,10 @@
 package io.horizontalsystems.languageswitcher
 
-import android.content.Intent
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.core.CoreApp
 
 object LanguageSwitcherModule {
-
-    const val LANGUAGE_CHANGED = 1
 
     interface IView {
         fun show(items: List<LanguageViewItem>)
@@ -29,11 +25,6 @@ object LanguageSwitcherModule {
     interface IRouter {
         fun reloadAppInterface()
         fun close()
-    }
-
-    fun start(fragment: Fragment, requestCode: Int) {
-        val intent = Intent(fragment.context, LanguageSettingsActivity::class.java)
-        fragment.startActivityForResult(intent, requestCode)
     }
 
     class Factory : ViewModelProvider.Factory {

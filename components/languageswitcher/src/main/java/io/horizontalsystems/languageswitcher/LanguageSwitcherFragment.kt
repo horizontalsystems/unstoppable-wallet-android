@@ -7,56 +7,67 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.core.CoreActivity
+import androidx.transition.TransitionInflater
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_language_settings.*
+import kotlinx.android.synthetic.main.fragment_language_settings.*
 
-class LanguageSettingsActivity : CoreActivity(), LanguageSwitcherAdapter.Listener {
+class LanguageSettingsFragment : Fragment(), LanguageSwitcherAdapter.Listener {
 
     private lateinit var presenter: LanguageSwitcherPresenter
-    private var adapter: LanguageSwitcherAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.slide_right)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_language_settings, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         presenter = ViewModelProvider(this, LanguageSwitcherModule.Factory()).get(LanguageSwitcherPresenter::class.java)
 
         val presenterView = presenter.view as LanguageSwitcherView
         val presenterRouter = presenter.router as LanguageSwitcherRouter
 
-        setContentView(R.layout.activity_language_settings)
-
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsLanguage_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
+                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = {
+                    activity?.onBackPressed()
+                })
         )
 
-        adapter = LanguageSwitcherAdapter(this)
+        val adapter = LanguageSwitcherAdapter(this)
+
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
-        presenterView.languageItems.observe(this, Observer { items ->
-            items?.let {
-                adapter?.items = it
-                adapter?.notifyDataSetChanged()
-            }
+        presenterView.languageItems.observe(viewLifecycleOwner, Observer {
+            adapter.items = it
+            adapter.notifyDataSetChanged()
         })
 
-        presenterRouter.reloadAppLiveEvent.observe(this, Observer {
-            // MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
-            setResult(LanguageSwitcherModule.LANGUAGE_CHANGED)
-            finish()
+        presenterRouter.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
+            setFragmentResult(LANGUAGE_CHANGE, bundleOf())
+
+            activity?.supportFragmentManager?.popBackStack()
         })
 
-        presenterRouter.closeLiveEvent.observe(this, Observer {
-            finish()
+        presenterRouter.closeLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.supportFragmentManager?.popBackStack()
         })
 
         presenter.viewDidLoad()
@@ -64,6 +75,10 @@ class LanguageSettingsActivity : CoreActivity(), LanguageSwitcherAdapter.Listene
 
     override fun onItemClick(position: Int) {
         presenter.didSelect(position)
+    }
+
+    companion object {
+        const val LANGUAGE_CHANGE = "language_change"
     }
 }
 
