@@ -27,12 +27,9 @@ object SwapApproveModule {
             val feeCoinData = App.feeCoinProvider.feeCoinData(coin)
             val feeCoin = feeCoinData?.first ?: coin
 
-            val feeWallet = App.walletManager.wallet(feeCoin)!!
-            val feeBalanceAdapter = App.adapterManager.getBalanceAdapterForWallet(feeWallet)!!
-
             val baseCurrency = App.currencyManager.baseCurrency
 
-            val feeService = FeeService(amount, spenderAddress, feeCoin, baseCurrency, erc20Adapter!!, feeRateProvider!!, App.xRateManager, feeBalanceAdapter)
+            val feeService = FeeService(amount, spenderAddress, feeCoin, baseCurrency, erc20Adapter!!, feeRateProvider!!, App.xRateManager)
             val feePresenter = FeePresenter(feeService)
             val swapApproveService = SwapApproveService(coin, amount, spenderAddress, feeService, erc20Adapter)
 
