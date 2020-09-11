@@ -1,32 +1,39 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
+import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreMode
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
-import kotlinx.android.synthetic.main.activity_manage_keys.*
+import kotlinx.android.synthetic.main.fragment_manage_keys.*
 
-class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeysAdapter.Listener {
+class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeysAdapter.Listener {
 
-    private lateinit var presenter: ManageKeysPresenter
+    private val presenter by viewModels<ManageKeysPresenter> { ManageKeysModule.Factory() }
     private lateinit var adapter: ManageKeysAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_manage_keys, container, false)
+    }
 
-        presenter = ViewModelProvider(this, ManageKeysModule.Factory()).get(ManageKeysPresenter::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setContentView(R.layout.activity_manage_keys)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         adapter = ManageKeysAdapter(this)
         recyclerView.adapter = adapter
@@ -36,7 +43,6 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
 
         (presenter.view as ManageKeysView).confirmUnlinkEvent.observe(this, Observer { item ->
             item.account?.let { account ->
-
                 val confirmationList = listOf(
                         getString(R.string.ManageKeys_Delete_ConfirmationRemove, getString(item.predefinedAccountType.title)),
                         getString(R.string.ManageKeys_Delete_ConfirmationDisable, getString(item.predefinedAccountType.coinCodes)),
@@ -49,7 +55,9 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
                     }
                 }
 
-                ManageKeysDeleteAlert.show(this, getString(item.predefinedAccountType.title), confirmationList, confirmListener)
+                activity?.let {
+                    ManageKeysDeleteAlert.show(it, getString(item.predefinedAccountType.title), confirmationList, confirmListener)
+                }
             }
         })
 
@@ -57,14 +65,14 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
             val description = getString(R.string.ManageKeys_Delete_Alert)
-            ManageKeysDialog.show(supportFragmentManager, title, subtitle, description)
+            ManageKeysDialog.show(parentFragmentManager, title, subtitle, description)
         })
 
         presenter.onLoad()
     }
 
     override fun onAttachFragment(fragment: Fragment) {
-        if (fragment is ManageKeysDialog){
+        if (fragment is ManageKeysDialog) {
             fragment.setListener(this)
         }
     }
@@ -78,23 +86,31 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener, ManageKeys
 
     private fun observeRouter(router: ManageKeysRouter) {
         router.showRestore.observe(this, Observer { predefinedAccountType ->
-            RestoreModule.startForResult(this, predefinedAccountType, RestoreMode.FromManageKeys)
+            context?.let {
+                RestoreModule.start(it, predefinedAccountType, RestoreMode.FromManageKeys)
+            }
         })
 
         router.showCreateWalletLiveEvent.observe(this, Observer { predefinedAccountType ->
-            CreateWalletModule.startInApp(this, predefinedAccountType)
+            context?.let {
+                CreateWalletModule.startInApp(it, predefinedAccountType)
+            }
         })
 
         router.showBackupModule.observe(this, Observer { (account, predefinedAccountType) ->
-            BackupModule.start(this, account, getString(predefinedAccountType.coinCodes))
+            context?.let {
+                BackupModule.start(it, account, getString(predefinedAccountType.coinCodes))
+            }
         })
 
         router.showBlockchainSettings.observe(this, Observer { enabledCoinTypes ->
-            AddressFormatSettingsModule.startForResult(this, enabledCoinTypes, false)
+            activity?.let {
+                AddressFormatSettingsModule.startForResult(it, enabledCoinTypes, false)
+            }
         })
 
         router.closeEvent.observe(this, Observer {
-            finish()
+            activity?.supportFragmentManager?.popBackStack()
         })
     }
 
