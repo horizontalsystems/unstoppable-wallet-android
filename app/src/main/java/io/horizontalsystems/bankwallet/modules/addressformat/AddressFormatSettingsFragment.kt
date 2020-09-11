@@ -1,33 +1,39 @@
 package io.horizontalsystems.bankwallet.modules.addressformat
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import kotlinx.android.synthetic.main.activity_address_format_settings.*
+import kotlinx.android.synthetic.main.fragment_address_format_settings.*
 
-class AddressFormatSettingsActivity : BaseActivity() {
+class AddressFormatSettingsFragment : BaseFragment() {
 
     private lateinit var presenter: AddressFormatSettingsPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_address_format_settings)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_address_format_settings, container, false)
+    }
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
-        val coinTypes: List<CoinType> = intent.getParcelableArrayListExtra(ModuleField.COIN_TYPES)
-                ?: listOf()
-        val showDoneButton: Boolean = intent.getBooleanExtra(ModuleField.SHOW_DONE_BUTTON, false)
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+
+        val coinTypes = arguments?.getParcelableArrayList(ModuleField.COIN_TYPES)
+                ?: listOf<CoinType>()
+        val showDoneButton = arguments?.getBoolean(ModuleField.SHOW_DONE_BUTTON, false) ?: false
 
         presenter = ViewModelProvider(this, AddressFormatSettingsModule.Factory(coinTypes, showDoneButton))
                 .get(AddressFormatSettingsPresenter::class.java)
@@ -41,16 +47,16 @@ class AddressFormatSettingsActivity : BaseActivity() {
         setLtcItems()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.coin_settings_menu, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.coin_settings_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.menuDone)?.apply {
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menuDone)?.apply {
             isVisible = presenter.showDoneButton
         }
-        return true
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -64,54 +70,56 @@ class AddressFormatSettingsActivity : BaseActivity() {
     }
 
     private fun observeView(view: AddressFormatSettingsView) {
-        view.btcBipTitle.observe(this, Observer { title ->
+        view.btcBipTitle.observe(viewLifecycleOwner, Observer { title ->
             btcHeader.text = title
         })
-        view.ltcBipTitle.observe(this, Observer { title ->
+        view.ltcBipTitle.observe(viewLifecycleOwner, Observer { title ->
             ltcHeader.text = title
         })
-        view.btcBipVisibility.observe(this, Observer { isVisible ->
+        view.btcBipVisibility.observe(viewLifecycleOwner, Observer { isVisible ->
             btcHeader.isVisible = isVisible
             btcBip44.isVisible = isVisible
             btcBip49.isVisible = isVisible
             btcBip84.isVisible = isVisible
         })
-        view.btcBipDerivation.observe(this, Observer { derivation ->
+        view.btcBipDerivation.observe(viewLifecycleOwner, Observer { derivation ->
             btcBip44.setChecked(derivation == Derivation.bip44)
             btcBip49.setChecked(derivation == Derivation.bip49)
             btcBip84.setChecked(derivation == Derivation.bip84)
         })
-        view.ltcBipVisibility.observe(this, Observer { isVisible ->
+        view.ltcBipVisibility.observe(viewLifecycleOwner, Observer { isVisible ->
             ltcHeader.isVisible = isVisible
             ltcBip44.isVisible = isVisible
             ltcBip49.isVisible = isVisible
             ltcBip84.isVisible = isVisible
         })
-        view.ltcBipDerivation.observe(this, Observer { derivation ->
+        view.ltcBipDerivation.observe(viewLifecycleOwner, Observer { derivation ->
             ltcBip44.setChecked(derivation == Derivation.bip44)
             ltcBip49.setChecked(derivation == Derivation.bip49)
             ltcBip84.setChecked(derivation == Derivation.bip84)
         })
-        view.showDerivationChangeAlert.observe(this, Observer { (derivationSetting, coinTitle) ->
-            val bipVersion = derivationSetting.derivation.title()
-            ConfirmationDialog.show(
-                    title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
-                    subtitle = bipVersion,
-                    contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content, coinTitle, coinTitle),
-                    actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, bipVersion),
-                    cancelButtonTitle = getString(R.string.Alert_Cancel),
-                    activity = this,
-                    listener = object : ConfirmationDialog.Listener {
-                        override fun onActionButtonClick() {
-                            presenter.proceedWithDerivationChange(derivationSetting)
+        view.showDerivationChangeAlert.observe(viewLifecycleOwner, Observer { (derivationSetting, coinTitle) ->
+            activity?.let {
+                val bipVersion = derivationSetting.derivation.title()
+                ConfirmationDialog.show(
+                        title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
+                        subtitle = bipVersion,
+                        contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content, coinTitle, coinTitle),
+                        actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, bipVersion),
+                        cancelButtonTitle = getString(R.string.Alert_Cancel),
+                        activity = it,
+                        listener = object : ConfirmationDialog.Listener {
+                            override fun onActionButtonClick() {
+                                presenter.proceedWithDerivationChange(derivationSetting)
+                            }
                         }
-                    }
-            )
+                )
+            }
         })
     }
 
     private fun setBtcItems() {
-        val btcCoinType  =  CoinType.Bitcoin
+        val btcCoinType = CoinType.Bitcoin
 
         btcBip44.bind(
                 Derivation.bip44.longTitle(),
@@ -132,7 +140,7 @@ class AddressFormatSettingsActivity : BaseActivity() {
     }
 
     private fun setLtcItems() {
-        val ltcCoinType  =  CoinType.Litecoin
+        val ltcCoinType = CoinType.Litecoin
 
         ltcBip44.bind(
                 Derivation.bip44.longTitle(),
@@ -153,14 +161,12 @@ class AddressFormatSettingsActivity : BaseActivity() {
     }
 
     private fun observeRouter(router: AddressFormatSettingsRouter) {
-        router.closeWithResultOk.observe(this, Observer {
-            setResult(RESULT_OK)
-            finish()
+        router.closeWithResultOk.observe(viewLifecycleOwner, Observer {
+            activity?.supportFragmentManager?.popBackStack()
         })
 
-        router.close.observe(this, Observer {
-            finish()
+        router.close.observe(viewLifecycleOwner, Observer {
+            activity?.supportFragmentManager?.popBackStack()
         })
     }
-
 }

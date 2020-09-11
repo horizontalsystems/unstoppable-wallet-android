@@ -37,9 +37,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.addressformat.AddressFormatSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.backup.BackupActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
