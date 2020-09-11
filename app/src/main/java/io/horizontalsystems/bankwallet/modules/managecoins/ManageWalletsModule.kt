@@ -31,8 +31,6 @@ object ManageWalletsModule {
 
         fun onClickCancel()
         fun onAccountRestored()
-        fun onBlockchainSettingsApproved()
-        fun onBlockchainSettingsCancel()
         fun onSelectDerivationSetting(coin: Coin, derivation: AccountType.Derivation)
         fun onCancelDerivationSelectorDialog(coin: Coin)
     }

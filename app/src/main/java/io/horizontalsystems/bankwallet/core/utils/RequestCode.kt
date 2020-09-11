@@ -9,7 +9,6 @@ object ModuleCode {
     const val COIN_SETTINGS = 7
     const val RESTORE_COINS = 8
     const val LANGUAGE_SWITCH = 9
-    const val BLOCKCHAIN_SETTINGS_LIST = 10
 }
 
 object ModuleField {

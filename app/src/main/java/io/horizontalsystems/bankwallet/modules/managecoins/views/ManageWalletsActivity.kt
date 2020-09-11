@@ -98,24 +98,16 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener, Coin
                     presenter.onAccountRestored()
                 }
             }
-            ModuleCode.BLOCKCHAIN_SETTINGS_LIST -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    presenter.onBlockchainSettingsApproved()
-                } else {
-                    presenter.onBlockchainSettingsCancel()
-                }
-            }
         }
-
     }
 
     override fun onAttachFragment(fragment: Fragment) {
-        if(fragment is ManageWalletsDialog){
+        if (fragment is ManageWalletsDialog) {
             fragment.setListener(this)
         }
     }
 
-// ManageWalletsDialog.Listener
+    //  ManageWalletsDialog.Listener
 
     override fun onClickCreateKey(predefinedAccountType: PredefinedAccountType) {
         presenter.onSelectNewAccount(predefinedAccountType)

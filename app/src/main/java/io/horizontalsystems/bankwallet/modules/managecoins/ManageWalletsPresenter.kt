@@ -87,17 +87,6 @@ class ManageWalletsPresenter(
         syncViewItems()
     }
 
-    override fun onBlockchainSettingsApproved() {
-        walletWithSettings?.let {
-            enableWallet(it.coin, it.account)
-            walletWithSettings = null
-        }
-    }
-
-    override fun onBlockchainSettingsCancel() {
-        syncViewItems()
-    }
-
     override fun onCleared() {
         interactor.clear()
         super.onCleared()
