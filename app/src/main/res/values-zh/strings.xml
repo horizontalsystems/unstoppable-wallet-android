@@ -151,16 +151,16 @@
     <string name="Swap_TransactionSpeed">交易速度</string>
     <string name="Swap_TransactionFee">交易费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
-    <string name="Swap_ErrorInsufficientBalanceForFee">Transaction fees for swap paid in %s. You need %s.</string>
+    <string name="Swap_ErrorInsufficientBalanceForFee">交易费用以%s支付。您需要%s。</string>
     <string name="Swap_ErrorNoLiquidity">无流动资金</string>
-    <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
-    <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
-    <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">无法获取交易信息</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">无法获取允许信息</string>
+    <string name="Swap_ErrorCouldNotFetchFee">无法获取交易信息</string>
     <string name="Swap_Proceed">继续</string>
     <string name="Swap_Approve">批准</string>
     <string name="Swap_Approving">审批中</string>
-    <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Swapping">交换文件</string>
+    <string name="Swap_Confirmation">确认</string>
     <string name="Swap_Confirmation_Pay">支付 %s</string>
     <string name="Swap_Confirmation_Get">获得 %s</string>
     <!--Swap Coin Select-->
@@ -170,7 +170,7 @@
     <string name="Approve_Subtitle">掉期交易</string>
     <string name="Approve_FeeTitle">费用</string>
     <string name="Approve_TransactionSpeedTitle">交易速度</string>
-    <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
+    <string name="Approve_InsufficientFeeAlert">交易费用以%s支付。您需要%s。</string>
     <string name="Approve_Info">您应该为智能合约授予权限以便使用您的资金执行交易。此权限不会影响您余额中的资金</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
