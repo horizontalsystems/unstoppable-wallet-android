@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.managewallets.view
 
+import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
@@ -26,14 +27,16 @@ class ManageWalletsViewModel(
     private var filter: String? = null
 
     init {
-        service.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    syncViewState(it)
-                }
-                .let { disposable = it }
+        Handler().postDelayed({
+            syncViewState()
 
-        syncViewState()
+            service.stateObservable
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        syncViewState(it)
+                    }
+                    .let { disposable = it }
+        }, 500)
     }
 
     override fun onCleared() {

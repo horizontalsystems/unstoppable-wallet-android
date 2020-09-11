@@ -2,10 +2,12 @@ package io.horizontalsystems.bankwallet.modules.managewallets.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
@@ -47,10 +49,16 @@ class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         shadowlessToolbar.bind(
                 getString(R.string.ManageCoins_title),
                 leftBtnItem = TopMenuItem(text = R.string.ManageCoins_AddToken, onClick = { showAddTokenDialog() }),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Done, onClick = { activity?.onBackPressed() })
+                rightBtnItem = TopMenuItem(text = R.string.Button_Done, onClick = {
+                    hideKeyboard()
+                    Handler().postDelayed({
+                        activity?.onBackPressed()
+                    }, 100)
+                })
         )
 
         viewModel = ViewModelProvider(this, ManageWalletsModule.Factory())
@@ -101,6 +109,8 @@ class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener,
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, Observer { items ->
             adapter.viewItems = items
             adapter.notifyDataSetChanged()
+
+            progressLoading.isVisible = false
         })
 
         viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->

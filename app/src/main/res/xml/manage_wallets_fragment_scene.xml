@@ -4,6 +4,10 @@
 
     <ConstraintSet android:id="@+id/start">
         <Constraint android:id="@+id/shadowlessToolbar" />
+        <Constraint android:id="@id/progressLoading">
+            <PropertySet
+                app:visibilityMode="ignore" />
+        </Constraint>
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
