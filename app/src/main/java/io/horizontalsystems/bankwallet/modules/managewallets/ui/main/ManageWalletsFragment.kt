@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -95,25 +95,32 @@ class ManageWalletsFragment : Fragment(), ManageWalletItemsAdapter.Listener, NoA
         })
 
         viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->
-            val items = AccountType.Derivation.values().toList()
-            val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) }
-                    ?: return@Observer
 
-            BottomSheetSelectorDialog.show(
-                    childFragmentManager,
-                    getString(R.string.AddressFormatSettings_Title),
-                    coin.title,
-                    coinDrawable,
-                    items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description(), derivation.addressPrefix(coin.type))) },
-                    items.indexOf(currentDerivation),
-                    notifyUnchanged = true,
-                    onItemSelected = { position ->
-                        viewModel.onSelect(coin, DerivationSetting(coin.type, items[position]))
-                    },
-                    onCancelled = {
-                        viewModel.onCancelDerivationSelection()
-                    }
-            )
+            activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+
+            showAddressFormatSelectionDialog(coin, currentDerivation)
         })
+    }
+
+    private fun showAddressFormatSelectionDialog(coin: Coin, currentDerivation: AccountType.Derivation) {
+        val items = AccountType.Derivation.values().toList()
+        val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) }
+                ?: return
+
+        BottomSheetSelectorDialog.show(
+                childFragmentManager,
+                getString(R.string.AddressFormatSettings_Title),
+                coin.title,
+                coinDrawable,
+                items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description(), derivation.addressPrefix(coin.type))) },
+                items.indexOf(currentDerivation),
+                notifyUnchanged = true,
+                onItemSelected = { position ->
+                    viewModel.onSelect(coin, DerivationSetting(coin.type, items[position]))
+                },
+                onCancelled = {
+                    viewModel.onCancelDerivationSelection()
+                }
+        )
     }
 }

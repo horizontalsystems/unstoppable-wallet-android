@@ -1,9 +1,11 @@
 package io.horizontalsystems.views
 
 import android.content.Context
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isInvisible
 import kotlinx.android.synthetic.main.view_coin_search.view.*
@@ -15,6 +17,15 @@ class CoinSearchView : ConstraintLayout {
 
         closeButton.setOnClickListener {
             searchInput.setText("")
+        }
+
+        searchInput.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                Handler().postDelayed({
+                    performClick()
+                }, 100)
+            }
+            false
         }
 
         bindTextChangeListener { closeButton.isInvisible = it.isBlank() }
