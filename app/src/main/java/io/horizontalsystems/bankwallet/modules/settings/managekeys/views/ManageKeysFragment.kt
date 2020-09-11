@@ -105,7 +105,7 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
 
         router.showBlockchainSettings.observe(this, Observer { enabledCoinTypes ->
             activity?.let {
-                AddressFormatSettingsModule.startForResult(it, enabledCoinTypes, false)
+                AddressFormatSettingsModule.start(it, enabledCoinTypes, false)
             }
         })
 

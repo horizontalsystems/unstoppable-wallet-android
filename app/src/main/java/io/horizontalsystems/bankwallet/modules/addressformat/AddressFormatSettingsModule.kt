@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.addressformat
 
-import android.content.Context
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -46,11 +46,18 @@ object AddressFormatSettingsModule {
         fun close()
     }
 
-    fun startForResult(context: Context, coinTypes: List<CoinType>, showDoneButton: Boolean) {
-        val intent = Intent(context, AddressFormatSettingsActivity::class.java)
-        intent.putParcelableArrayListExtra(ModuleField.COIN_TYPES, ArrayList(coinTypes))
-        intent.putExtra(ModuleField.SHOW_DONE_BUTTON, showDoneButton)
-        context.startActivity(intent)
+    fun start(activity: FragmentActivity, coinTypes: List<CoinType>, showDoneButton: Boolean) {
+        val fragment = AddressFormatSettingsFragment().apply {
+            arguments = Bundle(2).apply {
+                putParcelableArrayList(ModuleField.COIN_TYPES, ArrayList(coinTypes))
+                putBoolean(ModuleField.SHOW_DONE_BUTTON, showDoneButton)
+            }
+        }
+
+        activity.supportFragmentManager.commit {
+            add(R.id.fragmentContainerView, fragment)
+            addToBackStack(null)
+        }
     }
 
     class Factory(private val coinTypes: List<CoinType>, private val showDoneButton: Boolean) : ViewModelProvider.Factory {
