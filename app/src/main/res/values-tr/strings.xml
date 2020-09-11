@@ -25,6 +25,7 @@
     <string name="Button_Retry">Yeniden Dene</string>
     <string name="Button_Change">Değiştir</string>
     <string name="Button_Add">Ekle</string>
+    <string name="Button_Approve">Onayla</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
@@ -133,7 +134,7 @@
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <!--Swap-->
-    <string name="Swap_Title">Takas</string>
+    <string name="Swap">Takas</string>
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
     <string name="Swap_ToAmountTitle">Kazandığınız</string>
     <string name="Swap_Percent">%s%%</string>
@@ -141,13 +142,36 @@
     <string name="Swap_MaxButtonTitle">Azami</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
     <string name="Swap_Balance">Bakiye</string>
+    <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
     <string name="Swap_MinimumReceived">Minimum Kazanılan</string>
-    <string name="Swap_MaximiumSold">Maksimum Ödenen</string>
+    <string name="Swap_MaximumSold">Maksimum Ödenen</string>
+    <string name="Swap_SwapFee">Takas Ücreti</string>
+    <string name="Swap_TransactionSpeed">İşlem hızı</string>
+    <string name="Swap_TransactionFee">İşlem Ücreti</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
+    <string name="Swap_ErrorInsufficientBalanceForFee">İşlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
+    <string name="Swap_ErrorNoLiquidity">Likidite Yok</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">Alım satım bilgisi alınamadı</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">Ödenek bilgisi alınamadı</string>
+    <string name="Swap_ErrorCouldNotFetchFee">Ücret bilgisi alınamadı</string>
+    <string name="Swap_Proceed">Devam</string>
+    <string name="Swap_Approve">Onayla</string>
+    <string name="Swap_Approving">Onaylayan</string>
+    <string name="Swap_Swapping">Takas</string>
+    <string name="Swap_Confirmation">Onaylama</string>
+    <string name="Swap_Confirmation_Pay">Ödeyin %s</string>
+    <string name="Swap_Confirmation_Get">%s al</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Kripto Parayı Seç</string>
+    <!--Approve-->
+    <string name="Approve_Title">Onayla</string>
+    <string name="Approve_Subtitle">Takas</string>
+    <string name="Approve_FeeTitle">Masraf</string>
+    <string name="Approve_TransactionSpeedTitle">İşlem hızı</string>
+    <string name="Approve_InsufficientFeeAlert">Onay için işlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
+    <string name="Approve_Info">Fonlarınızı kullanarak alım satımı gerçekleştirmek için bir akıllı sözleşmeye izin vermelisiniz. Bu izin bakiyenizdeki fonları etkilemez</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap, Ethereum\'da otomatik likidite tedariki için tamamen merkezi olmayan bir protokoldür.
@@ -318,7 +342,7 @@
     <string name="SettingsContact_Email">E-posta</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın.\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarılırsınız.</string>
+    <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarı alırsınız. \n\nFiyat Trendi Uyarısı, 6 ay boyunca, 1 haftalık kısa bir süre için bir trend değişikliği durumunu uyarır.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
     <string name="SettingsNotifications_TurnOn">Ayarlardan aç</string>
     <string name="SettingsNotifications_Off">Kapat</string>
@@ -329,8 +353,8 @@
     <string name="Notification_PriceDown">%1$s fiyat: Aşağı %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s trend: Yukarı 📈</string>
     <string name="Notification_TrendDown">%s trend: Aşağı 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Değişim 24s</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Fiyat Trend Değişimi</string>
+    <string name="NotificationBottomMenu_Change24h">Fiyat Değişimi 24s</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trend Değişimi</string>
     <string name="NotificationBottomMenu_ShortTerm">Kısa Vade 7G</string>
     <string name="NotificationBottomMenu_Short">Kısa</string>
     <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
