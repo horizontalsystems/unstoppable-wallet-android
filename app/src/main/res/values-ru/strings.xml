@@ -154,7 +154,7 @@
     <string name="Swap_ErrorInsufficientBalanceForFee">Комиссии за транзакцию взимаются в %s. Вам нужно %s.</string>
     <string name="Swap_ErrorNoLiquidity">Нет Ликвидности</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Не удалось получить информацию о сделке</string>
-    <string name="Swap_ErrorCouldNotFetchAllowance">Не удалось получить информацию о разрешение</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">Не удалось получить информацию о допустимом лимите</string>
     <string name="Swap_ErrorCouldNotFetchFee">Не удалось получить информацию о комиссии</string>
     <string name="Swap_Proceed">Продолжить</string>
     <string name="Swap_Approve">Подтвердить</string>
