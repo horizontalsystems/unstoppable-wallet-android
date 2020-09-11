@@ -160,7 +160,7 @@
     <string name="Swap_Approve">Подтвердить</string>
     <string name="Swap_Approving">Подтверждение</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Confirmation">Подтверждение</string>
     <string name="Swap_Confirmation_Pay">Оплатить %s</string>
     <string name="Swap_Confirmation_Get">Получить %s</string>
     <!--Swap Coin Select-->
