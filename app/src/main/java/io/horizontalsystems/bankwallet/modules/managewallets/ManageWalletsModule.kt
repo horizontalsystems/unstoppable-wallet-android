@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.modules.managewallets.ui.main.ManageWalletsViewModel
+import io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsFragment
+import io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsViewModel
 import io.reactivex.Observable
 
 object ManageWalletsModule {
@@ -41,6 +43,10 @@ object ManageWalletsModule {
 
             return ManageWalletsViewModel(service, listOf(service)) as T
         }
+    }
+
+    fun start(activity: FragmentActivity) {
+        ManageWalletsFragment.start(activity)
     }
 
 }
