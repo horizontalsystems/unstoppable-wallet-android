@@ -49,7 +49,7 @@
     <!--Restore-->
     <string name="Restore_ChooseWallet">Выберите Кошелек</string>
     <string name="Restore_Enter_Key_Title">Введите ключ</string>
-    <string name="Restore_Enter_Key_Description_Mnemonic">Введите ваш приватный ключ для %1s кошелька, который состоит из %2s слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
+    <string name="Restore_Enter_Key_Description_Mnemonic">Введите приватный ключ для кошелька %1s, который состоит из %2s слов. Слова нужно ввести в правильном порядке и использовать пробелы между ними.</string>
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
@@ -58,7 +58,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Резервная Копия</string>
     <string name="Backup_Intro_TitleShow">Показать Ключ</string>
-    <string name="Backup_Intro_Subtitle">Приватный Ключ, который будет показан далее, - это единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и т.д. Убедитесь, что никто не смотрит на ваш экран.\n\nТокены, контролируемые этим ключом: %s.</string>
+    <string name="Backup_Intro_Subtitle">Приватный ключ, который будет показан далее, является единственным способом восстановления ваших средств в случае утери, кражи или поломки вашего телефона. \n\nУбедитесь, что никто не смотрит в ваш экран.\n\nЭтот ключ контролирует следующие токены: %s.</string>
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная Копия</string>
     <string name="Backup_DisplayTitle">Приватный Ключ</string>
@@ -70,7 +70,7 @@
     <string name="Backup_Button_Submit">Подтвердить</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Копирование ключа с помощью действия «копировать» представляет определенный риск, если вы используете какие-либо приложения для управления буфером обмена, или другие приложения, которые могут иметь доступ к данным буфера обмена.</string>
+    <string name="Backup_Eos_Warning">Копирование ключа с помощью действия «копировать» подвергает вас определенному риску, если вы используете какие-либо приложения для управления буфером обмена, или другие приложения, которые могут иметь доступ к данным буфера обмена.</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Deposit">Получить</string>
@@ -107,7 +107,7 @@
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
-    <string name="Send_Error_UnsupportedAddress">Временная блокировка работает только с адресами P2PKH (начинаются с 1)</string>
+    <string name="Send_Error_UnsupportedAddress">Блокировка по времени работает только с адресами P2PKH (начиная с 1)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
     <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
     <string name="Send_Error_MaximumAmount">Макс. сумма %s</string>
@@ -144,7 +144,7 @@
     <string name="Swap_Balance">Баланс</string>
     <string name="Swap_Allowance">Разрешение</string>
     <string name="Swap_Price">Цена</string>
-    <string name="Swap_PriceImpact">Разница в цене</string>
+    <string name="Swap_PriceImpact">Колебание Цен</string>
     <string name="Swap_MinimumReceived">Минимальная выплата</string>
     <string name="Swap_MaximumSold">Максимальная Выплата</string>
     <string name="Swap_SwapFee">Комиссия за обмен</string>
@@ -174,10 +174,10 @@
     <string name="Approve_Info">Вы должны предоставить смарт-контракту разрешение на совершение сделки с использованием ваших средств. Это разрешение не влияет на средства на вашем балансе</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap - это полностью децентрализованный протокол для автоматического предоставления ликвидности на Ethereum.\n\nПростая формула обеспечивает постоянную ликвидность для тысячи пользователей и сотен приложений.\n\nUniswap дает возможность разработчикам, поставщикам ликвидности и трейдерам участвовать в открытом и доступном для всех финансовом рынке.</string>
+    <string name="UniswapInfo_Description">Uniswap – полностью децентрализованный протокол для автоматического предоставления ликвидности на Ethereum.\n\nПростая формула обеспечивает постоянную ликвидность для тысячи пользователей и сотен приложений.\n\nUniswap дает возможность разработчикам, поставщикам ликвидности и трейдерам участвовать на открытом и доступном для всех финансовом рынке.</string>
     <string name="UniswapInfo_MinReceivedTitle">Получено минимум</string>
     <string name="UniswapInfo_MinReceivedDescription">Ваша транзакция будет отменена в случае возникновения большого и неблагоприятного ценового движения до её подтверждения.</string>
-    <string name="UniswapInfo_PriceImpactTitle">Разница в цене</string>
+    <string name="UniswapInfo_PriceImpactTitle">Колебание Цен</string>
     <string name="UniswapInfo_PriceImpactDescription">Разница между рыночной и скользящей ценой возникает из-за размера сделки.</string>
     <string name="UniswapInfo_SwapFeeTitle">Комиссия за обмен</string>
     <string name="UniswapInfo_SwapFeeDescription">Часть с каждой сделки (0,30%) идет поставщикам ликвидности как протокольный стимул.</string>
@@ -190,7 +190,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
-    <string name="Transactions_EmptyList">У Вас ещё нет ожидаемых или прошлых транзакций </string>
+    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Receiving">Получение</string>
     <string name="Transactions_Sending">Отправка</string>
     <string name="Transactions_Failed">Не удалось</string>
@@ -362,8 +362,8 @@
     <string name="Eos_Backend_Error_SelfTransfer">Не удается отправить токен на свой аккаунт</string>
     <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
     <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
-    <string name="Binance_Backend_Error_MemoRequired">Получателю нужно заполненное поле мемо при отправке транзакции</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Необходимо, чтобы мемо содержало только цифры</string>
+    <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
+    <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
@@ -431,9 +431,9 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизироваться с блокчейном %1$s.\n\nПри изменении формата адреса для %2$s текущая история транзакций не будет отображаться на вкладке баланса. Вернув предыдущую настройку, вы вернете все после того, как кошелек повторно синхронизируется с блокчейном. Мы рекомендуем не менять его, если вы не уверены, что это такое.</string>
+    <string name="BlockchainSettings_BipChangeAlert_Content">После того, как данное изменение вступит в силу, кошелек должен будет повторно синхронизироваться с блокчейном %1$s.\n\nПри изменении формата адреса для %2$s текущий баланс и история транзакций больше не будут отображаться. При возвращении предыдущих настроек баланс и история восстановятся после того, как кошелек повторно синхронизируется с блокчейном. Рекомендуем не менять настройки, если вы не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">После этого изменения кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
+    <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
     <string name="BlockchainSettings_SyncMode_Blockchain">Блокчейн</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
