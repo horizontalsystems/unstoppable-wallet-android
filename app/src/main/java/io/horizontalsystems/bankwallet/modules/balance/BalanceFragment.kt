@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.backup.BackupFragment
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsActivityMvvm
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
@@ -58,8 +57,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
         sortButton.setOnClickListener {
-//            viewModel.delegate.onSortClick()
-            startActivity(Intent(activity, ManageWalletsActivityMvvm::class.java))
+            viewModel.delegate.onSortClick()
         }
 
         pullToRefresh.setOnRefreshListener {
