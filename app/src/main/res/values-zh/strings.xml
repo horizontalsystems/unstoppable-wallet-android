@@ -25,6 +25,7 @@
     <string name="Button_Retry">重试</string>
     <string name="Button_Change">更改</string>
     <string name="Button_Add">添加</string>
+    <string name="Button_Approve">批准</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Wallet">%s钱包</string>
@@ -76,7 +77,7 @@
     <string name="Balance_Send">发送​​</string>
     <string name="Balance_Swap">掉期交易</string>
     <string name="Balance_RatePerCoin">%s / %s</string>
-    <string name="Balance_SyncedUntil">直至：%s</string>
+    <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">正在同步...</string>
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -133,7 +134,7 @@
     <string name="Send_ERC_Alert">用Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
     <!--Swap-->
-    <string name="Swap_Title">掉期交易</string>
+    <string name="Swap">掉期交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
     <string name="Swap_ToAmountTitle">您获得</string>
     <string name="Swap_Percent">%s%%</string>
@@ -141,13 +142,36 @@
     <string name="Swap_MaxButtonTitle">最多</string>
     <string name="Swap_TokenSelectorTitle">令牌</string>
     <string name="Swap_Balance">余额</string>
+    <string name="Swap_Allowance">补贴</string>
     <string name="Swap_Price">价格</string>
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">最小获取金额</string>
-    <string name="Swap_MaximiumSold">最大支付金额</string>
+    <string name="Swap_MaximumSold">最大支付金额</string>
+    <string name="Swap_SwapFee">掉期交易费用</string>
+    <string name="Swap_TransactionSpeed">交易速度</string>
+    <string name="Swap_TransactionFee">交易费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
+    <string name="Swap_ErrorInsufficientBalanceForFee">交易费用以%s支付。您需要%s。</string>
+    <string name="Swap_ErrorNoLiquidity">无流动资金</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">无法获取交易信息</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">无法获取允许信息</string>
+    <string name="Swap_ErrorCouldNotFetchFee">无法获取交易信息</string>
+    <string name="Swap_Proceed">继续</string>
+    <string name="Swap_Approve">批准</string>
+    <string name="Swap_Approving">审批中</string>
+    <string name="Swap_Swapping">交换文件</string>
+    <string name="Swap_Confirmation">确认</string>
+    <string name="Swap_Confirmation_Pay">支付 %s</string>
+    <string name="Swap_Confirmation_Get">获得 %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">选择代币</string>
+    <!--Approve-->
+    <string name="Approve_Title">批准</string>
+    <string name="Approve_Subtitle">掉期交易</string>
+    <string name="Approve_FeeTitle">费用</string>
+    <string name="Approve_TransactionSpeedTitle">交易速度</string>
+    <string name="Approve_InsufficientFeeAlert">交易费用以%s支付。您需要%s。</string>
+    <string name="Approve_Info">您应该为智能合约授予权限以便使用您的资金执行交易。此权限不会影响您余额中的资金</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap是对以太币（Ethereum）实现流动性供给自动化的一种完全去中心化协议。\n\n一个简单的形式化方程为成千上百的用户和应用程序推动了不可阻挡的流动性。\n\nUniswap为开发人员、流动性提供着和交易者赋予了参与到对所有人开放的金融市场中的能力。</string>
@@ -313,10 +337,10 @@
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系信息</string>
-    <string name="SettingsContact_Email">邮件</string>
+    <string name="SettingsContact_Email">电子邮箱</string>
     <string name="SettingsContact_Telegram">电报</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格的变化在24小时内超出选定的临界值时，您将收到警报。</string>
+    <string name="SettingsNotifications_Description">为您要监视的代币设定价格变动警报\n\n当过去24小时内价格变动超过选定的临界值时，您将会收到警报。\n\n价格趋势警报将对短期的1星期、长期的6个月发出趋势变动警告。</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsNotifications_TurnOn">在设置中开启</string>
     <string name="SettingsNotifications_Off">关</string>
@@ -327,8 +351,8 @@
     <string name="Notification_PriceDown">%1$s 价格：下跌%2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s 趋势：上升 📈</string>
     <string name="Notification_TrendDown">%s 趋势：下跌 📉</string>
-    <string name="NotificationBottomMenu_Change24h">24小时变动</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">价格趋势变动</string>
+    <string name="NotificationBottomMenu_Change24h">24小时价格变动</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">趋势变化</string>
     <string name="NotificationBottomMenu_ShortTerm">短期7天</string>
     <string name="NotificationBottomMenu_Short">做空</string>
     <string name="NotificationBottomMenu_LongTerm">长期6个月</string>

@@ -25,6 +25,7 @@
     <string name="Button_Retry">دوباره امتحان کنید</string>
     <string name="Button_Change">تغییر</string>
     <string name="Button_Add">اضافه کردن</string>
+    <string name="Button_Approve">تایید</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
@@ -76,7 +77,7 @@
     <string name="Balance_Send">ارسال</string>
     <string name="Balance_Swap">جابجایی</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
-    <string name="Balance_SyncedUntil">تا: %s</string>
+    <string name="Balance_SyncedUntil">تا %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
     <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -133,7 +134,7 @@
     <string name="Send_ERC_Alert">هزینه تراکنش برای %s (ERC20) در اتریوم پرداخت شده است. شما به %s ETH نیاز دارید.</string>
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
     <!--Swap-->
-    <string name="Swap_Title">جابجایی</string>
+    <string name="Swap">جایگزینی</string>
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
     <string name="Swap_ToAmountTitle">شما دریافت می کنید</string>
     <string name="Swap_Percent">%s%%</string>
@@ -141,13 +142,36 @@
     <string name="Swap_MaxButtonTitle">حداکثر</string>
     <string name="Swap_TokenSelectorTitle">توکن</string>
     <string name="Swap_Balance">بالانس</string>
+    <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
     <string name="Swap_MinimumReceived">حداقل دریافت</string>
-    <string name="Swap_MaximiumSold">حداکثر پرداخت</string>
+    <string name="Swap_MaximumSold">حداکثر پرداخت</string>
+    <string name="Swap_SwapFee">هزینه جابجایی</string>
+    <string name="Swap_TransactionSpeed">سرعت تراکنش</string>
+    <string name="Swap_TransactionFee">كارمزد تراکنش</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
+    <string name="Swap_ErrorInsufficientBalanceForFee">هزینه تراکنش برای جابجایی در %s پرداخت شد. شما به %s نیاز دارید.</string>
+    <string name="Swap_ErrorNoLiquidity">بدون نقدینگی</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">اطلاعات تجارت دریافت نشد</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">اطلاعات کمک هزینه دریافت نشد</string>
+    <string name="Swap_ErrorCouldNotFetchFee">اطلاعات هزینه دریافت نشد</string>
+    <string name="Swap_Proceed">ادامه دادن</string>
+    <string name="Swap_Approve">تایید</string>
+    <string name="Swap_Approving">در حال تایید</string>
+    <string name="Swap_Swapping">در حال جابجایی</string>
+    <string name="Swap_Confirmation">تایید</string>
+    <string name="Swap_Confirmation_Pay">پرداخت %s</string>
+    <string name="Swap_Confirmation_Get">دریافت %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">سکه را انتخاب کنید</string>
+    <!--Approve-->
+    <string name="Approve_Title">تایید</string>
+    <string name="Approve_Subtitle">جابجایی</string>
+    <string name="Approve_FeeTitle">هزينه</string>
+    <string name="Approve_TransactionSpeedTitle">سرعت تراکنش</string>
+    <string name="Approve_InsufficientFeeAlert">هزینه تراکنش برای تایید در %sپرداخت شد. شما به %s نیاز دارید.</string>
+    <string name="Approve_Info">برای انجام تجارت با استفاده از وجوه خود باید به یک قرارداد هوشمند اجازه بدهید. این اجازه تأثیری بر بودجه فعلی شما نمی گذارد</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap یک پروتکل کاملاً غیرمتمرکز برای تأمین خودکار نقدینگی در اتریوم است.
@@ -323,10 +347,10 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">تماس</string>
-    <string name="SettingsContact_Email">ايميل</string>
+    <string name="SettingsContact_Email">ایمیل</string>
     <string name="SettingsContact_Telegram">تلگرام (توسعه دهندگان)</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت را برای سکه هایی که می خواهید تماشا کنید تنظیم کنید.\n\nوقتی تغییر قیمت برای ۲۴ ساعت گذشته بیش از آستانه انتخاب شده باشد ، به شما هشدار داده می شود.</string>
+    <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت برای سکه هایی که می خواهید ببینید را تنظیم کنید. \n\n وقتی تغییر قیمت در ۲۴ ساعت گذشته از آستانه انتخاب شده بیشتر شود به شما هشدار داده می شود.\n\nهشدار روند قیمت برای مدت کوتاه ۱ هفته و برای مدت طولانی ۶ ماه تغییر روند هشدار می دهد.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. برای اینکه بتوانید هشدارهای تغییر قیمت را دریافت کنید ، باید آنها را فعال کنید.</string>
     <string name="SettingsNotifications_TurnOn">روشن کردن در تنظیمات</string>
     <string name="SettingsNotifications_Off">خاموش</string>
@@ -337,8 +361,8 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="Notification_PriceDown">%1$s قیمت: پایین ترین %2$s%%⬇️</string>
     <string name="Notification_TrendUp">%s روند: صعودی📈</string>
     <string name="Notification_TrendDown">%sروند: نزولی 📉</string>
-    <string name="NotificationBottomMenu_Change24h">تغییر 24 ساعت</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">تغییر روند قیمت</string>
+    <string name="NotificationBottomMenu_Change24h">تغییر ۲۴ ساعته قیمت</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">قیمت گرایش</string>
     <string name="NotificationBottomMenu_ShortTerm">کوتاه مدت 7D</string>
     <string name="NotificationBottomMenu_Short">کوتاه</string>
     <string name="NotificationBottomMenu_LongTerm">بلندمدت 6M</string>

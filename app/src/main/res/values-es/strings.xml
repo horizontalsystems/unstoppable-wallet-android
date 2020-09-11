@@ -25,6 +25,7 @@
     <string name="Button_Retry">Reintentar</string>
     <string name="Button_Change">Cambiar</string>
     <string name="Button_Add">Añadir</string>
+    <string name="Button_Approve">Aprobar</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s Monedero</string>
@@ -76,7 +77,7 @@
     <string name="Balance_Send">Enviar</string>
     <string name="Balance_Swap">Permutar</string>
     <string name="Balance_RatePerCoin">%s por %s</string>
-    <string name="Balance_SyncedUntil">hasta: %s</string>
+    <string name="Balance_SyncedUntil">hasta %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_SearchingTransactions">Buscando transacciones…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -133,7 +134,7 @@
     <string name="Send_ERC_Alert">Las comisiones de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <!--Swap-->
-    <string name="Swap_Title">Permutar</string>
+    <string name="Swap">Permutar</string>
     <string name="Swap_FromAmountTitle">Usted paga</string>
     <string name="Swap_ToAmountTitle">Obtienes</string>
     <string name="Swap_Percent">%s%%</string>
@@ -141,13 +142,36 @@
     <string name="Swap_MaxButtonTitle">Máx.</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
     <string name="Swap_Balance">Saldo</string>
+    <string name="Swap_Allowance">Permiso de acceso</string>
     <string name="Swap_Price">Precio</string>
     <string name="Swap_PriceImpact">Impacto en el precio</string>
     <string name="Swap_MinimumReceived">Mínimo Obtenido</string>
-    <string name="Swap_MaximiumSold">Máximo Pagado</string>
+    <string name="Swap_MaximumSold">Máximo Pagado</string>
+    <string name="Swap_SwapFee">Tarifa por permutar</string>
+    <string name="Swap_TransactionSpeed">Velocidad de transacción</string>
+    <string name="Swap_TransactionFee">Tarifa de Transacción</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
+    <string name="Swap_ErrorInsufficientBalanceForFee">Comisiones de transacción pagadas en %s. Es necesario %s.</string>
+    <string name="Swap_ErrorNoLiquidity">Sin liquidez</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">No se pudo obtener la información de la compra</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">No se pudo obtener información de permisos</string>
+    <string name="Swap_ErrorCouldNotFetchFee">No se pudo obtener la información de la compra</string>
+    <string name="Swap_Proceed">Continuar</string>
+    <string name="Swap_Approve">Aprobar</string>
+    <string name="Swap_Approving">Aprobando</string>
+    <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Confirmation">Confirmaciones</string>
+    <string name="Swap_Confirmation_Pay">Paga %s</string>
+    <string name="Swap_Confirmation_Get">Obtén %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Elegir moneda</string>
+    <!--Approve-->
+    <string name="Approve_Title">Aprobar</string>
+    <string name="Approve_Subtitle">Permutar</string>
+    <string name="Approve_FeeTitle">Comisión</string>
+    <string name="Approve_TransactionSpeedTitle">Velocidad de transacción</string>
+    <string name="Approve_InsufficientFeeAlert">Comisiones de transacción pagadas en %s. Es necesario %s.</string>
+    <string name="Approve_Info">Usted debe conceder un permiso a un contrato inteligente para ejecutar la operación usando sus fondos. Este permiso no afecta a los fondos de su saldo</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap es un protocolo totalmente descentralizado para la provisión automatizada de liquidez en Ethereum.
@@ -319,7 +343,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">Establezca alertas de cambio de precio para las monedas que desea ver.\n\nSe le avisará cuando el cambio de precio, durante las últimas 24 horas, supere el umbral seleccionado.</string>
+    <string name="SettingsNotifications_Description">Establece alertas de variación de precio para las monedas que te gustaría ver\n\nSe te alertará cuando la variación de precio de las últimas 24 horas supere el umbral seleccionado.\n\n La Alerta de Tendencia de Precio advierte de un cambio de tendencia para el corto plazo de 1 semana, y para el largo plazo de 6 meses.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero Unstoppable están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
     <string name="SettingsNotifications_TurnOn">Activar en ajustes</string>
     <string name="SettingsNotifications_Off">Desactivado</string>
@@ -330,8 +354,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Notification_PriceDown">Precio %1$s: Bajó %2$s%% ⬇</string>
     <string name="Notification_TrendUp">%s tendencia: Alcista 📈</string>
     <string name="Notification_TrendDown">%s tendencia: Bajista 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Variación 24h</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Variación de Tendencia de Precios</string>
+    <string name="NotificationBottomMenu_Change24h">Variación de Precio 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Variación de tendencia</string>
     <string name="NotificationBottomMenu_ShortTerm">Corto plazo 7D</string>
     <string name="NotificationBottomMenu_Short">Corto plazo</string>
     <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
