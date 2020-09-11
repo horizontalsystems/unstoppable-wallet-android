@@ -25,7 +25,7 @@
     <string name="Button_Retry">Wiederholen</string>
     <string name="Button_Change">Ändern</string>
     <string name="Button_Add">Hinzufügen</string>
-    <string name="Button_Approve">Approve</string>
+    <string name="Button_Approve">Bestätigen</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s wallet</string>
@@ -77,7 +77,7 @@
     <string name="Balance_Send">Senden</string>
     <string name="Balance_Swap">Tauschen</string>
     <string name="Balance_RatePerCoin">%s pro %s</string>
-    <string name="Balance_SyncedUntil">until %s</string>
+    <string name="Balance_SyncedUntil">bis %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
     <string name="Balance_FoundTx">%s tx</string>
@@ -134,7 +134,7 @@
     <string name="Send_ERC_Alert">Transaktionsgebühren für %s (ERC20) in Ethereum bezahlt. Du brauchst %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <!--Swap-->
-    <string name="Swap">Swap</string>
+    <string name="Swap">Tauschen</string>
     <string name="Swap_FromAmountTitle">Sie bezahlen</string>
     <string name="Swap_ToAmountTitle">Sie erhalten</string>
     <string name="Swap_Percent">%s %%</string>
@@ -142,36 +142,36 @@
     <string name="Swap_MaxButtonTitle">Max</string>
     <string name="Swap_TokenSelectorTitle">Token</string>
     <string name="Swap_Balance">Guthaben</string>
-    <string name="Swap_Allowance">Allowance</string>
+    <string name="Swap_Allowance">Vergütung</string>
     <string name="Swap_Price">Preis</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
     <string name="Swap_MinimumReceived">Mindestens erhalten</string>
-    <string name="Swap_MaximumSold">Maximum Paid</string>
-    <string name="Swap_SwapFee">Swap Fee</string>
-    <string name="Swap_TransactionSpeed">Transaction Speed</string>
-    <string name="Swap_TransactionFee">Transaction Fee</string>
+    <string name="Swap_MaximumSold">Maximal bezahlt</string>
+    <string name="Swap_SwapFee">Tauschgebühr</string>
+    <string name="Swap_TransactionSpeed">Transaktionsgeschwindigkeit</string>
+    <string name="Swap_TransactionFee">Transaktionsgebühr</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
-    <string name="Swap_ErrorInsufficientBalanceForFee">Transaction fees for swap paid in %s. You need %s.</string>
-    <string name="Swap_ErrorNoLiquidity">No Liquidity</string>
-    <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
-    <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
-    <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>
-    <string name="Swap_Proceed">Proceed</string>
-    <string name="Swap_Approve">Approve</string>
-    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_ErrorInsufficientBalanceForFee">Transaktionsgebühren in %s bezahlt. Sie benötigen %s.</string>
+    <string name="Swap_ErrorNoLiquidity">Keine Liquidität</string>
+    <string name="Swap_ErrorCouldNotFetchTrade">Die Kaufinformationen konnten nicht abgerufen werden</string>
+    <string name="Swap_ErrorCouldNotFetchAllowance">Konnte Berechtigungsinformationen nicht abrufen</string>
+    <string name="Swap_ErrorCouldNotFetchFee">Die Kaufinformationen konnten nicht abgerufen werden</string>
+    <string name="Swap_Proceed">Fortfahren</string>
+    <string name="Swap_Approve">Bestätigen</string>
+    <string name="Swap_Approving">Wird bestätigt</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_Confirmation">Confirmation</string>
-    <string name="Swap_Confirmation_Pay">Pay %s</string>
-    <string name="Swap_Confirmation_Get">Get %s</string>
+    <string name="Swap_Confirmation">Bestätigung</string>
+    <string name="Swap_Confirmation_Pay">%s bezahlen</string>
+    <string name="Swap_Confirmation_Get">%s erhalten</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Coins auswählen</string>
     <!--Approve-->
-    <string name="Approve_Title">Approve</string>
-    <string name="Approve_Subtitle">Swap</string>
-    <string name="Approve_FeeTitle">Fee</string>
-    <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
-    <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
-    <string name="Approve_Info">You should grant a permission to a smart contract to execute the trade using your funds. This permission doesn\’t affect funds on your balance</string>
+    <string name="Approve_Title">Bestätigen</string>
+    <string name="Approve_Subtitle">Tauschen</string>
+    <string name="Approve_FeeTitle">Gebühr</string>
+    <string name="Approve_TransactionSpeedTitle">Transaktionsgeschwindigkeit</string>
+    <string name="Approve_InsufficientFeeAlert">Transaktionsgebühren in %s bezahlt. Sie benötigen %s.</string>
+    <string name="Approve_Info">Sie sollten einem intelligenten Vertrag die Erlaubnis erteilen, den Handel mit Ihrem Guthaben auszuführen. Diese Berechtigung wirkt sich nicht auf das Guthaben auf Ihrem Saldo aus</string>
     <!--Uniwwap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Uniswap ist ein vollständig dezentralisiertes Protokoll zur automatisierten Liquiditätsbereitstellung für Ethereum.
@@ -342,7 +342,7 @@
     <string name="SettingsContact_Email">E-mail</string>
     <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
+    <string name="SettingsNotifications_Description">Legen Sie Warnungen für Preisänderungen von Coins fest, die Sie sehen möchten\n\nSie werden benachrichtigt, wenn die Preisänderung der letzten 24 Stunden den ausgewählten Grenzwert überschreitet.\n\nPreistrend-Warnung warnt vor einer Trendänderung für 1 Woche (kurzfristig), für 6 Monate (langfristig).</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Die Benachrichtigungen für das Unstoppable Wallet sind ausgeschaltet. Sie müssen die Benachrichtigungen einschalten und eine Aktualisierung im Hintergrund erlauben, um Benachrichtigungen bei Preisänderungn zu erhalten.</string>
     <string name="SettingsNotifications_TurnOn">In Einstellungen einschalten</string>
     <string name="SettingsNotifications_Off">Aus</string>
@@ -353,8 +353,8 @@
     <string name="Notification_PriceDown">%1$s Preis: Unten %2$s%% :down_pfeile:</string>
     <string name="Notification_TrendUp">%s Trend: Hoch 📈</string>
     <string name="Notification_TrendDown">%s Trend: Unten 📉</string>
-    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
+    <string name="NotificationBottomMenu_Change24h">Preisänderung 24h</string>
+    <string name="NotificationBottomMenu_PriceTrendChange">Trendänderung</string>
     <string name="NotificationBottomMenu_ShortTerm">Kurzfristig 7T</string>
     <string name="NotificationBottomMenu_Short">Kurz</string>
     <string name="NotificationBottomMenu_LongTerm">Langfristig 6M</string>
