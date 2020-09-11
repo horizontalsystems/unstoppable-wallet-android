@@ -35,8 +35,9 @@ object RestoreModule {
     interface IInteractor {
         @Throws(EosUnsupportedException::class)
         fun createAccounts(accounts: List<Account>)
+
         @Throws
-        fun account(accountType: AccountType) : Account
+        fun account(accountType: AccountType): Account
         fun saveWallets(wallets: List<Wallet>)
         fun create(account: Account)
         fun initializeSettings(coinType: CoinType)
@@ -69,13 +70,23 @@ object RestoreModule {
         context.startActivity(Intent(context, RestoreActivity::class.java))
     }
 
-    fun startForResult(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
-        val intent = Intent(context, RestoreActivity::class.java)
-        intent.putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
-        intent.putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
-        context.startActivityForResult(intent, ModuleCode.RESTORE)
+    fun start(context: Context, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
+        val intent = Intent(context, RestoreActivity::class.java).apply {
+            putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
+            putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
+        }
+
+        context.startActivity(intent)
     }
 
+    fun startForResult(context: AppCompatActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
+        val intent = Intent(context, RestoreActivity::class.java).apply {
+            putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
+            putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
+        }
+
+        context.startActivityForResult(intent, ModuleCode.RESTORE)
+    }
 }
 
 @Parcelize

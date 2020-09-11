@@ -84,9 +84,6 @@
             android:name=".modules.managecoins.views.ManageWalletsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.managekeys.views.ManageKeysActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.restore.RestoreActivity"
             android:screenOrientation="portrait" />
         <activity

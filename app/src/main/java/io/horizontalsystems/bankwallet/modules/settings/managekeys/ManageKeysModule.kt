@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import android.content.Context
-import android.content.Intent
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysActivity
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysFragment
 
 object ManageKeysModule {
 
@@ -64,12 +65,16 @@ object ManageKeysModule {
         }
     }
 
-    fun start(context: Context) {
-        context.startActivity(Intent(context, ManageKeysActivity::class.java))
+    fun start(activity: FragmentActivity) {
+        activity.supportFragmentManager.commit {
+            add(R.id.fragmentContainerView, ManageKeysFragment())
+            addToBackStack(null)
+        }
     }
 }
 
 data class ManageAccountItem(
         val predefinedAccountType: PredefinedAccountType,
         val account: Account?,
-        val hasDerivationSetting: Boolean = false )
+        val hasDerivationSetting: Boolean = false
+)

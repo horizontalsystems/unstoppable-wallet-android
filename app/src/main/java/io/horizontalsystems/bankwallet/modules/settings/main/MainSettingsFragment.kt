@@ -117,7 +117,7 @@ class MainSettingsFragment : Fragment() {
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
         router.showManageKeysLiveEvent.observe(this, Observer {
-            context?.let { context -> ManageKeysModule.start(context) }
+            activity?.let { ManageKeysModule.start(it) }
         })
 
         router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {

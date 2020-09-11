@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.addressformat
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -45,11 +46,11 @@ object AddressFormatSettingsModule {
         fun close()
     }
 
-    fun startForResult(context: AppCompatActivity, coinTypes: List<CoinType>, showDoneButton: Boolean) {
+    fun startForResult(context: Context, coinTypes: List<CoinType>, showDoneButton: Boolean) {
         val intent = Intent(context, AddressFormatSettingsActivity::class.java)
         intent.putParcelableArrayListExtra(ModuleField.COIN_TYPES, ArrayList(coinTypes))
         intent.putExtra(ModuleField.SHOW_DONE_BUTTON, showDoneButton)
-        context.startActivityForResult(intent, ModuleCode.BLOCKCHAIN_SETTINGS_LIST)
+        context.startActivity(intent)
     }
 
     class Factory(private val coinTypes: List<CoinType>, private val showDoneButton: Boolean) : ViewModelProvider.Factory {
