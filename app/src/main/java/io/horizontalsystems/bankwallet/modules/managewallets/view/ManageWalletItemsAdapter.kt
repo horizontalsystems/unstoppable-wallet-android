@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.managewallets.ui.main
+package io.horizontalsystems.bankwallet.modules.managewallets.view
 
 import android.view.View
 import android.view.ViewGroup

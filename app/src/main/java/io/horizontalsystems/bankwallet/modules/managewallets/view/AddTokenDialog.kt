@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.managecoins.views
+package io.horizontalsystems.bankwallet.modules.managewallets.view
 
 import android.os.Bundle
 import android.view.View
