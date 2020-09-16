@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
-import android.content.Context
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -36,10 +35,6 @@ object BackupModule {
     }
 
     //  helpers
-
-    fun start(context: Context, account: Account, coinCodes: String) {
-        BackupActivity.start(context, account, coinCodes)
-    }
 
     fun init(view: BackupViewModel, router: Router, account: Account) {
         val interactor = BackupInteractor(App.backupManager, App.pinComponent, App.predefinedAccountTypeManager)

@@ -37,14 +37,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.backup.BackupActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".modules.backup.words.BackupWordsActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".modules.createwallet.view.CreateWalletActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -69,13 +61,7 @@
             android:name=".modules.fulltransactioninfo.dataprovider.DataProviderSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.security.SecuritySettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.lockscreen.LockScreenActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="io.horizontalsystems.pin.PinActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.managecoins.views.ManageWalletsActivity"
@@ -97,10 +83,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.keystore.KeyStoreActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.backup.eos.BackupEosActivity"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.info.InfoActivity"

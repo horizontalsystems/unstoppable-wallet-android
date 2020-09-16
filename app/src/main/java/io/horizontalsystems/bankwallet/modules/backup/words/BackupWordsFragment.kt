@@ -1,24 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
-class BackupWordsFragment : Fragment() {
+class BackupWordsFragment : BaseFragment() {
 
     val viewModel by activityViewModels<BackupWordsViewModel>()
 
@@ -28,70 +25,84 @@ class BackupWordsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(false)
 
-        viewModel.wordsLiveData.observe(viewLifecycleOwner, Observer {
-            populateWords(it)
-        })
-
-        viewModel.backedUpLiveData.observe(viewLifecycleOwner, Observer { backedUp ->
-            buttonClose.isVisible = backedUp
-            buttonNext.isVisible = !backedUp
-        })
-
-        buttonNext.setOnSingleClickListener {
-            viewModel.delegate.onNextClick()
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        buttonClose.setOnSingleClickListener {
-            viewModel.delegate.onCloseClick()
+        val backedUp = arguments?.getBoolean(ACCOUNT_BACKEDUP, false) ?: false
+        val backupWords = arguments?.getStringArray(WORDS_KEY) ?: arrayOf()
+        val typeTitle = arguments?.getInt(ACCOUNT_TYPE_TITLE, R.string.AccountType_Unstoppable) ?: 0
+
+        viewModel.accountTypeTitle = typeTitle
+        viewModel.init(backupWords, backedUp)
+
+        if (savedInstanceState == null) {
+            viewModel.delegate.viewDidLoad()
         }
 
+        observeEvents()
     }
 
-    private fun populateWords(words: Array<String>) {
-        context?.let { ctx ->
-            val numberColor = ContextCompat.getColor(ctx, R.color.grey)
-            val wordColor = LayoutHelper.getAttr(R.attr.ColorOz, ctx.theme)
-                    ?: ContextCompat.getColor(ctx, R.color.grey)
-            val sb = SpannableStringBuilder()
+    private fun observeEvents() {
+        viewModel.loadPageLiveEvent.observe(viewLifecycleOwner, Observer { page ->
+            val fragment = when (page) {
+                1 -> BackupWordsListFragment()
+                else -> BackupWordsConfirmFragment()
+            }
 
-            words.forEachIndexed { index, word ->
-                val normalizedIndex = index + 1
-                val wordString = "$word\n"
-                var numberString = "$normalizedIndex. "
-                if (normalizedIndex < 10) {
-                    numberString += "  " //add two spaces to to make equal alignment for all words
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentContainer, fragment)
+                addToBackStack(null)
+                commit()
+            }
+
+            collapsingToolbar.title = when (page) {
+                1 -> getString(R.string.Backup_DisplayTitle)
+                2 -> getString(R.string.Backup_Confirmation_CheckTitle)
+                else -> null
+            }
+        })
+
+        viewModel.notifyBackedUpEvent.observe(viewLifecycleOwner, Observer {
+            setFragmentResult(BackupWordsModule.requestKey, bundleOf(
+                    BackupWordsModule.requestResult to BackupWordsModule.RESULT_BACKUP
+            ))
+            activity?.supportFragmentManager?.popBackStack()
+        })
+
+        viewModel.notifyClosedEvent.observe(viewLifecycleOwner, Observer {
+            setFragmentResult(BackupWordsModule.requestKey, bundleOf(
+                    BackupWordsModule.requestResult to BackupWordsModule.RESULT_SHOW
+            ))
+            activity?.supportFragmentManager?.popBackStack()
+        })
+
+        viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.supportFragmentManager?.popBackStack()
+        })
+    }
+
+    companion object {
+        const val ACCOUNT_BACKEDUP = "account_backedup"
+        const val WORDS_KEY = "words"
+        const val ACCOUNT_TYPE_TITLE = "account_type_title"
+
+        fun start(activity: FragmentActivity, words: List<String>, backedUp: Boolean, accountTypeTitle: Int) {
+            val fragment = BackupWordsFragment().apply {
+                arguments = Bundle(3).apply {
+                    putStringArray(WORDS_KEY, words.toTypedArray())
+                    putBoolean(ACCOUNT_BACKEDUP, backedUp)
+                    putInt(ACCOUNT_TYPE_TITLE, accountTypeTitle)
                 }
+            }
 
-                val numberSpan = SpannableString(numberString)
-                numberSpan.setSpan(ForegroundColorSpan(numberColor), 0, numberString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                val wordSpan = SpannableString(wordString)
-                wordSpan.setSpan(ForegroundColorSpan(wordColor), 0, wordString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                sb.append(numberSpan)
-                sb.append(wordSpan)
-
-                when (normalizedIndex) {
-                    6 -> {
-                        topLeft.text = sb
-                        sb.clear()
-                    }
-                    12 -> {
-                        topRight.text = sb
-                        sb.clear()
-                    }
-                    18 -> {
-                        bottomLeft.text = sb
-                        sb.clear()
-                    }
-                    24 -> {
-                        bottomRight.text = sb
-                        sb.clear()
-                    }
-                }
+            activity.supportFragmentManager.commit {
+                add(R.id.fragmentContainerView, fragment)
+                addToBackStack(null)
             }
         }
     }
-
 }

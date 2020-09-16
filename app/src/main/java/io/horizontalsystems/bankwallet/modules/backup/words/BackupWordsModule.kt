@@ -1,10 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.backup.words
 
-import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.core.managers.RandomProvider
 import java.util.*
 
 object BackupWordsModule {
+    const val requestKey = "key_backup_words"
+    const val requestResult = "key_backup_result"
     const val RESULT_BACKUP = 1
     const val RESULT_SHOW = 2
 
@@ -46,10 +47,6 @@ object BackupWordsModule {
     }
 
     //  helpers
-
-    fun start(context: AppCompatActivity, words: List<String>, backedUp: Boolean, accountTypeTitle: Int) {
-        BackupWordsActivity.start(context, words, backedUp, accountTypeTitle)
-    }
 
     fun init(view: BackupWordsViewModel, router: IRouter, words: Array<String>, backedUp: Boolean) {
         val interactor = BackupWordsInteractor(RandomProvider(), words)

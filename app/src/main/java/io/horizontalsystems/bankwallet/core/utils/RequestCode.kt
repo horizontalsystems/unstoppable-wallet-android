@@ -3,12 +3,7 @@ package io.horizontalsystems.bankwallet.core.utils
 object ModuleCode {
     const val RESTORE = 2
     const val RESTORE_KEY_INPUT = 3
-    const val BACKUP_WORDS = 4
-    const val BACKUP_EOS = 5
-    const val UNLOCK_PIN = 6
-    const val COIN_SETTINGS = 7
     const val RESTORE_COINS = 8
-    const val LANGUAGE_SWITCH = 9
 }
 
 object ModuleField {

@@ -16,13 +16,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.backup.BackupFragment
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
-import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
+import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
@@ -228,7 +228,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.openBackup.observe(viewLifecycleOwner, Observer { (account, coinCodesStringRes) ->
-            context?.let { BackupModule.start(it, account, getString(coinCodesStringRes)) }
+            activity?.let { BackupFragment.start(it, account, getString(coinCodesStringRes)) }
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
