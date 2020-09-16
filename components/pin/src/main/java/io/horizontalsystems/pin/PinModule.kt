@@ -14,6 +14,9 @@ object PinModule {
 
     const val keyInteractionType = "interaction_type"
     const val keyShowCancel = "show_cancel"
+    const val requestKey = "pin_request_key"
+    const val requestType = "pin_request_type"
+    const val requestResult = "pin_request_result"
 
     interface IView {
         fun setToolbar(title: Int, showBackButton: Boolean)
@@ -52,29 +55,29 @@ object PinModule {
         fun didFailToSavePin()
     }
 
-    fun startForSetPin(context: AppCompatActivity, requestCode: Int) {
-        PinActivity.startForResult(context, PinInteractionType.SET_PIN, requestCode)
+    fun startForSetPin(): PinFragment {
+        return PinFragment.start(PinInteractionType.SET_PIN, true)
     }
 
-    fun startForEditPin(context: AppCompatActivity) {
-        PinActivity.startForResult(context, PinInteractionType.EDIT_PIN)
+    fun startForEditPin(): PinFragment {
+        return PinFragment.start(PinInteractionType.EDIT_PIN, false)
     }
 
-    fun startForUnlock(context: AppCompatActivity, requestCode: Int) {
-        PinActivity.startForResult(context, PinInteractionType.UNLOCK, requestCode, true)
+    fun startForUnlock(): PinFragment {
+        return PinFragment.start(PinInteractionType.UNLOCK, true)
     }
 
 }
 
-sealed class TopText(open val text: Int){
-    class Title(override val text: Int): TopText(text)
-    class BigError(override val text: Int): TopText(text)
-    class Description(override val text: Int): TopText(text)
-    class SmallError(override val text: Int): TopText(text)
+sealed class TopText(open val text: Int) {
+    class Title(override val text: Int) : TopText(text)
+    class BigError(override val text: Int) : TopText(text)
+    class Description(override val text: Int) : TopText(text)
+    class SmallError(override val text: Int) : TopText(text)
 }
 
 @Parcelize
-enum class PinInteractionType: Parcelable {
+enum class PinInteractionType : Parcelable {
     SET_PIN,
     UNLOCK,
     EDIT_PIN

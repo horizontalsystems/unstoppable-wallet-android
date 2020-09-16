@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.backup.eos
 
-import androidx.appcompat.app.AppCompatActivity
-
 object BackupEosModule {
+    const val requestKey = "key_backup_eos"
+    const val requestResult = "key_backup_eos_result"
     const val RESULT_SHOW = 1
 
     interface View
@@ -15,11 +15,5 @@ object BackupEosModule {
 
     interface Router {
         fun close()
-    }
-
-    //  helpers
-
-    fun start(context: AppCompatActivity, account: String, activePrivateKey: String) {
-        BackupEosActivity.start(context, account, activePrivateKey)
     }
 }

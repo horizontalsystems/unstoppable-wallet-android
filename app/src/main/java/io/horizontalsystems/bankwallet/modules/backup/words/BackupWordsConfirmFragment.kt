@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
-class BackupWordsConfirmFragment : Fragment() {
+class BackupWordsConfirmFragment : BaseFragment() {
 
     val viewModel by activityViewModels<BackupWordsViewModel>()
 
@@ -50,7 +50,8 @@ class BackupWordsConfirmFragment : Fragment() {
             R.id.itemDone -> {
                 validateWords()
                 true
-            } else -> {
+            }
+            else -> {
                 super.onOptionsItemSelected(item)
             }
         }

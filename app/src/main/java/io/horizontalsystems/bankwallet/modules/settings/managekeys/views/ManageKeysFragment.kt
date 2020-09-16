@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
-import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.backup.BackupFragment
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreMode
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
@@ -98,8 +98,8 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
         })
 
         router.showBackupModule.observe(this, Observer { (account, predefinedAccountType) ->
-            context?.let {
-                BackupModule.start(it, account, getString(predefinedAccountType.coinCodes))
+            activity?.let {
+                BackupFragment.start(it, account, getString(predefinedAccountType.coinCodes))
             }
         })
 
