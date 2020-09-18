@@ -1,41 +1,38 @@
-package io.horizontalsystems.bankwallet.modules.managewallets.view
+package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenActivity
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
-import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
+import io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletItemsAdapter
+import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
-class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener, NoAccountDialog.Listener {
+class RestoreSelectCoinsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener {
 
     companion object {
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, ManageWalletsFragment())
-                addToBackStack(null)
+        fun instance(predefinedAccountType: PredefinedAccountType): RestoreSelectCoinsFragment {
+            return RestoreSelectCoinsFragment().apply {
+                arguments = Bundle(1).apply {
+                    putParcelable("predefinedAccountType", predefinedAccountType)
+                }
             }
         }
     }
 
-    private lateinit var viewModel: ManageWalletsViewModel
+    private lateinit var viewModel: RestoreSelectCoinsViewModel
     private lateinit var adapter: ManageWalletItemsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,17 +45,21 @@ class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener,
 
         shadowlessToolbar.bind(
                 getString(R.string.ManageCoins_title),
-                leftBtnItem = TopMenuItem(text = R.string.ManageCoins_AddToken, onClick = { showAddTokenDialog() }),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Done, onClick = {
+                leftBtnItem = TopMenuItem(R.drawable.ic_back) { parentFragmentManager.popBackStack() },
+                rightBtnItem = TopMenuItem(text = R.string.Button_Restore, onClick = {
                     hideKeyboard()
                     Handler().postDelayed({
-                        activity?.onBackPressed()
+                        viewModel.onRestore()
                     }, 100)
                 })
         )
+        //disable restore button
+        shadowlessToolbar.setRightButtonEnabled(false)
 
-        viewModel = ViewModelProvider(this, ManageWalletsModule.Factory())
-                .get(ManageWalletsViewModel::class.java)
+        val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType") ?: throw Exception("Parameter missing")
+
+        viewModel = ViewModelProvider(this, RestoreSelectCoinsModule.Factory(predefinedAccountType))
+                .get(RestoreSelectCoinsViewModel::class.java)
 
         adapter = ManageWalletItemsAdapter(this)
         recyclerView.adapter = adapter
@@ -72,12 +73,6 @@ class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener,
         observe()
     }
 
-    override fun onAttachFragment(childFragment: Fragment) {
-        if (childFragment is NoAccountDialog) {
-            childFragment.setListener(this)
-        }
-    }
-
     // ManageWalletItemsAdapter.Listener
 
     override fun enable(coin: Coin) {
@@ -89,15 +84,7 @@ class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener,
     }
 
     override fun select(coin: Coin) {
-        NoAccountDialog.show(childFragmentManager, coin)
-    }
-
-    //NoAccountDialog.Listener
-
-    override fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {
-        activity?.let {
-            RestoreModule.startInApp(it, predefinedAccountType, false)
-        }
+        //not used here
     }
 
     private fun observe() {
@@ -111,6 +98,14 @@ class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener,
         viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->
             hideKeyboard()
             showAddressFormatSelectionDialog(coin, currentDerivation)
+        })
+
+        viewModel.canRestoreLiveData.observe(viewLifecycleOwner, Observer { enabled ->
+            shadowlessToolbar.setRightButtonEnabled(enabled)
+        })
+
+        viewModel.enabledCoinsLiveData.observe(viewLifecycleOwner, Observer { enabledCoins ->
+            setFragmentResult(RestoreFragment.selectCoinsRequestKey, bundleOf(RestoreFragment.selectCoinsBundleKey to enabledCoins))
         })
     }
 
@@ -134,17 +129,6 @@ class ManageWalletsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener,
                     viewModel.onCancelDerivationSelection()
                 }
         )
-    }
-
-    private fun showAddTokenDialog() {
-        hideKeyboard()
-        activity?.let {
-            AddTokenDialog.show(it, object : AddTokenDialog.Listener {
-                override fun onClickAddErc20Token() {
-                    startActivity(Intent(activity, AddErc20TokenActivity::class.java))
-                }
-            })
-        }
     }
 
 }

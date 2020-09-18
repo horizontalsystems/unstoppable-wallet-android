@@ -1,98 +1,43 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.EosUnsupportedException
-import io.horizontalsystems.bankwallet.core.putParcelableExtra
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.entities.*
-import kotlinx.android.parcel.Parcelize
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+
 
 object RestoreModule {
-
-    interface IView {
-        fun reload(items: List<PredefinedAccountType>)
-        fun showError(ex: Exception)
+    interface IRestoreService{
+        var predefinedAccountType: PredefinedAccountType?
+        var accountType: AccountType?
+        fun restoreAccount(coins: List<Coin> = listOf())
     }
 
-    interface ViewDelegate {
-        val items: List<PredefinedAccountType>
-
-        fun onLoad()
-        fun onSelect(predefinedAccountType: PredefinedAccountType)
-        fun didEnterValidAccount(accountType: AccountType)
-        fun didReturnFromCoinSettings()
-        fun didReturnFromRestoreCoins(enabledCoins: List<Coin>?)
-        fun onReturnWithCancel()
-    }
-
-    interface IInteractor {
-        @Throws(EosUnsupportedException::class)
-        fun createAccounts(accounts: List<Account>)
-
-        @Throws
-        fun account(accountType: AccountType): Account
-        fun saveWallets(wallets: List<Wallet>)
-        fun create(account: Account)
-        fun initializeSettings(coinType: CoinType)
-    }
-
-    interface IRouter {
-        fun showRestoreCoins(predefinedAccountType: PredefinedAccountType)
-        fun showKeyInput(predefinedAccountType: PredefinedAccountType)
-        fun startMainModule()
-        fun close()
-        fun closeWithSuccess()
-    }
-
-    class Factory(
-            private val predefinedAccountType: PredefinedAccountType?,
-            private val restoreMode: RestoreMode
-    ) : ViewModelProvider.Factory {
+    class Factory(private val selectCoins: Boolean, private val predefinedAccountType: PredefinedAccountType? = null) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = RestoreView()
-            val router = RestoreRouter()
-            val interactor = RestoreInteractor(App.accountCreator, App.accountManager, App.walletManager, App.blockchainSettingsManager)
-            val presenter = RestorePresenter(view, router, interactor, App.predefinedAccountTypeManager, predefinedAccountType, restoreMode)
+            val service = RestoreService(predefinedAccountType, App.walletManager, App.accountCreator, App.accountManager)
 
-            return presenter as T
+            return RestoreViewModel(service, selectCoins, listOf(service)) as T
         }
     }
 
-    fun start(context: Context) {
-        context.startActivity(Intent(context, RestoreActivity::class.java))
+    fun startAsActivity(activity: FragmentActivity) {
+        activity.startActivity(Intent(activity, RestoreActivity::class.java))
     }
 
-    fun start(context: FragmentActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
-        val intent = Intent(context, RestoreActivity::class.java).apply {
-            putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
-            putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
+    fun startInApp(activity: FragmentActivity, predefinedAccountType: PredefinedAccountType?, selectCoins: Boolean = true) {
+        val fragment = RestoreFragment.instance(predefinedAccountType, selectCoins)
+
+        activity.supportFragmentManager.commit {
+            add(R.id.fragmentContainerView, fragment)
+            addToBackStack(null)
         }
-
-        context.startActivity(intent)
     }
-
-    fun startForResult(context: FragmentActivity, predefinedAccountType: PredefinedAccountType, restoreMode: RestoreMode) {
-        val intent = Intent(context, RestoreActivity::class.java).apply {
-            putParcelableExtra(ModuleField.PREDEFINED_ACCOUNT_TYPE, predefinedAccountType)
-            putParcelableExtra(ModuleField.RESTORE_MODE, restoreMode)
-        }
-
-        context.startActivityForResult(intent, ModuleCode.RESTORE)
-    }
-
-}
-
-@Parcelize
-enum class RestoreMode(val value: String) : Parcelable {
-    FromWelcome("FromWelcome"),
-    FromManageKeys("FromManageKeys"),
-    InApp("InApp")
 }

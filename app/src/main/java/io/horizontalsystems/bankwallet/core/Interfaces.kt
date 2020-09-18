@@ -14,7 +14,6 @@ import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -146,7 +145,7 @@ interface ITransactionDataProviderManager {
 }
 
 interface IWordsManager {
-    fun validate(words: List<String>)
+    fun validate(words: List<String>, wordCount: Int)
     fun generateWords(count: Int = 12): List<String>
 }
 

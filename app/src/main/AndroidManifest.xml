@@ -48,7 +48,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".modules.restore.words.RestoreWordsActivity"
+            android:name=".modules.restore.words.RestoreWordsFragment"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
