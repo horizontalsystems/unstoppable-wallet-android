@@ -1,12 +1,16 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWordsManager
+import io.horizontalsystems.bankwallet.core.InvalidMnemonicWordsCountException
 import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class WordsManager : IWordsManager {
 
-    @Throws(Mnemonic.MnemonicException::class)
-    override fun validate(words: List<String>) {
+    @Throws()
+    override fun validate(words: List<String>, wordCount: Int) {
+        if (words.size != wordCount) {
+            throw InvalidMnemonicWordsCountException()
+        }
         Mnemonic().validate(words)
     }
 

@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
 import io.horizontalsystems.bankwallet.modules.backup.BackupFragment
 import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
-import io.horizontalsystems.bankwallet.modules.restore.RestoreMode
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
 import kotlinx.android.synthetic.main.fragment_manage_keys.*
@@ -87,7 +86,7 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
     private fun observeRouter(router: ManageKeysRouter) {
         router.showRestore.observe(this, Observer { predefinedAccountType ->
             activity?.let {
-                RestoreModule.start(it, predefinedAccountType, RestoreMode.FromManageKeys)
+                RestoreModule.startInApp(it, predefinedAccountType)
             }
         })
 

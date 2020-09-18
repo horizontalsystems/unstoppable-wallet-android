@@ -2,29 +2,51 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.SingleLiveEvent
+import java.lang.Exception
+import java.util.*
 
-class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWordsModule.Router {
+class RestoreWordsViewModel(
+        private val service: RestoreWordsService,
+        private val clearables: List<Clearable>
+) : ViewModel() {
 
-    lateinit var delegate: RestoreWordsModule.ViewDelegate
+    val accountTypeLiveEvent = SingleLiveEvent<AccountType>()
+    val errorLiveData = MutableLiveData<Exception>()
+    val wordCount = service.wordCount
 
-    val errorLiveData = MutableLiveData<Int>()
-    val notifyRestored = SingleLiveEvent<Unit>()
-
-    fun init(wordsCount: Int) {
-        RestoreWordsModule.init(this, this, wordsCount)
+    override fun onCleared() {
+        clearables.forEach {
+            it.clear()
+        }
+        super.onCleared()
     }
 
-    // View
+    fun onProceed(text: String?) {
+        try {
+            if (text.isNullOrEmpty()) {
+                throw WordsError.EmptyWords
+            }
 
-    override fun showError(error: Int) {
-        errorLiveData.value = error
+            val words = text
+                    .trim()
+                    .toLowerCase(Locale.ENGLISH)
+                    .replace(Regex("(\\s)+"), " ")
+                    .split(" ")
+
+            val accountType = service.accountType(words)
+            accountTypeLiveEvent.postValue(accountType)
+
+        } catch (e: Exception) {
+            errorLiveData.postValue(e)
+        }
     }
 
-    // Router
 
-    override fun notifyRestored() {
-        notifyRestored.call()
+    sealed class WordsError : Exception() {
+        object EmptyWords : WordsError()
     }
 
 }

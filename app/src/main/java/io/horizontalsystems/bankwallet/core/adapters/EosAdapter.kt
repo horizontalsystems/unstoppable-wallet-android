@@ -140,9 +140,19 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
             EosKit.clear(App.instance, networkType, walletId)
         }
 
+        fun validateAccountName(accountName: String) {
+            if (accountName.length !in 1..12) {
+                throw EosError.InvalidAccountName
+            }
+        }
+
         fun validatePrivateKey(key: String) {
             EosKit.validatePrivateKey(key)
         }
+    }
+
+    sealed class EosError: Exception(){
+        object InvalidAccountName: EosError()
     }
 
 }

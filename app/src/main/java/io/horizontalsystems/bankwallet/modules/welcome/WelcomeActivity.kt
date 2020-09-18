@@ -52,7 +52,7 @@ class WelcomeActivity : BaseActivity() {
         viewModel.init()
 
         viewModel.openRestoreModule.observe(this, Observer {
-            RestoreModule.start(this)
+            RestoreModule.startAsActivity(this)
         })
 
         viewModel.openCreateWalletModule.observe(this, Observer {
