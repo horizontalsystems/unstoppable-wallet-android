@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment
@@ -96,12 +97,12 @@ class RestoreFragment : BaseFragment() {
     private fun getFragmentByScreen(screen: RestoreViewModel.Screen): BaseFragment {
         return when (screen) {
             RestoreViewModel.Screen.SelectPredefinedAccountType -> {
-                setPredefinedAccountTypeFragmentListener()
+                setPredefinedAccountTypeListener()
 
                 RestoreSelectPredefinedAccountTypeFragment()
             }
             is RestoreViewModel.Screen.RestoreAccountType -> {
-                setRestoreWordsFragmentListener()
+                setAccountTypeListener()
 
                 when (screen.predefinedAccountType) {
                     PredefinedAccountType.Standard,
@@ -110,12 +111,12 @@ class RestoreFragment : BaseFragment() {
                         RestoreWordsFragment.instance(wordsCount, screen.predefinedAccountType.title)
                     }
                     PredefinedAccountType.Eos -> {
-                        throw Exception("Not implemented")
+                        RestoreEosFragment()
                     }
                 }
             }
             is RestoreViewModel.Screen.SelectCoins -> {
-                setRestoreSelectCoinsFragmentListener()
+                setSelectCoinsListener()
 
                 RestoreSelectCoinsFragment.instance(screen.predefinedAccountType)
             }
@@ -129,7 +130,7 @@ class RestoreFragment : BaseFragment() {
         }
     }
 
-    private fun setPredefinedAccountTypeFragmentListener() {
+    private fun setPredefinedAccountTypeListener() {
         childFragmentManager.setFragmentResultListener(selectPredefinedAccountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
             val predefinedAccountType = result.getParcelable<PredefinedAccountType>(predefinedAccountTypeBundleKey)
                     ?: return@FragmentResultListener
@@ -137,7 +138,7 @@ class RestoreFragment : BaseFragment() {
         })
     }
 
-    private fun setRestoreWordsFragmentListener() {
+    private fun setAccountTypeListener() {
         childFragmentManager.setFragmentResultListener(accountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
             val accountType = result.getParcelable<AccountType>(accountTypeBundleKey)
                     ?: return@FragmentResultListener
@@ -145,7 +146,7 @@ class RestoreFragment : BaseFragment() {
         })
     }
 
-    private fun setRestoreSelectCoinsFragmentListener() {
+    private fun setSelectCoinsListener() {
         childFragmentManager.setFragmentResultListener(selectCoinsRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
             val selectedCoins = result.getParcelableArrayList<Coin>(selectCoinsBundleKey)
                     ?: return@FragmentResultListener

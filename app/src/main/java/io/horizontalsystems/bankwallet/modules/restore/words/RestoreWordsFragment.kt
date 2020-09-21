@@ -53,10 +53,10 @@ class RestoreWordsFragment : BaseFragment() {
         val wordsCount = arguments?.getInt(wordsCountKey) ?: throw Exception("Invalid words count")
         val accountTypeTitleRes = arguments?.getInt(titleKey) ?: throw Exception("Invalid title")
 
-        description.text = getString(R.string.Restore_Enter_Key_Description_Mnemonic, getString(accountTypeTitleRes), wordsCount.toString())
-
         viewModel = ViewModelProvider(this, RestoreWordsModule.Factory(wordsCount))
                 .get(RestoreWordsViewModel::class.java)
+
+        description.text = getString(R.string.Restore_Enter_Key_Description_Mnemonic, getString(accountTypeTitleRes), viewModel.wordCount.toString())
 
         setInputViewListeners()
 

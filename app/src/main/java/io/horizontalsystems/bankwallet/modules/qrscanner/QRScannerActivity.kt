@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.client.android.DecodeFormatManager
 import com.google.zxing.client.android.DecodeHintManager
@@ -116,6 +117,16 @@ class QRScannerActivity : AppCompatActivity() {
 
         fun start(context: Activity) {
             val intentIntegrator = IntentIntegrator(context)
+            intentIntegrator.captureActivity = QRScannerActivity::class.java
+            intentIntegrator.setOrientationLocked(true)
+            intentIntegrator.setPrompt("")
+            intentIntegrator.setBeepEnabled(false)
+            intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+            intentIntegrator.initiateScan()
+        }
+
+        fun start(fragment: Fragment) {
+            val intentIntegrator = IntentIntegrator.forSupportFragment(fragment)
             intentIntegrator.captureActivity = QRScannerActivity::class.java
             intentIntegrator.setOrientationLocked(true)
             intentIntegrator.setPrompt("")
