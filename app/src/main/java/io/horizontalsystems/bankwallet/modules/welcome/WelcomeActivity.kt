@@ -56,7 +56,7 @@ class WelcomeActivity : BaseActivity() {
         })
 
         viewModel.openCreateWalletModule.observe(this, Observer {
-            CreateWalletModule.start(this)
+            CreateWalletModule.startAsActivity(this)
         })
 
         viewModel.appVersionLiveData.observe(this, Observer { appVersion ->

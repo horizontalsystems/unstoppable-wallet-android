@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.restore
+package io.horizontalsystems.bankwallet.modules.createwallet
 
 import android.os.Bundle
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 
-class RestoreActivity: BaseActivity() {
+class CreateWalletActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -13,7 +13,7 @@ class RestoreActivity: BaseActivity() {
         setContentView(R.layout.activity_fragment_container)
 
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragmentContainerView, RestoreFragment.instance())
+            replace(R.id.fragmentContainerView, CreateWalletFragment.instance())
             commit()
         }
 

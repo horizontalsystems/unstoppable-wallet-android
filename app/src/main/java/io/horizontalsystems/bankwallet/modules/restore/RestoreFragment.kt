@@ -78,7 +78,6 @@ class RestoreFragment : BaseFragment() {
                 }
             }
         })
-
     }
 
     private fun observe() {
