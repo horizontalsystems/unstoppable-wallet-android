@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.createwallet.view.CreateWalletActivity"
+            android:name=".modules.createwallet.CreateWalletActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.main.MainActivity"
@@ -47,10 +47,6 @@
             android:name=".modules.send.SendActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize" />
-        <activity
-            android:name=".modules.restore.words.RestoreWordsFragment"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".modules.qrscanner.QRScannerActivity"
             android:screenOrientation="portrait" />
