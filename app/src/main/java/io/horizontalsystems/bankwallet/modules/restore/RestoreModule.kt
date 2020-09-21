@@ -37,7 +37,7 @@ object RestoreModule {
 
         activity.supportFragmentManager.commit {
             add(R.id.fragmentContainerView, fragment)
-            addToBackStack(null)
+            addToBackStack(RestoreFragment.fragmentTag)
         }
     }
 }

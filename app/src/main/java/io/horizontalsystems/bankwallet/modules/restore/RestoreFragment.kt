@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
@@ -25,12 +26,14 @@ class RestoreFragment : BaseFragment() {
     private lateinit var viewModel: RestoreViewModel
 
     companion object {
+        const val fragmentTag = "restoreFragment"
         const val selectPredefinedAccountTypeRequestKey = "selectPredefinedAccountTypeRequestKey"
         const val predefinedAccountTypeBundleKey = "predefinedAccountTypeBundleKey"
         const val accountTypeRequestKey = "accountTypeRequestKey"
         const val accountTypeBundleKey = "accountTypeBundleKey"
         const val selectCoinsRequestKey = "selectCoinsRequestKey"
         const val selectCoinsBundleKey = "selectCoinsBundleKey"
+
 
         fun instance(predefinedAccountType: PredefinedAccountType? = null, selectCoins: Boolean = true): RestoreFragment {
             return RestoreFragment().apply {
@@ -50,7 +53,8 @@ class RestoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val selectCoins = arguments?.getBoolean("selectCoins") ?: throw Exception("Parameter missing")
+        val selectCoins = arguments?.getBoolean("selectCoins")
+                ?: throw Exception("Parameter missing")
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
 
         viewModel = ViewModelProvider(this, RestoreModule.Factory(selectCoins, predefinedAccountType))
@@ -65,17 +69,16 @@ class RestoreFragment : BaseFragment() {
         super.onAttach(context)
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (childFragmentManager.backStackEntryCount > 0) {
-                    childFragmentManager.popBackStack()
+                hideKeyboard()
+
+                parentFragmentManager.popBackStackImmediate()
+
+                if (parentFragmentManager.fragments.last() is RestoreFragment) {
+                    closeRestoreFragment(RestoreActivity.Result.Cancelation)
                 }
             }
         })
 
-        childFragmentManager.addOnBackStackChangedListener {
-            if (childFragmentManager.backStackEntryCount == 0){
-                requireActivity().onBackPressed()
-            }
-        }
     }
 
     private fun observe() {
@@ -84,14 +87,22 @@ class RestoreFragment : BaseFragment() {
         })
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner, Observer {
-            parentFragmentManager.popBackStack()
+            closeRestoreFragment(RestoreActivity.Result.Success)
         })
+    }
+
+    private fun closeRestoreFragment(result: RestoreActivity.Result) {
+        if (activity is RestoreActivity) {
+            (activity as? RestoreActivity)?.close(result)
+        } else {
+            parentFragmentManager.popBackStack(fragmentTag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
     }
 
     private fun openScreen(screen: RestoreViewModel.Screen) {
         val fragment = getFragmentByScreen(screen)
 
-        showChildFragment(fragment)
+        showFragment(fragment)
     }
 
     private fun getFragmentByScreen(screen: RestoreViewModel.Screen): BaseFragment {
@@ -123,15 +134,15 @@ class RestoreFragment : BaseFragment() {
         }
     }
 
-    private fun showChildFragment(fragment: BaseFragment) {
-        childFragmentManager.commit {
+    private fun showFragment(fragment: BaseFragment) {
+        activity?.supportFragmentManager?.commit {
             add(R.id.fragmentContainerView, fragment)
             addToBackStack(null)
         }
     }
 
     private fun setPredefinedAccountTypeListener() {
-        childFragmentManager.setFragmentResultListener(selectPredefinedAccountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
+        activity?.supportFragmentManager?.setFragmentResultListener(selectPredefinedAccountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
             val predefinedAccountType = result.getParcelable<PredefinedAccountType>(predefinedAccountTypeBundleKey)
                     ?: return@FragmentResultListener
             viewModel.onSelect(predefinedAccountType)
@@ -139,7 +150,7 @@ class RestoreFragment : BaseFragment() {
     }
 
     private fun setAccountTypeListener() {
-        childFragmentManager.setFragmentResultListener(accountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
+        activity?.supportFragmentManager?.setFragmentResultListener(accountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
             val accountType = result.getParcelable<AccountType>(accountTypeBundleKey)
                     ?: return@FragmentResultListener
             viewModel.onEnter(accountType)
@@ -147,7 +158,7 @@ class RestoreFragment : BaseFragment() {
     }
 
     private fun setSelectCoinsListener() {
-        childFragmentManager.setFragmentResultListener(selectCoinsRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
+        activity?.supportFragmentManager?.setFragmentResultListener(selectCoinsRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
             val selectedCoins = result.getParcelableArrayList<Coin>(selectCoinsBundleKey)
                     ?: return@FragmentResultListener
             viewModel.onSelect(selectedCoins)
