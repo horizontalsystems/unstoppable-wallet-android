@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.entities.AccountType
 import java.util.*
 
-class RestoreEosService() : RestoreEosModule2.IService, Clearable {
+class RestoreEosService() : RestoreEosModule.IService, Clearable {
 
     override fun accountType(account: String, privateKey: String): AccountType {
         val accountName = account.trim().toLowerCase(Locale.ENGLISH)
