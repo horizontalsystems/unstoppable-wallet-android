@@ -21,7 +21,6 @@ class CreateWalletViewModel(
     val finishLiveEvent = SingleLiveEvent<Unit>()
     val canCreateLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<Exception>()
-    val enableFailedLiveData = MutableLiveData<Coin>()
 
     private var disposable: Disposable? = null
     private var filter: String? = null
@@ -56,7 +55,7 @@ class CreateWalletViewModel(
             service.enable(coin)
         } catch (e: Exception){
             errorLiveData.postValue(e)
-            enableFailedLiveData.postValue(coin)
+            syncViewState()
         }
     }
 
