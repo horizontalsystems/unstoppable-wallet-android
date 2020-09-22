@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageCoinViewItem
+import io.horizontalsystems.bankwallet.ui.extensions.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -17,7 +17,7 @@ class CreateWalletViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<ManageCoinViewItem>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
     val canCreateLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<Exception>()
@@ -82,7 +82,7 @@ class CreateWalletViewModel(
     private fun syncViewState(updatedState: CreateWalletService.State? = null) {
         val state = updatedState ?: service.state
 
-        val viewItems = mutableListOf<ManageCoinViewItem>()
+        val viewItems = mutableListOf<CoinViewItem>()
 
         val filteredFeatureCoins = filtered(state.featured)
 
@@ -90,7 +90,7 @@ class CreateWalletViewModel(
             viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
                 viewItem(item, state.featured.size - 1 == index)
             })
-            viewItems.add(ManageCoinViewItem.Divider)
+            viewItems.add(CoinViewItem.Divider)
         }
 
         viewItems.addAll(filtered(state.items).mapIndexed { index, item ->
@@ -100,8 +100,8 @@ class CreateWalletViewModel(
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: CreateWalletService.Item, last: Boolean): ManageCoinViewItem {
-        return ManageCoinViewItem.ToggleVisible(item.coin, item.enabled, last)
+    private fun viewItem(item: CreateWalletService.Item, last: Boolean): CoinViewItem {
+        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last)
     }
 
     private fun filtered(items: List<CreateWalletService.Item>): List<CreateWalletService.Item> {

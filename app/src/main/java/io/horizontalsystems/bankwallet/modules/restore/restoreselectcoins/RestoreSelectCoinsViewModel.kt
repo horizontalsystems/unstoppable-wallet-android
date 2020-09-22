@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageCoinViewItem
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService
+import io.horizontalsystems.bankwallet.ui.extensions.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -19,7 +19,7 @@ class RestoreSelectCoinsViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<ManageCoinViewItem>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
     val enabledCoinsLiveData = SingleLiveEvent<List<Coin>>()
     val openDerivationSettingsLiveEvent = SingleLiveEvent<Pair<Coin, AccountType.Derivation>>()
     val canRestoreLiveData = MutableLiveData<Boolean>()
@@ -93,7 +93,7 @@ class RestoreSelectCoinsViewModel(
     private fun syncViewState(updatedState: RestoreSelectCoinsService.State? = null) {
         val state = updatedState ?: service.state
 
-        val viewItems = mutableListOf<ManageCoinViewItem>()
+        val viewItems = mutableListOf<CoinViewItem>()
 
         val filteredFeatureCoins = filtered(state.featured)
 
@@ -101,7 +101,7 @@ class RestoreSelectCoinsViewModel(
             viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
                 viewItem(item, state.featured.size - 1 == index)
             })
-            viewItems.add(ManageCoinViewItem.Divider)
+            viewItems.add(CoinViewItem.Divider)
         }
 
         viewItems.addAll(filtered(state.items).mapIndexed { index, item ->
@@ -111,8 +111,8 @@ class RestoreSelectCoinsViewModel(
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: RestoreSelectCoinsService.Item, last: Boolean): ManageCoinViewItem {
-        return ManageCoinViewItem.ToggleVisible(item.coin, item.enabled, last)
+    private fun viewItem(item: RestoreSelectCoinsService.Item, last: Boolean): CoinViewItem {
+        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last)
     }
 
     private fun filtered(items: List<RestoreSelectCoinsService.Item>): List<RestoreSelectCoinsService.Item> {

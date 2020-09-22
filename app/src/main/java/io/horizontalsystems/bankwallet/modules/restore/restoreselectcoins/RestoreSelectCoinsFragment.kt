@@ -2,25 +2,19 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletItemsAdapter
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
-class RestoreSelectCoinsFragment : BaseFragment(), ManageWalletItemsAdapter.Listener {
+class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
     companion object {
         fun instance(predefinedAccountType: PredefinedAccountType): RestoreSelectCoinsFragment {
@@ -33,12 +27,6 @@ class RestoreSelectCoinsFragment : BaseFragment(), ManageWalletItemsAdapter.List
     }
 
     private lateinit var viewModel: RestoreSelectCoinsViewModel
-    private lateinit var adapter: ManageWalletItemsAdapter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.manage_wallets_fragment, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,15 +49,6 @@ class RestoreSelectCoinsFragment : BaseFragment(), ManageWalletItemsAdapter.List
         viewModel = ViewModelProvider(this, RestoreSelectCoinsModule.Factory(predefinedAccountType))
                 .get(RestoreSelectCoinsViewModel::class.java)
 
-        adapter = ManageWalletItemsAdapter(this)
-        recyclerView.adapter = adapter
-
-        searchView.bind(
-                hint = getString(R.string.ManageCoins_Search),
-                onTextChanged = { query ->
-                    viewModel.updateFilter(query)
-                })
-
         observe()
     }
 
@@ -87,12 +66,23 @@ class RestoreSelectCoinsFragment : BaseFragment(), ManageWalletItemsAdapter.List
         //not used here
     }
 
+    // CoinListBaseFragment
+
+    override fun updateFilter(query: String) {
+        viewModel.updateFilter(query)
+    }
+
+    override fun onCancelAddressFormatSelection() {
+       viewModel.onCancelDerivationSelection()
+    }
+
+    override fun onSelectAddressFormat(coin: Coin, derivationSetting: DerivationSetting) {
+        viewModel.onSelect(coin, derivationSetting)
+    }
+
     private fun observe() {
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, Observer { items ->
-            adapter.viewItems = items
-            adapter.notifyDataSetChanged()
-
-            progressLoading.isVisible = false
+            setItems(items)
         })
 
         viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->
@@ -107,28 +97,6 @@ class RestoreSelectCoinsFragment : BaseFragment(), ManageWalletItemsAdapter.List
         viewModel.enabledCoinsLiveData.observe(viewLifecycleOwner, Observer { enabledCoins ->
             setFragmentResult(RestoreFragment.selectCoinsRequestKey, bundleOf(RestoreFragment.selectCoinsBundleKey to enabledCoins))
         })
-    }
-
-    private fun showAddressFormatSelectionDialog(coin: Coin, currentDerivation: AccountType.Derivation) {
-        val items = AccountType.Derivation.values().toList()
-        val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) }
-                ?: return
-
-        BottomSheetSelectorDialog.show(
-                childFragmentManager,
-                getString(R.string.AddressFormatSettings_Title),
-                coin.title,
-                coinDrawable,
-                items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description(), derivation.addressPrefix(coin.type))) },
-                items.indexOf(currentDerivation),
-                notifyUnchanged = true,
-                onItemSelected = { position ->
-                    viewModel.onSelect(coin, DerivationSetting(coin.type, items[position]))
-                },
-                onCancelled = {
-                    viewModel.onCancelDerivationSelection()
-                }
-        )
     }
 
 }
