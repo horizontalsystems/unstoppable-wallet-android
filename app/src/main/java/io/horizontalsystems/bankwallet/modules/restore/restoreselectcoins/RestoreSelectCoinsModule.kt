@@ -10,7 +10,6 @@ import io.reactivex.Observable
 
 object RestoreSelectCoinsModule {
     interface IService{
-        val stateObservable: Observable<RestoreSelectCoinsService.State>
         val canRestore: Observable<Boolean>
         var state: RestoreSelectCoinsService.State
         val enabledCoins: List<Coin>

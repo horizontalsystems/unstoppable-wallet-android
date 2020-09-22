@@ -28,32 +28,26 @@ class CreateWalletViewModel(
     init {
         Handler().postDelayed({
             syncViewState()
-
-            service.stateObservable
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        syncViewState(it)
-                    }
-                    .let { disposable = it }
-
-            service.canCreate
-                    .subscribe {
-                        canCreateLiveData.postValue(it)
-                    }
         }, 700)
+
+        service.canCreate
+                .subscribe {
+                    canCreateLiveData.postValue(it)
+                }.let { disposable = it }
     }
 
     override fun onCleared() {
         clearables.forEach {
             it.clear()
         }
+        disposable?.dispose()
         super.onCleared()
     }
 
     fun enable(coin: Coin) {
         try {
             service.enable(coin)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             errorLiveData.postValue(e)
             syncViewState()
         }
@@ -72,14 +66,14 @@ class CreateWalletViewModel(
         try {
             service.create()
             finishLiveEvent.call()
-        } catch (e: Exception){
+        } catch (e: Exception) {
             errorLiveData.postValue(e)
         }
     }
 
 
-    private fun syncViewState(updatedState: CreateWalletService.State? = null) {
-        val state = updatedState ?: service.state
+    private fun syncViewState() {
+        val state = service.state
 
         val viewItems = mutableListOf<CoinViewItem>()
 
@@ -87,20 +81,21 @@ class CreateWalletViewModel(
 
         if (filteredFeatureCoins.isNotEmpty()) {
             viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
-                viewItem(item, state.featured.size - 1 == index)
+                viewItem(item, filteredFeatureCoins.size - 1 == index, filteredFeatureCoins.size - 1 == index)
             })
-            viewItems.add(CoinViewItem.Divider)
         }
 
-        viewItems.addAll(filtered(state.items).mapIndexed { index, item ->
-            viewItem(item, state.items.size - 1 == index)
+        val filteredItems = filtered(state.items)
+
+        viewItems.addAll(filteredItems.mapIndexed { index, item ->
+            viewItem(item, filteredItems.size - 1 == index)
         })
 
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: CreateWalletService.Item, last: Boolean): CoinViewItem {
-        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last)
+    private fun viewItem(item: CreateWalletService.Item, last: Boolean, showDivider: Boolean = false): CoinViewItem {
+        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last, showDivider)
     }
 
     private fun filtered(items: List<CreateWalletService.Item>): List<CreateWalletService.Item> {

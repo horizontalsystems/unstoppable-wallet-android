@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsServic
 import io.horizontalsystems.bankwallet.ui.extensions.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class RestoreSelectCoinsViewModel(
@@ -31,17 +30,10 @@ class RestoreSelectCoinsViewModel(
         Handler().postDelayed({
             syncViewState()
 
-            service.stateObservable
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        syncViewState(it)
-                    }
-                    .let { disposable = it }
-
             service.canRestore
                     .subscribe {
                         canRestoreLiveData.postValue(it)
-                    }
+                    }.let { disposable = it }
         }, 700)
     }
 
@@ -49,6 +41,7 @@ class RestoreSelectCoinsViewModel(
         clearables.forEach {
             it.clear()
         }
+        disposable?.dispose()
         super.onCleared()
     }
 
@@ -90,8 +83,8 @@ class RestoreSelectCoinsViewModel(
         }
     }
 
-    private fun syncViewState(updatedState: RestoreSelectCoinsService.State? = null) {
-        val state = updatedState ?: service.state
+    private fun syncViewState() {
+        val state = service.state
 
         val viewItems = mutableListOf<CoinViewItem>()
 
@@ -99,20 +92,21 @@ class RestoreSelectCoinsViewModel(
 
         if (filteredFeatureCoins.isNotEmpty()) {
             viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
-                viewItem(item, state.featured.size - 1 == index)
+                viewItem(item, filteredFeatureCoins.size - 1 == index, filteredFeatureCoins.size - 1 == index)
             })
-            viewItems.add(CoinViewItem.Divider)
         }
 
-        viewItems.addAll(filtered(state.items).mapIndexed { index, item ->
-            viewItem(item, state.items.size - 1 == index)
+        val filteredItems = filtered(state.items)
+
+        viewItems.addAll(filteredItems.mapIndexed { index, item ->
+            viewItem(item, filteredItems.size - 1 == index)
         })
 
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: RestoreSelectCoinsService.Item, last: Boolean): CoinViewItem {
-        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last)
+    private fun viewItem(item: RestoreSelectCoinsService.Item, last: Boolean, showDivider: Boolean = false): CoinViewItem {
+        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last, showDivider)
     }
 
     private fun filtered(items: List<RestoreSelectCoinsService.Item>): List<RestoreSelectCoinsService.Item> {
