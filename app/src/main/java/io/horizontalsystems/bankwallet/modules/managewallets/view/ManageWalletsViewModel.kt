@@ -33,7 +33,7 @@ class ManageWalletsViewModel(
             service.stateObservable
                     .subscribeOn(Schedulers.io())
                     .subscribe {
-                        syncViewState(it)
+                        syncViewState()
                     }
                     .let { disposable = it }
         }, 500)
@@ -80,8 +80,8 @@ class ManageWalletsViewModel(
         }
     }
 
-    private fun syncViewState(updatedState: ManageWalletsModule.State? = null) {
-        val state = updatedState ?: service.state
+    private fun syncViewState() {
+        val state = service.state
 
         val viewItems = mutableListOf<CoinViewItem>()
 
@@ -89,22 +89,23 @@ class ManageWalletsViewModel(
 
         if (filteredFeatureCoins.isNotEmpty()) {
             viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
-                viewItem(item, state.featuredItems.size - 1 == index)
+                viewItem(item, filteredFeatureCoins.size - 1 == index, filteredFeatureCoins.size - 1 == index)
             })
-            viewItems.add(CoinViewItem.Divider)
         }
 
-        viewItems.addAll(filtered(state.items).mapIndexed { index, item ->
-            viewItem(item, state.items.size - 1 == index)
+        val filteredItems = filtered(state.items)
+
+        viewItems.addAll(filteredItems.mapIndexed { index, item ->
+            viewItem(item, filteredItems.size - 1 == index)
         })
 
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: ManageWalletsModule.Item, last: Boolean): CoinViewItem {
+    private fun viewItem(item: ManageWalletsModule.Item, last: Boolean, showDivider: Boolean = false): CoinViewItem {
         return when(val itemState = item.state) {
-            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, last)
-            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last)
+            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, last, showDivider)
+            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last, showDivider)
         }
     }
 

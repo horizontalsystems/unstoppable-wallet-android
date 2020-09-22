@@ -16,13 +16,10 @@ class ManageWalletsService(
     private val disposables = CompositeDisposable()
     private val wallets = mutableMapOf<Coin, Wallet>()
 
-    override val stateObservable = BehaviorSubject.create<ManageWalletsModule.State>()
+    override val stateObservable = BehaviorSubject.create<Unit>()
 
     override var state = ManageWalletsModule.State.empty()
-        private set(value) {
-            field = value
-            stateObservable.onNext(value)
-        }
+        private set
 
 
     init {
@@ -30,6 +27,7 @@ class ManageWalletsService(
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncState()
+                    stateObservable.onNext(Unit)
                 })
 
 
@@ -37,6 +35,7 @@ class ManageWalletsService(
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncState()
+                    stateObservable.onNext(Unit)
                 })
 
 
