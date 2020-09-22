@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
@@ -106,6 +107,10 @@ class CreateWalletFragment : CoinListBaseFragment() {
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner, Observer {
             closeCreateWalletFragment(CreateWalletActivity.Result.Success)
+        })
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
+            HudHelper.showErrorMessage(this.requireView(), getString(R.string.default_error_msg))
         })
     }
 
