@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageCoinViewItem
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService
+import io.horizontalsystems.bankwallet.ui.extensions.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +22,7 @@ class ManageWalletsViewModel(
 
     private var disposable: Disposable? = null
 
-    val viewItemsLiveData = MutableLiveData<List<ManageCoinViewItem>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
     val openDerivationSettingsLiveEvent = SingleLiveEvent<Pair<Coin, AccountType.Derivation>>()
     private var filter: String? = null
 
@@ -83,7 +83,7 @@ class ManageWalletsViewModel(
     private fun syncViewState(updatedState: ManageWalletsModule.State? = null) {
         val state = updatedState ?: service.state
 
-        val viewItems = mutableListOf<ManageCoinViewItem>()
+        val viewItems = mutableListOf<CoinViewItem>()
 
         val filteredFeatureCoins = filtered(state.featuredItems)
 
@@ -91,7 +91,7 @@ class ManageWalletsViewModel(
             viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
                 viewItem(item, state.featuredItems.size - 1 == index)
             })
-            viewItems.add(ManageCoinViewItem.Divider)
+            viewItems.add(CoinViewItem.Divider)
         }
 
         viewItems.addAll(filtered(state.items).mapIndexed { index, item ->
@@ -101,10 +101,10 @@ class ManageWalletsViewModel(
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: ManageWalletsModule.Item, last: Boolean): ManageCoinViewItem {
+    private fun viewItem(item: ManageWalletsModule.Item, last: Boolean): CoinViewItem {
         return when(val itemState = item.state) {
-            ManageWalletsModule.ItemState.NoAccount -> ManageCoinViewItem.ToggleHidden(item.coin, last)
-            is ManageWalletsModule.ItemState.HasAccount -> ManageCoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last)
+            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, last)
+            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last)
         }
     }
 

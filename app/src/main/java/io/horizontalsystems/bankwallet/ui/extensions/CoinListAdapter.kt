@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.managewallets.view
+package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.view.View
 import android.view.ViewGroup
@@ -6,13 +6,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageCoinViewItem
-import io.horizontalsystems.bankwallet.ui.extensions.setCoinImage
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
 
-class ManageWalletItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CoinListAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
         fun enable(coin: Coin)
@@ -23,7 +21,7 @@ class ManageWalletItemsAdapter(private val listener: Listener) : RecyclerView.Ad
     private val coinWithSwitch = 0
     private val coinWithoutSwitch = 1
     private val dividerView = 2
-    var viewItems = listOf<ManageCoinViewItem>()
+    var viewItems = listOf<CoinViewItem>()
 
     override fun getItemCount(): Int {
         return viewItems.size
@@ -31,24 +29,24 @@ class ManageWalletItemsAdapter(private val listener: Listener) : RecyclerView.Ad
 
     override fun getItemViewType(position: Int): Int =
             when (viewItems[position]) {
-                ManageCoinViewItem.Divider -> dividerView
-                is ManageCoinViewItem.ToggleHidden -> coinWithoutSwitch
-                is ManageCoinViewItem.ToggleVisible -> coinWithSwitch
+                CoinViewItem.Divider -> dividerView
+                is CoinViewItem.ToggleHidden -> coinWithoutSwitch
+                is CoinViewItem.ToggleVisible -> coinWithSwitch
             }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            coinWithoutSwitch -> ManageCoinWithPlusViewHolder(
+            coinWithoutSwitch -> CoinWithPlusViewHolder(
                     inflate(parent, R.layout.view_holder_coin_manage_item, false),
                     onClick = { index ->
-                        (viewItems[index] as? ManageCoinViewItem.ToggleHidden)?.coin?.let {
+                        (viewItems[index] as? CoinViewItem.ToggleHidden)?.coin?.let {
                             listener.select(it)
                         }
                     })
-            coinWithSwitch -> ManageCoinWithSwitchViewHolder(
+            coinWithSwitch -> CoinWithSwitchViewHolder(
                     inflate(parent, R.layout.view_holder_coin_manage_item, false),
                     onSwitch = { isChecked, index ->
-                        (viewItems[index] as? ManageCoinViewItem.ToggleVisible)?.coin?.let {
+                        (viewItems[index] as? CoinViewItem.ToggleVisible)?.coin?.let {
                             onSwitchToggle(isChecked, it)
                         }
                     })
@@ -59,13 +57,13 @@ class ManageWalletItemsAdapter(private val listener: Listener) : RecyclerView.Ad
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is ManageCoinWithSwitchViewHolder -> {
-                (viewItems[position] as? ManageCoinViewItem.ToggleVisible)?.let {
+            is CoinWithSwitchViewHolder -> {
+                (viewItems[position] as? CoinViewItem.ToggleVisible)?.let {
                     holder.bind(it.coin, it.enabled, it.last)
                 }
             }
-            is ManageCoinWithPlusViewHolder -> {
-                (viewItems[position] as? ManageCoinViewItem.ToggleHidden)?.let {
+            is CoinWithPlusViewHolder -> {
+                (viewItems[position] as? CoinViewItem.ToggleHidden)?.let {
                     holder.bind(it.coin, it.last)
                 }
             }
@@ -82,7 +80,7 @@ class ManageWalletItemsAdapter(private val listener: Listener) : RecyclerView.Ad
 
 }
 
-class ManageCoinWithSwitchViewHolder(
+class CoinWithSwitchViewHolder(
         override val containerView: View,
         private val onSwitch: (isChecked: Boolean, position: Int) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
@@ -115,7 +113,7 @@ class ManageCoinWithSwitchViewHolder(
     }
 }
 
-class ManageCoinWithPlusViewHolder(
+class CoinWithPlusViewHolder(
         override val containerView: View,
         private val onClick: (position: Int) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
@@ -138,3 +136,9 @@ class ManageCoinWithPlusViewHolder(
 }
 
 class ViewHolderDivider(val containerView: View) : RecyclerView.ViewHolder(containerView)
+
+sealed class CoinViewItem {
+    object Divider : CoinViewItem()
+    class ToggleHidden(val coin: Coin, val last: Boolean) : CoinViewItem()
+    class ToggleVisible(val coin: Coin, val enabled: Boolean, val last: Boolean) : CoinViewItem()
+}

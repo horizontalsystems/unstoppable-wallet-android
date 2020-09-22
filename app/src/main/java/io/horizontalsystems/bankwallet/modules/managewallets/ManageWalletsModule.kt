@@ -50,10 +50,3 @@ object ManageWalletsModule {
     }
 
 }
-
-
-sealed class ManageCoinViewItem {
-    object Divider : ManageCoinViewItem()
-    class ToggleHidden(val coin: Coin, val last: Boolean) : ManageCoinViewItem()
-    class ToggleVisible(val coin: Coin, val enabled: Boolean, val last: Boolean) : ManageCoinViewItem()
-}

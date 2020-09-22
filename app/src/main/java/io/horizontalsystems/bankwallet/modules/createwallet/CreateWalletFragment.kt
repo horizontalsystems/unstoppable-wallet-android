@@ -3,22 +3,18 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletItemsAdapter
+import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
-class CreateWalletFragment : BaseFragment(), ManageWalletItemsAdapter.Listener {
+class CreateWalletFragment : CoinListBaseFragment() {
 
     companion object {
         const val fragmentTag = "createWalletFragment"
@@ -32,12 +28,6 @@ class CreateWalletFragment : BaseFragment(), ManageWalletItemsAdapter.Listener {
     }
 
     private lateinit var viewModel: CreateWalletViewModel
-    private lateinit var adapter: ManageWalletItemsAdapter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.manage_wallets_fragment, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,15 +50,6 @@ class CreateWalletFragment : BaseFragment(), ManageWalletItemsAdapter.Listener {
         viewModel = ViewModelProvider(this, CreateWalletModule.Factory(predefinedAccountType))
                 .get(CreateWalletViewModel::class.java)
 
-        adapter = ManageWalletItemsAdapter(this)
-        recyclerView.adapter = adapter
-
-        searchView.bind(
-                hint = getString(R.string.ManageCoins_Search),
-                onTextChanged = { query ->
-                    viewModel.updateFilter(query)
-                })
-
         observe()
     }
 
@@ -84,6 +65,12 @@ class CreateWalletFragment : BaseFragment(), ManageWalletItemsAdapter.Listener {
 
     override fun select(coin: Coin) {
         //not used here
+    }
+
+    // CoinListBaseFragment
+
+    override fun updateFilter(query: String) {
+        viewModel.updateFilter(query)
     }
 
     override fun onAttach(context: Context) {
@@ -110,10 +97,7 @@ class CreateWalletFragment : BaseFragment(), ManageWalletItemsAdapter.Listener {
 
     private fun observe() {
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, Observer { items ->
-            adapter.viewItems = items
-            adapter.notifyDataSetChanged()
-
-            progressLoading.isVisible = false
+            setItems(items)
         })
 
         viewModel.canCreateLiveData.observe(viewLifecycleOwner, Observer { enabled ->
