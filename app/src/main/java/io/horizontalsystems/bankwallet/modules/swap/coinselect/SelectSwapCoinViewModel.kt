@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import java.math.BigDecimal
+import java.util.*
 
 class SelectSwapCoinViewModel(
         private val excludedCoin: Coin?,
@@ -17,9 +18,10 @@ class SelectSwapCoinViewModel(
 ) : ViewModel() {
 
     val coinItemsLivedData = MutableLiveData<List<SwapCoinItem>>()
+    private var filter: String? = null
 
-    init {
-        val coinItems = coinManager.coins.mapNotNull { coin ->
+    private val swappableCoins by lazy {
+        coinManager.coins.mapNotNull { coin ->
             val wallet = walletManager.wallet(coin)
             val balance = wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balance }
                     ?: BigDecimal.ZERO
@@ -30,8 +32,29 @@ class SelectSwapCoinViewModel(
                 SwapCoinItem(coin, if (balance <= BigDecimal.ZERO) null else balance)
             }
         }
+    }
 
-        coinItemsLivedData.postValue(coinItems)
+    init {
+        syncViewState()
+    }
+
+    fun updateFilter(newText: String?) {
+        filter = newText
+        syncViewState()
+    }
+
+    private fun syncViewState() {
+        val filteredItems = filtered(swappableCoins)
+        coinItemsLivedData.postValue(filteredItems)
+    }
+
+    private fun filtered(items: List<SwapCoinItem>): List<SwapCoinItem> {
+        val filter = filter ?: return items
+
+        return items.filter {
+            it.coin.title.toLowerCase(Locale.ENGLISH).contains(filter.toLowerCase(Locale.ENGLISH))
+                    || it.coin.code.toLowerCase(Locale.ENGLISH).contains(filter.toLowerCase(Locale.ENGLISH))
+        }
     }
 
 }
