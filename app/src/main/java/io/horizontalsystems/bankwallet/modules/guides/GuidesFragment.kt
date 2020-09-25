@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Guide
-import io.horizontalsystems.bankwallet.modules.guideview.GuideModule
+import io.horizontalsystems.bankwallet.modules.guideview.GuideFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import kotlinx.android.synthetic.main.fragment_guides.*
 import kotlinx.android.synthetic.main.fragment_guides.recyclerTags
@@ -45,8 +45,8 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
     }
 
     override fun onItemClick(guide: Guide) {
-        context?.let {
-            GuideModule.start(it, guide.fileUrl)
+        activity?.let {
+            GuideFragment.start(it, guide.fileUrl)
         }
     }
 
