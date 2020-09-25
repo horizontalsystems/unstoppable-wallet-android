@@ -2,23 +2,35 @@ package io.horizontalsystems.bankwallet.modules.addErc20token
 
 import android.os.Bundle
 import android.os.Handler
-import androidx.activity.viewModels
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.activity_add_erc20_token.*
+import kotlinx.android.synthetic.main.fragment_add_erc20_token.*
 
-class AddErc20TokenActivity : BaseActivity() {
+class AddErc20TokenFragment : BaseFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_erc20_token)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_add_erc20_token, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         val model: AddErc20TokenViewModel by viewModels { AddErc20TokenModule.Factory() }
 
@@ -85,12 +97,21 @@ class AddErc20TokenActivity : BaseActivity() {
         })
 
         model.showSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Success, HudHelper.SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success, HudHelper.SnackbarDuration.LONG)
             Handler().postDelayed({
-                finish()
+                activity?.supportFragmentManager?.popBackStack()
             }, 1500)
         })
 
+    }
+
+    companion object{
+        fun start(activity: FragmentActivity) {
+            activity.supportFragmentManager.commit {
+                add(R.id.fragmentContainerView, AddErc20TokenFragment())
+                addToBackStack(null)
+            }
+        }
     }
 
 }

@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenActivity
+import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragment
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
@@ -112,7 +112,9 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         activity?.let {
             AddTokenDialog.show(it, object : AddTokenDialog.Listener {
                 override fun onClickAddErc20Token() {
-                    startActivity(Intent(activity, AddErc20TokenActivity::class.java))
+                    activity?.let {
+                        AddErc20TokenFragment.start(it)
+                    }
                 }
             })
         }
