@@ -102,11 +102,11 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
-    def lifecycle_version = '2.3.0-alpha05'
+    def lifecycle_version = '2.3.0-alpha07'
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // use -ktx for Kotlin
     // alternatively - just LiveData
@@ -119,7 +119,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.3.0-alpha08'
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.browser:browser:1.2.0"
-    implementation 'com.google.firebase:firebase-messaging:20.2.3'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
 
     // Room
     def room_version = '2.2.5'
@@ -131,16 +131,16 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
 
-    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha04'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha05'
 
-    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'com.google.android.material:material:1.3.0-alpha02'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     // (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
@@ -158,7 +158,7 @@ dependencies {
     api 'com.journeyapps:zxing-android-embedded:4.1.0'
 
     // WorkManager Kotlin
-    def work_version = "2.3.4"
+    def work_version = "2.4.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
