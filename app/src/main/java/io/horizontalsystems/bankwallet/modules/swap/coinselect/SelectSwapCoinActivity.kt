@@ -8,9 +8,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.views.TopMenuItem
-import kotlinx.android.synthetic.main.activity_swap_select_token.recyclerView
-import kotlinx.android.synthetic.main.activity_swap_select_token.shadowlessToolbar
-import kotlinx.android.synthetic.main.manage_wallets_fragment.*
+import kotlinx.android.synthetic.main.activity_swap_select_token.*
 
 class SelectSwapCoinActivity : BaseActivity() {
 
