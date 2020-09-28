@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.intro
 
-import android.app.ActivityOptions
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -83,7 +82,7 @@ class IntroFragment: BaseFragment() {
 
         (presenter.router as? IntroRouter)?.let { router ->
             router.navigateToWelcomeLiveEvent.observe(this, Observer {
-                context?.let { ctx -> WelcomeModule.start(ctx, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle()) }
+                activity?.let { activity -> WelcomeModule.start(activity) }
             })
         }
     }

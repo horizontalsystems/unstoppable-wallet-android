@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.welcome
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object WelcomeModule {
@@ -28,10 +28,11 @@ object WelcomeModule {
         fun openTorPage()
     }
 
-    fun start(context: Context, options: Bundle?) {
-        val intent = Intent(context, WelcomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        context.startActivity(intent, options)
+    fun start(fragmentActivity: FragmentActivity) {
+        fragmentActivity.supportFragmentManager.commit {
+            add(R.id.fragmentContainerView, WelcomeFragment.instance())
+            addToBackStack(null)
+        }
     }
 
     fun init(view: WelcomeViewModel, router: IRouter) {
