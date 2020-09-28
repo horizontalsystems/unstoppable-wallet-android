@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
@@ -28,12 +27,8 @@ object RestoreModule {
         }
     }
 
-    fun startAsActivity(activity: FragmentActivity) {
-        activity.startActivity(Intent(activity, RestoreActivity::class.java))
-    }
-
-    fun startInApp(activity: FragmentActivity, predefinedAccountType: PredefinedAccountType?, selectCoins: Boolean = true) {
-        val fragment = RestoreFragment.instance(predefinedAccountType, selectCoins)
+    fun start(activity: FragmentActivity, inApp: Boolean = true, predefinedAccountType: PredefinedAccountType? = null, selectCoins: Boolean = true) {
+        val fragment = RestoreFragment.instance(predefinedAccountType, selectCoins, inApp)
 
         activity.supportFragmentManager.commit {
             add(R.id.fragmentContainerView, fragment)

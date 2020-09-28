@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.managewallets.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -92,7 +91,7 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
     override fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {
         activity?.let {
-            RestoreModule.startInApp(it, predefinedAccountType, false)
+            RestoreModule.start(it, true, predefinedAccountType, false)
         }
     }
 

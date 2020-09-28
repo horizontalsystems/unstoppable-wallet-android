@@ -57,9 +57,6 @@
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.restore.RestoreActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.intro.IntroActivity"
             android:theme="@style/OnboardingTheme"
             android:screenOrientation="portrait" />

@@ -30,7 +30,7 @@ class WelcomeFragment : BaseFragment() {
         viewModel.init()
 
         viewModel.openRestoreModule.observe(viewLifecycleOwner, Observer {
-            activity?.let { activity -> RestoreModule.startAsActivity(activity) }
+            activity?.let { activity -> RestoreModule.start(activity, false) }
         })
 
         viewModel.openCreateWalletModule.observe(viewLifecycleOwner, Observer {
