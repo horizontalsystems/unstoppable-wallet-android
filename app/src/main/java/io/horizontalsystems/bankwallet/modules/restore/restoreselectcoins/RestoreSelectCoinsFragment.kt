@@ -36,9 +36,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                 leftBtnItem = TopMenuItem(R.drawable.ic_back) { parentFragmentManager.popBackStack() },
                 rightBtnItem = TopMenuItem(text = R.string.Button_Restore, onClick = {
                     hideKeyboard()
-                    Handler().postDelayed({
-                        viewModel.onRestore()
-                    }, 100)
+                    viewModel.onRestore()
                 })
         )
         //disable restore button

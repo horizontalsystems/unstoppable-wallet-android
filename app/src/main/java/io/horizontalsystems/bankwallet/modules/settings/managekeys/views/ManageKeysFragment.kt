@@ -86,7 +86,7 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
     private fun observeRouter(router: ManageKeysRouter) {
         router.showRestore.observe(this, Observer { predefinedAccountType ->
             activity?.let {
-                RestoreModule.startInApp(it, predefinedAccountType)
+                RestoreModule.start(it, true, predefinedAccountType)
             }
         })
 

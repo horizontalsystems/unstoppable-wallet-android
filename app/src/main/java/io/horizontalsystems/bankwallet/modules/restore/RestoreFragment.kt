@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment
@@ -24,27 +26,7 @@ import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragmen
 class RestoreFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreViewModel
-
-    companion object {
-        const val fragmentTag = "restoreFragment"
-        const val selectPredefinedAccountTypeRequestKey = "selectPredefinedAccountTypeRequestKey"
-        const val predefinedAccountTypeBundleKey = "predefinedAccountTypeBundleKey"
-        const val accountTypeRequestKey = "accountTypeRequestKey"
-        const val accountTypeBundleKey = "accountTypeBundleKey"
-        const val selectCoinsRequestKey = "selectCoinsRequestKey"
-        const val selectCoinsBundleKey = "selectCoinsBundleKey"
-
-
-        fun instance(predefinedAccountType: PredefinedAccountType? = null, selectCoins: Boolean = true): RestoreFragment {
-            return RestoreFragment().apply {
-                arguments = Bundle(2).apply {
-                    putParcelable("predefinedAccountType", predefinedAccountType)
-                    putBoolean("selectCoins", selectCoins)
-                }
-            }
-        }
-
-    }
+    private var inApp = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_restore, container, false)
@@ -56,11 +38,15 @@ class RestoreFragment : BaseFragment() {
         val selectCoins = arguments?.getBoolean("selectCoins")
                 ?: throw Exception("Parameter missing")
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
+        inApp = arguments?.getBoolean("inApp") ?: true
 
         viewModel = ViewModelProvider(this, RestoreModule.Factory(selectCoins, predefinedAccountType))
                 .get(RestoreViewModel::class.java)
 
-        openScreen(viewModel.initialScreen)
+        Handler().postDelayed({
+            //without delay fragment is opened without slide animation
+            openScreen(viewModel.initialScreen)
+        }, 10)
 
         observe()
     }
@@ -74,7 +60,8 @@ class RestoreFragment : BaseFragment() {
                 parentFragmentManager.popBackStackImmediate()
 
                 if (parentFragmentManager.fragments.last() is RestoreFragment) {
-                    closeRestoreFragment(RestoreActivity.Result.Cancelation)
+                    //remove restore fragment too
+                    parentFragmentManager.popBackStack()
                 }
             }
         })
@@ -86,15 +73,18 @@ class RestoreFragment : BaseFragment() {
         })
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner, Observer {
-            closeRestoreFragment(RestoreActivity.Result.Success)
+            closeWithSuccess()
         })
     }
 
-    private fun closeRestoreFragment(result: RestoreActivity.Result) {
-        if (activity is RestoreActivity) {
-            (activity as? RestoreActivity)?.close(result)
-        } else {
+    private fun closeWithSuccess() {
+        if (inApp) {
             parentFragmentManager.popBackStack(fragmentTag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        } else {
+            activity?.let {
+                MainModule.start(it)
+                it.finishAffinity()
+            }
         }
     }
 
@@ -162,6 +152,29 @@ class RestoreFragment : BaseFragment() {
                     ?: return@FragmentResultListener
             viewModel.onSelect(selectedCoins)
         })
+    }
+
+
+    companion object {
+        const val fragmentTag = "restoreFragment"
+        const val selectPredefinedAccountTypeRequestKey = "selectPredefinedAccountTypeRequestKey"
+        const val predefinedAccountTypeBundleKey = "predefinedAccountTypeBundleKey"
+        const val accountTypeRequestKey = "accountTypeRequestKey"
+        const val accountTypeBundleKey = "accountTypeBundleKey"
+        const val selectCoinsRequestKey = "selectCoinsRequestKey"
+        const val selectCoinsBundleKey = "selectCoinsBundleKey"
+
+
+        fun instance(predefinedAccountType: PredefinedAccountType? = null, selectCoins: Boolean = true, inApp: Boolean): RestoreFragment {
+            return RestoreFragment().apply {
+                arguments = Bundle(2).apply {
+                    putParcelable("predefinedAccountType", predefinedAccountType)
+                    putBoolean("selectCoins", selectCoins)
+                    putBoolean("inApp", inApp)
+                }
+            }
+        }
+
     }
 
 }

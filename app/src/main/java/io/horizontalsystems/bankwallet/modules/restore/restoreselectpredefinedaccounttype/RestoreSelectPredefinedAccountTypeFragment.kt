@@ -24,14 +24,6 @@ class RestoreSelectPredefinedAccountTypeFragment: BaseFragment(), RestoreNavigat
     private lateinit var adapter: RestoreNavigationAdapter
     private lateinit var viewModel: RestoreSelectPredefinedAccountTypeViewModel
 
-    companion object {
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, RestoreSelectPredefinedAccountTypeFragment())
-                addToBackStack(null)
-            }
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_restore_select_predefined_account_type, container, false)
