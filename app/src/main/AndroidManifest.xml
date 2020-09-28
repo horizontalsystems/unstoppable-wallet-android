@@ -60,15 +60,6 @@
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="io.horizontalsystems.pin.PinActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.managecoins.views.ManageWalletsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.settings.managekeys.views.ManageKeysActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.restore.RestoreActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -80,9 +71,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.info.InfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.restore.restorecoins.RestoreCoinsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.ratechart.RateChartActivity"
