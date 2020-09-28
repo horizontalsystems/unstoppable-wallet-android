@@ -76,10 +76,6 @@
             android:theme="@style/OnboardingTheme"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.welcome.WelcomeActivity"
-            android:theme="@style/OnboardingTheme"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
         <activity

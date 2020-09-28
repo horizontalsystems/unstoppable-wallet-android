@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="24dp"
-    android:paddingEnd="24dp">
+    android:paddingEnd="24dp"
+    android:background="?android:windowBackground"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/title"
