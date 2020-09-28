@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.createwallet
 
-import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
@@ -31,16 +30,12 @@ object CreateWalletModule {
         }
     }
 
-    fun startAsActivity(activity: FragmentActivity) {
-        activity.startActivity(Intent(activity, CreateWalletActivity::class.java))
-    }
-
-    fun startInApp(activity: FragmentActivity, predefinedAccountType: PredefinedAccountType?) {
-        val fragment = CreateWalletFragment.instance(predefinedAccountType)
+    fun start(activity: FragmentActivity, inApp: Boolean = true, predefinedAccountType: PredefinedAccountType? = null) {
+        val fragment = CreateWalletFragment.instance(predefinedAccountType, inApp)
 
         activity.supportFragmentManager.commit {
             add(R.id.fragmentContainerView, fragment)
-            addToBackStack(CreateWalletFragment.fragmentTag)
+            addToBackStack(null)
         }
     }
 }

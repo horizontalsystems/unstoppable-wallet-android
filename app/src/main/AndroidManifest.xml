@@ -37,9 +37,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.createwallet.CreateWalletActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.main.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
