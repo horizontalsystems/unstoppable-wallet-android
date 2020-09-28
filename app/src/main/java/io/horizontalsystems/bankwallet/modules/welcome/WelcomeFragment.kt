@@ -34,7 +34,7 @@ class WelcomeFragment : BaseFragment() {
         })
 
         viewModel.openCreateWalletModule.observe(viewLifecycleOwner, Observer {
-            activity?.let { activity -> CreateWalletModule.startAsActivity(activity) }
+            activity?.let { activity -> CreateWalletModule.start(activity, false) }
         })
 
         viewModel.appVersionLiveData.observe(viewLifecycleOwner, Observer { appVersion ->

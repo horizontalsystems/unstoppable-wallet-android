@@ -92,7 +92,7 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
 
         router.showCreateWalletLiveEvent.observe(this, Observer { predefinedAccountType ->
             activity?.let {
-                CreateWalletModule.startInApp(it, predefinedAccountType)
+                CreateWalletModule.start(it, true, predefinedAccountType)
             }
         })
 

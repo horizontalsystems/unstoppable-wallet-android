@@ -21,7 +21,6 @@ class IntroActivity : BaseActivity() {
             exitTransition = fade
         }
 
-        setTransparentStatusBar()
         setContentView(R.layout.activity_fragment_container)
 
         supportFragmentManager.beginTransaction().apply {
