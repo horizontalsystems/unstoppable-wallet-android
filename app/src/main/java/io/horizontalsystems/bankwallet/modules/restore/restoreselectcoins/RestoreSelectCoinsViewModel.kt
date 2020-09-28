@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService
 import io.horizontalsystems.bankwallet.ui.extensions.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
@@ -74,9 +73,9 @@ class RestoreSelectCoinsViewModel(
     private fun enable(coin: Coin, derivationSetting: DerivationSetting? = null) {
         try {
             service.enable(coin, derivationSetting)
-        } catch (exception: ManageWalletsService.EnableCoinError) {
+        } catch (exception: RestoreSelectCoinsService.EnableCoinError) {
             when (val e = exception) {
-                is ManageWalletsService.EnableCoinError.DerivationNotConfirmed -> {
+                is RestoreSelectCoinsService.EnableCoinError.DerivationNotConfirmed -> {
                     openDerivationSettingsLiveEvent.postValue(Pair(coin, e.currentDerivation))
                 }
             }
