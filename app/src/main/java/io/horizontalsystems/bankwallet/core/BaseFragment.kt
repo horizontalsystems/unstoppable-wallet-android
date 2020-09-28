@@ -19,6 +19,10 @@ abstract class BaseFragment : Fragment() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
 
+    open fun canHandleOnBackPress(): Boolean{
+        return false
+    }
+
     protected fun showCustomKeyboardAlert() {
         AlertDialogFragment.newInstance(
                 titleString = getString(R.string.Alert_TitleWarning),
