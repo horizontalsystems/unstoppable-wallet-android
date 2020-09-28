@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.viewpager.widget.ViewPager>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalCenter"
@@ -12,29 +22,71 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.6" />
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/Title3"
+    <ImageSwitcher
+        android:id="@+id/imageSwitcher"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:background="@drawable/ic_ellipse"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
+        app:layout_constraintBottom_toTopOf="@+id/verticalCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="50dp" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/circleIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:ci_animator="@anim/pager_indicator_animation"
+        app:ci_drawable="@drawable/pin_pager_circle_selected"
+        app:ci_drawable_unselected="@drawable/pin_pager_circle"
+        app:ci_height="4dp"
+        app:ci_margin="4dp"
+        app:ci_width="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/verticalCenter"
-        tools:text="@string/Intro_Independence_Title" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <TextView
-        android:id="@+id/description"
-        style="@style/Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/btnSkip"
+        style="@style/Subhead1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="@string/Button_Skip"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="@string/Intro_Independence_Description" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
+    <TextView
+        android:id="@+id/btnNext"
+        style="@style/Subhead1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="@string/Button_Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 </androidx.constraintlayout.widget.ConstraintLayout>
