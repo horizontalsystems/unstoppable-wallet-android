@@ -613,7 +613,7 @@ Uniswap is a fully decentralized protocol for automated liquidity provision on E
 
     <!--Charts-->
 
-    <string name="Charts_TimeDuration_Day">1D</string>
+    <string name="Charts_TimeDuration_Day">24h</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
     <string name="Charts_TimeDuration_TwoWeeks">2W</string>
