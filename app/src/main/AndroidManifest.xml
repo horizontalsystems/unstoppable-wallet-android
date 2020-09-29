@@ -70,12 +70,6 @@
             android:name=".modules.ratechart.RateChartActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.security.privacy.PrivacySettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.settings.security.privacy.PrivacySettingsInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.swap.view.SwapActivity"
             android:screenOrientation="portrait" />
         <activity

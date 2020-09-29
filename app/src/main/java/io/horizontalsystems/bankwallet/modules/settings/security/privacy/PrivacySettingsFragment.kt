@@ -3,15 +3,15 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -22,20 +22,29 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.AlertDialogFragment
-import kotlinx.android.synthetic.main.activity_settings_privacy.*
+import kotlinx.android.synthetic.main.fragment_settings_privacy.*
+import kotlinx.android.synthetic.main.fragment_settings_privacy.toolbar
 import kotlin.system.exitProcess
 
-class PrivacySettingsActivity : BaseActivity() {
+class PrivacySettingsFragment : BaseFragment() {
     private lateinit var viewModel: PrivacySettingsViewModel
     private lateinit var communicationSettingsAdapter: PrivacySettingsAdapter
     private lateinit var walletRestoreSettingsAdapter: PrivacySettingsAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings_privacy)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_settings_privacy, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+
+        setHasOptionsMenu(true)
 
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()
@@ -51,19 +60,19 @@ class PrivacySettingsActivity : BaseActivity() {
         }
 
         // IView
-        viewModel.showPrivacySettingsInfo.observe(this, Observer { enabled ->
+        viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer { enabled ->
             openPrivacySettingsInfo()
         })
 
-        viewModel.torEnabledLiveData.observe(this, Observer { enabled ->
+        viewModel.torEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
             setTorSwitch(enabled)
         })
 
-        viewModel.blockchainSettingsVisibilityLiveData.observe(this, Observer { isVisible ->
+        viewModel.blockchainSettingsVisibilityLiveData.observe(viewLifecycleOwner, Observer { isVisible ->
             createWalletRestoreSettingsView(isVisible)
         })
 
-        viewModel.setTorConnectionStatus.observe(this, Observer { torStatus ->
+        viewModel.setTorConnectionStatus.observe(viewLifecycleOwner, Observer { torStatus ->
             torStatus?.let {
                 when (torStatus) {
                     TorStatus.Connecting -> {
@@ -94,28 +103,28 @@ class PrivacySettingsActivity : BaseActivity() {
             }
         })
 
-        viewModel.transactionOrderingLiveData.observe(this, Observer { ordering ->
+        viewModel.transactionOrderingLiveData.observe(viewLifecycleOwner, Observer { ordering ->
             transactionsOrderSetting.showDropdownValue(getSortingLocalized(ordering))
         })
 
-        viewModel.showAppRestartAlertForTor.observe(this, Observer { checked ->
+        viewModel.showAppRestartAlertForTor.observe(viewLifecycleOwner, Observer { checked ->
             showAppRestartAlert(checked)
         })
 
-        viewModel.showNotificationsNotEnabledAlert.observe(this, Observer {
+        viewModel.showNotificationsNotEnabledAlert.observe(viewLifecycleOwner, Observer {
             showNotificationsNotEnabledAlert()
         })
 
-        viewModel.showTorPrerequisitesAlert.observe(this, Observer {
+        viewModel.showTorPrerequisitesAlert.observe(viewLifecycleOwner, Observer {
             showTorPrerequisitesAlert()
         })
 
-        viewModel.showTransactionsSortingSelectorDialog.observe(this, Observer { (items, selected) ->
+        viewModel.showTransactionsSortingSelectorDialog.observe(viewLifecycleOwner, Observer { (items, selected) ->
             BottomSheetSelectorDialog.show(
-                    supportFragmentManager,
+                    childFragmentManager,
                     getString(R.string.SettingsPrivacy_Transactions),
                     getString(R.string.SettingsPrivacy_TransactionsSettingText),
-                    ContextCompat.getDrawable(this, R.drawable.ic_transactions),
+                    context?.let { ContextCompat.getDrawable(it, R.drawable.ic_transactions) },
                     items.map { getSortingInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
@@ -130,6 +139,21 @@ class PrivacySettingsActivity : BaseActivity() {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_info_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuShowInfo -> {
+                viewModel.delegate.onShowPrivacySettingsInfoClick()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun createCommunicationSettingsView() {
 
         communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
@@ -142,10 +166,10 @@ class PrivacySettingsActivity : BaseActivity() {
 
         viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
             BottomSheetSelectorDialog.show(
-                    supportFragmentManager,
+                    childFragmentManager,
                     getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
                     coin.title,
-                    AppLayoutHelper.getCoinDrawable(this, coin.code, coin.type),
+                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
                     items.map { getCommunicationModeInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
@@ -155,24 +179,26 @@ class PrivacySettingsActivity : BaseActivity() {
         })
 
         viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
-            ConfirmationDialog.show(
-                    title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
-                    subtitle = communicationMode.title,
-                    contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
-                    actionButtonTitle = getString(R.string.Button_Change),
-                    cancelButtonTitle = getString(R.string.Alert_Cancel),
-                    activity = this,
-                    listener = object : ConfirmationDialog.Listener {
-                        override fun onActionButtonClick() {
-                            viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
-                        }
+            activity?.let {
+                ConfirmationDialog.show(
+                        title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
+                        subtitle = communicationMode.title,
+                        contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
+                        actionButtonTitle = getString(R.string.Button_Change),
+                        cancelButtonTitle = getString(R.string.Alert_Cancel),
+                        activity = it,
+                        listener = object : ConfirmationDialog.Listener {
+                            override fun onActionButtonClick() {
+                                viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
+                            }
 
-                        override fun onCancelButtonClick() {
-                            setTorSwitch(false)
-                            viewModel.delegate.onApplyTorPrerequisites(false)
+                            override fun onCancelButtonClick() {
+                                setTorSwitch(false)
+                                viewModel.delegate.onApplyTorPrerequisites(false)
+                            }
                         }
-                    }
-            )
+                )
+            }
         })
     }
 
@@ -190,10 +216,10 @@ class PrivacySettingsActivity : BaseActivity() {
 
             viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
                 BottomSheetSelectorDialog.show(
-                        supportFragmentManager,
+                        childFragmentManager,
                         getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
                         coin.title,
-                        AppLayoutHelper.getCoinDrawable(this, coin.code, coin.type),
+                        context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
                         items.map { getSyncModeInfo(it) },
                         items.indexOf(selected),
                         onItemSelected = { position ->
@@ -252,25 +278,27 @@ class PrivacySettingsActivity : BaseActivity() {
     }
 
     private fun showAppRestartAlert(checked: Boolean) {
-        ConfirmationDialog.show(
-                icon = R.drawable.ic_tor,
-                title = getString(R.string.SettingsPrivacy_ConnectionSettingsTitle),
-                subtitle = getString(R.string.SettingsSecurity_EnableTor),
-                contentText = getString(R.string.SettingsSecurity_AppRestartWarning),
-                actionButtonTitle = getString(R.string.Alert_Restart),
-                cancelButtonTitle = null, // Do not show cancel button
-                activity = this,
-                listener = object : ConfirmationDialog.Listener {
-                    override fun onActionButtonClick() {
-                        viewModel.delegate.setTorEnabled(checked)
-                    }
+        activity?.let {
+            ConfirmationDialog.show(
+                    icon = R.drawable.ic_tor,
+                    title = getString(R.string.SettingsPrivacy_ConnectionSettingsTitle),
+                    subtitle = getString(R.string.SettingsSecurity_EnableTor),
+                    contentText = getString(R.string.SettingsSecurity_AppRestartWarning),
+                    actionButtonTitle = getString(R.string.Alert_Restart),
+                    cancelButtonTitle = null, // Do not show cancel button
+                    activity = it,
+                    listener = object : ConfirmationDialog.Listener {
+                        override fun onActionButtonClick() {
+                            viewModel.delegate.setTorEnabled(checked)
+                        }
 
-                    override fun onCancelButtonClick() {
-                        setTorSwitch(!checked)
-                        viewModel.delegate.onApplyTorPrerequisites(!checked)
+                        override fun onCancelButtonClick() {
+                            setTorSwitch(!checked)
+                            viewModel.delegate.onApplyTorPrerequisites(!checked)
+                        }
                     }
-                }
-        )
+            )
+        }
     }
 
     private fun showNotificationsNotEnabledAlert() {
@@ -287,7 +315,7 @@ class PrivacySettingsActivity : BaseActivity() {
                     override fun onCancel() {
                         setTorSwitch(false)
                     }
-                }).show(supportFragmentManager, "alert_dialog_notification")
+                }).show(childFragmentManager, "alert_dialog_notification")
     }
 
     private fun showTorPrerequisitesAlert() {
@@ -303,43 +331,32 @@ class PrivacySettingsActivity : BaseActivity() {
                     override fun onCancel() {
                         setTorSwitch(false)
                     }
-                }).show(supportFragmentManager, "alert_dialog")
+                }).show(childFragmentManager, "alert_dialog")
     }
 
     private fun openAppNotificationSettings() {
         val intent = Intent()
         intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-        intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+        intent.putExtra("android.provider.extra.APP_PACKAGE", context?.packageName)
         startActivity(intent)
     }
 
     private fun restartApp() {
-        MainModule.startAsNewTask(this)
-        if (App.localStorage.torEnabled) {
-            val intent = Intent(this, TorConnectionActivity::class.java)
-            startActivity(intent)
+        activity?.let {
+            MainModule.startAsNewTask(it)
+            if (App.localStorage.torEnabled) {
+                val intent = Intent(it, TorConnectionActivity::class.java)
+                startActivity(intent)
+            }
+            exitProcess(0)
         }
-        exitProcess(0)
     }
 
-    private fun getTint(color: Int) = ColorStateList.valueOf(ContextCompat.getColor(this, color))
+    private fun getTint(color: Int) = context?.let { ColorStateList.valueOf(ContextCompat.getColor(it, color)) }
 
     private fun openPrivacySettingsInfo() {
-        PrivacySettingsInfoActivity.start(this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.settings_info_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuShowInfo -> {
-                viewModel.delegate.onShowPrivacySettingsInfoClick()
-                return true
-            }
+        activity?.let {
+            PrivacySettingsInfoFragment.start(it)
         }
-        return super.onOptionsItemSelected(item)
     }
 }
