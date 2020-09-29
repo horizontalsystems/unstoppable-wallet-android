@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.chartview.models.PointInfo
@@ -72,6 +75,14 @@ object RateChartModule {
             interactor.delegate = presenter
 
             return presenter as T
+        }
+    }
+
+    fun start(fragmentManager: FragmentManager, coinCode: String, coinTitle: String, coinId: String? = null){
+        val fragment = RateChartFragment.instance(coinCode, coinTitle, coinId)
+        fragmentManager.commit {
+            add(R.id.fragmentContainerView, fragment)
+            addToBackStack(null)
         }
     }
 
