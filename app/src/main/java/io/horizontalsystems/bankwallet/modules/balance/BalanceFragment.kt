@@ -15,12 +15,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.backup.BackupFragment
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
@@ -232,11 +231,9 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            startActivity(Intent(activity, RateChartActivity::class.java).apply {
-                putExtra(ModuleField.COIN_ID, coin.coinId)
-                putExtra(ModuleField.COIN_CODE, coin.code)
-                putExtra(ModuleField.COIN_TITLE, coin.title)
-            })
+            activity?.let{
+                RateChartModule.start(it.supportFragmentManager, coin.code, coin.title, coin.coinId)
+            }
         })
 
         viewModel.openContactPage.observe(viewLifecycleOwner, Observer {

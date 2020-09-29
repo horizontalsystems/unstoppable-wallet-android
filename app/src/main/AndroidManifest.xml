@@ -67,9 +67,6 @@
             android:name=".modules.info.InfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.ratechart.RateChartActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.swap.view.SwapActivity"
             android:screenOrientation="portrait" />
         <activity

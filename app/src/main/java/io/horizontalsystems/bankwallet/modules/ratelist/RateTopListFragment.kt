@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartActivity
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import kotlinx.android.synthetic.main.fragment_rates.*
@@ -58,10 +56,7 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
 
     private fun observeRouter(router: RateListRouter) {
         router.openChartLiveEvent.observe(viewLifecycleOwner, Observer { (coinCode, coinTitle) ->
-            startActivity(Intent(activity, RateChartActivity::class.java).apply {
-                putExtra(ModuleField.COIN_CODE, coinCode)
-                putExtra(ModuleField.COIN_TITLE, coinTitle)
-            })
+            RateChartModule.start(parentFragmentManager, coinCode, coinTitle)
         })
 
         router.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { selected ->

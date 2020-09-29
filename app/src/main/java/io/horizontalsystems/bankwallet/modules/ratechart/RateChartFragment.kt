@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -11,8 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -20,34 +18,54 @@ import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
-import kotlinx.android.synthetic.main.activity_rate_chart.*
+import kotlinx.android.synthetic.main.fragment_rate_chart.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
 
-class RateChartActivity : BaseActivity(), Chart.Listener {
+class RateChartFragment : BaseFragment(), Chart.Listener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_rate_chart)
+    companion object {
+        fun instance(coinCode: String, coinTitle: String, coinId: String? = null): RateChartFragment {
+            return RateChartFragment().apply {
+                arguments = Bundle(3).apply {
+                    putString("coinCode", coinCode)
+                    putString("coinTitle", coinTitle)
+                    putString("coinId", coinId)
+                }
+            }
+        }
+    }
 
-        val coinId = intent.getStringExtra(ModuleField.COIN_ID)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_rate_chart, container, false)
+    }
 
-        val coinCode = intent.getStringExtra(ModuleField.COIN_CODE) ?: run {
-            finish()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setHasOptionsMenu(true)
+
+        val coinId = arguments?.getString("coinId")
+
+        val coinCode = arguments?.getString("coinCode") ?: run {
+            parentFragmentManager.popBackStackImmediate()
             return
         }
 
-        val coinTitle = intent.getStringExtra(ModuleField.COIN_TITLE) ?: ""
-        toolbar.title = coinTitle
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val coinTitle = arguments?.getString("coinTitle") ?: ""
+
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            it.title = coinTitle
+        }
 
         presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
@@ -57,25 +75,20 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         observeData()
         bindActions()
-    }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
         presenter.viewDidLoad()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.rate_chart_menu, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.rate_chart_menu, menu)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.menuNotification)?.apply {
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menuNotification)?.apply {
             isVisible = presenter.notificationIconVisible
             val iconRes = if (presenter.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_inactive_24
-            icon = ContextCompat.getDrawable(this@RateChartActivity, iconRes)
+            icon = context?.let { ContextCompat.getDrawable(it, iconRes) }
         }
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -86,6 +99,11 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun canHandleOnBackPress(): Boolean {
+        parentFragmentManager.popBackStackImmediate()
+        return true
     }
 
     //  ChartView Listener
@@ -111,19 +129,19 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
     //  Private
 
     private fun observeData() {
-        presenterView.showSpinner.observe(this, Observer {
+        presenterView.showSpinner.observe(viewLifecycleOwner, Observer {
             chart.showSinner()
         })
 
-        presenterView.hideSpinner.observe(this, Observer {
+        presenterView.hideSpinner.observe(viewLifecycleOwner, Observer {
             chart.hideSinner()
         })
 
-        presenterView.setDefaultMode.observe(this, Observer { type ->
+        presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
             actions[type]?.let { resetActions(it, setDefault = true) }
         })
 
-        presenterView.showChartInfo.observe(this, Observer { item ->
+        presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chart.showChart()
 
             rootView.post {
@@ -137,7 +155,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             coinRateDiff.diff = item.diffValue
         })
 
-        presenterView.showMarketInfo.observe(this, Observer { item ->
+        presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
             coinRateLast.text = formatter.formatFiat(item.rateValue.value, item.rateValue.currency.symbol, 2, 4)
 
             coinMarketCap.apply {
@@ -187,7 +205,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
 
         })
 
-        presenterView.setSelectedPoint.observe(this, Observer { item ->
+        presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
             pointInfoVolume.isInvisible = true
             pointInfoVolumeTitle.isInvisible = true
 
@@ -207,7 +225,7 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             item.macdInfo?.let { macdInfo ->
                 macdInfo.histogram?.let {
                     macdHistogram.isVisible = true
-                    macdHistogram.setTextColor(getHistogramColor(it))
+                    getHistogramColor(it)?.let { it1 -> macdHistogram.setTextColor(it1) }
                     macdHistogram.text = formatter.format(it, 0, 2)
                 }
                 macdInfo.signal?.let {
@@ -221,16 +239,16 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             }
         })
 
-        presenterView.showError.observe(this, Observer {
+        presenterView.showError.observe(viewLifecycleOwner, Observer {
             chart.showError(getString(R.string.Charts_Error_NotAvailable))
         })
 
-        presenterView.showEma.observe(this, Observer { enabled ->
+        presenterView.showEma.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showEma(enabled)
             emaChartIndicator.setStateEnabled(enabled)
         })
 
-        presenterView.showMacd.observe(this, Observer { enabled ->
+        presenterView.showMacd.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showMacd(enabled)
             macdChartIndicator.setStateEnabled(enabled)
 
@@ -238,17 +256,17 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
             setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = enabled)
         })
 
-        presenterView.showRsi.observe(this, Observer { enabled ->
+        presenterView.showRsi.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showRsi(enabled)
             rsiChartIndicator.setStateEnabled(enabled)
         })
 
-        presenterView.alertNotificationUpdated.observe(this, Observer { visible ->
-            invalidateOptionsMenu()
+        presenterView.alertNotificationUpdated.observe(viewLifecycleOwner, Observer { visible ->
+            activity?.invalidateOptionsMenu()
         })
 
-        presenterView.showNotificationMenu.observe(this, Observer { (coinId, coinName) ->
-            BottomNotificationMenu.show(supportFragmentManager, NotificationMenuMode.All, coinName, coinId)
+        presenterView.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinId, coinName) ->
+            BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinId)
         })
 
     }
@@ -258,9 +276,9 @@ class RateChartActivity : BaseActivity(), Chart.Listener {
         return formatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
     }
 
-    private fun getHistogramColor(value: Float): Int {
+    private fun getHistogramColor(value: Float): Int? {
         val textColor = if (value > 0) R.color.green_d else R.color.red_d
-        return getColor(textColor)
+        return context?.getColor(textColor)
     }
 
     private fun bindActions() {
