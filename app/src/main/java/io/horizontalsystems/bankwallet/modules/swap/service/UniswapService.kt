@@ -113,7 +113,7 @@ class UniswapService(
     override val fee = BehaviorSubject.create<DataState<SwapFeeInfo?>>()
 
     override val swapFee: CoinValue?
-        get() = amountSending?.multiply(BigDecimal("0.003"))?.let { CoinValue(coinSending, it) }
+        get() = trade.dataOrNull?.swapFee
 
     override val feeRatePriority: FeeRatePriority
         get() = uniswapFeeProvider.feeRatePriority
@@ -347,7 +347,7 @@ class UniswapService(
                 }
             }
             is DataState.Error -> {
-                val error = when(feeDataState.error) {
+                val error = when (feeDataState.error) {
                     is SwapApproveModule.InsufficientFeeBalance -> SwapError.InsufficientBalanceForFee(feeDataState.error.coinValue)
                     else -> SwapError.CouldNotFetchFee
                 }
@@ -433,6 +433,7 @@ class UniswapService(
                     amountOut,
                     executionPrice,
                     priceImpact(priceImpact),
+                    tradeData.providerFee?.let { CoinValue(coinSending, it) },
                     if (tradeData.type == TradeType.ExactIn) amountOutMin else amountInMax
             )
         }
