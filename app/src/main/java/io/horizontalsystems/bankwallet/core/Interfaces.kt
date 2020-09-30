@@ -28,6 +28,7 @@ interface IAdapterManager {
     fun refresh()
     fun stopKits()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
+    fun getAdapterForCoin(coin: Coin): IAdapter?
     fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?

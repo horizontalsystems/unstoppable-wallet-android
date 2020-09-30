@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
@@ -11,7 +14,6 @@ import io.horizontalsystems.erc20kit.models.Transaction
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.TransactionWithInternal
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -121,7 +123,14 @@ class Erc20Adapter(
         )
     }
 
-    fun approve(address: String, amount: BigDecimal, gasPrice: Long, gasLimit: Long): Single<TransactionWithInternal> {
+    fun allowance(spenderAddress: Address): Single<BigDecimal> {
+        return erc20Kit.allowance(spenderAddress)
+                .map {
+                    scaleDown(it.toBigDecimal())
+                }
+    }
+
+    fun approve(address: String, amount: BigDecimal, gasPrice: Long, gasLimit: Long): Single<Transaction> {
         return erc20Kit.approve(Address(address), scaleUp(amount), gasPrice, gasLimit)
     }
 
