@@ -54,7 +54,7 @@ class ConfirmationPresenter(
         swapService.state
                 .subscribeOn(Schedulers.io())
                 .subscribe { swapState ->
-                    _swapButtonEnabled.postValue(swapState != SwapState.Swapping)
+                    _swapButtonEnabled.postValue(swapState == SwapState.SwapAllowed)
 
                     val swapButtonTitle = if (swapState == SwapState.Swapping) {
                         stringProvider.string(R.string.Swap_Swapping)
