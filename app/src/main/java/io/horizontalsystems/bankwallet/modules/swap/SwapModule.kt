@@ -14,13 +14,14 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
-import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.provider.AllowanceProvider
-import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
+import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
 import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
+import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapActivity
+import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
@@ -114,10 +115,10 @@ object SwapModule {
 
             val swapRepository = UniswapRepository(uniswapKit)
             val swapService = UniswapService(coinSending, swapRepository, allowanceProvider, App.walletManager, App.adapterManager, App.feeCoinProvider, uniswapFeeProvider)
+            val formatter = SwapItemFormatter(stringProvider, App.numberFormatter)
+            val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, formatter)
 
-            val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, App.numberFormatter)
-
-            return SwapViewModel(confirmationPresenter, swapService, stringProvider, App.numberFormatter, listOf(swapService, confirmationPresenter)) as T
+            return SwapViewModel(confirmationPresenter, swapService, stringProvider, formatter, listOf(swapService, confirmationPresenter)) as T
         }
     }
 }

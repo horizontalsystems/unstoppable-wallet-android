@@ -47,7 +47,7 @@ class SwapConfirmationFragment : Fragment() {
             presenter.onSwap()
         }
 
-        presenter.confirmationViewItem().let {
+        presenter.confirmationViewItem()?.let {
             payTitle.text = it.sendingTitle
             payValue.text = it.sendingValue
             getTitle.text = it.receivingTitle
