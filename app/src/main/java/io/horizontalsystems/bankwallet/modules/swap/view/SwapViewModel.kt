@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.DataState
-import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.ISwapService
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
@@ -17,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
+import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -27,7 +26,7 @@ class SwapViewModel(
         val confirmationPresenter: ConfirmationPresenter,
         private val swapService: ISwapService,
         private val stringProvider: StringProvider,
-        private val numberFormatter: IAppNumberFormatter,
+        private val formatter: SwapItemFormatter,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -116,7 +115,7 @@ class SwapViewModel(
         swapService.balance
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    _balance.postValue(formatCoinAmount(it.value, it.coin))
+                    _balance.postValue(formatter.coinAmount(it.value, it.coin))
                 }
                 .let { disposables.add(it) }
 
@@ -139,7 +138,7 @@ class SwapViewModel(
                 .subscribe {
                     if (it is DataState.Success) {
                         _allowance.postValue(it.data?.let { coinValue ->
-                            formatCoinAmount(coinValue.value, coinValue.coin)
+                            formatter.coinAmount(coinValue.value, coinValue.coin)
                         })
                     }
                     _allowanceLoading.postValue(it is DataState.Loading)
@@ -237,31 +236,13 @@ class SwapViewModel(
         }
     }
 
-    private fun formatCoinAmount(amount: BigDecimal, coin: Coin): String {
-        val maxFraction = if (coin.decimal < 8) coin.decimal else 8
-        return numberFormatter.formatCoin(amount, coin.code, 0, maxFraction)
-    }
-
     private fun tradeViewItem(trade: Trade): TradeViewItem {
-        val minMaxTitle: String?
-        val minMaxAmount: String?
-
-        when (trade.amountType) {
-            AmountType.ExactSending -> {
-                minMaxTitle = stringProvider.string(R.string.Swap_MinimumReceived)
-                minMaxAmount = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinReceiving) }
-            }
-            AmountType.ExactReceiving -> {
-                minMaxTitle = stringProvider.string(R.string.Swap_MaximumSold)
-                minMaxAmount = trade.minMaxAmount?.let { formatCoinAmount(it, trade.coinSending) }
-            }
-        }
         return TradeViewItem(
-                trade.executionPrice?.let { "${trade.coinSending.code} = ${formatCoinAmount(it, trade.coinReceiving)} " },
-                trade.priceImpact?.value?.toPlainString()?.let { stringProvider.string(R.string.Swap_Percent, it) },
+                trade.executionPrice?.let { formatter.executionPrice(it, trade.coinSending, trade.coinReceiving) },
+                trade.priceImpact?.let { formatter.priceImpact(it) },
                 trade.priceImpact?.level,
-                minMaxTitle,
-                minMaxAmount
+                formatter.minMaxTitle(trade.amountType),
+                trade.minMaxAmount?.let { formatter.minMaxValue(it, trade.coinSending, trade.coinReceiving, trade.amountType) }
         )
     }
 
@@ -271,7 +252,7 @@ class SwapViewModel(
             errors.contains(SwapError.CouldNotFetchTrade) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchTrade)
             errors.contains(SwapError.CouldNotFetchAllowance) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchAllowance)
             errors.contains(SwapError.CouldNotFetchFee) -> stringProvider.string(R.string.Swap_ErrorCouldNotFetchFee)
-            errors.any { it is SwapError.InsufficientBalanceForFee} -> {
+            errors.any { it is SwapError.InsufficientBalanceForFee } -> {
                 val error = errors.first { it is SwapError.InsufficientBalanceForFee } as SwapError.InsufficientBalanceForFee
                 val coinValue = error.coinValue
 
