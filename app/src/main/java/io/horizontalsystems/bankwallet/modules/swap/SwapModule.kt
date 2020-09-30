@@ -107,7 +107,7 @@ object SwapModule {
             val ethereumKit = App.ethereumKitManager.ethereumKit ?: throw EthereumKitNotCreated()
             val uniswapKit = UniswapKit.getInstance(ethereumKit)
 
-            val allowanceProvider = AllowanceProvider(ethereumKit, ethereumKit.receiveAddress)
+            val allowanceProvider = AllowanceProvider(App.adapterManager)
             val feeRateProvider = FeeRateProviderFactory.provider(coinSending)
             val uniswapFeeProvider = UniswapFeeProvider(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider!!)
             val stringProvider = StringProvider(App.instance)
