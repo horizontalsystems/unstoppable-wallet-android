@@ -102,7 +102,7 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         viewModel.openProviderSettingsEvent.observe(viewLifecycleOwner, Observer { coin ->
             val fragment = DataProviderSettingsFragment.instance(coin)
             parentFragmentManager.commit {
-                add(R.id.txFullInfoContainerView, fragment)
+                add(R.id.topFragmentContainerView, fragment)
                 addToBackStack(null)
             }
         })
