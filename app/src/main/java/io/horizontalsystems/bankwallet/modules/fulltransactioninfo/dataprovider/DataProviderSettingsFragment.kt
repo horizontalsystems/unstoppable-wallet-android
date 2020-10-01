@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
-import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,56 +11,76 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_explorer_switcher.*
+import kotlinx.android.synthetic.main.fragment_explorer_switcher.*
 import kotlinx.android.synthetic.main.view_holder_explorer_item.*
 
-class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter.Listener {
+class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter.Listener {
 
     private var adapter: DataProviderSettingsAdapter? = null
 
     private lateinit var viewModel: DataProviderSettingsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_explorer_switcher, container, false)
+    }
 
-        val coin = intent.getParcelableExtra<Coin>(DataProviderSettingsModule.COIN_STRING) ?: run { finish(); return }
-        val txHash = intent.getStringExtra(DataProviderSettingsModule.TRANSACTION_HASH) ?: run { finish(); return }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val coin = arguments?.getParcelable<Coin>("coinKey") ?: run {
+            parentFragmentManager.popBackStack()
+            return
+        }
+
         viewModel = ViewModelProvider(this).get(DataProviderSettingsViewModel::class.java)
-        viewModel.init(coin, txHash)
-
-        setContentView(R.layout.activity_explorer_switcher)
+        viewModel.init(coin)
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Source),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { onBackPressed() })
+                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { parentFragmentManager.popBackStack() })
         )
 
         adapter = DataProviderSettingsAdapter(this)
 
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewModel.providerItems.observe(this, Observer { items ->
+        viewModel.providerItems.observe(viewLifecycleOwner, Observer { items ->
             items?.let {
                 adapter?.items = it
                 adapter?.notifyDataSetChanged()
             }
         })
 
-        viewModel.closeLiveEvent.observe(this, Observer {
-            finish()
+        viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
+            Handler().postDelayed({ parentFragmentManager.popBackStack() }, 500)
         })
     }
 
     override fun onChangeProvider(item: DataProviderSettingsItem) {
         viewModel.delegate.onSelect(item)
+    }
+
+    override fun canHandleOnBackPress(): Boolean {
+        parentFragmentManager.popBackStack()
+        return true
+    }
+
+    companion object {
+        fun instance(coin: Coin): DataProviderSettingsFragment {
+            return DataProviderSettingsFragment().apply {
+                arguments = Bundle(1).apply {
+                    putParcelable("coinKey", coin)
+                }
+            }
+        }
     }
 }
 
@@ -87,7 +107,7 @@ class DataProviderSettingsAdapter(private var listener: Listener) : RecyclerView
         return when (viewType) {
             VIEW_TYPE_ITEM -> {
                 val containerView = inflater.inflate(ViewHolderDataProviderSettings.layoutResourceId, parent, false)
-                ViewHolderDataProviderSettings(parent.context, containerView)
+                ViewHolderDataProviderSettings(containerView)
             }
             else -> ViewHolderProgressbar(inflater.inflate(ViewHolderProgressbar.layoutResourceId, parent, false))
         }
@@ -101,13 +121,13 @@ class DataProviderSettingsAdapter(private var listener: Listener) : RecyclerView
 
 }
 
-class ViewHolderDataProviderSettings(private val context: Context, override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderDataProviderSettings(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: DataProviderSettingsItem, showBottomShade: Boolean, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         title.text = item.name
-        subtitle.text = context.getString(if (item.online) R.string.FullInfo_Source_Online else R.string.FullInfo_Source_Offline)
+        subtitle.text = containerView.context.getString(if (item.online) R.string.FullInfo_Source_Online else R.string.FullInfo_Source_Offline)
         subtitle.setTextColor(ContextCompat.getColor(subtitle.context, if (item.online) R.color.green_d else R.color.red_d))
 
         statusChecking.isVisible = item.checking
@@ -118,7 +138,7 @@ class ViewHolderDataProviderSettings(private val context: Context, override val 
     }
 
     companion object {
-        val layoutResourceId = R.layout.view_holder_explorer_item
+        const val layoutResourceId = R.layout.view_holder_explorer_item
     }
 
 }

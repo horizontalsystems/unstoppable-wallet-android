@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
@@ -41,11 +42,11 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         super.onViewCreated(view, savedInstanceState)
 
         val transactionHash = arguments?.getString("transactionHashKey") ?: run {
-            parentFragmentManager.popBackStackImmediate()
+            parentFragmentManager.popBackStack()
             return
         }
         val wallet = arguments?.getParcelable<Wallet>("walletKey") ?: run {
-            parentFragmentManager.popBackStackImmediate()
+            parentFragmentManager.popBackStack()
             return
         }
 
@@ -62,7 +63,7 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Title),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { parentFragmentManager.popBackStackImmediate() })
+                rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { parentFragmentManager.popBackStack() })
         )
 
         //
@@ -98,9 +99,11 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
             }
         })
 
-        viewModel.openProviderSettingsEvent.observe(viewLifecycleOwner, Observer { data ->
-            data?.let { (coin, transactionHash) ->
-                context?.let { DataProviderSettingsModule.start(it, coin, transactionHash) }
+        viewModel.openProviderSettingsEvent.observe(viewLifecycleOwner, Observer { coin ->
+            val fragment = DataProviderSettingsFragment.instance(coin)
+            parentFragmentManager.commit {
+                add(R.id.txFullInfoContainerView, fragment)
+                addToBackStack(null)
             }
         })
 
@@ -131,7 +134,7 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
     }
 
     override fun canHandleOnBackPress(): Boolean {
-        parentFragmentManager.popBackStackImmediate()
+        parentFragmentManager.popBackStack()
         return true
     }
 

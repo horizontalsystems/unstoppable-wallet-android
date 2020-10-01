@@ -18,7 +18,7 @@ object FullTransactionInfoModule {
         fun showErrorTransactionNotFound(providerName: String)
         fun showCopied()
         fun openUrl(url: String)
-        fun openProviderSettings(coin: Coin, transactionHash: String)
+        fun openProviderSettings(coin: Coin)
         fun share(url: String)
         fun setShareButtonVisibility(visible: Boolean)
         fun showTransactionInfo()

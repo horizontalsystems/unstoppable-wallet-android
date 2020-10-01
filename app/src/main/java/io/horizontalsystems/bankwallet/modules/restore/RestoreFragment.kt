@@ -57,7 +57,7 @@ class RestoreFragment : BaseFragment() {
             override fun handleOnBackPressed() {
                 hideKeyboard()
 
-                parentFragmentManager.popBackStackImmediate()
+                parentFragmentManager.popBackStack()
 
                 if (parentFragmentManager.fragments.last() is RestoreFragment) {
                     //remove restore fragment too
