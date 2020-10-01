@@ -113,12 +113,6 @@ class BalanceViewItemFactory {
         return coinType.typeLabel() != null
     }
 
-    private fun buttonSwapVisible(balanceItem: BalanceModule.BalanceItem): Boolean {
-        val coinType = balanceItem.wallet.coin.type
-        val balance = balanceItem.balance ?: BigDecimal.ZERO
-        return coinType.swappable && balance > BigDecimal.ZERO
-    }
-
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
@@ -150,7 +144,7 @@ class BalanceViewItemFactory {
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
                 hideBalance = hideBalance,
-                swapVisible = buttonSwapVisible(item),
+                swapVisible = item.wallet.coin.type.swappable,
                 swapEnabled = state is AdapterState.Synced
         )
     }

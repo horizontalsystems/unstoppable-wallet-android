@@ -301,7 +301,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="4dp"
                 android:drawableTop="@drawable/ic_swap"
-                android:drawableTint="@color/black"
+                android:drawableTint="@color/button_text_color_selector"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/buttonSend"
