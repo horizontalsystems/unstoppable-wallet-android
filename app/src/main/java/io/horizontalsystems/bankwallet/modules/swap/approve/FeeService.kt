@@ -24,7 +24,7 @@ class FeeService(
 
     override var gasPrice: Long = 0
     override var gasLimit: Long = 0
-    override val feeRatePriority = FeeRatePriority.HIGH
+    override val feeRatePriority = FeeRatePriority.MEDIUM
 
     override val feeValues = BehaviorSubject.create<DataState<Pair<CoinValue, CurrencyValue?>>>()
 

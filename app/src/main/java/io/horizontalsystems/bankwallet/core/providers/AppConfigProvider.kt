@@ -146,6 +146,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
     override val syncModeSettings: List<SyncModeSetting>
         get() = listOf(
                 SyncModeSetting(CoinType.Bitcoin, SyncMode.Fast),
+                SyncModeSetting(CoinType.BitcoinCash, SyncMode.Fast),
                 SyncModeSetting(CoinType.Litecoin, SyncMode.Fast),
                 SyncModeSetting(CoinType.Dash, SyncMode.Fast)
         )
