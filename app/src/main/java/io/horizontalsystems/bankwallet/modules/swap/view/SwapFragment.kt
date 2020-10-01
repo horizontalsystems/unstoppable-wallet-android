@@ -1,19 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.swap.view
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
@@ -24,28 +26,37 @@ import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.activity_swap.*
+import kotlinx.android.synthetic.main.fragment_swap.*
 import java.math.BigDecimal
 
-class SwapActivity : BaseActivity() {
+class SwapFragment : BaseFragment() {
 
     lateinit var viewModel: SwapViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_swap)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_swap, container, false)
+    }
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(getDrawable(R.drawable.ic_info))
-        supportActionBar?.title = getString(R.string.Swap)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val coinSending = intent.extras?.getParcelable<Coin>(SwapModule.tokenInKey)
+        setHasOptionsMenu(true)
+
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            it.supportActionBar?.setHomeAsUpIndicator(context?.getDrawable(R.drawable.ic_info))
+            it.supportActionBar?.title = getString(R.string.Swap)
+        }
+
+        val coinSending = arguments?.getParcelable<Coin>("tokenInKey")
         viewModel = ViewModelProvider(this, SwapModule.Factory(coinSending!!)).get(SwapViewModel::class.java)
 
         fromAmount.apply {
             onTokenButtonClick {
-                SelectSwapCoinModule.start(this@SwapActivity, requestSelectFromCoin, true, viewModel.coinReceiving.value)
+                activity?.let {
+                    SelectSwapCoinModule.start(it, requestSelectFromCoin, true, viewModel.coinReceiving.value)
+                }
             }
 
             editText.addTextChangedListener(fromAmountListener)
@@ -53,7 +64,9 @@ class SwapActivity : BaseActivity() {
 
         toAmount.apply {
             onTokenButtonClick {
-                SelectSwapCoinModule.start(this@SwapActivity, requestSelectToCoin, false, viewModel.coinSending.value)
+                activity?.let {
+                    SelectSwapCoinModule.start(it, requestSelectToCoin, false, viewModel.coinSending.value)
+                }
             }
 
             editText.addTextChangedListener(toAmountListener)
@@ -64,7 +77,7 @@ class SwapActivity : BaseActivity() {
             viewModel.onProceedClick()
         }
 
-        supportFragmentManager.setFragmentResultListener(SwapApproveFragment.requestKey, this) { requestKey, bundle ->
+        childFragmentManager.setFragmentResultListener(SwapApproveFragment.requestKey, this) { requestKey, bundle ->
             if (requestKey == SwapApproveFragment.requestKey) {
                 val resultOk = bundle.getBoolean(SwapApproveFragment.resultKey)
                 if (resultOk) {
@@ -76,34 +89,70 @@ class SwapActivity : BaseActivity() {
         observeViewModel()
     }
 
+    override fun canHandleOnBackPress(): Boolean {
+        activity?.supportFragmentManager?.popBackStack()
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.swap_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuCancel -> {
+                activity?.supportFragmentManager?.popBackStack()
+                return true
+            }
+            //todo not working with fragment
+            android.R.id.home -> {
+                activity?.let { UniswapInfoActivity.start(it) }
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val selectedCoin = data?.getParcelableExtra<Coin>(SelectSwapCoinModule.selectedCoinKey)
+                    ?: return
+            when (requestCode) {
+                requestSelectFromCoin -> viewModel.setCoinSending(selectedCoin)
+                requestSelectToCoin -> viewModel.setCoinReceiving(selectedCoin)
+            }
+        }
+    }
+
     private fun observeViewModel() {
-        viewModel.proceedButtonVisible.observe(this, Observer { proceedButtonVisible ->
+        viewModel.proceedButtonVisible.observe(viewLifecycleOwner, Observer { proceedButtonVisible ->
             proceedButton.isVisible = proceedButtonVisible
         })
 
-        viewModel.proceedButtonEnabled.observe(this, Observer { proceedButtonEnabled ->
+        viewModel.proceedButtonEnabled.observe(viewLifecycleOwner, Observer { proceedButtonEnabled ->
             proceedButton.isEnabled = proceedButtonEnabled
         })
 
-        viewModel.approving.observe(this, Observer { approving ->
+        viewModel.approving.observe(viewLifecycleOwner, Observer { approving ->
             approvingButton.isVisible = approving
             approvingProgressBar.isVisible = approving
         })
 
-        viewModel.approveData.observe(this, Observer { approveData ->
+        viewModel.approveData.observe(viewLifecycleOwner, Observer { approveData ->
             approveButton.isVisible = approveData != null
             approveButton.setOnSingleClickListener {
                 approveData?.let {
                     SwapApproveFragment
                             .newInstance(it.coin, it.amount, it.spenderAddress)
-                            .show(supportFragmentManager, "SwapApproveFragment")
+                            .show(childFragmentManager, "SwapApproveFragment")
                 }
             }
         })
 
-        viewModel.openConfirmation.observe(this, Observer { requireConfirmation ->
+        viewModel.openConfirmation.observe(viewLifecycleOwner, Observer { requireConfirmation ->
             if (requireConfirmation) {
-                supportFragmentManager.beginTransaction()
+                parentFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
                                 R.anim.slide_in_from_right, R.anim.slide_out_to_right)
                         .add(R.id.rootView, SwapConfirmationFragment())
@@ -112,75 +161,77 @@ class SwapActivity : BaseActivity() {
             }
         })
 
-        viewModel.coinSending.observe(this, Observer { coin ->
+        viewModel.coinSending.observe(viewLifecycleOwner, Observer { coin ->
             fromAmount.setSelectedCoin(coin?.code)
         })
 
-        viewModel.coinReceiving.observe(this, Observer { coin ->
+        viewModel.coinReceiving.observe(viewLifecycleOwner, Observer { coin ->
             toAmount.setSelectedCoin(coin?.code)
         })
 
-        viewModel.amountSending.observe(this, Observer { amount ->
+        viewModel.amountSending.observe(viewLifecycleOwner, Observer { amount ->
             setAmountSendingIfChanged(amount)
         })
 
-        viewModel.amountReceiving.observe(this, Observer { amount ->
+        viewModel.amountReceiving.observe(viewLifecycleOwner, Observer { amount ->
             setAmountReceivingIfChanged(amount)
         })
 
-        viewModel.balance.observe(this, Observer { balance ->
+        viewModel.balance.observe(viewLifecycleOwner, Observer { balance ->
             availableBalanceValue.text = balance
         })
 
-        viewModel.amountSendingError.observe(this, Observer { amountSendingError ->
+        viewModel.amountSendingError.observe(viewLifecycleOwner, Observer { amountSendingError ->
             fromAmount.setError(amountSendingError)
         })
 
-        viewModel.amountSendingLabelVisible.observe(this, Observer { isVisible ->
+        viewModel.amountSendingLabelVisible.observe(viewLifecycleOwner, Observer { isVisible ->
             fromAmountLabel.isVisible = isVisible
         })
 
-        viewModel.amountReceivingLabelVisible.observe(this, Observer { isVisible ->
+        viewModel.amountReceivingLabelVisible.observe(viewLifecycleOwner, Observer { isVisible ->
             toAmountLabel.isVisible = isVisible
         })
 
-        viewModel.tradeViewItem.observe(this, Observer { tradeViewItem ->
+        viewModel.tradeViewItem.observe(viewLifecycleOwner, Observer { tradeViewItem ->
             setTradeViewItem(tradeViewItem)
         })
 
-        viewModel.tradeViewItemLoading.observe(this, Observer { isLoading ->
+        viewModel.tradeViewItemLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             tradeViewItemProgressBar.isVisible = isLoading
         })
 
-        viewModel.feeLoading.observe(this, Observer { isLoading ->
+        viewModel.feeLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             feeProgressBar.isVisible = isLoading
         })
 
-        viewModel.allowance.observe(this, Observer { allowance ->
+        viewModel.allowance.observe(viewLifecycleOwner, Observer { allowance ->
             setAllowance(allowance)
         })
 
-        viewModel.allowanceLoading.observe(this, Observer { isLoading ->
+        viewModel.allowanceLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             setAllowanceLoading(isLoading)
         })
 
-        viewModel.insufficientAllowance.observe(this, Observer { error ->
-            val color = if (error)
-                LayoutHelper.getAttr(R.attr.ColorLucian, theme) ?: getColor(R.color.red_d)
-            else
-                getColor(R.color.grey)
+        viewModel.insufficientAllowance.observe(viewLifecycleOwner, Observer { error ->
+            context?.let {
+                val color = if (error)
+                    LayoutHelper.getAttr(R.attr.ColorLucian, it.theme) ?: it.getColor(R.color.red_d)
+                else
+                    it.getColor(R.color.grey)
 
-            allowanceValue.setTextColor(color)
+                allowanceValue.setTextColor(color)
+            }
         })
 
-        viewModel.error.observe(this, Observer { error ->
+        viewModel.error.observe(viewLifecycleOwner, Observer { error ->
             commonError.text = error
             commonError.isVisible = error != null
         })
 
-        viewModel.closeWithSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), it, HudHelper.SnackbarDuration.LONG)
-            Handler().postDelayed({ finish() }, 1200)
+        viewModel.closeWithSuccess.observe(viewLifecycleOwner, Observer {
+            HudHelper.showSuccessMessage(requireView(), it, HudHelper.SnackbarDuration.LONG)
+            Handler().postDelayed({ parentFragmentManager.popBackStack() }, 1200)
         })
     }
 
@@ -196,7 +247,7 @@ class SwapActivity : BaseActivity() {
             allowanceTitle.isVisible = true
             allowanceValue.isVisible = true
             allowanceValue.text = getString(R.string.Alert_Loading)
-            allowanceValue.setTextColor(getColor(R.color.grey_50))
+            context?.getColor(R.color.grey_50)?.let { allowanceValue.setTextColor(it) }
         }
     }
 
@@ -204,7 +255,9 @@ class SwapActivity : BaseActivity() {
         priceValue.text = tradeViewItem?.price
 
         priceImpactValue.text = tradeViewItem?.priceImpact
-        priceImpactValue.setTextColor(priceImpactColor(tradeViewItem?.priceImpactLevel))
+        context?.let {
+            priceImpactValue.setTextColor(priceImpactColor(it, tradeViewItem?.priceImpactLevel))
+        }
 
         minMaxTitle.text = tradeViewItem?.minMaxTitle
         minMaxValue.text = tradeViewItem?.minMaxAmount
@@ -212,15 +265,15 @@ class SwapActivity : BaseActivity() {
         setTradeViewItemVisibility(visible = tradeViewItem != null)
     }
 
-    private fun priceImpactColor(priceImpactLevel: PriceImpact.Level?): Int {
+    private fun priceImpactColor(ctx: Context, priceImpactLevel: PriceImpact.Level?): Int {
         return when (priceImpactLevel) {
-            PriceImpact.Level.Normal -> LayoutHelper.getAttr(R.attr.ColorRemus, theme)
-                    ?: getColor(R.color.green_d)
-            PriceImpact.Level.Warning -> LayoutHelper.getAttr(R.attr.ColorJacob, theme)
-                    ?: getColor(R.color.yellow_d)
-            PriceImpact.Level.Forbidden -> LayoutHelper.getAttr(R.attr.ColorLucian, theme)
-                    ?: getColor(R.color.red_d)
-            else -> getColor(R.color.grey)
+            PriceImpact.Level.Normal -> LayoutHelper.getAttr(R.attr.ColorRemus, ctx.theme)
+                    ?: ctx.getColor(R.color.green_d)
+            PriceImpact.Level.Warning -> LayoutHelper.getAttr(R.attr.ColorJacob, ctx.theme)
+                    ?: ctx.getColor(R.color.yellow_d)
+            PriceImpact.Level.Forbidden -> LayoutHelper.getAttr(R.attr.ColorLucian, ctx.theme)
+                    ?: ctx.getColor(R.color.red_d)
+            else -> ctx.getColor(R.color.grey)
         }
     }
 
@@ -279,40 +332,24 @@ class SwapActivity : BaseActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.swap_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuCancel -> {
-                finish()
-                return true
-            }
-            android.R.id.home -> {
-                UniswapInfoActivity.start(this)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val selectedCoin = data?.getParcelableExtra<Coin>(SelectSwapCoinModule.selectedCoinKey)
-                    ?: return
-            when (requestCode) {
-                requestSelectFromCoin -> viewModel.setCoinSending(selectedCoin)
-                requestSelectToCoin -> viewModel.setCoinReceiving(selectedCoin)
-            }
-        }
-    }
-
     companion object {
         const val requestSelectFromCoin = 0
         const val requestSelectToCoin = 1
+
+        fun start(activity: FragmentActivity?, coin: Coin) {
+            activity?.supportFragmentManager?.commit {
+                add(R.id.fragmentContainerView, instance(coin))
+                addToBackStack(null)
+            }
+        }
+
+        fun instance(coin: Coin): SwapFragment {
+            return SwapFragment().apply {
+                arguments = Bundle(1).apply {
+                    putParcelable("tokenInKey", coin)
+                }
+            }
+        }
     }
 
 }

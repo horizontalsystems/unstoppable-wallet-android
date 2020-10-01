@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:clickable="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -48,6 +50,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <View
                 android:id="@+id/headline"
                 android:layout_width="0dp"
@@ -294,11 +297,11 @@
                 android:layout_marginTop="12dp"
                 android:textColor="?ColorLucian"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/minMaxTitle"
-                tools:visibility="visible"
-                tools:text="No Liquidity" />
+                tools:text="No Liquidity"
+                tools:visibility="visible" />
 
             <Button
                 android:id="@+id/proceedButton"
@@ -332,8 +335,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:layout_marginBottom="12dp"
-                android:text="@string/Swap_Approving"
                 android:enabled="false"
+                android:text="@string/Swap_Approving"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
