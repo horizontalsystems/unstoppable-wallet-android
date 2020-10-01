@@ -55,7 +55,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         val coinId = arguments?.getString("coinId")
 
         val coinCode = arguments?.getString("coinCode") ?: run {
-            parentFragmentManager.popBackStackImmediate()
+            parentFragmentManager.popBackStack()
             return
         }
 
@@ -102,7 +102,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     }
 
     override fun canHandleOnBackPress(): Boolean {
-        parentFragmentManager.popBackStackImmediate()
+        parentFragmentManager.popBackStack()
         return true
     }
 

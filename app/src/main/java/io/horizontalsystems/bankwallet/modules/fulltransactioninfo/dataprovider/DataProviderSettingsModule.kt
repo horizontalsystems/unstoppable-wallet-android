@@ -1,14 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
-import android.content.Context
-import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 
 object DataProviderSettingsModule {
-    const val COIN_STRING = "coin"
-    const val TRANSACTION_HASH = "transaction_hash"
 
     interface View {
         fun show(items: List<DataProviderSettingsItem>)
@@ -33,20 +29,13 @@ object DataProviderSettingsModule {
         fun onSetDataProvider()
     }
 
-    fun init(coin: Coin, transactionHash: String, view: DataProviderSettingsViewModel) {
+    fun init(coin: Coin, view: DataProviderSettingsViewModel) {
         val interactor = DataProviderSettingsInteractor(App.transactionDataProviderManager, App.networkManager)
-        val presenter = DataProviderSettingsPresenter(coin, transactionHash, interactor)
+        val presenter = DataProviderSettingsPresenter(coin, interactor)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
-    }
-
-    fun start(context: Context, coin: Coin, transactionHash: String) {
-        val intent = Intent(context, DataProviderSettingsActivity::class.java)
-        intent.putExtra(COIN_STRING, coin)
-        intent.putExtra(TRANSACTION_HASH, transactionHash)
-        context.startActivity(intent)
     }
 
 }

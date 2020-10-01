@@ -18,7 +18,7 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val showErrorTransactionNotFound = SingleLiveEvent<String>()
     val showShareEvent = SingleLiveEvent<String>()
     val openLinkEvent = SingleLiveEvent<String>()
-    val openProviderSettingsEvent = SingleLiveEvent<Pair<Coin, String>>()
+    val openProviderSettingsEvent = SingleLiveEvent<Coin>()
     val shareButtonVisibility = MutableLiveData<Boolean>()
 
     fun init(transactionHash: String, wallet: Wallet) {
@@ -66,8 +66,8 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         showCopiedEvent.call()
     }
 
-    override fun openProviderSettings(coin: Coin, transactionHash: String) {
-        openProviderSettingsEvent.value = Pair(coin, transactionHash)
+    override fun openProviderSettings(coin: Coin) {
+        openProviderSettingsEvent.postValue(coin)
     }
 
     override fun openUrl(url: String) {

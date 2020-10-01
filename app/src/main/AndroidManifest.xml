@@ -48,9 +48,6 @@
             android:name=".modules.qrscanner.QRScannerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.fulltransactioninfo.dataprovider.DataProviderSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity

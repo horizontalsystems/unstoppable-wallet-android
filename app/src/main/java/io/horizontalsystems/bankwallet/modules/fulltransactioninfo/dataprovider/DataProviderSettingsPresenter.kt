@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import io.horizontalsystems.bankwallet.entities.Coin
 
-class DataProviderSettingsPresenter(val coin: Coin, val transactionHash: String, private val interactor: DataProviderSettingsModule.Interactor)
+class DataProviderSettingsPresenter(val coin: Coin, private val interactor: DataProviderSettingsModule.Interactor)
     : DataProviderSettingsModule.ViewDelegate, DataProviderSettingsModule.InteractorDelegate {
 
     var view: DataProviderSettingsModule.View? = null
