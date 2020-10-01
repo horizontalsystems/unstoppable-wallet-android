@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,9 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
@@ -25,32 +23,36 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_full_transaction_info.*
+import kotlinx.android.synthetic.main.fragment_full_transaction_info.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_item.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_link.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_source.*
 
-class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFragment.Listener {
+class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFragment.Listener {
 
-    private val transactionRecordAdapter = SectionViewAdapter(this)
     private lateinit var viewModel: FullTransactionInfoViewModel
-    private var snackbar: Snackbar? = null
 
-    override fun onDestroy() {
-        snackbar?.dismiss()
-        super.onDestroy()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_full_transaction_info, container, false)
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        val transactionHash = intent.getStringExtra(transactionHashKey) ?: run { finish(); return }
-        val wallet = intent.getParcelableExtra<Wallet>(walletKey) ?: run { finish(); return }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val transactionHash = arguments?.getString("transactionHashKey") ?: run {
+            parentFragmentManager.popBackStackImmediate()
+            return
+        }
+        val wallet = arguments?.getParcelable<Wallet>("walletKey") ?: run {
+            parentFragmentManager.popBackStackImmediate()
+            return
+        }
+
+        val transactionRecordAdapter = SectionViewAdapter()
 
         viewModel = ViewModelProvider(this).get(FullTransactionInfoViewModel::class.java)
         viewModel.init(transactionHash, wallet)
-
-        setContentView(R.layout.activity_full_transaction_info)
 
         transactionIdView.text = transactionHash
 
@@ -60,35 +62,35 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Title),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { onBackPressed() })
+                rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { parentFragmentManager.popBackStackImmediate() })
         )
 
         //
         // LiveData
         //
-        viewModel.shareButtonVisibility.observe(this, Observer { visible ->
+        viewModel.shareButtonVisibility.observe(viewLifecycleOwner, Observer { visible ->
             shadowlessToolbar.bindLeftButton(
                     leftBtnItem = if (visible) TopMenuItem(text = R.string.Button_Share, onClick = { viewModel.share() }) else null
             )
         })
 
-        viewModel.reloadEvent.observe(this, Observer {
+        viewModel.reloadEvent.observe(viewLifecycleOwner, Observer {
             transactionRecordAdapter.notifyDataSetChanged()
         })
 
-        viewModel.showTransactionInfoEvent.observe(this, Observer {
+        viewModel.showTransactionInfoEvent.observe(viewLifecycleOwner, Observer {
             setVisible(recyclerTransactionInfo)
         })
 
-        viewModel.showLoadingEvent.observe(this, Observer {
+        viewModel.showLoadingEvent.observe(viewLifecycleOwner, Observer {
             setVisible(progressLoading)
         })
 
-        viewModel.showCopiedEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Hud_Text_Copied)
+        viewModel.showCopiedEvent.observe(viewLifecycleOwner, Observer {
+            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
         })
 
-        viewModel.openLinkEvent.observe(this, Observer { url ->
+        viewModel.openLinkEvent.observe(viewLifecycleOwner, Observer { url ->
             url?.let {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(url)
@@ -96,23 +98,23 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             }
         })
 
-        viewModel.openProviderSettingsEvent.observe(this, Observer { data ->
+        viewModel.openProviderSettingsEvent.observe(viewLifecycleOwner, Observer { data ->
             data?.let { (coin, transactionHash) ->
-                DataProviderSettingsModule.start(this, coin, transactionHash)
+                context?.let { DataProviderSettingsModule.start(it, coin, transactionHash) }
             }
         })
 
-        viewModel.showErrorProviderOffline.observe(this, Observer { providerName ->
+        viewModel.showErrorProviderOffline.observe(viewLifecycleOwner, Observer { providerName ->
             setError(providerName, R.string.FullInfo_Error_ProviderOffline, R.drawable.dragon_icon, true)
             setVisible(errorContainer)
         })
 
-        viewModel.showErrorTransactionNotFound.observe(this, Observer { providerName ->
+        viewModel.showErrorTransactionNotFound.observe(viewLifecycleOwner, Observer { providerName ->
             setError(providerName, R.string.FullInfo_Error_TransactionNotFound, R.drawable.ic_attention, false)
             setVisible(errorContainer)
         })
 
-        viewModel.showShareEvent.observe(this, Observer { url ->
+        viewModel.showShareEvent.observe(viewLifecycleOwner, Observer { url ->
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, url)
@@ -123,9 +125,14 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         recyclerTransactionInfo.hasFixedSize()
         recyclerTransactionInfo.adapter = transactionRecordAdapter
-        recyclerTransactionInfo.layoutManager = LinearLayoutManager(this)
+        recyclerTransactionInfo.layoutManager = LinearLayoutManager(context)
 
         transactionRecordAdapter.viewModel = viewModel
+    }
+
+    override fun canHandleOnBackPress(): Boolean {
+        parentFragmentManager.popBackStackImmediate()
+        return true
     }
 
     //
@@ -142,31 +149,30 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
     private fun setError(providerName: String, errorText: Int, icon: Int, showRetry: Boolean) {
         val errorMessage = getString(errorText)
         val fragment = FullTransactionInfoErrorFragment.newInstance(providerName, errorMessage, icon, showRetry)
-        val transaction = supportFragmentManager.beginTransaction()
+        val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.errorContainer, fragment)
         transaction.commit()
     }
 
-    private fun setVisible(view: View){
+    private fun setVisible(view: View) {
         listOf(errorContainer, progressLoading, recyclerTransactionInfo).forEach {
             it.isInvisible = it != view
         }
     }
 
     companion object {
-        const val transactionHashKey = "transaction_hash"
-        const val walletKey = "wallet"
-
-        fun start(context: Context, transactionHash: String, wallet: Wallet) {
-            val intents = Intent(context, FullTransactionInfoActivity::class.java)
-            intents.putExtra(transactionHashKey, transactionHash)
-            intents.putExtra(walletKey, wallet)
-            context.startActivity(intents)
+        fun instance(transactionHash: String, wallet: Wallet): FullTransactionInfoFragment {
+            return FullTransactionInfoFragment().apply {
+                arguments = Bundle(2).apply {
+                    putString("transactionHashKey", transactionHash)
+                    putParcelable("walletKey", wallet)
+                }
+            }
         }
     }
 }
 
-class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SectionViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var viewModel: FullTransactionInfoViewModel
 
     private val sectionViewSource = 0
@@ -204,7 +210,7 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
 
         when (holder) {
             is SectionSourceViewHolder -> {
-                holder.transactionSource.bindSourceProvider(context.getString(R.string.FullInfo_Source), providerName)
+                holder.transactionSource.bindSourceProvider(holder.containerView.context.getString(R.string.FullInfo_Source), providerName)
                 holder.transactionSource.setOnClickListener {
                     viewModel.delegate.onTapProvider()
                 }
@@ -216,8 +222,8 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
                     holder.sectionRecyclerView.hasFixedSize()
                     holder.sectionRecyclerView.isNestedScrollingEnabled = false
 
-                    holder.sectionRecyclerView.layoutManager = LinearLayoutManager(context)
-                    holder.sectionRecyclerView.adapter = SectionItemViewAdapter(context, viewModel, section.items)
+                    holder.sectionRecyclerView.layoutManager = LinearLayoutManager(holder.containerView.context)
+                    holder.sectionRecyclerView.adapter = SectionItemViewAdapter(viewModel, section.items)
                 }
 
             }
@@ -240,7 +246,7 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
     }
 }
 
-class SectionItemViewAdapter(val context: Context, val viewModel: FullTransactionInfoViewModel, val items: List<FullTransactionItem>)
+class SectionItemViewAdapter(val viewModel: FullTransactionInfoViewModel, val items: List<FullTransactionItem>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -266,7 +272,7 @@ class SectionItemViewAdapter(val context: Context, val viewModel: FullTransactio
     }
 
     private fun bindTransaction(item: FullTransactionItem, showBorder: Boolean, viewItem: FullTransactionInfoItemView) {
-        val title = if (item.titleResId != null) context.getString(item.titleResId) else item.title
+        val title = if (item.titleResId != null) viewItem.context.getString(item.titleResId) else item.title
 
         viewItem.bind(title, item.value, item.icon, item.dimmed, showBorder)
 
