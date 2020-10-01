@@ -7,18 +7,19 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(), TransactionInfoView.Listener {
@@ -38,7 +39,6 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
             commit()
         }
 
-        setTopPadding()
         preloadBottomSheets()
     }
 
@@ -47,11 +47,18 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
         collapseBottomSheetsOnActivityRestore()
     }
 
-    override fun onBackPressed() = when (txInfoBottomSheetBehavior?.state) {
-        BottomSheetBehavior.STATE_EXPANDED -> {
-            txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+    override fun onBackPressed() {
+        supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
+            if ((fragment as? BaseFragment)?.canHandleOnBackPress() == true) {
+                return
+            }
         }
-        else -> super.onBackPressed()
+        when (txInfoBottomSheetBehavior?.state) {
+            BottomSheetBehavior.STATE_EXPANDED -> {
+                txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+            else -> super.onBackPressed()
+        }
     }
 
     fun openSend(wallet: Wallet) {
@@ -68,7 +75,13 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
     }
 
     override fun openFullTransactionInfo(transactionHash: String, wallet: Wallet) {
-        FullTransactionInfoModule.start(this, transactionHash, wallet)
+        val fragment = FullTransactionInfoFragment.instance(transactionHash, wallet)
+
+        supportFragmentManager.commit {
+            add(R.id.txFullInfoContainerView, fragment)
+            addToBackStack(null)
+        }
+
     }
 
     override fun openTransactionInfo() {
@@ -95,10 +108,6 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
                 transactionInfoView.bind(it, this, this)
             }
         }, 200)
-    }
-
-    private fun setTopPadding() {
-        coordinator.setPadding(0, AppLayoutHelper.getStatusBarHeight(this), 0, 0)
     }
 
     private fun setBottomSheets() {

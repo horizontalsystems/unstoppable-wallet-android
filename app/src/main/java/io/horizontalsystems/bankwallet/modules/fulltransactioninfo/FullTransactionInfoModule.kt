@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.Bin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.BitcoinResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EosResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoActivity
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.reactivex.Flowable
 
@@ -127,7 +126,4 @@ object FullTransactionInfoModule {
         interactor.delegate = presenter
     }
 
-    fun start(activity: androidx.fragment.app.FragmentActivity, transactionHash: String, wallet: Wallet) {
-        FullTransactionInfoActivity.start(activity, transactionHash, wallet)
-    }
 }
