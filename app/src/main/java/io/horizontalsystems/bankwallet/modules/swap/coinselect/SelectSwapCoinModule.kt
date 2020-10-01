@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -13,7 +13,7 @@ object SelectSwapCoinModule {
     const val hideZeroBalanceKey = "hideZeroBalanceKey"
     const val selectedCoinKey = "selectedCoinKey"
 
-    fun start(context: AppCompatActivity, requestCode: Int, hideZeroBalance: Boolean, excludedCoin: Coin?) {
+    fun start(context: Activity, requestCode: Int, hideZeroBalance: Boolean, excludedCoin: Coin?) {
         val intent = Intent(context, SelectSwapCoinActivity::class.java)
         intent.putExtra(excludedCoinKey, excludedCoin)
         intent.putExtra(hideZeroBalanceKey, hideZeroBalance)

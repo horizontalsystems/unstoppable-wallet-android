@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.view
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -41,9 +41,9 @@ class UniswapInfoActivity : BaseActivity() {
     }
 
     companion object {
-        fun start(context: Context) {
-            val intent = Intent(context, UniswapInfoActivity::class.java)
-            context.startActivity(intent)
+        fun start(activity: Activity) {
+            val intent = Intent(activity, UniswapInfoActivity::class.java)
+            activity.startActivity(intent)
         }
     }
 }

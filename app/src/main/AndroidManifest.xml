@@ -58,9 +58,6 @@
             android:name=".modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.swap.view.SwapActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.swap.coinselect.SelectSwapCoinActivity"
             android:screenOrientation="portrait" />
         <activity
