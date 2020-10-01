@@ -4,14 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.info.InfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.InfoFragment
+import io.horizontalsystems.bankwallet.modules.info.InfoParameters
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -25,9 +27,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
 
     interface Listener {
         fun openTransactionInfo()
-        fun openFullTransactionInfo(transactionHash: String, wallet: Wallet)
         fun closeTransactionInfo()
         fun onShowInfoMessage(snackbar: Snackbar? = null)
+        fun showFragmentInTopContainerView(fragment: Fragment)
     }
 
     constructor(context: Context) : super(context)
@@ -70,24 +72,24 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         })
 
 
-        viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, Observer { pair ->
-            pair?.let {
-                listener?.openFullTransactionInfo(transactionHash = it.first, wallet = it.second)
-            }
+        viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, Observer { (txHash, wallet) ->
+            listener?.showFragmentInTopContainerView(FullTransactionInfoFragment.instance(txHash, wallet))
         })
 
         viewModel.showLockInfo.observe(lifecycleOwner, Observer { lockDate ->
             val title = context.getString(R.string.Info_LockTime_Title)
             val description = context.getString(R.string.Info_LockTime_Description, DateHelper.getFullDate(lockDate))
+            val infoParameters = InfoParameters(title, description)
 
-            InfoModule.start(context, InfoModule.InfoParameters(title, description))
+            listener?.showFragmentInTopContainerView(InfoFragment.instance(infoParameters))
         })
 
         viewModel.showDoubleSpendInfo.observe(lifecycleOwner, Observer { (txHash, conflictingTxHash) ->
             val title = context.getString(R.string.Info_DoubleSpend_Title)
             val description = context.getString(R.string.Info_DoubleSpend_Description)
+            val infoParameters = InfoParameters(title, description, txHash, conflictingTxHash)
 
-            InfoModule.start(context, InfoModule.InfoParameters(title, description, txHash, conflictingTxHash))
+            listener?.showFragmentInTopContainerView(InfoFragment.instance(infoParameters))
         })
 
         viewModel.titleLiveData.observe(lifecycleOwner, Observer { titleViewItem ->

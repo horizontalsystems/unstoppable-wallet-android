@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -16,7 +17,6 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
@@ -74,16 +74,6 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
         txInfoViewModel?.init(transactionRecord, wallet)
     }
 
-    override fun openFullTransactionInfo(transactionHash: String, wallet: Wallet) {
-        val fragment = FullTransactionInfoFragment.instance(transactionHash, wallet)
-
-        supportFragmentManager.commit {
-            add(R.id.txFullInfoContainerView, fragment)
-            addToBackStack(null)
-        }
-
-    }
-
     override fun openTransactionInfo() {
         txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
@@ -94,6 +84,13 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
     override fun onShowInfoMessage(snackbar: Snackbar?) {
         this.messageInfoSnackbar = snackbar
+    }
+
+    override fun showFragmentInTopContainerView(fragment: Fragment) {
+        supportFragmentManager.commit {
+            add(R.id.topFragmentContainerView, fragment)
+            addToBackStack(null)
+        }
     }
 
     private fun preloadBottomSheets() {
