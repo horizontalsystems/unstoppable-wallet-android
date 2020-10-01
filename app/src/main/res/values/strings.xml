@@ -225,20 +225,26 @@
     <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
     <string name="Approve_Info">You should grant a permission to a smart contract to execute the trade using your funds. This permission doesn\’t affect funds on your balance</string>
 
-    <!--Uniwwap Info -->
+    <!--Uniswap Info -->
 
-    <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">
-Uniswap is a fully decentralized protocol for automated liquidity provision on Ethereum.
-\n\nA simple formalized equation drives unstoppable liquidity for thousands of users and hundreds of applications.
-\n\nUniswap empowers developers, liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.
-    </string>
-    <string name="UniswapInfo_MinReceivedTitle">Minimum Received</string>
-    <string name="UniswapInfo_MinReceivedDescription">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</string>
+    <string name="UniswapInfo_Title">Uniswap</string>
+    <string name="UniswapInfo_Description">This exchange service is powered by Uniswap, a decentralized token exchange protocol built on Ethereum blockchain.\n\nUniswap is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="UniswapInfo_UniswapRelated">Uniswap Related</string>
+    <string name="UniswapInfo_AllowanceTitle">Allowance</string>
+    <string name="UniswapInfo_AllowanceDescription">The amount of some currency that Uniswap can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
     <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="UniswapInfo_PriceImpactDescription">The difference between the market price and estimated price due to trade size.</string>
+    <string name="UniswapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
     <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="UniswapInfo_SwapFeeDescription">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</string>
+    <string name="UniswapInfo_SwapFeeDescription">A service fee for the swap action on Uniswap platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
+    <string name="UniswapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
+    <string name="UniswapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
+    <string name="UniswapInfo_MaxSpendTitle">Maximum Spend</string>
+    <string name="UniswapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
+    <string name="UniswapInfo_Other">Other</string>
+    <string name="UniswapInfo_TransactionFeeTitle">Transaction Fee</string>
+    <string name="UniswapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on Ethereum blockchain. Uniswap related transactions will typically cost more than generic token transfer transactions.</string>
+    <string name="UniswapInfo_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="UniswapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
     <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
 
     <!--Deposit-->

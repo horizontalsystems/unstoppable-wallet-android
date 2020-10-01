@@ -59,26 +59,42 @@
                 android:textColor="?ColorBran" />
 
             <TextView
-                style="@style/Headline2"
+                android:id="@+id/headerRelated"
+                style="@style/Title3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="@string/UniswapInfo_MinReceivedTitle"
+                android:layout_marginBottom="8dp"
+                android:textColor="?ColorJacob"
+                android:text="@string/UniswapInfo_UniswapRelated"/>
+
+            <View
+                android:id="@+id/headerRelatedUnderline"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_50" />
+
+            <TextView
+                style="@style/Headline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_AllowanceTitle"
                 android:textColor="?ColorJacob" />
 
             <TextView
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/UniswapInfo_MinReceivedDescription"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_AllowanceDescription"
                 android:textColor="?ColorBran" />
 
             <TextView
                 style="@style/Headline2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/UniswapInfo_PriceImpactTitle"
                 android:textColor="?ColorJacob" />
 
@@ -86,7 +102,7 @@
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/UniswapInfo_PriceImpactDescription"
                 android:textColor="?ColorBran" />
 
@@ -94,7 +110,7 @@
                 style="@style/Headline2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/UniswapInfo_SwapFeeTitle"
                 android:textColor="?ColorJacob" />
 
@@ -102,8 +118,88 @@
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/UniswapInfo_SwapFeeDescription"
+                android:textColor="?ColorBran" />
+
+            <TextView
+                style="@style/Headline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_GuaranteedAmountTitle"
+                android:textColor="?ColorJacob" />
+
+            <TextView
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_GuaranteedAmountDescription"
+                android:textColor="?ColorBran" />
+
+            <TextView
+                style="@style/Headline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_MaxSpendTitle"
+                android:textColor="?ColorJacob" />
+
+            <TextView
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_MaxSpendDescription"
+                android:textColor="?ColorBran" />
+
+            <TextView
+                android:id="@+id/headerOther"
+                style="@style/Title3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="8dp"
+                android:textColor="?ColorJacob"
+                android:text="@string/UniswapInfo_Other"/>
+
+            <View
+                android:id="@+id/headerOtherUnderline"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_50" />
+
+            <TextView
+                style="@style/Headline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_TransactionFeeTitle"
+                android:textColor="?ColorJacob" />
+
+            <TextView
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_TransactionFeeDescription"
+                android:textColor="?ColorBran" />
+
+            <TextView
+                style="@style/Headline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_TransactionSpeedTitle"
+                android:textColor="?ColorJacob" />
+
+            <TextView
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/UniswapInfo_TransactionSpeedDescription"
                 android:textColor="?ColorBran" />
 
             <Button
