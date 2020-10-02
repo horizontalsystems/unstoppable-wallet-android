@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -23,8 +24,9 @@ class SelectSwapCoinViewHolder(
         }
     }
 
-    fun bind(coinItem: SwapCoinItem) {
+    fun bind(coinItem: SwapCoinItem, showBottomBorder: Boolean) {
         this.coinItem = coinItem
+        bottomShade.isVisible = showBottomBorder
 
         coinItem.apply {
             coinIcon.setCoinImage(coin.code, coin.type)

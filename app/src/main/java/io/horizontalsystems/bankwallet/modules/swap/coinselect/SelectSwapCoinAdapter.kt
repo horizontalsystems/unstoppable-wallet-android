@@ -20,7 +20,7 @@ class SelectSwapCoinAdapter(
     }
 
     override fun onBindViewHolder(holder: SelectSwapCoinViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], items.size - 1 == position)
     }
 
 }
