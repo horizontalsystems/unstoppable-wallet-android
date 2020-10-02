@@ -45,9 +45,12 @@ class SwapFragment : BaseFragment() {
 
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.supportActionBar?.setHomeAsUpIndicator(context?.getDrawable(R.drawable.ic_info))
             it.supportActionBar?.title = getString(R.string.Swap)
+        }
+
+        //catch click on top left menu item, Info Icon
+        toolbar.setNavigationOnClickListener {
+            activity?.let { UniswapInfoActivity.start(it) }
         }
 
         val coinSending = arguments?.getParcelable<Coin>("tokenInKey")
@@ -96,11 +99,6 @@ class SwapFragment : BaseFragment() {
         when (item.itemId) {
             R.id.menuCancel -> {
                 activity?.supportFragmentManager?.popBackStack()
-                return true
-            }
-            //todo not working with fragment
-            android.R.id.home -> {
-                activity?.let { UniswapInfoActivity.start(it) }
                 return true
             }
         }
