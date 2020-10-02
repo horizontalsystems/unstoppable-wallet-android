@@ -57,9 +57,6 @@
         <activity
             android:name=".modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.swap.view.UniswapInfoActivity"
-            android:screenOrientation="portrait" />
 
         <service
             android:name=".core.fcm.MyFirebaseMessagingService"

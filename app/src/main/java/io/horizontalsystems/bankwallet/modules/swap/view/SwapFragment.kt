@@ -50,7 +50,7 @@ class SwapFragment : BaseFragment() {
 
         //catch click on top left menu item, Info Icon
         toolbar.setNavigationOnClickListener {
-            activity?.let { UniswapInfoActivity.start(it) }
+            activity?.let { UniswapInfoFragment.start(it) }
         }
 
         val coinSending = arguments?.getParcelable<Coin>("tokenInKey")
