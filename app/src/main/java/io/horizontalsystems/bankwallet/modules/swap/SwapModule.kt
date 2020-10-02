@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
 import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapActivity
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
 import io.horizontalsystems.uniswapkit.UniswapKit
@@ -27,7 +26,6 @@ import java.math.BigDecimal
 import java.util.*
 
 object SwapModule {
-    const val tokenInKey = "tokenInKey"
 
     interface ISwapService {
         val coinSending: Coin
