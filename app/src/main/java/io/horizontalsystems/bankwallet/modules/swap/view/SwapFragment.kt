@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.swap.view
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,12 +20,13 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
-import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinModule
+import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_swap.*
 import java.math.BigDecimal
 
@@ -50,12 +51,12 @@ class SwapFragment : BaseFragment() {
         }
 
         val coinSending = arguments?.getParcelable<Coin>("tokenInKey")
-        viewModel = ViewModelProvider(this, SwapModule.Factory(coinSending!!)).get(SwapViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(), SwapModule.Factory(coinSending!!)).get(SwapViewModel::class.java)
 
         fromAmount.apply {
             onTokenButtonClick {
                 activity?.let {
-                    SelectSwapCoinModule.start(it, requestSelectFromCoin, true, viewModel.coinReceiving.value)
+                    SelectSwapCoinFragment.start(it, SelectType.FromCoin, true, viewModel.coinReceiving.value)
                 }
             }
 
@@ -65,7 +66,7 @@ class SwapFragment : BaseFragment() {
         toAmount.apply {
             onTokenButtonClick {
                 activity?.let {
-                    SelectSwapCoinModule.start(it, requestSelectToCoin, false, viewModel.coinSending.value)
+                    SelectSwapCoinFragment.start(it, SelectType.ToCoin, false, viewModel.coinSending.value)
                 }
             }
 
@@ -77,14 +78,7 @@ class SwapFragment : BaseFragment() {
             viewModel.onProceedClick()
         }
 
-        childFragmentManager.setFragmentResultListener(SwapApproveFragment.requestKey, this) { requestKey, bundle ->
-            if (requestKey == SwapApproveFragment.requestKey) {
-                val resultOk = bundle.getBoolean(SwapApproveFragment.resultKey)
-                if (resultOk) {
-                    viewModel.onApproved()
-                }
-            }
-        }
+        setFragmentResultListeners()
 
         observeViewModel()
     }
@@ -113,14 +107,25 @@ class SwapFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val selectedCoin = data?.getParcelableExtra<Coin>(SelectSwapCoinModule.selectedCoinKey)
-                    ?: return
-            when (requestCode) {
-                requestSelectFromCoin -> viewModel.setCoinSending(selectedCoin)
-                requestSelectToCoin -> viewModel.setCoinReceiving(selectedCoin)
+    private fun setFragmentResultListeners() {
+        childFragmentManager.setFragmentResultListener(SwapApproveFragment.requestKey, this) { requestKey, bundle ->
+            if (requestKey == SwapApproveFragment.requestKey) {
+                val resultOk = bundle.getBoolean(SwapApproveFragment.resultKey)
+                if (resultOk) {
+                    viewModel.onApproved()
+                }
+            }
+        }
+
+        activity?.supportFragmentManager?.setFragmentResultListener(SelectSwapCoinFragment.requestKey, this) { requestKey, bundle ->
+            if (requestKey == SelectSwapCoinFragment.requestKey) {
+                val selectType = bundle.getParcelable<SelectType>(SelectSwapCoinFragment.selectTypeResultKey)
+                val selectedCoin = bundle.getParcelable<Coin>(SelectSwapCoinFragment.coinResultKey)
+                        ?: return@setFragmentResultListener
+                when (selectType) {
+                    SelectType.FromCoin -> viewModel.setCoinSending(selectedCoin)
+                    SelectType.ToCoin -> viewModel.setCoinReceiving(selectedCoin)
+                }
             }
         }
     }
@@ -152,12 +157,9 @@ class SwapFragment : BaseFragment() {
 
         viewModel.openConfirmation.observe(viewLifecycleOwner, Observer { requireConfirmation ->
             if (requireConfirmation) {
-                parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
-                                R.anim.slide_in_from_right, R.anim.slide_out_to_right)
-                        .add(R.id.rootView, SwapConfirmationFragment())
-                        .addToBackStack("confirmFragment")
-                        .commit()
+                activity?.let {
+                    SwapConfirmationFragment.start(it)
+                }
             }
         })
 
@@ -231,7 +233,7 @@ class SwapFragment : BaseFragment() {
 
         viewModel.closeWithSuccess.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(requireView(), it, HudHelper.SnackbarDuration.LONG)
-            Handler().postDelayed({ parentFragmentManager.popBackStack() }, 1200)
+            Handler().postDelayed({ activity?.supportFragmentManager?.popBackStack(TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE) }, 1200)
         })
     }
 
@@ -333,13 +335,13 @@ class SwapFragment : BaseFragment() {
     }
 
     companion object {
-        const val requestSelectFromCoin = 0
-        const val requestSelectToCoin = 1
+
+        const val TAG = "SwapFragment"
 
         fun start(activity: FragmentActivity?, coin: Coin) {
             activity?.supportFragmentManager?.commit {
                 add(R.id.fragmentContainerView, instance(coin))
-                addToBackStack(null)
+                addToBackStack(TAG)
             }
         }
 
@@ -350,6 +352,11 @@ class SwapFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    @Parcelize
+    enum class SelectType: Parcelable{
+        FromCoin, ToCoin
     }
 
 }

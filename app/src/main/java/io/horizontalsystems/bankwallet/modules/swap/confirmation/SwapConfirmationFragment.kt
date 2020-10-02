@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -89,6 +90,17 @@ class SwapConfirmationFragment : Fragment() {
                     }
                 }
         )
+    }
+
+    companion object {
+        fun start(activity: FragmentActivity) {
+            activity.supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
+                            R.anim.slide_in_from_right, R.anim.slide_out_to_right)
+                    .add(R.id.fragmentContainerView, SwapConfirmationFragment())
+                    .addToBackStack("confirmFragment")
+                    .commit()
+        }
     }
 
 }
