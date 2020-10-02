@@ -32,6 +32,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="4dp"
                 app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_info"
                 tools:title="@string/Swap" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
