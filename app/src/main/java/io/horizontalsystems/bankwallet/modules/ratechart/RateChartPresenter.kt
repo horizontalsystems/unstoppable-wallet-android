@@ -27,7 +27,7 @@ class RateChartPresenter(
     var notificationIconVisible = coinId != null && interactor.notificationsAreEnabled
     var notificationIconActive = false
 
-    private var chartType = interactor.defaultChartType ?: ChartType.DAILY
+    private var chartType = interactor.defaultChartType ?: ChartType.TODAY
     private var emaIsEnabled = false
     private var macdIsEnabled = false
     private var rsiIsEnabled = false

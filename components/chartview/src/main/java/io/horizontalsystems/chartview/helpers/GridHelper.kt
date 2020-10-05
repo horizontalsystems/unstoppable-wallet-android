@@ -21,6 +21,7 @@ object GridHelper {
         calendar.set(Calendar.SECOND, 0)
 
         when (chartType) {
+            ChartType.TODAY,
             ChartType.DAILY -> {
             }
             ChartType.WEEKLY,
@@ -54,6 +55,7 @@ object GridHelper {
 
     private fun moveColumn(type: ChartType, calendar: Calendar) {
         when (type) {
+            ChartType.TODAY -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
             ChartType.DAILY -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
             ChartType.WEEKLY -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
             ChartType.WEEKLY2 -> calendar.add(Calendar.DAY_OF_WEEK, -3)      // 3 days
@@ -67,6 +69,7 @@ object GridHelper {
 
     private fun columnLabel(calendar: Calendar, type: ChartType): String {
         return when (type) {
+            ChartType.TODAY,
             ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
             ChartType.WEEKLY -> formatDate(calendar.time, "EEE")
             ChartType.WEEKLY2,

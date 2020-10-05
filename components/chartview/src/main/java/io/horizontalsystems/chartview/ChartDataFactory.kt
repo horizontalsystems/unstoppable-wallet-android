@@ -5,7 +5,7 @@ import io.horizontalsystems.chartview.helpers.IndicatorHelper
 import io.horizontalsystems.chartview.models.ChartPoint
 
 object ChartDataFactory {
-    fun build(points: List<ChartPoint>, startTime: Long, endTime: Long, startDayPoint: ChartPoint?): ChartData {
+    fun build(points: List<ChartPoint>, startTime: Long, endTime: Long, isExpired: Boolean): ChartData {
         val values = mutableListOf<Float>()
         val items = mutableListOf<ChartData.Item>()
 
@@ -38,34 +38,12 @@ object ChartDataFactory {
         chartData.add(macd.map { ChartData.Value(it) }, Macd)
         chartData.add(signal.map { ChartData.Value(it) }, MacdSignal)
         chartData.add(histogram.map { ChartData.Value(it) }, MacdHistogram)
-        addStartDayPoint(chartData, points, startDayPoint)
 
-        return convertPoints(chartData)
+        return convertPoints(chartData, isExpired)
     }
 
-    private fun addStartDayPoint(chartData: ChartData, points: List<ChartPoint>, startDayPoint: ChartPoint?) {
-        if (startDayPoint == null) return
-        val values = (points.filter { it.timestamp < startDayPoint.timestamp } + startDayPoint).map { it.value }
-
-        val emaFast = IndicatorHelper.ema(values, EmaFast.period)
-        val emaSlow = IndicatorHelper.ema(values, EmaSlow.period)
-        val rsi = IndicatorHelper.rsi(values, Rsi.period)
-        val (macd, signal, histogram) = IndicatorHelper.macd(values, Macd.fastPeriod, Macd.slowPeriod, Macd.signalPeriod)
-
-        val item = mutableMapOf<Indicator, ChartData.Value?>()
-        item[Candle] = ChartData.Value(startDayPoint.value)
-        item[EmaFast] = ChartData.Value(emaFast.last())
-        item[EmaSlow] = ChartData.Value(emaSlow.last())
-        item[Rsi] = ChartData.Value(rsi.last())
-        item[Macd] = ChartData.Value(macd.last())
-        item[MacdSignal] = ChartData.Value(signal.last())
-        item[MacdHistogram] = ChartData.Value(histogram.last())
-
-        chartData.insert(ChartData.Item(startDayPoint.timestamp, item))
-    }
-
-    private fun convertPoints(chartData: ChartData): ChartData {
-        val visibleData = ChartData(mutableListOf(), chartData.startTimestamp, chartData.endTimestamp)
+    private fun convertPoints(chartData: ChartData, isExpired: Boolean): ChartData {
+        val visibleData = ChartData(mutableListOf(), chartData.startTimestamp, chartData.endTimestamp, isExpired)
 
         for (item in chartData.items) {
             if (item.timestamp < visibleData.startTimestamp) {

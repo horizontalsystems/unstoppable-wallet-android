@@ -70,8 +70,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     //  Helper methods
     fun setTrendColor(chartData: ChartData) {
-        val lastPoint = chartData.items.lastOrNull() ?: return
-        if (lastPoint.timestamp < chartData.endTimestamp) {
+        if (chartData.isExpired) {
             curveColor = curveOutdatedColor
         } else if (chartData.diff() < BigDecimal.ZERO) {
             curveColor = trendDownColor

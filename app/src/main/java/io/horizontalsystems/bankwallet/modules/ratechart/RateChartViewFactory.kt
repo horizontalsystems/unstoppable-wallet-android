@@ -9,6 +9,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
+import java.lang.Long.max
 import java.math.BigDecimal
 
 data class ChartInfoViewItem(
@@ -40,8 +41,9 @@ data class MarketInfoViewItem(
 
 class RateChartViewFactory {
     fun createChartInfo(type: ChartType, chartInfo: ChartInfo, marketInfo: MarketInfo?): ChartInfoViewItem {
-        val chartData = createChartData(chartInfo, marketInfo, type)
+        val chartData = createChartData(chartInfo, marketInfo)
         val chartType = when (type) {
+            ChartType.TODAY -> ChartView.ChartType.TODAY
             ChartType.DAILY -> ChartView.ChartType.DAILY
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
             ChartType.WEEKLY2 -> ChartView.ChartType.WEEKLY2
@@ -115,24 +117,18 @@ class RateChartViewFactory {
         return Triple(emaTrend, rsiTrend, macdTrend)
     }
 
-    private fun createChartData(chartInfo: ChartInfo, marketInfo: MarketInfo?, chartType: ChartType): ChartData {
-        val points = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }
-        var startTime = chartInfo.startTimestamp
+    private fun createChartData(chartInfo: ChartInfo, marketInfo: MarketInfo?): ChartData {
+        val points = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }.toMutableList()
         val lastPoint = chartInfo.points.lastOrNull()
 
-        //  Points expired or not market info
-        if (lastPoint?.timestamp != chartInfo.endTimestamp || marketInfo == null) {
-            return ChartDataFactory.build(points, startTime, chartInfo.endTimestamp, startDayPoint = null)
+        var endTimestamp = chartInfo.endTimestamp
+        val lastPointTimestamp = lastPoint?.timestamp
+
+        if (marketInfo != null && lastPointTimestamp != null && marketInfo.timestamp > lastPointTimestamp) {
+            endTimestamp = max(marketInfo.timestamp, endTimestamp)
+            points.add(ChartPoint(marketInfo.rate.toFloat(), null, marketInfo.timestamp))
         }
 
-        val pointsWithMarketPrice = points + ChartPoint(marketInfo.rate.toFloat(), null, marketInfo.timestamp)
-        var startDayPoint: ChartPoint? = null
-
-        if (chartType == ChartType.DAILY) {
-            startTime = marketInfo.timestamp - chartType.rangeInterval
-            startDayPoint = ChartPoint(marketInfo.rateOpen24Hour.toFloat(), null, startTime)
-        }
-
-        return ChartDataFactory.build(pointsWithMarketPrice, startTime, marketInfo.timestamp, startDayPoint)
+        return ChartDataFactory.build(points, chartInfo.startTimestamp, endTimestamp, chartInfo.isExpired)
     }
 }
