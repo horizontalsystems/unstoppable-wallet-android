@@ -22,9 +22,9 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
 
         setContentView(R.layout.fragment_swap_approve)
 
-        val coin = requireArguments().getParcelable<Coin>("coin")!!
-        val amount = requireArguments().getSerializable("amount") as BigDecimal
-        val spenderAddress = requireArguments().getString("spenderAddress")!!
+        val coin = requireArguments().getParcelable<Coin>(COIN_KEY)!!
+        val amount = requireArguments().getSerializable(AMOUNT_KEY) as BigDecimal
+        val spenderAddress = requireArguments().getString(SPENDER_ADDRESS_KEY)!!
 
         val viewModel by viewModels<SwapApproveViewModel> {
             SwapApproveModule.Factory(coin, amount, spenderAddress)
@@ -76,12 +76,16 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
         val requestKey = "approve"
         val resultKey = "result"
 
+        const val COIN_KEY = "coin_key"
+        const val AMOUNT_KEY = "amount_key"
+        const val SPENDER_ADDRESS_KEY = "spender_address_key"
+
         fun newInstance(coin: Coin, amount: BigDecimal, spenderAddress: String): SwapApproveFragment {
             return SwapApproveFragment().apply {
                 arguments = Bundle(3).apply {
-                    putParcelable("coin", coin)
-                    putSerializable("amount", amount)
-                    putString("spenderAddress", spenderAddress)
+                    putParcelable(COIN_KEY, coin)
+                    putSerializable(AMOUNT_KEY, amount)
+                    putString(SPENDER_ADDRESS_KEY, spenderAddress)
                 }
             }
         }

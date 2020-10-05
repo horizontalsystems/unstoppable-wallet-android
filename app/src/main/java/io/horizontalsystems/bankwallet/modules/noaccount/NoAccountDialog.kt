@@ -30,7 +30,7 @@ class NoAccountDialog: BaseBottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setContentView(R.layout.fragment_bottom_manage_wallets)
 
-        val coin = requireArguments().getParcelable<Coin>("coin")!!
+        val coin = requireArguments().getParcelable<Coin>(COIN_KEY)!!
 
         viewModel = ViewModelProvider(this, NoAccountModule.Factory(coin))
                 .get(NoAccountViewModel::class.java)
@@ -97,11 +97,13 @@ class NoAccountDialog: BaseBottomSheetDialogFragment() {
 
 
     companion object {
+        const val COIN_KEY = "coin_key"
+
         @JvmStatic
         fun show(supportFragmentManager: FragmentManager, coin: Coin) {
             val fragment = NoAccountDialog().apply {
                 arguments = Bundle(1).apply {
-                    putParcelable("coin", coin)
+                    putParcelable(COIN_KEY, coin)
                 }
             }
 

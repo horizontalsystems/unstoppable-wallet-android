@@ -41,11 +41,11 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val transactionHash = arguments?.getString("transactionHashKey") ?: run {
+        val transactionHash = arguments?.getString(TRANSACTION_HASH_KEY) ?: run {
             parentFragmentManager.popBackStack()
             return
         }
-        val wallet = arguments?.getParcelable<Wallet>("walletKey") ?: run {
+        val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY) ?: run {
             parentFragmentManager.popBackStack()
             return
         }
@@ -164,11 +164,14 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
     }
 
     companion object {
+        const val TRANSACTION_HASH_KEY = "transaction_hash_key"
+        const val WALLET_KEY = "wallet_key"
+
         fun instance(transactionHash: String, wallet: Wallet): FullTransactionInfoFragment {
             return FullTransactionInfoFragment().apply {
                 arguments = Bundle(2).apply {
-                    putString("transactionHashKey", transactionHash)
-                    putParcelable("walletKey", wallet)
+                    putString(TRANSACTION_HASH_KEY, transactionHash)
+                    putParcelable(WALLET_KEY, wallet)
                 }
             }
         }

@@ -30,7 +30,7 @@ class ReceiveFragment: BaseBottomSheetDialogFragment() {
 
         setContentView(R.layout.view_bottom_sheet_receive)
 
-        val wallet = arguments?.getParcelable<Wallet>(keyWallet) ?: run { dismiss(); return }
+        val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY) ?: run { dismiss(); return }
 
         setTitle(activity?.getString(R.string.Deposit_Title, wallet.coin.code))
         setSubtitle(wallet.coin.title)
@@ -82,10 +82,11 @@ class ReceiveFragment: BaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        private const val keyWallet = "wallet_key"
+        private const val WALLET_KEY = "wallet_key"
+
         fun newInstance(wallet: Wallet) = ReceiveFragment().apply {
             arguments = Bundle(1).apply {
-                putParcelable(keyWallet, wallet)
+                putParcelable(WALLET_KEY, wallet)
             }
         }
     }
