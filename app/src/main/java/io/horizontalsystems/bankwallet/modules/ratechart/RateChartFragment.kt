@@ -283,7 +283,8 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
     private fun bindActions() {
         actions = mapOf(
-                Pair(ChartType.DAILY, button1D),
+                Pair(ChartType.TODAY, buttonToday),
+                Pair(ChartType.DAILY, button24),
                 Pair(ChartType.WEEKLY, button1W),
                 Pair(ChartType.WEEKLY2, button2W),
                 Pair(ChartType.MONTHLY, button1M),

@@ -10,6 +10,7 @@ class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     : View(context, attrs, defStyleAttr) {
 
     enum class ChartType {
+        TODAY,
         DAILY,
         WEEKLY,
         WEEKLY2,

@@ -5,7 +5,7 @@ import android.util.Range
 import java.math.BigDecimal
 import kotlin.math.abs
 
-class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endTimestamp: Long) {
+class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endTimestamp: Long, val isExpired: Boolean = false) {
 
     class Value(val value: Float, var point: PointF = PointF(0f, 0f))
 

@@ -107,7 +107,14 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/button1D"
+                        android:id="@+id/buttonToday"
+                        style="@style/TabComponent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Charts_TimeDuration_Today" />
+
+                    <Button
+                        android:id="@+id/button24"
                         style="@style/TabComponent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
