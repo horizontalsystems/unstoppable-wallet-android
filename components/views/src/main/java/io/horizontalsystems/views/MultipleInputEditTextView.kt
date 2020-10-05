@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -14,6 +13,7 @@ class MultipleInputEditTextView : ConstraintLayout {
 
     interface Listener {
         fun beforeTextChanged()
+        fun onTextChanged(text: String)
     }
 
     init {
@@ -86,6 +86,7 @@ class MultipleInputEditTextView : ConstraintLayout {
                 btnDeleteInput.isGone = string.isEmpty()
                 btnPaste.isVisible = string.isEmpty() && attrInputFromClipboard
                 btnQRCodeScan.isVisible = string.isEmpty() && attrInputFromQRCode
+                listener?.onTextChanged(string)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int){

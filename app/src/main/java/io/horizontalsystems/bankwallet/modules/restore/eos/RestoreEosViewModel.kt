@@ -13,6 +13,8 @@ class RestoreEosViewModel(
 
     val accountTypeLiveEvent = SingleLiveEvent<AccountType>()
     val errorLiveData = MutableLiveData<java.lang.Exception>()
+    private var account: String = ""
+    private var privateKey: String = ""
 
     override fun onCleared() {
         clearables.forEach {
@@ -21,7 +23,15 @@ class RestoreEosViewModel(
         super.onCleared()
     }
 
-    fun onProceed(account: String, privateKey: String) {
+    fun onEnterAccount(account: String){
+        this.account = account
+    }
+
+    fun  onEnterPrivateKey(privateKey: String){
+        this.privateKey = privateKey
+    }
+
+    fun onProceed() {
         try {
             val accountType = service.accountType(account, privateKey)
             accountTypeLiveEvent.postValue(accountType)
