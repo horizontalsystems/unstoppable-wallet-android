@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.managewallets.view
 
 import android.os.Bundle
-import android.os.Handler
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
@@ -17,8 +20,6 @@ import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
-import io.horizontalsystems.views.TopMenuItem
-import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
 class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
@@ -36,16 +37,10 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        shadowlessToolbar.bind(
-                getString(R.string.ManageCoins_title),
-                leftBtnItem = TopMenuItem(text = R.string.ManageCoins_AddToken, onClick = { showAddTokenDialog() }),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Done, onClick = {
-                    hideKeyboard()
-                    Handler().postDelayed({
-                        activity?.onBackPressed()
-                    }, 100)
-                })
-        )
+        setHasOptionsMenu(true)
+        (activity as? AppCompatActivity)?.let {
+            it.supportActionBar?.title  = getString(R.string.ManageCoins_title)
+        }
 
         viewModel = ViewModelProvider(this, ManageWalletsModule.Factory())
                 .get(ManageWalletsViewModel::class.java)
@@ -57,6 +52,33 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         if (childFragment is NoAccountDialog) {
             childFragment.setListener(this)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.manage_wallets_menu, menu)
+        configureSearchMenu(menu, R.string.ManageCoins_Search)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuAddToken -> {
+                hideKeyboard()
+                showAddTokenDialog()
+                return true
+            }
+            android.R.id.home -> {
+                activity?.supportFragmentManager?.popBackStack()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun canHandleOnBackPress(): Boolean {
+        activity?.supportFragmentManager?.popBackStack()
+        return true
     }
 
     // ManageWalletItemsAdapter.Listener

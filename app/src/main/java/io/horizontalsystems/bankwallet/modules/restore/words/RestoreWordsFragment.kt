@@ -64,6 +64,7 @@ class RestoreWordsFragment : BaseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.restore_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
