@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
+import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
@@ -17,6 +19,12 @@ abstract class BaseFragment : Fragment() {
 
     protected fun hideKeyboard() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+    }
+
+    protected fun setMenuItemEnabled(menuItem: MenuItem, enabled: Boolean) {
+        menuItem.isEnabled = enabled
+        val color = context?.getColor(if (enabled) R.color.yellow_d else R.color.grey) ?: return
+        menuItem.icon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
     open fun canHandleOnBackPress(): Boolean{

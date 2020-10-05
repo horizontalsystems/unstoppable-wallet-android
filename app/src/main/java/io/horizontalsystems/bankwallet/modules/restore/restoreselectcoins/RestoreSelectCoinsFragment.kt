@@ -1,18 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
 import android.os.Bundle
-import android.os.Handler
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.DerivationSetting
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
-import io.horizontalsystems.views.TopMenuItem
-import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
@@ -27,20 +30,14 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
     }
 
     private lateinit var viewModel: RestoreSelectCoinsViewModel
+    private var doneMenuButton: MenuItem? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        shadowlessToolbar.bind(
-                getString(R.string.ManageCoins_title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back) { parentFragmentManager.popBackStack() },
-                rightBtnItem = TopMenuItem(text = R.string.Button_Restore, onClick = {
-                    hideKeyboard()
-                    viewModel.onRestore()
-                })
-        )
-        //disable restore button
-        shadowlessToolbar.setRightButtonEnabled(false)
+        setHasOptionsMenu(true)
+        (activity as? AppCompatActivity)?.let {
+            it.supportActionBar?.title  = getString(R.string.Select_Coins)
+        }
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType") ?: throw Exception("Parameter missing")
 
@@ -48,6 +45,25 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                 .get(RestoreSelectCoinsViewModel::class.java)
 
         observe()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.restore_select_coin_menu, menu)
+        configureSearchMenu(menu, R.string.ManageCoins_Search)
+        doneMenuButton = menu.findItem(R.id.menuDone)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuDone -> {
+                hideKeyboard()
+                viewModel.onRestore()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     // ManageWalletItemsAdapter.Listener
@@ -89,7 +105,9 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         })
 
         viewModel.canRestoreLiveData.observe(viewLifecycleOwner, Observer { enabled ->
-            shadowlessToolbar.setRightButtonEnabled(enabled)
+            doneMenuButton?.let { menuItem ->
+                setMenuItemEnabled(menuItem, enabled)
+            }
         })
 
         viewModel.enabledCoinsLiveData.observe(viewLifecycleOwner, Observer { enabledCoins ->
