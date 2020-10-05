@@ -23,7 +23,7 @@ import io.horizontalsystems.eoskit.core.InvalidPrivateKey
 import io.horizontalsystems.views.MultipleInputEditTextView
 import kotlinx.android.synthetic.main.fragment_restore_eos.*
 
-class RestoreEosFragment : BaseFragment(), MultipleInputEditTextView.Listener {
+class RestoreEosFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreEosViewModel
 
@@ -47,8 +47,25 @@ class RestoreEosFragment : BaseFragment(), MultipleInputEditTextView.Listener {
         eosAccount.btnText = getString(R.string.Send_Button_Paste)
         eosActivePrivateKey.btnText = getString(R.string.Send_Button_Paste)
 
-        eosAccount.setListenerForTextInput(this)
-        eosActivePrivateKey.setListenerForTextInput(this)
+        eosAccount.setListenerForTextInput(object : MultipleInputEditTextView.Listener{
+            override fun beforeTextChanged() {
+                checkKeyboard()
+            }
+
+            override fun onTextChanged(text: String) {
+                viewModel.onEnterAccount(text)
+            }
+        })
+
+        eosActivePrivateKey.setListenerForTextInput(object : MultipleInputEditTextView.Listener{
+            override fun beforeTextChanged() {
+                checkKeyboard()
+            }
+
+            override fun onTextChanged(text: String) {
+                viewModel.onEnterPrivateKey(text)
+            }
+        })
 
         bindActions()
         observe()
@@ -62,19 +79,11 @@ class RestoreEosFragment : BaseFragment(), MultipleInputEditTextView.Listener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menuRestore -> {
-                viewModel.onProceed(eosAccount.text, eosActivePrivateKey.text)
+                viewModel.onProceed()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun beforeTextChanged() {
-        context?.let {
-            if (Utils.isUsingCustomKeyboard(it)) {
-                showCustomKeyboardAlert()
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,6 +94,14 @@ class RestoreEosFragment : BaseFragment(), MultipleInputEditTextView.Listener {
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun checkKeyboard() {
+        context?.let {
+            if (Utils.isUsingCustomKeyboard(it)) {
+                showCustomKeyboardAlert()
+            }
+        }
     }
 
     private fun observe() {
