@@ -1,26 +1,20 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
-abstract class CoinListBaseFragment: BaseFragment(), CoinListAdapter.Listener {
+abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.Listener {
 
     private lateinit var adapter: CoinListAdapter
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -57,34 +51,9 @@ abstract class CoinListBaseFragment: BaseFragment(), CoinListAdapter.Listener {
         progressLoading.isVisible = false
     }
 
-    abstract fun updateFilter(query: String)
-
     open fun onCancelAddressFormatSelection() {}
 
     open fun onSelectAddressFormat(coin: Coin, derivationSetting: DerivationSetting) {}
-
-    protected fun configureSearchMenu(menu: Menu, hint: Int) {
-        val menuItem = menu.findItem(R.id.search) ?: return
-        val searchView: SearchView = menuItem.actionView as SearchView
-        searchView.maxWidth = Integer.MAX_VALUE
-        searchView.queryHint = getString(hint)
-        searchView.imeOptions = searchView.imeOptions or EditorInfo.IME_FLAG_NO_EXTRACT_UI
-
-        searchView.findViewById<View>(androidx.appcompat.R.id.search_plate)?.setBackgroundColor(Color.TRANSPARENT)
-        searchView.findViewById<EditText>(R.id.search_src_text)?.let { editText ->
-            context?.getColor(R.color.grey_50)?.let { color -> editText.setHintTextColor(color) }
-        }
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newQuery: String): Boolean {
-                val trimmedQuery = newQuery.trim()
-                updateFilter(trimmedQuery)
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean = false
-        })
-    }
 
     protected fun showAddressFormatSelectionDialog(coin: Coin, currentDerivation: AccountType.Derivation) {
         val items = AccountType.Derivation.values().toList()

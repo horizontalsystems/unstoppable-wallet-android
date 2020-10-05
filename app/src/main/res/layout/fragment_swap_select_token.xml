@@ -8,24 +8,13 @@
     android:background="?android:windowBackground"
     android:clickable="true">
 
-    <io.horizontalsystems.views.ShadowlessToolbarView
-        android:id="@+id/shadowlessToolbar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <io.horizontalsystems.views.CoinSearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -39,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:itemCount="4"
         tools:listitem="@layout/view_holder_coin_manage_item" />
 
