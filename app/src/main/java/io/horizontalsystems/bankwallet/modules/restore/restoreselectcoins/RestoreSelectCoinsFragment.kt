@@ -19,16 +19,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
-    companion object {
-        fun instance(predefinedAccountType: PredefinedAccountType): RestoreSelectCoinsFragment {
-            return RestoreSelectCoinsFragment().apply {
-                arguments = Bundle(1).apply {
-                    putParcelable("predefinedAccountType", predefinedAccountType)
-                }
-            }
-        }
-    }
-
     private lateinit var viewModel: RestoreSelectCoinsViewModel
     private var doneMenuButton: MenuItem? = null
 
@@ -39,7 +29,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
             it.supportActionBar?.title  = getString(R.string.Select_Coins)
         }
 
-        val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType") ?: throw Exception("Parameter missing")
+        val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY) ?: throw Exception("Parameter missing")
 
         viewModel = ViewModelProvider(this, RestoreSelectCoinsModule.Factory(predefinedAccountType))
                 .get(RestoreSelectCoinsViewModel::class.java)
@@ -113,6 +103,19 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         viewModel.enabledCoinsLiveData.observe(viewLifecycleOwner, Observer { enabledCoins ->
             setFragmentResult(RestoreFragment.selectCoinsRequestKey, bundleOf(RestoreFragment.selectCoinsBundleKey to enabledCoins))
         })
+    }
+
+
+    companion object {
+        const val PREDEFINED_ACCOUNT_TYPE_KEY = "predefined_account_type_key"
+
+        fun instance(predefinedAccountType: PredefinedAccountType): RestoreSelectCoinsFragment {
+            return RestoreSelectCoinsFragment().apply {
+                arguments = Bundle(1).apply {
+                    putParcelable(PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+                }
+            }
+        }
     }
 
 }

@@ -25,9 +25,9 @@ class ManageKeysDialog : BaseBottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setContentView(R.layout.fragment_bottom_manage_keys)
 
-        val title = requireArguments().getString("title")
-        val subtitle = requireArguments().getString("subtitle")
-        val content = requireArguments().getString("content")
+        val title = requireArguments().getString(TITLE_KEY)
+        val subtitle = requireArguments().getString(SUBTITLE_KEY)
+        val content = requireArguments().getString(CONTENT_KEY)
 
         setTitle(title)
         setSubtitle(subtitle)
@@ -58,12 +58,17 @@ class ManageKeysDialog : BaseBottomSheetDialogFragment() {
     }
 
     companion object {
+        const val TITLE_KEY = "title_key"
+        const val SUBTITLE_KEY = "subtitle_key"
+        const val CONTENT_KEY = "content_key"
+
+
         fun show(fragmentManager: FragmentManager, title: String, subtitle: String, content: String) {
             val fragment = ManageKeysDialog().apply {
                 arguments = Bundle(4).apply {
-                    putString("title", title)
-                    putString("subtitle", subtitle)
-                    putString("content", content)
+                    putString(TITLE_KEY, title)
+                    putString(SUBTITLE_KEY, subtitle)
+                    putString(CONTENT_KEY, content)
                 }
             }
 

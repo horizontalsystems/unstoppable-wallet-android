@@ -31,18 +31,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
 
-    companion object {
-        fun instance(coinCode: String, coinTitle: String, coinId: String? = null): RateChartFragment {
-            return RateChartFragment().apply {
-                arguments = Bundle(3).apply {
-                    putString("coinCode", coinCode)
-                    putString("coinTitle", coinTitle)
-                    putString("coinId", coinId)
-                }
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_rate_chart, container, false)
     }
@@ -52,14 +40,14 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
         setHasOptionsMenu(true)
 
-        val coinId = arguments?.getString("coinId")
+        val coinId = arguments?.getString(COIN_ID_KEY)
 
-        val coinCode = arguments?.getString("coinCode") ?: run {
+        val coinCode = arguments?.getString(COIN_CODE_KEY) ?: run {
             parentFragmentManager.popBackStack()
             return
         }
 
-        val coinTitle = arguments?.getString("coinTitle") ?: ""
+        val coinTitle = arguments?.getString(COIN_TITLE_KEY) ?: ""
 
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
@@ -366,6 +354,22 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         }
 
         return Pair(roundedDecimalValue, returnSuffix)
+    }
+
+    companion object {
+        const val COIN_CODE_KEY = "coin_code_key"
+        const val COIN_TITLE_KEY = "coin_title_key"
+        const val COIN_ID_KEY = "coin_id_key"
+
+        fun instance(coinCode: String, coinTitle: String, coinId: String? = null): RateChartFragment {
+            return RateChartFragment().apply {
+                arguments = Bundle(3).apply {
+                    putString(COIN_CODE_KEY, coinCode)
+                    putString(COIN_TITLE_KEY, coinTitle)
+                    putString(COIN_ID_KEY, coinId)
+                }
+            }
+        }
     }
 
 }

@@ -17,20 +17,23 @@ class IntroSlideFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val titleResId = requireArguments().getInt("title")
-        val descriptionResId = requireArguments().getInt("description")
+        val titleResId = requireArguments().getInt(TITLE_KEY)
+        val descriptionResId = requireArguments().getInt(DESCRIPTION_KEY)
 
         title.text = getString(titleResId)
         description.text = getString(descriptionResId)
     }
 
     companion object {
+        const val TITLE_KEY = "title_key"
+        const val DESCRIPTION_KEY = "description_key"
+
         @JvmStatic
         fun newInstance(titleResId: Int, descriptionResId: Int) =
                 IntroSlideFragment().apply {
                     arguments = Bundle(2).apply {
-                        putInt("title", titleResId)
-                        putInt("description", descriptionResId)
+                        putInt(TITLE_KEY, titleResId)
+                        putInt(DESCRIPTION_KEY, descriptionResId)
                     }
                 }
     }

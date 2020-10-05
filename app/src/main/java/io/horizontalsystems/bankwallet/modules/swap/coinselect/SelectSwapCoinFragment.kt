@@ -34,9 +34,9 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
             it.supportActionBar?.title  = getString(R.string.ManageCoins_title)
         }
 
-        val excludedCoin = arguments?.getParcelable<Coin>("excludedCoinKey")
-        val hideZeroBalance = arguments?.getBoolean("hideZeroBalanceKey")
-        val selectType = arguments?.getParcelable<SwapFragment.SelectType>("selectTypeKey") ?: run{
+        val excludedCoin = arguments?.getParcelable<Coin>(EXCLUDED_COIN_KEY)
+        val hideZeroBalance = arguments?.getBoolean(HIDE_ZERO_BALANCE_KEY)
+        val selectType = arguments?.getParcelable<SwapFragment.SelectType>(SELECT_TYPE_KEY) ?: run{
             activity?.supportFragmentManager?.popBackStack()
             return
         }
@@ -90,6 +90,10 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
         const val coinResultKey = "coinResultKey"
         const val selectTypeResultKey = "selectTypeResultKey"
 
+        const val EXCLUDED_COIN_KEY = "excludedCoinKey"
+        const val HIDE_ZERO_BALANCE_KEY = "hideZeroBalanceKey"
+        const val SELECT_TYPE_KEY = "selectTypeKey"
+
         fun start(activity: FragmentActivity?, selectType: SwapFragment.SelectType, hideZeroBalance: Boolean, excludedCoin: Coin?) {
             activity?.supportFragmentManager?.commit {
                 add(R.id.fragmentContainerView, instance(selectType, hideZeroBalance, excludedCoin))
@@ -100,9 +104,9 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
         fun instance(selectType: SwapFragment.SelectType,  hideZeroBalance: Boolean, excludedCoin: Coin?): SelectSwapCoinFragment {
             return SelectSwapCoinFragment().apply {
                 arguments = Bundle(3).apply {
-                    putParcelable("excludedCoinKey", excludedCoin)
-                    putBoolean("hideZeroBalanceKey", hideZeroBalance)
-                    putParcelable("selectTypeKey", selectType)
+                    putParcelable(EXCLUDED_COIN_KEY, excludedCoin)
+                    putBoolean(HIDE_ZERO_BALANCE_KEY, hideZeroBalance)
+                    putParcelable(SELECT_TYPE_KEY, selectType)
                 }
             }
         }

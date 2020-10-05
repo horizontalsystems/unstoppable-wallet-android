@@ -35,10 +35,9 @@ class RestoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val selectCoins = arguments?.getBoolean("selectCoins")
-                ?: throw Exception("Parameter missing")
-        val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
-        inApp = arguments?.getBoolean("inApp") ?: true
+        val selectCoins = arguments?.getBoolean(SELECT_COINS_KEY)!!
+        val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY)
+        inApp = arguments?.getBoolean(IN_APP_KEY) ?: true
 
         viewModel = ViewModelProvider(this, RestoreModule.Factory(selectCoins, predefinedAccountType))
                 .get(RestoreViewModel::class.java)
@@ -164,13 +163,17 @@ class RestoreFragment : BaseFragment() {
         const val selectCoinsRequestKey = "selectCoinsRequestKey"
         const val selectCoinsBundleKey = "selectCoinsBundleKey"
 
+        const val PREDEFINED_ACCOUNT_TYPE_KEY = "predefined_account_type_key"
+        const val SELECT_COINS_KEY = "select_coins_key"
+        const val IN_APP_KEY = "in_app_key"
+
 
         fun instance(predefinedAccountType: PredefinedAccountType? = null, selectCoins: Boolean = true, inApp: Boolean): RestoreFragment {
             return RestoreFragment().apply {
                 arguments = Bundle(2).apply {
-                    putParcelable("predefinedAccountType", predefinedAccountType)
-                    putBoolean("selectCoins", selectCoins)
-                    putBoolean("inApp", inApp)
+                    putParcelable(PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+                    putBoolean(SELECT_COINS_KEY, selectCoins)
+                    putBoolean(IN_APP_KEY, inApp)
                 }
             }
         }

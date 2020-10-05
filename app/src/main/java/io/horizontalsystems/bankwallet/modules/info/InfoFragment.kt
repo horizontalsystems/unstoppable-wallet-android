@@ -23,7 +23,7 @@ class InfoFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val infoParams = arguments?.getParcelable<InfoParameters>("infoParameters") ?: run {
+        val infoParams = arguments?.getParcelable<InfoParameters>(INFO_PARAMETERS_KEY) ?: run {
             parentFragmentManager.popBackStack()
             return
         }
@@ -62,10 +62,12 @@ class InfoFragment : BaseFragment() {
     }
 
     companion object {
+        const val INFO_PARAMETERS_KEY = "info_parameters_key"
+
         fun instance(infoParameters: InfoParameters): InfoFragment {
             return InfoFragment().apply {
                 arguments = Bundle(1).apply {
-                    putParcelable("infoParameters", infoParameters)
+                    putParcelable(INFO_PARAMETERS_KEY, infoParameters)
                 }
             }
         }
