@@ -113,6 +113,9 @@ class PrivacySettingsPresenter(
         if (connectionStatus == TorStatus.Failed) {
             interactor.isTorEnabled = false
             view?.toggleTorEnabled(false)
+        } else if(connectionStatus == TorStatus.Connected){
+            interactor.isTorEnabled = true
+            view?.toggleTorEnabled(true)
         }
     }
 
