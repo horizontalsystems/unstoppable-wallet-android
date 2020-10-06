@@ -27,14 +27,12 @@ import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
-    private var activeTab: Int? = null
     private val viewModel by viewModels<MainViewModel>()
     private var bottomBadgeView: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        activeTab = arguments?.getInt(ACTIVE_TAB_KEY)
-
         val view = inflater.inflate(R.layout.fragment_main, container, false)
+
         val fragments = listOf(
                 BalanceFragment(),
                 TransactionsFragment(),
@@ -43,7 +41,29 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         )
 
         view.viewPager.offscreenPageLimit = 3
-        view.viewPager.adapter = ViewPagerAdapter(fragments, childFragmentManager, viewLifecycleOwner.lifecycle)
+        view.viewPager.adapter = MainViewPagerAdapter(fragments, childFragmentManager, viewLifecycleOwner.lifecycle)
+
+        view.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                view.bottomNavigation.menu.getItem(position).isChecked = true
+            }
+        })
+
+        view.bottomNavigation.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.navigation_balance -> view.viewPager.setCurrentItem(0, false)
+                R.id.navigation_transactions -> view.viewPager.setCurrentItem(1, false)
+                R.id.navigation_guides -> view.viewPager.setCurrentItem(2, false)
+                R.id.navigation_settings -> view.viewPager.setCurrentItem(3, false)
+            }
+            true
+        }
+
+        arguments?.getInt(ACTIVE_TAB_KEY)?.let { position ->
+            view.bottomNavigation.menu.getItem(position).isChecked = true
+            view.viewPager.setCurrentItem(position, false)
+        }
 
         return view
     }
@@ -74,8 +94,6 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
                 settingsNavigationViewItem?.removeView(bottomBadgeView)
             }
         })
-
-        loadViewPager()
     }
 
     override fun onResume() {
@@ -108,47 +126,15 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         }
     }
 
-    override fun onClickCancel() {
-    }
-
-    override fun onDismiss() {
-    }
-
     private fun getBottomBadge(): View? {
         if (bottomBadgeView != null) {
             return bottomBadgeView
         }
 
         val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-
-        bottomBadgeView = LayoutInflater.from(activity)
-                .inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
+        bottomBadgeView = LayoutInflater.from(activity).inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
 
         return bottomBadgeView
-    }
-
-    private fun loadViewPager() {
-        activeTab?.let { position ->
-            bottomNavigation.menu.getItem(position).isChecked = true
-            viewPager.setCurrentItem(position, false)
-        }
-
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                bottomNavigation.menu.getItem(position).isChecked = true
-            }
-        })
-
-        bottomNavigation.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.navigation_balance -> viewPager.setCurrentItem(0, false)
-                R.id.navigation_transactions -> viewPager.setCurrentItem(1, false)
-                R.id.navigation_guides -> viewPager.setCurrentItem(2, false)
-                R.id.navigation_settings -> viewPager.setCurrentItem(3, false)
-            }
-            true
-        }
     }
 
     companion object {

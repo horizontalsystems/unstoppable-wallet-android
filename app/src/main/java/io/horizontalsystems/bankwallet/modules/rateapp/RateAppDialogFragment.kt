@@ -17,8 +17,8 @@ class RateAppDialogFragment(private var listener: Listener? = null) : DialogFrag
 
     interface Listener{
         fun onClickRateApp()
-        fun onClickCancel()
-        fun onDismiss()
+        fun onClickCancel() {}
+        fun onDismiss() {}
     }
 
     override fun onCreateDialog(bundle: Bundle?): Dialog {
