@@ -43,6 +43,7 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         )
 
         view.viewPager.offscreenPageLimit = 3
+        view.viewPager.isUserInputEnabled = false
         view.viewPager.adapter = ViewPagerAdapter(fragments, childFragmentManager, viewLifecycleOwner.lifecycle)
 
         return view
