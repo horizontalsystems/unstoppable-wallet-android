@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.bankwallet.ui.extensions.coinlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,15 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import kotlinx.android.synthetic.main.manage_wallets_fragment.*
 
 abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.Listener {
 
-    private lateinit var adapter: CoinListAdapter
+    private lateinit var featuredItemsAdapter: CoinListAdapter
+    private lateinit var itemsAdapter: CoinListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -29,8 +32,10 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        adapter = CoinListAdapter(this)
-        recyclerView.adapter = adapter
+        featuredItemsAdapter = CoinListAdapter(this)
+        itemsAdapter = CoinListAdapter(this)
+        recyclerView.itemAnimator = null
+        recyclerView.adapter = ConcatAdapter(featuredItemsAdapter, itemsAdapter)
 
     }
 
@@ -44,9 +49,9 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
 
     // CoinListBaseFragment
 
-    protected fun setItems(items: List<CoinViewItem>){
-        adapter.viewItems = items
-        adapter.notifyDataSetChanged()
+    protected fun setViewState(viewState: CoinViewState){
+        featuredItemsAdapter.submitList(viewState.featuredViewItems)
+        itemsAdapter.submitList(viewState.viewItems)
 
         progressLoading.isVisible = false
     }

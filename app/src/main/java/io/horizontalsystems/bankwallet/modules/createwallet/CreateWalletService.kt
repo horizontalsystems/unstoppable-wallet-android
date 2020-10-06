@@ -13,8 +13,13 @@ class CreateWalletService(
         private val derivationSettingsManager: IDerivationSettingsManager
 ) : CreateWalletModule.IService, Clearable {
 
+    override val stateObservable = BehaviorSubject.create<State>()
     override val canCreate = BehaviorSubject.create<Boolean>()
     override var state: State = State()
+        set(value) {
+            field = value
+            stateObservable.onNext(value)
+        }
 
     private val accounts = mutableMapOf<PredefinedAccountType, Account>()
     private val wallets = mutableMapOf<Coin, Wallet>()

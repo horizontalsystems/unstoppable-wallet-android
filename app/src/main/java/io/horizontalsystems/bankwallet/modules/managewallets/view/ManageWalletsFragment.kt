@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragme
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 
 class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
@@ -118,8 +118,8 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
     }
 
     private fun observe() {
-        viewModel.viewItemsLiveData.observe(viewLifecycleOwner, Observer { items ->
-            setItems(items)
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            setViewState(state)
         })
 
         viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->

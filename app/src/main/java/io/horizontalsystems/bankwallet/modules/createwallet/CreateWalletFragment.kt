@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.helpers.HudHelper
 
 class CreateWalletFragment : CoinListBaseFragment() {
@@ -96,8 +96,8 @@ class CreateWalletFragment : CoinListBaseFragment() {
     }
 
     private fun observe() {
-        viewModel.viewItemsLiveData.observe(viewLifecycleOwner, Observer { items ->
-            setItems(items)
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            setViewState(state)
         })
 
         viewModel.canCreateLiveData.observe(viewLifecycleOwner, Observer { enabled ->
