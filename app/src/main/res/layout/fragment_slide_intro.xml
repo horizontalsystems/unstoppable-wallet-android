@@ -35,6 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_goneMarginTop="32dp"
         tools:text="@string/Intro_Independence_Description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

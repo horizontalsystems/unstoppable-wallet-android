@@ -28,7 +28,6 @@
         android:id="@+id/imageSwitcher"
         android:layout_width="280dp"
         android:layout_height="280dp"
-        android:background="@drawable/ic_ellipse"
         android:inAnimation="@android:anim/fade_in"
         android:outAnimation="@android:anim/fade_out"
         app:layout_constraintBottom_toTopOf="@+id/verticalCenter"

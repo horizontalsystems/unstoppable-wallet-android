@@ -38,6 +38,7 @@
 
     <!--Intro-->
     <string name="Intro_Independence_Title">Independence</string>
+    <string name="Intro_Wallet_Description">Store and Trade crypto. Have full control over assets. Remain anonymous.</string>
     <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times</string>
     <string name="Intro_Knowledge_Title">Knowledge</string>
     <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages</string>
