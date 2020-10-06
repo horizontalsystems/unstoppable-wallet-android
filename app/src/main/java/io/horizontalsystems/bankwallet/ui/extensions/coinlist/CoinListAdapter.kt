@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.bankwallet.ui.extensions.coinlist
 
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.ui.extensions.setCoinImage
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
@@ -20,31 +21,25 @@ class CoinListAdapter(private val listener: Listener) : ListAdapter<CoinViewItem
         fun select(coin: Coin)
     }
 
-    var viewItems = listOf<CoinViewItem>()
-
-    override fun getItemCount(): Int {
-        return viewItems.size
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinWithSwitchViewHolder {
         return CoinWithSwitchViewHolder(
                 inflate(parent, R.layout.view_holder_coin_manage_item, false),
                 onSwitch = { isChecked, index ->
-                    (viewItems[index] as? CoinViewItem.ToggleVisible)?.let {
+                    (getItem(index) as? CoinViewItem.ToggleVisible)?.let {
                         onSwitchToggle(isChecked, it.coin)
                         //update state in adapter item list: coins
                         it.enabled = isChecked
                     }
                 },
                 onClick = { index ->
-                    (viewItems[index] as? CoinViewItem.ToggleHidden)?.coin?.let {
+                    (getItem(index) as? CoinViewItem.ToggleHidden)?.coin?.let {
                         listener.select(it)
                     }
                 })
     }
 
     override fun onBindViewHolder(holder: CoinWithSwitchViewHolder, position: Int) {
-        holder.bind(viewItems[position])
+        holder.bind(getItem(position))
     }
 
     private fun onSwitchToggle(isChecked: Boolean, coin: Coin) {
@@ -58,14 +53,18 @@ class CoinListAdapter(private val listener: Listener) : ListAdapter<CoinViewItem
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<CoinViewItem>() {
             override fun areItemsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                return oldItem == newItem
+                if ((oldItem as? CoinViewItem.ToggleHidden)?.coin?.coinId == (newItem as? CoinViewItem.ToggleHidden)?.coin?.coinId
+                        || (oldItem as? CoinViewItem.ToggleVisible)?.coin?.coinId == (newItem as? CoinViewItem.ToggleVisible)?.coin?.coinId) {
+                    return true
+                }
+                return false
             }
 
             override fun areContentsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
                 if (oldItem is CoinViewItem.ToggleHidden && newItem is CoinViewItem.ToggleHidden) {
-                    return oldItem.coin.coinId == newItem.coin.coinId
+                    return oldItem.coin.coinId == newItem.coin.coinId && oldItem.last == newItem.last
                 } else if (oldItem is CoinViewItem.ToggleVisible && newItem is CoinViewItem.ToggleVisible) {
-                    return oldItem.coin.coinId == newItem.coin.coinId && oldItem.enabled == newItem.enabled
+                    return oldItem.coin.coinId == newItem.coin.coinId && oldItem.enabled == newItem.enabled && oldItem.last == newItem.last
                 } else return false
             }
         }
@@ -92,13 +91,13 @@ class CoinWithSwitchViewHolder(
     fun bind(viewItem: CoinViewItem) {
         when (viewItem) {
             is CoinViewItem.ToggleHidden -> {
-                set(viewItem.coin, viewItem.last, viewItem.showDivider)
+                set(viewItem.coin, viewItem.last)
 
                 rightArrow.isVisible = true
                 toggleSwitch.isVisible = false
             }
             is CoinViewItem.ToggleVisible -> {
-                set(viewItem.coin, viewItem.last, viewItem.showDivider)
+                set(viewItem.coin, viewItem.last)
 
                 rightArrow.isVisible = false
                 toggleSwitch.isVisible = true
@@ -114,18 +113,20 @@ class CoinWithSwitchViewHolder(
 
     }
 
-    private fun set(coin: Coin, last: Boolean, showDivider: Boolean) {
-        dividerSpace.isVisible = showDivider
+    private fun set(coin: Coin, last: Boolean) {
         coinIcon.setCoinImage(coin.code, coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.typeLabel()
         coinTypeLabel.isVisible = coin.type.typeLabel() != null
         bottomShade.isVisible = last
+        dividerView.isVisible = last
     }
 }
 
 sealed class CoinViewItem {
-    class ToggleHidden(val coin: Coin, val last: Boolean, var showDivider: Boolean = false) : CoinViewItem()
-    class ToggleVisible(val coin: Coin, var enabled: Boolean, val last: Boolean, var showDivider: Boolean = false) : CoinViewItem()
+    class ToggleHidden(val coin: Coin, val last: Boolean) : CoinViewItem()
+    class ToggleVisible(val coin: Coin, var enabled: Boolean, val last: Boolean) : CoinViewItem()
 }
+
+data class CoinViewState(val featuredViewItems: List<CoinViewItem>, val viewItems: List<CoinViewItem>)

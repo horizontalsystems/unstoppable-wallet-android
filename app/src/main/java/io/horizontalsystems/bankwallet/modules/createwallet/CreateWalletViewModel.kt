@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.ui.extensions.CoinViewItem
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
 import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 import java.util.*
 
 class CreateWalletViewModel(
@@ -17,30 +17,37 @@ class CreateWalletViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
+    val viewStateLiveData = MutableLiveData<CoinViewState>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
     val canCreateLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<Exception>()
 
-    private var disposable: Disposable? = null
+    private var disposables = CompositeDisposable()
     private var filter: String? = null
 
     init {
         Handler().postDelayed({
             syncViewState()
+
+            service.stateObservable
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        syncViewState(it)
+                    }
+                    .let { disposables.add(it) }
         }, 700)
 
         service.canCreate
                 .subscribe {
                     canCreateLiveData.postValue(it)
-                }.let { disposable = it }
+                }.let { disposables.add(it) }
     }
 
     override fun onCleared() {
         clearables.forEach {
             it.clear()
         }
-        disposable?.dispose()
+        disposables.clear()
         super.onCleared()
     }
 
@@ -72,30 +79,25 @@ class CreateWalletViewModel(
     }
 
 
-    private fun syncViewState() {
-        val state = service.state
-
-        val viewItems = mutableListOf<CoinViewItem>()
+    private fun syncViewState(serviceState: CreateWalletService.State? = null) {
+        val state = serviceState ?: service.state
 
         val filteredFeatureCoins = filtered(state.featured)
 
-        if (filteredFeatureCoins.isNotEmpty()) {
-            viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
-                viewItem(item, filteredFeatureCoins.size - 1 == index, filteredFeatureCoins.size - 1 == index)
-            })
-        }
-
         val filteredItems = filtered(state.items)
 
-        viewItems.addAll(filteredItems.mapIndexed { index, item ->
-            viewItem(item, filteredItems.size - 1 == index)
-        })
-
-        viewItemsLiveData.postValue(viewItems)
+        viewStateLiveData.postValue(CoinViewState(
+                filteredFeatureCoins.mapIndexed { index, item ->
+                    viewItem(item, filteredFeatureCoins.size - 1 == index)
+                },
+                filteredItems.mapIndexed { index, item ->
+                    viewItem(item, filteredItems.size - 1 == index)
+                }
+        ))
     }
 
-    private fun viewItem(item: CreateWalletService.Item, last: Boolean, showDivider: Boolean = false): CoinViewItem {
-        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last, showDivider)
+    private fun viewItem(item: CreateWalletService.Item, last: Boolean): CoinViewItem {
+        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last)
     }
 
     private fun filtered(items: List<CreateWalletService.Item>): List<CreateWalletService.Item> {

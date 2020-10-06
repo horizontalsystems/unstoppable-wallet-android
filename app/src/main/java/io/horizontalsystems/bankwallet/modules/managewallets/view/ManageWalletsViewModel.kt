@@ -9,7 +9,8 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService
-import io.horizontalsystems.bankwallet.ui.extensions.CoinViewItem
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +23,7 @@ class ManageWalletsViewModel(
 
     private var disposable: Disposable? = null
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
+    val viewStateLiveData = MutableLiveData<CoinViewState>()
     val openDerivationSettingsLiveEvent = SingleLiveEvent<Pair<Coin, AccountType.Derivation>>()
     private var filter: String? = null
 
@@ -33,7 +34,7 @@ class ManageWalletsViewModel(
             service.stateObservable
                     .subscribeOn(Schedulers.io())
                     .subscribe {
-                        syncViewState()
+                        syncViewState(it)
                     }
                     .let { disposable = it }
         }, 500)
@@ -80,32 +81,27 @@ class ManageWalletsViewModel(
         }
     }
 
-    private fun syncViewState() {
-        val state = service.state
-
-        val viewItems = mutableListOf<CoinViewItem>()
+    private fun syncViewState(updatedState: ManageWalletsModule.State? = null) {
+        val state = updatedState ?: service.state
 
         val filteredFeatureCoins = filtered(state.featuredItems)
 
-        if (filteredFeatureCoins.isNotEmpty()) {
-            viewItems.addAll(filteredFeatureCoins.mapIndexed { index, item ->
-                viewItem(item, filteredFeatureCoins.size - 1 == index, filteredFeatureCoins.size - 1 == index)
-            })
-        }
-
         val filteredItems = filtered(state.items)
 
-        viewItems.addAll(filteredItems.mapIndexed { index, item ->
-            viewItem(item, filteredItems.size - 1 == index)
-        })
-
-        viewItemsLiveData.postValue(viewItems)
+        viewStateLiveData.postValue(CoinViewState(
+                filteredFeatureCoins.mapIndexed { index, item ->
+                    viewItem(item, filteredFeatureCoins.size - 1 == index)
+                },
+                filteredItems.mapIndexed { index, item ->
+                    viewItem(item, filteredItems.size - 1 == index)
+                }
+        ))
     }
 
-    private fun viewItem(item: ManageWalletsModule.Item, last: Boolean, showDivider: Boolean = false): CoinViewItem {
+    private fun viewItem(item: ManageWalletsModule.Item, last: Boolean): CoinViewItem {
         return when(val itemState = item.state) {
-            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, last, showDivider)
-            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last, showDivider)
+            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, last)
+            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last)
         }
     }
 

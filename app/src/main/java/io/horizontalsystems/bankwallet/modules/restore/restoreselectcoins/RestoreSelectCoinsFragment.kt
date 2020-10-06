@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
-import io.horizontalsystems.bankwallet.ui.extensions.CoinListBaseFragment
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
@@ -85,8 +85,8 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
     }
 
     private fun observe() {
-        viewModel.viewItemsLiveData.observe(viewLifecycleOwner, Observer { items ->
-            setItems(items)
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer { viewState ->
+            setViewState(viewState)
         })
 
         viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->

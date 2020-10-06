@@ -16,7 +16,12 @@ class RestoreSelectCoinsService(
 ) : RestoreSelectCoinsModule.IService, Clearable {
 
     override val canRestore = BehaviorSubject.create<Boolean>()
+    override val stateObservable = BehaviorSubject.create<State>()
     override var state: State = State()
+        set(value) {
+            field = value
+            stateObservable.onNext(value)
+        }
 
     override var enabledCoins: MutableList<Coin> = mutableListOf()
         private set
