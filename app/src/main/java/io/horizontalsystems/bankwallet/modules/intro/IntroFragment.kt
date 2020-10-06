@@ -9,6 +9,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -43,7 +44,7 @@ class IntroFragment: BaseFragment() {
         } catch (e: Exception) {
         }
 
-        val images = arrayOf(R.drawable.ic_independence, R.drawable.ic_knowledge, R.drawable.ic_privacy)
+        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_independence, R.drawable.ic_knowledge, R.drawable.ic_privacy)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             private var skipButtonVisible = true
 
@@ -53,6 +54,11 @@ class IntroFragment: BaseFragment() {
 
             override fun onPageSelected(position: Int) {
                 imageSwitcher.setImageResource(images[position])
+                if (position == 0) {
+                    imageSwitcher.background = null
+                } else {
+                    imageSwitcher.background = getDrawable(requireContext(), R.drawable.ic_ellipse)
+                }
                 if (position == pagesCount - 1) {
                     skipButtonVisible = false
                     fadeOutAnimation(btnSkip)
@@ -64,7 +70,7 @@ class IntroFragment: BaseFragment() {
         })
 
         imageSwitcher.setFactory { ImageView(activity?.applicationContext) }
-        imageSwitcher.setImageResource(R.drawable.ic_independence)
+        imageSwitcher.setImageResource(images[0])
 
         circleIndicator.setViewPager(viewPager)
 
