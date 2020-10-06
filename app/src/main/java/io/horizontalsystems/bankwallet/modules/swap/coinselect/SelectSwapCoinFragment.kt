@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -77,11 +78,14 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
     }
 
     private fun closeWithResult(coin: Coin, selectType: SwapFragment.SelectType) {
+        hideKeyboard()
         setFragmentResult(requestKey, bundleOf(
                 coinResultKey to coin,
                 selectTypeResultKey to selectType
         ))
-        activity?.supportFragmentManager?.popBackStack()
+        Handler().postDelayed({
+            activity?.supportFragmentManager?.popBackStack()
+        }, 100)
     }
 
     companion object {
