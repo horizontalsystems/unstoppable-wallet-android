@@ -408,7 +408,6 @@
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
-    <string name="SettingsSecurity_EnableTor">Enable Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet traffic while using this app. Can be slow.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
@@ -584,6 +583,8 @@
 
     <!-- Tor -->
 
+    <string name="Tor_Title">Tor</string>
+    <string name="Tor_Connection_Title">Connection</string>
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
     <string name="TorPage_Connecting">Connecting…</string>

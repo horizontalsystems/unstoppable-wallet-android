@@ -93,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/SettingsSecurity_EnableTor"
+                    android:text="@string/Tor_Title"
                     android:textColor="?TextColorBarsToDark"
                     app:layout_constraintBottom_toTopOf="@+id/subtitleText"
                     app:layout_constraintStart_toEndOf="@+id/controlIcon"

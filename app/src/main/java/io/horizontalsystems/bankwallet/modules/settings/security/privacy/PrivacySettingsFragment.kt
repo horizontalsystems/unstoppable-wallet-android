@@ -281,8 +281,8 @@ class PrivacySettingsFragment : BaseFragment() {
         activity?.let {
             ConfirmationDialog.show(
                     icon = R.drawable.ic_tor,
-                    title = getString(R.string.SettingsPrivacy_ConnectionSettingsTitle),
-                    subtitle = getString(R.string.SettingsSecurity_EnableTor),
+                    title = getString(R.string.Tor_Title),
+                    subtitle = getString(R.string.Tor_Connection_Title),
                     contentText = getString(R.string.SettingsSecurity_AppRestartWarning),
                     actionButtonTitle = getString(R.string.Alert_Restart),
                     cancelButtonTitle = null, // Do not show cancel button
