@@ -37,13 +37,13 @@
     <string name="FooterText" translatable="false">© Horizontal Systems 2020</string>
 
     <!--Intro-->
-    <string name="Intro_Independence_Title">Independence</string>
     <string name="Intro_Wallet_Description">Store and Trade crypto. Have full control over assets. Remain anonymous.</string>
-    <string name="Intro_Independence_Description">Keep crypto assets safe, unconfiscatable and accessible at all times</string>
-    <string name="Intro_Knowledge_Title">Knowledge</string>
-    <string name="Intro_Knowledge_Description">Become informed and discover growing blockchain projects in early stages</string>
-    <string name="Intro_Privacy_Title">Privacy</string>
-    <string name="Intro_Privacy_Description">Stay incognito and under the radar while growing your wealth</string>
+    <string name="Intro_Invest_Title">Invest Wisely</string>
+    <string name="Intro_Invest_Description">Unstoppable integrates unmatched trading, monitoring and analytical instruments.</string>
+    <string name="Intro_Independence_Title">Be Independent</string>
+    <string name="Intro_Independence_Description">Unstoppable is built to ensure users are able to access funds at any time from anywhere.</string>
+    <string name="Intro_Privacy_Title">Stay Private</string>
+    <string name="Intro_Privacy_Description">Use this wallet to remain incognito and be able to keep your information private.</string>
 
     <!--Welcome-->
 
