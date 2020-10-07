@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
 class BackupWordsConfirmFragment : BaseFragment() {
@@ -39,6 +40,10 @@ class BackupWordsConfirmFragment : BaseFragment() {
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             HudHelper.showErrorMessage(this.requireView(), it)
         })
+
+        activity?.let {
+            KeyboardHelper.showKeyboardDelayed(it, wordOne, 200)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

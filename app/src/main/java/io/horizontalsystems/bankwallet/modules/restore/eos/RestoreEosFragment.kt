@@ -19,9 +19,13 @@ import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.eoskit.core.InvalidPrivateKey
 import io.horizontalsystems.views.MultipleInputEditTextView
+import kotlinx.android.synthetic.main.fragment_backup_eos.*
 import kotlinx.android.synthetic.main.fragment_restore_eos.*
+import kotlinx.android.synthetic.main.fragment_restore_eos.eosAccount
+import kotlinx.android.synthetic.main.fragment_restore_eos.eosActivePrivateKey
 
 class RestoreEosFragment : BaseFragment() {
 
@@ -69,6 +73,10 @@ class RestoreEosFragment : BaseFragment() {
 
         bindActions()
         observe()
+
+        activity?.let {
+            KeyboardHelper.showKeyboardDelayed(it, eosAccount, 200)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
