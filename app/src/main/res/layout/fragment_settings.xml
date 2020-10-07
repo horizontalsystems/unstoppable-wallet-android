@@ -55,6 +55,16 @@
                 app:title="@string/Settings_SecurityCenter" />
 
             <io.horizontalsystems.views.SettingsView
+                android:id="@+id/walletConnect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_wallet_connect"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/privacySettings"
+                app:title="@string/Settings_WalletConnect" />
+
+            <io.horizontalsystems.views.SettingsView
                 android:id="@+id/appStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +72,7 @@
                 app:icon="@drawable/ic_app_status"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/privacySettings"
+                app:layout_constraintTop_toBottomOf="@+id/walletConnect"
                 app:title="@string/Settings_AppStatus" />
 
             <io.horizontalsystems.views.SettingsView
