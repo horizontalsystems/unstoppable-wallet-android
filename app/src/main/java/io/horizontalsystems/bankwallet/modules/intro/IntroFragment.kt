@@ -40,7 +40,7 @@ class IntroFragment : BaseFragment() {
         } catch (e: Exception) {
         }
 
-        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_independence, R.drawable.ic_knowledge, R.drawable.ic_privacy)
+        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_knowledge, R.drawable.ic_independence,  R.drawable.ic_privacy)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             private var skipButtonVisible = true
 
