@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
@@ -21,7 +21,7 @@ import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
 
-class ConfirmationFragment(private var sendPresenter: SendPresenter?) : Fragment() {
+class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFragment() {
 
     private var sendButtonView: ConfirmationSendButtonView? = null
     private var presenter: SendConfirmationPresenter? = null

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
@@ -97,12 +98,10 @@ class SendActivity : BaseActivity() {
         presenterView.showSendConfirmation.observe(this, Observer {
             hideSoftKeyboard()
 
-            supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
-                            R.anim.slide_in_from_right, R.anim.slide_out_to_right)
-                    .add(R.id.rootView, ConfirmationFragment(mainPresenter))
-                    .addToBackStack("confirmFragment")
-                    .commit()
+            supportFragmentManager.commit {
+                add(R.id.rootView, ConfirmationFragment(mainPresenter))
+                addToBackStack(null)
+            }
         })
 
         presenterView.sendButtonEnabled.observe(this, Observer { enabled ->
