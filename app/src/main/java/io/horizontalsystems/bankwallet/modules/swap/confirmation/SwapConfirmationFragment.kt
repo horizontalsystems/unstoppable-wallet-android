@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
 import io.horizontalsystems.core.helpers.HudHelper
@@ -18,7 +19,7 @@ import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_confirmation.shadowlessToolbar
 import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
-class SwapConfirmationFragment : Fragment() {
+class SwapConfirmationFragment : BaseFragment() {
 
     private lateinit var presenter: ConfirmationPresenter
 
@@ -94,12 +95,10 @@ class SwapConfirmationFragment : Fragment() {
 
     companion object {
         fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
-                            R.anim.slide_in_from_right, R.anim.slide_out_to_right)
-                    .add(R.id.fragmentContainerView, SwapConfirmationFragment())
-                    .addToBackStack("confirmFragment")
-                    .commit()
+            activity.supportFragmentManager.commit {
+                add(R.id.fragmentContainerView, SwapConfirmationFragment())
+                addToBackStack(null)
+            }
         }
     }
 
