@@ -192,6 +192,10 @@ dependencies {
     apptestnetImplementation zcashDependencyTestNet
     debugImplementation zcashDependencyTestNet
 
+    // WalletConnect
+    implementation 'com.github.trustwallet:wallet-connect-kotlin:1.4.9'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
     // in case native file tor.so not loading, do full gradle clean and build.
     implementation 'com.github.horizontalsystems:tor-kit-android:7038b2d'
 

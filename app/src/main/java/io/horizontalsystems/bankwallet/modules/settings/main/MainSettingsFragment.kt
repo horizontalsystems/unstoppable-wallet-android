@@ -18,6 +18,11 @@ import io.horizontalsystems.core.*
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
+import androidx.navigation.fragment.findNavController
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
+import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.setOnSingleClickListener
+
 class MainSettingsFragment : BaseFragment() {
 
     private val presenter by viewModels<MainSettingsPresenter> { MainSettingsModule.Factory() }
@@ -42,6 +47,8 @@ class MainSettingsFragment : BaseFragment() {
         manageKeys.setOnSingleClickListener { presenter.didTapManageKeys() }
 
         privacySettings.setOnSingleClickListener { presenter.didTapSecurity() }
+
+        walletConnect.setOnSingleClickListener { presenter.didTapWalletConnect() }
 
         notifications.setOnSingleClickListener { presenter.didTapNotifications() }
 
@@ -161,6 +168,10 @@ class MainSettingsFragment : BaseFragment() {
 
         router.openAppStatusLiveEvent.observe(viewLifecycleOwner, Observer {
             findNavController().navigate(R.id.mainFragment_to_appStatusFragment, null, navOptions())
+        })
+
+        router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let { WalletConnectModule.start(it) }
         })
     }
 

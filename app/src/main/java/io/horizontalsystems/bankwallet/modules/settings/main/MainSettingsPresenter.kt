@@ -33,6 +33,10 @@ class MainSettingsPresenter(
         router.openAppStatus()
     }
 
+    override fun didTapWalletConnect() {
+        router.openWalletConnect()
+    }
+
     override fun didTapSecurity() {
         router.showSecuritySettings()
     }
