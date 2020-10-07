@@ -58,9 +58,9 @@ class SendFeePresenter(
         }
     }
 
-    private fun syncFeeLabels() {
-        view.setPrimaryFee(helper.feeAmount(fee, SendModule.InputType.COIN, xRate))
-        view.setSecondaryFee(helper.feeAmount(fee, SendModule.InputType.CURRENCY, xRate))
+    private fun syncFees() {
+        view.setPrimaryFee(helper.feeAmount(fee, inputType, xRate))
+        view.setSecondaryFee(helper.feeAmount(fee, inputType.reversed(), xRate))
     }
 
     private fun syncFeeRateLabels() {
@@ -147,7 +147,7 @@ class SendFeePresenter(
 
     override fun setFee(fee: BigDecimal) {
         this.fee = fee
-        syncFeeLabels()
+        syncFees()
         syncError()
     }
 
@@ -170,6 +170,7 @@ class SendFeePresenter(
 
     override fun setInputType(inputType: SendModule.InputType) {
         this.inputType = inputType
+        syncFees()
     }
 
     // SendFeeModule.IViewDelegate
@@ -178,7 +179,7 @@ class SendFeePresenter(
         xRate = interactor.getRate(coin.code)
 
         syncFeeRateLabels()
-        syncFeeLabels()
+        syncFees()
         syncError()
     }
 
@@ -233,7 +234,7 @@ class SendFeePresenter(
 
     override fun didUpdateExchangeRate(rate: BigDecimal) {
         xRate = rate
-        syncFeeLabels()
+        syncFees()
     }
 
     // ViewModel
