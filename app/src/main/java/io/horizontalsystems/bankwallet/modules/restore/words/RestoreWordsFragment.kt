@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
 import kotlinx.android.synthetic.main.fragment_restore_words.toolbar
 
@@ -61,6 +62,10 @@ class RestoreWordsFragment : BaseFragment() {
         setInputViewListeners()
 
         observe()
+
+        activity?.let {
+            KeyboardHelper.showKeyboardDelayed(it, wordsInput, 200)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
