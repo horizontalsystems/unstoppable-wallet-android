@@ -1,18 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.intro
 
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.core.content.ContextCompat.getDrawable
-import androidx.core.view.isInvisible
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
@@ -20,7 +16,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
 import kotlinx.android.synthetic.main.fragment_intro.*
 
-class IntroFragment: BaseFragment() {
+class IntroFragment : BaseFragment() {
 
     private val presenter by lazy { ViewModelProvider(this, IntroModule.Factory()).get(IntroPresenter::class.java) }
 
@@ -61,13 +57,14 @@ class IntroFragment: BaseFragment() {
                 }
                 if (position == pagesCount - 1) {
                     skipButtonVisible = false
-                    fadeOutAnimation(btnSkip)
                 } else if (!skipButtonVisible) {
                     skipButtonVisible = true
-                    fadeInAnimation(btnSkip)
                 }
+                showSkipButton(skipButtonVisible)
             }
         })
+
+        ViewCompat.setTransitionName(imageSwitcher, "intro_wallet_logo")
 
         imageSwitcher.setFactory { ImageView(activity?.applicationContext) }
         imageSwitcher.setImageResource(images[0])
@@ -87,8 +84,8 @@ class IntroFragment: BaseFragment() {
         }
 
         (presenter.router as? IntroRouter)?.let { router ->
-            router.navigateToWelcomeLiveEvent.observe(this, Observer {
-                activity?.let { activity -> WelcomeModule.start(activity) }
+            router.navigateToWelcomeLiveEvent.observe(this, {
+                activity?.let { activity -> WelcomeModule.start(activity, imageSwitcher) }
             })
         }
     }
@@ -102,36 +99,9 @@ class IntroFragment: BaseFragment() {
         }
     }
 
-    private fun fadeOutAnimation(view: View) {
-        val fadeOut: Animation = AlphaAnimation(1.0f, 0.0f)
-        fadeOut.interpolator = AccelerateInterpolator()
-        fadeOut.duration = 300
-
-        fadeOut.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {}
-            override fun onAnimationEnd(animation: Animation?) {
-                view.isInvisible = true
-            }
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-
-        view.startAnimation(fadeOut)
-    }
-
-    private fun fadeInAnimation(view: View) {
-        val fadeIn: Animation = AlphaAnimation(0.0f, 1.0f)
-        fadeIn.interpolator = DecelerateInterpolator()
-        fadeIn.duration = 300
-
-        fadeIn.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                view.isVisible = true
-            }
-            override fun onAnimationRepeat(animation: Animation) {}
-        })
-
-        view.startAnimation(fadeIn)
+    private fun showSkipButton(show: Boolean) {
+        TransitionManager.beginDelayedTransition(introLayout)
+        btnSkip.isVisible = show
     }
 
     companion object {
