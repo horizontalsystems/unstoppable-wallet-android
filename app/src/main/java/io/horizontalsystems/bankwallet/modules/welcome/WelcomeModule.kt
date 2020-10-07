@@ -33,7 +33,6 @@ object WelcomeModule {
         fragmentActivity.supportFragmentManager.commit {
             addSharedElement(sharedLogo, "welcome_wallet_logo")
             replace(R.id.fragmentContainerView, WelcomeFragment.instance())
-            addToBackStack(null)
         }
     }
 
