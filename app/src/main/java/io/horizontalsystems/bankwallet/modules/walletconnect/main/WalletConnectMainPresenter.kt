@@ -46,10 +46,14 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) : Vi
         service.rejectSession()
     }
 
+    fun disconnect() {
+        service.killSession()
+    }
+
     private fun syncState(state: WalletConnectService.State) {
         Log.e("AAA", "state $state")
 
-        if (state == WalletConnectService.State.Rejected) {
+        if (state == WalletConnectService.State.Rejected || state == WalletConnectService.State.Killed) {
             closeLiveEvent.postValue(Unit)
         }
 

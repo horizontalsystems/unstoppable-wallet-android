@@ -74,6 +74,10 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
             presenter.reject()
         }
 
+        disconnectButton.setOnSingleClickListener {
+            presenter.disconnect()
+        }
+
         cancelButton.setOnSingleClickListener {
             parentFragmentManager.popBackStack()
         }
