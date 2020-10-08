@@ -32,39 +32,21 @@
         android:id="@+id/progressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="11dp"
         android:textColor="@color/grey"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/progressBarWrapper"
+        app:layout_constraintEnd_toStartOf="@+id/progressBar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/Transactions_Sending" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/progressBarWrapper"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/progressBar"
+        android:layout_width="20dp"
+        android:layout_height="18dp"
+        android:src="@drawable/animation_pending_big"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/progressBar1"
-            style="@style/TransactionInfoStatusProgressBarBig"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/progressBar2"
-            style="@style/TransactionInfoStatusProgressBarBig"
-            app:layout_constraintStart_toEndOf="@id/progressBar1"
-            app:layout_constraintTop_toTopOf="@id/progressBar1" />
-
-        <ImageView
-            android:id="@+id/progressBar3"
-            style="@style/TransactionInfoStatusProgressBarBig"
-            app:layout_constraintStart_toEndOf="@id/progressBar2"
-            app:layout_constraintTop_toTopOf="@id/progressBar1" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
