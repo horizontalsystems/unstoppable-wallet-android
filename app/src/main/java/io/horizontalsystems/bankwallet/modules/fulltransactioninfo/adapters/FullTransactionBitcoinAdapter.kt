@@ -28,11 +28,11 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.formatCoin(data.fee, coin.code, 0, 8)))
 
         data.size?.let {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)", dimmed = true))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)", dimmed = false))
         }
 
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = App.numberFormatter.format(feePerByte, 0, 0, suffix = " ($unitName)"), dimmed = true))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = App.numberFormatter.format(feePerByte, 0, 0, suffix = " ($unitName)"), dimmed = false))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))

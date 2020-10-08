@@ -98,7 +98,7 @@
         android:paddingBottom="13dp"
         android:text="@string/TransactionInfo_ButtonVerify"
         android:textAlignment="center"
-        android:textColor="@color/grey"
+        android:textColor="?ColorOz"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

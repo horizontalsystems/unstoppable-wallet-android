@@ -38,7 +38,7 @@ class FullTransactionEthereumAdapter(private val provider: FullTransactionInfoMo
             section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = App.numberFormatter.formatCoin(amount, coin.code, 0, 8)))
 
             data.nonce?.let {
-                section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = it, dimmed = true))
+                section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = it, dimmed = false))
             }
 
             sections.add(FullTransactionSection(section))
@@ -50,14 +50,14 @@ class FullTransactionEthereumAdapter(private val provider: FullTransactionInfoMo
                 section.add(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.formatCoin(BigDecimal(it), feeCoin.code, 0, 8)))
             }
             if (data.size != null) {
-                section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))
+                section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = false))
             }
-            section.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = data.gasLimit, dimmed = true))
+            section.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = data.gasLimit, dimmed = false))
             data.gasUsed?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = data.gasUsed, dimmed = true))
+                section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = data.gasUsed, dimmed = false))
             }
             data.gasPrice?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "$it GWei", dimmed = true))
+                section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "$it GWei", dimmed = false))
             }
 
             sections.add(FullTransactionSection(section))
