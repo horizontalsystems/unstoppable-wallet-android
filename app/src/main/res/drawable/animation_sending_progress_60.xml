@@ -3,11 +3,11 @@
     android:oneshot="false">
 
     <item
-        android:drawable="@drawable/ic_status_sending_2"
+        android:drawable="@drawable/ic_sending_2"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_status_sending_3"
+        android:drawable="@drawable/ic_sending_2_a"
         android:duration="@integer/animation_duration" />
 
 </animation-list>

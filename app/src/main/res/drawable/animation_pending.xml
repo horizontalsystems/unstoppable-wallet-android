@@ -3,19 +3,19 @@
     android:oneshot="false">
 
     <item
-        android:drawable="@drawable/ic_status_proccessing_0"
+        android:drawable="@drawable/ic_pending_0"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_status_sending_1"
+        android:drawable="@drawable/ic_pending_1"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_status_sending_2"
+        android:drawable="@drawable/ic_pending_2"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_status_sending_3"
+        android:drawable="@drawable/ic_pending_3"
         android:duration="@integer/animation_duration" />
 
 </animation-list>

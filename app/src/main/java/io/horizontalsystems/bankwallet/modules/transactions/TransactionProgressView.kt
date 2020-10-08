@@ -28,7 +28,7 @@ class TransactionProgressView : ConstraintLayout {
 
     fun bind(progress: Double = 0.0, incoming: Boolean) {
         when {
-            progress <= 0.33 -> progressBar.setBackgroundResource(if (incoming) R.drawable.animation_receiving_progress_0 else R.drawable.animation_sending_progress_0)
+            progress <= 0.33 -> progressBar.setBackgroundResource(R.drawable.animation_pending)
             progress <= 0.66 -> progressBar.setBackgroundResource(if (incoming) R.drawable.animation_receiving_progress_30 else R.drawable.animation_sending_progress_30)
             progress <= 1.0 -> progressBar.setBackgroundResource(if (incoming) R.drawable.animation_receiving_progress_60 else R.drawable.animation_sending_progress_60)
         }

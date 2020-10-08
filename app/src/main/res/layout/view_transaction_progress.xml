@@ -8,10 +8,10 @@
     <ImageView
         android:id="@+id/progressBar"
         android:layout_width="16dp"
-        android:layout_height="12dp"
-        android:src="@drawable/animation_receiving_progress_0"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="10dp"
+        android:src="@drawable/animation_pending"
+        app:layout_constraintBottom_toBottomOf="@+id/processText"
+        app:layout_constraintTop_toTopOf="@+id/processText"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
