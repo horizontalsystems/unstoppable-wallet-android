@@ -323,7 +323,7 @@
 
             <TextView
                 android:id="@+id/volumeTitle"
-                style="@font/noto_sans_regular"
+                style="@font/roboto_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -337,7 +337,7 @@
                 android:id="@+id/volumeValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:textAlignment="textEnd"
                 android:textColor="@color/stateful_chart_value_text_color"
                 android:textSize="14sp"
@@ -348,7 +348,7 @@
 
             <TextView
                 android:id="@+id/coinMarketCapTitle"
-                style="@font/noto_sans_regular"
+                style="@font/roboto_regular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -362,7 +362,7 @@
                 android:id="@+id/coinMarketCap"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:textAlignment="textEnd"
                 android:textColor="@color/stateful_chart_value_text_color"
                 android:textSize="14sp"
@@ -373,7 +373,7 @@
 
             <TextView
                 android:id="@+id/circulationTitle"
-                style="@font/noto_sans_regular"
+                style="@font/roboto_regular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -387,7 +387,7 @@
                 android:id="@+id/circulationValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:textAlignment="textEnd"
                 android:textColor="@color/stateful_chart_value_text_color"
                 android:textSize="14sp"
@@ -398,7 +398,7 @@
 
             <TextView
                 android:id="@+id/totalSupplyTitle"
-                style="@font/noto_sans_regular"
+                style="@font/roboto_regular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -415,7 +415,7 @@
                 android:id="@+id/totalSupplyValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:textAlignment="textEnd"
                 android:textColor="@color/stateful_chart_value_text_color"
                 android:textSize="14sp"
@@ -426,7 +426,7 @@
 
             <TextView
                 android:id="@+id/startDateTitle"
-                style="@font/noto_sans_regular"
+                style="@font/roboto_regular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -443,7 +443,7 @@
                 android:id="@+id/startDateValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:textAlignment="textEnd"
                 android:textColor="@color/stateful_chart_value_text_color"
                 android:textSize="14sp"
@@ -454,7 +454,7 @@
 
             <TextView
                 android:id="@+id/websiteTitle"
-                style="@font/noto_sans_regular"
+                style="@font/roboto_regular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -471,7 +471,7 @@
                 android:id="@+id/websiteValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:textAlignment="textEnd"
                 android:textColor="@color/stateful_chart_value_text_color"
                 android:textSize="14sp"
