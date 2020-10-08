@@ -62,6 +62,10 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
 
         })
 
+        presenter.closeLiveEvent.observe(viewLifecycleOwner, Observer { hint ->
+            requireActivity().finish()
+        })
+
         approveButton.setOnSingleClickListener {
             presenter.approve()
         }
