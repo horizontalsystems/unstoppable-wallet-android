@@ -38,7 +38,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         }
 
     override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
-        return ethereumKit.send(address, amount, gasPrice, gasLimit)
+        return ethereumKit.send(address, amount, byteArrayOf(),gasPrice, gasLimit)
                 .doOnSubscribe {
                     logger.info("call ethereumKit.send")
                 }
