@@ -53,8 +53,9 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) : Vi
     private fun syncState(state: WalletConnectService.State) {
         Log.e("AAA", "state $state")
 
-        if (state == WalletConnectService.State.Rejected || state == WalletConnectService.State.Killed) {
+        if (state == WalletConnectService.State.Completed) {
             closeLiveEvent.postValue(Unit)
+            return
         }
 
         val peerMetaViewItem = service.peerMeta?.let { peerMeta ->

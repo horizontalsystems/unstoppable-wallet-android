@@ -16,8 +16,7 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
         object Connecting : State()
         object WaitingForApproveSession : State()
         object Ready : State()
-        object Rejected : State()
-        object Killed : State()
+        object Completed : State()
     }
 
     private val ethereumKit: EthereumKit? = ethKitManager.ethereumKit
@@ -78,7 +77,7 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
         interactor?.let {
             it.rejectSession()
 
-            state = State.Rejected
+            state = State.Completed
         }
     }
 
@@ -86,7 +85,7 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
         interactor?.let {
             it.killSession()
 
-            state = State.Killed
+            state = State.Completed
         }
     }
 
