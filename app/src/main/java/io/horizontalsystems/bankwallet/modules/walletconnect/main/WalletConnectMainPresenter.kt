@@ -58,12 +58,12 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) : Vi
             return
         }
 
-        val peerMetaViewItem = service.peerMeta?.let { peerMeta ->
+        val peerMetaViewItem = service.remotePeerMeta?.let { peerMeta ->
             PeerMetaViewItem(peerMeta.name, peerMeta.url, peerMeta.description, peerMeta.icons.lastOrNull())
         }
         peerMetaLiveData.postValue(peerMetaViewItem)
 
-        connectingLiveData.postValue(state == WalletConnectService.State.Connecting && service.peerMeta == null)
+        connectingLiveData.postValue(state == WalletConnectService.State.Connecting && service.remotePeerMeta == null)
         cancelVisibleLiveData.postValue(state == WalletConnectService.State.Connecting)
         disconnectVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
         approveAndRejectVisibleLiveData.postValue(state == WalletConnectService.State.WaitingForApproveSession)

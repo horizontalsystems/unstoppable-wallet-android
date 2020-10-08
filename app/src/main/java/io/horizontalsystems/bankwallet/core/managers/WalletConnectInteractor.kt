@@ -6,12 +6,16 @@ import com.trustwallet.walletconnect.WCClient
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
 import java.util.*
 
-class WalletConnectInteractor(private val session: WCSession, private val peerId: String = UUID.randomUUID().toString(), private val remotePeerId: String? = null) {
+class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.randomUUID().toString()) {
 
     interface Delegate {
-        fun didRequestSession(peerMeta: WCPeerMeta)
+        fun didConnect()
+        fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta)
     }
 
     constructor(uri: String) : this(WCSession.from(uri) ?: throw SessionError.InvalidUri)
@@ -23,12 +27,17 @@ class WalletConnectInteractor(private val session: WCSession, private val peerId
 
     init {
         client.onSessionRequest = { id: Long, peer: WCPeerMeta ->
-            Log.e("AAA", "client.onSessionRequest")
-            delegate?.didRequestSession(peer)
+            client.remotePeerId?.let { delegate?.didRequestSession(it, peer) }
         }
+
+        client.addSocketListener(object : WebSocketListener() {
+            override fun onOpen(webSocket: WebSocket, response: Response) {
+                delegate?.didConnect()
+            }
+        })
     }
 
-    fun connect() {
+    fun connect(remotePeerId: String?) {
         client.connect(session, clientMeta, peerId, remotePeerId)
     }
 
