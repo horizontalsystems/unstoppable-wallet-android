@@ -2,11 +2,13 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
-class WalletConnectMainPresenter(private val service: WalletConnectService) {
+class WalletConnectMainPresenter(private val service: WalletConnectService) : ViewModel() {
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
@@ -16,6 +18,7 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) {
     val signedTransactionsVisibleLiveData = MutableLiveData<Boolean>()
     val hintLiveData = MutableLiveData<Int?>()
     val stateLiveData = MutableLiveData<State?>()
+    val closeLiveEvent = SingleLiveEvent<Unit>()
 
     enum class State {
         OFFLINE, ONLINE, CONNECTING
@@ -45,6 +48,10 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) {
 
     private fun syncState(state: WalletConnectService.State) {
         Log.e("AAA", "state $state")
+
+        if (state == WalletConnectService.State.Rejected) {
+            closeLiveEvent.postValue(Unit)
+        }
 
         val peerMetaViewItem = service.peerMeta?.let { peerMeta ->
             PeerMetaViewItem(peerMeta.name, peerMeta.url, peerMeta.description, peerMeta.icons.lastOrNull())
