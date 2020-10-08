@@ -615,9 +615,9 @@
     <string name="CoinOption_Slow_Subtitle">1–24 hours</string>
     <string name="CoinOption_AddressFormatTitle">Address format</string>
     <string name="CoinOption_SyncModeTitle">Restore Source</string>
-    <string name="CoinOption_bip44_Subtitle">Older (starts with %s)</string>
-    <string name="CoinOption_bip49_Subtitle">Popular (starts with %s)</string>
-    <string name="CoinOption_bip84_Subtitle">Newest (starts with %s)</string>
+    <string name="CoinOption_bip44_Subtitle">Older (starts with %s...)</string>
+    <string name="CoinOption_bip49_Subtitle">Popular (starts with %s...)</string>
+    <string name="CoinOption_bip84_Subtitle">Newest (starts with %s...)</string>
 
     <!--Charts-->
 
