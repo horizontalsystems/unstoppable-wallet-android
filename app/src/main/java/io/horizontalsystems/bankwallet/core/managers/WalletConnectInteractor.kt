@@ -40,6 +40,10 @@ class WalletConnectInteractor(private val session: WCSession, private val peerId
         client.rejectSession()
     }
 
+    fun killSession() {
+        client.killSession()
+    }
+
     sealed class SessionError : Error() {
         object InvalidUri : SessionError()
     }
