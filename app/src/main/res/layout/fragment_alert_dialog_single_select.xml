@@ -12,7 +12,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/noto_sans_medium"
+        android:fontFamily="@font/roboto_medium"
         android:paddingBottom="12dp"
         android:textColor="@color/grey"
         android:textSize="14sp"
