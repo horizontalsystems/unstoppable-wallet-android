@@ -22,6 +22,9 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dappInfoAdapter = DappInfoAdapter()
+        dappInfo.adapter = dappInfoAdapter
+
         presenter.connectingLiveData.observe(viewLifecycleOwner, Observer {
             connecting.isVisible = it
         })
@@ -31,9 +34,9 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
 
             peerMetaViewItem?.let {
                 dappTitle.text = it.name
-                dappUrlValue.text = it.url
-
                 it.icon?.let { Picasso.get().load(it).into(dappIcon) }
+
+                dappInfoAdapter.url = it.url
             }
         })
 
@@ -51,15 +54,15 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
         })
 
         presenter.signedTransactionsVisibleLiveData.observe(viewLifecycleOwner, Observer {
-
+            dappInfoAdapter.signedTransactionsVisible = it
         })
 
         presenter.hintLiveData.observe(viewLifecycleOwner, Observer { hint ->
             dappHint.text = hint?.let { getString(it) }
         })
 
-        presenter.stateLiveData.observe(viewLifecycleOwner, Observer { hint ->
-
+        presenter.statusLiveData.observe(viewLifecycleOwner, Observer { status ->
+            dappInfoAdapter.status = status
         })
 
         presenter.closeLiveEvent.observe(viewLifecycleOwner, Observer { hint ->

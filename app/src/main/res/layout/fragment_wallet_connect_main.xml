@@ -36,47 +36,16 @@
             app:layout_constraintTop_toTopOf="@id/dappIcon"
             tools:text="Dapp Interface" />
 
-        <View
-            android:id="@+id/dappUrlBg"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dappInfo"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:background="?ColorLawrence"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dappIcon" />
-
-        <View
-            android:id="@+id/border"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="@color/steel_20"
-            app:layout_constraintEnd_toEndOf="@id/dappUrlBg"
-            app:layout_constraintStart_toStartOf="@id/dappUrlBg"
-            app:layout_constraintTop_toTopOf="@id/dappUrlBg" />
-
-        <TextView
-            android:id="@+id/dappUrlTitle"
-            style="@style/Subhead2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/WalletConnect_Url"
-            android:textColor="@color/grey"
-            app:layout_constraintBottom_toBottomOf="@id/dappUrlBg"
-            app:layout_constraintStart_toStartOf="@id/dappUrlBg"
-            app:layout_constraintTop_toTopOf="@id/dappUrlBg" />
-
-        <TextView
-            android:id="@+id/dappUrlValue"
-            style="@style/Subhead1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:textColor="?ColorLeah"
-            app:layout_constraintBottom_toBottomOf="@id/dappUrlBg"
-            app:layout_constraintEnd_toEndOf="@id/dappUrlBg"
-            app:layout_constraintTop_toTopOf="@id/dappUrlBg"
-            tools:text="app.walletconnect.org" />
+            app:layout_constraintTop_toBottomOf="@id/dappIcon"
+            tools:itemCount="3"
+            tools:listitem="@layout/view_holder_dapp_item" />
 
         <TextView
             android:id="@+id/dappHint"
@@ -90,13 +59,14 @@
             android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dappUrlBg" />
+            app:layout_constraintTop_toBottomOf="@id/dappInfo" />
+
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/dappGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="dappIcon,dappTitle,dappUrlBg,dappUrlTitle,dappUrlValue,border,dappHint" />
+            app:constraint_referenced_ids="dappIcon,dappTitle,dappInfo,dappHint" />
 
         <ProgressBar
             android:id="@+id/connecting"
