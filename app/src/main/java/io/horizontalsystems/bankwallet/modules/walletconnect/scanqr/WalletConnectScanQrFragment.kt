@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
@@ -19,21 +20,19 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewMo
 import io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment
 
 class WalletConnectScanQrFragment : BaseFragment() {
-    private val viewModel by activityViewModels<WalletConnectViewModel> { WalletConnectModule.Factory() }
-    private val presenter by lazy {
-        viewModel.scanQrPresenter
-    }
+    private val baseViewModel by activityViewModels<WalletConnectViewModel> { WalletConnectModule.Factory() }
+    private val viewModel by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         QRScannerActivity.start(this)
 
-        presenter.openMainLiveEvent.observe(this, Observer {
+        viewModel.openMainLiveEvent.observe(this, Observer {
             (requireActivity() as WalletConnectActivity).showFragment(WalletConnectMainFragment())
         })
 
-        presenter.openErrorLiveEvent.observe(this, Observer {
+        viewModel.openErrorLiveEvent.observe(this, Observer {
             val message = when (it) {
                 is WalletConnectInteractor.SessionError.InvalidUri -> getString(R.string.WalletConnect_Error_InvalidUrl)
                 else -> it.message ?: getString(R.string.default_error_msg)
@@ -51,7 +50,7 @@ class WalletConnectScanQrFragment : BaseFragment() {
                 Activity.RESULT_OK -> {
                     data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
                         Log.e("AAA", "Scanned string: $it")
-                        presenter.handleScanned(it)
+                        viewModel.handleScanned(it)
                     }
                 }
                 Activity.RESULT_CANCELED -> {
