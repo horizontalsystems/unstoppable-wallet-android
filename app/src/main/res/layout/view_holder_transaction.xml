@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/directionIcon"
+        android:id="@+id/txTypeIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -43,8 +43,8 @@
         android:layout_marginStart="12dp"
         android:textAllCaps="true"
         android:textColor="?TextColorGreyLightToDark"
-        app:layout_constraintStart_toEndOf="@+id/directionIcon"
-        app:layout_constraintTop_toTopOf="@+id/directionIcon"
+        app:layout_constraintStart_toEndOf="@+id/txTypeIcon"
+        app:layout_constraintTop_toTopOf="@+id/txTypeIcon"
         tools:text="Jun 3" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.TransactionStatusWithTimeView

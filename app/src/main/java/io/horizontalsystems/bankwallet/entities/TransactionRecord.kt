@@ -75,6 +75,6 @@ data class TransactionRecord(
 }
 
 enum class TransactionType {
-     Outgoing, SentToSelf, Incoming
+     Outgoing, SentToSelf, Incoming, Approve
 }
 

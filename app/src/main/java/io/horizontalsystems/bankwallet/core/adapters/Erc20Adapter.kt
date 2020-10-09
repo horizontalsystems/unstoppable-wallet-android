@@ -11,6 +11,7 @@ import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
 import io.horizontalsystems.erc20kit.core.TransactionKey
 import io.horizontalsystems.erc20kit.models.Transaction
+import io.horizontalsystems.erc20kit.models.Transaction.TransactionType.APPROVE
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
@@ -100,8 +101,13 @@ class Erc20Adapter(
         val myAddress = ethereumKit.receiveAddress
         val fromMine = transaction.from == myAddress
         val toMine = transaction.to == myAddress
+        var confirmationsThreshold: Int = confirmationsThreshold
 
         val type = when {
+            transaction.type == APPROVE -> {
+                confirmationsThreshold = approveConfirmationsThreshold
+                TransactionType.Approve
+            }
             fromMine && toMine -> TransactionType.SentToSelf
             fromMine -> TransactionType.Outgoing
             else -> TransactionType.Incoming
@@ -140,6 +146,8 @@ class Erc20Adapter(
     }
 
     companion object {
+        private const val approveConfirmationsThreshold = 1
+
         fun clear(walletId: String, testMode: Boolean) {
             val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
             Erc20Kit.clear(App.instance, networkType, walletId)

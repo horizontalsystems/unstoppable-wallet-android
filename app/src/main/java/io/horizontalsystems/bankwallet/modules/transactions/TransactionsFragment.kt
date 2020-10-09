@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.Tran
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
@@ -70,27 +71,27 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
-        viewModel.filterItems.observe(viewLifecycleOwner, Observer { filters ->
+        viewModel.filterItems.observe(viewLifecycleOwner, { filters ->
             filters?.let {
                 filterAdapter.setFilters(it)
             }
         })
 
-        viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, Observer { transactionViewItem ->
+        viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, { transactionViewItem ->
             activity?.let {
                 TransactionInfoModule.start(it, transactionViewItem.record, transactionViewItem.wallet)
             }
         })
 
-        viewModel.items.observe(viewLifecycleOwner, Observer {
+        viewModel.items.observe(viewLifecycleOwner, {
             transactionsAdapter.submitList(it)
         })
 
-        viewModel.reloadTransactions.observe(viewLifecycleOwner, Observer {
+        viewModel.reloadTransactions.observe(viewLifecycleOwner, {
             transactionsAdapter.notifyDataSetChanged()
         })
 
-        viewModel.showSyncing.observe(viewLifecycleOwner, Observer { show ->
+        viewModel.showSyncing.observe(viewLifecycleOwner, { show ->
             toolbarSpinner.isInvisible = !show
         })
 
@@ -174,22 +175,18 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     fun bind(transactionRecord: TransactionViewItem, showBottomShade: Boolean) {
-        val incoming = transactionRecord.type == TransactionType.Incoming
-        val sentToSelf = transactionRecord.type == TransactionType.SentToSelf
-
         txValueInFiat.text = transactionRecord.currencyValue?.let {
             App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
         }
-        txValueInFiat.setTextColor(getAmountColor(incoming))
-
+        txValueInFiat.setTextColor(getAmountColor(transactionRecord.type))
         txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, getLockIcon(transactionRecord.lockState), 0)
         txValueInCoin.text = App.numberFormatter.formatCoin(transactionRecord.coinValue.value, transactionRecord.coinValue.coin.code, 0, 8)
-        directionIcon.setImageResource(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
+        txTypeIcon.setImageResource(getTransactionTypeIcon(transactionRecord.type))
         txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txStatusWithTimeView.bind(transactionRecord.status, incoming, time)
+        txStatusWithTimeView.bind(transactionRecord.status, transactionRecord.type, time)
         bottomShade.isVisible = showBottomShade
-        sentToSelfIcon.isVisible = sentToSelf
+        sentToSelfIcon.isVisible = transactionRecord.type == TransactionType.SentToSelf
         doubleSpendIcon.isVisible = transactionRecord.doubleSpend
     }
 
@@ -200,13 +197,11 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
-        val incoming = current.type == TransactionType.Incoming
-
         if (current.currencyValue != prev.currencyValue) {
             txValueInFiat.text = current.currencyValue?.let {
                 App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
             }
-            txValueInFiat.setTextColor(getAmountColor(incoming))
+            txValueInFiat.setTextColor(getAmountColor(current.type))
         }
 
         if (current.lockState != prev.lockState) {
@@ -220,7 +215,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         if (current.status != prev.status || current.date != prev.date) {
             txDate.text = current.date?.let { DateHelper.shortDate(it) }
             val time = current.date?.let { DateHelper.getOnlyTime(it) }
-            txStatusWithTimeView.bind(current.status, incoming, time)
+            txStatusWithTimeView.bind(current.status, current.type, time)
         }
 
         if (current.doubleSpend != prev.doubleSpend) {
@@ -228,10 +223,32 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
     }
 
-    private fun getAmountColor(incoming: Boolean): Int {
-        val amountTextColor = if (incoming) R.color.green_d else R.color.yellow_d
-        return itemView.context.getColor(amountTextColor)
+    private fun getAmountColor(type: TransactionType): Int {
+        val context = itemView.context
+        return when (type) {
+            TransactionType.Outgoing, TransactionType.SentToSelf -> {
+                LayoutHelper.getAttr(R.attr.ColorJacob, context.theme)
+                        ?: context.getColor(R.color.yellow_d)
+            }
+            TransactionType.Incoming -> {
+                LayoutHelper.getAttr(R.attr.ColorRemus, context.theme)
+                        ?: context.getColor(R.color.green_d)
+            }
+            TransactionType.Approve -> {
+                LayoutHelper.getAttr(R.attr.ColorLeah, context.theme)
+                        ?: context.getColor(R.color.steel_light)
+            }
+        }
     }
+
+    private fun getTransactionTypeIcon(type: TransactionType): Int {
+        return when (type) {
+            TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing
+            TransactionType.Incoming -> R.drawable.ic_incoming
+            TransactionType.Approve -> R.drawable.ic_approval
+        }
+    }
+
 }
 
 class ViewHolderEmptyScreen(override val containerView: View) : ViewHolder(containerView), LayoutContainer
