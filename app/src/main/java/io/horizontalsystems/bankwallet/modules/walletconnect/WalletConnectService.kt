@@ -68,10 +68,11 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
     fun approveSession() {
         ethereumKit?.let { ethereumKit ->
             interactor?.let { interactor ->
-                interactor.approveSession(ethereumKit.receiveAddress.eip55, ethereumKit.networkType.getNetwork().id)
+                val chainId = ethereumKit.networkType.getNetwork().id
+                interactor.approveSession(ethereumKit.receiveAddress.eip55, chainId)
 
                 remotePeerData?.let { peerData ->
-                    wcSessionStoreType.session = WCSessionStoreItem(interactor.session, interactor.peerId, peerData.peerId, peerData.peerMeta)
+                    wcSessionStoreType.session = WCSessionStoreItem(interactor.session, chainId, interactor.peerId, peerData.peerId, peerData.peerMeta)
                 }
 
                 state = State.Ready
@@ -88,18 +89,19 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
     }
 
     fun killSession() {
-        interactor?.let {
-            it.killSession()
-            wcSessionStoreType.session = null
-
-            state = State.Completed
-        }
+        interactor?.killSession()
     }
 
     override fun didConnect() {
         if (remotePeerData != null) {
             state = State.Ready
         }
+    }
+
+    override fun didKillSession() {
+        wcSessionStoreType.session = null
+
+        state = State.Completed
     }
 
     override fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta) {

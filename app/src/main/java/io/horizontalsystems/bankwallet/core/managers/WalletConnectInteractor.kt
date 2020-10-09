@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
 import com.google.gson.GsonBuilder
 import com.trustwallet.walletconnect.WCClient
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
+import com.trustwallet.walletconnect.models.session.WCSessionUpdate
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.WebSocket
@@ -16,6 +16,7 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
     interface Delegate {
         fun didConnect()
         fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta)
+        fun didKillSession()
     }
 
     constructor(uri: String) : this(WCSession.from(uri) ?: throw SessionError.InvalidUri)
@@ -28,6 +29,12 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
     init {
         client.onSessionRequest = { id: Long, peer: WCPeerMeta ->
             client.remotePeerId?.let { delegate?.didRequestSession(it, peer) }
+        }
+
+        client.onSessionUpdate = { id: Long, update: WCSessionUpdate ->
+            if (!update.approved) {
+                delegate?.didKillSession()
+            }
         }
 
         client.addSocketListener(object : WebSocketListener() {
@@ -51,6 +58,7 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
 
     fun killSession() {
         client.killSession()
+        delegate?.didKillSession()
     }
 
     sealed class SessionError : Error() {
