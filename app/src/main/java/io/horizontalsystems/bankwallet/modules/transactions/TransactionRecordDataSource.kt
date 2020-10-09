@@ -89,10 +89,9 @@ class TransactionRecordDataSource(
 
     private fun transactionViewItem(wallet: Wallet, record: TransactionRecord): TransactionViewItem {
         val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
-        val threshold = metadataDataSource.getConfirmationThreshold(wallet)
         val rate = metadataDataSource.getRate(wallet.coin, record.timestamp)
 
-        return viewItemFactory.item(wallet, record, lastBlockInfo, threshold, rate)
+        return viewItemFactory.item(wallet, record, lastBlockInfo, rate)
     }
 
     fun setWallets(wallets: List<Wallet>) {
@@ -150,9 +149,8 @@ class TransactionRecordDataSource(
         return hasUpdate
     }
 
-    fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>) {
-        allWalletsData.forEach { (wallet, confirmationThreshold, lastBlockHeight) ->
-            metadataDataSource.setConfirmationThreshold(confirmationThreshold, wallet)
+    fun onUpdateWalletsData(allWalletsData: List<Pair<Wallet, LastBlockInfo?>>) {
+        allWalletsData.forEach { (wallet, lastBlockHeight) ->
             lastBlockHeight?.let {
                 metadataDataSource.setLastBlockInfo(it, wallet)
             }

@@ -13,16 +13,14 @@ import java.math.BigInteger
 
 abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
-        val decimal: Int)
-    : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+        val decimal: Int
+) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     override val debugInfo: String = ethereumKit.debugInfo()
 
     // ITransactionsAdapter
-
-    override val confirmationsThreshold: Int = 12
 
     override val lastBlockInfo: LastBlockInfo?
         get() = ethereumKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
@@ -87,5 +85,9 @@ abstract class EthereumBaseAdapter(
     protected abstract fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit>
 
     protected abstract fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long>
+
+    companion object {
+        const val confirmationsThreshold: Int = 12
+    }
 
 }

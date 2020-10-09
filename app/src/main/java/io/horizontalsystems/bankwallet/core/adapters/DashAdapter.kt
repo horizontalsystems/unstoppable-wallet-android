@@ -105,7 +105,7 @@ class DashAdapter(
                         walletId = account.id,
                         syncMode = getSyncMode(syncMode),
                         networkType = getNetworkType(testMode),
-                        confirmationsThreshold = defaultConfirmationsThreshold)
+                        confirmationsThreshold = confirmationsThreshold)
             }
 
             throw UnsupportedAccountException()

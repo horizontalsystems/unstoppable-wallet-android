@@ -49,8 +49,6 @@ abstract class BitcoinBaseAdapter(
     // Adapter implementation
     //
 
-    override val confirmationsThreshold: Int = defaultConfirmationsThreshold
-
     override val lastBlockInfo: LastBlockInfo?
         get() = kit.lastBlockInfo?.let { LastBlockInfo(it.height, it.timestamp) }
 
@@ -242,6 +240,7 @@ abstract class BitcoinBaseAdapter(
                 transactionIndex = transaction.transactionIndex,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockHeight?.toLong(),
+                confirmationsThreshold = confirmationsThreshold,
                 amount = satoshiToBTC(amount.absoluteValue),
                 fee = satoshiToBTC(transaction.fee),
                 timestamp = transaction.timestamp,
@@ -267,7 +266,7 @@ abstract class BitcoinBaseAdapter(
     }
 
     companion object {
-        const val defaultConfirmationsThreshold = 3
+        const val confirmationsThreshold = 3
         const val decimal = 8
 
         fun getTransactionSortingType(sortType: TransactionDataSortingType?): TransactionDataSortType = when (sortType) {

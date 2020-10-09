@@ -16,7 +16,6 @@ import java.util.regex.Pattern
 class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val decimal: Int) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendEosAdapter {
 
     private val token = eosKit.register(eos.token, eos.symbol)
-    private val irreversibleThreshold = 330
 
     // IAdapter
 
@@ -38,10 +37,8 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
 
     // ITransactionsAdapter
 
-    override val confirmationsThreshold: Int = irreversibleThreshold
-
     override val lastBlockInfo: LastBlockInfo?
-        get() = eosKit.irreversibleBlockHeight?.let { LastBlockInfo(it + confirmationsThreshold) }
+        get() = eosKit.irreversibleBlockHeight?.let { LastBlockInfo(it + irreversibleThreshold) }
 
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = eosKit.irreversibleBlockFlowable.map { Unit }
@@ -72,6 +69,7 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
                 transactionIndex = 0,
                 interTransactionIndex = transaction.actionSequence,
                 blockHeight = transaction.blockNumber.toLong(),
+                confirmationsThreshold = irreversibleThreshold,
                 amount = transaction.amount?.toBigDecimal() ?: BigDecimal.ZERO,
                 timestamp = transaction.date / 1000,
                 from = transaction.from,
@@ -136,6 +134,8 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
     override val receiveAddress: String get() = eosKit.account
 
     companion object {
+        private const val irreversibleThreshold = 330
+
         fun clear(walletId: String, testMode: Boolean) {
             val networkType = if (testMode) EosKit.NetworkType.TestNet else EosKit.NetworkType.MainNet
             EosKit.clear(App.instance, networkType, walletId)

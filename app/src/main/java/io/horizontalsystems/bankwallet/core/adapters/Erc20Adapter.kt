@@ -115,6 +115,7 @@ class Erc20Adapter(
                 interTransactionIndex = transaction.interTransactionIndex,
                 blockHeight = transaction.blockNumber,
                 amount = scaleDown(transaction.value.toBigDecimal()),
+                confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
                 from = transaction.from.hex,
                 to = transaction.to.hex,

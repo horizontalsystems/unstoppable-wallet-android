@@ -84,7 +84,7 @@ class BitcoinAdapter(
                         walletId = account.id,
                         syncMode = getSyncMode(syncMode),
                         networkType = getNetworkType(testMode),
-                        confirmationsThreshold = defaultConfirmationsThreshold,
+                        confirmationsThreshold = confirmationsThreshold,
                         bip = getBip(derivation))
             }
 

@@ -20,7 +20,7 @@ class TransactionInfoPresenter(
         val coin = wallet.coin
         val lastBlockInfo = interactor.lastBlockInfo
 
-        val status = transaction.status(lastBlockInfo?.height, interactor.threshold)
+        val status = transaction.status(lastBlockInfo?.height)
         val lockState = transaction.lockState(lastBlockInfo?.timestamp)
 
         val rate = interactor.getRate(wallet.coin.code, transaction.timestamp)

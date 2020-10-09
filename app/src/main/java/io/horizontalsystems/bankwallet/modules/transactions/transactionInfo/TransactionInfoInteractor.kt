@@ -21,9 +21,6 @@ class TransactionInfoInteractor(
     override val lastBlockInfo: LastBlockInfo?
         get() = adapter.lastBlockInfo
 
-    override val threshold: Int
-        get() = adapter.confirmationsThreshold
-
     override fun getRate(code: String, timestamp: Long): CurrencyValue? {
         val baseCurrency = currencyManager.baseCurrency
 
