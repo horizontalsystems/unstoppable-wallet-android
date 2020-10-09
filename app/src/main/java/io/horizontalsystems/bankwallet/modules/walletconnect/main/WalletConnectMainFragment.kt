@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.R
@@ -15,9 +16,7 @@ import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main) {
 
     private val baseViewModel by activityViewModels<WalletConnectViewModel>()
-    private val presenter by lazy {
-        baseViewModel.mainPresenter
-    }
+    private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,11 +24,11 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
         val dappInfoAdapter = DappInfoAdapter()
         dappInfo.adapter = dappInfoAdapter
 
-        presenter.connectingLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.connectingLiveData.observe(viewLifecycleOwner, Observer {
             connecting.isVisible = it
         })
 
-        presenter.peerMetaLiveData.observe(viewLifecycleOwner, Observer { peerMetaViewItem ->
+        viewModel.peerMetaLiveData.observe(viewLifecycleOwner, Observer { peerMetaViewItem ->
             dappGroup.isVisible = peerMetaViewItem != null
 
             peerMetaViewItem?.let {
@@ -40,45 +39,45 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
             }
         })
 
-        presenter.cancelVisibleLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.cancelVisibleLiveData.observe(viewLifecycleOwner, Observer {
             cancelButton.isVisible = it
         })
 
-        presenter.approveAndRejectVisibleLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.approveAndRejectVisibleLiveData.observe(viewLifecycleOwner, Observer {
             approveButton.isVisible = it
             rejectButton.isVisible = it
         })
 
-        presenter.disconnectVisibleLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.disconnectVisibleLiveData.observe(viewLifecycleOwner, Observer {
             disconnectButton.isVisible = it
         })
 
-        presenter.signedTransactionsVisibleLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.signedTransactionsVisibleLiveData.observe(viewLifecycleOwner, Observer {
             dappInfoAdapter.signedTransactionsVisible = it
         })
 
-        presenter.hintLiveData.observe(viewLifecycleOwner, Observer { hint ->
+        viewModel.hintLiveData.observe(viewLifecycleOwner, Observer { hint ->
             dappHint.text = hint?.let { getString(it) }
         })
 
-        presenter.statusLiveData.observe(viewLifecycleOwner, Observer { status ->
+        viewModel.statusLiveData.observe(viewLifecycleOwner, Observer { status ->
             dappInfoAdapter.status = status
         })
 
-        presenter.closeLiveEvent.observe(viewLifecycleOwner, Observer { hint ->
+        viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer { hint ->
             requireActivity().finish()
         })
 
         approveButton.setOnSingleClickListener {
-            presenter.approve()
+            viewModel.approve()
         }
 
         rejectButton.setOnSingleClickListener {
-            presenter.reject()
+            viewModel.reject()
         }
 
         disconnectButton.setOnSingleClickListener {
-            presenter.disconnect()
+            viewModel.disconnect()
         }
 
         cancelButton.setOnSingleClickListener {

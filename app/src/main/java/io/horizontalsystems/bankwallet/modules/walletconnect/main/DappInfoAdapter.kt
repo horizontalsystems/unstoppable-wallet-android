@@ -45,20 +45,20 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
 
     private var itemCount = visibleItems.size
 
-    var status: WalletConnectMainPresenter.Status? = null
+    var status: WalletConnectMainViewModel.Status? = null
         set(value) {
             field = value
 
             val statusStringId = when (value) {
-                WalletConnectMainPresenter.Status.OFFLINE -> R.string.WalletConnect_Status_Offline
-                WalletConnectMainPresenter.Status.ONLINE -> R.string.WalletConnect_Status_Online
-                WalletConnectMainPresenter.Status.CONNECTING -> R.string.WalletConnect_Status_Connecting
+                WalletConnectMainViewModel.Status.OFFLINE -> R.string.WalletConnect_Status_Offline
+                WalletConnectMainViewModel.Status.ONLINE -> R.string.WalletConnect_Status_Online
+                WalletConnectMainViewModel.Status.CONNECTING -> R.string.WalletConnect_Status_Connecting
                 null -> null
             }
 
             val color = when (value) {
-                WalletConnectMainPresenter.Status.OFFLINE -> R.attr.ColorLucian
-                WalletConnectMainPresenter.Status.ONLINE -> R.attr.ColorRemus
+                WalletConnectMainViewModel.Status.OFFLINE -> R.attr.ColorLucian
+                WalletConnectMainViewModel.Status.ONLINE -> R.attr.ColorRemus
                 else -> null
             }
 

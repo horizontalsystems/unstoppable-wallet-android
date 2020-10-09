@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectServic
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
-class WalletConnectMainPresenter(private val service: WalletConnectService) : ViewModel() {
+class WalletConnectMainViewModel(private val service: WalletConnectService) : ViewModel() {
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
