@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -17,10 +16,10 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) : Vi
     val disconnectVisibleLiveData = MutableLiveData<Boolean>()
     val signedTransactionsVisibleLiveData = MutableLiveData<Boolean>()
     val hintLiveData = MutableLiveData<Int?>()
-    val stateLiveData = MutableLiveData<State?>()
+    val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
-    enum class State {
+    enum class Status {
         OFFLINE, ONLINE, CONNECTING
     }
 
@@ -51,8 +50,6 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) : Vi
     }
 
     private fun syncState(state: WalletConnectService.State) {
-        Log.e("AAA", "state $state")
-
         if (state == WalletConnectService.State.Completed) {
             closeLiveEvent.postValue(Unit)
             return
@@ -69,9 +66,9 @@ class WalletConnectMainPresenter(private val service: WalletConnectService) : Vi
         approveAndRejectVisibleLiveData.postValue(state == WalletConnectService.State.WaitingForApproveSession)
         signedTransactionsVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
 
-        stateLiveData.postValue(when (state) {
-            WalletConnectService.State.Connecting -> State.CONNECTING
-            WalletConnectService.State.Ready -> State.ONLINE
+        statusLiveData.postValue(when (state) {
+            WalletConnectService.State.Connecting -> Status.CONNECTING
+            WalletConnectService.State.Ready -> Status.ONLINE
             else -> null
         })
 
