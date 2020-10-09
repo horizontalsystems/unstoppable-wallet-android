@@ -156,12 +156,12 @@ class TransactionsInteractor(
         transactionUpdatesDisposables.clear()
         adapterStateUpdatesDisposables.clear()
 
-        val walletsData = mutableListOf<Triple<Wallet, Int, LastBlockInfo?>>()
+        val walletsData = mutableListOf<Pair<Wallet, LastBlockInfo?>>()
         val adapterStates = mutableMapOf<Wallet, AdapterState>()
 
         walletManager.wallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
-                walletsData.add(Triple(wallet, adapter.confirmationsThreshold, adapter.lastBlockInfo))
+                walletsData.add(Pair(wallet, adapter.lastBlockInfo))
                 adapterStates[wallet] = adapter.state
 
                 adapter.transactionRecordsFlowable

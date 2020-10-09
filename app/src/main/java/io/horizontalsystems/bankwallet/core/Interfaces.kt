@@ -185,7 +185,6 @@ interface ITransactionsAdapter {
     val state: AdapterState
     val stateUpdatedFlowable: Flowable<Unit>
 
-    val confirmationsThreshold: Int
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
 

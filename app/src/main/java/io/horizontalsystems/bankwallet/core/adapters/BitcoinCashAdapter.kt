@@ -83,7 +83,7 @@ class BitcoinCashAdapter(
                         walletId = account.id,
                         syncMode = getSyncMode(syncMode ?: SyncMode.Slow),
                         networkType = getNetworkType(testMode),
-                        confirmationsThreshold = defaultConfirmationsThreshold)
+                        confirmationsThreshold = confirmationsThreshold)
             }
 
             throw UnsupportedAccountException()

@@ -10,7 +10,6 @@ import java.math.BigDecimal
 class TransactionMetadataDataSource {
 
     private val lastBlockInfos = mutableMapOf<Wallet, LastBlockInfo>()
-    private val thresholds = mutableMapOf<Wallet, Int>()
     private val rates = mutableMapOf<Coin, MutableMap<Long, CurrencyValue>>()
 
     fun setLastBlockInfo(lastBlockInfo: LastBlockInfo, wallet: Wallet) {
@@ -20,13 +19,6 @@ class TransactionMetadataDataSource {
     fun getLastBlockInfo(wallet: Wallet): LastBlockInfo? {
         return lastBlockInfos[wallet]
     }
-
-    fun setConfirmationThreshold(confirmationThreshold: Int, wallet: Wallet) {
-        thresholds[wallet] = confirmationThreshold
-    }
-
-    fun getConfirmationThreshold(wallet: Wallet): Int =
-            thresholds[wallet] ?: 1
 
     fun setRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
         if (!rates.containsKey(coin)) {

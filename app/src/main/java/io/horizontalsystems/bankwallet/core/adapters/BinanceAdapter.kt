@@ -59,9 +59,6 @@ class BinanceAdapter(
 
     // ITransactionsAdapter
 
-    override val confirmationsThreshold: Int
-        get() = 1
-
     override val lastBlockInfo: LastBlockInfo?
         get() = binanceKit.latestBlock?.height?.let { LastBlockInfo(it) }
 
@@ -94,6 +91,7 @@ class BinanceAdapter(
                 transactionIndex = 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber.toLong(),
+                confirmationsThreshold = confirmationsThreshold,
                 amount = transaction.amount.toBigDecimal(),
                 fee = transferFee,
                 timestamp = transaction.date.time / 1000,
@@ -134,7 +132,7 @@ class BinanceAdapter(
             is BinanceError -> {
                 if (error.message.contains("receiver requires non-empty memo in transfer transaction")) {
                     return LocalizedException(R.string.Binance_Backend_Error_MemoRequired)
-                } else if(error.message.contains("requires the memo contains only digits")) {
+                } else if (error.message.contains("requires the memo contains only digits")) {
                     return LocalizedException(R.string.Binance_Backend_Error_RequiresDigits)
                 }
             }
@@ -153,6 +151,7 @@ class BinanceAdapter(
 
 
     companion object {
+        private const val confirmationsThreshold = 1
         val transferFee = BigDecimal.valueOf(0.000375)
 
         fun clear(walletId: String, testMode: Boolean) {

@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.util.*
 
-class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
+class TransactionViewItemFactory {
 
-    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
+    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, rate: CurrencyValue?): TransactionViewItem {
         val currencyValue = rate?.let {
             CurrencyValue(it.currency, record.amount * it.value)
         }
@@ -21,7 +20,7 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 currencyValue,
                 record.type,
                 date,
-                record.status(lastBlockInfo?.height, threshold),
+                record.status(lastBlockInfo?.height),
                 record.lockState(lastBlockInfo?.timestamp),
                 record.conflictingTxHash != null
         )

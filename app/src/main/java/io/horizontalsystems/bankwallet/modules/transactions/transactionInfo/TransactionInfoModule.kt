@@ -30,7 +30,6 @@ object TransactionInfoModule {
     }
 
     interface Interactor {
-        val threshold: Int
         val lastBlockInfo: LastBlockInfo?
 
         fun copyToClipboard(value: String)

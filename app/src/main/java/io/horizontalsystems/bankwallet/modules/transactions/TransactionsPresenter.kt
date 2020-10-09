@@ -45,7 +45,7 @@ class TransactionsPresenter(
         }
     }
 
-    override fun onUpdateWalletsData(allWalletsData: List<Triple<Wallet, Int, LastBlockInfo?>>) {
+    override fun onUpdateWalletsData(allWalletsData: List<Pair<Wallet, LastBlockInfo?>>) {
         dataSource.onUpdateWalletsData(allWalletsData)
 
         interactor.fetchLastBlockHeights()

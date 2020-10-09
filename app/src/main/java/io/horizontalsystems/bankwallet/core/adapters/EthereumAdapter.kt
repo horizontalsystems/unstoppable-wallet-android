@@ -103,6 +103,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber,
                 amount = scaleDown(amount.abs().toBigDecimal()),
+                confirmationsThreshold = confirmationsThreshold,
                 fee = fee,
                 timestamp = transaction.timestamp,
                 from = transaction.from.hex,
