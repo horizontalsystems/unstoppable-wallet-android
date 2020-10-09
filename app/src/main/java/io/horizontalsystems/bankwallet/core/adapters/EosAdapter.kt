@@ -11,6 +11,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.regex.Pattern
 
 class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val decimal: Int) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendEosAdapter {
 
@@ -141,7 +142,10 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
         }
 
         fun validateAccountName(accountName: String) {
-            if (accountName.length !in 1..12) {
+            //EOS account validation Regex pattern from here https://github.com/EOSIO/eos/issues/955
+            val pattern = Pattern.compile("^[a-z1-5.]{0,11}[a-j1-5]$")
+            val matches = pattern.matcher(accountName).matches()
+            if (!matches) {
                 throw EosError.InvalidAccountName
             }
         }
