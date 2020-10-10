@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import io.horizontalsystems.bankwallet.R
@@ -24,6 +25,10 @@ class WalletConnectActivity : BaseActivity() {
         supportFragmentManager.commit {
             replace(R.id.fragmentContainerViewXxx, fragment)
         }
+    }
+
+    fun showBottomSheetFragment(fragment: DialogFragment) {
+        fragment.show(supportFragmentManager, null)
     }
 
     private fun openScreen(screen: WalletConnectViewModel.InitialScreen) {
