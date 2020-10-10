@@ -10,7 +10,9 @@ import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestFragment
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
 class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main) {
@@ -64,8 +66,12 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
             dappInfoAdapter.status = status
         })
 
-        viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer { hint ->
+        viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
             requireActivity().finish()
+        })
+
+        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner, Observer { id ->
+            (requireActivity() as WalletConnectActivity).showBottomSheetFragment(WalletConnectRequestFragment.newInstance(id))
         })
 
         approveButton.setOnSingleClickListener {

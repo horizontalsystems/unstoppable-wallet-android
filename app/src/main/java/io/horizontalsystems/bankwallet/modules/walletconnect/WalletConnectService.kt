@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect
 import com.trustwallet.walletconnect.WCSessionStoreItem
 import com.trustwallet.walletconnect.WCSessionStoreType
 import com.trustwallet.walletconnect.models.WCPeerMeta
+import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
@@ -33,11 +34,13 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
         }
 
     val stateSubject = PublishSubject.create<State>()
+    val requestSubject = PublishSubject.create<Long>()
 
     val isEthereumKitReady: Boolean
         get() = ethereumKit != null
 
     private val wcSessionStoreType = WCSessionStoreType(App.preferences)
+    private val pendingRequests = mutableMapOf<Long, Request>()
 
     init {
         val sessionStoreItem = wcSessionStoreType.session
@@ -92,6 +95,20 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
         interactor?.killSession()
     }
 
+    fun getRequest(requestId: Long) : Request? {
+        return pendingRequests[requestId]
+    }
+
+    fun approveRequest(requestId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    fun rejectRequest(requestId: Long) {
+        pendingRequests.remove(requestId)
+
+        interactor?.rejectRequest(requestId, "Rejected by user")
+    }
+
     override fun didConnect() {
         if (remotePeerData != null) {
             state = State.Ready
@@ -110,6 +127,26 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
         state = State.WaitingForApproveSession
     }
 
+    override fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction) {
+        didRequest(Request(id, Request.Type.SendEthereumTransaction(transaction)))
+    }
+
+    override fun didRequestSignEthTransaction(id: Long, transaction: WCEthereumTransaction) {
+        didRequest(Request(id, Request.Type.SignEthereumTransaction(transaction)))
+    }
+
+    private fun didRequest(request: Request) {
+        pendingRequests[request.id] = request
+        requestSubject.onNext(request.id)
+    }
+
     data class PeerData(val peerId: String, val peerMeta: WCPeerMeta)
+
+    data class Request(val id: Long, val type: Type) {
+        sealed class Type {
+            data class SendEthereumTransaction(val transaction: WCEthereumTransaction) : Type()
+            data class SignEthereumTransaction(val transaction: WCEthereumTransaction) : Type()
+        }
+    }
 
 }

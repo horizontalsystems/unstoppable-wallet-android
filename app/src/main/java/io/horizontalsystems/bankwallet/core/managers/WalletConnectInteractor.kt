@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import com.google.gson.GsonBuilder
 import com.trustwallet.walletconnect.WCClient
 import com.trustwallet.walletconnect.models.WCPeerMeta
+import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import com.trustwallet.walletconnect.models.session.WCSession
 import com.trustwallet.walletconnect.models.session.WCSessionUpdate
 import okhttp3.OkHttpClient
@@ -17,6 +18,8 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
         fun didConnect()
         fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta)
         fun didKillSession()
+        fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction)
+        fun didRequestSignEthTransaction(id: Long, transaction: WCEthereumTransaction)
     }
 
     constructor(uri: String) : this(WCSession.from(uri) ?: throw SessionError.InvalidUri)
@@ -42,6 +45,14 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
                 delegate?.didConnect()
             }
         })
+
+        client.onEthSendTransaction = { id: Long, transaction: WCEthereumTransaction ->
+            delegate?.didRequestSendEthTransaction(id, transaction)
+        }
+
+        client.onEthSignTransaction = { id: Long, transaction: WCEthereumTransaction ->
+            delegate?.didRequestSignEthTransaction(id, transaction)
+        }
     }
 
     fun connect(remotePeerId: String?) {
@@ -59,6 +70,14 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
     fun killSession() {
         client.killSession()
         delegate?.didKillSession()
+    }
+
+    fun <T> approveRequest(id: Long, result: T) {
+        client.approveRequest(id, result)
+    }
+
+    fun rejectRequest(id: Long, message: String) {
+        client.rejectRequest(id, message)
     }
 
     sealed class SessionError : Error() {
