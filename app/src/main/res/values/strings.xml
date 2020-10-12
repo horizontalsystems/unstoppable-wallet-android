@@ -267,7 +267,8 @@
 
     <!--Transaction Info-->
 
-    <string name="TransactionInfo_Title">Transaction</string>
+    <string name="TransactionInfo_Transaction">Transaction</string>
+    <string name="TransactionInfo_Approval">Swap Approval</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>

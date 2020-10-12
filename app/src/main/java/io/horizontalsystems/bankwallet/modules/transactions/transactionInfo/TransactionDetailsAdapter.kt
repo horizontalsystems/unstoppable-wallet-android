@@ -149,13 +149,13 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             return fee
         }
 
-        fun bind(title: String, value: String) {
+        private fun bind(title: String, value: String) {
             txtTitle.text = title
             valueText.text = value
             valueText.isVisible = true
         }
 
-        fun bindAddress(title: String, address: String, l: ((v: View) -> Unit)) {
+        private fun bindAddress(title: String, address: String, l: ((v: View) -> Unit)) {
             txtTitle.text = title
             decoratedText.text = address
             decoratedText.isVisible = true
@@ -163,7 +163,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         }
 
 
-        fun bindHashId(title: String, address: String) {
+        private fun bindHashId(title: String, address: String) {
             txtTitle.text = title
             decoratedText.text = address
             decoratedText.isVisible = true

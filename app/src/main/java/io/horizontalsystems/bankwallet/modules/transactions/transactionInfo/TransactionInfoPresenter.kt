@@ -9,7 +9,8 @@ class TransactionInfoPresenter(
         private val interactor: TransactionInfoModule.Interactor,
         private val router: TransactionInfoModule.Router,
         private val transaction: TransactionRecord,
-        private val wallet: Wallet
+        private val wallet: Wallet,
+        private val transactionInfoAddressMapper: TransactionInfoAddressMapper
 ) : TransactionInfoModule.ViewDelegate, TransactionInfoModule.InteractorDelegate {
 
     var view: TransactionInfoModule.View? = null
@@ -54,17 +55,17 @@ class TransactionInfoPresenter(
 
         transaction.from?.let { from ->
             if (showFromAddress(wallet.coin.type)) {
-                viewItems.add(TransactionDetailViewItem.From(from))
+                viewItems.add(TransactionDetailViewItem.From(transactionInfoAddressMapper.map(from)))
             }
         }
 
         transaction.to?.let { to ->
-            viewItems.add(TransactionDetailViewItem.To(to))
+            viewItems.add(TransactionDetailViewItem.To(transactionInfoAddressMapper.map(to)))
         }
 
         transaction.lockInfo?.originalAddress?.let { recipient ->
             if (transaction.type == TransactionType.Outgoing) {
-                viewItems.add(TransactionDetailViewItem.Recipient(recipient))
+                viewItems.add(TransactionDetailViewItem.Recipient(transactionInfoAddressMapper.map(recipient)))
             }
         }
 
