@@ -164,7 +164,7 @@
             android:id="@+id/balanceWrapper"
             android:layout_width="0dp"
             android:layout_height="34dp"
-            android:gravity="top"
+            android:paddingBottom="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/border">
@@ -174,9 +174,9 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="4dp"
                 android:includeFontPadding="false"
                 android:textColor="?BallanceCoinAmountColor"
                 tools:text="0.000078 BTC" />
@@ -186,10 +186,9 @@
                 style="@style/Headline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|bottom"
                 android:layout_marginTop="11dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginBottom="4dp"
                 android:includeFontPadding="false"
                 android:textColor="?ColorJacob"
                 tools:text="$52.50" />
@@ -199,9 +198,9 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="4dp"
                 android:includeFontPadding="false"
                 android:textColor="@color/grey"
                 android:visibility="gone"
@@ -212,7 +211,7 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|bottom"
                 android:layout_marginTop="11dp"
                 android:layout_marginEnd="12dp"
                 android:includeFontPadding="false"
@@ -291,24 +290,28 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
                 android:text="@string/Balance_Send"
-                app:layout_constraintEnd_toStartOf="@+id/buttonSwap"
+                app:layout_constraintEnd_toStartOf="@+id/swapButtonWrapper"
                 app:layout_constraintStart_toEndOf="@id/buttonReceive"
                 app:layout_constraintTop_toTopOf="@+id/buttonReceive" />
 
-            <Button
-                android:id="@+id/buttonSwap"
-                style="@style/ButtonPrimarySteel"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="4dp"
-                android:drawableTop="@drawable/ic_swap"
-                android:drawableTint="@color/button_text_color_selector"
-                android:visibility="gone"
+            <FrameLayout
+                android:id="@+id/swapButtonWrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/buttonSend"
-                app:layout_constraintTop_toTopOf="@+id/buttonSend" />
+                app:layout_constraintTop_toTopOf="@+id/buttonSend">
+                <Button
+                    android:id="@+id/buttonSwap"
+                    style="@style/ButtonPrimarySteel"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:visibility="gone"
+                    android:drawableTop="@drawable/ic_swap"
+                    android:drawableTint="@color/button_text_color_selector" />
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
