@@ -78,9 +78,11 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
     private fun transactionRecord(transactionWithInternal: TransactionWithInternal): TransactionRecord {
         val transaction = transactionWithInternal.transaction
+        var fromAddress = transaction.from
+        var toAddress = transaction.to
         val myAddress = ethereumKit.receiveAddress
-        val fromMine = transaction.from == myAddress
-        val toMine = transaction.to == myAddress
+        val fromMine = fromAddress == myAddress
+        val toMine = toAddress == myAddress
         val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.let { scaleDown(it) }
 
         var amount = if (fromMine) transaction.value.negate() else transaction.value
@@ -88,6 +90,8 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
             var internalAmount = internalTransaction.value
             internalAmount = if (internalTransaction.from == myAddress) internalAmount.negate() else internalAmount
             amount += internalAmount
+            fromAddress = internalTransaction.from
+            toAddress = internalTransaction.to
         }
         val type = when {
             fromMine && toMine -> TransactionType.SentToSelf
@@ -106,8 +110,8 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
                 confirmationsThreshold = confirmationsThreshold,
                 fee = fee,
                 timestamp = transaction.timestamp,
-                from = transaction.from.hex,
-                to = transaction.to.hex,
+                from = fromAddress.hex,
+                to = toAddress.hex,
                 type = type,
                 failed = transaction.isError?.let { it != 0 } ?: false
         )
