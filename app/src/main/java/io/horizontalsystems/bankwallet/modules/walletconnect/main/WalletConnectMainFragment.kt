@@ -87,7 +87,7 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
         }
 
         cancelButton.setOnSingleClickListener {
-            parentFragmentManager.popBackStack()
+            requireActivity().finish()
         }
     }
 }
