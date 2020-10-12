@@ -204,9 +204,11 @@
     <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Receiving">Receiving</string>
     <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Approving">Swap approval</string>
     <string name="Transactions_Failed">Failed</string>
     <!--Transaction Info-->
-    <string name="TransactionInfo_Title">Transaction</string>
+    <string name="TransactionInfo_Transaction">Transaction</string>
+    <string name="TransactionInfo_Approval">Swap Approval</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
