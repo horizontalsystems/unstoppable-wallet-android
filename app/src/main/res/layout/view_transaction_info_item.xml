@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btnAction"
         app:layout_constraintStart_toEndOf="@+id/txtTitle"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="wrap"
+        app:layout_constraintWidth_default="wrap"
         tools:text="address" />
 
     <ImageButton

@@ -49,7 +49,7 @@ object TransactionInfoModule {
     fun init(view: TransactionInfoViewModel, router: Router, transactionRecord: TransactionRecord, wallet: Wallet) {
         val adapter = App.adapterManager.getTransactionsAdapterForWallet(wallet)!!
         val interactor = TransactionInfoInteractor(TextHelper, adapter, App.xRateManager, App.currencyManager, App.feeCoinProvider)
-        val presenter = TransactionInfoPresenter(interactor, router, transactionRecord, wallet)
+        val presenter = TransactionInfoPresenter(interactor, router, transactionRecord, wallet, TransactionInfoAddressMapper)
 
         view.delegate = presenter
         presenter.view = view

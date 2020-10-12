@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -14,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.modules.info.InfoParameters
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelper
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -57,12 +57,12 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         val transactionDetailsAdapter = TransactionDetailsAdapter(viewModel)
         rvDetails.adapter = transactionDetailsAdapter
 
-        viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
+        viewModel.showCopiedLiveEvent.observe(lifecycleOwner, {
             val snackbar = HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
             listener?.onShowInfoMessage(snackbar)
         })
 
-        viewModel.showShareLiveEvent.observe(lifecycleOwner, Observer { url ->
+        viewModel.showShareLiveEvent.observe(lifecycleOwner, { url ->
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, url)
@@ -72,11 +72,11 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         })
 
 
-        viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, Observer { (txHash, wallet) ->
+        viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, { (txHash, wallet) ->
             listener?.showFragmentInTopContainerView(FullTransactionInfoFragment.instance(txHash, wallet))
         })
 
-        viewModel.showLockInfo.observe(lifecycleOwner, Observer { lockDate ->
+        viewModel.showLockInfo.observe(lifecycleOwner, { lockDate ->
             val title = context.getString(R.string.Info_LockTime_Title)
             val description = context.getString(R.string.Info_LockTime_Description, DateHelper.getFullDate(lockDate))
             val infoParameters = InfoParameters(title, description)
@@ -84,7 +84,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             listener?.showFragmentInTopContainerView(InfoFragment.instance(infoParameters))
         })
 
-        viewModel.showDoubleSpendInfo.observe(lifecycleOwner, Observer { (txHash, conflictingTxHash) ->
+        viewModel.showDoubleSpendInfo.observe(lifecycleOwner, { (txHash, conflictingTxHash) ->
             val title = context.getString(R.string.Info_DoubleSpend_Title)
             val description = context.getString(R.string.Info_DoubleSpend_Description)
             val infoParameters = InfoParameters(title, description, txHash, conflictingTxHash)
@@ -92,25 +92,16 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             listener?.showFragmentInTopContainerView(InfoFragment.instance(infoParameters))
         })
 
-        viewModel.titleLiveData.observe(lifecycleOwner, Observer { titleViewItem ->
-            val incoming = titleViewItem.type == TransactionType.Incoming
-            val sentToSelf = titleViewItem.type == TransactionType.SentToSelf
-
-            setTitle(context.getString(R.string.TransactionInfo_Title))
+        viewModel.titleLiveData.observe(lifecycleOwner, { titleViewItem ->
+            val title = if (titleViewItem.type == TransactionType.Approve) R.string.TransactionInfo_Approval else R.string.TransactionInfo_Transaction
+            setTitle(context.getString(title))
             setSubtitle(titleViewItem.date?.let { DateHelper.getFullDate(it) })
-            setHeaderIcon(if (incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
+            setHeaderIcon(TransactionViewHelper.getTransactionTypeIcon(titleViewItem.type))
 
-            sentToSelfIcon.isVisible = sentToSelf
+            sentToSelfIcon.isVisible = titleViewItem.type == TransactionType.SentToSelf
 
-            val lockIcon = when {
-                titleViewItem.lockState == null -> 0
-                titleViewItem.lockState.locked -> R.drawable.ic_lock
-                else -> R.drawable.ic_unlock
-            }
-            primaryValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, lockIcon, 0)
-
-            val amountTextColor = if (incoming) R.color.green_d else R.color.yellow_d
-            primaryValue.setTextColor(context.getColor(amountTextColor))
+            primaryValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, TransactionViewHelper.getLockIcon(titleViewItem.lockState), 0)
+            primaryValue.setTextColor(TransactionViewHelper.getAmountColor(titleViewItem.type, context))
 
             titleViewItem.primaryAmountInfo.let {
                 primaryName.text = it.getAmountName()
@@ -123,7 +114,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             }
         })
 
-        viewModel.detailsLiveData.observe(lifecycleOwner, Observer {
+        viewModel.detailsLiveData.observe(lifecycleOwner, {
             transactionDetailsAdapter.setItems(it)
             listener?.openTransactionInfo()
         })

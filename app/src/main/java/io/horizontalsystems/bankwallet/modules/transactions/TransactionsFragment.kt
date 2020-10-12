@@ -178,10 +178,10 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txValueInFiat.text = transactionRecord.currencyValue?.let {
             App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
         }
-        txValueInFiat.setTextColor(getAmountColor(transactionRecord.type))
-        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, getLockIcon(transactionRecord.lockState), 0)
+        txValueInFiat.setTextColor(TransactionViewHelper.getAmountColor(transactionRecord.type, itemView.context))
+        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, TransactionViewHelper.getLockIcon(transactionRecord.lockState), 0)
         txValueInCoin.text = App.numberFormatter.formatCoin(transactionRecord.coinValue.value, transactionRecord.coinValue.coin.code, 0, 8)
-        txTypeIcon.setImageResource(getTransactionTypeIcon(transactionRecord.type))
+        txTypeIcon.setImageResource(TransactionViewHelper.getTransactionTypeIcon(transactionRecord.type))
         txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, transactionRecord.type, time)
@@ -190,22 +190,16 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         doubleSpendIcon.isVisible = transactionRecord.doubleSpend
     }
 
-    private fun getLockIcon(lockState: TransactionLockState?) = when {
-        lockState == null -> 0
-        lockState.locked -> R.drawable.ic_lock
-        else -> R.drawable.ic_unlock
-    }
-
     fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
         if (current.currencyValue != prev.currencyValue) {
             txValueInFiat.text = current.currencyValue?.let {
                 App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
             }
-            txValueInFiat.setTextColor(getAmountColor(current.type))
+            txValueInFiat.setTextColor(TransactionViewHelper.getAmountColor(current.type, itemView.context))
         }
 
         if (current.lockState != prev.lockState) {
-            txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, getLockIcon(current.lockState), 0)
+            txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, TransactionViewHelper.getLockIcon(current.lockState), 0)
         }
 
         if (current.coinValue != prev.coinValue) {
@@ -220,32 +214,6 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 
         if (current.doubleSpend != prev.doubleSpend) {
             doubleSpendIcon.isVisible = current.doubleSpend
-        }
-    }
-
-    private fun getAmountColor(type: TransactionType): Int {
-        val context = itemView.context
-        return when (type) {
-            TransactionType.Outgoing, TransactionType.SentToSelf -> {
-                LayoutHelper.getAttr(R.attr.ColorJacob, context.theme)
-                        ?: context.getColor(R.color.yellow_d)
-            }
-            TransactionType.Incoming -> {
-                LayoutHelper.getAttr(R.attr.ColorRemus, context.theme)
-                        ?: context.getColor(R.color.green_d)
-            }
-            TransactionType.Approve -> {
-                LayoutHelper.getAttr(R.attr.ColorLeah, context.theme)
-                        ?: context.getColor(R.color.steel_light)
-            }
-        }
-    }
-
-    private fun getTransactionTypeIcon(type: TransactionType): Int {
-        return when (type) {
-            TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing
-            TransactionType.Incoming -> R.drawable.ic_incoming
-            TransactionType.Approve -> R.drawable.ic_approval
         }
     }
 
