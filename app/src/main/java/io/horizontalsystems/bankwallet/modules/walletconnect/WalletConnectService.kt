@@ -67,7 +67,9 @@ class WalletConnectService(
         state = State.Connecting
     }
 
-    override fun clear() = Unit
+    override fun clear() {
+        interactor?.disconnect()
+    }
 
     fun approveSession() {
         ethereumKit?.let { ethereumKit ->
