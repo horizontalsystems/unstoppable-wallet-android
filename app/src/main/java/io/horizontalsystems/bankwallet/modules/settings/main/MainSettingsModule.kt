@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.trustwallet.walletconnect.models.WCPeerMeta
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.entities.Currency
 
@@ -15,6 +16,7 @@ object MainSettingsModule {
         fun setAppVersion(appVersion: String)
         fun setTermsAccepted(termsAccepted: Boolean)
         fun setPinIsSet(pinSet: Boolean)
+        fun setCurrentWalletConnectPeer(peer: String?)
     }
 
     interface IMainSettingsViewDelegate {
@@ -38,6 +40,7 @@ object MainSettingsModule {
         val companyWebPageLink: String
         val appWebPageLink: String
         val allBackedUp: Boolean
+        val walletConnectPeerMeta: WCPeerMeta?
         val currentLanguageDisplayName: String
         val baseCurrency: Currency
         val appVersion: String
@@ -53,6 +56,7 @@ object MainSettingsModule {
         fun didUpdateBaseCurrency()
         fun didUpdateTermsAccepted(allAccepted: Boolean)
         fun didUpdatePinSet()
+        fun didUpdateWalletConnect(peerMeta: WCPeerMeta?)
     }
 
     interface IMainSettingsRouter {
@@ -84,7 +88,8 @@ object MainSettingsModule {
                     currencyManager = App.currencyManager,
                     appConfigProvider = App.appConfigProvider,
                     termsManager = App.termsManager,
-                    pinComponent = App.pinComponent
+                    pinComponent = App.pinComponent,
+                    walletConnectSessionStore = App.walletConnectSessionStore
             )
             val presenter = MainSettingsPresenter(view, router, interactor)
             interactor.delegate = presenter

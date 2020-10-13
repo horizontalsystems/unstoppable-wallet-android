@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.lifecycle.ViewModel
+import com.trustwallet.walletconnect.models.WCPeerMeta
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractor
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractorDelegate
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsRouter
@@ -23,6 +24,7 @@ class MainSettingsPresenter(
         view.setAppVersion(interactor.appVersion)
         view.setTermsAccepted(interactor.termsAccepted)
         view.setPinIsSet(interactor.isPinSet)
+        view.setCurrentWalletConnectPeer(interactor.walletConnectPeerMeta?.name)
     }
 
     override fun didTapManageKeys() {
@@ -94,6 +96,10 @@ class MainSettingsPresenter(
 
     override fun didUpdatePinSet() {
         view.setPinIsSet(interactor.isPinSet)
+    }
+
+    override fun didUpdateWalletConnect(peerMeta: WCPeerMeta?) {
+        view.setCurrentWalletConnectPeer(peerMeta?.name)
     }
 
     // ViewModel

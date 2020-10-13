@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
+import com.trustwallet.walletconnect.models.WCPeerMeta
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionStore
 import io.horizontalsystems.core.*
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.CompositeDisposable
@@ -15,7 +17,8 @@ class MainSettingsInteractor(
         private val currencyManager: ICurrencyManager,
         private val appConfigProvider: IAppConfigProvider,
         private val termsManager: ITermsManager,
-        private val pinComponent: IPinComponent)
+        private val pinComponent: IPinComponent,
+        private val walletConnectSessionStore: WalletConnectSessionStore)
     : MainSettingsModule.IMainSettingsInteractor {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -25,6 +28,10 @@ class MainSettingsInteractor(
     init {
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
             delegate?.didUpdateAllBackedUp(it)
+        })
+
+        disposables.add(walletConnectSessionStore.storePeerMetaSignal.subscribe {
+            delegate?.didUpdateWalletConnect(walletConnectSessionStore.storedPeerMeta)
         })
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
@@ -48,6 +55,9 @@ class MainSettingsInteractor(
 
     override val allBackedUp: Boolean
         get() = backupManager.allBackedUp
+
+    override val walletConnectPeerMeta: WCPeerMeta?
+        get() = walletConnectSessionStore.storedPeerMeta
 
     override val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName

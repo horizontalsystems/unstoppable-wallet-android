@@ -11,7 +11,7 @@ object WalletConnectModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = WalletConnectService(App.ethereumKitManager)
+            val service = WalletConnectService(App.ethereumKitManager, App.walletConnectSessionStore)
 
             return WalletConnectViewModel(service, listOf(service)) as T
         }
