@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,14 +18,42 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectActivi
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestFragment
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
+import kotlinx.android.synthetic.main.fragment_wallet_connect_main.toolbar
 
 class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main) {
+
+    private var closeVisible: Boolean = false
+        set(value) {
+            field = value
+
+            requireActivity().invalidateOptionsMenu()
+        }
 
     private val baseViewModel by activityViewModels<WalletConnectViewModel>()
     private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.wallet_connect_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menuClose) {
+            requireActivity().onBackPressed()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menuClose)?.isVisible = closeVisible
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setHasOptionsMenu(true)
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         val dappInfoAdapter = DappInfoAdapter()
         dappInfo.adapter = dappInfoAdapter
@@ -52,6 +84,10 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
 
         viewModel.disconnectVisibleLiveData.observe(viewLifecycleOwner, Observer {
             disconnectButton.isVisible = it
+        })
+
+        viewModel.closeVisibleLiveData.observe(viewLifecycleOwner, Observer {
+            closeVisible = it
         })
 
         viewModel.signedTransactionsVisibleLiveData.observe(viewLifecycleOwner, Observer {
