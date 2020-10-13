@@ -109,6 +109,10 @@ class MainSettingsFragment : BaseFragment() {
         presenterView.termsAccepted.observe(viewLifecycleOwner, Observer { termsAccepted ->
             terms.showAttention(!termsAccepted)
         })
+
+        presenterView.walletConnectPeer.observe(viewLifecycleOwner, Observer {
+            walletConnect.showValue(it)
+        })
     }
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {

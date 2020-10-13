@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionStore
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -77,6 +78,7 @@ class App : CoreApp() {
         lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
         lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
+        lateinit var walletConnectSessionStore: WalletConnectSessionStore
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
     }
@@ -196,6 +198,7 @@ class App : CoreApp() {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
         erc20ContractInfoProvider = Erc20ContractInfoProvider(appConfigTestMode, appConfigProvider, networkManager)
+        walletConnectSessionStore = WalletConnectSessionStore()
 
         termsManager = TermsManager(localStorage)
 

@@ -1,17 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
 import com.trustwallet.walletconnect.WCSessionStoreItem
-import com.trustwallet.walletconnect.WCSessionStoreType
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.subjects.PublishSubject
 
-class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectInteractor.Delegate, Clearable {
+class WalletConnectService(
+        ethKitManager: IEthereumKitManager,
+        private val sessionStore: WalletConnectSessionStore
+) : WalletConnectInteractor.Delegate, Clearable {
 
     sealed class State {
         object Idle : State()
@@ -39,11 +40,11 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
     val isEthereumKitReady: Boolean
         get() = ethereumKit != null
 
-    private val wcSessionStoreType = WCSessionStoreType(App.preferences)
     private val pendingRequests = mutableMapOf<Long, Request>()
 
     init {
-        val sessionStoreItem = wcSessionStoreType.session
+        val sessionStoreItem = sessionStore.storedItem
+
         if (sessionStoreItem != null) {
             remotePeerData = PeerData(sessionStoreItem.remotePeerId, sessionStoreItem.remotePeerMeta)
 
@@ -75,7 +76,7 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
                 interactor.approveSession(ethereumKit.receiveAddress.eip55, chainId)
 
                 remotePeerData?.let { peerData ->
-                    wcSessionStoreType.session = WCSessionStoreItem(interactor.session, chainId, interactor.peerId, peerData.peerId, peerData.peerMeta)
+                    sessionStore.storedItem = WCSessionStoreItem(interactor.session, chainId, interactor.peerId, peerData.peerId, peerData.peerMeta)
                 }
 
                 state = State.Ready
@@ -116,7 +117,7 @@ class WalletConnectService(ethKitManager: IEthereumKitManager) : WalletConnectIn
     }
 
     override fun didKillSession() {
-        wcSessionStoreType.session = null
+        sessionStore.storedItem = null
 
         state = State.Completed
     }
