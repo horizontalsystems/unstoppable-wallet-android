@@ -30,6 +30,7 @@ import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
+import kotlin.system.exitProcess
 
 class App : CoreApp() {
 
@@ -214,6 +215,30 @@ class App : CoreApp() {
         startManagers()
 
         FirebaseApp.initializeApp(this)
+    }
+
+    override fun onTrimMemory(level: Int) {
+        when (level){
+            TRIM_MEMORY_BACKGROUND,
+            TRIM_MEMORY_MODERATE,
+            TRIM_MEMORY_COMPLETE -> {
+                /*
+                   Release as much memory as the process can.
+
+                   The app is on the LRU list and the system is running low on memory.
+                   The event raised indicates where the app sits within the LRU list.
+                   If the event is TRIM_MEMORY_COMPLETE, the process will be one of
+                   the first to be terminated.
+                */
+                if (backgroundManager.inBackground) {
+                    val logger = AppLogger("low memory")
+                    logger.info("Kill app due to low memory, level: $level")
+                    exitProcess(0)
+                }
+            }
+            else -> {  /*do nothing*/ }
+        }
+        super.onTrimMemory(level)
     }
 
     override fun attachBaseContext(base: Context) {
