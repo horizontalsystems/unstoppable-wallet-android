@@ -72,6 +72,10 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
         delegate?.didKillSession()
     }
 
+    fun disconnect() {
+        client.disconnect()
+    }
+
     fun <T> approveRequest(id: Long, result: T) {
         client.approveRequest(id, result)
     }
