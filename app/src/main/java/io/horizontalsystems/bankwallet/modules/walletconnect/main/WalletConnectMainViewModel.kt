@@ -16,6 +16,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
     val cancelVisibleLiveData = MutableLiveData<Boolean>()
     val approveAndRejectVisibleLiveData = MutableLiveData<Boolean>()
+    val closeVisibleLiveData = MutableLiveData<Boolean>()
     val disconnectVisibleLiveData = MutableLiveData<Boolean>()
     val signedTransactionsVisibleLiveData = MutableLiveData<Boolean>()
     val hintLiveData = MutableLiveData<Int?>()
@@ -75,6 +76,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         connectingLiveData.postValue(state == WalletConnectService.State.Connecting && service.remotePeerMeta == null)
         cancelVisibleLiveData.postValue(state == WalletConnectService.State.Connecting)
         disconnectVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
+        closeVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
         approveAndRejectVisibleLiveData.postValue(state == WalletConnectService.State.WaitingForApproveSession)
         signedTransactionsVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
 
