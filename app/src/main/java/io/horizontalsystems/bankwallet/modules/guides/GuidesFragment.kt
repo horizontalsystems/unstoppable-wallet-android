@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.guideview.GuideFragment
@@ -69,10 +70,13 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
         })
     }
 
-    override fun onFilterItemClick(item: FilterAdapter.FilterItem?) {
+    override fun onFilterItemClick(item: FilterAdapter.FilterItem?, itemPosition: Int, itemWidth: Int) {
         item?.filterId?.let {
             recyclerGuides.layoutManager?.scrollToPosition(0)
             viewModel.onSelectFilter(it)
+
+            val leftOffset = recyclerTags.width / 2 - itemWidth / 2
+            (recyclerTags.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(itemPosition, leftOffset)
         }
     }
 }
