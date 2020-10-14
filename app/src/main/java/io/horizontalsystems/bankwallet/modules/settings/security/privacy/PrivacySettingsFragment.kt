@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -16,21 +17,20 @@ import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
-import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.fragment_settings_privacy.*
-import kotlinx.android.synthetic.main.fragment_settings_privacy.toolbar
 import kotlin.system.exitProcess
 
 class PrivacySettingsFragment : BaseFragment() {
+
     private lateinit var viewModel: PrivacySettingsViewModel
     private lateinit var communicationSettingsAdapter: PrivacySettingsAdapter
     private lateinit var walletRestoreSettingsAdapter: PrivacySettingsAdapter
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_settings_privacy, container, false)
@@ -61,7 +61,7 @@ class PrivacySettingsFragment : BaseFragment() {
 
         // IView
         viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer { enabled ->
-            openPrivacySettingsInfo()
+            findNavController().navigate(R.id.privacySettingsFragment_to_privacySettingsInfoFragment, null, navOptions())
         })
 
         viewModel.torEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
@@ -155,7 +155,6 @@ class PrivacySettingsFragment : BaseFragment() {
     }
 
     private fun createCommunicationSettingsView() {
-
         communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
         communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
 
@@ -203,9 +202,7 @@ class PrivacySettingsFragment : BaseFragment() {
     }
 
     private fun createWalletRestoreSettingsView(doCreate: Boolean) {
-
         if (doCreate) {
-
             walletRestoreSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
             walletRestoreSettingsRecyclerview.adapter = walletRestoreSettingsAdapter
 
@@ -352,10 +349,4 @@ class PrivacySettingsFragment : BaseFragment() {
     }
 
     private fun getTint(color: Int) = context?.let { ColorStateList.valueOf(ContextCompat.getColor(it, color)) }
-
-    private fun openPrivacySettingsInfo() {
-        activity?.let {
-            PrivacySettingsInfoFragment.start(it)
-        }
-    }
 }

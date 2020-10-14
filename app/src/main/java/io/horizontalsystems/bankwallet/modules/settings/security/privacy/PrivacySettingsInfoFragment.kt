@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.views.TopMenuItem
@@ -21,17 +22,8 @@ class PrivacySettingsInfoFragment : BaseFragment() {
         shadowlessToolbar.bind(
                 title = getString(R.string.Welcome_PrivacySettings),
                 rightBtnItem = TopMenuItem(text = R.string.Alert_Close, onClick = {
-                    parentFragmentManager.popBackStack()
+                    findNavController().popBackStack()
                 })
         )
-    }
-
-    companion object {
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, PrivacySettingsInfoFragment())
-                addToBackStack(null)
-            }
-        }
     }
 }

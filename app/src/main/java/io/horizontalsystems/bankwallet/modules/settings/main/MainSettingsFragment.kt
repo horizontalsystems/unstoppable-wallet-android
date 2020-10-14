@@ -7,29 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule
-import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
-import io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesModule
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
-import io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsModule
-import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.currencyswitcher.CurrencySwitcherFragment
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-class MainSettingsFragment : Fragment() {
+class MainSettingsFragment : BaseFragment() {
 
     private val presenter by viewModels<MainSettingsPresenter> { MainSettingsModule.Factory() }
 
@@ -117,49 +110,35 @@ class MainSettingsFragment : Fragment() {
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
         router.showManageKeysLiveEvent.observe(this, Observer {
-            activity?.let { ManageKeysModule.start(it) }
+            findNavController().navigate(R.id.mainFragment_to_manageKeysFragment, null, navOptions())
         })
 
         router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.commit {
-                add(R.id.fragmentContainerView, CurrencySwitcherFragment())
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.mainFragment_to_currencySwitcherFragment, null, navOptions())
         })
 
         router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.commit {
-                add(R.id.fragmentContainerView, LanguageSettingsFragment())
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.mainFragment_to_languageSettingsFragment, null, navOptions())
         })
 
         router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                TermsFragment.start(it)
-            }
+            findNavController().navigate(R.id.mainFragment_to_termsFragment, null, navOptions())
         })
 
         router.showNotificationsLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                NotificationsModule.start(it)
-            }
+            findNavController().navigate(R.id.mainFragment_to_notificationsFragment, null, navOptions())
         })
 
         router.showReportProblemLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                ContactModule.start(it)
-            }
+            findNavController().navigate(R.id.mainFragment_to_contactFragment, null, navOptions())
         })
 
         router.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                SecuritySettingsModule.start(it)
-            }
+            findNavController().navigate(R.id.mainFragment_to_securitySettingsFragment, null, navOptions())
         })
 
         router.showExperimentalFeaturesLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { ExperimentalFeaturesModule.start(it) }
+            findNavController().navigate(R.id.mainFragment_to_experimentalFeaturesFragment, null, navOptions())
         })
 
         router.openLinkLiveEvent.observe(viewLifecycleOwner, Observer { link ->
@@ -185,15 +164,13 @@ class MainSettingsFragment : Fragment() {
         })
 
         router.openAppStatusLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { AppStatusModule.start(it) }
+            findNavController().navigate(R.id.mainFragment_to_appStatusFragment, null, navOptions())
         })
     }
 
     private fun subscribeFragmentResult() {
-        activity?.supportFragmentManager?.setFragmentResultListener(LanguageSettingsFragment.LANGUAGE_CHANGE, viewLifecycleOwner) { requestKey, _ ->
-            if (requestKey == LanguageSettingsFragment.LANGUAGE_CHANGE) {
-                activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
-            }
+        getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
+            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
         }
     }
 }

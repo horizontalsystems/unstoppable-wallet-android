@@ -10,12 +10,12 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
+import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
@@ -61,13 +61,13 @@ class LanguageSettingsFragment : Fragment(), LanguageSwitcherAdapter.Listener {
         })
 
         presenterRouter.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
-            setFragmentResult(LANGUAGE_CHANGE, bundleOf())
+            setNavigationResult(LANGUAGE_CHANGE, bundleOf())
 
-            activity?.supportFragmentManager?.popBackStack()
+            activity?.onBackPressed()
         })
 
         presenterRouter.closeLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.popBackStack()
+            activity?.onBackPressed()
         })
 
         presenter.viewDidLoad()

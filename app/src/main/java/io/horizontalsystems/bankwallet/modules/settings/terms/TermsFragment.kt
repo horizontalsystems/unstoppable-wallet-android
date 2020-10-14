@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -67,15 +65,6 @@ class TermsFragment : BaseFragment() {
         chechkbox.isChecked = terms[index].checked
         chechkbox.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.onTapTerm(index)
-        }
-    }
-
-    companion object {
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, TermsFragment())
-                addToBackStack(null)
-            }
         }
     }
 }

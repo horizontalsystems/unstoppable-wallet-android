@@ -2,21 +2,15 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
 import android.graphics.PorterDuff
-import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.transition.TransitionInflater
+import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.AlertDialogFragment
 
 abstract class BaseFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.slide_right)
-    }
-
     protected fun hideKeyboard() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
@@ -27,7 +21,16 @@ abstract class BaseFragment : Fragment() {
         menuItem.icon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
-    open fun canHandleOnBackPress(): Boolean{
+    protected fun navOptions(): NavOptions {
+        return NavOptions.Builder()
+                .setEnterAnim(R.anim.from_right)
+                .setExitAnim(R.anim.to_left)
+                .setPopEnterAnim(R.anim.from_left)
+                .setPopExitAnim(R.anim.to_right)
+                .build()
+    }
+
+    open fun canHandleOnBackPress(): Boolean {
         return false
     }
 

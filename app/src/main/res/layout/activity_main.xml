@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
         android:id="@+id/fragmentContainerView"
-        android:layout_marginTop="24dp"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_graph" />
 
     <View
         android:id="@+id/bottomSheetDim"
@@ -38,8 +41,8 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/topFragmentContainerView"
-        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

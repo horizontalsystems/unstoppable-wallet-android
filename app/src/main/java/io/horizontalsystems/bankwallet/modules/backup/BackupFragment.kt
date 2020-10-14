@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -19,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosFragment
 import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsFragment
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
@@ -27,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_backup.*
 
 class BackupFragment : BaseFragment() {
 
-    private lateinit var viewModel: BackupViewModel
+    private val viewModel by viewModels<BackupViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_backup, container, false)
@@ -44,45 +43,44 @@ class BackupFragment : BaseFragment() {
 
         val accountCoins = arguments?.getString(ModuleField.ACCOUNT_COINS)
         val account = arguments?.getParcelable<Account>(ModuleField.ACCOUNT) ?: run {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
             return
         }
 
-        viewModel = ViewModelProvider(this).get(BackupViewModel::class.java)
         viewModel.init(account)
-
-        buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
-
         viewModel.startPinModule.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.commit {
-                add(R.id.fragmentContainerView, PinModule.startForUnlock())
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.backupFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
         })
 
         viewModel.startBackupWordsModule.observe(viewLifecycleOwner, Observer { (words, accountTypeTitle) ->
-            activity?.let {
-                BackupWordsFragment.start(it, words, account.isBackedUp, accountTypeTitle)
+            val arguments = Bundle(3).apply {
+                putStringArray(BackupWordsFragment.WORDS_KEY, words.toTypedArray())
+                putBoolean(BackupWordsFragment.ACCOUNT_BACKEDUP, account.isBackedUp)
+                putInt(BackupWordsFragment.ACCOUNT_TYPE_TITLE, accountTypeTitle)
             }
+
+            findNavController().navigate(R.id.backupFragment_to_backupWordsFragment, arguments, navOptions())
         })
 
         viewModel.startBackupEosModule.observe(viewLifecycleOwner, Observer { (account, activePrivateKey) ->
-            activity?.let {
-                BackupEosFragment.start(it, account, activePrivateKey)
+            val arguments = Bundle(2).apply {
+                putString(BackupEosFragment.ACCOUNT, account)
+                putString(BackupEosFragment.ACTIVE_PRIVATE_KEY, activePrivateKey)
             }
+
+            findNavController().navigate(R.id.backupFragment_to_backupEosFragment, arguments, navOptions())
         })
 
         viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         })
 
         viewModel.showSuccessAndFinishEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Done, SnackbarDuration.LONG)
-                it.supportFragmentManager.popBackStack()
-            }
+            activity?.let { HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Done, SnackbarDuration.LONG) }
+            findNavController().popBackStack()
         })
 
+        buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
         backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
 
         if (account.isBackedUp) {
@@ -94,9 +92,7 @@ class BackupFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResult() {
-        val fragmentActivity = activity ?: return
-
-        fragmentActivity.supportFragmentManager.setFragmentResultListener(PinModule.requestKey, viewLifecycleOwner) { _, bundle ->
+        getNavigationResult(PinModule.requestKey)?.let { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
@@ -108,32 +104,24 @@ class BackupFragment : BaseFragment() {
             }
         }
 
-        fragmentActivity.supportFragmentManager.setFragmentResultListener(BackupWordsModule.requestKey, viewLifecycleOwner) { _, bundle ->
+        getNavigationResult(BackupWordsModule.requestKey)?.let { bundle ->
             when (bundle.getInt(BackupWordsModule.requestResult)) {
                 BackupWordsModule.RESULT_BACKUP -> viewModel.delegate.didBackup()
-                BackupWordsModule.RESULT_SHOW -> activity?.supportFragmentManager?.popBackStack()
-            }
-        }
-
-        fragmentActivity.supportFragmentManager.setFragmentResultListener(BackupEosModule.requestKey, viewLifecycleOwner) { _, bundle ->
-            when (bundle.getInt(BackupEosModule.requestResult)) {
-                BackupEosModule.RESULT_SHOW -> activity?.supportFragmentManager?.popBackStack()
-            }
-        }
-    }
-
-    companion object {
-        fun start(activity: FragmentActivity, account: Account, coinCodes: String) {
-            val fragment = BackupFragment().apply {
-                arguments = Bundle(2).apply {
-                    putParcelable(ModuleField.ACCOUNT, account)
-                    putString(ModuleField.ACCOUNT_COINS, coinCodes)
+                BackupWordsModule.RESULT_SHOW -> {
+                    findNavController().popBackStack()
+                }
+                else -> {
                 }
             }
+        }
 
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, fragment)
-                addToBackStack(null)
+        getNavigationResult(BackupEosModule.requestKey)?.let {
+            when (it.getInt(BackupEosModule.requestResult)) {
+                BackupEosModule.RESULT_SHOW -> {
+                    findNavController().popBackStack()
+                }
+                else -> {
+                }
             }
         }
     }

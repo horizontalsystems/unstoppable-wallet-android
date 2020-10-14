@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.welcome
 
-import android.view.View
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object WelcomeModule {
@@ -29,13 +25,6 @@ object WelcomeModule {
         fun openTorPage()
     }
 
-    fun start(fragmentActivity: FragmentActivity, sharedLogo: View) {
-        fragmentActivity.supportFragmentManager.commit {
-            addSharedElement(sharedLogo, "welcome_wallet_logo")
-            replace(R.id.fragmentContainerView, WelcomeFragment.instance())
-        }
-    }
-
     fun init(view: WelcomeViewModel, router: IRouter) {
         val interactor = WelcomeInteractor(App.systemInfoManager)
         val presenter = WelcomePresenter(interactor, router)
@@ -43,5 +32,4 @@ object WelcomeModule {
         view.delegate = presenter
         presenter.view = view
     }
-
 }

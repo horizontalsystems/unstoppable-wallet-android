@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsModule
-import io.horizontalsystems.bankwallet.modules.backup.BackupFragment
-import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
-import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
 import kotlinx.android.synthetic.main.fragment_manage_keys.*
 
@@ -64,7 +64,7 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
             val description = getString(R.string.ManageKeys_Delete_Alert)
-            ManageKeysDialog.show(parentFragmentManager, title, subtitle, description)
+            ManageKeysDialog.show(childFragmentManager, title, subtitle, description)
         })
 
         presenter.onLoad()
@@ -85,31 +85,44 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
 
     private fun observeRouter(router: ManageKeysRouter) {
         router.showRestore.observe(this, Observer { predefinedAccountType ->
-            activity?.let {
-                RestoreModule.start(it, true, predefinedAccountType)
+            val arguments = Bundle(3).apply {
+                putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+                putBoolean(RestoreFragment.SELECT_COINS_KEY, true)
+                putBoolean(RestoreFragment.IN_APP_KEY, true)
             }
+
+            findNavController().navigate(R.id.manageKeysFragment_to_restoreFragment, arguments, navOptions())
         })
 
         router.showCreateWalletLiveEvent.observe(this, Observer { predefinedAccountType ->
-            activity?.let {
-                CreateWalletModule.start(it, true, predefinedAccountType)
+            val arguments = Bundle(2).apply {
+                putParcelable("predefinedAccountType", predefinedAccountType)
+                putBoolean("inApp", true)
             }
+
+            findNavController().navigate(R.id.manageKeysFragment_to_createWalletFragment, arguments, navOptions())
         })
 
         router.showBackupModule.observe(this, Observer { (account, predefinedAccountType) ->
-            activity?.let {
-                BackupFragment.start(it, account, getString(predefinedAccountType.coinCodes))
+            val arguments = Bundle(2).apply {
+                putParcelable(ModuleField.ACCOUNT, account)
+                putString(ModuleField.ACCOUNT_COINS, getString(predefinedAccountType.coinCodes))
             }
+
+            findNavController().navigate(R.id.manageKeysFragment_to_backupFragment, arguments, navOptions())
         })
 
         router.showBlockchainSettings.observe(this, Observer { enabledCoinTypes ->
-            activity?.let {
-                AddressFormatSettingsModule.start(it, enabledCoinTypes, false)
+            val arguments = Bundle(2).apply {
+                putParcelableArrayList(ModuleField.COIN_TYPES, ArrayList(enabledCoinTypes))
+                putBoolean(ModuleField.SHOW_DONE_BUTTON, false)
             }
+
+            findNavController().navigate(R.id.manageKeysFragment_to_addressFormatSettingsFragment, arguments, navOptions())
         })
 
         router.closeEvent.observe(this, Observer {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         })
     }
 

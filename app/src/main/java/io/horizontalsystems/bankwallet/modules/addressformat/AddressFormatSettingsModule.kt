@@ -1,13 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.addressformat
 
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
@@ -44,20 +39,6 @@ object AddressFormatSettingsModule {
     interface IRouter {
         fun closeWithResultOk()
         fun close()
-    }
-
-    fun start(activity: FragmentActivity, coinTypes: List<CoinType>, showDoneButton: Boolean) {
-        val fragment = AddressFormatSettingsFragment().apply {
-            arguments = Bundle(2).apply {
-                putParcelableArrayList(ModuleField.COIN_TYPES, ArrayList(coinTypes))
-                putBoolean(ModuleField.SHOW_DONE_BUTTON, showDoneButton)
-            }
-        }
-
-        activity.supportFragmentManager.commit {
-            add(R.id.fragmentContainerView, fragment)
-            addToBackStack(null)
-        }
     }
 
     class Factory(private val coinTypes: List<CoinType>, private val showDoneButton: Boolean) : ViewModelProvider.Factory {

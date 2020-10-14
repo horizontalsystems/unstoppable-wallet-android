@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysFragment
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 object ManageKeysModule {
 
@@ -62,13 +61,6 @@ object ManageKeysModule {
             interactor.delegate = presenter
 
             return presenter as T
-        }
-    }
-
-    fun start(activity: FragmentActivity) {
-        activity.supportFragmentManager.commit {
-            add(R.id.fragmentContainerView, ManageKeysFragment())
-            addToBackStack(null)
         }
     }
 }

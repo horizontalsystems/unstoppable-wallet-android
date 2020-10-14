@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
@@ -37,10 +38,10 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
         setContentView(R.layout.activity_main)
         setTransparentStatusBar()
 
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragmentContainerView, MainFragment.new(intent.extras?.getInt(ACTIVE_TAB_KEY)))
-            commit()
-        }
+        val navController = findNavController(R.id.fragmentContainerView)
+
+        navController.setGraph(R.navigation.main_graph, intent.extras)
+        navController.addOnDestinationChangedListener(this)
 
         preloadBottomSheets()
     }

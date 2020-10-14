@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
 class BackupWordsFragment : BaseFragment() {
@@ -55,7 +54,6 @@ class BackupWordsFragment : BaseFragment() {
 
             childFragmentManager.beginTransaction().apply {
                 replace(R.id.fragmentContainer, fragment)
-                addToBackStack(null)
                 commit()
             }
 
@@ -67,21 +65,21 @@ class BackupWordsFragment : BaseFragment() {
         })
 
         viewModel.notifyBackedUpEvent.observe(viewLifecycleOwner, Observer {
-            setFragmentResult(BackupWordsModule.requestKey, bundleOf(
+            setNavigationResult(BackupWordsModule.requestKey, bundleOf(
                     BackupWordsModule.requestResult to BackupWordsModule.RESULT_BACKUP
             ))
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         })
 
         viewModel.notifyClosedEvent.observe(viewLifecycleOwner, Observer {
-            setFragmentResult(BackupWordsModule.requestKey, bundleOf(
+            setNavigationResult(BackupWordsModule.requestKey, bundleOf(
                     BackupWordsModule.requestResult to BackupWordsModule.RESULT_SHOW
             ))
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         })
 
         viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         })
     }
 
@@ -89,20 +87,5 @@ class BackupWordsFragment : BaseFragment() {
         const val ACCOUNT_BACKEDUP = "account_backedup"
         const val WORDS_KEY = "words"
         const val ACCOUNT_TYPE_TITLE = "account_type_title"
-
-        fun start(activity: FragmentActivity, words: List<String>, backedUp: Boolean, accountTypeTitle: Int) {
-            val fragment = BackupWordsFragment().apply {
-                arguments = Bundle(3).apply {
-                    putStringArray(WORDS_KEY, words.toTypedArray())
-                    putBoolean(ACCOUNT_BACKEDUP, backedUp)
-                    putInt(ACCOUNT_TYPE_TITLE, accountTypeTitle)
-                }
-            }
-
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, fragment)
-                addToBackStack(null)
-            }
-        }
     }
 }

@@ -12,9 +12,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 import io.horizontalsystems.bankwallet.modules.guides.GuidesFragment
@@ -33,15 +36,13 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        val fragments = listOf(
+        view.viewPager.offscreenPageLimit = 1
+        view.viewPager.adapter = MainViewPagerAdapter(listOf(
                 BalanceFragment(),
                 TransactionsFragment(),
                 GuidesFragment(),
                 MainSettingsFragment()
-        )
-
-        view.viewPager.offscreenPageLimit = 3
-        view.viewPager.adapter = MainViewPagerAdapter(fragments, childFragmentManager, viewLifecycleOwner.lifecycle)
+        ), childFragmentManager, viewLifecycleOwner.lifecycle)
 
         view.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -135,15 +136,5 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         bottomBadgeView = LayoutInflater.from(activity).inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
 
         return bottomBadgeView
-    }
-
-    companion object {
-        fun new(activeTab: Int?) = MainFragment().apply {
-            if (activeTab != null) {
-                arguments = Bundle(1).apply {
-                    putInt(ACTIVE_TAB_KEY, activeTab)
-                }
-            }
-        }
     }
 }

@@ -8,22 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ShareCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.backup.BackupFragment
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
-import io.horizontalsystems.bankwallet.modules.settings.contact.ContactModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
-import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -33,7 +32,7 @@ import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, ManageKeysDialog.Listener {
+class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, ManageKeysDialog.Listener {
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
@@ -178,7 +177,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
-            SwapFragment.start(activity, wallet.coin)
+            findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf("tokenInKey" to wallet.coin), navOptions())
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -186,7 +185,7 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { ManageWalletsModule.start(it) }
+            findNavController().navigate(R.id.mainFragment_to_manageWalletsFragment, null, navOptions())
         })
 
         viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
@@ -226,27 +225,35 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
         })
 
         viewModel.openBackup.observe(viewLifecycleOwner, Observer { (account, coinCodesStringRes) ->
-            activity?.let { BackupFragment.start(it, account, getString(coinCodesStringRes)) }
+            val arguments = Bundle(2).apply {
+                putParcelable(ModuleField.ACCOUNT, account)
+                putString(ModuleField.ACCOUNT_COINS, getString(coinCodesStringRes))
+            }
+
+            findNavController().navigate(R.id.mainFragment_to_backupFragment, arguments, navOptions())
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            activity?.let{
-                RateChartModule.start(it.supportFragmentManager, coin.code, coin.title, coin.coinId)
+            val arguments = Bundle(3).apply {
+                putString(RateChartFragment.COIN_CODE_KEY, coin.code)
+                putString(RateChartFragment.COIN_TITLE_KEY, coin.title)
+                putString(RateChartFragment.COIN_ID_KEY, coin.coinId)
             }
+
+            findNavController().navigate(R.id.mainFragment_to_rateChartFragment, arguments, navOptions())
         })
 
         viewModel.openContactPage.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                ContactModule.start(it)
-            }
+            findNavController().navigate(R.id.mainFragment_to_contactFragment, null, navOptions())
         })
 
         viewModel.setBalanceHidden.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
             setOptionsMenuVisible(hideBalance)
 
             if (animate) {
-                val animator = getValueAnimator(!hideBalance, expandDuration, AccelerateDecelerateInterpolator()
-                ) { progress -> setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, progress) }
+                val animator = getValueAnimator(!hideBalance, expandDuration, AccelerateDecelerateInterpolator()) { progress ->
+                    setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, progress)
+                }
                 animator.start()
             } else {
                 setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, if (hideBalance) 0f else 1f)
@@ -261,13 +268,12 @@ class BalanceFragment : Fragment(), BalanceItemsAdapter.Listener, ReceiveFragmen
                     }
 
                     override fun onClickChangeSource() {
-                        PrivacySettingsModule.start(fragmentActivity)
+                        findNavController().navigate(R.id.mainFragment_to_privacySettingsFragment, null, navOptions())
                     }
 
                     override fun onClickReport() {
                         viewModel.delegate.onReportClick(errorMessage)
                     }
-
                 })
             }
         })

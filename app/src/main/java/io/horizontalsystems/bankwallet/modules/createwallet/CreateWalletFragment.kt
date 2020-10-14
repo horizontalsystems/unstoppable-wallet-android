@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
@@ -17,17 +18,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragme
 import io.horizontalsystems.core.helpers.HudHelper
 
 class CreateWalletFragment : CoinListBaseFragment() {
-
-    companion object {
-        fun instance(predefinedAccountType: PredefinedAccountType?, inApp: Boolean): CreateWalletFragment {
-            return CreateWalletFragment().apply {
-                arguments = Bundle(2).apply {
-                    putParcelable("predefinedAccountType", predefinedAccountType)
-                    putBoolean("inApp", inApp)
-                }
-            }
-        }
-    }
 
     private lateinit var viewModel: CreateWalletViewModel
     private var doneMenuButton: MenuItem? = null
@@ -38,7 +28,7 @@ class CreateWalletFragment : CoinListBaseFragment() {
 
         setHasOptionsMenu(true)
         (activity as? AppCompatActivity)?.let {
-            it.supportActionBar?.title  = getString(R.string.ManageCoins_title)
+            it.supportActionBar?.title = getString(R.string.ManageCoins_title)
         }
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
@@ -68,10 +58,11 @@ class CreateWalletFragment : CoinListBaseFragment() {
                 return true
             }
             android.R.id.home -> {
-                activity?.supportFragmentManager?.popBackStack()
+                findNavController().popBackStack()
                 return true
             }
         }
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -115,14 +106,10 @@ class CreateWalletFragment : CoinListBaseFragment() {
         })
     }
 
-    private fun onBackPress() {
-        hideKeyboard()
-        parentFragmentManager.popBackStack()
-    }
-
     private fun closeWithSuccess() {
         if (inApp) {
-            onBackPress()
+            hideKeyboard()
+            findNavController().popBackStack()
         } else {
             activity?.let {
                 MainModule.start(it)
@@ -130,5 +117,4 @@ class CreateWalletFragment : CoinListBaseFragment() {
             }
         }
     }
-
 }

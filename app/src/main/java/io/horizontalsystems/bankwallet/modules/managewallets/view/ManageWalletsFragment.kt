@@ -7,10 +7,9 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
@@ -18,19 +17,10 @@ import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragment
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
-import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
+import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 
 class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
-
-    companion object {
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, ManageWalletsFragment())
-                addToBackStack(null)
-            }
-        }
-    }
 
     private lateinit var viewModel: ManageWalletsViewModel
 
@@ -69,7 +59,7 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
                 return true
             }
             android.R.id.home -> {
-                activity?.supportFragmentManager?.popBackStack()
+                findNavController().popBackStack()
                 return true
             }
         }
@@ -77,7 +67,7 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
     }
 
     override fun canHandleOnBackPress(): Boolean {
-        activity?.supportFragmentManager?.popBackStack()
+        findNavController().popBackStack()
         return true
     }
 
@@ -109,12 +99,16 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         viewModel.onSelect(coin, derivationSetting)
     }
 
-    //NoAccountDialog.Listener
+    // NoAccountDialog.Listener
 
     override fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {
-        activity?.let {
-            RestoreModule.start(it, true, predefinedAccountType, false)
+        val arguments = Bundle(3).apply {
+            putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+            putBoolean(RestoreFragment.SELECT_COINS_KEY, false)
+            putBoolean(RestoreFragment.IN_APP_KEY, true)
         }
+
+        findNavController().navigate(R.id.manageWalletsFragment_to_restoreFragment, arguments, navOptions())
     }
 
     private fun observe() {
@@ -133,12 +127,9 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         activity?.let {
             AddTokenDialog.show(it, object : AddTokenDialog.Listener {
                 override fun onClickAddErc20Token() {
-                    activity?.let {
-                        AddErc20TokenFragment.start(it)
-                    }
+                    findNavController().navigate(R.id.manageWalletsFragment_to_addErc20Token, null, navOptions())
                 }
             })
         }
     }
-
 }

@@ -1,7 +1,7 @@
 package io.horizontalsystems.pin
 
+import android.os.Bundle
 import android.os.Parcelable
-import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -55,18 +55,22 @@ object PinModule {
         fun didFailToSavePin()
     }
 
-    fun startForSetPin(): PinFragment {
-        return PinFragment.start(PinInteractionType.SET_PIN, true)
+    fun forSetPin(): Bundle {
+        return arguments(PinInteractionType.SET_PIN, true)
     }
 
-    fun startForEditPin(): PinFragment {
-        return PinFragment.start(PinInteractionType.EDIT_PIN, false)
+    fun forEditPin(): Bundle {
+        return arguments(PinInteractionType.EDIT_PIN, false)
     }
 
-    fun startForUnlock(): PinFragment {
-        return PinFragment.start(PinInteractionType.UNLOCK, true)
+    fun forUnlock(): Bundle {
+        return arguments(PinInteractionType.UNLOCK, true)
     }
 
+    private fun arguments(interactionType: PinInteractionType, showCancel: Boolean) = Bundle(2).apply {
+        putParcelable(keyInteractionType, interactionType)
+        putBoolean(keyShowCancel, showCancel)
+    }
 }
 
 sealed class TopText(open val text: Int) {

@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
@@ -95,12 +92,4 @@ object PrivacySettingsModule {
         view.delegate = presenter
         presenter.view = view
     }
-
-    fun start(activity: FragmentActivity) {
-        activity.supportFragmentManager.commit {
-            add(R.id.fragmentContainerView, PrivacySettingsFragment())
-            addToBackStack(null)
-        }
-    }
-
 }

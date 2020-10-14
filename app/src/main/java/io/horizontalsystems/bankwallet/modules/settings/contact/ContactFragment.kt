@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -58,7 +56,7 @@ class ContactFragment : BaseFragment() {
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsContact_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back) {
-                    activity?.supportFragmentManager?.popBackStack()
+                    activity?.onBackPressed()
                 }
         )
 
@@ -95,15 +93,6 @@ class ContactFragment : BaseFragment() {
             startActivity(intent)
         } else {
             presenter.didFailSendMail()
-        }
-    }
-
-    companion object {
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, ContactFragment())
-                addToBackStack(null)
-            }
         }
     }
 }

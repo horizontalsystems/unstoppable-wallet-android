@@ -12,7 +12,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySettingsView, PrivacySettingsModule.IPrivacySettingsRouter {
     lateinit var delegate: PrivacySettingsModule.IPrivacySettingsViewDelegate
 
-    val showPrivacySettingsInfo = MutableLiveData<Unit>()
+    val showPrivacySettingsInfo = SingleLiveEvent<Unit>()
     val torEnabledLiveData = MutableLiveData<Boolean>()
     val blockchainSettingsVisibilityLiveData = MutableLiveData<Boolean>()
     val transactionOrderingLiveData = MutableLiveData<TransactionDataSortingType>()
