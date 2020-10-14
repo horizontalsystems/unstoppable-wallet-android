@@ -164,7 +164,7 @@
             android:id="@+id/balanceWrapper"
             android:layout_width="0dp"
             android:layout_height="34dp"
-            android:paddingBottom="2dp"
+            android:paddingBottom="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/border">
