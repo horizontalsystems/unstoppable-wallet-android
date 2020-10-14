@@ -1,14 +1,18 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.core.CoreActivity
+import io.horizontalsystems.core.hideKeyboard
 import io.horizontalsystems.views.AlertDialogFragment
 
-abstract class BaseActivity : CoreActivity() {
+abstract class BaseActivity : CoreActivity(), NavController.OnDestinationChangedListener {
 
     fun showCustomKeyboardAlert() {
         AlertDialogFragment.newInstance(
@@ -41,5 +45,11 @@ abstract class BaseActivity : CoreActivity() {
 
     protected fun hideSoftKeyboard() {
         getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
+
+    // NavController Listener
+
+    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
+        currentFocus?.hideKeyboard(this)
     }
 }

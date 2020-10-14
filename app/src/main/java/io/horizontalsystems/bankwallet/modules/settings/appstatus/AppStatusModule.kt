@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
@@ -34,13 +31,6 @@ object AppStatusModule {
             val presenter = AppStatusPresenter(view, interactor)
 
             return presenter as T
-        }
-    }
-
-    fun start(activity: FragmentActivity) {
-        activity.supportFragmentManager.commit {
-            add(R.id.fragmentContainerView, AppStatusFragment())
-            addToBackStack(null)
         }
     }
 }

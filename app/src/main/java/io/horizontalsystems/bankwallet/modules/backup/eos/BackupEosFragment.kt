@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_backup_eos.*
 
@@ -25,16 +24,16 @@ class BackupEosFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         shadowlessToolbar.bind(getString(R.string.Backup_DisplayTitle), TopMenuItem(R.drawable.ic_back, onClick = {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         }))
 
         val account = arguments?.getString(ACCOUNT) ?: run {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
             return
         }
 
         val activePrivateKey = arguments?.getString(ACTIVE_PRIVATE_KEY) ?: run {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
             return
         }
 
@@ -49,10 +48,8 @@ class BackupEosFragment : BaseFragment() {
         eosActivePrivateKey.bind { onCopy(privateKey) }
 
         btnClose.setOnClickListener {
-            setFragmentResult(BackupEosModule.requestKey, bundleOf(
-                    BackupEosModule.requestResult to BackupEosModule.RESULT_SHOW
-            ))
-            activity?.supportFragmentManager?.popBackStack()
+            setNavigationResult(BackupEosModule.requestKey, bundleOf(BackupEosModule.requestResult to BackupEosModule.RESULT_SHOW))
+            findNavController().popBackStack()
         }
 
         imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(privateKey, 120F))
@@ -68,19 +65,5 @@ class BackupEosFragment : BaseFragment() {
     companion object {
         const val ACCOUNT = "account"
         const val ACTIVE_PRIVATE_KEY = "active_private_key"
-
-        fun start(activity: FragmentActivity, account: String, activePrivateKey: String) {
-            val fragment = BackupEosFragment().apply {
-                arguments = Bundle(2).apply {
-                    putString(ACCOUNT, account)
-                    putString(ACTIVE_PRIVATE_KEY, activePrivateKey)
-                }
-            }
-
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, fragment)
-                addToBackStack(null)
-            }
-        }
     }
 }

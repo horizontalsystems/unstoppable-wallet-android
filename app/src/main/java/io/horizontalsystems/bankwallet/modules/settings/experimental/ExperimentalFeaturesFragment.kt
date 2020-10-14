@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling.BitcoinHodlingModule
 import kotlinx.android.synthetic.main.fragment_experimental_features.*
 
 class ExperimentalFeaturesFragment : BaseFragment() {
@@ -32,7 +32,7 @@ class ExperimentalFeaturesFragment : BaseFragment() {
         val router = presenter.router as ExperimentalFeaturesRouter
 
         router.showBitcoinHodlingLiveEvent.observe(this, Observer {
-            activity?.let { BitcoinHodlingModule.start(it) }
+            findNavController().navigate(R.id.experimentalFeaturesFragment_to_bitcoinHodlingFragment, null, navOptions())
         })
 
         bitcoinHodling.setOnSingleClickListener {

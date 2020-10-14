@@ -8,6 +8,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -22,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_rate_chart.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
-
 
 class RateChartFragment : BaseFragment(), Chart.Listener {
     private lateinit var presenter: RateChartPresenter
@@ -43,7 +43,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         val coinId = arguments?.getString(COIN_ID_KEY)
 
         val coinCode = arguments?.getString(COIN_CODE_KEY) ?: run {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
             return
         }
 
@@ -90,7 +90,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     }
 
     override fun canHandleOnBackPress(): Boolean {
-        parentFragmentManager.popBackStack()
+        findNavController().popBackStack()
         return true
     }
 
@@ -360,16 +360,5 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         const val COIN_CODE_KEY = "coin_code_key"
         const val COIN_TITLE_KEY = "coin_title_key"
         const val COIN_ID_KEY = "coin_id_key"
-
-        fun instance(coinCode: String, coinTitle: String, coinId: String? = null): RateChartFragment {
-            return RateChartFragment().apply {
-                arguments = Bundle(3).apply {
-                    putString(COIN_CODE_KEY, coinCode)
-                    putString(COIN_TITLE_KEY, coinTitle)
-                    putString(COIN_ID_KEY, coinId)
-                }
-            }
-        }
     }
-
 }

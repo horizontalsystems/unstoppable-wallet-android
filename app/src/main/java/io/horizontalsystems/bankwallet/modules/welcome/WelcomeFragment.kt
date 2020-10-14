@@ -6,19 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
-import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
+import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import kotlinx.android.synthetic.main.fragment_welcome.*
 
-
-class WelcomeFragment : Fragment() {
+class WelcomeFragment : BaseFragment() {
 
     private val viewModel by viewModels<WelcomeViewModel>()
 
@@ -32,11 +30,22 @@ class WelcomeFragment : Fragment() {
         viewModel.init()
 
         viewModel.openRestoreModule.observe(viewLifecycleOwner, Observer {
-            activity?.let { activity -> RestoreModule.start(activity, false) }
+            val arguments = Bundle(3).apply {
+                putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, null)
+                putBoolean(RestoreFragment.SELECT_COINS_KEY, true)
+                putBoolean(RestoreFragment.IN_APP_KEY, false)
+            }
+
+            findNavController().navigate(R.id.welcomeFragment_to_restoreFragment, arguments, navOptions())
         })
 
         viewModel.openCreateWalletModule.observe(viewLifecycleOwner, Observer {
-            activity?.let { activity -> CreateWalletModule.start(activity, false) }
+            val arguments = Bundle(2).apply {
+                putParcelable("predefinedAccountType", null)
+                putBoolean("inApp", false)
+            }
+
+            findNavController().navigate(R.id.welcomeFragment_to_welcomeCreateWalletFragment, arguments, navOptions())
         })
 
         viewModel.appVersionLiveData.observe(viewLifecycleOwner, Observer { appVersion ->
@@ -50,7 +59,7 @@ class WelcomeFragment : Fragment() {
         })
 
         viewModel.openTorPage.observe(viewLifecycleOwner, Observer {
-            activity?.let { activity -> PrivacySettingsModule.start(activity) }
+            findNavController().navigate(R.id.welcomeFragment_to_privacySettingsFragment, null, navOptions())
         })
 
         buttonCreate.setOnSingleClickListener {
@@ -68,11 +77,4 @@ class WelcomeFragment : Fragment() {
         ViewCompat.setTransitionName(walletLogo, "welcome_wallet_logo")
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.shared_image)
     }
-
-    companion object {
-        fun instance(): WelcomeFragment {
-            return WelcomeFragment()
-        }
-    }
-
 }

@@ -2,7 +2,6 @@ package io.horizontalsystems.pin
 
 import android.os.Bundle
 import android.os.Handler
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.pin.core.NumPadItem
 import io.horizontalsystems.pin.core.NumPadItemType
 import io.horizontalsystems.pin.core.NumPadItemsAdapter
@@ -43,6 +43,8 @@ import java.util.concurrent.Executor
 
 class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Listener {
 
+    var attachedToLockScreen = false
+
     private val interactionType: PinInteractionType by lazy {
         arguments?.getParcelable(PinModule.keyInteractionType) ?: PinInteractionType.UNLOCK
     }
@@ -57,11 +59,6 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
     private lateinit var pinPagesAdapter: PinPagesAdapter
     private lateinit var numpadAdapter: NumPadItemsAdapter
     private val executor = Executor { command -> command.run() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.slide_right)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_pin, container, false)
@@ -121,11 +118,18 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
     }
 
     override fun onCancelClick() {
-        setFragmentResult(PinModule.requestKey, bundleOf(
+        val bundle = bundleOf(
                 PinModule.requestType to interactionType,
                 PinModule.requestResult to PinModule.RESULT_CANCELLED
-        ))
-        activity?.supportFragmentManager?.popBackStack()
+        )
+
+        if (attachedToLockScreen) {
+            setFragmentResult(PinModule.requestKey, bundle)
+            return
+        }
+
+        setNavigationResult(PinModule.requestKey, bundle)
+        activity?.onBackPressed()
     }
 
     override fun onItemClick(item: NumPadItem) {
@@ -137,11 +141,18 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
     }
 
     private fun dismissWithSuccess() {
-        setFragmentResult(PinModule.requestKey, bundleOf(
+        val bundle = bundleOf(
                 PinModule.requestType to interactionType,
                 PinModule.requestResult to PinModule.RESULT_OK
-        ))
-        activity?.supportFragmentManager?.popBackStack()
+        )
+
+        if (attachedToLockScreen) {
+            setFragmentResult(PinModule.requestKey, bundle)
+            return
+        }
+
+        setNavigationResult(PinModule.requestKey, bundle)
+        activity?.onBackPressed()
     }
 
     private fun observeData() {
@@ -240,15 +251,6 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         })
 
         biometricPrompt.authenticate(promptInfo)
-    }
-
-    companion object {
-        fun start(interactionType: PinInteractionType, showCancel: Boolean) = PinFragment().apply {
-            arguments = Bundle(2).apply {
-                putParcelable(PinModule.keyInteractionType, interactionType)
-                putBoolean(PinModule.keyShowCancel, showCancel)
-            }
-        }
     }
 }
 

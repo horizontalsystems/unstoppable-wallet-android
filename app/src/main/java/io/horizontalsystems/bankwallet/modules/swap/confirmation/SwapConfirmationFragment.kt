@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -21,6 +20,8 @@ import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
 class SwapConfirmationFragment : BaseFragment() {
 
+    val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
+
     private lateinit var presenter: ConfirmationPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,18 +31,17 @@ class SwapConfirmationFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(SwapViewModel::class.java)
         presenter = viewModel.confirmationPresenter
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
                 leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = {
                     presenter.onCancelConfirmation()
-                    requireActivity().onBackPressed()
+                    findNavController().popBackStack()
                 }),
                 rightBtnItem = TopMenuItem(text = R.string.Button_Cancel, onClick = {
                     presenter.onCancelConfirmation()
-                    requireActivity().onBackPressed()
+                    findNavController().popBackStack()
                 }))
 
         swapButton.setOnSingleClickListener {
@@ -86,20 +86,10 @@ class SwapConfirmationFragment : BaseFragment() {
 
                         if (isEnabled) {
                             isEnabled = false
-                            requireActivity().onBackPressed()
+                            findNavController().popBackStack()
                         }
                     }
                 }
         )
     }
-
-    companion object {
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, SwapConfirmationFragment())
-                addToBackStack(null)
-            }
-        }
-    }
-
 }

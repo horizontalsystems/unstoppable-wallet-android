@@ -21,18 +21,12 @@ class IntroActivity : BaseActivity() {
             exitTransition = fade
         }
 
-        setContentView(R.layout.activity_fragment_container)
-
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragmentContainerView, IntroFragment.instance())
-            commit()
-        }
-
+        setContentView(R.layout.activity_intro)
     }
 
     override fun onBackPressed() {
-        supportFragmentManager.fragments.lastOrNull()?.let{ fragment ->
-            if ((fragment as? BaseFragment)?.canHandleOnBackPress() == true){
+        supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
+            if ((fragment as? BaseFragment)?.canHandleOnBackPress() == true) {
                 return
             }
         }

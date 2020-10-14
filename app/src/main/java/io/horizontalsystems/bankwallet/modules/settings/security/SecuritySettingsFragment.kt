@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.commit
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.TopMenuItem
@@ -32,10 +31,12 @@ class SecuritySettingsFragment : BaseFragment() {
         viewModel.init()
 
         shadowlessToolbar.bind(getString(R.string.Settings_SecurityCenter), TopMenuItem(R.drawable.ic_back, onClick = {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         }))
 
-        changePin.setOnSingleClickListener { viewModel.delegate.didTapEditPin() }
+        changePin.setOnSingleClickListener {
+            viewModel.delegate.didTapEditPin()
+        }
 
         privacy.setOnSingleClickListener {
             viewModel.delegate.didTapPrivacy()
@@ -81,39 +82,26 @@ class SecuritySettingsFragment : BaseFragment() {
         //  Router
 
         viewModel.openEditPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.commit {
-                add(R.id.fragmentContainerView, PinModule.startForEditPin())
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.securitySettingsFragment_to_pinFragment, PinModule.forEditPin(), navOptions())
         })
 
         viewModel.openSetPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.commit {
-                add(R.id.fragmentContainerView, PinModule.startForSetPin())
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.securitySettingsFragment_to_pinFragment, PinModule.forSetPin(), navOptions())
         })
 
         viewModel.openUnlockPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.commit {
-                add(R.id.fragmentContainerView, PinModule.startForUnlock())
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.securitySettingsFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
         })
 
         viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                PrivacySettingsModule.start(it)
-            }
+            findNavController().navigate(R.id.securitySettingsFragment_to_privacySettingsFragment, null, navOptions())
         })
 
         subscribeFragmentResult()
     }
 
     private fun subscribeFragmentResult() {
-        val fragmentActivity = activity ?: return
-
-        fragmentActivity.supportFragmentManager.setFragmentResultListener(PinModule.requestKey, viewLifecycleOwner) { requestKey, bundle ->
+        getNavigationResult(PinModule.requestKey)?.let { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 

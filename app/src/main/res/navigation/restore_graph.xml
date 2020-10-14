@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/restore_graph"
+    app:startDestination="@id/restoreFragment">
+
+    <fragment
+        android:id="@+id/restoreFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.RestoreFragment"
+        tools:layout="@layout/fragment_restore">
+        <action
+            android:id="@+id/restoreFragment_to_restoreWordsFragment"
+            app:destination="@id/restoreWordsFragment" />
+        <action
+            android:id="@+id/restoreFragment_to_restoreEosFragment"
+            app:destination="@id/restoreEosFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/restoreEosFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosFragment"
+        tools:layout="@layout/fragment_restore_eos" />
+    <fragment
+        android:id="@+id/restoreWordsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment"
+        tools:layout="@layout/fragment_restore_words" />
+</navigation>

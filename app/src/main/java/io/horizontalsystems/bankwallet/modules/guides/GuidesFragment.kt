@@ -4,21 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.guideview.GuideFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import kotlinx.android.synthetic.main.fragment_guides.*
-import kotlinx.android.synthetic.main.fragment_guides.recyclerTags
-import kotlinx.android.synthetic.main.fragment_guides.toolbarSpinner
 
-class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listener {
+class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Listener {
 
     private val viewModel by viewModels<GuidesViewModel> { GuidesModule.Factory() }
     private val errorAdapter = ErrorAdapter()
@@ -46,9 +46,8 @@ class GuidesFragment : Fragment(), GuidesAdapter.Listener, FilterAdapter.Listene
     }
 
     override fun onItemClick(guide: Guide) {
-        activity?.let {
-            GuideFragment.start(it, guide.fileUrl)
-        }
+        val arguments = bundleOf(GuideFragment.guideUrlKey to guide.fileUrl)
+        findNavController().navigate(R.id.mainFragment_to_guideFragment, arguments, navOptions())
     }
 
     private fun observeLiveData() {

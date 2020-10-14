@@ -5,17 +5,15 @@ import android.os.Handler
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment
+import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_select_token.*
-
 
 class SelectSwapCoinFragment : BaseWithSearchFragment() {
 
@@ -32,13 +30,13 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.supportActionBar?.title  = getString(R.string.ManageCoins_title)
+            it.supportActionBar?.title = getString(R.string.ManageCoins_title)
         }
 
         val excludedCoin = arguments?.getParcelable<Coin>(EXCLUDED_COIN_KEY)
         val hideZeroBalance = arguments?.getBoolean(HIDE_ZERO_BALANCE_KEY)
-        val selectType = arguments?.getParcelable<SwapFragment.SelectType>(SELECT_TYPE_KEY) ?: run{
-            activity?.supportFragmentManager?.popBackStack()
+        val selectType = arguments?.getParcelable<SwapFragment.SelectType>(SELECT_TYPE_KEY) ?: run {
+            findNavController().popBackStack()
             return
         }
 
@@ -66,7 +64,7 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                activity?.supportFragmentManager?.popBackStack()
+                findNavController().popBackStack()
                 return true
             }
         }
@@ -79,12 +77,12 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
 
     private fun closeWithResult(coin: Coin, selectType: SwapFragment.SelectType) {
         hideKeyboard()
-        setFragmentResult(requestKey, bundleOf(
+        setNavigationResult(requestKey, bundleOf(
                 coinResultKey to coin,
                 selectTypeResultKey to selectType
         ))
         Handler().postDelayed({
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         }, 100)
     }
 
@@ -98,22 +96,12 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
         const val HIDE_ZERO_BALANCE_KEY = "hideZeroBalanceKey"
         const val SELECT_TYPE_KEY = "selectTypeKey"
 
-        fun start(activity: FragmentActivity?, selectType: SwapFragment.SelectType, hideZeroBalance: Boolean, excludedCoin: Coin?) {
-            activity?.supportFragmentManager?.commit {
-                add(R.id.fragmentContainerView, instance(selectType, hideZeroBalance, excludedCoin))
-                addToBackStack(null)
-            }
-        }
-
-        fun instance(selectType: SwapFragment.SelectType,  hideZeroBalance: Boolean, excludedCoin: Coin?): SelectSwapCoinFragment {
-            return SelectSwapCoinFragment().apply {
-                arguments = Bundle(3).apply {
-                    putParcelable(EXCLUDED_COIN_KEY, excludedCoin)
-                    putBoolean(HIDE_ZERO_BALANCE_KEY, hideZeroBalance)
-                    putParcelable(SELECT_TYPE_KEY, selectType)
-                }
+        fun params(selectType: SwapFragment.SelectType, hideZeroBalance: Boolean, excludedCoin: Coin?): Bundle {
+            return Bundle(3).apply {
+                putParcelable(EXCLUDED_COIN_KEY, excludedCoin)
+                putBoolean(HIDE_ZERO_BALANCE_KEY, hideZeroBalance)
+                putParcelable(SELECT_TYPE_KEY, selectType)
             }
         }
     }
-
 }

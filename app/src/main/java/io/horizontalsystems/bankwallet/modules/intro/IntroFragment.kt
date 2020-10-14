@@ -9,7 +9,10 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -40,7 +43,7 @@ class IntroFragment : BaseFragment() {
         } catch (e: Exception) {
         }
 
-        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_knowledge, R.drawable.ic_independence,  R.drawable.ic_privacy)
+        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_knowledge, R.drawable.ic_independence, R.drawable.ic_privacy)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             private var skipButtonVisible = true
 
@@ -84,8 +87,9 @@ class IntroFragment : BaseFragment() {
         }
 
         (presenter.router as? IntroRouter)?.let { router ->
-            router.navigateToWelcomeLiveEvent.observe(this, {
-                activity?.let { activity -> WelcomeModule.start(activity, imageSwitcher) }
+            router.navigateToWelcomeLiveEvent.observe(viewLifecycleOwner, Observer {
+                val extras = FragmentNavigatorExtras(imageSwitcher to "welcome_wallet_logo")
+                findNavController().navigate(R.id.introFragment_to_welcomeFragment, null, null, extras)
             })
         }
     }
@@ -102,11 +106,5 @@ class IntroFragment : BaseFragment() {
     private fun showSkipButton(show: Boolean) {
         TransitionManager.beginDelayedTransition(introLayout)
         btnSkip.isVisible = show
-    }
-
-    companion object {
-        fun instance(): IntroFragment {
-            return IntroFragment()
-        }
     }
 }

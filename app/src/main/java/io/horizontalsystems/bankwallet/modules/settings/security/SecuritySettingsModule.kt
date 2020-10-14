@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object SecuritySettingsModule {
@@ -39,13 +36,6 @@ object SecuritySettingsModule {
         fun showSetPin()
         fun showUnlockPin()
         fun openPrivacySettings()
-    }
-
-    fun start(activity: FragmentActivity) {
-        activity.supportFragmentManager.commit {
-            add(R.id.fragmentContainerView, SecuritySettingsFragment())
-            addToBackStack(null)
-        }
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {

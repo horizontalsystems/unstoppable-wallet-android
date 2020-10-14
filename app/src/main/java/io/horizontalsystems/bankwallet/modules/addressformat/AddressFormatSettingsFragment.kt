@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
@@ -162,11 +163,11 @@ class AddressFormatSettingsFragment : BaseFragment() {
 
     private fun observeRouter(router: AddressFormatSettingsRouter) {
         router.closeWithResultOk.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         })
 
         router.close.observe(viewLifecycleOwner, Observer {
-            activity?.supportFragmentManager?.popBackStack()
+            findNavController().popBackStack()
         })
     }
 }

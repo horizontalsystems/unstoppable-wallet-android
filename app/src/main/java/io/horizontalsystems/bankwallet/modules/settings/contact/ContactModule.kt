@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.contact
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -44,9 +43,5 @@ object ContactModule {
 
             return presenter as T
         }
-    }
-
-    fun start(activity: FragmentActivity) {
-        ContactFragment.start(activity)
     }
 }

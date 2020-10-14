@@ -152,8 +152,12 @@ dependencies {
 
     implementation 'com.atlassian.commonmark:commonmark:0.15.1'
 
-    //ViewPager circle indicator
+    // ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.4'
+
+    // Navigation component
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.0"
 
     api 'com.journeyapps:zxing-android-embedded:4.1.0'
 

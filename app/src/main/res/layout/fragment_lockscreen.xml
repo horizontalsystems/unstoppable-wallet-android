@@ -8,15 +8,15 @@
         android:id="@+id/circleIndicator"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        app:ci_height="4dp"
-        app:ci_margin="4dp"
-        app:ci_width="20dp"
         app:ci_animator="@anim/pager_indicator_animation"
         app:ci_drawable="@drawable/pin_pager_circle_selected"
         app:ci_drawable_unselected="@drawable/pin_pager_circle"
-        app:layout_constraintTop_toTopOf="parent"
+        app:ci_height="4dp"
+        app:ci_margin="4dp"
+        app:ci_width="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"

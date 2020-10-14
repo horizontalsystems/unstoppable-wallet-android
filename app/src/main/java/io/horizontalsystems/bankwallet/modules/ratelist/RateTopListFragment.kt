@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import kotlinx.android.synthetic.main.fragment_rates.*
 
-class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
+class RatesTopListFragment : BaseFragment(), CoinRatesAdapter.Listener {
 
     private lateinit var coinRatesHeaderAdapter: CoinRatesHeaderAdapter
     private lateinit var coinRatesAdapter: CoinRatesAdapter
@@ -72,7 +75,13 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
 
     private fun observeRouter(router: RateListRouter) {
         router.openChartLiveEvent.observe(viewLifecycleOwner, Observer { (coinCode, coinTitle) ->
-            RateChartModule.start(parentFragmentManager, coinCode, coinTitle)
+            val arguments = Bundle(3).apply {
+                putString(RateChartFragment.COIN_CODE_KEY, coinCode)
+                putString(RateChartFragment.COIN_TITLE_KEY, coinTitle)
+                putString(RateChartFragment.COIN_ID_KEY, null)
+            }
+
+            findNavController().navigate(R.id.lockScreenFragment_to_rateChartFragment, arguments, navOptions())
         })
 
         router.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { selected ->

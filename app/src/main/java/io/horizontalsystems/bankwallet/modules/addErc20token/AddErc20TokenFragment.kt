@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -100,19 +99,9 @@ class AddErc20TokenFragment : BaseFragment() {
         model.showSuccess.observe(this, Observer {
             HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success, SnackbarDuration.LONG)
             Handler().postDelayed({
-                activity?.supportFragmentManager?.popBackStack()
+                findNavController().popBackStack()
             }, 1500)
         })
 
     }
-
-    companion object{
-        fun start(activity: FragmentActivity) {
-            activity.supportFragmentManager.commit {
-                add(R.id.fragmentContainerView, AddErc20TokenFragment())
-                addToBackStack(null)
-            }
-        }
-    }
-
 }
