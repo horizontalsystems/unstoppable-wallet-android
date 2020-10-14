@@ -167,7 +167,7 @@
     <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
-    <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogProceed">Next</string>
     <string name="Send_DialogLockTime" translatable="false">TimeLock</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
@@ -228,7 +228,7 @@
 
     <!--Uniswap Info -->
 
-    <string name="UniswapInfo_Title">Uniswap</string>
+    <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">This exchange service is powered by Uniswap, a decentralized token exchange protocol built on Ethereum blockchain.\n\nUniswap is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="UniswapInfo_UniswapRelated">Uniswap Related</string>
     <string name="UniswapInfo_AllowanceTitle">Allowance</string>
@@ -416,7 +416,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order for Tor to work.</string>
     <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
-    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
@@ -460,7 +460,7 @@
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
     <string name="SettingsNotifications_Off">Off</string>
-    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="SettingsNotifications_DeactivateAll">Reset All</string>
     <string name="SettingsNotifications_PushNotification">Push Notification</string>
 
     <string name="Notification_Title">Notifications</string>
@@ -637,10 +637,10 @@
     <string name="Charts_Title">%s Price</string>
     <string name="Charts_Rate_High">%s High</string>
     <string name="Charts_Rate_Low">%s Low</string>
-    <string name="Charts_MarketCap">MCap</string>
-    <string name="Charts_Volume24">Vol (24h)</string>
-    <string name="Charts_inCirculation">In Circ</string>
-    <string name="Charts_TotalSupply">Total</string>
+    <string name="Charts_MarketCap">Market Cap</string>
+    <string name="Charts_Volume24">Volume (24h)</string>
+    <string name="Charts_inCirculation">In Circulation</string>
+    <string name="Charts_TotalSupply">Total Supply</string>
     <string name="Charts_StartDate">Launch Date</string>
     <string name="Charts_Website">Project Website</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
