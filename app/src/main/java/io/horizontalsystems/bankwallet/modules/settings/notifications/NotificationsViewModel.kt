@@ -29,6 +29,7 @@ class NotificationsViewModel(
     val notificationIsOnLiveData = MutableLiveData<Boolean>()
     val openOptionsDialog = SingleLiveEvent<Triple<String, String, NotificationMenuMode>>()
     val controlsVisible = MutableLiveData<Boolean>()
+    val setDeactivateButtonEnabled = MutableLiveData<Boolean>()
 
     init {
         loadAlerts()
@@ -100,6 +101,9 @@ class NotificationsViewModel(
             }
         }
 
+        val deactivateAllButtonEnabled = priceAlerts.any { it.trendState != PriceAlert.TrendState.OFF || it.changeState != PriceAlert.ChangeState.OFF }
+
+        setDeactivateButtonEnabled.postValue(deactivateAllButtonEnabled)
         itemsLiveData.postValue(viewItems)
     }
 
