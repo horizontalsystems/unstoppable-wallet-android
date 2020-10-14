@@ -8,7 +8,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
@@ -18,10 +18,8 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
@@ -109,9 +107,12 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         viewModel.delegate.onTransactionItemClick(item)
     }
 
-    override fun onFilterItemClick(item: FilterAdapter.FilterItem?) {
+    override fun onFilterItemClick(item: FilterAdapter.FilterItem?, itemPosition: Int, itemWidth: Int) {
         recyclerTransactions.layoutManager?.scrollToPosition(0)
         viewModel.delegate.onFilterSelect(item as? Wallet)
+        
+        val leftOffset = recyclerTags.width / 2 - itemWidth / 2
+        (recyclerTags.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(itemPosition, leftOffset)
     }
 
 }
@@ -224,7 +225,7 @@ class ViewHolderEmptyScreen(override val containerView: View) : ViewHolder(conta
 class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderFilter.ClickListener {
 
     interface Listener {
-        fun onFilterItemClick(item: FilterItem?)
+        fun onFilterItemClick(item: FilterItem?, itemPosition: Int, itemWidth: Int)
     }
 
     open class FilterItem(val filterId: String)
@@ -253,9 +254,9 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
         }
     }
 
-    override fun onClickItem(position: Int) {
+    override fun onClickItem(position: Int, width: Int) {
         if (filterChangeable) {
-            listener.onFilterItemClick(filters[position])
+            listener.onFilterItemClick(filters[position], position, width)
             selectedFilterItem = filters[position]
             notifyDataSetChanged()
         }
@@ -265,13 +266,13 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
 class ViewHolderFilter(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
-        fun onClickItem(position: Int)
+        fun onClickItem(position: Int, width: Int)
     }
 
     fun bind(filterId: String?, active: Boolean) {
         buttonFilter.text = filterId
                 ?: containerView.context.getString(R.string.Transactions_FilterAll)
         buttonFilter.isActivated = active
-        buttonFilter.setOnClickListener { l.onClickItem(adapterPosition) }
+        buttonFilter.setOnClickListener { l.onClickItem(bindingAdapterPosition, containerView.width) }
     }
 }
