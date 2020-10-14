@@ -79,17 +79,39 @@
                 tools:itemCount="1"
                 tools:listitem="@layout/view_settings_dropdown" />
 
-            <io.horizontalsystems.views.SettingsView
+            <FrameLayout
                 android:id="@+id/deactivateAll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_marginBottom="32dp"
                 android:layout_marginTop="32dp"
-                app:bottomBorder="true"
-                app:showArrow="false"
+                android:background="@drawable/clickable_background_color_lawrence"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notifications"
-                app:title="@string/SettingsNotifications_DeactivateAll" />
+                app:layout_constraintTop_toBottomOf="@id/notifications">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_gravity="top"
+                    android:background="@color/steel_20"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/deactivateAllText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/red_d"
+                    android:text="@string/SettingsNotifications_DeactivateAll"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/steel_20"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

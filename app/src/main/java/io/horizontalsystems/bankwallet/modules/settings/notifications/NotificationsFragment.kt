@@ -20,6 +20,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.view_holder_notification_coin_name.*
 
+
 class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener {
 
     private val viewModel by viewModels<NotificationsViewModel> { NotificationsModule.Factory() }
@@ -45,8 +46,6 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
         deactivateAll.setOnSingleClickListener {
             viewModel.deactivateAll()
         }
-
-        deactivateAll.setTitleRed()
 
         notificationItemsAdapter = NotificationItemsAdapter(this)
         notifications.adapter = notificationItemsAdapter
@@ -104,6 +103,14 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
         viewModel.openOptionsDialog.observe(viewLifecycleOwner, Observer { (coinName, coinId, mode) ->
             BottomNotificationMenu.show(childFragmentManager, mode, coinName, coinId)
         })
+
+        viewModel.setDeactivateButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            val color = if (enabled) R.color.red_d else R.color.grey_50
+            context?.let { deactivateAllText.setTextColor(it.getColor(color)) }
+
+            deactivateAll.isEnabled = enabled
+        })
+
     }
 }
 
