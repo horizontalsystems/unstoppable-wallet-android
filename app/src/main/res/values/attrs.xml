@@ -17,4 +17,7 @@
     <declare-styleable name="SwapAmountView">
         <attr name="showMax" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="SwapCardView">
+        <attr name="title" format="string" />
+    </declare-styleable>
 </resources>

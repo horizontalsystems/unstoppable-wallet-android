@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
@@ -28,8 +27,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_swap.*
-import kotlinx.android.synthetic.main.fragment_swap.toolbar
+import kotlinx.android.synthetic.main.fragment_swap_new.*
 import java.math.BigDecimal
 
 class SwapFragment : BaseFragment() {
@@ -39,7 +37,7 @@ class SwapFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_swap, container, false)
+        return inflater.inflate(R.layout.fragment_swap_new, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,26 +55,29 @@ class SwapFragment : BaseFragment() {
             findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
         }
 
-        fromAmount.apply {
-            onTokenButtonClick {
+        youPay.apply {
+            onSelectTokenButtonClick {
                 val params = SelectSwapCoinFragment.params(SelectType.FromCoin, true, viewModel.coinReceiving.value)
                 findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, navOptions())
             }
 
-            editText.addTextChangedListener(fromAmountListener)
+            amountEditText.addTextChangedListener(amountSendingListener)
         }
 
-        toAmount.apply {
-            onTokenButtonClick {
+        youGet.apply {
+            onSelectTokenButtonClick {
                 val params = SelectSwapCoinFragment.params(SelectType.ToCoin, false, viewModel.coinSending.value)
                 findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, navOptions())
             }
 
-            editText.addTextChangedListener(toAmountListener)
+            amountEditText.addTextChangedListener(amountReceivingListener)
+        }
+
+        switchButton.setOnClickListener {
+            viewModel.onSwitchClick()
         }
 
         proceedButton.setOnSingleClickListener {
-            // open confirmation module
             viewModel.onProceedClick()
         }
 
@@ -98,6 +99,9 @@ class SwapFragment : BaseFragment() {
             R.id.menuCancel -> {
                 findNavController().popBackStack()
                 return true
+            }
+            R.id.menuInfo -> {
+                findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
             }
         }
         return super.onOptionsItemSelected(item)
@@ -122,103 +126,95 @@ class SwapFragment : BaseFragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.proceedButtonVisible.observe(viewLifecycleOwner, Observer { proceedButtonVisible ->
-            proceedButton.isVisible = proceedButtonVisible
+        viewModel.coinSending.observe(viewLifecycleOwner, { coin ->
+            youPay.setSelectedCoin(coin)
         })
 
-        viewModel.proceedButtonEnabled.observe(viewLifecycleOwner, Observer { proceedButtonEnabled ->
-            proceedButton.isEnabled = proceedButtonEnabled
+        viewModel.coinReceiving.observe(viewLifecycleOwner, { coin ->
+            youGet.setSelectedCoin(coin)
         })
 
-        viewModel.approving.observe(viewLifecycleOwner, Observer { approving ->
-            approvingButton.isVisible = approving
-            approvingProgressBar.isVisible = approving
-        })
-
-        viewModel.approveData.observe(viewLifecycleOwner, Observer { approveData ->
-            connectButton.isVisible = approveData != null
-            connectButton.setOnSingleClickListener {
-                approveData?.let {
-                    findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to it), navOptions())
-                }
-            }
-        })
-
-        viewModel.openConfirmation.observe(viewLifecycleOwner, Observer { requireConfirmation ->
-            if (requireConfirmation) {
-                findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
-            }
-        })
-
-        viewModel.coinSending.observe(viewLifecycleOwner, Observer { coin ->
-            fromAmount.setSelectedCoin(coin?.code)
-        })
-
-        viewModel.coinReceiving.observe(viewLifecycleOwner, Observer { coin ->
-            toAmount.setSelectedCoin(coin?.code)
-        })
-
-        viewModel.amountSending.observe(viewLifecycleOwner, Observer { amount ->
+        viewModel.amountSending.observe(viewLifecycleOwner, { amount ->
             setAmountSendingIfChanged(amount)
         })
 
-        viewModel.amountReceiving.observe(viewLifecycleOwner, Observer { amount ->
+        viewModel.amountReceiving.observe(viewLifecycleOwner, { amount ->
             setAmountReceivingIfChanged(amount)
         })
 
-        viewModel.balance.observe(viewLifecycleOwner, Observer { balance ->
-            availableBalanceValue.text = balance
-        })
-
-        viewModel.amountSendingError.observe(viewLifecycleOwner, Observer { amountSendingError ->
-            fromAmount.setError(amountSendingError)
-        })
-
-        viewModel.amountSendingLabelVisible.observe(viewLifecycleOwner, Observer { isVisible ->
-            fromAmountLabel.isVisible = isVisible
-        })
-
-        viewModel.amountReceivingLabelVisible.observe(viewLifecycleOwner, Observer { isVisible ->
-            toAmountLabel.isVisible = isVisible
-        })
-
-        viewModel.tradeViewItem.observe(viewLifecycleOwner, Observer { tradeViewItem ->
+        viewModel.tradeViewItem.observe(viewLifecycleOwner, { tradeViewItem ->
             setTradeViewItem(tradeViewItem)
         })
 
-        viewModel.tradeViewItemLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            tradeViewItemProgressBar.isVisible = isLoading
+        viewModel.balanceSending.observe(viewLifecycleOwner, { balance ->
+            youPay.setBalance(balance)
         })
 
-        viewModel.feeLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            feeProgressBar.isVisible = isLoading
+        viewModel.balanceReceiving.observe(viewLifecycleOwner, { balance ->
+            youGet.setBalance(balance)
         })
 
-        viewModel.allowance.observe(viewLifecycleOwner, Observer { allowance ->
+        viewModel.allowance.observe(viewLifecycleOwner, { allowance ->
             setAllowance(allowance)
         })
 
-        viewModel.allowanceLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+        viewModel.allowanceLoading.observe(viewLifecycleOwner, { isLoading ->
             setAllowanceLoading(isLoading)
         })
 
-        viewModel.insufficientAllowance.observe(viewLifecycleOwner, Observer { error ->
+        viewModel.insufficientAllowance.observe(viewLifecycleOwner, { error ->
             context?.let {
                 val color = if (error)
                     LayoutHelper.getAttr(R.attr.ColorLucian, it.theme) ?: it.getColor(R.color.red_d)
                 else
                     it.getColor(R.color.grey)
-
                 allowanceValue.setTextColor(color)
             }
         })
 
-        viewModel.error.observe(viewLifecycleOwner, Observer { error ->
+        viewModel.amountSendingError.observe(viewLifecycleOwner, { amountSendingError ->
+            youPay.showBalanceError(amountSendingError != null)
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, { error ->
             commonError.text = error
             commonError.isVisible = error != null
         })
 
-        viewModel.closeWithSuccess.observe(viewLifecycleOwner, Observer {
+        viewModel.amountSendingEstimated.observe(viewLifecycleOwner, { estimated ->
+            youPay.showEstimated(estimated)
+        })
+
+        viewModel.amountReceivingEstimated.observe(viewLifecycleOwner, { estimated ->
+            youGet.showEstimated(estimated)
+        })
+
+        viewModel.proceedButtonEnabled.observe(viewLifecycleOwner, { proceedButtonEnabled ->
+            proceedButton.isEnabled = proceedButtonEnabled
+        })
+
+        viewModel.approveData.observe(viewLifecycleOwner, { approveData ->
+            approveButton.isVisible = approveData != null
+            approveButton.setOnSingleClickListener {
+                approveData?.let {
+                    SwapApproveFragment
+                            .newInstance(it.coin, it.amount, it.spenderAddress)
+                            .show(childFragmentManager, "SwapApproveFragment")
+                }
+            }
+        })
+
+        viewModel.openConfirmation.observe(viewLifecycleOwner, { requireConfirmation ->
+            if (requireConfirmation) {
+                findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
+            }
+        })
+
+        viewModel.loading.observe(viewLifecycleOwner, { isLoading ->
+            progressBar.isVisible = isLoading
+        })
+
+        viewModel.closeWithSuccess.observe(viewLifecycleOwner, {
             HudHelper.showSuccessMessage(requireView(), it, SnackbarDuration.LONG)
             Handler().postDelayed({
                 findNavController().popBackStack()
@@ -228,22 +224,19 @@ class SwapFragment : BaseFragment() {
 
     private fun setAllowance(allowance: String?) {
         allowanceValue.text = allowance
-        val isVisible = allowance != null
-        allowanceTitle.isVisible = isVisible
-        allowanceValue.isVisible = isVisible
+        allowanceGroup.isVisible = allowance != null
     }
 
     private fun setAllowanceLoading(isLoading: Boolean) {
         if (isLoading) {
-            allowanceTitle.isVisible = true
-            allowanceValue.isVisible = true
+            allowanceGroup.isVisible = true
             allowanceValue.text = getString(R.string.Alert_Loading)
             context?.getColor(R.color.grey_50)?.let { allowanceValue.setTextColor(it) }
         }
     }
 
     private fun setTradeViewItem(tradeViewItem: TradeViewItem?) {
-        priceValue.text = tradeViewItem?.price
+        price.text = tradeViewItem?.price
 
         priceImpactValue.text = tradeViewItem?.priceImpact
         context?.let {
@@ -253,31 +246,21 @@ class SwapFragment : BaseFragment() {
         minMaxTitle.text = tradeViewItem?.minMaxTitle
         minMaxValue.text = tradeViewItem?.minMaxAmount
 
-        setTradeViewItemVisibility(visible = tradeViewItem != null)
+        tradeDataGroup.isVisible = tradeViewItem != null
     }
 
-    private fun priceImpactColor(ctx: Context, priceImpactLevel: PriceImpact.Level?): Int {
-        return when (priceImpactLevel) {
-            PriceImpact.Level.Normal -> LayoutHelper.getAttr(R.attr.ColorRemus, ctx.theme)
-                    ?: ctx.getColor(R.color.green_d)
-            PriceImpact.Level.Warning -> LayoutHelper.getAttr(R.attr.ColorJacob, ctx.theme)
-                    ?: ctx.getColor(R.color.yellow_d)
-            PriceImpact.Level.Forbidden -> LayoutHelper.getAttr(R.attr.ColorLucian, ctx.theme)
-                    ?: ctx.getColor(R.color.red_d)
-            else -> ctx.getColor(R.color.grey)
-        }
-    }
+    private fun priceImpactColor(ctx: Context, priceImpactLevel: PriceImpact.Level?) =
+            when (priceImpactLevel) {
+                PriceImpact.Level.Normal -> LayoutHelper.getAttr(R.attr.ColorRemus, ctx.theme)
+                        ?: ctx.getColor(R.color.green_d)
+                PriceImpact.Level.Warning -> LayoutHelper.getAttr(R.attr.ColorJacob, ctx.theme)
+                        ?: ctx.getColor(R.color.yellow_d)
+                PriceImpact.Level.Forbidden -> LayoutHelper.getAttr(R.attr.ColorLucian, ctx.theme)
+                        ?: ctx.getColor(R.color.red_d)
+                else -> ctx.getColor(R.color.grey)
+            }
 
-    private fun setTradeViewItemVisibility(visible: Boolean) {
-        priceTitle.isVisible = visible
-        priceValue.isVisible = visible
-        priceImpactTitle.isVisible = visible
-        priceImpactValue.isVisible = visible
-        minMaxTitle.isVisible = visible
-        minMaxValue.isVisible = visible
-    }
-
-    private val fromAmountListener = object : TextWatcher {
+    private val amountSendingListener = object : TextWatcher {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             viewModel.setAmountSending(s?.toString())
         }
@@ -286,7 +269,7 @@ class SwapFragment : BaseFragment() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
     }
 
-    private val toAmountListener = object : TextWatcher {
+    private val amountReceivingListener = object : TextWatcher {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             viewModel.setAmountReceiving(s?.toString())
         }
@@ -296,22 +279,22 @@ class SwapFragment : BaseFragment() {
     }
 
     private fun setAmountSendingIfChanged(amount: String?) {
-        fromAmount.editText.apply {
+        youPay.amountEditText.apply {
             if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
 
-            removeTextChangedListener(fromAmountListener)
+            removeTextChangedListener(amountSendingListener)
             setText(amount)
-            addTextChangedListener(fromAmountListener)
+            addTextChangedListener(amountSendingListener)
         }
     }
 
     private fun setAmountReceivingIfChanged(amount: String?) {
-        toAmount.editText.apply {
+        youGet.amountEditText.apply {
             if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
 
-            removeTextChangedListener(toAmountListener)
+            removeTextChangedListener(amountReceivingListener)
             setText(amount)
-            addTextChangedListener(toAmountListener)
+            addTextChangedListener(amountReceivingListener)
         }
     }
 

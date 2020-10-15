@@ -76,7 +76,7 @@ class ConfirmationPresenter(
 
     fun confirmationViewItem(): ConfirmationViewItem? {
         val trade = swapService.trade?.dataOrNull ?: return null
-        val coinSending = swapService.coinSending
+        val coinSending = swapService.coinSending ?: return null
         val amountSending = swapService.amountSending ?: return null
         val coinReceiving = swapService.coinReceiving ?: return null
         val amountReceiving = swapService.amountReceiving ?: return null

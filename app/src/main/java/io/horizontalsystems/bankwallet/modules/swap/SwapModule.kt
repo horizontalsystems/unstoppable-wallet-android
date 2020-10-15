@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.EthereumKitNotCreated
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -31,8 +32,8 @@ import java.util.*
 object SwapModule {
 
     interface ISwapService {
-        val coinSending: Coin
-        val coinSendingObservable: Observable<Coin>
+        val coinSending: Coin?
+        val coinSendingObservable: Observable<Optional<Coin>>
 
         val coinReceiving: Coin?
         val coinReceivingObservable: Observable<Optional<Coin>>
@@ -47,7 +48,8 @@ object SwapModule {
         val tradeObservable: Observable<DataState<Trade?>>
 
         val amountType: Observable<AmountType>
-        val balance: Observable<CoinValue>
+        val balanceSending: Observable<Optional<CoinValue>>
+        val balanceReceiving: Observable<Optional<CoinValue>>
         val allowance: Observable<DataState<CoinValue?>>
         val errors: Observable<List<SwapError>>
         val state: Observable<SwapState>
@@ -59,6 +61,7 @@ object SwapModule {
 
         fun enterCoinSending(coin: Coin)
         fun enterCoinReceiving(coin: Coin)
+        fun switchCoins()
         fun enterAmountSending(amount: BigDecimal?)
         fun enterAmountReceiving(amount: BigDecimal?)
         fun proceed()
@@ -100,15 +103,15 @@ object SwapModule {
         object Success : SwapState()
     }
 
-    class Factory(private val coinSending: Coin) : ViewModelProvider.Factory {
+    class Factory(private val coinSending: Coin?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val ethereumKit = App.ethereumKitManager.ethereumKit ?: throw EthereumKitNotCreated()
             val uniswapKit = UniswapKit.getInstance(ethereumKit)
 
             val allowanceProvider = AllowanceProvider(App.adapterManager)
-            val feeRateProvider = FeeRateProviderFactory.provider(coinSending)
-            val uniswapFeeProvider = UniswapFeeProvider(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider!!)
+            val feeRateProvider = EthereumFeeRateProvider(App.feeRateProvider)
+            val uniswapFeeProvider = UniswapFeeProvider(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider)
             val stringProvider = StringProvider(App.instance)
 
             val swapRepository = UniswapRepository(uniswapKit)

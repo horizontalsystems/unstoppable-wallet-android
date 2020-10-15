@@ -29,6 +29,10 @@ object LayoutHelper {
             null
     }
 
+    fun getAttr(attr: Int, theme: Resources.Theme, default: Int): Int {
+        return getAttr(attr, theme) ?: default
+    }
+
     fun d(id: Int, context: Context): Drawable? {
         return ContextCompat.getDrawable(context, id)
     }
