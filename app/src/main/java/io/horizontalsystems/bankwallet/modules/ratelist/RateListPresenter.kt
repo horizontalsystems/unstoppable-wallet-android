@@ -42,10 +42,9 @@ class RateListPresenter(
         val coinCodes = coins.map { it.code }
         interactor.setupXRateManager(coinCodes)
         interactor.subscribeToMarketInfo(currency.code)
-        loadTopList()
     }
 
-    private fun loadTopList() {
+    fun loadTopList() {
         if (!loading) {
             loading = true
             interactor.getTopList()
@@ -74,7 +73,6 @@ class RateListPresenter(
         portfolioMarketInfos.putAll(marketInfos)
 
         syncListsAndShow()
-        loadTopList()
     }
 
     override fun didFetchedTopMarketList(items: List<TopMarket>) {

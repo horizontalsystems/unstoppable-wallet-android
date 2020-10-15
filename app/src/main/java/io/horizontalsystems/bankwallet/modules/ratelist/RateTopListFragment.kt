@@ -18,6 +18,7 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
 
     private lateinit var coinRatesHeaderAdapter: CoinRatesHeaderAdapter
     private lateinit var coinRatesAdapter: CoinRatesAdapter
+    private lateinit var sourceAdapter: SourceAdapter
     private val presenter: RateListPresenter by activityViewModels { RateListModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,17 +28,24 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        coinRatesHeaderAdapter = CoinRatesHeaderAdapter(getString(R.string.RateList_top100), View.OnClickListener {
+        coinRatesHeaderAdapter = CoinRatesHeaderAdapter(true, getString(R.string.RateList_top100), View.OnClickListener {
             presenter.onTopListSortClick()
         })
         coinRatesAdapter = CoinRatesAdapter(this)
 
+        sourceAdapter = SourceAdapter(false)
+
         coinRatesRecyclerView.itemAnimator = null
-        coinRatesRecyclerView.adapter = ConcatAdapter(coinRatesHeaderAdapter, coinRatesAdapter, SourceAdapter())
+        coinRatesRecyclerView.adapter = ConcatAdapter(coinRatesHeaderAdapter, coinRatesAdapter, sourceAdapter)
 
         presenter.viewDidLoad()
         observeView(presenter.view)
         observeRouter(presenter.router)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.loadTopList()
     }
 
     override fun onCoinClicked(coinItem: CoinItem) {
@@ -50,7 +58,15 @@ class RatesTopListFragment : Fragment(), CoinRatesAdapter.Listener {
         })
 
         view.topViewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
-            coinRatesAdapter.submitList(viewItems)
+            if (viewItems.isNotEmpty()) {
+                coinRatesHeaderAdapter.showSpinner = false
+                coinRatesHeaderAdapter.notifyDataSetChanged()
+
+                coinRatesAdapter.submitList(viewItems) {
+                    sourceAdapter.visible = true
+                    sourceAdapter.notifyDataSetChanged()
+                }
+            }
         })
     }
 

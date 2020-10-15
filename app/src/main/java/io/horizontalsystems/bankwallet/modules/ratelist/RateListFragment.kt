@@ -30,7 +30,7 @@ class RatesListFragment : Fragment(), CoinRatesAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        coinRatesHeaderAdapter = CoinRatesHeaderAdapter(getString(R.string.RateList_portfolio))
+        coinRatesHeaderAdapter = CoinRatesHeaderAdapter(false, getString(R.string.RateList_portfolio))
         coinRatesAdapter = CoinRatesAdapter(this)
         cryptoNewsHeaderAdapter = CryptoNewsHeaderAdapter()
         cryptoNewsAdapter = CryptoNewsAdapter()

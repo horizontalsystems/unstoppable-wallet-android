@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.view_holder_date.*
 import kotlinx.android.synthetic.main.view_holder_title.*
 import java.util.*
 
-class CoinRatesHeaderAdapter(private val title: CharSequence, private val sortButtonClickListener: View.OnClickListener? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CoinRatesHeaderAdapter(var showSpinner: Boolean, private val title: CharSequence, private val sortButtonClickListener: View.OnClickListener? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var timestamp = 0L
         set(value) {
@@ -21,12 +21,13 @@ class CoinRatesHeaderAdapter(private val title: CharSequence, private val sortBu
             notifyItemChanged(0)
         }
 
-    override fun getItemCount() = 2
+    override fun getItemCount() = 2 + (if (showSpinner) 1 else 0)
 
     override fun getItemViewType(position: Int): Int {
         return when(position) {
             0 -> DateViewHolder.layout
             1 -> TitleViewHolder.layout
+            2 -> SpinnerViewHolder.layout
             else -> throw IllegalStateException()
         }
     }
@@ -35,6 +36,7 @@ class CoinRatesHeaderAdapter(private val title: CharSequence, private val sortBu
         return when(viewType) {
             DateViewHolder.layout -> DateViewHolder.create(parent)
             TitleViewHolder.layout -> TitleViewHolder.create(parent, sortButtonClickListener)
+            SpinnerViewHolder.layout -> SpinnerViewHolder.create(parent)
             else -> throw IllegalStateException("Undefined viewType: $viewType")
         }
     }
@@ -81,6 +83,15 @@ class CoinRatesHeaderAdapter(private val title: CharSequence, private val sortBu
 
     }
 
+    class SpinnerViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        companion object {
+            const val layout = R.layout.view_holder_spinner
+
+            fun create(parent: ViewGroup) = SpinnerViewHolder(inflate(parent, layout, false))
+        }
+
+    }
 
 }
 

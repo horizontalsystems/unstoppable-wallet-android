@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.inflate
 
-class SourceAdapter : RecyclerView.Adapter<SourceAdapter.ViewHolderSource>() {
+class SourceAdapter(var visible: Boolean = true) : RecyclerView.Adapter<SourceAdapter.ViewHolderSource>() {
 
-    override fun getItemCount() = 1
+    override fun getItemCount() = if(visible) 1 else 0
 
     override fun onBindViewHolder(holder: ViewHolderSource, position: Int) = Unit
 
