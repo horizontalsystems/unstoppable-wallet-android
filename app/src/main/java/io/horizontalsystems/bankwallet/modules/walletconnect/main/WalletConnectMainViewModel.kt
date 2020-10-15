@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
-import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
-import org.apache.commons.io.filefilter.MagicNumberFileFilter
 
 class WalletConnectMainViewModel(private val service: WalletConnectService) : ViewModel() {
 
@@ -22,7 +20,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     val hintLiveData = MutableLiveData<Int?>()
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val openRequestLiveEvent = SingleLiveEvent<Long>()
+    val openRequestLiveEvent = SingleLiveEvent<WalletConnectRequest>()
 
     enum class Status {
         OFFLINE, ONLINE, CONNECTING

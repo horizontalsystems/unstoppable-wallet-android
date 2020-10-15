@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelpe
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.android.synthetic.main.partial_transaction_info.view.*
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarGravity
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.view.*

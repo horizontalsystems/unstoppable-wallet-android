@@ -47,6 +47,9 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 defaultCoins[7]
         )
 
+    override val ethereumCoin: Coin
+        get() = defaultCoins[2]
+
     override val defaultCoins: List<Coin> by lazy {
         listOf(
                 Coin("BTC", "Bitcoin", "BTC", 8, CoinType.Bitcoin),

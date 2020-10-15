@@ -15,8 +15,9 @@ import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectActivity
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.toolbar
 
@@ -106,8 +107,12 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
             requireActivity().finish()
         })
 
-        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner, Observer { id ->
-            (requireActivity() as WalletConnectActivity).showBottomSheetFragment(WalletConnectRequestFragment.newInstance(id))
+        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner, Observer {
+            if (it is WalletConnectSendEthereumTransactionRequest) {
+                baseViewModel.sharedSendEthereumTransactionRequest = it
+
+                (requireActivity() as WalletConnectActivity).showFragment(WalletConnectSendEthereumTransactionRequestFragment.newInstance())
+            }
         })
 
         approveButton.setOnSingleClickListener {

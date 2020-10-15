@@ -295,6 +295,7 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val defaultCoins: List<Coin>
+    val ethereumCoin: Coin
     val derivationSettings: List<DerivationSetting>
     val syncModeSettings: List<SyncModeSetting>
     val communicationSettings: List<CommunicationSetting>

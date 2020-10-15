@@ -27,10 +27,6 @@ class WalletConnectActivity : BaseActivity() {
         }
     }
 
-    fun showBottomSheetFragment(fragment: DialogFragment) {
-        fragment.show(supportFragmentManager, null)
-    }
-
     private fun openScreen(screen: WalletConnectViewModel.InitialScreen) {
         when (screen) {
             WalletConnectViewModel.InitialScreen.NoEthereumKit -> {

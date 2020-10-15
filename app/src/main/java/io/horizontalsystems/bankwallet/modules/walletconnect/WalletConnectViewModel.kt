@@ -9,6 +9,8 @@ class WalletConnectViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
+    var sharedSendEthereumTransactionRequest: WalletConnectSendEthereumTransactionRequest? = null
+
     val initialScreen: InitialScreen
         get() = when {
             !service.isEthereumKitReady -> {
