@@ -31,7 +31,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class UniswapService(
-        coinSending: Coin,
+        coinSending: Coin?,
         private val uniswapRepository: UniswapRepository,
         private val allowanceProvider: AllowanceProvider,
         private val walletManager: IWalletManager,
@@ -60,11 +60,11 @@ class UniswapService(
             }
         }
 
-    override val coinSendingObservable = BehaviorSubject.create<Coin>()
-    override var coinSending: Coin = coinSending
+    override val coinSendingObservable = BehaviorSubject.create<Optional<Coin>>()
+    override var coinSending: Coin? = coinSending
         private set(value) {
             field = value
-            coinSendingObservable.onNext(value)
+            coinSendingObservable.onNext(Optional.ofNullable(value))
         }
 
     override val coinReceivingObservable = BehaviorSubject.create<Optional<Coin>>()
@@ -106,7 +106,8 @@ class UniswapService(
         }
 
     override val amountType = BehaviorSubject.createDefault(AmountType.ExactSending)
-    override val balance = BehaviorSubject.create<CoinValue>()
+    override val balanceSending = BehaviorSubject.create<Optional<CoinValue>>()
+    override val balanceReceiving = BehaviorSubject.create<Optional<CoinValue>>()
     override val allowance = BehaviorSubject.create<DataState<CoinValue?>>()
     override val errors = BehaviorSubject.create<List<SwapError>>()
     override val state = BehaviorSubject.createDefault<SwapState>(SwapState.Idle)
@@ -122,7 +123,7 @@ class UniswapService(
         get() = fee.value?.dataOrNull?.let { Pair(it.coinAmount, it.fiatAmount) }
 
     init {
-        enterCoinSending(coinSending)
+        coinSending?.let { enterCoinSending(it) }
 
         timer.schedule(object : TimerTask() {
             override fun run() {
@@ -135,7 +136,7 @@ class UniswapService(
 
     override fun enterCoinSending(coin: Coin) {
         coinSending = coin
-        balance.onNext(CoinValue(coin, balance(coin)))
+        balanceSending.onNext(Optional.of(CoinValue(coin, balance(coin))))
 
         syncAllowance()
         syncTrade()
@@ -143,7 +144,20 @@ class UniswapService(
 
     override fun enterCoinReceiving(coin: Coin) {
         coinReceiving = coin
+        balanceReceiving.onNext(Optional.of(CoinValue(coin, balance(coin))))
 
+        syncTrade()
+    }
+
+    override fun switchCoins() {
+        val tmp = coinReceiving
+        coinReceiving = coinSending
+        coinSending = tmp
+
+        balanceSending.onNext(Optional.ofNullable(coinSending?.let { CoinValue(it, balance(it)) }))
+        balanceReceiving.onNext(Optional.ofNullable(coinReceiving?.let { CoinValue(it, balance(it)) }))
+
+        syncAllowance()
         syncTrade()
     }
 
@@ -220,9 +234,10 @@ class UniswapService(
             AmountType.ExactReceiving -> amountReceiving
             else -> null
         }
-        val coinReceiving = this.coinReceiving
+        val coinSending = coinSending
+        val coinReceiving = coinReceiving
 
-        if (amountType == null || amount == null || amount.compareTo(BigDecimal.ZERO) == 0 || coinReceiving == null) {
+        if (amountType == null || amount == null || amount.compareTo(BigDecimal.ZERO) == 0 || coinSending == null || coinReceiving == null) {
             tradeData = DataState.Success(null)
             validateState()
             return
@@ -249,27 +264,31 @@ class UniswapService(
     private fun syncAllowance() {
         allowanceDisposable?.dispose()
         allowanceDisposable = null
-
-        if (coinSending.type is CoinType.Erc20) {
-            allowanceDisposable = allowanceProvider.getAllowance(coinSending, uniswapRepository.routerAddress)
-                    .subscribeOn(Schedulers.io())
-                    .doOnSubscribe {
-                        allowance.onNext(DataState.Loading)
-                    }
-                    .doFinally {
-                        validateState()
-                    }
-                    .subscribe({
-                        allowance.onNext(DataState.Success(CoinValue(coinSending, it)))
-                    }, {
-                        allowance.onNext(DataState.Error(it))
-                    })
-        } else {
-            allowance.onNext(DataState.Success(null))
+        val coinSending = coinSending
+        when (coinSending?.type) {
+            is CoinType.Erc20 -> {
+                allowanceDisposable = allowanceProvider.getAllowance(coinSending, uniswapRepository.routerAddress)
+                        .subscribeOn(Schedulers.io())
+                        .doOnSubscribe {
+                            allowance.onNext(DataState.Loading)
+                        }
+                        .doFinally {
+                            validateState()
+                        }
+                        .subscribe({
+                            allowance.onNext(DataState.Success(CoinValue(coinSending, it)))
+                        }, {
+                            allowance.onNext(DataState.Error(it))
+                        })
+            }
+            else -> {
+                allowance.onNext(DataState.Success(null))
+            }
         }
     }
 
     private fun syncFee() {
+        val coinSending = coinSending ?: return
         val coinFee = feeCoinProvider.feeCoinData(coinSending)?.first ?: coinSending
         val tradeData = tradeData.dataOrNull ?: return
 
@@ -294,14 +313,14 @@ class UniswapService(
     @Synchronized
     private fun validateState() {
         val newErrors = mutableListOf<SwapError>()
-        val amountSending = this.amountSending
-        val balance = balance.value?.value
+        val amountSending = amountSending
+        val balanceSending = balanceSending.value?.let { if (it.isPresent) it.get().value else null }
         val allowanceDataState = allowance.value
         val tradeDataState = trade
         val feeDataState = fee.value
 
         // validate balance
-        if (amountSending != null && balance != null && amountSending > balance) {
+        if (amountSending != null && balanceSending != null && amountSending > balanceSending) {
             newErrors.add(SwapError.InsufficientBalance)
         }
 
@@ -328,9 +347,11 @@ class UniswapService(
 
             val maxSendingAmount = if (tradeData != null && tradeData.amountType == AmountType.ExactReceiving)
                 tradeData.minMaxAmount
-            else amountSending
+            else
+                amountSending
 
-            if (maxSendingAmount != null && allowanceData != null && maxSendingAmount > allowanceData.value) {
+            val coinSending = coinSending
+            if (coinSending != null && maxSendingAmount != null && allowanceData != null && maxSendingAmount > allowanceData.value) {
                 val amount = maxSendingAmount.movePointRight(coinSending.decimal).toBigInteger()
                 val allowance = allowanceData.value.movePointRight(coinSending.decimal).toBigInteger()
 
@@ -370,12 +391,15 @@ class UniswapService(
                     feeDataState == DataState.Loading -> {
                         SwapState.FetchingFee
                     }
-                    newErrors.size == 1 && newErrors.first() is SwapError.InsufficientAllowance -> {
-                        val insufficientAllowanceError = newErrors.first { it is SwapError.InsufficientAllowance } as SwapError.InsufficientAllowance
-                        SwapState.ApproveRequired(insufficientAllowanceError.approveData)
-                    }
-                    tradeDataState is DataState.Success && tradeDataState.data != null && newErrors.isEmpty() -> {
-                        SwapState.ProceedAllowed
+                    tradeDataState is DataState.Success && tradeDataState.data != null -> {
+                        if (newErrors.isEmpty()) {
+                            SwapState.ProceedAllowed
+                        } else if (newErrors.size == 1 && newErrors.first() is SwapError.InsufficientAllowance) {
+                            val insufficientAllowanceError = newErrors.first { it is SwapError.InsufficientAllowance } as SwapError.InsufficientAllowance
+                            SwapState.ApproveRequired(insufficientAllowanceError.approveData)
+                        } else {
+                            SwapState.Idle
+                        }
                     }
                     else -> {
                         SwapState.Idle
@@ -426,7 +450,9 @@ class UniswapService(
     }
 
     private fun trade(tradeData: TradeData): Trade? {
-        val coinReceiving = this.coinReceiving ?: return null
+        val coinReceiving = coinReceiving ?: return null
+        val coinSending = coinSending ?: return null
+
         tradeData.apply {
             return Trade(
                     coinSending,

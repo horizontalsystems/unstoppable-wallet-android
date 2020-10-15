@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.math.RoundingMode
 
 class SwapItemFormatter(
@@ -26,7 +27,7 @@ class SwapItemFormatter(
     fun minMaxValue(amount: BigDecimal, coinSending: Coin, coinReceiving: Coin, amountType: AmountType): String {
         return when (amountType) {
             AmountType.ExactSending -> {
-                 coinAmount(amount, coinReceiving)
+                coinAmount(amount, coinReceiving)
             }
             AmountType.ExactReceiving -> {
                 coinAmount(amount, coinSending)
@@ -35,7 +36,7 @@ class SwapItemFormatter(
     }
 
     fun executionPrice(price: BigDecimal, coinSending: Coin, coinReceiving: Coin): String {
-        val inversePrice = if (price == BigDecimal.ZERO)
+        val inversePrice = if (price.unscaledValue() == BigInteger.ZERO)
             BigDecimal.ZERO
         else
             BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)

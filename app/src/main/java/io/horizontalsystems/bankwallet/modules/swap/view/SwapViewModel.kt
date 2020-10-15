@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.math.BigDecimal
 
 class SwapViewModel(
         val confirmationPresenter: ConfirmationPresenter,
@@ -34,10 +33,10 @@ class SwapViewModel(
 
     // region Outputs
     private val _coinSending = MutableLiveData<Coin>()
-    val coinSending: LiveData<Coin> = _coinSending
+    val coinSending: LiveData<Coin?> = _coinSending
 
     private val _coinReceiving = MutableLiveData<Coin>()
-    val coinReceiving: LiveData<Coin> = _coinReceiving
+    val coinReceiving: LiveData<Coin?> = _coinReceiving
 
     private val _allowance = MutableLiveData<String?>()
     val allowance: LiveData<String?> = _allowance
@@ -45,8 +44,11 @@ class SwapViewModel(
     private val _allowanceLoading = MutableLiveData<Boolean>()
     val allowanceLoading: LiveData<Boolean> = _allowanceLoading
 
-    private val _balance = MutableLiveData<String>()
-    val balance: LiveData<String> = _balance
+    private val _balanceSending = MutableLiveData<String?>()
+    val balanceSending: LiveData<String?> = _balanceSending
+
+    private val _balanceReceiving = MutableLiveData<String?>()
+    val balanceReceiving: LiveData<String?> = _balanceReceiving
 
     private val _amountSending = MutableLiveData<String?>()
     val amountSending: LiveData<String?> = _amountSending
@@ -54,17 +56,14 @@ class SwapViewModel(
     private val _amountReceiving = MutableLiveData<String?>()
     val amountReceiving: LiveData<String?> = _amountReceiving
 
-    private val _amountSendingLabelVisible = MutableLiveData<Boolean>()
-    val amountSendingLabelVisible: LiveData<Boolean> = _amountSendingLabelVisible
+    private val _amountSendingEstimated = MutableLiveData<Boolean>()
+    val amountSendingEstimated: LiveData<Boolean> = _amountSendingEstimated
 
-    private val _amountReceivingLabelVisible = MutableLiveData<Boolean>()
-    val amountReceivingLabelVisible: LiveData<Boolean> = _amountReceivingLabelVisible
+    private val _amountReceivingEstimated = MutableLiveData<Boolean>()
+    val amountReceivingEstimated: LiveData<Boolean> = _amountReceivingEstimated
 
     private val _tradeViewItem = MutableLiveData<TradeViewItem?>()
     val tradeViewItem: LiveData<TradeViewItem?> = _tradeViewItem
-
-    private val _tradeViewItemLoading = MutableLiveData<Boolean>()
-    val tradeViewItemLoading: LiveData<Boolean> = _tradeViewItemLoading
 
     private val _insufficientAllowance = MutableLiveData<Boolean>()
     val insufficientAllowance: LiveData<Boolean> = _insufficientAllowance
@@ -75,14 +74,8 @@ class SwapViewModel(
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    private val _approving = MutableLiveData<Boolean>()
-    val approving: LiveData<Boolean> = _approving
-
     private val _approveData = MutableLiveData<SwapModule.ApproveData?>()
     val approveData: LiveData<SwapModule.ApproveData?> = _approveData
-
-    private val _proceedButtonVisible = MutableLiveData<Boolean>()
-    val proceedButtonVisible: LiveData<Boolean> = _proceedButtonVisible
 
     private val _proceedButtonEnabled = MutableLiveData<Boolean>()
     val proceedButtonEnabled: LiveData<Boolean> = _proceedButtonEnabled
@@ -90,18 +83,37 @@ class SwapViewModel(
     private val _openConfirmation = SingleLiveEvent<Boolean>()
     val openConfirmation: LiveData<Boolean> = _openConfirmation
 
-    private val _feeLoading = MutableLiveData<Boolean>()
-    val feeLoading: LiveData<Boolean> = _feeLoading
-
     private val _closeWithSuccess = SingleLiveEvent<Int>()
     val closeWithSuccess: LiveData<Int> = _closeWithSuccess
+
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+    private var feeLoading = false
+        set(value) {
+            field = value
+            updateLoading()
+        }
+
+    private var approving = false
+        set(value) {
+            field = value
+            updateLoading()
+        }
+
+    private var tradeItemLoading = false
+        set(value) {
+            field = value
+            updateLoading()
+        }
+
     // endregion
 
     init {
         swapService.coinSendingObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    _coinSending.postValue(it)
+                    _coinSending.postValue(it.orElse(null))
                 }
                 .let { disposables.add(it) }
 
@@ -112,10 +124,19 @@ class SwapViewModel(
                 }
                 .let { disposables.add(it) }
 
-        swapService.balance
+        swapService.balanceSending
                 .subscribeOn(Schedulers.io())
-                .subscribe {
-                    _balance.postValue(formatter.coinAmount(it.value, it.coin))
+                .subscribe { optionalBalance ->
+                    val balance = if (optionalBalance.isPresent) optionalBalance.get() else null
+                    _balanceSending.postValue(balance?.let { formatter.coinAmount(it.value, it.coin) })
+                }
+                .let { disposables.add(it) }
+
+        swapService.balanceReceiving
+                .subscribeOn(Schedulers.io())
+                .subscribe { optionalBalance ->
+                    val balance = if (optionalBalance.isPresent) optionalBalance.get() else null
+                    _balanceReceiving.postValue(balance?.let { formatter.coinAmount(it.value, it.coin) })
                 }
                 .let { disposables.add(it) }
 
@@ -148,10 +169,10 @@ class SwapViewModel(
         swapService.tradeObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe { dataState ->
-                    if (dataState is DataState.Success) {
-                        _tradeViewItem.postValue(dataState.data?.let { tradeViewItem(it) })
+                    if (dataState is DataState.Success || dataState is DataState.Error) {
+                        _tradeViewItem.postValue(dataState.dataOrNull?.let { tradeViewItem(it) })
                     }
-                    _tradeViewItemLoading.postValue(dataState is DataState.Loading)
+                    tradeItemLoading = dataState is DataState.Loading
                 }
                 .let { disposables.add(it) }
 
@@ -171,18 +192,17 @@ class SwapViewModel(
         swapService.amountType
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    _amountSendingLabelVisible.postValue(it == AmountType.ExactReceiving)
-                    _amountReceivingLabelVisible.postValue(it == AmountType.ExactSending)
+                    _amountSendingEstimated.postValue(it == AmountType.ExactReceiving)
+                    _amountReceivingEstimated.postValue(it == AmountType.ExactSending)
                 }
                 .let { disposables.add(it) }
 
         swapService.state
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    _approving.postValue(it is SwapState.WaitingForApprove)
+                    approving = it is SwapState.WaitingForApprove
                     _approveData.postValue((it as? SwapState.ApproveRequired)?.data)
 
-                    _proceedButtonVisible.postValue(it !is SwapState.ApproveRequired && it !is SwapState.WaitingForApprove)
                     _proceedButtonEnabled.postValue(it == SwapState.ProceedAllowed)
 
                     _openConfirmation.postValue(it == SwapState.SwapAllowed)
@@ -196,7 +216,7 @@ class SwapViewModel(
         swapService.fee
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    _feeLoading.postValue(it == DataState.Loading)
+                    feeLoading = it == DataState.Loading
                 }
                 .let { disposables.add(it) }
     }
@@ -226,6 +246,10 @@ class SwapViewModel(
         swapService.approved()
     }
 
+    fun onSwitchClick() {
+        swapService.switchCoins()
+    }
+
     // endregion
 
     override fun onCleared() {
@@ -234,6 +258,11 @@ class SwapViewModel(
         clearables.forEach {
             it.clear()
         }
+    }
+
+    @Synchronized
+    private fun updateLoading() {
+        _loading.postValue(feeLoading || approving || tradeItemLoading)
     }
 
     private fun tradeViewItem(trade: Trade): TradeViewItem {

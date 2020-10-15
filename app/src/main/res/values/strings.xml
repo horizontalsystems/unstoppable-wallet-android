@@ -212,13 +212,13 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">ESTIMATED</string>
     <string name="Swap_MaxButtonTitle">Max</string>
-    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_TokenSelectorTitle">Select Token</string>
     <string name="Swap_Balance">Balance</string>
     <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Price</string>
     <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_MinimumReceived">Minimum Got</string>
-    <string name="Swap_MaximumSold">Maximum Paid</string>
+    <string name="Swap_MinimumReceived">Guaranteed Amount</string>
+    <string name="Swap_MaximumSold">Maximum Spend</string>
     <string name="Swap_SwapFee">Swap Fee</string>
     <string name="Swap_TransactionSpeed">Transaction Speed</string>
     <string name="Swap_TransactionFee">Transaction Fee</string>
@@ -232,6 +232,7 @@
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_AdvancedSettings">Advanced Settings</string>
 
     <string name="Swap_Confirmation">Confirmation</string>
     <string name="Swap_Confirmation_Pay">Pay %s</string>
