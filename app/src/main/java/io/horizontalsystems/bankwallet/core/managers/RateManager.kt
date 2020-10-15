@@ -4,6 +4,7 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.IRateCoinMapper
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
@@ -18,7 +19,8 @@ class RateManager(
         context: Context,
         walletManager: IWalletManager,
         private val currencyManager: ICurrencyManager,
-        private val rateCoinMapper: IRateCoinMapper) : IRateManager {
+        private val rateCoinMapper: IRateCoinMapper,
+        private val feeCoinProvider: FeeCoinProvider) : IRateManager {
 
     private val disposables = CompositeDisposable()
     private val coinMarketCapApiKey = "f33ccd44-6545-4cbb-991c-4584b9501251"
@@ -120,7 +122,11 @@ class RateManager(
     }
 
     private fun onWalletsUpdated(wallets: List<Wallet>) {
-        kit.set(wallets.mapNotNull { rateCoinMapper.convert(it.coin.code) })
+        val feeCoinCodes = wallets.mapNotNull { feeCoinProvider.feeCoinData(it.coin)?.first?.code }
+        val coinCodes = wallets.map { it.coin.code }
+        val uniqueCodes = (feeCoinCodes + coinCodes).distinct()
+        val convertedCoinCodes = uniqueCodes.mapNotNull{ rateCoinMapper.convert(it) }
+        kit.set(convertedCoinCodes)
     }
 
     private fun onBaseCurrencyUpdated() {
