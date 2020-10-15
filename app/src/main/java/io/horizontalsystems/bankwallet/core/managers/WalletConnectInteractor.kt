@@ -19,7 +19,6 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
         fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta)
         fun didKillSession()
         fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction)
-        fun didRequestSignEthTransaction(id: Long, transaction: WCEthereumTransaction)
     }
 
     constructor(uri: String) : this(WCSession.from(uri) ?: throw SessionError.InvalidUri)
@@ -30,6 +29,12 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
     val client = WCClient(GsonBuilder(), OkHttpClient.Builder().build())
 
     init {
+        client.addSocketListener(object : WebSocketListener() {
+            override fun onOpen(webSocket: WebSocket, response: Response) {
+                delegate?.didConnect()
+            }
+        })
+
         client.onSessionRequest = { id: Long, peer: WCPeerMeta ->
             client.remotePeerId?.let { delegate?.didRequestSession(it, peer) }
         }
@@ -40,19 +45,26 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
             }
         }
 
-        client.addSocketListener(object : WebSocketListener() {
-            override fun onOpen(webSocket: WebSocket, response: Response) {
-                delegate?.didConnect()
-            }
-        })
+        client.onFailure = { Unit }
+
+        client.onDisconnect = { code: Int, reason: String -> Unit }
 
         client.onEthSendTransaction = { id: Long, transaction: WCEthereumTransaction ->
             delegate?.didRequestSendEthTransaction(id, transaction)
         }
 
-        client.onEthSignTransaction = { id: Long, transaction: WCEthereumTransaction ->
-            delegate?.didRequestSignEthTransaction(id, transaction)
+        client.onEthSignTransaction = { id, _ ->
+            rejectWithNotSupported(id)
         }
+
+        client.onEthSign = { id, _ -> rejectWithNotSupported(id) }
+        client.onCustomRequest = { id, _ -> rejectWithNotSupported(id) }
+        client.onBnbTrade = { id, _ -> rejectWithNotSupported(id) }
+        client.onBnbCancel = { id, _ -> rejectWithNotSupported(id) }
+        client.onBnbTransfer = { id, _ -> rejectWithNotSupported(id) }
+        client.onBnbTxConfirm = { id, _ -> rejectWithNotSupported(id) }
+        client.onGetAccounts = { id -> rejectWithNotSupported(id) }
+        client.onSignTransaction = { id, _ -> rejectWithNotSupported(id) }
     }
 
     fun connect(remotePeerId: String?) {
@@ -82,6 +94,10 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
 
     fun rejectRequest(id: Long, message: String) {
         client.rejectRequest(id, message)
+    }
+
+    private fun rejectWithNotSupported(id: Long) {
+        client.rejectRequest(id, "Not supported")
     }
 
     sealed class SessionError : Error() {

@@ -22,6 +22,8 @@ class WalletConnectService(
         object Completed : State()
     }
 
+    data class PeerData(val peerId: String, val peerMeta: WCPeerMeta)
+
     private val ethereumKit: EthereumKit? = ethKitManager.ethereumKit
     private var interactor: WalletConnectInteractor? = null
     private var remotePeerData: PeerData? = null
@@ -35,12 +37,12 @@ class WalletConnectService(
         }
 
     val stateSubject = PublishSubject.create<State>()
-    val requestSubject = PublishSubject.create<Long>()
+    val requestSubject = PublishSubject.create<WalletConnectRequest>()
 
     val isEthereumKitReady: Boolean
         get() = ethereumKit != null
 
-    private val pendingRequests = mutableMapOf<Long, Request>()
+    private val pendingRequests = mutableMapOf<Long, WalletConnectRequest>()
 
     init {
         val sessionStoreItem = sessionStore.storedItem
@@ -98,10 +100,6 @@ class WalletConnectService(
         interactor?.killSession()
     }
 
-    fun getRequest(requestId: Long) : Request? {
-        return pendingRequests[requestId]
-    }
-
     fun approveRequest(requestId: Long) {
         TODO("Not yet implemented")
     }
@@ -131,25 +129,19 @@ class WalletConnectService(
     }
 
     override fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction) {
-        didRequest(Request(id, Request.Type.SendEthereumTransaction(transaction)))
-    }
-
-    override fun didRequestSignEthTransaction(id: Long, transaction: WCEthereumTransaction) {
-        didRequest(Request(id, Request.Type.SignEthereumTransaction(transaction)))
-    }
-
-    private fun didRequest(request: Request) {
-        pendingRequests[request.id] = request
-        requestSubject.onNext(request.id)
-    }
-
-    data class PeerData(val peerId: String, val peerMeta: WCPeerMeta)
-
-    data class Request(val id: Long, val type: Type) {
-        sealed class Type {
-            data class SendEthereumTransaction(val transaction: WCEthereumTransaction) : Type()
-            data class SignEthereumTransaction(val transaction: WCEthereumTransaction) : Type()
+        handleRequest(id) {
+            WalletConnectSendEthereumTransactionRequest(id, transaction)
         }
     }
 
+    private fun handleRequest(id: Long, requestResolver: () -> WalletConnectRequest) {
+        try {
+            val request = requestResolver()
+
+            pendingRequests[request.id] = request
+            requestSubject.onNext(request)
+        } catch (t: Throwable) {
+            interactor?.rejectRequest(id, t.message ?: "")
+        }
+    }
 }
