@@ -162,13 +162,13 @@ class App : CoreApp() {
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
 
         rateCoinMapper = RateCoinMapper()
-        xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper)
+        feeCoinProvider = FeeCoinProvider(appConfigProvider)
+        xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper, feeCoinProvider)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode.testMode, appConfigProvider.etherscanApiKey, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
-        feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
         notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
             backgroundManager.registerListener(this)
