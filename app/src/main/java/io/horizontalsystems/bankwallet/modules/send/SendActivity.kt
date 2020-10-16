@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFrag
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.activity_send.toolbar
 
@@ -78,7 +79,7 @@ class SendActivity : BaseActivity() {
 
     private fun subscribeToRouterEvents(router: SendRouter) {
         router.closeWithSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Send_Success, HudHelper.SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Send_Success, SnackbarDuration.LONG)
 
             //Delay 1200 millis to properly show message
             Handler().postDelayed({ finish() }, 1200)

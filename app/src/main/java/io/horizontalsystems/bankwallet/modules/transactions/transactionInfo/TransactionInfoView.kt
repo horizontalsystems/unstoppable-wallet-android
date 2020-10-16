@@ -17,6 +17,8 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelpe
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.CustomSnackbar
+import io.horizontalsystems.snackbar.SnackbarGravity
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.view.*
 
 class TransactionInfoView : ConstraintLayoutWithHeader {
@@ -28,7 +30,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
     interface Listener {
         fun openTransactionInfo()
         fun closeTransactionInfo()
-        fun onShowInfoMessage(snackbar: Snackbar? = null)
+        fun onShowInfoMessage(snackbar: CustomSnackbar? = null)
         fun showFragmentInTopContainerView(fragment: Fragment)
     }
 
@@ -58,7 +60,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         rvDetails.adapter = transactionDetailsAdapter
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, {
-            val snackbar = HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
+            val snackbar = HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied, gravity = SnackbarGravity.TOP_OF_VIEW)
             listener?.onShowInfoMessage(snackbar)
         })
 

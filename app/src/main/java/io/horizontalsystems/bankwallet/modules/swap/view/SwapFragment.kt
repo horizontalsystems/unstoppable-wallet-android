@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmatio
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_swap.*
@@ -230,7 +231,7 @@ class SwapFragment : BaseFragment() {
         })
 
         viewModel.closeWithSuccess.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(requireView(), it, HudHelper.SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(requireView(), it, SnackbarDuration.LONG)
             Handler().postDelayed({ activity?.supportFragmentManager?.popBackStack(TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE) }, 1200)
         })
     }

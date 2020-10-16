@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
+import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_backup.*
 
 class BackupFragment : BaseFragment() {
@@ -77,7 +78,7 @@ class BackupFragment : BaseFragment() {
 
         viewModel.showSuccessAndFinishEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
-                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Done, HudHelper.SnackbarDuration.LONG)
+                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Done, SnackbarDuration.LONG)
                 it.supportFragmentManager.popBackStack()
             }
         })
