@@ -264,7 +264,6 @@ class PrivacySettingsFragment : BaseFragment() {
     private fun getCommunicationModeInfo(communicationMode: CommunicationMode): Pair<String, String> {
         return when (communicationMode) {
             CommunicationMode.Infura -> Pair(communicationMode.title, "infura.io")
-            CommunicationMode.Incubed -> Pair(communicationMode.title, "slock.it")
             else -> throw Exception("Unsupported syncMode: $communicationMode")
         }
     }

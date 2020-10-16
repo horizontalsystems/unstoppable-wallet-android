@@ -26,11 +26,7 @@ class PrivacySettingsPresenter(
 
     private fun getCommunicationSettingsViewItem(coin: Coin): PrivacySettingsViewItem? {
         return when (coin.type) {
-            is CoinType.Ethereum -> {
-                interactor.communicationSetting(coin.type)?.communicationMode?.let { communicationMode ->
-                    PrivacySettingsViewItem(coin, Communication(communicationMode), !interactor.isTorEnabled)
-                }
-            }
+            is CoinType.Ethereum -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.Infura), enabled = false)
             is CoinType.Eos -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.Greymass), enabled = false)
             is CoinType.Binance -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.BinanceDex), enabled = false)
             else -> null
@@ -49,7 +45,7 @@ class PrivacySettingsPresenter(
                 PrivacySettingsViewItem(coin, WalletRestore(syncMode ?: SyncMode.Slow), enabled)
             }
 
-    private val communicationModeOptions = listOf(CommunicationMode.Infura, CommunicationMode.Incubed)
+    private val communicationModeOptions = listOf(CommunicationMode.Infura)
     private val syncModeOptions = listOf(SyncMode.Fast, SyncMode.Slow)
 
     override fun viewDidLoad() {
