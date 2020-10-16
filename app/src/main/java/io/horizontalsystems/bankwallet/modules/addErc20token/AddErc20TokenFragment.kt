@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_add_erc20_token.*
 
 class AddErc20TokenFragment : BaseFragment() {
@@ -97,7 +98,7 @@ class AddErc20TokenFragment : BaseFragment() {
         })
 
         model.showSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success, HudHelper.SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success, SnackbarDuration.LONG)
             Handler().postDelayed({
                 activity?.supportFragmentManager?.popBackStack()
             }, 1500)

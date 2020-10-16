@@ -22,13 +22,14 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
+import io.horizontalsystems.snackbar.CustomSnackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
     private var txInfoViewModel: TransactionInfoViewModel? = null
     private var txInfoBottomSheetBehavior: BottomSheetBehavior<View>? = null
-    private var messageInfoSnackbar: Snackbar? = null
+    private var messageInfoSnackbar: CustomSnackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(null) // null prevents fragments restoration on theme switch
@@ -109,7 +110,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
         txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    override fun onShowInfoMessage(snackbar: Snackbar?) {
+    override fun onShowInfoMessage(snackbar: CustomSnackbar?) {
         this.messageInfoSnackbar = snackbar
     }
 

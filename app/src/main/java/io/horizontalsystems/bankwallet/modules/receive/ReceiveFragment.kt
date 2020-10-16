@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragme
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.SnackbarGravity
 import kotlinx.android.synthetic.main.view_bottom_sheet_receive.*
 
 class ReceiveFragment: BaseBottomSheetDialogFragment() {
@@ -71,13 +72,13 @@ class ReceiveFragment: BaseBottomSheetDialogFragment() {
 
         view.showError.observe(viewLifecycleOwner, Observer { error ->
             error?.let {
-                HudHelper.showErrorMessage(this.requireView(), it, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
+                HudHelper.showErrorMessage(this.requireView(), it, gravity = SnackbarGravity.TOP_OF_VIEW)
             }
             dismiss()
         })
 
         view.showCopied.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied, gravity = HudHelper.SnackbarGravity.TOP_OF_VIEW)
+            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied, gravity = SnackbarGravity.TOP_OF_VIEW)
         })
     }
 
