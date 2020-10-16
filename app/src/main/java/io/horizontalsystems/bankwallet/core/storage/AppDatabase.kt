@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 21, exportSchema = false, entities = [
+@Database(version = 22, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -64,7 +64,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addCoinRecordTable,
                             removeRateStorageTable,
                             addNotificationTables,
-                            addLogsTable
+                            addLogsTable,
+                            updateEthereumCommunicationMode
                     )
                     .build()
         }
@@ -405,6 +406,16 @@ abstract class AppDatabase : RoomDatabase() {
         private val addLogsTable: Migration = object : Migration(20, 21) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `LogEntry` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` INTEGER NOT NULL, `level` INTEGER NOT NULL, `actionId` TEXT NOT NULL, `message` TEXT NOT NULL)")
+            }
+        }
+
+        private val updateEthereumCommunicationMode: Migration = object : Migration(21, 22) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    UPDATE BlockchainSetting 
+                    SET value = '${CommunicationMode.Infura.value}' 
+                    WHERE coinType = 'ethereum' AND `key` = 'communication' AND value = '${CommunicationMode.Incubed.value}';
+                    """.trimIndent())
             }
         }
 
