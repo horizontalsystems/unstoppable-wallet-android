@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
@@ -35,9 +35,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
     }
 
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(viewModel: TransactionInfoViewModel, lifecycleOwner: LifecycleOwner, listener: Listener) {
@@ -59,12 +57,12 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         val transactionDetailsAdapter = TransactionDetailsAdapter(viewModel)
         rvDetails.adapter = transactionDetailsAdapter
 
-        viewModel.showCopiedLiveEvent.observe(lifecycleOwner, {
+        viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
             val snackbar = HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied, gravity = SnackbarGravity.TOP_OF_VIEW)
             listener?.onShowInfoMessage(snackbar)
         })
 
-        viewModel.showShareLiveEvent.observe(lifecycleOwner, { url ->
+        viewModel.showShareLiveEvent.observe(lifecycleOwner, Observer { url ->
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, url)
@@ -74,11 +72,11 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
         })
 
 
-        viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, { (txHash, wallet) ->
+        viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, Observer { (txHash, wallet) ->
             listener?.showFragmentInTopContainerView(FullTransactionInfoFragment.instance(txHash, wallet))
         })
 
-        viewModel.showLockInfo.observe(lifecycleOwner, { lockDate ->
+        viewModel.showLockInfo.observe(lifecycleOwner, Observer { lockDate ->
             val title = context.getString(R.string.Info_LockTime_Title)
             val description = context.getString(R.string.Info_LockTime_Description, DateHelper.getFullDate(lockDate))
             val infoParameters = InfoParameters(title, description)
@@ -86,7 +84,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             listener?.showFragmentInTopContainerView(InfoFragment.instance(infoParameters))
         })
 
-        viewModel.showDoubleSpendInfo.observe(lifecycleOwner, { (txHash, conflictingTxHash) ->
+        viewModel.showDoubleSpendInfo.observe(lifecycleOwner, Observer { (txHash, conflictingTxHash) ->
             val title = context.getString(R.string.Info_DoubleSpend_Title)
             val description = context.getString(R.string.Info_DoubleSpend_Description)
             val infoParameters = InfoParameters(title, description, txHash, conflictingTxHash)
@@ -94,7 +92,7 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             listener?.showFragmentInTopContainerView(InfoFragment.instance(infoParameters))
         })
 
-        viewModel.titleLiveData.observe(lifecycleOwner, { titleViewItem ->
+        viewModel.titleLiveData.observe(lifecycleOwner, Observer { titleViewItem ->
             val title = if (titleViewItem.type == TransactionType.Approve) R.string.TransactionInfo_Approval else R.string.TransactionInfo_Transaction
             setTitle(context.getString(title))
             setSubtitle(titleViewItem.date?.let { DateHelper.getFullDate(it) })
@@ -116,10 +114,9 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             }
         })
 
-        viewModel.detailsLiveData.observe(lifecycleOwner, {
+        viewModel.detailsLiveData.observe(lifecycleOwner, Observer {
             transactionDetailsAdapter.setItems(it)
             listener?.openTransactionInfo()
         })
     }
-
 }

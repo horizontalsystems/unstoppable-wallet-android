@@ -8,6 +8,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -69,30 +70,27 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
-        viewModel.filterItems.observe(viewLifecycleOwner, { filters ->
-            filters?.let {
-                filterAdapter.setFilters(it)
-            }
+        viewModel.filterItems.observe(viewLifecycleOwner, Observer { filters ->
+            filterAdapter.setFilters(filters)
         })
 
-        viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, { transactionViewItem ->
+        viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, Observer { transactionViewItem ->
             activity?.let {
                 TransactionInfoModule.start(it, transactionViewItem.record, transactionViewItem.wallet)
             }
         })
 
-        viewModel.items.observe(viewLifecycleOwner, {
+        viewModel.items.observe(viewLifecycleOwner, Observer {
             transactionsAdapter.submitList(it)
         })
 
-        viewModel.reloadTransactions.observe(viewLifecycleOwner, {
+        viewModel.reloadTransactions.observe(viewLifecycleOwner, Observer {
             transactionsAdapter.notifyDataSetChanged()
         })
 
-        viewModel.showSyncing.observe(viewLifecycleOwner, { show ->
+        viewModel.showSyncing.observe(viewLifecycleOwner, Observer { show ->
             toolbarSpinner.isInvisible = !show
         })
-
     }
 
     override fun onDestroyView() {
