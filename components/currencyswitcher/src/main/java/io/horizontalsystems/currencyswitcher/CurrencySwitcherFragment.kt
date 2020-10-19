@@ -28,11 +28,6 @@ class CurrencySwitcherFragment : Fragment(), CurrencySwitcherAdapter.Listener {
     private lateinit var presenterRouter: CurrencySwitcherRouter
     private var adapter: CurrencySwitcherAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.slide_right)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_currency_switcher, container, false)
     }
