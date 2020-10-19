@@ -19,7 +19,8 @@
 
         <TextView
             android:id="@+id/snackbarText"
-            style="@style/Subhead2"
+            style="@style/Subhead1"
+            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
