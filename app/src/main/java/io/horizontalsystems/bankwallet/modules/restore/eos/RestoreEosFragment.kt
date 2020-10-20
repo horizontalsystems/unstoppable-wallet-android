@@ -119,7 +119,7 @@ class RestoreEosFragment : BaseFragment() {
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
-            hideKeyboard()
+            //hideKeyboard()
             val error = when(it){
                 is EosAdapter.EosError.InvalidAccountName -> R.string.Restore_EosAccountIncorrect
                 is InvalidPrivateKey -> R.string.Restore_EosKeyIncorrect

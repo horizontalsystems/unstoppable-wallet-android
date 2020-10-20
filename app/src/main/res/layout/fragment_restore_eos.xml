@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
     android:clickable="true">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="0dp"
+        android:paddingEnd="4dp"
+        app:title="@string/Restore_Enter_Key_Title" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginTop="?attr/actionBarSize">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,34 +51,4 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height_tall"
-        android:background="@color/transparent"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:collapsedTitleTextAppearance="@style/Title3"
-            app:expandedTitleMarginBottom="16dp"
-            app:expandedTitleMarginStart="16dp"
-            app:expandedTitleTextAppearance="@style/Title2"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:paddingStart="0dp"
-                android:paddingEnd="4dp"
-                app:layout_collapseMode="pin"
-                app:title="@string/Restore_Enter_Key_Title" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>
