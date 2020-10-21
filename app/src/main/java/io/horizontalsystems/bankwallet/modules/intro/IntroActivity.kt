@@ -5,7 +5,6 @@ import android.transition.Fade
 import android.view.Window
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.core.BaseFragment
 
 class IntroActivity : BaseActivity() {
 
@@ -24,12 +23,4 @@ class IntroActivity : BaseActivity() {
         setContentView(R.layout.activity_intro)
     }
 
-    override fun onBackPressed() {
-        supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
-            if ((fragment as? BaseFragment)?.canHandleOnBackPress() == true) {
-                return
-            }
-        }
-        super.onBackPressed()
-    }
 }

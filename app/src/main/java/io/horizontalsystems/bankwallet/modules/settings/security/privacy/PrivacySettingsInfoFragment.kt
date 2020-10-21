@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.navigateUp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.views.TopMenuItem
-import kotlinx.android.synthetic.main.fragment_privacy_settings_info.*
+import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
+import kotlinx.android.synthetic.main.fragment_settings_privacy.*
 
 class PrivacySettingsInfoFragment : BaseFragment() {
 
@@ -19,11 +19,36 @@ class PrivacySettingsInfoFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.Welcome_PrivacySettings),
-                rightBtnItem = TopMenuItem(text = R.string.Alert_Close, onClick = {
-                    findNavController().popBackStack()
-                })
-        )
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, false)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { navigateUp(navController, appBarConfiguration) }
+
+        toolbar.inflateMenu(R.menu.settings_privacy_info_menu)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.closeButton){
+                findNavController().navigateUp()
+                true
+            } else {
+                super.onOptionsItemSelected(menuItem)
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_privacy_info_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.closeButton -> {
+                findNavController().navigateUp()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

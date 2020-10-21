@@ -3,16 +3,20 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -39,12 +43,22 @@ class PrivacySettingsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        setHasOptionsMenu(true)
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+
+        toolbar.inflateMenu(R.menu.settings_info_menu)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.menuShowInfo){
+                viewModel.delegate.onShowPrivacySettingsInfoClick()
+                true
+            } else {
+                super.onOptionsItemSelected(menuItem)
+            }
+        }
 
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()
@@ -137,21 +151,6 @@ class PrivacySettingsFragment : BaseFragment() {
         viewModel.restartApp.observe(this, Observer {
             restartApp()
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.settings_info_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuShowInfo -> {
-                viewModel.delegate.onShowPrivacySettingsInfoClick()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun createCommunicationSettingsView() {
