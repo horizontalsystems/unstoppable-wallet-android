@@ -1,27 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.util.Log
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
+import com.google.zxing.integration.android.IntentIntegrator
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectActivity
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
-import kotlinx.android.synthetic.main.fragment_wallet_connect_main.toolbar
 
-class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main) {
+class WalletConnectMainFragment : BaseFragment() {
 
     private var closeVisible: Boolean = false
         set(value) {
@@ -30,7 +38,8 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
             requireActivity().invalidateOptionsMenu()
         }
 
-    private val baseViewModel by activityViewModels<WalletConnectViewModel>()
+    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) { WalletConnectModule.Factory() }
+    private val viewModelScan by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
     private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -39,7 +48,7 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menuClose) {
-            requireActivity().onBackPressed()
+            findNavController().popBackStack()
             return true
         }
 
@@ -50,11 +59,41 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
         menu.findItem(R.id.menuClose)?.isVisible = closeVisible
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_wallet_connect_main, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.isVisible = false
+
         setHasOptionsMenu(true)
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+
+        when (baseViewModel.initialScreen) {
+            WalletConnectViewModel.InitialScreen.NoEthereumKit -> TODO()
+            WalletConnectViewModel.InitialScreen.ScanQrCode -> {
+                QRScannerActivity.start(this)
+            }
+            WalletConnectViewModel.InitialScreen.Main -> {
+                view.isVisible = true
+            }
+        }
+
+        viewModelScan.openErrorLiveEvent.observe(this, Observer {
+            val message = when (it) {
+                is WalletConnectInteractor.SessionError.InvalidUri -> getString(R.string.WalletConnect_Error_InvalidUrl)
+                else -> it.message ?: getString(R.string.default_error_msg)
+            }
+
+            findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectErrorFragment, bundleOf(WalletConnectErrorFragment.MESSAGE_KEY to message))
+        })
+
+        viewModelScan.openMainLiveEvent.observe(this, Observer {
+            view.isVisible = true
+        })
+
 
         val dappInfoAdapter = DappInfoAdapter()
         dappInfo.adapter = dappInfoAdapter
@@ -104,14 +143,14 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
         })
 
         viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
-            requireActivity().finish()
+            findNavController().popBackStack()
         })
 
         viewModel.openRequestLiveEvent.observe(viewLifecycleOwner, Observer {
             if (it is WalletConnectSendEthereumTransactionRequest) {
                 baseViewModel.sharedSendEthereumTransactionRequest = it
 
-                (requireActivity() as WalletConnectActivity).showFragment(WalletConnectSendEthereumTransactionRequestFragment.newInstance())
+                findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptions())
             }
         })
 
@@ -128,8 +167,27 @@ class WalletConnectMainFragment : Fragment(R.layout.fragment_wallet_connect_main
         }
 
         cancelButton.setOnSingleClickListener {
-            requireActivity().finish()
+            findNavController().popBackStack()
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == IntentIntegrator.REQUEST_CODE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                        Log.e("AAA", "Scanned string: $it")
+                        viewModelScan.handleScanned(it)
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+    }
+
 }
 

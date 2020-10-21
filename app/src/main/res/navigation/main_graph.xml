@@ -57,6 +57,9 @@
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment" />
+        <action
+            android:id="@+id/mainFragment_to_walletConnectMainFragment"
+            app:destination="@id/walletConnectMainFragment" />
     </fragment>
 
     <fragment
@@ -236,5 +239,29 @@
         android:id="@+id/uniswapInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.view.UniswapInfoFragment"
         tools:layout="@layout/fragment_swap_info" />
+    <fragment
+        android:id="@+id/walletConnectMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment"
+        android:label="WalletConnectMainFragment"
+        tools:layout="@layout/fragment_wallet_connect_main">
+        <action
+            android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"
+            app:destination="@id/walletConnectErrorFragment"
+            app:popUpTo="@id/walletConnectMainFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment"
+            app:destination="@id/walletConnectSendEthereumTransactionRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletConnectErrorFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorFragment"
+        android:label="WalletConnectErrorFragment"
+        tools:layout="@layout/fragment_wallet_connect_error" />
+    <fragment
+        android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
+        tools:layout="@layout/fragment_wallet_connect_request"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment"
+        android:label="WalletConnectSendEthereumTransactionRequestFragment" />
 
 </navigation>
