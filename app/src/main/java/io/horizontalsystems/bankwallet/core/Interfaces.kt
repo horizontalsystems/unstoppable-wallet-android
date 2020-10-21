@@ -255,6 +255,14 @@ interface ISendEosAdapter {
     fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
 }
 
+interface ISendZCashAdapter {
+    val availableBalance: BigDecimal
+    val fee: BigDecimal
+
+    fun validate(address: String)
+    fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit>
+}
+
 interface IAdapter {
     fun start()
     fun stop()

@@ -23,7 +23,7 @@ object SendFeeModule {
         fun setPrimaryFee(feeAmount: String?)
         fun setSecondaryFee(feeAmount: String?)
         fun setInsufficientFeeBalanceError(insufficientFeeBalance: InsufficientFeeBalance?)
-        fun setDuration(duration: Long)
+        fun setDuration(duration: Long?)
         fun setFeePriority(priority: FeeRatePriority)
         fun showFeeRatePrioritySelector(feeRates: List<FeeRateInfoViewItem>)
         fun showCustomFeePriority(show: Boolean)

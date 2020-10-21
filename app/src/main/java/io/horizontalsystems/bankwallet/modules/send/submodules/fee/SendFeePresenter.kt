@@ -26,7 +26,7 @@ class SendFeePresenter(
 
     private var fee: BigDecimal = BigDecimal.ZERO
     private var availableFeeBalance: BigDecimal? = null
-    private var feeRateInfo = FeeRateInfo(FeeRatePriority.MEDIUM, 1, 2 * 60 * 60)
+    private var feeRateInfo = FeeRateInfo(FeeRatePriority.MEDIUM, 1)
     private var error: Exception? = null
 
     private var feeRates: List<FeeRateInfo>? = null
@@ -68,7 +68,7 @@ class SendFeePresenter(
             view.showCustomFeePriority(true)
         } else {
             view.showCustomFeePriority(false)
-            feeRateInfo.duration?.let { view.setDuration(it) }
+            view.setDuration(feeRateInfo.duration)
         }
 
         view.setFeePriority(feeRateInfo.priority)

@@ -80,6 +80,7 @@ class TransactionDataProviderManager(
     override val baseProviderUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun providers(coin: Coin): List<Provider> = when (coin.type) {
+        is CoinType.Zcash -> bitcoinProviders
         is CoinType.Bitcoin -> bitcoinProviders
         is CoinType.Litecoin -> litecoinProviders
         is CoinType.BitcoinCash -> bitcoinCashProviders
@@ -90,7 +91,7 @@ class TransactionDataProviderManager(
     }
 
     override fun baseProvider(coin: Coin) = when (coin.type) {
-        is CoinType.Bitcoin, is CoinType.BitcoinCash -> {
+        is CoinType.Zcash, is CoinType.Bitcoin, is CoinType.BitcoinCash -> {
             bitcoin(localStorage.baseBitcoinProvider ?: bitcoinProviders[0].name)
         }
         is CoinType.Litecoin -> {

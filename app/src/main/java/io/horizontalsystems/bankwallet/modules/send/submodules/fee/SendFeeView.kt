@@ -9,7 +9,7 @@ class SendFeeView : SendFeeModule.IView {
 
     val primaryFee = MutableLiveData<String?>()
     val secondaryFee = MutableLiveData<String?>()
-    val duration = MutableLiveData<Long>()
+    val duration = MutableLiveData<Long?>()
     val feePriority = MutableLiveData<FeeRatePriority>()
     val showFeePriorityOptions = MutableLiveData<List<SendFeeModule.FeeRateInfoViewItem>>()
     val showCustomFeePriority = SingleLiveEvent<Boolean>()
@@ -30,7 +30,7 @@ class SendFeeView : SendFeeModule.IView {
         feePriority.postValue(priority)
     }
 
-    override fun setDuration(duration: Long) {
+    override fun setDuration(duration: Long?) {
         this.duration.postValue(duration)
     }
 

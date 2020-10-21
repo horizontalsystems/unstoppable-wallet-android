@@ -183,6 +183,9 @@ dependencies {
         exclude group: 'com.google.protobuf'
     }
 
+    appcenterImplementation "cash.z.ecc.android:zcash-android-sdk-mainnet:1.1.0-beta10"
+    apptestnetImplementation "cash.z.ecc.android:zcash-android-sdk-testnet:1.1.0-beta10"
+
     // in case native file tor.so not loading, do full gradle clean and build.
     implementation 'com.github.horizontalsystems:tor-kit-android:24f2a45'
 
