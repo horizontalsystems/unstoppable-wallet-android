@@ -17,8 +17,4 @@ object WalletConnectModule {
         }
     }
 
-    fun start(activity: FragmentActivity) {
-        activity.startActivity(Intent(activity, WalletConnectActivity::class.java))
-    }
-
 }

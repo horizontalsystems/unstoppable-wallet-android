@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.partial_transaction_info.*
 
 class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 
-    private val baseViewModel by activityViewModels<WalletConnectViewModel>()
+    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet_connect_request, container, false)
@@ -34,7 +35,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { WalletConnectRequestModule.Factory(baseViewModel.sharedSendEthereumTransactionRequest!!) }
 
         viewModel.resultLiveData.observe(viewLifecycleOwner, Observer {
-//            dismiss()
+            findNavController().popBackStack()
         })
 
         viewModel.amountViewItemLiveData.observe(viewLifecycleOwner, Observer {
