@@ -21,6 +21,8 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
+import io.horizontalsystems.bankwallet.modules.send.zcash.SendZcashHandler
+import io.horizontalsystems.bankwallet.modules.send.zcash.SendZcashInteractor
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.reactivex.Single
@@ -107,6 +109,14 @@ object SendModule {
 
         fun validate(account: String)
         fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
+    }
+
+    interface ISendZcashInteractor {
+        val availableBalance: BigDecimal
+        val fee: BigDecimal
+
+        fun validate(address: String)
+        fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
     }
 
     interface IRouter {
@@ -231,6 +241,16 @@ object SendModule {
 
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
+
+                    handler
+                }
+                is ISendZCashAdapter -> {
+                    val zcashInteractor = SendZcashInteractor(adapter)
+                    val handler = SendZcashHandler(zcashInteractor, router)
+
+                    presenter.amountModuleDelegate = handler
+                    presenter.addressModuleDelegate = handler
+                    presenter.feeModuleDelegate = handler
 
                     handler
                 }

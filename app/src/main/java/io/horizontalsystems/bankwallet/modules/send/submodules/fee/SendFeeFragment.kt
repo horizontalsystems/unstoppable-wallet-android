@@ -61,11 +61,12 @@ class SendFeeFragment(
             fiatFee?.let { txFeeSecondary.text = " | $it" }
         })
 
-        presenterView.duration.observe(viewLifecycleOwner, Observer { duration ->
-            context?.let {
-                val txDurationString = DateHelper.getTxDurationString(it, duration)
-                txDuration.text = it.getString(R.string.Duration_Within, txDurationString)
+        presenterView.duration.observe(viewLifecycleOwner, { duration ->
+            duration?.let {
+                val txDurationString = DateHelper.getTxDurationString(requireContext(), duration)
+                txDuration.text = requireContext().getString(R.string.Duration_Within, txDurationString)
             }
+            txDurationLayout.isVisible = duration != null
         })
 
         presenterView.feePriority.observe(viewLifecycleOwner, Observer { feePriority ->

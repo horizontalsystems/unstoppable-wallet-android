@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
 sealed class CoinType : Parcelable {
+    @Parcelize object Zcash : CoinType()
     @Parcelize object Bitcoin : CoinType()
     @Parcelize object Litecoin : CoinType()
     @Parcelize object BitcoinCash : CoinType()
@@ -20,6 +21,7 @@ sealed class CoinType : Parcelable {
             is Eos -> {
                 return accountType is AccountType.Eos
             }
+            is Zcash,
             is Bitcoin,
             is Litecoin,
             is BitcoinCash,
@@ -51,6 +53,7 @@ sealed class CoinType : Parcelable {
 
     val predefinedAccountType: PredefinedAccountType
         get() = when (this) {
+            is Zcash,
             is Bitcoin,
             is Litecoin,
             is Erc20,
