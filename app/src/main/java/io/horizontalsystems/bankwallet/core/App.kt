@@ -8,6 +8,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import com.google.firebase.FirebaseApp
 import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumCoinService
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
