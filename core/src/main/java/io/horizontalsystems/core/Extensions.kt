@@ -12,7 +12,9 @@ import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.LiveData
+import androidx.navigation.NavController
+import io.horizontalsystems.core.fragment.KeptNavHostFragment
 import io.horizontalsystems.core.helpers.SingleClickListener
 
 //  View
@@ -32,7 +34,17 @@ fun View.hideKeyboard(context: Context) {
 
 //  Fragment
 
-fun Fragment.getNavigationResult(key: String = "result") = findNavController().currentBackStackEntry?.savedStateHandle?.remove<Bundle>(key)
+fun Fragment.findNavController(): NavController {
+    return KeptNavHostFragment.findNavController(this)
+}
+
+fun Fragment.getNavigationResult(key: String = "result"): Bundle? {
+    return findNavController().currentBackStackEntry?.savedStateHandle?.remove<Bundle>(key)
+}
+
+fun Fragment.getNavigationLiveData(key: String = "result"): LiveData<Bundle>? {
+    return findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData(key)
+}
 
 fun Fragment.setNavigationResult(key: String = "result", bundle: Bundle) {
     findNavController().previousBackStackEntry?.savedStateHandle?.set(key, bundle)

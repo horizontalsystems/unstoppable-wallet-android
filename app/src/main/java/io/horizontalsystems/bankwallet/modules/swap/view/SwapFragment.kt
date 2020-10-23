@@ -9,9 +9,7 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -22,7 +20,8 @@ import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
-import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -30,7 +29,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_swap.*
 import java.math.BigDecimal
 
-class SwapFragment : BaseFragment(), FragmentResultListener {
+class SwapFragment : BaseFragment() {
 
     val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) {
         SwapModule.Factory(arguments?.getParcelable("tokenInKey")!!)
@@ -102,24 +101,22 @@ class SwapFragment : BaseFragment(), FragmentResultListener {
         return super.onOptionsItemSelected(item)
     }
 
-    // FragmentResultListener
-
-    override fun onFragmentResult(requestKey: String, result: Bundle) {
-        if (SwapApproveFragment.requestKey == requestKey && result.getBoolean(SwapApproveFragment.resultKey)) {
-            viewModel.onApproved()
-        }
-    }
-
     private fun setFragmentResultListeners() {
-        childFragmentManager.setFragmentResultListener(SwapApproveFragment.requestKey, this, this)
-
-        getNavigationResult(SelectSwapCoinFragment.requestKey)?.let { bundle ->
-            val selectedCoin = bundle.getParcelable<Coin>(SelectSwapCoinFragment.coinResultKey) ?: return
-            when (bundle.getParcelable<SelectType>(SelectSwapCoinFragment.selectTypeResultKey)) {
-                SelectType.FromCoin -> viewModel.setCoinSending(selectedCoin)
-                SelectType.ToCoin -> viewModel.setCoinReceiving(selectedCoin)
+        getNavigationLiveData(SwapApproveFragment.requestKey)?.observe(viewLifecycleOwner, Observer {
+            if (it.getBoolean(SwapApproveFragment.resultKey)) {
+                viewModel.onApproved()
             }
-        }
+        })
+
+        getNavigationLiveData(SelectSwapCoinFragment.requestKey)?.observe(viewLifecycleOwner, Observer { bundle ->
+            val selectedCoin = bundle.getParcelable<Coin>(SelectSwapCoinFragment.coinResultKey)
+            if (selectedCoin != null) {
+                when (bundle.getParcelable<SelectType>(SelectSwapCoinFragment.selectTypeResultKey)) {
+                    SelectType.FromCoin -> viewModel.setCoinSending(selectedCoin)
+                    SelectType.ToCoin -> viewModel.setCoinReceiving(selectedCoin)
+                }
+            }
+        })
     }
 
     private fun observeViewModel() {

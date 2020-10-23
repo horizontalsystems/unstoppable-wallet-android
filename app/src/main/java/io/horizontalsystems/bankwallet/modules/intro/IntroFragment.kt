@@ -12,11 +12,10 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
+import io.horizontalsystems.core.findNavController
 import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
 import kotlinx.android.synthetic.main.fragment_intro.*
 
 class IntroFragment : BaseFragment() {
@@ -66,8 +65,6 @@ class IntroFragment : BaseFragment() {
                 showSkipButton(skipButtonVisible)
             }
         })
-
-        ViewCompat.setTransitionName(imageSwitcher, "intro_wallet_logo")
 
         imageSwitcher.setFactory { ImageView(activity?.applicationContext) }
         imageSwitcher.setImageResource(images[0])
