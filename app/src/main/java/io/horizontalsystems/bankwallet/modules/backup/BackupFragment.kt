@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -17,7 +16,8 @@ import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosFragment
 import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsFragment
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
-import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
@@ -92,7 +92,7 @@ class BackupFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResult() {
-        getNavigationResult(PinModule.requestKey)?.let { bundle ->
+        getNavigationLiveData(PinModule.requestKey)?.observe(viewLifecycleOwner, Observer { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
@@ -102,9 +102,9 @@ class BackupFragment : BaseFragment() {
                     PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlock()
                 }
             }
-        }
+        })
 
-        getNavigationResult(BackupWordsModule.requestKey)?.let { bundle ->
+        getNavigationLiveData(BackupWordsModule.requestKey)?.observe(viewLifecycleOwner, Observer { bundle ->
             when (bundle.getInt(BackupWordsModule.requestResult)) {
                 BackupWordsModule.RESULT_BACKUP -> viewModel.delegate.didBackup()
                 BackupWordsModule.RESULT_SHOW -> {
@@ -113,9 +113,9 @@ class BackupFragment : BaseFragment() {
                 else -> {
                 }
             }
-        }
+        })
 
-        getNavigationResult(BackupEosModule.requestKey)?.let {
+        getNavigationLiveData(BackupEosModule.requestKey)?.observe(viewLifecycleOwner, Observer {
             when (it.getInt(BackupEosModule.requestResult)) {
                 BackupEosModule.RESULT_SHOW -> {
                     findNavController().popBackStack()
@@ -123,6 +123,6 @@ class BackupFragment : BaseFragment() {
                 else -> {
                 }
             }
-        }
+        })
     }
 }

@@ -5,15 +5,14 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_welcome.*
 
 class WelcomeFragment : BaseFragment() {
@@ -74,7 +73,6 @@ class WelcomeFragment : BaseFragment() {
             viewModel.delegate.openTorPage()
         }
 
-        ViewCompat.setTransitionName(walletLogo, "welcome_wallet_logo")
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.shared_image)
     }
 }

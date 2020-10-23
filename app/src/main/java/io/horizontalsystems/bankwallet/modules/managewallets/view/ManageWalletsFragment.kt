@@ -9,12 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragment
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment

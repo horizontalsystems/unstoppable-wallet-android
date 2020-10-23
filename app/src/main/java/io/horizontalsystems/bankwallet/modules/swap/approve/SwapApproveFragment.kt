@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -12,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_approve.*
 import java.math.BigDecimal
 
@@ -62,7 +62,7 @@ class SwapApproveFragment : BaseBottomSheetDialogFragment() {
         })
 
         viewModel.successLiveEvent.observe(viewLifecycleOwner, Observer {
-            setFragmentResult(requestKey, bundleOf(resultKey to true))
+            setNavigationResult(requestKey, bundleOf(resultKey to true))
 
             dismiss()
         })
