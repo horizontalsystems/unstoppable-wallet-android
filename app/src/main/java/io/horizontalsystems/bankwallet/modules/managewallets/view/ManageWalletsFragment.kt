@@ -14,10 +14,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragment
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.RestoreActivity
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 
 class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
@@ -103,12 +102,12 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
     override fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {
         val arguments = Bundle(3).apply {
-            putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
-            putBoolean(RestoreFragment.SELECT_COINS_KEY, false)
-            putBoolean(RestoreFragment.IN_APP_KEY, true)
+            putParcelable(RestoreActivity.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+            putBoolean(RestoreActivity.SELECT_COINS_KEY, false)
+            putBoolean(RestoreActivity.IN_APP_KEY, true)
         }
 
-        findNavController().navigate(R.id.manageWalletsFragment_to_restoreFragment, arguments, navOptions())
+        findNavController().navigate(R.id.manageWalletsFragment_to_restoreActivity, arguments, navOptions())
     }
 
     private fun observe() {

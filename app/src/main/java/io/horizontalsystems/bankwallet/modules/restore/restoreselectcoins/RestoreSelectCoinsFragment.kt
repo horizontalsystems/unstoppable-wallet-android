@@ -6,15 +6,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.RestoreActivity
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
@@ -24,6 +22,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setHasOptionsMenu(true)
         (activity as? AppCompatActivity)?.let {
             it.supportActionBar?.title  = getString(R.string.Select_Coins)
@@ -101,21 +100,13 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         })
 
         viewModel.enabledCoinsLiveData.observe(viewLifecycleOwner, Observer { enabledCoins ->
-            setFragmentResult(RestoreFragment.selectCoinsRequestKey, bundleOf(RestoreFragment.selectCoinsBundleKey to enabledCoins))
+            (activity as? RestoreActivity)?.onCoinsEnabled(enabledCoins)
         })
     }
 
 
     companion object {
         const val PREDEFINED_ACCOUNT_TYPE_KEY = "predefined_account_type_key"
-
-        fun instance(predefinedAccountType: PredefinedAccountType): RestoreSelectCoinsFragment {
-            return RestoreSelectCoinsFragment().apply {
-                arguments = Bundle(1).apply {
-                    putParcelable(PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
-                }
-            }
-        }
     }
 
 }

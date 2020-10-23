@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/restore_graph"
-    app:startDestination="@id/restoreFragment">
+    android:id="@+id/restore_graph">
 
     <fragment
-        android:id="@+id/restoreFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restore.RestoreFragment"
-        tools:layout="@layout/fragment_restore">
-        <action
-            android:id="@+id/restoreFragment_to_restoreWordsFragment"
-            app:destination="@id/restoreWordsFragment" />
-        <action
-            android:id="@+id/restoreFragment_to_restoreEosFragment"
-            app:destination="@id/restoreEosFragment" />
-    </fragment>
-
+        android:id="@+id/predefinedAccountTypesFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment"
+        tools:layout="@layout/fragment_restore_select_predefined_account_type" />
     <fragment
         android:id="@+id/restoreEosFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosFragment"
@@ -25,4 +15,8 @@
         android:id="@+id/restoreWordsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment"
         tools:layout="@layout/fragment_restore_words" />
+    <fragment
+        android:id="@+id/restoreSelectCoinsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment"
+        tools:layout="@layout/manage_wallets_fragment" />
 </navigation>

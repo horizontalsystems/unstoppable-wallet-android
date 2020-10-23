@@ -6,7 +6,6 @@
     app:startDestination="@id/mainFragment">
 
     <include app:graph="@navigation/privacy_settings_graph" />
-    <include app:graph="@navigation/restore_graph" />
 
     <fragment
         android:id="@+id/mainFragment"
@@ -64,8 +63,8 @@
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsFragment"
         tools:layout="@layout/manage_wallets_fragment">
         <action
-            android:id="@+id/manageWalletsFragment_to_restoreFragment"
-            app:destination="@id/restore_graph" />
+            android:id="@+id/manageWalletsFragment_to_restoreActivity"
+            app:destination="@id/activityRestore" />
         <action
             android:id="@+id/manageWalletsFragment_to_addErc20Token"
             app:destination="@id/addErc20TokenFragment" />
@@ -85,8 +84,8 @@
             android:id="@+id/manageKeysFragment_to_backupFragment"
             app:destination="@id/backupFragment" />
         <action
-            android:id="@+id/manageKeysFragment_to_restoreFragment"
-            app:destination="@id/restore_graph" />
+            android:id="@+id/manageKeysFragment_to_restoreActivity"
+            app:destination="@id/activityRestore" />
     </fragment>
 
     <fragment
@@ -219,5 +218,9 @@
         android:id="@+id/uniswapInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.view.UniswapInfoFragment"
         tools:layout="@layout/fragment_swap_info" />
+    <activity
+        android:id="@+id/activityRestore"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.RestoreActivity"
+        tools:layout="@layout/activity_restore" />
 
 </navigation>

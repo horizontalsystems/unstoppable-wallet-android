@@ -3,29 +3,29 @@ package io.horizontalsystems.bankwallet.modules.restore.eos
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
+import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.RestoreActivity
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.eoskit.core.InvalidPrivateKey
 import io.horizontalsystems.views.MultipleInputEditTextView
-import kotlinx.android.synthetic.main.fragment_backup_eos.*
 import kotlinx.android.synthetic.main.fragment_restore_eos.*
-import kotlinx.android.synthetic.main.fragment_restore_eos.eosAccount
-import kotlinx.android.synthetic.main.fragment_restore_eos.eosActivePrivateKey
+
 
 class RestoreEosFragment : BaseFragment() {
 
@@ -38,15 +38,28 @@ class RestoreEosFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setHasOptionsMenu(true)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
         viewModel = ViewModelProvider(this, RestoreEosModule.Factory())
                 .get(RestoreEosViewModel::class.java)
+
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener {
+            hideKeyboard()
+            activity?.onBackPressed()
+        }
+
+        toolbar.inflateMenu(R.menu.restore_menu)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.menuRestore){
+                viewModel.onProceed()
+                true
+            } else {
+                super.onOptionsItemSelected(menuItem)
+            }
+        }
 
         eosAccount.btnText = getString(R.string.Send_Button_Paste)
         eosActivePrivateKey.btnText = getString(R.string.Send_Button_Paste)
@@ -75,23 +88,8 @@ class RestoreEosFragment : BaseFragment() {
         observe()
 
         activity?.let {
-            KeyboardHelper.showKeyboardDelayed(it, eosAccount, 200)
+            KeyboardHelper.showKeyboardDelayed(it, eosAccount, 500)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.restore_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuRestore -> {
-                viewModel.onProceed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -115,7 +113,7 @@ class RestoreEosFragment : BaseFragment() {
     private fun observe() {
         viewModel.accountTypeLiveEvent.observe(viewLifecycleOwner, Observer { accountType ->
             hideKeyboard()
-            setFragmentResult(RestoreFragment.accountTypeRequestKey, bundleOf(RestoreFragment.accountTypeBundleKey to accountType))
+            (activity as? RestoreActivity)?.onRestore(accountType)
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
@@ -124,6 +122,7 @@ class RestoreEosFragment : BaseFragment() {
                 is InvalidPrivateKey -> R.string.Restore_EosKeyIncorrect
                 else -> R.string.default_error_msg
             }
+            hideKeyboard()
             HudHelper.showErrorMessage(this.requireView(), getString(error))
         })
     }

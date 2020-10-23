@@ -3,21 +3,24 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
 import io.horizontalsystems.bankwallet.core.utils.Utils
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.RestoreActivity
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
-import kotlinx.android.synthetic.main.fragment_restore_words.toolbar
+
 
 class RestoreWordsFragment : BaseFragment() {
 
@@ -26,15 +29,6 @@ class RestoreWordsFragment : BaseFragment() {
     companion object {
         const val wordsCountKey = "wordsCountKey"
         const val titleKey = "titleKey"
-
-        fun instance(wordsCount: Int, titleRes: Int): RestoreWordsFragment {
-            return RestoreWordsFragment().apply {
-                arguments = Bundle(2).apply {
-                    putInt(RestoreWordsFragment.wordsCountKey, wordsCount)
-                    putInt(RestoreWordsFragment.titleKey, titleRes)
-                }
-            }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,11 +38,25 @@ class RestoreWordsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setHasOptionsMenu(true)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener {
+            hideKeyboard()
+            activity?.onBackPressed()
+        }
+
+        toolbar.inflateMenu(R.menu.restore_menu)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.menuRestore){
+                val words = wordsInput.text?.toString() ?: ""
+                viewModel.onProceed(words)
+                true
+            } else {
+                super.onOptionsItemSelected(menuItem)
+            }
         }
 
         val wordsCount = arguments?.getInt(wordsCountKey) ?: throw Exception("Invalid words count")
@@ -64,34 +72,18 @@ class RestoreWordsFragment : BaseFragment() {
         observe()
 
         activity?.let {
-            KeyboardHelper.showKeyboardDelayed(it, wordsInput, 200)
+            KeyboardHelper.showKeyboardDelayed(it, wordsInput, 500)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.restore_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuRestore -> {
-                val words = wordsInput.text?.toString() ?: ""
-                viewModel.onProceed(words)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun observe() {
         viewModel.accountTypeLiveEvent.observe(viewLifecycleOwner, Observer { accountType ->
             hideKeyboard()
-            setFragmentResult(RestoreFragment.accountTypeRequestKey, bundleOf(RestoreFragment.accountTypeBundleKey to accountType))
+            (activity as? RestoreActivity)?.onRestore(accountType)
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
+            hideKeyboard()
             HudHelper.showErrorMessage(this.requireView(), getString(R.string.Restore_ValidationFailed))
         })
     }

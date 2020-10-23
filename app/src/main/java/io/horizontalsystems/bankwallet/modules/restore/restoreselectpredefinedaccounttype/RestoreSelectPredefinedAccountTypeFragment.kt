@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.RestoreActivity
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_restore_select_predefined_account_type.*
 import kotlinx.android.synthetic.main.view_holder_account_restore.*
@@ -30,6 +31,15 @@ class RestoreSelectPredefinedAccountTypeFragment: BaseFragment(), RestoreNavigat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         viewModel = ViewModelProvider(this, RestoreSelectPredefinedAccountTypeModule.Factory())
                 .get(RestoreSelectPredefinedAccountTypeViewModel::class.java)
 
@@ -39,7 +49,7 @@ class RestoreSelectPredefinedAccountTypeFragment: BaseFragment(), RestoreNavigat
     }
 
     override fun onSelect(predefinedAccountType: PredefinedAccountType) {
-        setFragmentResult(RestoreFragment.selectPredefinedAccountTypeRequestKey, bundleOf(RestoreFragment.predefinedAccountTypeBundleKey to predefinedAccountType))
+        (activity as? RestoreActivity)?.onPredefinedTypeSelect(predefinedAccountType)
     }
 }
 

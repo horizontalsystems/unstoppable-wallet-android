@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys.views
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.RestoreActivity
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
 import kotlinx.android.synthetic.main.fragment_manage_keys.*
 
@@ -86,12 +85,12 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
     private fun observeRouter(router: ManageKeysRouter) {
         router.showRestore.observe(this, Observer { predefinedAccountType ->
             val arguments = Bundle(3).apply {
-                putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
-                putBoolean(RestoreFragment.SELECT_COINS_KEY, true)
-                putBoolean(RestoreFragment.IN_APP_KEY, true)
+                putParcelable(RestoreActivity.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+                putBoolean(RestoreActivity.SELECT_COINS_KEY, true)
+                putBoolean(RestoreActivity.IN_APP_KEY, true)
             }
 
-            findNavController().navigate(R.id.manageKeysFragment_to_restoreFragment, arguments, navOptions())
+            findNavController().navigate(R.id.manageKeysFragment_to_restoreActivity, arguments, navOptions())
         })
 
         router.showCreateWalletLiveEvent.observe(this, Observer { predefinedAccountType ->

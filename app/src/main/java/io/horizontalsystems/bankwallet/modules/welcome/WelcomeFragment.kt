@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.RestoreActivity
 import kotlinx.android.synthetic.main.fragment_welcome.*
 
 class WelcomeFragment : BaseFragment() {
@@ -31,12 +31,12 @@ class WelcomeFragment : BaseFragment() {
 
         viewModel.openRestoreModule.observe(viewLifecycleOwner, Observer {
             val arguments = Bundle(3).apply {
-                putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, null)
-                putBoolean(RestoreFragment.SELECT_COINS_KEY, true)
-                putBoolean(RestoreFragment.IN_APP_KEY, false)
+                putParcelable(RestoreActivity.PREDEFINED_ACCOUNT_TYPE_KEY, null)
+                putBoolean(RestoreActivity.SELECT_COINS_KEY, true)
+                putBoolean(RestoreActivity.IN_APP_KEY, false)
             }
 
-            findNavController().navigate(R.id.welcomeFragment_to_restoreFragment, arguments, navOptions())
+            findNavController().navigate(R.id.welcomeFragment_to_restoreActivity, arguments, navOptions())
         })
 
         viewModel.openCreateWalletModule.observe(viewLifecycleOwner, Observer {
