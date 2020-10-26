@@ -132,7 +132,7 @@ class PrivacySettingsAdapter(
             containerView.isEnabled = viewItem.enabled
 
             containerView.setOnClickListener {
-                viewDelegate.didTapItem(viewItem.settingType, adapterPosition)
+                viewDelegate.didTapItem(viewItem.settingType, bindingAdapterPosition - 1)
             }
         }
     }
