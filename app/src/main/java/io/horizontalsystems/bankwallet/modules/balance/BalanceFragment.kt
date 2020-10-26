@@ -181,7 +181,11 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
-            Handler().postDelayed({ pullToRefresh.isRefreshing = false }, 1000)
+            Handler().postDelayed({
+                if (view != null) {
+                    pullToRefresh.isRefreshing = false
+                }
+            }, 1000)
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
