@@ -154,6 +154,8 @@
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
     <string name="Send_Error_WrongParameters">Wrong parameters</string>
+    <string name="Send_Error_TransparentAddress">Unstoppable doesn\'t support payments to a transparent address</string>
+    <string name="Send_Error_SendToSelf">Sending to self is not supported</string>
 
     <string name="Send_DialogTitle">Confirm</string>
     <string name="Send_DialogAvailableBalance">Available Balance</string>
