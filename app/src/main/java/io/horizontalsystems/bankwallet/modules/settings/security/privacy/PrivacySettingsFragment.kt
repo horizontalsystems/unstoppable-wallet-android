@@ -87,6 +87,8 @@ class PrivacySettingsFragment :
                 walletRestoreSettingsAdapter
         )
 
+        concatRecyclerView.itemAnimator = null
+
         createCommunicationSettingsView()
 
 

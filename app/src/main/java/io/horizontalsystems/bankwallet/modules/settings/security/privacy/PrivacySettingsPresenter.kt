@@ -64,7 +64,7 @@ class PrivacySettingsPresenter(
     }
 
     override fun didSwitchTorEnabled(checked: Boolean) {
-
+        view?.toggleTorEnabled(checked)
         if (checked) {
             if (!interactor.isTorNotificationEnabled) {
                 view?.showNotificationsNotEnabledAlert()
