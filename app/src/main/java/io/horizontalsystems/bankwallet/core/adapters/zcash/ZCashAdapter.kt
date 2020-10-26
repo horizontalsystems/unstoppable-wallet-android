@@ -116,8 +116,7 @@ class ZCashAdapter(
     //endregion
 
     //region IReceiveAdapter
-    override val receiveAddress: String
-        get() = DerivationTool.deriveShieldedAddress(seed)
+    override val receiveAddress = DerivationTool.deriveShieldedAddress(seed)
 
     override fun getReceiveAddressType(wallet: Wallet): String? = null
     //endregion
@@ -159,9 +158,14 @@ class ZCashAdapter(
 
     override fun validate(address: String) {
         runBlocking {
-            val addressType = synchronizer.validateAddress(address)
-            if (addressType is AddressType.Invalid) {
-                throw Exception("Invalid ZCash address: ${addressType.reason}")
+            when (synchronizer.validateAddress(address)) {
+                is AddressType.Invalid -> throw ZcashError.InvalidAddress
+                is AddressType.Transparent -> throw ZcashError.TransparentAddressNotAllowed
+                is AddressType.Shielded -> {
+                    if (address == receiveAddress) {
+                        throw ZcashError.SendToSelfNotAllowed
+                    }
+                }
             }
         }
     }
@@ -250,5 +254,11 @@ class ZCashAdapter(
                         showRawTransaction = false
                 )
             }
+
+    sealed class ZcashError : Exception() {
+        object InvalidAddress : ZcashError()
+        object TransparentAddressNotAllowed : ZcashError()
+        object SendToSelfNotAllowed : ZcashError()
+    }
 
 }
