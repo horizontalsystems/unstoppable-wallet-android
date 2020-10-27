@@ -130,11 +130,7 @@ class ZCashAdapter(
 
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
         val fromParams = from?.let {
-            val transactionHash =
-                    if (it.transactionHash.length < 2)
-                        byteArrayOf()
-                    else
-                        it.transactionHash.substring(2).fromHex().reversedArray()
+            val transactionHash = it.transactionHash.fromHex().reversedArray()
             Triple(transactionHash, it.timestamp, it.transactionIndex)
         }
 
@@ -228,7 +224,7 @@ class ZCashAdapter(
 
     private fun getTransactionRecord(zCashTransaction: ZCashTransaction): TransactionRecord =
             zCashTransaction.let {
-                val transactionHashHex = "0x" + it.transactionHash.toHexReversed()
+                val transactionHashHex = it.transactionHash.toHexReversed()
                 val type = when {
                     !it.toAddress.isNullOrEmpty() -> TransactionType.Outgoing
                     it.toAddress.isNullOrEmpty() && it.value > 0L && it.minedHeight > 0 -> TransactionType.Incoming
