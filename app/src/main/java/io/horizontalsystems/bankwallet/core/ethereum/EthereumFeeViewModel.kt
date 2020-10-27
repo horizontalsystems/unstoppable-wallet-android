@@ -1,18 +1,18 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
 
 class EthereumFeeViewModel(
         private val transactionService: EthereumTransactionService,
         private val coinService: EthereumCoinService
 ) : ViewModel() {
 
-    private val feeStatusSubject: BehaviorSubject<String> = BehaviorSubject.createDefault("")
+    private val feeStatusLiveData = MutableLiveData<String>()
     private val disposable = CompositeDisposable()
 
     init {
@@ -27,8 +27,12 @@ class EthereumFeeViewModel(
                 }
     }
 
+    fun setGasPriceType(gasPriceType: EthereumTransactionService.GasPriceType) {
+        transactionService.gasPriceType = gasPriceType
+    }
+
     private fun sync(transactionStatus: DataState<EthereumTransactionService.Transaction>) {
-        feeStatusSubject.onNext(feeStatus(transactionStatus))
+        feeStatusLiveData.postValue(feeStatus(transactionStatus))
     }
 
     private fun feeStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>): String {
@@ -44,6 +48,5 @@ class EthereumFeeViewModel(
             }
         }
     }
-
 
 }
