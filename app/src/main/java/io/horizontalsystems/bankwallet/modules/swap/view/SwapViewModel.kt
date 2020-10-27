@@ -211,11 +211,11 @@ class SwapViewModel(
     }
 
     fun setAmountSending(amount: String?) {
-        swapService.enterAmountSending(if (amount.isNullOrBlank()) null else BigDecimal(amount))
+        swapService.enterAmountSending(amount?.toBigDecimalOrNull())
     }
 
     fun setAmountReceiving(amount: String?) {
-        swapService.enterAmountReceiving(if (amount.isNullOrBlank()) null else BigDecimal(amount))
+        swapService.enterAmountReceiving(amount?.toBigDecimalOrNull())
     }
 
     fun onProceedClick() {
