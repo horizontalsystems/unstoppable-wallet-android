@@ -5,12 +5,12 @@ import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
 sealed class CoinType : Parcelable {
-    @Parcelize object Zcash : CoinType()
     @Parcelize object Bitcoin : CoinType()
     @Parcelize object Litecoin : CoinType()
     @Parcelize object BitcoinCash : CoinType()
     @Parcelize object Dash : CoinType()
     @Parcelize object Ethereum : CoinType()
+    @Parcelize object Zcash : CoinType()
 
     @Parcelize class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
     @Parcelize class Eos(val token: String, val symbol: String) : CoinType()

@@ -62,6 +62,13 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
                 provider = providerEos
                 adapter = FullTransactionEosAdapter(providerEos, wallet)
             }
+            //ZCASH
+            coin.type is CoinType.Zcash -> {
+                val providerZcash = dataProviderManager.zcash(baseProvider.name)
+
+                provider = providerZcash
+                adapter = FullTransactionBitcoinAdapter(providerZcash, coin, "zatoshi")
+            }
             // ETH, ETHt
             else -> {
                 val providerETH = dataProviderManager.ethereum(baseProvider.name)

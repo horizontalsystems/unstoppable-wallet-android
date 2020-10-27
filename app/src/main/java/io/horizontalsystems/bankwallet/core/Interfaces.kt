@@ -46,6 +46,7 @@ interface ILocalStorage {
     var baseDashProvider: String?
     var baseBinanceProvider: String?
     var baseEosProvider: String?
+    var baseZcashProvider: String?
     var syncMode: SyncMode?
     var sortType: BalanceSortType
     var appVersions: List<AppVersion>
@@ -143,6 +144,7 @@ interface ITransactionDataProviderManager {
     fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
     fun binance(name: String): FullTransactionInfoModule.BinanceProvider
     fun eos(name: String): FullTransactionInfoModule.EosProvider
+    fun zcash(name: String): FullTransactionInfoModule.BitcoinForksProvider
 }
 
 interface IWordsManager {

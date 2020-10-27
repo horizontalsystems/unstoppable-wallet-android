@@ -77,10 +77,13 @@ class TransactionDataProviderManager(
         listOf(EosGreymassProvider())
     }
 
+    private val zcashProviders: List<BitcoinForksProvider> by lazy {
+        listOf(ZcashProvider())
+    }
+
     override val baseProviderUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun providers(coin: Coin): List<Provider> = when (coin.type) {
-        is CoinType.Zcash -> bitcoinProviders
         is CoinType.Bitcoin -> bitcoinProviders
         is CoinType.Litecoin -> litecoinProviders
         is CoinType.BitcoinCash -> bitcoinCashProviders
@@ -88,10 +91,11 @@ class TransactionDataProviderManager(
         is CoinType.Dash -> dashProviders
         is CoinType.Binance -> binanceProviders
         is CoinType.Eos -> eosProviders
+        is CoinType.Zcash -> zcashProviders
     }
 
     override fun baseProvider(coin: Coin) = when (coin.type) {
-        is CoinType.Zcash, is CoinType.Bitcoin, is CoinType.BitcoinCash -> {
+        is CoinType.Bitcoin, is CoinType.BitcoinCash -> {
             bitcoin(localStorage.baseBitcoinProvider ?: bitcoinProviders[0].name)
         }
         is CoinType.Litecoin -> {
@@ -108,6 +112,9 @@ class TransactionDataProviderManager(
         }
         is CoinType.Eos -> {
             eos(localStorage.baseEosProvider ?: eosProviders[0].name)
+        }
+        is CoinType.Zcash -> {
+            zcash(localStorage.baseZcashProvider ?: zcashProviders[0].name)
         }
     }
 
@@ -175,6 +182,12 @@ class TransactionDataProviderManager(
 
     override fun eos(name: String): FullTransactionInfoModule.EosProvider {
         eosProviders.let { list ->
+            return list.find { it.name == name } ?: list[0]
+        }
+    }
+
+    override fun zcash(name: String): BitcoinForksProvider {
+        zcashProviders.let { list ->
             return list.find { it.name == name } ?: list[0]
         }
     }
