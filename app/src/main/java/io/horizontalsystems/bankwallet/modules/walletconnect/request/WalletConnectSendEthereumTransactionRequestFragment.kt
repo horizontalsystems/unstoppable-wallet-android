@@ -34,22 +34,6 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 
         val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { WalletConnectRequestModule.Factory(baseViewModel.sharedSendEthereumTransactionRequest!!) }
 
-        viewModel.resultLiveData.observe(viewLifecycleOwner, Observer {
-            findNavController().popBackStack()
-        })
-
-        viewModel.amountViewItemLiveData.observe(viewLifecycleOwner, Observer {
-            it.primaryAmountInfo.let {
-                primaryName.text = it.getAmountName()
-                primaryValue.text = it.getFormattedForTxInfo()
-            }
-
-            it.secondaryAmountInfo.let {
-                secondaryName.text = it?.getAmountName()
-                secondaryValue.text = it?.getFormattedForTxInfo()
-            }
-        })
-
         btnApprove.setOnSingleClickListener {
             viewModel.approve()
         }
@@ -57,6 +41,33 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         btnReject.setOnSingleClickListener {
 //            viewModel.reject()
         }
+
+        viewModel.amountData.let {
+            it.primary.let {
+                primaryName.text = it.getAmountName()
+                primaryValue.text = it.getFormattedForTxInfo()
+            }
+
+            it.secondary.let {
+                secondaryName.text = it?.getAmountName()
+                secondaryValue.text = it?.getFormattedForTxInfo()
+            }
+        }
+
+        viewModel.viewItems
+
+        viewModel.approveLiveEvent.observe(viewLifecycleOwner, Observer {
+            findNavController().popBackStack()
+        })
+
+        viewModel.approveEnabledLiveData.observe(viewLifecycleOwner, Observer {
+            btnApprove.isEnabled = it
+        })
+
+        viewModel.rejectEnabledLiveData.observe(viewLifecycleOwner, Observer {
+            btnReject.isEnabled = it
+        })
+
     }
 
     companion object {
