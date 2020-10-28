@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -49,11 +50,9 @@ class InfoFragment : BaseFragment() {
             itemConflictingTxHash.setOnClickListener { copyText(conflictingTxHash) }
         }
 
-    }
-
-    override fun canHandleOnBackPress(): Boolean {
-        parentFragmentManager.popBackStack()
-        return true
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun copyText(txHash: String) {

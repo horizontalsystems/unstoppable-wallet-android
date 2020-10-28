@@ -5,11 +5,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
+import io.horizontalsystems.core.findNavController
 
 class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
@@ -33,6 +34,10 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
         viewModel = ViewModelProvider(this, ManageWalletsModule.Factory())
                 .get(ManageWalletsViewModel::class.java)
+
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            findNavController().popBackStack()
+        }
 
         observe()
     }
@@ -63,11 +68,6 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun canHandleOnBackPress(): Boolean {
-        findNavController().popBackStack()
-        return true
     }
 
     // ManageWalletItemsAdapter.Listener

@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -77,14 +78,13 @@ class SwapFragment : BaseFragment() {
             viewModel.onProceedClick()
         }
 
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            findNavController().popBackStack()
+        }
+
         setFragmentResultListeners()
 
         observeViewModel()
-    }
-
-    override fun canHandleOnBackPress(): Boolean {
-        findNavController().popBackStack()
-        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
