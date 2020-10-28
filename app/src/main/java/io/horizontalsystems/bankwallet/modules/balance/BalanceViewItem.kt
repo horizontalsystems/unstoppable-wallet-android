@@ -110,7 +110,7 @@ class BalanceViewItemFactory {
     }
 
     private fun coinTypeLabelVisible(coinType: CoinType): Boolean {
-        return coinType.typeLabel() != null
+        return coinType.label != null
     }
 
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {

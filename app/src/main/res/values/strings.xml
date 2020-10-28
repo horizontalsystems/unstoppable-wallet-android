@@ -608,6 +608,8 @@
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOSIO tokens</string>
     <string name="AccountType_Binance" translatable="false">Binance</string>
     <string name="AccountType_Binance_Text" translatable="false">BNB, BEP2 tokens</string>
+    <string name="AccountType_Zcash" translatable="false">Zcash</string>
+    <string name="AccountType_Zcash_Text" translatable="false">ZEC</string>
 
     <!--Coin Option-->
 

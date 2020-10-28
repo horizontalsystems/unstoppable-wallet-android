@@ -19,6 +19,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
         private const val EOS = "eos"
+        private const val ZCASH = "zcash"
     }
 
     override val isAccountsEmpty: Boolean
@@ -32,6 +33,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value)
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
                             EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value)
+                            ZCASH -> AccountType.Zcash(record.words!!.list)
                             else -> null
                         }
                         Account(record.id, record.name, accountType!!, AccountOrigin.valueOf(record.origin), record.isBackedUp)
@@ -73,17 +75,22 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         return when (account.type) {
             is AccountType.Mnemonic,
             is AccountType.PrivateKey,
-            is AccountType.Eos -> {
+            is AccountType.Eos,
+            is AccountType.Zcash -> {
                 AccountRecord(
                         id = account.id,
                         name = account.name,
                         type = getAccountTypeCode(account.type),
                         origin = account.origin.value,
                         isBackedUp = account.isBackedUp,
-                        words = if (account.type is AccountType.Mnemonic) SecretList(account.type.words) else null,
-                        salt = if (account.type is AccountType.Mnemonic) account.type.salt?.let { SecretString(it) } else null,
+                        words = when (account.type) {
+                            is AccountType.Mnemonic -> SecretList(account.type.words)
+                            is AccountType.Zcash -> SecretList(account.type.words)
+                            else -> null
+                        },
+                        salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
                         key = getKey(account.type)?.let { SecretString(it) },
-                        eosAccount = if (account.type is AccountType.Eos) account.type.account else null
+                        eosAccount = (account.type as? AccountType.Eos)?.account
                 )
             }
             else -> throw Exception("Cannot save account with type: ${account.type}")
@@ -102,6 +109,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         return when (accountType) {
             is AccountType.PrivateKey -> PRIVATE_KEY
             is AccountType.Eos -> EOS
+            is AccountType.Zcash -> ZCASH
             else -> MNEMONIC
         }
     }

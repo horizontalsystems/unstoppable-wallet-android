@@ -25,14 +25,11 @@ class AccountCreator(
 
     private fun accountType(predefinedAccountType: PredefinedAccountType): AccountType {
         return when (predefinedAccountType) {
-            is PredefinedAccountType.Standard -> createMnemonicAccountType(12)
-            is PredefinedAccountType.Binance -> createMnemonicAccountType(24)
+            is PredefinedAccountType.Standard -> AccountType.Mnemonic(wordsManager.generateWords(12))
+            is PredefinedAccountType.Binance -> AccountType.Mnemonic(wordsManager.generateWords(24))
+            is PredefinedAccountType.Zcash -> AccountType.Zcash(wordsManager.generateWords(24))
             is PredefinedAccountType.Eos -> throw EosUnsupportedException()
         }
     }
 
-    private fun createMnemonicAccountType(wordsCount: Int): AccountType {
-        val words = wordsManager.generateWords(wordsCount)
-        return AccountType.Mnemonic(words, salt = null)
-    }
 }

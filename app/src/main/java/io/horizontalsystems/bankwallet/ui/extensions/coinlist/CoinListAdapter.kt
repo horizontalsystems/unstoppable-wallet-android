@@ -117,8 +117,8 @@ class CoinWithSwitchViewHolder(
         coinIcon.setCoinImage(coin.code, coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
-        coinTypeLabel.text = coin.type.typeLabel()
-        coinTypeLabel.isVisible = coin.type.typeLabel() != null
+        coinTypeLabel.text = coin.type.label
+        coinTypeLabel.isVisible = coin.type.label != null
         bottomShade.isVisible = last
         dividerView.isVisible = last
     }

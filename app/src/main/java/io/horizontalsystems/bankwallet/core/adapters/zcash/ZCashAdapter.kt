@@ -6,12 +6,10 @@ import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.block.CompactBlockProcessor
 import cash.z.ecc.android.sdk.ext.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
+import cash.z.ecc.android.sdk.tool.WalletBirthdayTool
 import cash.z.ecc.android.sdk.validate.AddressType
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.TransactionType
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -30,6 +28,9 @@ class ZCashAdapter(
 
     private val confirmationsThreshold = 10
     private val feeInZatoshi = 10_000L //0.0001 ZEC
+    private val saplingActivationHeight = if (testMode) 280_000 else 419_200
+    private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "lightwalletd.electriccoin.co"
+    private val lightWalletDPort = 9067
 
     private val synchronizer: Synchronizer
     private val seed: ByteArray
@@ -43,13 +44,22 @@ class ZCashAdapter(
     private var downloadProgress: Int = 0
 
     init {
-        val words = "".split(" ")
-        seed = Mnemonic().toSeed(words)
+        val accountType = (wallet.account.type as? AccountType.Zcash)
+                ?: throw UnsupportedAccountException()
+
+        seed = Mnemonic().toSeed(accountType.words)
+
+        val birthday = when (wallet.account.origin) {
+            AccountOrigin.Created -> null
+            AccountOrigin.Restored -> saplingActivationHeight
+        }
+        val nearestBirthday = WalletBirthdayTool.loadNearest(context, birthday)
+
         val initializer = Initializer(context) { builder ->
-            val host = if (testMode) "lightwalletd.testnet.electriccoin.co" else "lightwalletd.electriccoin.co"
-            builder.server(host, 9067)
+            builder.server(lightWalletDHost, lightWalletDPort)
             builder.setSeed(seed)
-            builder.importedWalletBirthday(954_500) //TODO change birthday height
+            builder.importedWalletBirthday(nearestBirthday.height)
+            builder.alias = wallet.account.id
         }
         synchronizer = Synchronizer(initializer)
         transactionsProvider = ZCashTransactionsProvider(synchronizer)

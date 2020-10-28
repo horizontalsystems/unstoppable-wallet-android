@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
 import kotlinx.android.synthetic.main.fragment_manage_keys.*
 
 class RestoreFragment : BaseFragment() {
@@ -95,9 +96,14 @@ class RestoreFragment : BaseFragment() {
 
                 when (screen.predefinedAccountType) {
                     PredefinedAccountType.Standard,
-                    PredefinedAccountType.Binance -> {
-                        val wordsCount = if (screen.predefinedAccountType == PredefinedAccountType.Standard) 12 else 24
-                        RestoreWordsFragment.instance(wordsCount, screen.predefinedAccountType.title)
+                    PredefinedAccountType.Binance,
+                    PredefinedAccountType.Zcash -> {
+                        val restoreAccountType = when (screen.predefinedAccountType) {
+                            PredefinedAccountType.Standard -> RestoreAccountType.STANDARD
+                            PredefinedAccountType.Binance -> RestoreAccountType.BINANCE
+                            else -> RestoreAccountType.ZCASH
+                        }
+                        RestoreWordsFragment.instance(restoreAccountType, screen.predefinedAccountType.title)
                     }
                     PredefinedAccountType.Eos -> {
                         RestoreEosFragment()
