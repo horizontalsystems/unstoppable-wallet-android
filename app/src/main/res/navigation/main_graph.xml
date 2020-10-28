@@ -125,7 +125,8 @@
     <fragment
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"
-        tools:layout="@layout/fragment_terms_settings" />
+        tools:layout="@layout/fragment_terms_settings"
+        android:label="@string/Settings_Terms"/>
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsFragment"
