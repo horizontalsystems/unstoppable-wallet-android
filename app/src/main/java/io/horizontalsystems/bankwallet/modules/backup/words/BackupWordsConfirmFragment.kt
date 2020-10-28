@@ -2,10 +2,12 @@ package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
@@ -43,6 +45,10 @@ class BackupWordsConfirmFragment : BaseFragment() {
 
         activity?.let {
             KeyboardHelper.showKeyboardDelayed(it, wordOne, 200)
+
+            it.onBackPressedDispatcher.addCallback(this) {
+                viewModel.delegate.onBackClick()
+            }
         }
     }
 
