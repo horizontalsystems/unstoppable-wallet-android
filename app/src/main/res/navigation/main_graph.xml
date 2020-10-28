@@ -119,7 +119,8 @@
     <fragment
         android:id="@+id/languageSettingsFragment"
         android:name="io.horizontalsystems.languageswitcher.LanguageSettingsFragment"
-        tools:layout="@layout/fragment_language_settings" />
+        tools:layout="@layout/fragment_language_settings"
+        android:label="@string/SettingsLanguage_Title"/>
     <fragment
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"

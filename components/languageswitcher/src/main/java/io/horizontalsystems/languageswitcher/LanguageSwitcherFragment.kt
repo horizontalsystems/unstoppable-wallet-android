@@ -12,12 +12,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionInflater
+import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_language_settings.*
@@ -33,17 +35,17 @@ class LanguageSettingsFragment : Fragment(), LanguageSwitcherAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+
         presenter = ViewModelProvider(this, LanguageSwitcherModule.Factory()).get(LanguageSwitcherPresenter::class.java)
 
         val presenterView = presenter.view as LanguageSwitcherView
         val presenterRouter = presenter.router as LanguageSwitcherRouter
-
-        shadowlessToolbar.bind(
-                title = getString(R.string.SettingsLanguage_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = {
-                    activity?.onBackPressed()
-                })
-        )
 
         val adapter = LanguageSwitcherAdapter(this)
 
