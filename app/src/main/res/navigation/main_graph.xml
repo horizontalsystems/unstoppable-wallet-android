@@ -133,7 +133,8 @@
     <fragment
         android:id="@+id/experimentalFeaturesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesFragment"
-        tools:layout="@layout/fragment_experimental_features">
+        tools:layout="@layout/fragment_experimental_features"
+        android:label="@string/ExperimentalFeatures_Title">
         <action
             android:id="@+id/experimentalFeaturesFragment_to_bitcoinHodlingFragment"
             app:destination="@id/bitcoinHodlingFragment" />
@@ -179,7 +180,8 @@
     <fragment
         android:id="@+id/bitcoinHodlingFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling.BitcoinHodlingFragment"
-        tools:layout="@layout/fragment_bitcoin_hodling" />
+        tools:layout="@layout/fragment_bitcoin_hodling"
+        android:label="@string/BitcoinHodling_Title"/>
     <fragment
         android:id="@+id/guideFragment"
         android:name="io.horizontalsystems.bankwallet.modules.guideview.GuideFragment"
