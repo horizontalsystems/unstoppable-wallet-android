@@ -43,13 +43,20 @@ class BackupPresenter(
     private fun startBackup() {
         when (val accountType = account.type) {
             is AccountType.Mnemonic -> {
-                interactor.predefinedAccountType(accountType)?.let {
-                    router.startBackupWordsModule(accountType.words, it.title)
-                }
+                startBackupWords(accountType, accountType.words)
+             }
+            is AccountType.Zcash -> {
+                startBackupWords(accountType, accountType.words)
             }
             is AccountType.Eos -> {
                 router.startBackupEosModule(accountType.account, accountType.activePrivateKey)
             }
+        }
+    }
+
+    private fun startBackupWords(accountType: AccountType, words: List<String>) {
+        interactor.predefinedAccountType(accountType)?.let {
+            router.startBackupWordsModule(words, it.title)
         }
     }
 }

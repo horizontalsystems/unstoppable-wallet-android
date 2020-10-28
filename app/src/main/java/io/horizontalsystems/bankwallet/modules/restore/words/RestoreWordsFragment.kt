@@ -14,24 +14,24 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
-import kotlinx.android.synthetic.main.fragment_restore_words.toolbar
 
 class RestoreWordsFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreWordsViewModel
 
     companion object {
-        const val wordsCountKey = "wordsCountKey"
+        const val restoreAccountTypeKey = "restoreAccountTypeKey"
         const val titleKey = "titleKey"
 
-        fun instance(wordsCount: Int, titleRes: Int): RestoreWordsFragment {
+        fun instance(restoreAccountType: RestoreAccountType, titleRes: Int): RestoreWordsFragment {
             return RestoreWordsFragment().apply {
                 arguments = Bundle(2).apply {
-                    putInt(RestoreWordsFragment.wordsCountKey, wordsCount)
-                    putInt(RestoreWordsFragment.titleKey, titleRes)
+                    putParcelable(restoreAccountTypeKey, restoreAccountType)
+                    putInt(titleKey, titleRes)
                 }
             }
         }
@@ -51,7 +51,7 @@ class RestoreWordsFragment : BaseFragment() {
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        val wordsCount = arguments?.getInt(wordsCountKey) ?: throw Exception("Invalid words count")
+        val wordsCount = arguments?.getParcelable<RestoreAccountType>(restoreAccountTypeKey) ?: throw Exception("Invalid restore account type")
         val accountTypeTitleRes = arguments?.getInt(titleKey) ?: throw Exception("Invalid title")
 
         viewModel = ViewModelProvider(this, RestoreWordsModule.Factory(wordsCount))

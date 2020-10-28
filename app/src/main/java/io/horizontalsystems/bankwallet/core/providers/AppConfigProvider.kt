@@ -43,7 +43,8 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 defaultCoins[3],
                 defaultCoins[4],
                 defaultCoins[5],
-                defaultCoins[6]
+                defaultCoins[6],
+                defaultCoins[7]
         )
 
     override val defaultCoins: List<Coin> by lazy {
@@ -54,8 +55,8 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("BCH", "Bitcoin Cash", "BCH", 8, CoinType.BitcoinCash),
                 Coin("DASH", "Dash", "DASH", 8, CoinType.Dash),
                 Coin("BNB", "Binance Chain", "BNB", 8, CoinType.Binance("BNB")),
+                Coin("ZEC", "Zcash", "ZEC", 8, CoinType.Zcash),
                 Coin("EOS", "EOS", "EOS", 4, CoinType.Eos("eosio.token", "EOS")),
-                Coin("ZEC", "ZCash", "ZEC", 8, CoinType.Zcash),
                 Coin("ZRX", "0x Protocol", "ZRX", 18, CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),
                 Coin("LEND", "Aave", "LEND", 18, CoinType.Erc20("0x80fB784B7eD66730e8b1DBd9820aFD29931aab03")),
                 Coin("ELF", "Aelf", "ELF", 18, CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e")),

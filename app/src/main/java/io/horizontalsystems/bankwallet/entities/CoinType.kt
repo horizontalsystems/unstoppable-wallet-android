@@ -5,74 +5,65 @@ import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
 sealed class CoinType : Parcelable {
-    @Parcelize object Bitcoin : CoinType()
-    @Parcelize object Litecoin : CoinType()
-    @Parcelize object BitcoinCash : CoinType()
-    @Parcelize object Dash : CoinType()
-    @Parcelize object Ethereum : CoinType()
-    @Parcelize object Zcash : CoinType()
+    @Parcelize
+    object Bitcoin : CoinType()
 
-    @Parcelize class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
-    @Parcelize class Eos(val token: String, val symbol: String) : CoinType()
-    @Parcelize class Binance(val symbol: String) : CoinType()
+    @Parcelize
+    object Litecoin : CoinType()
 
-    fun canSupport(accountType: AccountType): Boolean {
-        when (this) {
-            is Eos -> {
-                return accountType is AccountType.Eos
-            }
-            is Zcash,
-            is Bitcoin,
-            is Litecoin,
-            is BitcoinCash,
-            is Dash,
-            is Ethereum,
-            is Erc20 -> {
-                if (accountType is AccountType.Mnemonic) {
-                    return accountType.words.size == 12 && accountType.salt == null
-                }
-            }
-            is Binance -> {
-                if (accountType is AccountType.Mnemonic) {
-                    return accountType.words.size == 24 && accountType.salt == null
-                }
-            }
-        }
+    @Parcelize
+    object BitcoinCash : CoinType()
 
-        return false
-    }
+    @Parcelize
+    object Dash : CoinType()
 
-    fun typeLabel(): String? {
-        return when (this) {
+    @Parcelize
+    object Ethereum : CoinType()
+
+    @Parcelize
+    class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
+
+    @Parcelize
+    class Binance(val symbol: String) : CoinType()
+
+    @Parcelize
+    object Zcash : CoinType()
+
+    @Parcelize
+    class Eos(val token: String, val symbol: String) : CoinType()
+
+    val label: String?
+        get() = when (this) {
             is Erc20 -> "ERC20"
             is Eos -> if (symbol != "EOS") "EOSIO" else null
             is Binance -> if (symbol != "BNB") "BEP2" else null
             else -> null
         }
-    }
 
     val predefinedAccountType: PredefinedAccountType
         get() = when (this) {
-            is Zcash,
-            is Bitcoin,
-            is Litecoin,
-            is Erc20,
-            is BitcoinCash,
-            is Dash,
-            is Ethereum -> PredefinedAccountType.Standard
+            Bitcoin, Litecoin, BitcoinCash, Dash, Ethereum, is Erc20 -> PredefinedAccountType.Standard
             is Binance -> PredefinedAccountType.Binance
             is Eos -> PredefinedAccountType.Eos
+            Zcash -> PredefinedAccountType.Zcash
         }
 
     val swappable: Boolean
         get() = this is Ethereum || this is Erc20
 
-}
+    fun canSupport(accountType: AccountType) = when (this) {
+        is Eos -> {
+            accountType is AccountType.Eos
+        }
+        Bitcoin, Litecoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
+            accountType is AccountType.Mnemonic && accountType.words.size == 12 && accountType.salt == null
+        }
+        is Binance -> {
+            accountType is AccountType.Mnemonic && accountType.words.size == 24 && accountType.salt == null
+        }
+        Zcash -> {
+            accountType is AccountType.Zcash && accountType.words.size == 24
+        }
+    }
 
-@Parcelize
-enum class CoinSetting : Parcelable {
-    Derivation,
-    SyncMode
 }
-
-typealias CoinSettings = MutableMap<CoinSetting, String>
