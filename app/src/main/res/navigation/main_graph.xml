@@ -74,7 +74,8 @@
     <fragment
         android:id="@+id/manageKeysFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysFragment"
-        tools:layout="@layout/fragment_manage_keys">
+        tools:layout="@layout/fragment_manage_keys"
+        android:label="@string/ManageKeys_Title">
         <action
             android:id="@+id/manageKeysFragment_to_addressFormatSettingsFragment"
             app:destination="@id/addressFormatSettingsFragment" />
