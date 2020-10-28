@@ -1,12 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_app_status.*
@@ -22,31 +27,27 @@ class AppStatusFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+
+        toolbar.inflateMenu(R.menu.app_status_menu)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.menuCopy){
+                presenter.didTapCopy(textAppStatus.text.toString())
+                true
+            } else {
+                super.onOptionsItemSelected(menuItem)
+            }
         }
 
         observeView(presenter.view as AppStatusView)
 
         presenter.viewDidLoad()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.app_status_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuCopy -> {
-                presenter.didTapCopy(textAppStatus.text.toString())
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun observeView(view: AppStatusView) {
