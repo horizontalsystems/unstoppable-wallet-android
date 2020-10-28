@@ -114,7 +114,8 @@
     <fragment
         android:id="@+id/currencySwitcherFragment"
         android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherFragment"
-        tools:layout="@layout/fragment_currency_switcher" />
+        tools:layout="@layout/fragment_currency_switcher"
+        android:label="@string/SettingsCurrency_Title"/>
     <fragment
         android:id="@+id/languageSettingsFragment"
         android:name="io.horizontalsystems.languageswitcher.LanguageSettingsFragment"

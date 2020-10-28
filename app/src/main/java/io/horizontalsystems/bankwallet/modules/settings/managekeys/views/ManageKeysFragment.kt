@@ -7,17 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_keys.*
-import kotlinx.android.synthetic.main.fragment_manage_keys.toolbar
 
 class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeysAdapter.Listener {
 
@@ -31,12 +27,7 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-
-        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
-        navController.addOnDestinationChangedListener(navDestinationChangeListener)
-        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+        setNavigationToolbar(toolbar, findNavController())
 
         adapter = ManageKeysAdapter(this)
         recyclerView.adapter = adapter

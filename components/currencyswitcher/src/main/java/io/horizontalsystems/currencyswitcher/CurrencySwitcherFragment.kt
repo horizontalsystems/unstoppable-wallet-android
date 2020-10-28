@@ -1,7 +1,6 @@
 package io.horizontalsystems.currencyswitcher
 
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,17 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.core.CoreActivity
+import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.views.TopMenuItem
 import io.horizontalsystems.views.ViewHolderProgressbar
 import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_currency_switcher.*
 
@@ -35,25 +38,28 @@ class CurrencySwitcherFragment : Fragment(), CurrencySwitcherAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+
+
         presenter = ViewModelProvider(this, CurrencySwitcherModule.Factory()).get(CurrencySwitcherPresenter::class.java)
         presenterView = presenter.view as CurrencySwitcherView
         presenterRouter = presenter.router as CurrencySwitcherRouter
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.SettingsCurrency_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() })
-        )
-
         adapter = CurrencySwitcherAdapter(this)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = ConcatAdapter(adapter, CurrencySwitchFooterAdapter())
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        presenterView.currencyItems.observe(this, Observer { items ->
+        presenterView.currencyItems.observe(viewLifecycleOwner, Observer { items ->
             adapter?.items = items
             adapter?.notifyDataSetChanged()
         })
 
-        presenterRouter.closeLiveEvent.observe(this, Observer {
+        presenterRouter.closeLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.onBackPressed()
         })
 
@@ -117,4 +123,18 @@ class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHo
         val layoutResourceId: Int
             get() = R.layout.view_holder_item_with_checkmark
     }
+}
+
+class CurrencySwitchFooterAdapter : RecyclerView.Adapter<CurrencySwitchFooterAdapter.ViewHolderSource>() {
+
+    override fun getItemCount() =  1
+
+    override fun onBindViewHolder(holder: ViewHolderSource, position: Int) = Unit
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSource {
+        return ViewHolderSource(inflate(parent, R.layout.view_holder_currency_switcher_footer, false))
+    }
+
+    class ViewHolderSource(containerView: View) : RecyclerView.ViewHolder(containerView)
+
 }

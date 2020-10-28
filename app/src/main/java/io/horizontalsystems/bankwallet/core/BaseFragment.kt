@@ -5,14 +5,28 @@ import android.graphics.PorterDuff
 import android.os.Handler
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.views.AlertDialogFragment
 
 abstract class BaseFragment : Fragment() {
+
     protected fun hideKeyboard() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+    }
+
+    protected fun setNavigationToolbar(toolbar: Toolbar, navController: NavController){
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
     }
 
     protected fun setMenuItemEnabled(menuItem: MenuItem, enabled: Boolean) {

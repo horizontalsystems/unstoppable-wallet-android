@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.extensions
+package io.horizontalsystems.core.navigation
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.transition.TransitionManager
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.core.R
 import java.lang.ref.WeakReference
 import java.util.regex.Matcher
 import java.util.regex.Pattern
