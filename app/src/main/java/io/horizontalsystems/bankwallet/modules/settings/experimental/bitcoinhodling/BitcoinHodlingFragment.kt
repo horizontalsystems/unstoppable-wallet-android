@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_bitcoin_hodling.*
 
 class BitcoinHodlingFragment : BaseFragment() {
@@ -22,10 +22,7 @@ class BitcoinHodlingFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setNavigationToolbar(toolbar, findNavController())
 
         val hodlingView = presenter.view as BitcoinHodlingView
 
