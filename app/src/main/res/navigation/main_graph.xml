@@ -93,7 +93,8 @@
     <fragment
         android:id="@+id/securitySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment"
-        tools:layout="@layout/fragment_settings_security">
+        tools:layout="@layout/fragment_settings_security"
+        android:label="@string/Settings_SecurityCenter">
         <action
             android:id="@+id/securitySettingsFragment_to_privacySettingsFragment"
             app:destination="@id/privacy_settings_graph" />

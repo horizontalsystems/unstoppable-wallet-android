@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.core.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.extensions.NavDestinationChangeListener
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_settings_security.*
 
 class SecuritySettingsFragment : BaseFragment() {
@@ -28,11 +30,14 @@ class SecuritySettingsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.init()
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        shadowlessToolbar.bind(getString(R.string.Settings_SecurityCenter), TopMenuItem(R.drawable.ic_back, onClick = {
-            findNavController().popBackStack()
-        }))
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+
+        viewModel.init()
 
         changePin.setOnSingleClickListener {
             viewModel.delegate.didTapEditPin()
