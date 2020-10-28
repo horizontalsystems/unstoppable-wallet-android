@@ -110,7 +110,8 @@
     <fragment
         android:id="@+id/contactFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.contact.ContactFragment"
-        tools:layout="@layout/fragment_contact" />
+        tools:layout="@layout/fragment_contact"
+        android:label="@string/SettingsContact_Title"/>
     <fragment
         android:id="@+id/currencySwitcherFragment"
         android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherFragment"

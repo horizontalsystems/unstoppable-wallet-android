@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_contact.*
 
 class ContactFragment : BaseFragment() {
@@ -25,6 +25,8 @@ class ContactFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setNavigationToolbar(toolbar, findNavController())
 
         presenter = ViewModelProvider(this, ContactModule.Factory()).get(ContactPresenter::class.java)
 
@@ -52,13 +54,6 @@ class ContactFragment : BaseFragment() {
         router.openTelegramGroupEvent.observe(viewLifecycleOwner, Observer {
             openTelegramGroup(it)
         })
-
-        shadowlessToolbar.bind(
-                title = getString(R.string.SettingsContact_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back) {
-                    activity?.onBackPressed()
-                }
-        )
 
         mail.setOnSingleClickListener {
             presenter.didTapEmail()
