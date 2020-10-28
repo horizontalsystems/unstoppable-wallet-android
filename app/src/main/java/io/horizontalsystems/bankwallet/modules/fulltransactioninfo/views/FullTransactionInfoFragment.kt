@@ -8,6 +8,7 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
@@ -131,11 +132,10 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         recyclerTransactionInfo.layoutManager = LinearLayoutManager(context)
 
         transactionRecordAdapter.viewModel = viewModel
-    }
 
-    override fun canHandleOnBackPress(): Boolean {
-        parentFragmentManager.popBackStack()
-        return true
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     //

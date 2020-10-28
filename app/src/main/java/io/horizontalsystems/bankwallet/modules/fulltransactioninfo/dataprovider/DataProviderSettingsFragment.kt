@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -62,15 +63,14 @@ class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter
         viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
             Handler().postDelayed({ parentFragmentManager.popBackStack() }, 500)
         })
+
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     override fun onChangeProvider(item: DataProviderSettingsItem) {
         viewModel.delegate.onSelect(item)
-    }
-
-    override fun canHandleOnBackPress(): Boolean {
-        parentFragmentManager.popBackStack()
-        return true
     }
 
     companion object {

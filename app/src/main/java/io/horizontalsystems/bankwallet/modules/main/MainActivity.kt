@@ -51,11 +51,6 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
     }
 
     override fun onBackPressed() {
-        supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
-            if ((fragment as? BaseFragment)?.canHandleOnBackPress() == true) {
-                return
-            }
-        }
         when (txInfoBottomSheetBehavior?.state) {
             BottomSheetBehavior.STATE_EXPANDED -> {
                 txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED

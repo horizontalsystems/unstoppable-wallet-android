@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
@@ -64,6 +65,10 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         observeData()
         bindActions()
 
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            findNavController().popBackStack()
+        }
+
         presenter.viewDidLoad()
     }
 
@@ -87,11 +92,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun canHandleOnBackPress(): Boolean {
-        findNavController().popBackStack()
-        return true
     }
 
     //  ChartView Listener
