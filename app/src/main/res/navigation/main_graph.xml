@@ -105,7 +105,8 @@
     <fragment
         android:id="@+id/appStatusFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusFragment"
-        tools:layout="@layout/fragment_app_status" />
+        tools:layout="@layout/fragment_app_status"
+        android:label="@string/Settings_AppStatus"/>
     <fragment
         android:id="@+id/contactFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.contact.ContactFragment"
