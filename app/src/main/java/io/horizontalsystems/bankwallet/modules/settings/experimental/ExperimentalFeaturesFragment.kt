@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_experimental_features.*
 
 class ExperimentalFeaturesFragment : BaseFragment() {
@@ -23,7 +24,11 @@ class ExperimentalFeaturesFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setNavigationToolbar(toolbar, findNavController())
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            it.title = getString(R.string.ExperimentalFeatures_Title)
+        }
 
         val router = presenter.router as ExperimentalFeaturesRouter
 
