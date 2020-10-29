@@ -34,7 +34,7 @@ data class WalletConnectTransaction(
         val to: Address,
         val nonce: Long?,
         val gasPrice: Long?,
-        val gasLimit: Long,
+        val gasLimit: Long?,
         val value: BigInteger,
         val data: ByteArray
 )

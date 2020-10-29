@@ -43,8 +43,8 @@ class WalletConnectSendEthereumTransactionRequestService(
         state = State.Sending
 
         ethereumKit.send(
-                transaction.data.to!!,
-                transaction.data.value!!,
+                transaction.data.to,
+                transaction.data.value,
                 transaction.data.input,
                 transaction.gasData.gasPrice,
                 transaction.gasData.gasLimit)

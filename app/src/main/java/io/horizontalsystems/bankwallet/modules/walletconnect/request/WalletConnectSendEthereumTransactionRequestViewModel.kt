@@ -29,17 +29,12 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
     init {
         val transactionData = service.transactionData
 
-        amountData = coinService.amountData(transactionData.value ?: BigInteger.ZERO)
+        amountData = coinService.amountData(transactionData.value)
 
-        val viewItems = mutableListOf<WalletConnectRequestViewItem>()
-
-        transactionData.to?.let {
-            viewItems.add(WalletConnectRequestViewItem.To(it.eip55))
-        }
-
-        viewItems.add(WalletConnectRequestViewItem.Input(transactionData.input.toHexString()))
-
-        this.viewItems = viewItems
+        viewItems = listOf(
+                WalletConnectRequestViewItem.To(transactionData.to.eip55),
+                WalletConnectRequestViewItem.Input(transactionData.input.toHexString())
+        )
 
         service.stateObservable
                 .subscribe {
