@@ -8,7 +8,6 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -117,13 +116,14 @@ class WalletConnectMainFragment : BaseFragment() {
             cancelButton.isVisible = it
         })
 
-        viewModel.approveAndRejectVisibleLiveData.observe(viewLifecycleOwner, Observer {
-            approveButton.isVisible = it
-            rejectButton.isVisible = it
+        viewModel.connectButtonLiveData.observe(viewLifecycleOwner, Observer {
+            connectButton.isVisible = it.visible
+            connectButton.isEnabled = it.enabled
         })
 
-        viewModel.disconnectVisibleLiveData.observe(viewLifecycleOwner, Observer {
-            disconnectButton.isVisible = it
+        viewModel.disconnectButtonLiveData.observe(viewLifecycleOwner, Observer {
+            disconnectButton.isVisible = it.visible
+            disconnectButton.isEnabled = it.enabled
         })
 
         viewModel.closeVisibleLiveData.observe(viewLifecycleOwner, Observer {
@@ -154,12 +154,8 @@ class WalletConnectMainFragment : BaseFragment() {
             }
         })
 
-        approveButton.setOnSingleClickListener {
-            viewModel.approve()
-        }
-
-        rejectButton.setOnSingleClickListener {
-            viewModel.reject()
+        connectButton.setOnSingleClickListener {
+            viewModel.connect()
         }
 
         disconnectButton.setOnSingleClickListener {
@@ -167,7 +163,7 @@ class WalletConnectMainFragment : BaseFragment() {
         }
 
         cancelButton.setOnSingleClickListener {
-            findNavController().popBackStack()
+            viewModel.cancel()
         }
     }
 
