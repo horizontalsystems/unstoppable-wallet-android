@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
@@ -8,47 +8,21 @@
     android:background="?android:windowBackground"
     android:clickable="true">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/app_bar_height_tall"
-            app:collapsedTitleTextAppearance="@style/Title3"
-            app:elevation="0dp"
-            app:expandedTitleMarginBottom="16dp"
-            app:expandedTitleMarginStart="16dp"
-            app:expandedTitleTextAppearance="@style/Title2"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:paddingStart="0dp"
-                android:paddingEnd="4dp"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways|snap" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="?attr/actionBarSize" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView
         android:id="@+id/scroller"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/startGuideline"
@@ -298,28 +272,28 @@
                 android:id="@+id/emaChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/Charts_IndicatorEMA"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/border3" />
+                app:layout_constraintTop_toBottomOf="@+id/border3"
+                app:title="@string/Charts_IndicatorEMA" />
 
             <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/macdChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/Charts_IndicatorMACD"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emaChartIndicator" />
+                app:layout_constraintTop_toBottomOf="@+id/emaChartIndicator"
+                app:title="@string/Charts_IndicatorMACD" />
 
             <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/rsiChartIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/Charts_IndicatorRSI"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/macdChartIndicator" />
+                app:layout_constraintTop_toBottomOf="@+id/macdChartIndicator"
+                app:title="@string/Charts_IndicatorRSI" />
 
             <TextView
                 android:id="@+id/volumeTitle"
@@ -402,14 +376,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
                 android:text="@string/Charts_TotalSupply"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
-                android:layout_marginBottom="12dp"
-                app:layout_constraintVertical_bias="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/circulationTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/circulationTitle"
+                app:layout_constraintVertical_bias="0" />
 
             <TextView
                 android:id="@+id/totalSupplyValue"
@@ -430,14 +404,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
                 android:text="@string/Charts_StartDate"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
-                android:layout_marginBottom="12dp"
-                app:layout_constraintVertical_bias="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/totalSupplyTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/totalSupplyTitle"
+                app:layout_constraintVertical_bias="0" />
 
             <TextView
                 android:id="@+id/startDateValue"
@@ -458,24 +432,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="32dp"
                 android:text="@string/Charts_Website"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
-                android:layout_marginBottom="32dp"
-                app:layout_constraintVertical_bias="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/startDateTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/startDateTitle"
+                app:layout_constraintVertical_bias="0" />
 
             <TextView
                 android:id="@+id/websiteValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:autoLink="web"
                 android:fontFamily="@font/roboto_regular"
                 android:textAlignment="textEnd"
                 android:textColor="@color/stateful_chart_value_text_color"
                 android:textSize="14sp"
-                android:autoLink="web"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toEndOf="@id/websiteTitle"
                 app:layout_constraintTop_toTopOf="@+id/websiteTitle"
@@ -484,4 +458,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

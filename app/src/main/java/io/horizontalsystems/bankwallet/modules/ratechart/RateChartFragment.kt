@@ -3,13 +3,11 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -18,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.fragment_rate_chart.*
@@ -39,8 +38,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setHasOptionsMenu(true)
-
         val coinId = arguments?.getString(COIN_ID_KEY)
 
         val coinCode = arguments?.getString(COIN_CODE_KEY) ?: run {
@@ -50,14 +47,11 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
         val coinTitle = arguments?.getString(COIN_TITLE_KEY) ?: ""
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.title = coinTitle
-        }
-
         presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
+
+        setNavigationToolbar(toolbar, findNavController())
+        setToolbarMenu()
 
         chart.setListener(this)
         chart.rateFormatter = presenter.rateFormatter
@@ -72,26 +66,27 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         presenter.viewDidLoad()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.rate_chart_menu, menu)
+    private fun setToolbarMenu() {
+        toolbar.inflateMenu(R.menu.rate_chart_menu)
+
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.menuNotification) {
+                presenter.onNotificationClick()
+                true
+            } else {
+                super.onOptionsItemSelected(menuItem)
+            }
+        }
+
+        updateNotificationIcon()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menuNotification)?.apply {
+    private fun updateNotificationIcon() {
+        toolbar?.menu?.findItem(R.id.menuNotification)?.apply {
             isVisible = presenter.notificationIconVisible
             val iconRes = if (presenter.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_inactive_24
             icon = context?.let { ContextCompat.getDrawable(it, iconRes) }
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuNotification -> {
-                presenter.onNotificationClick()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     //  ChartView Listener
@@ -250,7 +245,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         })
 
         presenterView.alertNotificationUpdated.observe(viewLifecycleOwner, Observer { visible ->
-            activity?.invalidateOptionsMenu()
+            updateNotificationIcon()
         })
 
         presenterView.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinId, coinName) ->
