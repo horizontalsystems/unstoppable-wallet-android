@@ -57,7 +57,7 @@ class BackupWordsFragment : BaseFragment() {
                 commit()
             }
 
-            collapsingToolbar.title = when (page) {
+            toolbar.title = when (page) {
                 1 -> getString(R.string.Backup_DisplayTitle)
                 2 -> getString(R.string.Backup_Confirmation_CheckTitle)
                 else -> null

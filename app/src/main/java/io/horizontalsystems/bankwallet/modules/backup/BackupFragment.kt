@@ -34,18 +34,19 @@ class BackupFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(false)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
 
         val accountCoins = arguments?.getString(ModuleField.ACCOUNT_COINS)
         val account = arguments?.getParcelable<Account>(ModuleField.ACCOUNT) ?: run {
             findNavController().popBackStack()
             return
         }
+
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+
+        toolbar.title = getString(if (account.isBackedUp) R.string.Backup_Intro_TitleShow else R.string.Backup_Intro_Title)
 
         viewModel.init(account)
         viewModel.startPinModule.observe(viewLifecycleOwner, Observer {
@@ -84,7 +85,6 @@ class BackupFragment : BaseFragment() {
         backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
 
         if (account.isBackedUp) {
-            collapsingToolbar.title = getString(R.string.Backup_Intro_TitleShow)
             buttonNext.text = getString(R.string.Backup_Button_ShowKey)
         }
 

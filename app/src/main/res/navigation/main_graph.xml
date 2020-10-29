@@ -152,7 +152,8 @@
     <fragment
         android:id="@+id/backupFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backup.BackupFragment"
-        tools:layout="@layout/fragment_backup">
+        tools:layout="@layout/fragment_backup"
+        android:label="@string/Backup_Intro_Title">
         <action
             android:id="@+id/backupFragment_to_backupWordsFragment"
             app:destination="@id/backupWordsFragment" />
@@ -170,7 +171,8 @@
     <fragment
         android:id="@+id/backupEosFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosFragment"
-        tools:layout="@layout/fragment_backup_eos" />
+        tools:layout="@layout/fragment_backup_eos"
+        android:label="@string/Backup_DisplayTitle"/>
     <fragment
         android:id="@+id/rateChartFragment"
         android:name="io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment"

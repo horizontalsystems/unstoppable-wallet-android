@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
-import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_backup_eos.*
 
 class BackupEosFragment : BaseFragment() {
@@ -23,9 +23,10 @@ class BackupEosFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        shadowlessToolbar.bind(getString(R.string.Backup_DisplayTitle), TopMenuItem(R.drawable.ic_back, onClick = {
-            findNavController().popBackStack()
-        }))
+        (activity as? AppCompatActivity)?.let {
+            it.setSupportActionBar(toolbar)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         val account = arguments?.getString(ACCOUNT) ?: run {
             findNavController().popBackStack()
