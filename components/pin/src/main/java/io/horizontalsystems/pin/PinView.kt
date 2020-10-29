@@ -7,7 +7,7 @@ import java.util.*
 
 class PinView : PinModule.IView {
 
-    val toolbar = MutableLiveData<Pair<Int, Boolean>>()
+    val toolbar = MutableLiveData<Int>()
     val addPages = MutableLiveData<List<PinPage>>()
     val showPageAtIndex = MutableLiveData<Int>()
     val showError = MutableLiveData<Int>()
@@ -21,8 +21,8 @@ class PinView : PinModule.IView {
     val enablePinInput = SingleLiveEvent<Unit>()
 
 
-    override fun setToolbar(title: Int, showBackButton: Boolean) {
-        this.toolbar.value = Pair(title, showBackButton)
+    override fun setToolbar(title: Int) {
+        this.toolbar.postValue(title)
     }
 
     override fun addPages(pages: List<PinPage>) {

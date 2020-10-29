@@ -9,7 +9,7 @@ class EditPinPresenter(
     : ManagePinPresenter(view, interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
-        view.setToolbar(R.string.EditPin_Title, true)
+        view.setToolbar(R.string.EditPin_Title)
         view.enablePinInput()
         val pinPages = mutableListOf<PinPage>()
 

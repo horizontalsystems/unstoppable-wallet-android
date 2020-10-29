@@ -17,12 +17,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.pin.core.NumPadItem
 import io.horizontalsystems.pin.core.NumPadItemType
@@ -37,7 +41,6 @@ import io.horizontalsystems.pin.set.SetPinRouter
 import io.horizontalsystems.pin.unlock.UnlockPinModule
 import io.horizontalsystems.pin.unlock.UnlockPinPresenter
 import io.horizontalsystems.pin.unlock.UnlockPinRouter
-import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.synthetic.main.fragment_pin.*
 import java.util.concurrent.Executor
 
@@ -160,15 +163,8 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
             pinPagesAdapter.showCancelButton = showCancelButton
         })
 
-        pinView.toolbar.observe(viewLifecycleOwner, Observer { (titleRes, showBackButton) ->
-            shadowlessToolbar.isVisible = true
-
-            val backButton = when (showBackButton) {
-                true -> TopMenuItem(R.drawable.ic_back, onClick = { onCancelClick() })
-                else -> null
-            }
-
-            shadowlessToolbar.bind(getString(titleRes), leftBtnItem = backButton)
+        pinView.toolbar.observe(viewLifecycleOwner, Observer { titleRes ->
+            showToolbar(titleRes)
         })
 
         pinView.addPages.observe(viewLifecycleOwner, Observer {
@@ -224,6 +220,18 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
             val time = DateHelper.getOnlyTime(it)
             pinPagesAdapter.pinLockedMessage = getString(R.string.UnlockPin_WalletDisabledUntil, time)
         })
+    }
+
+    private fun showToolbar(titleRes: Int) {
+        toolbar.isVisible = true
+        toolbar.title = getString(titleRes)
+
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
+        navController.addOnDestinationChangedListener(navDestinationChangeListener)
+        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
     }
 
     private fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject) {
