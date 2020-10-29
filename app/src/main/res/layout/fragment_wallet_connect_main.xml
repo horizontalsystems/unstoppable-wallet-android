@@ -85,7 +85,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/approveButton"
+            android:id="@+id/connectButton"
             style="@style/ButtonPrimaryYellow"
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -93,21 +93,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/Button_Approve"
-            app:layout_constraintBottom_toTopOf="@id/rejectButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="1" />
-
-        <Button
-            android:id="@+id/rejectButton"
-            style="@style/ButtonPrimarySteel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/Button_Reject"
+            android:text="@string/Button_Connect"
             app:layout_constraintBottom_toTopOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

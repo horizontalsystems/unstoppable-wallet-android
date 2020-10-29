@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.core.SingleLiveEvent
@@ -13,10 +14,10 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
     val cancelVisibleLiveData = MutableLiveData<Boolean>()
-    val approveAndRejectVisibleLiveData = MutableLiveData<Boolean>()
+    val connectButtonLiveData = MutableLiveData<ButtonState>()
+    val disconnectButtonLiveData = MutableLiveData<ButtonState>()
     val closeVisibleLiveData = MutableLiveData<Boolean>()
-    val disconnectVisibleLiveData = MutableLiveData<Boolean>()
-    val signedTransactionsVisibleLiveData = MutableLiveData<Boolean>()
+    val signedTransactionsVisibleLiveData = MutableLiveData<Boolean>(false)
     val hintLiveData = MutableLiveData<Int?>()
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
@@ -26,18 +27,31 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         OFFLINE, ONLINE, CONNECTING
     }
 
+    enum class ButtonState(val visible: Boolean, val enabled: Boolean) {
+        Enabled(true, true), Disabled(true, false), Hidden(false, true)
+    }
+
     private val disposables = CompositeDisposable()
 
     init {
-        syncState(service.state)
+        sync(service.state, service.connectionState)
 
         service.stateSubject
                 .subscribe {
-                    syncState(it)
+                    sync(it, service.connectionState)
                 }
                 .let {
                     disposables.add(it)
                 }
+
+        service.connectionStateSubject
+                .subscribe {
+                    sync(service.state, it)
+                }
+                .let {
+                    disposables.add(it)
+                }
+
 
         service.requestSubject
                 .subscribe {
@@ -48,20 +62,24 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
                 }
     }
 
-    fun approve() {
-        service.approveSession()
+    fun cancel() {
+        if (service.connectionState == WalletConnectInteractor.State.Connected && service.state == WalletConnectService.State.WaitingForApproveSession) {
+            service.rejectSession()
+        } else {
+            closeLiveEvent.postValue(Unit)
+        }
     }
 
-    fun reject() {
-        service.rejectSession()
+    fun connect() {
+        service.approveSession()
     }
 
     fun disconnect() {
         service.killSession()
     }
 
-    private fun syncState(state: WalletConnectService.State) {
-        if (state == WalletConnectService.State.Completed) {
+    private fun sync(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State) {
+        if (state == WalletConnectService.State.Killed) {
             closeLiveEvent.postValue(Unit)
             return
         }
@@ -71,18 +89,13 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         }
         peerMetaLiveData.postValue(peerMetaViewItem)
 
-        connectingLiveData.postValue(state == WalletConnectService.State.Connecting && service.remotePeerMeta == null)
-        cancelVisibleLiveData.postValue(state == WalletConnectService.State.Connecting)
-        disconnectVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
+        connectingLiveData.postValue(state == WalletConnectService.State.Idle)
+        cancelVisibleLiveData.postValue(state != WalletConnectService.State.Ready)
+        connectButtonLiveData.postValue(getConnectButtonState(state, connectionState))
+        disconnectButtonLiveData.postValue(getDisconnectButtonState(state, connectionState))
         closeVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
-        approveAndRejectVisibleLiveData.postValue(state == WalletConnectService.State.WaitingForApproveSession)
-        signedTransactionsVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
 
-        statusLiveData.postValue(when (state) {
-            WalletConnectService.State.Connecting -> Status.CONNECTING
-            WalletConnectService.State.Ready -> Status.ONLINE
-            else -> null
-        })
+        statusLiveData.postValue(getStatus(connectionState))
 
 
         val hint = when (state) {
@@ -92,6 +105,34 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         }
 
         hintLiveData.postValue(hint)
+    }
+
+    private fun getStatus(connectionState: WalletConnectInteractor.State): Status? {
+        return if (service.remotePeerMeta == null) {
+            null
+        } else {
+            when (connectionState) {
+                WalletConnectInteractor.State.Connecting -> Status.CONNECTING
+                WalletConnectInteractor.State.Connected -> Status.ONLINE
+                WalletConnectInteractor.State.Disconnected -> Status.OFFLINE
+            }
+        }
+    }
+
+    private fun getConnectButtonState(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State): ButtonState {
+        return when {
+            state != WalletConnectService.State.WaitingForApproveSession -> ButtonState.Hidden
+            connectionState == WalletConnectInteractor.State.Connected -> ButtonState.Enabled
+            else -> ButtonState.Disabled
+        }
+    }
+
+    private fun getDisconnectButtonState(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State): ButtonState {
+        return when {
+            state != WalletConnectService.State.Ready -> ButtonState.Hidden
+            connectionState == WalletConnectInteractor.State.Connected -> ButtonState.Enabled
+            else -> ButtonState.Disabled
+        }
     }
 }
 

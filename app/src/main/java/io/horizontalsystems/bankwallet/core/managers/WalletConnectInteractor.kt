@@ -15,11 +15,22 @@ import java.util.*
 class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.randomUUID().toString()) {
 
     interface Delegate {
-        fun didConnect()
+        fun didUpdateState(state: State)
         fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta)
         fun didKillSession()
         fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction)
     }
+
+    enum class State {
+        Connecting, Connected, Disconnected
+    }
+
+    var state: State = State.Disconnected
+        private set(value) {
+            field = value
+
+            delegate?.didUpdateState(value)
+        }
 
     constructor(uri: String) : this(WCSession.from(uri) ?: throw SessionError.InvalidUri)
 
@@ -31,7 +42,11 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
     init {
         client.addSocketListener(object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
-                delegate?.didConnect()
+                state = State.Connected
+            }
+
+            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                state = State.Disconnected
             }
         })
 
@@ -47,7 +62,9 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
 
         client.onFailure = { Unit }
 
-        client.onDisconnect = { code: Int, reason: String -> Unit }
+        client.onDisconnect = { code: Int, reason: String ->
+            state = State.Disconnected
+        }
 
         client.onEthSendTransaction = { id: Long, transaction: WCEthereumTransaction ->
             delegate?.didRequestSendEthTransaction(id, transaction)
@@ -68,6 +85,8 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
     }
 
     fun connect(remotePeerId: String?) {
+        state = State.Connecting
+
         client.connect(session, clientMeta, peerId, remotePeerId)
     }
 

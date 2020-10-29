@@ -16,10 +16,9 @@ class WalletConnectService(
 
     sealed class State {
         object Idle : State()
-        object Connecting : State()
         object WaitingForApproveSession : State()
         object Ready : State()
-        object Completed : State()
+        object Killed : State()
     }
 
     data class PeerData(val peerId: String, val peerMeta: WCPeerMeta)
@@ -30,13 +29,17 @@ class WalletConnectService(
     val remotePeerMeta: WCPeerMeta?
         get() = remotePeerData?.peerMeta
 
-    var state: State = State.Connecting
+    var state: State = State.Idle
         private set(value) {
             field = value
             stateSubject.onNext(value)
         }
 
+    val connectionState: WalletConnectInteractor.State
+        get() = interactor?.state ?: WalletConnectInteractor.State.Disconnected
+
     val stateSubject = PublishSubject.create<State>()
+    val connectionStateSubject = PublishSubject.create<WalletConnectInteractor.State>()
     val requestSubject = PublishSubject.create<WalletConnectRequest>()
 
     val isEthereumKitReady: Boolean
@@ -54,7 +57,7 @@ class WalletConnectService(
             interactor?.delegate = this
             interactor?.connect(sessionStoreItem.remotePeerId)
 
-            state = State.Connecting
+            state = State.Ready
         } else {
             state = State.Idle
         }
@@ -65,8 +68,6 @@ class WalletConnectService(
         interactor = WalletConnectInteractor(uri)
         interactor?.delegate = this
         interactor?.connect(null)
-
-        state = State.Connecting
     }
 
     override fun clear() {
@@ -92,7 +93,7 @@ class WalletConnectService(
         interactor?.let {
             it.rejectSession()
 
-            state = State.Completed
+            state = State.Killed
         }
     }
 
@@ -110,16 +111,14 @@ class WalletConnectService(
         interactor?.rejectRequest(requestId, "Rejected by user")
     }
 
-    override fun didConnect() {
-        if (remotePeerData != null) {
-            state = State.Ready
-        }
+    override fun didUpdateState(state: WalletConnectInteractor.State) {
+        connectionStateSubject.onNext(state)
     }
 
     override fun didKillSession() {
         sessionStore.storedItem = null
 
-        state = State.Completed
+        state = State.Killed
     }
 
     override fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta) {

@@ -134,8 +134,8 @@ class SwapFragment : BaseFragment() {
         })
 
         viewModel.approveData.observe(viewLifecycleOwner, Observer { approveData ->
-            approveButton.isVisible = approveData != null
-            approveButton.setOnSingleClickListener {
+            connectButton.isVisible = approveData != null
+            connectButton.setOnSingleClickListener {
                 approveData?.let {
                     SwapApproveFragment
                             .newInstance(it.coin, it.amount, it.spenderAddress)
