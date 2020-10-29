@@ -174,7 +174,12 @@
     <fragment
         android:id="@+id/rateChartFragment"
         android:name="io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment"
-        tools:layout="@layout/fragment_rate_chart" />
+        tools:layout="@layout/fragment_rate_chart"
+        android:label="{coin_title_key}">
+        <argument
+            android:name="coin_title_key"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/pinFragment"
         android:name="io.horizontalsystems.pin.PinFragment"
