@@ -1,19 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.core.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
@@ -22,13 +19,18 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.fragment_settings_privacy.*
 import kotlin.system.exitProcess
 
-class PrivacySettingsFragment : BaseFragment() {
+class PrivacySettingsFragment :
+        BaseFragment(),
+        PrivacySettingsTorAdapter.Listener,
+        PrivacySettingsTransactionsStructureAdapter.Listener {
 
     private lateinit var viewModel: PrivacySettingsViewModel
+    private lateinit var torControlAdapter: PrivacySettingsTorAdapter
     private lateinit var communicationSettingsAdapter: PrivacySettingsAdapter
     private lateinit var walletRestoreSettingsAdapter: PrivacySettingsAdapter
 
@@ -39,25 +41,41 @@ class PrivacySettingsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
+
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        setHasOptionsMenu(true)
-
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()
 
+
+        val topDescriptionAdapter = PrivacySettingsHeaderAdapter()
+        torControlAdapter = PrivacySettingsTorAdapter(this)
+        val transactionsStructureAdapter = PrivacySettingsTransactionsStructureAdapter(this)
+        communicationSettingsAdapter = PrivacySettingsAdapter(
+                viewModel.delegate,
+                getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
+                getString(R.string.SettingsPrivacy_CommunicationDescription))
+        walletRestoreSettingsAdapter = PrivacySettingsAdapter(
+                viewModel.delegate,
+                getString(R.string.SettingsPrivacy_WalletRestore),
+                getString(R.string.SettingsPrivacy_WalletRestoreDescription))
+
+        concatRecyclerView.adapter = ConcatAdapter(
+                topDescriptionAdapter,
+                torControlAdapter,
+                transactionsStructureAdapter,
+                communicationSettingsAdapter,
+                walletRestoreSettingsAdapter
+        )
+
+        concatRecyclerView.itemAnimator = null
+
         createCommunicationSettingsView()
 
-        torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.delegate.didSwitchTorEnabled(isChecked)
-        }
-
-        transactionsOrderSetting.setOnClickListener {
-            viewModel.delegate.onTransactionOrderSettingTap()
-        }
 
         // IView
         viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer { enabled ->
@@ -65,7 +83,7 @@ class PrivacySettingsFragment : BaseFragment() {
         })
 
         viewModel.torEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
-            setTorSwitch(enabled)
+            torControlAdapter.setTorSwitch(enabled)
         })
 
         viewModel.blockchainSettingsVisibilityLiveData.observe(viewLifecycleOwner, Observer { isVisible ->
@@ -73,38 +91,11 @@ class PrivacySettingsFragment : BaseFragment() {
         })
 
         viewModel.setTorConnectionStatus.observe(viewLifecycleOwner, Observer { torStatus ->
-            torStatus?.let {
-                when (torStatus) {
-                    TorStatus.Connecting -> {
-                        connectionSpinner.isVisible = true
-                        controlIcon.imageTintList = getTint(R.color.grey)
-                        controlIcon.setImageResource(R.drawable.ic_tor_connected)
-                        subtitleText.text = getString(R.string.TorPage_Connecting)
-                    }
-                    TorStatus.Connected -> {
-                        connectionSpinner.isVisible = false
-                        controlIcon.imageTintList = getTint(R.color.yellow_d)
-                        controlIcon.setImageResource(R.drawable.ic_tor_connected)
-                        subtitleText.text = getString(R.string.TorPage_Connected)
-                    }
-                    TorStatus.Failed -> {
-                        connectionSpinner.isVisible = false
-                        controlIcon.imageTintList = getTint(R.color.yellow_d)
-                        controlIcon.setImageResource(R.drawable.ic_tor_status_error)
-                        subtitleText.text = getString(R.string.TorPage_Failed)
-                    }
-                    TorStatus.Closed -> {
-                        connectionSpinner.isVisible = false
-                        controlIcon.imageTintList = getTint(R.color.yellow_d)
-                        controlIcon.setImageResource(R.drawable.ic_tor)
-                        subtitleText.text = getString(R.string.TorPage_ConnectionClosed)
-                    }
-                }
-            }
+            torControlAdapter.bind(torStatus)
         })
 
         viewModel.transactionOrderingLiveData.observe(viewLifecycleOwner, Observer { ordering ->
-            transactionsOrderSetting.showDropdownValue(getSortingLocalized(ordering))
+            transactionsStructureAdapter.bind(getSortingLocalized(ordering))
         })
 
         viewModel.showAppRestartAlertForTor.observe(viewLifecycleOwner, Observer { checked ->
@@ -154,10 +145,15 @@ class PrivacySettingsFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun createCommunicationSettingsView() {
-        communicationSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
-        communicationSettingsRecyclerview.adapter = communicationSettingsAdapter
+    override fun onTorSwitchChecked(checked: Boolean) {
+        viewModel.delegate.didSwitchTorEnabled(checked)
+    }
 
+    override fun onClick() {
+        viewModel.delegate.onTransactionOrderSettingTap()
+    }
+
+    private fun createCommunicationSettingsView() {
         viewModel.communicationSettingsViewItems.observe(this, Observer {
             communicationSettingsAdapter.items = it
             communicationSettingsAdapter.notifyDataSetChanged()
@@ -192,7 +188,7 @@ class PrivacySettingsFragment : BaseFragment() {
                             }
 
                             override fun onCancelButtonClick() {
-                                setTorSwitch(false)
+                                torControlAdapter.setTorSwitch(false)
                                 viewModel.delegate.onApplyTorPrerequisites(false)
                             }
                         }
@@ -203,9 +199,6 @@ class PrivacySettingsFragment : BaseFragment() {
 
     private fun createWalletRestoreSettingsView(doCreate: Boolean) {
         if (doCreate) {
-            walletRestoreSettingsAdapter = PrivacySettingsAdapter(viewModel.delegate)
-            walletRestoreSettingsRecyclerview.adapter = walletRestoreSettingsAdapter
-
             viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
                 walletRestoreSettingsAdapter.items = it
                 walletRestoreSettingsAdapter.notifyDataSetChanged()
@@ -227,9 +220,6 @@ class PrivacySettingsFragment : BaseFragment() {
             })
         }
 
-        walletRestoreTitle.isVisible = doCreate
-        walletRestoreSettingsDescription.isVisible = doCreate
-        walletRestoreSettingsRecyclerview.isVisible = doCreate
     }
 
     private fun getSortingLocalized(sortingType: TransactionDataSortingType): String {
@@ -265,14 +255,6 @@ class PrivacySettingsFragment : BaseFragment() {
         }
     }
 
-    private fun setTorSwitch(checked: Boolean) {
-        torConnectionSwitch.setOnCheckedChangeListener(null)
-        torConnectionSwitch.isChecked = checked
-        torConnectionSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.delegate.didSwitchTorEnabled(isChecked)
-        }
-    }
-
     private fun showAppRestartAlert(checked: Boolean) {
         activity?.let {
             ConfirmationDialog.show(
@@ -289,7 +271,7 @@ class PrivacySettingsFragment : BaseFragment() {
                         }
 
                         override fun onCancelButtonClick() {
-                            setTorSwitch(!checked)
+                            torControlAdapter.setTorSwitch(!checked)
                             viewModel.delegate.onApplyTorPrerequisites(!checked)
                         }
                     }
@@ -309,7 +291,7 @@ class PrivacySettingsFragment : BaseFragment() {
                     }
 
                     override fun onCancel() {
-                        setTorSwitch(false)
+                        torControlAdapter.setTorSwitch(false)
                     }
                 }).show(childFragmentManager, "alert_dialog_notification")
     }
@@ -325,7 +307,7 @@ class PrivacySettingsFragment : BaseFragment() {
                     }
 
                     override fun onCancel() {
-                        setTorSwitch(false)
+                        torControlAdapter.setTorSwitch(false)
                     }
                 }).show(childFragmentManager, "alert_dialog")
     }
@@ -348,5 +330,4 @@ class PrivacySettingsFragment : BaseFragment() {
         }
     }
 
-    private fun getTint(color: Int) = context?.let { ColorStateList.valueOf(ContextCompat.getColor(it, color)) }
 }

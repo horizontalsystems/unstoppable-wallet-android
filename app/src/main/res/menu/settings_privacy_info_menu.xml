@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuShowInfo"
-        android:title="@string/Welcome_PrivacySettings"
-        android:icon="@drawable/ic_info"
+        android:id="@+id/closeButton"
+        android:title="@string/Alert_Close"
+        android:icon="@drawable/close"
         app:showAsAction="always" />
 
 </menu>
