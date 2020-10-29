@@ -22,7 +22,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.eoskit.core.InvalidPrivateKey
 import io.horizontalsystems.views.MultipleInputEditTextView
-import kotlinx.android.synthetic.main.fragment_backup_eos.*
 import kotlinx.android.synthetic.main.fragment_restore_eos.*
 import kotlinx.android.synthetic.main.fragment_restore_eos.eosAccount
 import kotlinx.android.synthetic.main.fragment_restore_eos.eosActivePrivateKey
