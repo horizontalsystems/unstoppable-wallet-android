@@ -12,7 +12,7 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import java.util.*
 
-class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.randomUUID().toString()) {
+class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.randomUUID().toString(), val remotePeerId: String? = null) {
 
     interface Delegate {
         fun didUpdateState(state: State)
@@ -84,7 +84,7 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
         client.onSignTransaction = { id, _ -> rejectWithNotSupported(id) }
     }
 
-    fun connect(remotePeerId: String?) {
+    fun connect() {
         state = State.Connecting
 
         client.connect(session, clientMeta, peerId, remotePeerId)

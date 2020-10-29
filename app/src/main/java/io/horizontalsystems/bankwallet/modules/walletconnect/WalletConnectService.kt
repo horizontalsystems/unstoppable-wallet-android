@@ -57,9 +57,9 @@ class WalletConnectService(
         if (sessionStoreItem != null) {
             remotePeerData = PeerData(sessionStoreItem.remotePeerId, sessionStoreItem.remotePeerMeta)
 
-            interactor = WalletConnectInteractor(sessionStoreItem.session, sessionStoreItem.peerId)
+            interactor = WalletConnectInteractor(sessionStoreItem.session, sessionStoreItem.peerId, sessionStoreItem.remotePeerId)
             interactor?.delegate = this
-            interactor?.connect(sessionStoreItem.remotePeerId)
+            interactor?.connect()
 
             state = State.Ready
         } else {
@@ -69,9 +69,7 @@ class WalletConnectService(
         connectivityManager.networkAvailabilitySignal
                 .subscribe {
                     if (connectivityManager.isConnected) {
-                        remotePeerData?.peerId?.let { remotePeerId ->
-                            interactor?.connect(remotePeerId)
-                        }
+                        interactor?.connect()
                     }
                 }
                 .let {
@@ -83,7 +81,7 @@ class WalletConnectService(
     fun connect(uri: String) {
         interactor = WalletConnectInteractor(uri)
         interactor?.delegate = this
-        interactor?.connect(null)
+        interactor?.connect()
     }
 
     override fun clear() {
