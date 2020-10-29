@@ -59,7 +59,7 @@ class ZCashAdapter(
             builder.server(lightWalletDHost, lightWalletDPort)
             builder.setSeed(seed)
             builder.importedWalletBirthday(nearestBirthday.height)
-            builder.alias = wallet.account.id
+            builder.alias = getValidAliasFromAccountId(wallet.account.id)
         }
         synchronizer = Synchronizer(initializer)
         transactionsProvider = ZCashTransactionsProvider(synchronizer)
@@ -87,7 +87,7 @@ class ZCashAdapter(
     }
 
     override val debugInfo: String
-        get() = ""//TODO("Not yet implemented")
+        get() = ""
     //endregion
 
     //region IBalanceAdapter
@@ -267,4 +267,15 @@ class ZCashAdapter(
         object SendToSelfNotAllowed : ZcashError()
     }
 
+    companion object {
+        private const val ALIAS_PREFIX = "zcash_"
+
+        private fun getValidAliasFromAccountId(accountId: String): String {
+            return ALIAS_PREFIX + accountId.replace("-", "_")
+        }
+
+        fun clear(accountId: String) {
+            //TODO("Not implemented yet")
+        }
+    }
 }
