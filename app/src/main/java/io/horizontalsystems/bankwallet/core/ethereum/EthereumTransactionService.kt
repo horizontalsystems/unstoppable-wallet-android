@@ -87,20 +87,16 @@ class EthereumTransactionService(
     }
 
     private fun gasLimitSingle(gasPrice: Long, transactionData: TransactionData): Single<Long> {
-        // todo: make "to" optional in EthereumKit
-        return ethereumKit.estimateGas(transactionData.to!!, transactionData.value, gasPrice, transactionData.input)
+        return ethereumKit.estimateGas(transactionData.to, transactionData.value, gasPrice, transactionData.input)
     }
 
     // types
 
     data class TransactionData(
-            var to: Address?,
-            var value: BigInteger?,
+            var to: Address,
+            var value: BigInteger,
             var input: ByteArray
-    ) {
-        val amount: BigInteger
-            get() = value ?: BigInteger.ZERO
-    }
+    )
 
     data class GasData(
             val gasLimit: Long,
@@ -115,7 +111,7 @@ class EthereumTransactionService(
             val gasData: GasData
     ) {
         val totalAmount: BigInteger
-            get() = data.amount + gasData.fee
+            get() = data.value + gasData.fee
     }
 
     sealed class GasPriceType {
