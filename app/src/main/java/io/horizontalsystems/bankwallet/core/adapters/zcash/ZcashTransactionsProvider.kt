@@ -14,18 +14,18 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.math.min
 
-class ZCashTransactionsProvider(synchronizer: Synchronizer) {
+class ZcashTransactionsProvider(synchronizer: Synchronizer) {
 
     init {
         synchronizer.clearedTransactions.distinctUntilChanged().collectWith(GlobalScope, ::onClearedTransactions)
         synchronizer.pendingTransactions.distinctUntilChanged().collectWith(GlobalScope, ::onPendingTransactions)
     }
 
-    private var confirmedTransactions: MutableList<ZCashTransaction> = mutableListOf()
-    private var pendingTransactions: MutableList<ZCashTransaction> = mutableListOf()
-    private val newTransactionsSubject: PublishSubject<List<ZCashTransaction>> = PublishSubject.create()
+    private var confirmedTransactions: MutableList<ZcashTransaction> = mutableListOf()
+    private var pendingTransactions: MutableList<ZcashTransaction> = mutableListOf()
+    private val newTransactionsSubject: PublishSubject<List<ZcashTransaction>> = PublishSubject.create()
 
-    private fun getAllTransactionsSorted(): List<ZCashTransaction> {
+    private fun getAllTransactionsSorted(): List<ZcashTransaction> {
         return confirmedTransactions.union(pendingTransactions).sortedDescending()
     }
 
@@ -34,7 +34,7 @@ class ZCashTransactionsProvider(synchronizer: Synchronizer) {
         val newTransactions = transactions.filter { tx -> tx.minedHeight > 0 && !confirmedTransactions.any { it.id == tx.id } }
 
         if (newTransactions.isNotEmpty()) {
-            val newZcashTransactions = newTransactions.map { ZCashTransaction(it) }
+            val newZcashTransactions = newTransactions.map { ZcashTransaction(it) }
             newTransactionsSubject.onNext(newZcashTransactions)
             confirmedTransactions.addAll(newZcashTransactions)
         }
@@ -46,17 +46,17 @@ class ZCashTransactionsProvider(synchronizer: Synchronizer) {
         val newTransactions = transactions.filter { tx -> tx.hasRawTransactionId() && !tx.isMined() && !pendingTransactions.any { it.id == tx.id } }
 
         if (newTransactions.isNotEmpty()) {
-            val newZcashTransactions = newTransactions.map { ZCashTransaction(it) }
+            val newZcashTransactions = newTransactions.map { ZcashTransaction(it) }
             newTransactionsSubject.onNext(newZcashTransactions)
             pendingTransactions.addAll(newZcashTransactions)
         }
     }
 
-    val newTransactionsFlowable: Flowable<List<ZCashTransaction>>
+    val newTransactionsFlowable: Flowable<List<ZcashTransaction>>
         get() = newTransactionsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     @Synchronized
-    fun getTransactions(from: Triple<ByteArray, Long, Int>?, limit: Int): Single<List<ZCashTransaction>> =
+    fun getTransactions(from: Triple<ByteArray, Long, Int>?, limit: Int): Single<List<ZcashTransaction>> =
             Single.create { emitter ->
                 try {
                     val allTransactions = getAllTransactionsSorted()

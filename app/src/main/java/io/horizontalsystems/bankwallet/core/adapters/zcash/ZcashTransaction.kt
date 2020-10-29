@@ -4,7 +4,7 @@ import cash.z.ecc.android.sdk.db.entity.ConfirmedTransaction
 import cash.z.ecc.android.sdk.db.entity.PendingTransaction
 import cash.z.ecc.android.sdk.db.entity.isFailure
 
-class ZCashTransaction : Comparable<ZCashTransaction> {
+class ZcashTransaction : Comparable<ZcashTransaction> {
     val id: Long
     val transactionHash: ByteArray
     val transactionIndex: Int
@@ -47,7 +47,7 @@ class ZCashTransaction : Comparable<ZCashTransaction> {
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is ZCashTransaction &&
+        return other is ZcashTransaction &&
                 other.transactionHash.contentEquals(transactionHash)
     }
 
@@ -55,7 +55,7 @@ class ZCashTransaction : Comparable<ZCashTransaction> {
         return transactionHash.hashCode()
     }
 
-    override fun compareTo(other: ZCashTransaction): Int = when (timestamp) {
+    override fun compareTo(other: ZcashTransaction): Int = when (timestamp) {
         other.timestamp -> transactionIndex.compareTo(other.transactionIndex)
         else -> timestamp.compareTo(other.timestamp)
     }

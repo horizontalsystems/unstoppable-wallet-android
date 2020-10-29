@@ -244,7 +244,7 @@ object SendModule {
 
                     handler
                 }
-                is ISendZCashAdapter -> {
+                is ISendZcashAdapter -> {
                     val zcashInteractor = SendZcashInteractor(adapter)
                     val handler = SendZcashHandler(zcashInteractor, router)
 
