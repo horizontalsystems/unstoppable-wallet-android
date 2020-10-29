@@ -255,7 +255,7 @@ class App : CoreApp() {
             rateAppManager.onAppLaunch()
             accountManager.loadAccounts()
             walletManager.loadWallets()
-            adapterManager.preloadAdapters() //
+            adapterManager.preloadAdapters()
             accountManager.clearAccounts()
             notificationSubscriptionManager.processJobs()
         }).start()

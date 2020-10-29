@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.adapters.zcash.ZCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
@@ -89,8 +89,8 @@ class SendAddressFragment(
                 else -> {
                     txtAddressError.text = when (error) {
                         is HodlerPlugin.UnsupportedAddressType -> getString(R.string.Send_Error_UnsupportedAddress)
-                        ZCashAdapter.ZcashError.TransparentAddressNotAllowed -> getString(R.string.Send_Error_TransparentAddress)
-                        ZCashAdapter.ZcashError.SendToSelfNotAllowed -> getString(R.string.Send_Error_SendToSelf)
+                        ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> getString(R.string.Send_Error_TransparentAddress)
+                        ZcashAdapter.ZcashError.SendToSelfNotAllowed -> getString(R.string.Send_Error_SendToSelf)
                         else -> getString(R.string.Send_Error_IncorrectAddress)
                     }
                     txtAddressError.isVisible = true

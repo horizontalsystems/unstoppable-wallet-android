@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.send.zcash
 
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.ISendZCashAdapter
+import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendZcashInteractor(
-        private val adapter: ISendZCashAdapter
+        private val adapter: ISendZcashAdapter
 ) : SendModule.ISendZcashInteractor {
 
     override val availableBalance: BigDecimal

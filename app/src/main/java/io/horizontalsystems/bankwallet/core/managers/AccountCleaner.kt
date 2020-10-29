@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.adapters.*
-import io.horizontalsystems.bankwallet.core.adapters.zcash.ZCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.entities.CoinType
 
 class AccountCleaner(private val testMode: Boolean) : IAccountCleaner {
@@ -20,7 +20,7 @@ class AccountCleaner(private val testMode: Boolean) : IAccountCleaner {
             is CoinType.Erc20 -> Erc20Adapter.clear(accountId, testMode)
             is CoinType.Binance -> BinanceAdapter.clear(accountId, testMode)
             is CoinType.Eos -> EosAdapter.clear(accountId, testMode)
-            CoinType.Zcash -> ZCashAdapter.clear(accountId)
+            CoinType.Zcash -> ZcashAdapter.clear(accountId)
         }
     }
 
@@ -32,7 +32,7 @@ class AccountCleaner(private val testMode: Boolean) : IAccountCleaner {
         EosAdapter.clear(accountId, testMode)
         EthereumAdapter.clear(accountId, testMode)
         Erc20Adapter.clear(accountId, testMode)
-        ZCashAdapter.clear(accountId)
+        ZcashAdapter.clear(accountId)
     }
 
 }

@@ -20,11 +20,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 
-class ZCashAdapter(
+class ZcashAdapter(
         context: Context,
         wallet: Wallet,
         testMode: Boolean
-) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZCashAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
     private val feeInZatoshi = 10_000L //0.0001 ZEC
@@ -34,7 +34,7 @@ class ZCashAdapter(
 
     private val synchronizer: Synchronizer
     private val seed: ByteArray
-    private val transactionsProvider: ZCashTransactionsProvider
+    private val transactionsProvider: ZcashTransactionsProvider
 
     private val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -62,7 +62,7 @@ class ZCashAdapter(
             builder.alias = getValidAliasFromAccountId(wallet.account.id)
         }
         synchronizer = Synchronizer(initializer)
-        transactionsProvider = ZCashTransactionsProvider(synchronizer)
+        transactionsProvider = ZcashTransactionsProvider(synchronizer)
 
         synchronizer.status.distinctUntilChanged().collectWith(GlobalScope, ::onStatus)
         synchronizer.progress.distinctUntilChanged().collectWith(GlobalScope, ::onDownloadProgress)
@@ -156,7 +156,7 @@ class ZCashAdapter(
         get() = transactionsProvider.newTransactionsFlowable.map { transactions -> transactions.map { getTransactionRecord(it) } }
     //endregion
 
-    //region ISendZCashAdapter
+    //region ISendZcashAdapter
     override val availableBalance: BigDecimal
         get() = (synchronizer.latestBalance.availableZatoshi - feeInZatoshi).coerceAtLeast(0).convertZatoshiToZec()
 
@@ -232,13 +232,13 @@ class ZCashAdapter(
         }
     }
 
-    private fun getTransactionRecord(zCashTransaction: ZCashTransaction): TransactionRecord =
-            zCashTransaction.let {
+    private fun getTransactionRecord(zcashTransaction: ZcashTransaction): TransactionRecord =
+            zcashTransaction.let {
                 val transactionHashHex = it.transactionHash.toHexReversed()
                 val type = when {
                     !it.toAddress.isNullOrEmpty() -> TransactionType.Outgoing
                     it.toAddress.isNullOrEmpty() && it.value > 0L && it.minedHeight > 0 -> TransactionType.Incoming
-                    else -> throw Exception("Unknown zcash transactions: $zCashTransaction")
+                    else -> throw Exception("Unknown zcash transactions: $zcashTransaction")
                 }
 
                 TransactionRecord(

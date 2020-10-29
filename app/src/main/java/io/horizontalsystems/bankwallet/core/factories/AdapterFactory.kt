@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
 import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.adapters.*
-import io.horizontalsystems.bankwallet.core.adapters.zcash.ZCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -27,7 +27,7 @@ class AdapterFactory(
         val communicationMode = blockchainSettingsManager.communicationSetting(wallet.coin.type)?.communicationMode
 
         return when (val coinType = wallet.coin.type) {
-            is CoinType.Zcash -> ZCashAdapter(context, wallet, testMode)
+            is CoinType.Zcash -> ZcashAdapter(context, wallet, testMode)
             is CoinType.Bitcoin -> BitcoinAdapter(wallet, derivation, syncMode, testMode, backgroundManager)
             is CoinType.Litecoin -> LitecoinAdapter(wallet, derivation, syncMode, testMode, backgroundManager)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)

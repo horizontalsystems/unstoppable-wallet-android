@@ -257,7 +257,7 @@ interface ISendEosAdapter {
     fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
 }
 
-interface ISendZCashAdapter {
+interface ISendZcashAdapter {
     val availableBalance: BigDecimal
     val fee: BigDecimal
 
