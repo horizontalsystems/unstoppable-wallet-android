@@ -8,6 +8,7 @@
     <fragment
         android:id="@+id/privacySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsFragment"
+        android:label="@string/SettingsSecurity_Privacy"
         tools:layout="@layout/fragment_settings_privacy">
         <action
             android:id="@+id/privacySettingsFragment_to_privacySettingsInfoFragment"
@@ -16,6 +17,7 @@
     <fragment
         android:id="@+id/privacySettingsInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsInfoFragment"
+        android:label="@string/Welcome_PrivacySettings"
         tools:layout="@layout/fragment_privacy_settings_info" />
 
 </navigation>
