@@ -19,7 +19,7 @@ object PinModule {
     const val requestResult = "pin_request_result"
 
     interface IView {
-        fun setToolbar(title: Int, showBackButton: Boolean)
+        fun setToolbar(title: Int)
         fun addPages(pages: List<PinPage>)
         fun showPage(index: Int)
         fun updateTopTextForPage(text: TopText, pageIndex: Int)

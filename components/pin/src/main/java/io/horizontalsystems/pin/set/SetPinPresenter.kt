@@ -8,7 +8,7 @@ class SetPinPresenter(
         interactor: PinModule.IInteractor) : ManagePinPresenter(view, interactor, pages = listOf(Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
-        view.setToolbar(R.string.SetPin_Title, true)
+        view.setToolbar(R.string.SetPin_Title)
         view.enablePinInput()
 
         val pinPages = mutableListOf<PinPage>()
