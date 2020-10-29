@@ -5,13 +5,16 @@ import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class WalletConnectService(
         ethKitManager: IEthereumKitManager,
-        private val sessionStore: WalletConnectSessionStore
+        private val sessionStore: WalletConnectSessionStore,
+        private val connectivityManager: ConnectivityManager
 ) : WalletConnectInteractor.Delegate, Clearable {
 
     sealed class State {
@@ -46,6 +49,7 @@ class WalletConnectService(
         get() = ethereumKit != null
 
     private val pendingRequests = mutableMapOf<Long, WalletConnectRequest>()
+    private val disposable = CompositeDisposable()
 
     init {
         val sessionStoreItem = sessionStore.storedItem
@@ -61,6 +65,18 @@ class WalletConnectService(
         } else {
             state = State.Idle
         }
+
+        connectivityManager.networkAvailabilitySignal
+                .subscribe {
+                    if (connectivityManager.isConnected) {
+                        remotePeerData?.peerId?.let { remotePeerId ->
+                            interactor?.connect(remotePeerId)
+                        }
+                    }
+                }
+                .let {
+                    disposable.add(it)
+                }
     }
 
 
@@ -71,6 +87,7 @@ class WalletConnectService(
     }
 
     override fun clear() {
+        disposable.clear()
         interactor?.disconnect()
     }
 
