@@ -9,19 +9,17 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.core.*
+import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.getNavigationLiveData
+import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
-
-import androidx.navigation.fragment.findNavController
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
-import io.horizontalsystems.core.CoreApp
-import io.horizontalsystems.core.setOnSingleClickListener
 
 class MainSettingsFragment : BaseFragment() {
 
