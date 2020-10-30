@@ -16,9 +16,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
@@ -51,6 +51,13 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
     }
 
     override fun onBackPressed() {
+        // todo: need to open FullTransactionInfo via navigation fragment
+        supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
+            (fragment as? FullTransactionInfoFragment)?.let {
+                supportFragmentManager.popBackStack()
+                return
+            }
+        }
         when (txInfoBottomSheetBehavior?.state) {
             BottomSheetBehavior.STATE_EXPANDED -> {
                 txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -111,6 +118,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
     override fun showFragmentInTopContainerView(fragment: Fragment) {
         supportFragmentManager.commit {
+            setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_in_bottom, R.anim.slide_out_bottom)
             add(R.id.topFragmentContainerView, fragment)
             addToBackStack(null)
         }
