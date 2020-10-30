@@ -41,7 +41,7 @@ class EthereumKitManager(
             val syncMode = WordsSyncMode.ApiSyncMode()
             val networkType = if (testMode) NetworkType.Ropsten else NetworkType.MainNet
             val rpcApi = when (communicationMode) {
-                CommunicationMode.Infura -> SyncSource.Infura(infuraProjectId, infuraSecretKey)
+                CommunicationMode.Infura -> SyncSource.InfuraWebSocket(infuraProjectId, infuraSecretKey)
                 CommunicationMode.Incubed -> SyncSource.Incubed
                 else -> throw Exception("Invalid communication mode for Ethereum: ${communicationMode?.value}")
             }
