@@ -1,36 +1,39 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
 import android.util.Range
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class EthereumFeeViewModel(
         private val transactionService: EthereumTransactionService,
         private val coinService: EthereumCoinService
-) : ViewModel() {
+) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 
-    sealed class Priority {
-        abstract val description: String
-
-        object Recommended : Priority() {
+    enum class Priority {
+        Recommended {
             override val description by lazy { App.instance.getString(R.string.Send_TxSpeed_Recommended) }
-        }
-
-        object Custom : Priority() {
+        },
+        Custom {
             override val description by lazy { App.instance.getString(R.string.Send_TxSpeed_Custom) }
-        }
+        };
+
+        abstract val description: String
     }
 
-    val feeStatusLiveData = MutableLiveData<String>("")
-    val priorityLiveData = MutableLiveData<String>("")
-    val feeSliderLiveData = MutableLiveData<SendFeeSliderViewItem?>(null)
+    override val feeLiveData = MutableLiveData<String>("")
+
+    override val priorityLiveData = MutableLiveData<String>("")
+    override val openSelectPriorityLiveEvent = SingleLiveEvent<List<SendPriorityViewItem>>()
+    override val feeSliderLiveData = MutableLiveData<SendFeeSliderViewItem?>(null)
 
     private val customFeeUnit = "gwei"
-    private val customFeeRange = Range(1, 400)
+    private val customFeeRange = Range(1L, 400L)
     private val disposable = CompositeDisposable()
 
     init {
@@ -54,8 +57,40 @@ class EthereumFeeViewModel(
                 }
     }
 
+    override fun openSelectPriority() {
+        val currentPriority = getPriority(transactionService.gasPriceType)
+
+        Priority.values().map {
+            SendPriorityViewItem(it.description, currentPriority == it)
+
+        }
+    }
+
+    override fun selectPriority(index: Int) {
+        val selectedPriority = Priority.values().get(index)
+        val currentPriority = getPriority(transactionService.gasPriceType)
+
+        if (selectedPriority == currentPriority) return
+
+        transactionService.gasPriceType = when (selectedPriority) {
+            Priority.Recommended -> {
+                EthereumTransactionService.GasPriceType.Recommended
+            }
+            Priority.Custom -> {
+                val transaction = transactionService.transactionStatus.dataOrNull
+                val gasPrice = transaction?.gasData?.gasPrice ?: wei(customFeeRange.lower)
+
+                EthereumTransactionService.GasPriceType.Custom(gasPrice)
+            }
+        }
+    }
+
+    override fun changeCustomPriority(value: Long) {
+        transactionService.gasPriceType = EthereumTransactionService.GasPriceType.Custom(wei(value))
+    }
+
     private fun syncTransactionStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>) {
-        feeStatusLiveData.postValue(feeStatus(transactionStatus))
+        feeLiveData.postValue(feeStatus(transactionStatus))
     }
 
     private fun syncGasPriceType(gasPriceType: EthereumTransactionService.GasPriceType) {
@@ -76,6 +111,10 @@ class EthereumFeeViewModel(
 
     private fun gwei(wei: Long): Long {
         return wei / 1_000_000_000
+    }
+
+    private fun wei(gwei: Long): Long {
+        return gwei * 1_000_000_000
     }
 
     private fun getPriority(gasPriceType: EthereumTransactionService.GasPriceType): Priority {
@@ -101,4 +140,19 @@ class EthereumFeeViewModel(
 
 }
 
-data class SendFeeSliderViewItem(val initialValue: Long, val range: Range<Int>, val unit: String)
+data class SendFeeSliderViewItem(val initialValue: Long, val range: Range<Long>, val unit: String)
+data class SendPriorityViewItem(val title: String, val selected: Boolean)
+
+interface ISendFeeViewModel {
+    val feeLiveData: LiveData<String>
+}
+
+interface ISendFeePriorityViewModel {
+    val priorityLiveData: LiveData<String>
+    val openSelectPriorityLiveEvent: SingleLiveEvent<List<SendPriorityViewItem>>
+    val feeSliderLiveData: LiveData<SendFeeSliderViewItem?>
+
+    fun openSelectPriority()
+    fun selectPriority(index: Int)
+    fun changeCustomPriority(value: Long)
+}
