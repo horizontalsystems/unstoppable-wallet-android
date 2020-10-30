@@ -305,6 +305,7 @@
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
     <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
+    <string name="TransactionInfo_Input">Input</string>
 
     <!-- Info -->
 
