@@ -9,13 +9,21 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.views.inflate
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet_connect_request.*
 import kotlinx.android.synthetic.main.partial_transaction_info.*
+import kotlinx.android.synthetic.main.view_transaction_info_item.*
 
 class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 
@@ -54,7 +62,9 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             }
         }
 
-        viewModel.viewItems
+        val detailsAdapter = TransactionDetailsAdapter(viewModel.viewItems)
+
+        rvDetails.adapter = detailsAdapter
 
         viewModel.approveLiveEvent.observe(viewLifecycleOwner, Observer {
             findNavController().popBackStack()
@@ -77,6 +87,58 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             return WalletConnectSendEthereumTransactionRequestFragment()
         }
 
+    }
+}
+
+class TransactionDetailsAdapter(items: List<WalletConnectRequestViewItem>) : ListAdapter<WalletConnectRequestViewItem, WalletConnectRequestViewItemViewHolder>(diffCallback) {
+
+    init {
+        submitList(items)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletConnectRequestViewItemViewHolder {
+        return WalletConnectRequestViewItemViewHolder(inflate(parent, R.layout.view_transaction_info_item))
+    }
+
+    override fun onBindViewHolder(holder: WalletConnectRequestViewItemViewHolder, position: Int) {
+        holder.bind(getItem(position), position < itemCount - 1)
+    }
+
+    companion object {
+        private val diffCallback = object : DiffUtil.ItemCallback<WalletConnectRequestViewItem>() {
+            override fun areItemsTheSame(oldItem: WalletConnectRequestViewItem, newItem: WalletConnectRequestViewItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: WalletConnectRequestViewItem, newItem: WalletConnectRequestViewItem): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
+}
+
+class WalletConnectRequestViewItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    fun bind(item: WalletConnectRequestViewItem, borderVisible: Boolean) {
+        btnAction.isVisible = false
+        valueText.isVisible = false
+        transactionStatusView.isVisible = false
+        border.isVisible = borderVisible
+
+        when (item) {
+            is WalletConnectRequestViewItem.To -> bind(containerView.context.getString(R.string.TransactionInfo_To), item.value)
+            is WalletConnectRequestViewItem.Input -> bind(containerView.context.getString(R.string.TransactionInfo_Input), item.value)
+        }
+    }
+
+    private fun bind(title: String, value: String) {
+        txtTitle.text = title
+        decoratedText.text = value
+        decoratedText.setOnClickListener {
+            TextHelper.copyText(value)
+
+            HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
+        }
     }
 
 }

@@ -5,9 +5,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 
 sealed class WalletConnectRequestViewItem {
 
-    class From(val value: String) : WalletConnectRequestViewItem()
     class To(val value: String) : WalletConnectRequestViewItem()
     class Input(val value: String) : WalletConnectRequestViewItem()
-    class Fee(val coinValue: CoinValue, val currencyValue: CurrencyValue?) : WalletConnectRequestViewItem()
 
 }
