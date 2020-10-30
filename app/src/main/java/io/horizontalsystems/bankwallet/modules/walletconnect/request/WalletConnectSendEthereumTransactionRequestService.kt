@@ -27,6 +27,10 @@ class WalletConnectSendEthereumTransactionRequestService(
     private val disposable = CompositeDisposable()
 
     init {
+        transaction.gasPrice?.let {
+            transactionService.gasPriceType = EthereumTransactionService.GasPriceType.Custom(it)
+        }
+
         transactionService.transactionStatusObservable
                 .subscribe {
                     syncState()
@@ -34,6 +38,8 @@ class WalletConnectSendEthereumTransactionRequestService(
                 .let {
                     disposable.add(it)
                 }
+
+        transactionService.transactionData = transactionData
     }
 
     fun send() {
