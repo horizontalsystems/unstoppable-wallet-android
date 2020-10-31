@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorF
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
@@ -153,6 +154,25 @@ class WalletConnectMainFragment : BaseFragment() {
                 findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptions())
             }
         })
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.let { savedStateHandle ->
+            savedStateHandle
+                    .getLiveData<WalletConnectSendEthereumTransactionRequestFragment.ApproveResult>("ApproveResult")
+                    .observe(viewLifecycleOwner, Observer { approveResult ->
+                        baseViewModel.sharedSendEthereumTransactionRequest?.let { sendEthereumTransactionRequest ->
+                            when (approveResult) {
+                                is WalletConnectSendEthereumTransactionRequestFragment.ApproveResult.Approved -> {
+                                    viewModel.approveRequest(sendEthereumTransactionRequest.id, approveResult.txHash)
+                                }
+                                WalletConnectSendEthereumTransactionRequestFragment.ApproveResult.Rejected -> {
+                                    viewModel.rejectRequest(sendEthereumTransactionRequest.id)
+                                }
+                            }
+
+                            baseViewModel.sharedSendEthereumTransactionRequest = null
+                        }
+                    })
+        }
 
         connectButton.setOnSingleClickListener {
             viewModel.connect()

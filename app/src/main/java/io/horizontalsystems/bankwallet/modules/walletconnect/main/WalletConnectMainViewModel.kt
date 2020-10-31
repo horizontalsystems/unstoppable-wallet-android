@@ -134,6 +134,14 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
             else -> ButtonState.Disabled
         }
     }
+
+    fun <T> approveRequest(requestId: Long, result: T) {
+        service.approveRequest(requestId, result)
+    }
+
+    fun rejectRequest(requestId: Long) {
+        service.rejectRequest(requestId)
+    }
 }
 
 data class PeerMetaViewItem(val name: String, val url: String, val description: String?, val icon: String?)
