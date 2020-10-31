@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_wallet_connect_request.*
 import kotlinx.android.synthetic.main.partial_transaction_info.*
 import kotlinx.android.synthetic.main.view_transaction_info_item.*
@@ -47,7 +49,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         }
 
         btnReject.setOnSingleClickListener {
-//            viewModel.reject()
+            popBackStackWithResult(ApproveResult.Rejected)
         }
 
         viewModel.amountData.let {
@@ -66,8 +68,8 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 
         rvDetails.adapter = detailsAdapter
 
-        viewModel.approveLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().popBackStack()
+        viewModel.approveLiveEvent.observe(viewLifecycleOwner, Observer { transactionHash ->
+            popBackStackWithResult(ApproveResult.Approved(transactionHash))
         })
 
         viewModel.approveEnabledLiveData.observe(viewLifecycleOwner, Observer {
@@ -84,13 +86,17 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 
     }
 
-    companion object {
-        val keyRequest = "keyRequest"
+    private fun popBackStackWithResult(approveResult: ApproveResult) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set("ApproveResult", approveResult)
+        findNavController().popBackStack()
+    }
 
-        fun newInstance(): WalletConnectSendEthereumTransactionRequestFragment {
-            return WalletConnectSendEthereumTransactionRequestFragment()
-        }
+    sealed class ApproveResult {
+        @Parcelize
+        class Approved(val txHash: ByteArray) : ApproveResult(), Parcelable
 
+        @Parcelize
+        object Rejected : ApproveResult(), Parcelable
     }
 }
 

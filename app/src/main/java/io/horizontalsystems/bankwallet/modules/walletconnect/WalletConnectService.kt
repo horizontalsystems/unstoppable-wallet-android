@@ -116,8 +116,12 @@ class WalletConnectService(
         interactor?.killSession()
     }
 
-    fun approveRequest(requestId: Long) {
-        TODO("Not yet implemented")
+    fun <T> approveRequest(requestId: Long, result: T) {
+        val request = pendingRequests.remove(requestId)
+
+        request?.let {
+            interactor?.approveRequest(requestId, it.convertResult(result))
+        }
     }
 
     fun rejectRequest(requestId: Long) {
