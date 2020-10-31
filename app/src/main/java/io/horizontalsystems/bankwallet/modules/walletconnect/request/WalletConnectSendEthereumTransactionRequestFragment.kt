@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -42,7 +44,10 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         primaryValue.setTextColor(LayoutHelper.getAttr(R.attr.ColorJacob, requireContext().theme)
                 ?: requireContext().getColor(R.color.yellow_d))
 
-        val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { WalletConnectRequestModule.Factory(baseViewModel.sharedSendEthereumTransactionRequest!!) }
+        val vmFactory = WalletConnectRequestModule.Factory(baseViewModel.sharedSendEthereumTransactionRequest!!)
+
+        val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { vmFactory }
+        val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
         btnApprove.setOnSingleClickListener {
             viewModel.approve()
@@ -84,6 +89,9 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             error.text = it?.toString()
         })
 
+        feeViewModel.feeLiveData.observe(viewLifecycleOwner, Observer {
+            feeValue.text = it
+        })
     }
 
     private fun popBackStackWithResult(approveResult: ApproveResult) {
