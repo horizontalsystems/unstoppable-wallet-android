@@ -78,6 +78,10 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             btnReject.isEnabled = it
         })
 
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
+            error.text = it?.toString()
+        })
+
     }
 
     companion object {
