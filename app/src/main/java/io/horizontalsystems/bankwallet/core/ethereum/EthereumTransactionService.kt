@@ -8,6 +8,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
@@ -60,6 +61,8 @@ class EthereumTransactionService(
                                 Transaction(transactionData, GasData(gasLimit, gasPrice))
                             }
                 }
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe({
                     transactionStatus = DataState.Success(it)
                 }, {

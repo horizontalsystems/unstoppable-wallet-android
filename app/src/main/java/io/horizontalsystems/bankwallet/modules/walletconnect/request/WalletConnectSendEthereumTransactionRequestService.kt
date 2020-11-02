@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
@@ -32,6 +33,8 @@ class WalletConnectSendEthereumTransactionRequestService(
         }
 
         transactionService.transactionStatusObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe {
                     syncState()
                 }
@@ -54,6 +57,8 @@ class WalletConnectSendEthereumTransactionRequestService(
                 transaction.data.input,
                 transaction.gasData.gasPrice,
                 transaction.gasData.gasLimit)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe({
                     state = State.Sent(it.transaction.hash)
                 }, {

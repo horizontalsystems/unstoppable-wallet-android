@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class WalletConnectService(
@@ -67,6 +68,8 @@ class WalletConnectService(
         }
 
         connectivityManager.networkAvailabilitySignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe {
                     if (connectivityManager.isConnected) {
                         interactor?.connect()
