@@ -18,12 +18,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.helpers.SingleClickListener
-import io.horizontalsystems.seekbar.FeeSeekBar
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -103,31 +99,23 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         })
 
         feeViewModel.openSelectPriorityLiveEvent.observe(viewLifecycleOwner, Observer {
-            val selectorItems = it.map { feeRateViewItem ->
-                SelectorItem(feeRateViewItem.title, feeRateViewItem.selected)
-            }
-
-            SelectorDialog
-                    .newInstance(selectorItems, getString(R.string.Send_DialogSpeed)) { position ->
-                        feeViewModel.selectPriority(position)
-                    }
-                    .show(parentFragmentManager, "fee_rate_priority_selector")
+            feeSelectorView.openPrioritySelector(it, parentFragmentManager)
         })
 
         feeViewModel.feeSliderLiveData.observe(viewLifecycleOwner, {
             feeSelectorView.setFeeSliderViewItem(it)
         })
 
-        feeSelectorView.onTxSpeedClickListener = object : SingleClickListener() {
-            override fun onSingleClick(v: View) {
-                feeViewModel.openSelectPriority()
-            }
+        feeSelectorView.onTxSpeedClickListener = {
+            feeViewModel.openSelectPriority()
         }
 
-        feeSelectorView.customFeeSeekBarListener = object : FeeSeekBar.Listener {
-            override fun onSelect(value: Int) {
-                feeViewModel.changeCustomPriority(value.toLong())
-            }
+        feeSelectorView.prioritySelectListener = { position ->
+            feeViewModel.selectPriority(position)
+        }
+
+        feeSelectorView.customFeeSeekBarListener = {
+            feeViewModel.changeCustomPriority(it.toLong())
         }
     }
 
