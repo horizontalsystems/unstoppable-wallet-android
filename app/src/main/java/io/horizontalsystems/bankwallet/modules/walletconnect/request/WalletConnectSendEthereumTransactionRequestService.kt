@@ -62,7 +62,7 @@ class WalletConnectSendEthereumTransactionRequestService(
                 .subscribe({
                     state = State.Sent(it.transaction.hash)
                 }, {
-                    // todo
+                    state = State.NotReady(it)
                 }).let {
                     disposable.add(it)
                 }
