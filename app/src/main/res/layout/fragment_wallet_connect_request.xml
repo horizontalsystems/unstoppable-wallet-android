@@ -14,45 +14,15 @@
 
         <include layout="@layout/partial_transaction_info" />
 
-        <TextView
-            android:id="@+id/feeTitle"
-            style="@style/Subhead2"
-            android:layout_width="wrap_content"
+        <io.horizontalsystems.bankwallet.ui.FeeSelectorView
+            android:id="@+id/feeSelectorView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:text="@string/Send_Fee"
-            android:textColor="@color/grey"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rvDetails" />
-
-        <TextView
-            android:id="@+id/feeValue"
-            style="@style/Subhead2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/grey"
-            app:layout_constraintTop_toTopOf="@id/feeTitle"
-            app:layout_constraintBottom_toBottomOf="@id/feeTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="0.000126 ETH | $2.10" />
-
-        <TextView
-            android:id="@+id/txSpeedTitle"
-            style="@style/Subhead2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:text="@string/Send_DialogSpeed"
-            android:textColor="@color/grey"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/feeTitle" />
 
         <TextView
             android:id="@+id/error"
@@ -65,7 +35,7 @@
             android:textColor="?ColorLucian"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txSpeedTitle"
+            app:layout_constraintTop_toBottomOf="@id/feeSelectorView"
             tools:text="@tools:sample/lorem" />
 
         <Button

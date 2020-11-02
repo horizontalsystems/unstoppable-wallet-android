@@ -60,10 +60,11 @@ class EthereumFeeViewModel(
     override fun openSelectPriority() {
         val currentPriority = getPriority(transactionService.gasPriceType)
 
-        Priority.values().map {
+        val viewItems = Priority.values().map {
             SendPriorityViewItem(it.description, currentPriority == it)
-
         }
+
+        openSelectPriorityLiveEvent.postValue(viewItems)
     }
 
     override fun selectPriority(index: Int) {
