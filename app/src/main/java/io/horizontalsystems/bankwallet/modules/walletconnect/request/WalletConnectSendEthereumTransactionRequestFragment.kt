@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -53,6 +54,10 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         }
 
         btnReject.setOnSingleClickListener {
+            popBackStackWithResult(ApproveResult.Rejected)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             popBackStackWithResult(ApproveResult.Rejected)
         }
 
