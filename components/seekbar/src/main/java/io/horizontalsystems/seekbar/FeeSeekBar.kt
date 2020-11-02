@@ -111,7 +111,7 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
         })
     }
 
-    fun setListener(listener: Listener) {
+    fun setListener(listener: Listener?) {
         this.listener = listener
     }
 
@@ -173,5 +173,9 @@ class FeeSeekBar @JvmOverloads constructor(context: Context, private val attrs: 
         canvas.translate(0f, secondaryTextHeight)
         canvas.drawText(secondLine, x - secondWidth / 2, 0f, bubbleSecondaryTextPaint)
         canvas.restore()
+    }
+
+    fun setBubbleHint(hint: String) {
+        config.bubbleHint = hint
     }
 }
