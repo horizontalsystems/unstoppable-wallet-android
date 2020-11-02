@@ -275,7 +275,7 @@ class ZcashAdapter(
         }
 
         fun clear(accountId: String) {
-            //TODO("Not implemented yet")
+            Initializer.erase(App.instance, getValidAliasFromAccountId(accountId))
         }
     }
 }
