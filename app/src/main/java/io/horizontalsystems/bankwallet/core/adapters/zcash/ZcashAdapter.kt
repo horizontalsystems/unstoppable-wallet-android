@@ -146,14 +146,14 @@ class ZcashAdapter(
 
         return transactionsProvider.getTransactions(fromParams, limit)
                 .map { transactions ->
-                    transactions.map {
+                    transactions.mapNotNull {
                         getTransactionRecord(it)
                     }
                 }
     }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = transactionsProvider.newTransactionsFlowable.map { transactions -> transactions.map { getTransactionRecord(it) } }
+        get() = transactionsProvider.newTransactionsFlowable.map { transactions -> transactions.mapNotNull { getTransactionRecord(it) } }
     //endregion
 
     //region ISendZcashAdapter
@@ -232,13 +232,13 @@ class ZcashAdapter(
         }
     }
 
-    private fun getTransactionRecord(zcashTransaction: ZcashTransaction): TransactionRecord =
+    private fun getTransactionRecord(zcashTransaction: ZcashTransaction): TransactionRecord? =
             zcashTransaction.let {
                 val transactionHashHex = it.transactionHash.toHexReversed()
                 val type = when {
                     !it.toAddress.isNullOrEmpty() -> TransactionType.Outgoing
-                    it.toAddress.isNullOrEmpty() && it.value > 0L && it.minedHeight > 0 -> TransactionType.Incoming
-                    else -> throw Exception("Unknown zcash transactions: $zcashTransaction")
+                    it.toAddress.isNullOrEmpty() && it.value >= 0L && it.minedHeight > 0 -> TransactionType.Incoming
+                    else -> return null
                 }
 
                 TransactionRecord(
