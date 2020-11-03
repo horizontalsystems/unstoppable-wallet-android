@@ -2,15 +2,13 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumCoinService
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.toHexString
 import io.reactivex.disposables.CompositeDisposable
-import java.math.BigDecimal
-import java.math.BigInteger
 
 class WalletConnectSendEthereumTransactionRequestViewModel(
         private val service: WalletConnectSendEthereumTransactionRequestService,
@@ -22,7 +20,7 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
     val approveLiveEvent = SingleLiveEvent<ByteArray>()
     val approveEnabledLiveData = MutableLiveData<Boolean>()
     val rejectEnabledLiveData = MutableLiveData<Boolean>()
-    val errorLiveData = MutableLiveData<Throwable?>()
+    val errorLiveData = MutableLiveData<String?>()
 
     private val disposable = CompositeDisposable()
 
@@ -73,14 +71,11 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
 
     private fun convert(error: Throwable?) = when (error) {
         is WalletConnectSendEthereumTransactionRequestService.TransactionError.InsufficientBalance -> {
-            SendError.InsufficientBalance(coinService.amountData(error.requiredBalance))
+            val amountData = coinService.amountData(error.requiredBalance)
+
+            App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, amountData.getFormatted())
         }
-        else -> error
-    }
-
-
-    sealed class SendError : Error() {
-        class InsufficientBalance(val requiredBalance: SendModule.AmountData) : SendError()
+        else -> error?.message ?: error?.javaClass?.simpleName
     }
 
 }
