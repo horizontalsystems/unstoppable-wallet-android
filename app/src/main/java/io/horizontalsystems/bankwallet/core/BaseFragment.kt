@@ -44,10 +44,6 @@ abstract class BaseFragment : Fragment() {
                 .build()
     }
 
-    open fun canHandleOnBackPress(): Boolean {
-        return false
-    }
-
     protected fun showCustomKeyboardAlert() {
         AlertDialogFragment.newInstance(
                 titleString = getString(R.string.Alert_TitleWarning),
