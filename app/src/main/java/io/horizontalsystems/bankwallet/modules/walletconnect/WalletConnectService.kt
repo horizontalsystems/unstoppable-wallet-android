@@ -49,8 +49,9 @@ class WalletConnectService(
     val isEthereumKitReady: Boolean
         get() = ethereumKit != null
 
-    private val pendingRequests = mutableMapOf<Long, WalletConnectRequest>()
+    private val pendingRequests = linkedMapOf<Long, WalletConnectRequest>()
     private val disposable = CompositeDisposable()
+    private var requestIsProcessing = false
 
     init {
         val sessionStoreItem = sessionStore.storedItem
@@ -125,12 +126,18 @@ class WalletConnectService(
         request?.let {
             interactor?.approveRequest(requestId, it.convertResult(result))
         }
+
+        requestIsProcessing = false
+        processNextRequest()
     }
 
     fun rejectRequest(requestId: Long) {
         pendingRequests.remove(requestId)
 
         interactor?.rejectRequest(requestId, "Rejected by user")
+
+        requestIsProcessing = false
+        processNextRequest()
     }
 
     override fun didUpdateState(state: WalletConnectInteractor.State) {
@@ -158,11 +165,21 @@ class WalletConnectService(
     private fun handleRequest(id: Long, requestResolver: () -> WalletConnectRequest) {
         try {
             val request = requestResolver()
-
             pendingRequests[request.id] = request
-            requestSubject.onNext(request)
+
+            processNextRequest()
         } catch (t: Throwable) {
             interactor?.rejectRequest(id, t.message ?: "")
+        }
+    }
+
+    @Synchronized
+    private fun processNextRequest() {
+        if (requestIsProcessing) return
+
+        pendingRequests.values.firstOrNull()?.let {
+            requestSubject.onNext(it)
+            requestIsProcessing = true
         }
     }
 }
