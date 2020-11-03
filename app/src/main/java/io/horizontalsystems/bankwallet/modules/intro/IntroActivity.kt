@@ -23,4 +23,14 @@ class IntroActivity : BaseActivity() {
         setContentView(R.layout.activity_intro)
     }
 
+    override fun onBackPressed() {
+        supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.lastOrNull()?.let { fragment ->
+            if ((fragment as? IntroFragment)?.canHandleOnBackPress() == true) {
+                return
+            }
+        }
+
+        super.onBackPressed()
+    }
+
 }

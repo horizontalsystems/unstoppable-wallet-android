@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat.getDrawable
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -91,7 +90,7 @@ class IntroFragment : BaseFragment() {
         }
     }
 
-    override fun canHandleOnBackPress(): Boolean {
+    fun canHandleOnBackPress(): Boolean {
         return if (viewPager.currentItem == 0) {
             false
         } else {
