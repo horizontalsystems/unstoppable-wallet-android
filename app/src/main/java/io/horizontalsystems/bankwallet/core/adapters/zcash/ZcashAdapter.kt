@@ -75,8 +75,7 @@ class ZcashAdapter(
 
     //region IAdapter
     override fun start() {
-        // TODO: reconsider coroutine scope
-        synchronizer.start(GlobalScope)
+        synchronizer.start()
     }
 
     override fun stop() {
