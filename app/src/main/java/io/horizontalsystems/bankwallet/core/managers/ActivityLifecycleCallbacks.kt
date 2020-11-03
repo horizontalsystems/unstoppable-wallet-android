@@ -43,7 +43,7 @@ class ActivityLifecycleCallbacks(
 
     override fun onStatusChange(torStatus: TorStatus) {
         if (torManager.isTorEnabled) {
-            (foregroundActivity as? FragmentActivity)?.supportFragmentManager?.fragments?.lastOrNull()?.let { fragment ->
+            (foregroundActivity as? FragmentActivity)?.supportFragmentManager?.primaryNavigationFragment?.childFragmentManager?.fragments?.lastOrNull()?.let { fragment ->
                 if (fragment !is PrivacySettingsFragment) {
                     foregroundActivity?.let { activity ->
                         val intent = Intent(activity, TorConnectionActivity::class.java)
