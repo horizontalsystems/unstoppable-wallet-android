@@ -14,18 +14,21 @@ class ConfirmationDialog(
         private val title: String,
         private val subtitle: String,
         private val icon: Int?,
-        private val contentText: String,
+        private val contentText: String?,
         private val actionButtonTitle: String?,
-        private val cancelButtonTitle: String?)
+        private val cancelButtonTitle: String?,
+        private val destructiveButtonTitle: String?)
     : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onActionButtonClick() {}
+        fun onDestructiveButtonClick() {}
         fun onCancelButtonClick() {}
     }
 
     private lateinit var contentTextView: TextView
     private lateinit var btnAction: Button
+    private lateinit var btnDestructive: Button
     private lateinit var btnCancel: Button
 
     override fun onCancel(dialog: DialogInterface) {
@@ -52,8 +55,10 @@ class ConfirmationDialog(
 
         contentTextView = view.findViewById(R.id.contentText)
         btnAction = view.findViewById(R.id.btnYellow)
+        btnDestructive = view.findViewById(R.id.btnDestructive)
         btnCancel = view.findViewById(R.id.btnGrey)
 
+        contentTextView.isVisible = contentText != null
         contentTextView.text = contentText
 
         bindActions()
@@ -63,6 +68,7 @@ class ConfirmationDialog(
 
         // Set Visibility based on title is NULL or not
         btnAction.isVisible = actionButtonTitle != null
+        btnDestructive.isVisible = destructiveButtonTitle != null
         btnCancel.isVisible = cancelButtonTitle != null
 
         actionButtonTitle?.let {
@@ -70,6 +76,14 @@ class ConfirmationDialog(
             btnAction.text = actionButtonTitle
             btnAction.setOnClickListener {
                 listener.onActionButtonClick()
+                dismiss()
+            }
+        }
+
+        destructiveButtonTitle?.let {
+            btnDestructive.text = destructiveButtonTitle
+            btnDestructive.setOnClickListener {
+                listener.onDestructiveButtonClick()
                 dismiss()
             }
         }
@@ -86,10 +100,19 @@ class ConfirmationDialog(
 
     companion object {
 
-        fun show(icon: Int? = null, title: String, subtitle: String, contentText: String,
-                 actionButtonTitle: String? = "", cancelButtonTitle: String? = "", activity: FragmentActivity, listener: Listener) {
+        fun show(
+                icon: Int? = null,
+                title: String,
+                subtitle: String,
+                contentText: String?,
+                actionButtonTitle: String? = "",
+                cancelButtonTitle: String? = "",
+                activity: FragmentActivity,
+                listener: Listener,
+                destructiveButtonTitle: String? = null
+        ) {
 
-            val fragment = ConfirmationDialog(listener, title, subtitle, icon, contentText, actionButtonTitle, cancelButtonTitle)
+            val fragment = ConfirmationDialog(listener, title, subtitle, icon, contentText, actionButtonTitle, cancelButtonTitle, destructiveButtonTitle)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_coin_settings_alert_dialog")
