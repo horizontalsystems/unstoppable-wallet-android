@@ -193,7 +193,7 @@ dependencies {
     debugImplementation zcashDependencyTestNet
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:24f2a45'
+    implementation 'com.github.horizontalsystems:tor-kit-android:7038b2d'
 
     // UI modules
 
