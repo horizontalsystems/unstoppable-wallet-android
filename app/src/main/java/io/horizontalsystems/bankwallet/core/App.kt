@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
@@ -184,12 +183,10 @@ class App : CoreApp() {
                 pinStorage = pinStorage,
                 encryptionManager = encryptionManager,
                 excludedActivityNames = listOf(
-                        //todo fix those converted to Fragments
                         KeyStoreActivity::class.java.name,
                         LockScreenActivity::class.java.name,
                         LauncherActivity::class.java.name,
-                        TorConnectionActivity::class.java.name,
-                        RateChartFragment::class.java.name
+                        TorConnectionActivity::class.java.name
                 )
         )
 
