@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIV
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
@@ -92,6 +94,14 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
                 settingsNavigationViewItem?.removeView(bottomBadgeView)
             }
         })
+
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            when  {
+                findNavController().currentDestination?.id == R.id.mainFragment && viewPager.currentItem == 0 -> activity?.finish()
+                findNavController().currentDestination?.id == R.id.mainFragment  -> viewPager.setCurrentItem(0, false)
+                else -> findNavController().popBackStack()
+            }
+        }
     }
 
     override fun onResume() {
