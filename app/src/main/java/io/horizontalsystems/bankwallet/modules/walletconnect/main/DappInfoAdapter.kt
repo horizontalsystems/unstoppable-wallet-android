@@ -59,7 +59,8 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
             val color = when (value) {
                 WalletConnectMainViewModel.Status.OFFLINE -> R.attr.ColorLucian
                 WalletConnectMainViewModel.Status.ONLINE -> R.attr.ColorRemus
-                else -> null
+                WalletConnectMainViewModel.Status.CONNECTING -> R.attr.ColorLeah
+                null -> null
             }
 
             getItem(R.string.WalletConnect_Status).apply {
