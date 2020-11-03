@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewMo
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
+import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
 class WalletConnectMainFragment : BaseFragment() {
@@ -179,7 +180,21 @@ class WalletConnectMainFragment : BaseFragment() {
         }
 
         disconnectButton.setOnSingleClickListener {
-            viewModel.disconnect()
+            ConfirmationDialog.show(
+                    icon = R.drawable.ic_wallet_connect,
+                    title = getString(R.string.Button_Disconnect),
+                    subtitle = dappTitle.text.toString(),
+                    contentText = null,
+                    actionButtonTitle = null,
+                    destructiveButtonTitle = getString(R.string.Button_Disconnect),
+                    cancelButtonTitle = getString(R.string.Button_Cancel),
+                    activity = requireActivity(),
+                    listener = object : ConfirmationDialog.Listener {
+                        override fun onDestructiveButtonClick() {
+                            viewModel.disconnect()
+                        }
+                    }
+            )
         }
 
         cancelButton.setOnSingleClickListener {
