@@ -90,7 +90,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
-            error.text = it?.toString()
+            error.text = it
         })
 
         feeSelectorView.setDurationVisible(false)
