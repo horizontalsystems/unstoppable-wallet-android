@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumHandler
 import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
@@ -201,6 +202,7 @@ object SendModule {
                     presenter.addressModuleDelegate = handler
                     presenter.feeModuleDelegate = handler
                     presenter.hodlerModuleDelegate = handler
+                    presenter.customPriorityUnit = CustomPriorityUnit.Satoshi
 
                     handler
                 }
@@ -223,6 +225,7 @@ object SendModule {
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
                     presenter.feeModuleDelegate = handler
+                    presenter.customPriorityUnit = CustomPriorityUnit.Gwei
 
                     handler
                 }

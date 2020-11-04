@@ -29,7 +29,12 @@ class FeeRateProvider(appConfig: IAppConfigProvider) {
     }
 
     fun ethereumGasPrice(): Single<List<FeeRateInfo>> {
-        return feeRateKit.ethereum().map { feeRates(it, addLowPriority = false) }
+         return feeRateKit.ethereum().map {
+             mutableListOf<FeeRateInfo>().apply {
+                 add(FeeRateInfo(FeeRatePriority.RECOMMENDED, it.mediumPriority, it.mediumPriorityDuration))
+                 add(FeeRateInfo(FeeRatePriority.Custom(1, IntRange(1, 400)), 1))
+             }
+         }
     }
 
     fun dashFeeRates(): Single<List<FeeRateInfo>> {
