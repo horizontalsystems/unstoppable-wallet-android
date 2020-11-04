@@ -57,45 +57,61 @@
         app:layout_constraintStart_toStartOf="@+id/txDate"
         app:layout_constraintTop_toBottomOf="@+id/txDate" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="1dp"
         android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="txDate,txStatusWithTimeView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txValueInFiat"
+        style="@style/Title3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="4dp"
+        android:drawableEnd="@drawable/ic_lock"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:lines="1"
+        android:textColor="?ColorRemus"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/sentToSelfIcon"
+        app:layout_constraintStart_toEndOf="@+id/barrier"
+        app:layout_constraintTop_toTopOf="@+id/txDate"
+        app:layout_goneMarginEnd="16dp"
+        tools:text="$400" />
+
+    <ImageView
+        android:id="@+id/sentToSelfIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
+        android:src="@drawable/ic_incoming"
+        android:tint="?ColorRemus"
+        app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txDate">
-
-        <TextView
-            android:id="@+id/txValueInFiat"
-            style="@style/Title3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_lock"
-            android:drawablePadding="4dp"
-            android:textColor="?ColorRemus"
-            tools:text="$400" />
-
-        <ImageView
-            android:id="@+id/sentToSelfIcon"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:src="@drawable/ic_incoming"
-            android:tint="?ColorRemus" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />
 
     <TextView
         android:id="@+id/txValueInCoin"
         style="@style/Subhead2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:gravity="end"
         android:includeFontPadding="false"
+        android:lines="1"
         android:textColor="@color/grey"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="+ 0,006482 BTC" />
+        app:layout_constraintStart_toStartOf="@+id/txValueInFiat"
+        tools:text="+ 0,0064 BTC" />
 
     <View
         android:id="@+id/bottomShade"
