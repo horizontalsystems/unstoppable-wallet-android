@@ -247,6 +247,7 @@
         <action
             android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"
             app:destination="@id/walletConnectErrorFragment"
+            app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/walletConnectMainFragment"
             app:popUpToInclusive="true" />
         <action
