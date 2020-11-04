@@ -73,7 +73,7 @@ class WalletConnectMainFragment : BaseFragment() {
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         when (baseViewModel.initialScreen) {
-            WalletConnectViewModel.InitialScreen.NoEthereumKit -> TODO()
+            WalletConnectViewModel.InitialScreen.NoEthereumKit -> { }
             WalletConnectViewModel.InitialScreen.ScanQrCode -> {
                 QRScannerActivity.start(this)
             }
