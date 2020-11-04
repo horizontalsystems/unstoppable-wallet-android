@@ -13,14 +13,14 @@ import kotlin.Exception
 interface WalletConnectRequest {
     val id: Long
 
-    fun <T> convertResult(result: T): String?
+    fun convertResult(result: Any): String?
 }
 
 class WalletConnectSendEthereumTransactionRequest(override val id: Long, val transaction: WalletConnectTransaction) : WalletConnectRequest {
 
     constructor(id: Long, transaction: WCEthereumTransaction, x: Boolean = false) : this(id, convertTx(transaction))
 
-    override fun <T> convertResult(result: T): String? {
+    override fun convertResult(result: Any): String? {
         return (result as? ByteArray)?.toHexString()
     }
 

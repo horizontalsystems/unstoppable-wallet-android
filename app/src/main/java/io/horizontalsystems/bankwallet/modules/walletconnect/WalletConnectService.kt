@@ -120,7 +120,7 @@ class WalletConnectService(
         interactor?.killSession()
     }
 
-    fun <T> approveRequest(requestId: Long, result: T) {
+    fun approveRequest(requestId: Long, result: Any) {
         val request = pendingRequests.remove(requestId)
 
         request?.let {
