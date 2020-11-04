@@ -29,6 +29,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp">
 
             <TextView
@@ -93,7 +94,6 @@
             android:id="@+id/txDurationLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp">
 
             <TextView
@@ -121,22 +121,6 @@
                 tools:text="~10 minutes" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <io.horizontalsystems.seekbar.FeeSeekBar
-            android:id="@+id/customFeeSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@null"
-            android:max="200"
-            android:min="1"
-            android:progress="50"
-            android:progressDrawable="@null"
-            android:progressTint="@color/transparent"
-            android:thumb="@drawable/seekbar_thumb"
-            android:visibility="gone"
-            app:bubbleBackground="?ColorClaude"
-            app:bubbleHint="@string/Send_TxSpeed_CustomFeeHint"
-            app:textColor="?ColorLeah" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/txSpeedLayout"
@@ -186,15 +170,22 @@
                 app:layout_constraintTop_toTopOf="@+id/txSpeedMenu"
                 app:tint="@color/grey" />
 
-            <View
-                android:id="@+id/border2"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <io.horizontalsystems.seekbar.FeeSeekBar
+            android:id="@+id/customFeeSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:max="200"
+            android:min="1"
+            android:progress="50"
+            android:progressDrawable="@null"
+            android:progressTint="@color/transparent"
+            android:thumb="@drawable/seekbar_thumb"
+            app:bubbleBackground="?ColorClaude"
+            app:bubbleHint="@string/Send_TxSpeed_CustomFeeHint"
+            app:textColor="?ColorLeah" />
 
     </LinearLayout>
 
