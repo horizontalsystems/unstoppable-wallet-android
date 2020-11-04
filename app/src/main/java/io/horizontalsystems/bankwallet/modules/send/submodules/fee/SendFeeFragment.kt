@@ -24,7 +24,8 @@ class SendFeeFragment(
         private val feeIsAdjustable: Boolean,
         private val coin: Coin,
         private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
-        private val sendHandler: SendModule.ISendHandler)
+        private val sendHandler: SendModule.ISendHandler,
+        private val customPriorityUnit: CustomPriorityUnit?)
     : SendSubmoduleFragment() {
 
     private var presenter: SendFeePresenter? = null
@@ -37,7 +38,7 @@ class SendFeeFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProvider(this, SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate))
+        presenter = ViewModelProvider(this, SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate, customPriorityUnit))
                 .get(SendFeePresenter::class.java)
         val presenterView = presenter?.view as SendFeeView
 
@@ -102,10 +103,13 @@ class SendFeeFragment(
             txDurationLayout.isVisible = !isVisible
         })
 
-        presenterView.setCustomFeeParams.observe(viewLifecycleOwner, Observer { (value, range) ->
+        presenterView.setCustomFeeParams.observe(viewLifecycleOwner, Observer { (value, range, label) ->
             customFeeSeekBar.progress = value
             customFeeSeekBar.min = range.first
             customFeeSeekBar.max = range.last
+            label?.let {
+                customFeeSeekBar.setBubbleHint(it)
+            }
         })
 
         presenterView.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->

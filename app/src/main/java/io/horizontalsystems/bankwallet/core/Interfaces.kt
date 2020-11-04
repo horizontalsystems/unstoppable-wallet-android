@@ -475,6 +475,7 @@ interface ITermsManager{
 
 sealed class FeeRatePriority {
     object LOW : FeeRatePriority()
+    object RECOMMENDED : FeeRatePriority()
     object MEDIUM : FeeRatePriority()
     object HIGH : FeeRatePriority()
 

@@ -153,7 +153,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Fee -> {
                     //add fee view
                     mainPresenter.feeModuleDelegate?.let {
-                        val sendFeeFragment = SendFeeFragment(input.isAdjustable, wallet.coin, it, mainPresenter.handler)
+                        val sendFeeFragment = SendFeeFragment(input.isAdjustable, wallet.coin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
                         fragments.add(sendFeeFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment)
                                 .commitNow()

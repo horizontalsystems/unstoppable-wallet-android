@@ -16,7 +16,8 @@ class SendFeePresenter(
         private val helper: SendFeePresenterHelper,
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
-        private val feeCoinData: Pair<Coin, String>?)
+        private val feeCoinData: Pair<Coin, String>?,
+        private val customPriorityUnit: CustomPriorityUnit?)
     : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule, SendFeeModule.IInteractorDelegate {
 
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
@@ -33,7 +34,7 @@ class SendFeePresenter(
         set(value) {
             field = value
             value?.let {
-                getFeeRateInfoByPriority(it, FeeRatePriority.MEDIUM)?.let { feeInfo ->
+                getFeeRateInfoByPriority(it, FeeRatePriority.MEDIUM, FeeRatePriority.RECOMMENDED)?.let { feeInfo ->
                     feeRateInfo = feeInfo
                     syncFeeRateLabels()
                 }
@@ -76,7 +77,7 @@ class SendFeePresenter(
 
     private fun updateCustomFeeParams(priority: FeeRatePriority.Custom) {
         val value = Math.min(feeRateInfo.feeRate.toInt(), priority.range.last)
-        view.setCustomFeeParams(value, priority.range)
+        view.setCustomFeeParams(value, priority.range, customPriorityUnit?.getLabel())
     }
 
     private fun validate() {
@@ -191,8 +192,13 @@ class SendFeePresenter(
         }
     }
 
-    private fun getFeeRateInfoByPriority(searchList: List<FeeRateInfo>, priority: FeeRatePriority): FeeRateInfo? {
-        return searchList.find { it.priority == priority }
+    private fun getFeeRateInfoByPriority(searchList: List<FeeRateInfo>, vararg priorities: FeeRatePriority): FeeRateInfo? {
+        priorities.forEach { feeRatePriority ->
+            searchList.find { it.priority == feeRatePriority }?.let {
+                return it
+            }
+        }
+        return null
     }
 
     private fun feeRateInfoViewItem(rateInfo: FeeRateInfo): SendFeeModule.FeeRateInfoViewItem {
@@ -214,7 +220,7 @@ class SendFeePresenter(
 
     override fun onChangeFeeRateValue(value: Long) {
         if (feeRateInfo.priority is FeeRatePriority.Custom) {
-            feeRateInfo.feeRate = value
+            feeRateInfo.feeRate = customPriorityUnit?.getConvertedValue(value) ?: value
 
             moduleDelegate?.onUpdateFeeRate()
         }
