@@ -135,7 +135,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         }
     }
 
-    fun <T> approveRequest(requestId: Long, result: T) {
+    fun approveRequest(requestId: Long, result: Any) {
         service.approveRequest(requestId, result)
     }
 
