@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -173,7 +174,7 @@ class MainSettingsFragment : BaseFragment() {
         })
 
         router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.mainFragment_to_walletConnectMainFragment, null, navOptions())
+            WalletConnectModule.start(this, R.id.mainFragment_to_walletConnectMainFragment, navOptions())
         })
     }
 
