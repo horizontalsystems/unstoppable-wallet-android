@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumCoinService
+import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.toHexString
@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class WalletConnectSendEthereumTransactionRequestViewModel(
         private val service: WalletConnectSendEthereumTransactionRequestService,
-        private val coinService: EthereumCoinService
+        private val coinService: CoinService
 ) : ViewModel() {
 
     val amountData: SendModule.AmountData

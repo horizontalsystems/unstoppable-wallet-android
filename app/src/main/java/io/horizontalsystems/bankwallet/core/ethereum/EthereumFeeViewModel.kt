@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class EthereumFeeViewModel(
         private val transactionService: EthereumTransactionService,
-        private val coinService: EthereumCoinService
+        private val coinService: CoinService
 ) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 
     enum class Priority {
