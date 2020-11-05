@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumCoinService
+import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
@@ -22,7 +21,7 @@ object WalletConnectRequestModule {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
             EthereumTransactionService(ethereumKit, feeRateProvider)
         }
-        val coinService by lazy { EthereumCoinService(App.appConfigProvider, App.currencyManager, App.xRateManager) }
+        val coinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
