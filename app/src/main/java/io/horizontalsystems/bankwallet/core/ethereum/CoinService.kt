@@ -25,19 +25,12 @@ class CoinService(
         }
 
     fun amountData(value: BigInteger): SendModule.AmountData {
-        val primaryAmountInfo: SendModule.AmountInfo
-        val secondaryAmountInfo: SendModule.AmountInfo?
-
         val decimalValue = BigDecimal(value, coin.decimal)
         val coinValue = CoinValue(coin, decimalValue)
 
-        val rate = rate
-        if (rate != null) {
-            primaryAmountInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(rate.currency, rate.value * decimalValue))
-            secondaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
-        } else {
-            primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
-            secondaryAmountInfo = null
+        val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
+        val secondaryAmountInfo = rate?.let {
+            SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * decimalValue))
         }
 
         return SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
