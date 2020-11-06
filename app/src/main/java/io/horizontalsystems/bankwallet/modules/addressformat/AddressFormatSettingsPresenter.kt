@@ -8,15 +8,10 @@ class AddressFormatSettingsPresenter(
         val view: AddressFormatSettingsModule.IView,
         val router: AddressFormatSettingsModule.IRouter,
         private val interactor: AddressFormatSettingsModule.IInteractor,
-        private val coinTypes: List<CoinType>,
-        val showDoneButton: Boolean)
+        private val coinTypes: List<CoinType>)
     : ViewModel(), AddressFormatSettingsModule.IViewDelegate {
 
     private var derivations = mutableListOf<DerivationSetting>()
-
-    override fun onDone() {
-        router.closeWithResultOk()
-    }
 
     override fun onViewLoad() {
         setBtcBip()

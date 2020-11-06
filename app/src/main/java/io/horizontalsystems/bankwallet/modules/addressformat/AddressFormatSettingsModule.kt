@@ -23,7 +23,6 @@ object AddressFormatSettingsModule {
 
     interface IViewDelegate {
         fun onSelect(derivationSetting: DerivationSetting)
-        fun onDone()
         fun onViewLoad()
         fun proceedWithDerivationChange(derivationSetting: DerivationSetting)
     }
@@ -37,17 +36,16 @@ object AddressFormatSettingsModule {
     }
 
     interface IRouter {
-        fun closeWithResultOk()
         fun close()
     }
 
-    class Factory(private val coinTypes: List<CoinType>, private val showDoneButton: Boolean) : ViewModelProvider.Factory {
+    class Factory(private val coinTypes: List<CoinType>) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = AddressFormatSettingsView()
             val router = AddressFormatSettingsRouter()
             val interactor = AddressFormatSettingsInteractor(App.derivationSettingsManager, App.coinManager, App.walletManager, App.adapterManager)
-            val presenter = AddressFormatSettingsPresenter(view, router, interactor, coinTypes, showDoneButton)
+            val presenter = AddressFormatSettingsPresenter(view, router, interactor, coinTypes)
 
             return presenter as T
         }

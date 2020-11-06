@@ -113,9 +113,8 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
         })
 
         router.showBlockchainSettings.observe(this, Observer { enabledCoinTypes ->
-            val arguments = Bundle(2).apply {
+            val arguments = Bundle(1).apply {
                 putParcelableArrayList(ModuleField.COIN_TYPES, ArrayList(enabledCoinTypes))
-                putBoolean(ModuleField.SHOW_DONE_BUTTON, false)
             }
 
             findNavController().navigate(R.id.manageKeysFragment_to_addressFormatSettingsFragment, arguments, navOptions())

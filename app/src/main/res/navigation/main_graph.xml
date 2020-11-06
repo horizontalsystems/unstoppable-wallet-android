@@ -147,7 +147,8 @@
     <fragment
         android:id="@+id/addressFormatSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsFragment"
-        tools:layout="@layout/fragment_address_format_settings" />
+        tools:layout="@layout/fragment_address_format_settings"
+        android:label="@string/AddressFormatSettings_Title"/>
     <fragment
         android:id="@+id/createWalletFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletFragment"
