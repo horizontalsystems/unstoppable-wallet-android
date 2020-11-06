@@ -206,7 +206,8 @@
     <fragment
         android:id="@+id/addErc20TokenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragment"
-        tools:layout="@layout/fragment_add_erc20_token" />
+        tools:layout="@layout/fragment_add_erc20_token"
+        android:label="@string/AddErc20Token_Title"/>
     <fragment
         android:id="@+id/swapFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment"
