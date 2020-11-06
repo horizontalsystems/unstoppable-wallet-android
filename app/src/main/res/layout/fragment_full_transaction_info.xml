@@ -7,10 +7,11 @@
     android:background="?android:windowBackground"
     android:clickable="true">
 
-    <io.horizontalsystems.views.ShadowlessToolbarView
-        android:id="@+id/shadowlessToolbar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/FullInfo_Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +26,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_goneMarginEnd="16dp"
         tools:text="0123456789abcdef0123456789abcdef0123456789abcdef" />
 
