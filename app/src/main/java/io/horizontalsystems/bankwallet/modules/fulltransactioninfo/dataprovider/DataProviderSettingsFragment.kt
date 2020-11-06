@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.views.TopMenuItem
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_explorer_switcher.*
@@ -43,10 +43,9 @@ class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter
         viewModel = ViewModelProvider(this).get(DataProviderSettingsViewModel::class.java)
         viewModel.init(coin)
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.FullInfo_Source),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { parentFragmentManager.popBackStack() })
-        )
+        setNavigationToolbar(toolbar, findNavController())
+
+        toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
 
         adapter = DataProviderSettingsAdapter(this)
 
