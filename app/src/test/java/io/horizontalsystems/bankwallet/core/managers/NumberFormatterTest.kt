@@ -57,6 +57,59 @@ class NumberFormatterTest {
     }
 
     @Test
+    fun testFormatCoinSignificant() {
+        assertFormattedCoinSignificant(BigDecimal("0.0000000000001000"), "< 0.00000001 BTC")
+
+        assertFormattedCoinSignificant(BigDecimal("0.00000123"), "0.00000123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.00001234"), "0.00001234 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.00012345"), "0.0001 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.00123456"), "0.0012 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.01234567"), "0.0123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.12345678"), "0.1234 BTC")
+
+        assertFormattedCoinSignificant(BigDecimal("1.00000123"), "1.00000123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("5.00000123"), "5.00000123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1.00001234"), "1.00001234 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1.00012345"), "1.0001 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1.00123456"), "1.0012 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1.01234567"), "1.0123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1.12345678"), "1.1234 BTC")
+
+        assertFormattedCoinSignificant(BigDecimal("12.00000123"), "12 BTC")
+        assertFormattedCoinSignificant(BigDecimal("12.00001234"), "12 BTC")
+        assertFormattedCoinSignificant(BigDecimal("12.00012345"), "12.0001 BTC")
+        assertFormattedCoinSignificant(BigDecimal("12.00123456"), "12.0012 BTC")
+        assertFormattedCoinSignificant(BigDecimal("12.01234567"), "12.0123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("12.12345678"), "12.1234 BTC")
+
+        assertFormattedCoinSignificant(BigDecimal("123.00000123"), "123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("123.00001234"), "123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("123.00012345"), "123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("123.00123456"), "123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("123.01234567"), "123.01 BTC")
+        assertFormattedCoinSignificant(BigDecimal("123.12345678"), "123.12 BTC")
+
+        assertFormattedCoinSignificant(BigDecimal("1234.00000123"), "1,234 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1234.00001234"), "1,234 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1234.00012345"), "1,234 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1234.00123456"), "1,234 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1234.01234567"), "1,234.01 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1234.12345678"), "1,234.12 BTC")
+
+        assertFormattedCoinSignificant(BigDecimal("0.00000123"), "0.00000123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1.00000123"), "1.00000123 BTC")
+        assertFormattedCoinSignificant(BigDecimal("1.00012345"), "1.0001 BTC")
+
+        assertFormattedCoinSignificant(BigDecimal("-5.00000123"), "-5.00000123 BTC")
+    }
+
+    private fun assertFormattedCoinSignificant(value: BigDecimal, expected: String) {
+        val formatted = numberFormatter.formatCoin(value, "BTC", 0, numberFormatter.getSignificantDecimalCoin(value))
+
+        assertEquals(expected, formatted)
+    }
+
+    @Test
     fun testFormatFiat() {
         assertFormattedFiat(BigDecimal("1000.51"), 0, 2, "$1,000")
         assertFormattedFiat(BigDecimal("1000.1234"), 0, 2, "$1,000")

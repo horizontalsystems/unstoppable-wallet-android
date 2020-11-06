@@ -72,8 +72,8 @@ class BalanceViewItemFactory {
     private fun coinValue(state: AdapterState?, balance: BigDecimal?, coin: Coin, visible: Boolean): DeemedValue {
         val dimmed = state !is AdapterState.Synced
         val value = balance?.let {
-            val maxFraction = if (it < BigDecimal("0.0001")) 8 else 4
-            App.numberFormatter.formatCoin(balance, coin.code, 0, maxFraction)
+            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(it)
+            App.numberFormatter.formatCoin(balance, coin.code, 0, significantDecimal)
         }
 
         return DeemedValue(value, dimmed, visible)

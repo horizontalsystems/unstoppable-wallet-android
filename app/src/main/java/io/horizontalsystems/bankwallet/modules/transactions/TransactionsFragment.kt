@@ -179,7 +179,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
         txValueInFiat.setTextColor(TransactionViewHelper.getAmountColor(transactionRecord.type, itemView.context))
         txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, TransactionViewHelper.getLockIcon(transactionRecord.lockState), 0)
-        txValueInCoin.text = App.numberFormatter.formatCoin(transactionRecord.coinValue.value, transactionRecord.coinValue.coin.code, 0, 8)
+        val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(transactionRecord.coinValue.value)
+        txValueInCoin.text = App.numberFormatter.formatCoin(transactionRecord.coinValue.value, transactionRecord.coinValue.coin.code, 0, significantDecimal)
         txTypeIcon.setImageResource(TransactionViewHelper.getTransactionTypeIcon(transactionRecord.type))
         txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
@@ -202,7 +203,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
 
         if (current.coinValue != prev.coinValue) {
-            txValueInCoin.text = App.numberFormatter.formatCoin(current.coinValue.value, current.coinValue.coin.code, 0, 8)
+            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(current.coinValue.value)
+            txValueInCoin.text = App.numberFormatter.formatCoin(current.coinValue.value, current.coinValue.coin.code, 0, significantDecimal)
         }
 
         if (current.status != prev.status || current.date != prev.date) {
