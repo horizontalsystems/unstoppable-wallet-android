@@ -366,6 +366,7 @@ interface IAppNumberFormatter {
     fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
     fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
     fun getSignificantDecimalFiat(value: BigDecimal): Int
+    fun getSignificantDecimalCoin(value: BigDecimal): Int
 }
 
 interface IFeeRateProvider {

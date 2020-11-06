@@ -64,6 +64,18 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
     }
 
+    override fun getSignificantDecimalCoin(value: BigDecimal): Int {
+        val absValue = value.abs()
+        val valueBeforeDot = absValue.setScale(0, RoundingMode.FLOOR)
+        val valueAfterDot = absValue - valueBeforeDot
+
+        return when {
+            valueBeforeDot < BigDecimal("10") && valueAfterDot < BigDecimal("0.0001") ->  8
+            valueBeforeDot < BigDecimal("100") -> 4
+            else -> 2
+        }
+    }
+
     private fun getFormatter(locale: Locale, minimumFractionDigits: Int, maximumFractionDigits: Int): NumberFormat {
         val formatterId = "${locale.language}-$minimumFractionDigits-$maximumFractionDigits"
 
