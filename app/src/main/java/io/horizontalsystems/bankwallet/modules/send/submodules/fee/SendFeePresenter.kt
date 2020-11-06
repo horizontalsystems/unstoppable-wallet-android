@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinVa
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
+import kotlin.math.min
 
 class SendFeePresenter(
         val view: SendFeeModule.IView,
@@ -76,7 +77,8 @@ class SendFeePresenter(
     }
 
     private fun updateCustomFeeParams(priority: FeeRatePriority.Custom) {
-        val value = Math.min(feeRateInfo.feeRate.toInt(), priority.range.last)
+        val selectedValue = customPriorityUnit?.getUnits(feeRateInfo.feeRate)?.toInt() ?: priority.range.last
+        val value = min(selectedValue, priority.range.last)
         view.setCustomFeeParams(value, priority.range, customPriorityUnit?.getLabel())
     }
 
