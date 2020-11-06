@@ -1,18 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.addressformat
 
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_address_format_settings.*
 
 class AddressFormatSettingsFragment : BaseFragment() {
@@ -25,49 +26,25 @@ class AddressFormatSettingsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setNavigationToolbar(toolbar, findNavController())
 
         val coinTypes = arguments?.getParcelableArrayList(ModuleField.COIN_TYPES)
                 ?: listOf<CoinType>()
-        val showDoneButton = arguments?.getBoolean(ModuleField.SHOW_DONE_BUTTON, false) ?: false
 
-        presenter = ViewModelProvider(this, AddressFormatSettingsModule.Factory(coinTypes, showDoneButton))
+        presenter = ViewModelProvider(this, AddressFormatSettingsModule.Factory(coinTypes))
                 .get(AddressFormatSettingsPresenter::class.java)
 
         presenter.onViewLoad()
 
         observeView(presenter.view as AddressFormatSettingsView)
-        observeRouter(presenter.router as AddressFormatSettingsRouter)
+
+        (presenter.router as AddressFormatSettingsRouter).close.observe(viewLifecycleOwner, Observer {
+            findNavController().popBackStack()
+        })
 
         setBtcItems()
         setLtcItems()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.coin_settings_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menuDone)?.apply {
-            isVisible = presenter.showDoneButton
-        }
-        super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuDone -> {
-                presenter.onDone()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun observeView(view: AddressFormatSettingsView) {
@@ -161,13 +138,4 @@ class AddressFormatSettingsFragment : BaseFragment() {
         )
     }
 
-    private fun observeRouter(router: AddressFormatSettingsRouter) {
-        router.closeWithResultOk.observe(viewLifecycleOwner, Observer {
-            findNavController().popBackStack()
-        })
-
-        router.close.observe(viewLifecycleOwner, Observer {
-            findNavController().popBackStack()
-        })
-    }
 }
