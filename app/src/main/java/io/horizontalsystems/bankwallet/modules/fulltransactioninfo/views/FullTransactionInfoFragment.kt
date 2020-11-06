@@ -23,9 +23,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_full_transaction_info.*
+import kotlinx.android.synthetic.main.fragment_full_transaction_info.toolbar
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_item.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_link.*
@@ -56,24 +56,35 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         viewModel = ViewModelProvider(this).get(FullTransactionInfoViewModel::class.java)
         viewModel.init(transactionHash, wallet)
 
+        toolbar.inflateMenu(R.menu.full_transaction_info_menu)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.shareButton -> {
+                    viewModel.share()
+                    true
+                }
+                R.id.closeButton -> {
+                    parentFragmentManager.popBackStack()
+                    true
+                }
+                else -> super.onOptionsItemSelected(menuItem)
+            }
+        }
+
         transactionIdView.text = transactionHash
 
         transactionIdView.setOnClickListener {
             viewModel.delegate.onTapId()
         }
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.FullInfo_Title),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { parentFragmentManager.popBackStack() })
-        )
 
         //
         // LiveData
         //
         viewModel.shareButtonVisibility.observe(viewLifecycleOwner, Observer { visible ->
-            shadowlessToolbar.bindLeftButton(
-                    leftBtnItem = if (visible) TopMenuItem(text = R.string.Button_Share, onClick = { viewModel.share() }) else null
-            )
+            toolbar?.menu?.findItem(R.id.shareButton)?.apply {
+                isVisible = visible
+            }
         })
 
         viewModel.reloadEvent.observe(viewLifecycleOwner, Observer {
