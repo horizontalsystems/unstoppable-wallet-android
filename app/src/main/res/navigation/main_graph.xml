@@ -241,7 +241,8 @@
     <fragment
         android:id="@+id/uniswapInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.view.UniswapInfoFragment"
-        tools:layout="@layout/fragment_swap_info" />
+        tools:layout="@layout/fragment_swap_info"
+        android:label="@string/UniswapInfo_Title"/>
     <fragment
         android:id="@+id/walletConnectMainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment"
