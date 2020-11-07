@@ -12,8 +12,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_restore_select_predefined_account_type.*
+import kotlinx.android.synthetic.main.fragment_restore_select_predefined_account_type.toolbar
 import kotlinx.android.synthetic.main.view_holder_account_restore.*
 
 
@@ -29,6 +31,9 @@ class RestoreSelectPredefinedAccountTypeFragment: BaseFragment(), RestoreNavigat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setNavigationToolbar(toolbar, findNavController())
+        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
 
         viewModel = ViewModelProvider(this, RestoreSelectPredefinedAccountTypeModule.Factory())
                 .get(RestoreSelectPredefinedAccountTypeViewModel::class.java)
