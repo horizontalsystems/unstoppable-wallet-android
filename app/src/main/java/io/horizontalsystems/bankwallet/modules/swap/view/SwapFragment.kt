@@ -28,6 +28,7 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_swap.*
+import kotlinx.android.synthetic.main.fragment_swap.toolbar
 import java.math.BigDecimal
 
 class SwapFragment : BaseFragment() {
@@ -47,7 +48,7 @@ class SwapFragment : BaseFragment() {
 
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
-            it.supportActionBar?.title = getString(R.string.Swap)
+            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
         //catch click on top left menu item, Info Icon

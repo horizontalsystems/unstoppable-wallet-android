@@ -211,7 +211,8 @@
     <fragment
         android:id="@+id/swapFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment"
-        tools:layout="@layout/fragment_swap">
+        tools:layout="@layout/fragment_swap"
+        android:label="@string/Swap">
         <action
             android:id="@+id/swapFragment_to_selectSwapCoinFragment"
             app:destination="@id/selectSwapCoinFragment" />
