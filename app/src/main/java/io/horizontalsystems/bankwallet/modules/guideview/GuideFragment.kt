@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.guides.LoadStatus
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_guide.*
 
 class GuideFragment : BaseFragment(), GuideContentAdapter.Listener {
@@ -26,13 +25,8 @@ class GuideFragment : BaseFragment(), GuideContentAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appBarLayout.outlineProvider = null
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.supportActionBar?.title = ""
-        }
+        setNavigationToolbar(toolbar, findNavController())
+        toolbar.title = ""
 
         rvBlocks.adapter = contentAdapter
 
