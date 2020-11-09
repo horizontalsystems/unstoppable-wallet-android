@@ -10,7 +10,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 class CoinService(
-        private val coin: Coin,
+        val coin: Coin,
         private val currencyManager: ICurrencyManager,
         private val xRateManager: IRateManager
 ) {
@@ -34,6 +34,18 @@ class CoinService(
         }
 
         return SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
+    }
+
+    fun coinValue(value: BigInteger): CoinValue {
+        return CoinValue(coin, convertToMonetaryUnit(value))
+    }
+
+    fun convertToMonetaryUnit(value: BigInteger): BigDecimal {
+        return value.toBigDecimal().movePointLeft(coin.decimal).stripTrailingZeros()
+    }
+
+    fun convertToFractionalMonetaryUnit(value: BigDecimal): BigInteger {
+        return value.movePointRight(coin.decimal).toBigInteger()
     }
 
 }

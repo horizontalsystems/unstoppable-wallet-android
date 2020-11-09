@@ -314,7 +314,7 @@ object SendModule {
 
         fun getFormatted(): String = when (this) {
             is CoinValueInfo -> {
-                App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
+                coinValue.getFormatted()
             }
             is CurrencyValueInfo -> {
                 App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 2)
@@ -323,7 +323,7 @@ object SendModule {
 
         fun getFormattedForTxInfo(): String = when(this) {
             is CoinValueInfo -> {
-                App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
+                coinValue.getFormatted()
             }
             is CurrencyValueInfo -> {
                 val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(currencyValue.value)

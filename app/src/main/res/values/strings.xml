@@ -243,12 +243,12 @@
 
     <!--Approve-->
 
-    <string name="Approve_Title">Approve</string>
-    <string name="Approve_Subtitle">Swap</string>
+    <string name="Approve_Title">Swap Approve</string>
     <string name="Approve_FeeTitle">Fee</string>
     <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
     <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
-    <string name="Approve_Info">You should grant a permission to a smart contract to execute the trade using your funds. This permission doesn\’t affect funds on your balance</string>
+    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for us in future trades.</string>
+    <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
 
     <!--Uniswap Info -->
 

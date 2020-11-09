@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
+import io.horizontalsystems.bankwallet.core.App
 import java.math.BigDecimal
 
 data class CoinValue(val coin: Coin, val value: BigDecimal) {
@@ -17,6 +18,10 @@ data class CoinValue(val coin: Coin, val value: BigDecimal) {
         var result = coin.hashCode()
         result = 31 * result + value.hashCode()
         return result
+    }
+
+    fun getFormatted(): String {
+        return App.numberFormatter.formatCoin(value, coin.code, 0, 8)
     }
 
 }

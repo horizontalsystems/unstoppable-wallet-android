@@ -1,93 +1,109 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
 import android.os.Bundle
-import android.view.View
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.*
+import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_approve.*
-import java.math.BigDecimal
+import kotlinx.android.synthetic.main.fragment_swap_approve.toolbar
 
-class SwapApproveFragment : BaseBottomSheetDialogFragment() {
+class SwapApproveFragment : BaseFragment() {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_swap_approve, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
-        setContentView(R.layout.fragment_swap_approve)
+        val approveData = requireArguments().getParcelable<SwapModule.ApproveData>(dataKey)!!
 
-        val coin = requireArguments().getParcelable<Coin>(COIN_KEY)!!
-        val amount = requireArguments().getSerializable(AMOUNT_KEY) as BigDecimal
-        val spenderAddress = requireArguments().getString(SPENDER_ADDRESS_KEY)!!
+        val vmFactory = SwapApproveModule.Factory(approveData)
+        val viewModel by viewModels<SwapApproveViewModel> { vmFactory }
+        val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
-        val viewModel by viewModels<SwapApproveViewModel> {
-            SwapApproveModule.Factory(coin, amount, spenderAddress)
+        amount.setText(viewModel.amount)
+
+        val watcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+            override fun afterTextChanged(s: Editable?) {
+                val amountText = s?.toString() ?: ""
+
+                if (viewModel.validateAmount(amountText)) {
+                    viewModel.amount = amountText
+                } else {
+                    amount.removeTextChangedListener(this)
+                    amount.setText(viewModel.amount)
+                    amount.setSelection(viewModel.amount.length)
+                    amount.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_edittext))
+                    amount.addTextChangedListener(this)
+                }
+            }
         }
-
-        setTitle(getString(R.string.Approve_Title))
-        setSubtitle(getString(R.string.Swap))
-        setHeaderIcon(R.drawable.ic_swap)
-
-        coinAmount.text = viewModel.coinAmount
-        coinCode.text = viewModel.coinTitle
-        txSpeedValue.text = viewModel.feePresenter.txSpeed
+        amount.addTextChangedListener(watcher)
 
         btnApprove.setOnSingleClickListener {
             viewModel.onApprove()
         }
 
-        viewModel.feePresenter.feeValue.observe(viewLifecycleOwner, Observer {
-            feeValue.text = it
-        })
-
-        viewModel.feePresenter.feeLoading.observe(viewLifecycleOwner, Observer {
-            txFeeLoading.isVisible = it
-        })
-
-        viewModel.feePresenter.error.observe(viewLifecycleOwner, Observer {
-            feeDataGroup.isVisible = it == null
-            feeError.isVisible = it != null
-
-            feeError.text = it
-        })
-
         viewModel.approveAllowed.observe(viewLifecycleOwner, Observer {
             btnApprove.isEnabled = it
         })
 
-        viewModel.successLiveEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.approveSuccessLiveEvent.observe(viewLifecycleOwner, Observer {
             setNavigationResult(requestKey, bundleOf(resultKey to true))
 
-            dismiss()
+            findNavController().popBackStack()
         })
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
+        viewModel.approveError.observe(viewLifecycleOwner, Observer {
             HudHelper.showErrorMessage(requireView(), it)
         })
+
+        viewModel.balanceError.observe(viewLifecycleOwner, Observer {
+            amountError.isVisible = it != null
+            amountError.text = it
+        })
+
+        feeSelectorView.setDurationVisible(false)
+        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.swap_approve_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuClose -> {
+                findNavController().popBackStack()
+                true
+            }
+            else -> false
+        }
     }
 
     companion object {
-        val requestKey = "approve"
-        val resultKey = "result"
-
-        const val COIN_KEY = "coin_key"
-        const val AMOUNT_KEY = "amount_key"
-        const val SPENDER_ADDRESS_KEY = "spender_address_key"
-
-        fun newInstance(coin: Coin, amount: BigDecimal, spenderAddress: String): SwapApproveFragment {
-            return SwapApproveFragment().apply {
-                arguments = Bundle(3).apply {
-                    putParcelable(COIN_KEY, coin)
-                    putSerializable(AMOUNT_KEY, amount)
-                    putString(SPENDER_ADDRESS_KEY, spenderAddress)
-                }
-            }
-        }
+        const val requestKey = "approve"
+        const val resultKey = "result"
+        const val dataKey = "data_key"
     }
 }

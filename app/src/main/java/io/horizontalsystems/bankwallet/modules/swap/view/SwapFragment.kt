@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
@@ -138,9 +139,7 @@ class SwapFragment : BaseFragment() {
             connectButton.isVisible = approveData != null
             connectButton.setOnSingleClickListener {
                 approveData?.let {
-                    SwapApproveFragment
-                            .newInstance(it.coin, it.amount, it.spenderAddress)
-                            .show(childFragmentManager, "SwapApproveFragment")
+                    findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to it), navOptions())
                 }
             }
         })
