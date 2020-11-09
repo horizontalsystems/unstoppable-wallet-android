@@ -1,50 +1,119 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.guides.DataState
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
+import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.erc20kit.core.Erc20Kit
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import java.math.BigDecimal
+import java.math.BigInteger
 
 class SwapApproveService(
-        override val coin: Coin,
-        override val amount: BigDecimal,
-        private val spenderAddress: String,
-        private val feeService: IFeeService,
-        private val erc20Adapter: Erc20Adapter
+        private val transactionService: EthereumTransactionService,
+        private val erc20Kit: Erc20Kit,
+        private val ethereumKit: EthereumKit,
+        amount: BigInteger,
+        private val spenderAddress: Address,
+        private val allowance: BigInteger,
 ) : ISwapApproveService, Clearable {
 
-    override val approveState = BehaviorSubject.create<SwapApproveState>()
+    override val stateObservable = BehaviorSubject.createDefault<State>(State.ApproveNotAllowed(listOf()))
+    override var amount = amount
+        set(value) {
+            field = value
+            syncTransactionData()
+        }
+
+    private var state: State = State.ApproveNotAllowed(listOf())
+        set(value) {
+            field = value
+
+            stateObservable.onNext(value)
+        }
+
+    private val ethereumBalance: BigInteger
+        get() = ethereumKit.balance ?: BigInteger.ZERO
 
     private val disposables = CompositeDisposable()
 
     init {
-        approveState.onNext(SwapApproveState.ApproveNotAllowed)
-
-        feeService.feeValues
-                .subscribeOn(Schedulers.io())
+        transactionService.transactionStatusObservable
+                .observeOn(Schedulers.io())
                 .subscribe {
-                    if (it is DataState.Success) {
-                        approveState.onNext(SwapApproveState.ApproveAllowed)
-                    }
+                    syncState()
                 }
                 .let {
                     disposables.add(it)
                 }
+
+        syncTransactionData()
+    }
+
+    private fun syncTransactionData() {
+        val erc20KitTransactionData = erc20Kit.approveTransactionData(spenderAddress, amount)
+
+        transactionService.transactionData = EthereumTransactionService.TransactionData(
+                erc20KitTransactionData.to,
+                erc20KitTransactionData.value,
+                erc20KitTransactionData.input,
+        )
+    }
+
+    private fun syncState() {
+        val errors = mutableListOf<Throwable>()
+        var loading = false
+
+        if (allowance >= amount && amount > BigInteger.ZERO) { // 0 amount is used for USDT to drop existing allowance
+            errors.add(TransactionAmountError.AlreadyApproved)
+        }
+
+        when (val transactionStatus = transactionService.transactionStatus) {
+            DataState.Loading -> {
+                loading = true
+            }
+            is DataState.Error -> {
+                errors.add(transactionStatus.error)
+            }
+            is DataState.Success -> {
+                val transaction = transactionStatus.data
+                if (transaction.totalAmount > ethereumBalance) {
+                    errors.add(TransactionEthereumAmountError.InsufficientBalance(transaction.totalAmount))
+                }
+            }
+        }
+
+        state = when {
+            errors.isEmpty() && !loading -> {
+                State.ApproveAllowed
+            }
+            else -> {
+                State.ApproveNotAllowed(errors)
+            }
+        }
     }
 
     override fun approve() {
-        approveState.onNext(SwapApproveState.Loading)
+        val transactionStatus = transactionService.transactionStatus
+        if (transactionStatus !is DataState.Success) return
 
-        erc20Adapter.approve(spenderAddress, amount, feeService.gasPrice, feeService.gasLimit)
+        val transaction = transactionStatus.data
+
+        state = State.Loading
+
+        ethereumKit.send(
+                transaction.data.to,
+                transaction.data.value,
+                transaction.data.input,
+                transaction.gasData.gasPrice,
+                transaction.gasData.gasLimit)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    approveState.onNext(SwapApproveState.Success)
+                    state = State.Success
                 }, {
-                    approveState.onNext(SwapApproveState.Error(it))
+                    state = State.Error(it)
                 })
                 .let {
                     disposables.add(it)
@@ -53,5 +122,21 @@ class SwapApproveService(
 
     override fun clear() {
         disposables.clear()
+    }
+
+    sealed class State {
+        class ApproveNotAllowed(val errors: List<Throwable>) : State()
+        object ApproveAllowed : State()
+        object Loading : State()
+        object Success : State()
+        class Error(val e: Throwable) : State()
+    }
+
+    sealed class TransactionAmountError : Exception() {
+        object AlreadyApproved : TransactionAmountError()
+    }
+
+    sealed class TransactionEthereumAmountError : Exception() {
+        class InsufficientBalance(val requiredBalance: BigInteger) : TransactionEthereumAmountError()
     }
 }

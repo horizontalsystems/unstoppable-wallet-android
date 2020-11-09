@@ -31,7 +31,7 @@ class Erc20Adapter(
 ) : EthereumBaseAdapter(kit, decimal) {
 
     private val contractAddress: Address = Address(contractAddress)
-    private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, this.contractAddress)
+    val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, this.contractAddress)
 
     // IAdapter
 
@@ -135,14 +135,6 @@ class Erc20Adapter(
                 .map {
                     scaleDown(it.toBigDecimal())
                 }
-    }
-
-    fun approve(address: String, amount: BigDecimal, gasPrice: Long, gasLimit: Long): Single<Transaction> {
-        return erc20Kit.approve(Address(address), scaleUp(amount), gasPrice, gasLimit)
-    }
-
-    fun estimateApprove(address: String, amount: BigDecimal, gasPrice: Long): Single<Long> {
-        return erc20Kit.estimateApprove(Address(address), scaleUp(amount), gasPrice)
     }
 
     companion object {

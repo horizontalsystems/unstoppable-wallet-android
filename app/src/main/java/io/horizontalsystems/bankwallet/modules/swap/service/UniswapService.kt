@@ -331,7 +331,10 @@ class UniswapService(
             else amountSending
 
             if (maxSendingAmount != null && allowanceData != null && maxSendingAmount > allowanceData.value) {
-                newErrors.add(SwapError.InsufficientAllowance(SwapModule.ApproveData(coinSending, maxSendingAmount, uniswapRepository.routerAddress.hex)))
+                val amount = maxSendingAmount.movePointRight(coinSending.decimal).toBigInteger()
+                val allowance = allowanceData.value.movePointRight(coinSending.decimal).toBigInteger()
+
+                newErrors.add(SwapError.InsufficientAllowance(SwapModule.ApproveData(coinSending, uniswapRepository.routerAddress.hex, amount, allowance)))
             }
         }
 

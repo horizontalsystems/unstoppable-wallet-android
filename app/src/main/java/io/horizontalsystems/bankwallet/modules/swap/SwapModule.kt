@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -22,7 +23,9 @@ import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
+import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 
 object SwapModule {
@@ -77,7 +80,13 @@ object SwapModule {
         class Other(val error: Throwable) : SwapError()
     }
 
-    data class ApproveData(val coin: Coin, val amount: BigDecimal, val spenderAddress: String)
+    @Parcelize
+    data class ApproveData(
+            val coin: Coin,
+            val spenderAddress: String,
+            val amount: BigInteger,
+            val allowance: BigInteger
+    ) : Parcelable
 
     sealed class SwapState {
         object Idle : SwapState()
