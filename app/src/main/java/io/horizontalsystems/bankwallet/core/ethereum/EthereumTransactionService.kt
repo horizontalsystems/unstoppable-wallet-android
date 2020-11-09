@@ -78,7 +78,7 @@ class EthereumTransactionService(
             is GasPriceType.Recommended -> {
                 feeRateProvider.feeRates()
                         .map {
-                            val feeRateInfo = it.first { it.priority == FeeRatePriority.MEDIUM }
+                            val feeRateInfo = it.first { it.priority == FeeRatePriority.RECOMMENDED }
 
                             feeRateInfo.feeRate
                         }
