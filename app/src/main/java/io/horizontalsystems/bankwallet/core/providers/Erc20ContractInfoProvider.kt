@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.IAppConfigTestMode
 import io.reactivex.Single
 import java.lang.Exception
+import java.util.*
 
 class Erc20ContractInfoProvider(private val appConfigTestModer: IAppConfigTestMode,
                                 private val appConfigProvider: IAppConfigProvider,
@@ -19,9 +20,13 @@ class Erc20ContractInfoProvider(private val appConfigTestModer: IAppConfigTestMo
 
         return networkManager.getCoinInfo(host, request)
                 .map { response->
-                    if (response.get("status").asString != "1"){
+                    if (response.get("status").asString == "0" && response.get("result").asString.toLowerCase(Locale.ENGLISH).contains("limit reached")){
+                        throw ApiError.ApiLimitExceeded
+                    }
+                    if (response.get("status").asString == "0" && response.get("result").asString.toLowerCase(Locale.ENGLISH).contains("invalid contract address")){
                         throw ApiError.ContractDoesNotExist
                     }
+
                     val result = response.getAsJsonArray("result")?.get(0)?.asJsonObject ?: throw ApiError.InvalidResponse
                     val tokenName = result.get("tokenName")?.asString ?: throw ApiError.InvalidResponse
                     val tokenSymbol = result.get("tokenSymbol")?.asString ?: throw ApiError.InvalidResponse
@@ -34,6 +39,7 @@ class Erc20ContractInfoProvider(private val appConfigTestModer: IAppConfigTestMo
 
 
     sealed class ApiError : Exception() {
+        object ApiLimitExceeded : ApiError()
         object ContractDoesNotExist : ApiError()
         object InvalidResponse : ApiError()
     }

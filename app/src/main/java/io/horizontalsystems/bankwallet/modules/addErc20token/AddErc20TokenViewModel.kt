@@ -16,12 +16,8 @@ class AddErc20TokenViewModel(
 
     val showTrashButton = MutableLiveData<Boolean>()
     val showPasteButton = MutableLiveData<Boolean>()
-    val showInvalidAddressError = MutableLiveData<Boolean>()
-    val showExistingCoinWarning = MutableLiveData<Boolean>()
-    val showProgressbar = MutableLiveData<Boolean>()
     val showSuccess = SingleLiveEvent<Unit>()
-    val showAddButton = MutableLiveData<Boolean>()
-    val coinLiveData = MutableLiveData<ViewItem?>()
+    val resultLiveData = MutableLiveData<AddErc20TokenModule.State>()
 
     private var disposable: Disposable? = null
     private var coin: Coin? = null
@@ -36,22 +32,21 @@ class AddErc20TokenViewModel(
             return
         }
 
-        val contractAddress = text.toString()
+        val contractAddress = text.toString().trim()
 
         try {
             validateAddress(contractAddress)
         } catch (e: Exception) {
-            showInvalidAddressError.postValue(true)
+            resultLiveData.postValue(AddErc20TokenModule.State.Failed(AddErc20TokenModule.InvalidAddress()))
             return
         }
 
         existingCoin(contractAddress)?.let { coin ->
-            coinLiveData.postValue(getViewItem(coin))
-            showExistingCoinWarning.postValue(true)
+            resultLiveData.postValue(AddErc20TokenModule.State.ExistingCoin(getViewItem(coin)))
             return
         }
 
-        showProgressbar.postValue(true)
+        resultLiveData.postValue(AddErc20TokenModule.State.Loading)
 
         fetchCoin(contractAddress)
     }
@@ -63,11 +58,7 @@ class AddErc20TokenViewModel(
 
     private fun resetView() {
         coin = null
-        showAddButton.postValue(false)
-        showProgressbar.postValue(false)
-        showInvalidAddressError.postValue(false)
-        coinLiveData.postValue(null)
-        showExistingCoinWarning.postValue(false)
+        resultLiveData.postValue(AddErc20TokenModule.State.Empty)
     }
 
     private fun fetchCoin(contractAddress: String) {
@@ -77,17 +68,14 @@ class AddErc20TokenViewModel(
                 .subscribeOn(Schedulers.io())
                 .subscribe({ fetchedCoin ->
                     coin = fetchedCoin
-                    showProgressbar.postValue(false)
-                    coinLiveData.postValue(getViewItem(fetchedCoin))
-                    showAddButton.postValue(true)
+                    resultLiveData.postValue(AddErc20TokenModule.State.Success(getViewItem(fetchedCoin)))
                 }, {
-                    showProgressbar.postValue(false)
-                    showInvalidAddressError.postValue(true)
+                    resultLiveData.postValue(AddErc20TokenModule.State.Failed(it))
                 })
     }
 
     private fun getViewItem(coin: Coin) =
-            ViewItem(coin.title, coin.code, coin.decimal)
+            AddErc20TokenModule.ViewItem(coin.title, coin.code, coin.decimal)
 
     private fun existingCoin(contractAddress: String): Coin? {
         return coinManager.existingErc20Coin(contractAddress)
@@ -107,7 +95,5 @@ class AddErc20TokenViewModel(
     private fun save(coin: Coin) {
         coinManager.save(coin)
     }
-
-    data class ViewItem(val coinName: String, val symbol: String, val decimal: Int)
 
 }
