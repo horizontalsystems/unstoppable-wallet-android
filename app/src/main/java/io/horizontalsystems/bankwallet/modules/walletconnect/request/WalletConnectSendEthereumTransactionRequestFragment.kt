@@ -94,34 +94,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         })
 
         feeSelectorView.setDurationVisible(false)
-
-        feeViewModel.feeLiveData.observe(viewLifecycleOwner, Observer {
-            feeSelectorView.setFeeText(it)
-        })
-
-        feeViewModel.priorityLiveData.observe(viewLifecycleOwner, Observer {
-            feeSelectorView.setPriorityText(it)
-        })
-
-        feeViewModel.openSelectPriorityLiveEvent.observe(viewLifecycleOwner, Observer {
-            feeSelectorView.openPrioritySelector(it, parentFragmentManager)
-        })
-
-        feeViewModel.feeSliderLiveData.observe(viewLifecycleOwner, {
-            feeSelectorView.setFeeSliderViewItem(it)
-        })
-
-        feeSelectorView.onTxSpeedClickListener = {
-            feeViewModel.openSelectPriority()
-        }
-
-        feeSelectorView.prioritySelectListener = { position ->
-            feeViewModel.selectPriority(position)
-        }
-
-        feeSelectorView.customFeeSeekBarListener = {
-            feeViewModel.changeCustomPriority(it.toLong())
-        }
+        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
     }
 
     private fun popBackStackWithResult(approveResult: ApproveResult) {
