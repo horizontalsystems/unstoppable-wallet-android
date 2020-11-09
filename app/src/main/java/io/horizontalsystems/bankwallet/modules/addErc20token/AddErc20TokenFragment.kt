@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.providers.Erc20ContractInfoProvider
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -59,39 +60,6 @@ class AddErc20TokenFragment : BaseFragment() {
             btnPaste.isVisible = visible
         })
 
-        model.showProgressbar.observe(viewLifecycleOwner, Observer { visible ->
-            progressLoading.isVisible = visible
-        })
-
-        model.showAddButton.observe(viewLifecycleOwner, Observer { visible ->
-            btnAddToken.isVisible = visible
-        })
-
-        model.showExistingCoinWarning.observe(viewLifecycleOwner, Observer { visible ->
-            warningText.isVisible = visible
-        })
-
-        model.showInvalidAddressError.observe(viewLifecycleOwner, Observer { visible ->
-            txtAddressError.isVisible = visible
-        })
-
-        model.coinLiveData.observe(viewLifecycleOwner, Observer { viewItem ->
-            coinNameTitle.isVisible = viewItem != null
-            coinNameValue.isVisible = viewItem != null
-
-            symbolTitle.isVisible = viewItem != null
-            symbolValue.isVisible = viewItem != null
-
-            decimalTitle.isVisible = viewItem != null
-            decimalsValue.isVisible = viewItem != null
-
-            viewItem?.let {
-                coinNameValue.text = it.coinName
-                symbolValue.text = it.symbol
-                decimalsValue.text = it.decimal.toString()
-            }
-        })
-
         model.showSuccess.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success, SnackbarDuration.LONG)
             Handler().postDelayed({
@@ -99,5 +67,67 @@ class AddErc20TokenFragment : BaseFragment() {
             }, 1500)
         })
 
+        model.resultLiveData.observe(viewLifecycleOwner, Observer { result ->
+            when (result) {
+                AddErc20TokenModule.State.Empty -> {
+                    progressLoading.isVisible = false
+                    warningText.isVisible = false
+                    btnAddToken.isVisible = false
+                    txtAddressError.isVisible = false
+
+                    setCoinDetails(null)
+                }
+                AddErc20TokenModule.State.Loading -> {
+                    progressLoading.isVisible = true
+                }
+                is AddErc20TokenModule.State.ExistingCoin -> {
+                    progressLoading.isVisible = false
+                    txtAddressError.isVisible = false
+                    warningText.isVisible = true
+
+                    setCoinDetails(result.viewItem)
+                }
+                is AddErc20TokenModule.State.Success -> {
+                    progressLoading.isVisible = false
+                    txtAddressError.isVisible = false
+                    btnAddToken.isVisible = true
+
+                    setCoinDetails(result.viewItem)
+                }
+                is AddErc20TokenModule.State.Failed -> {
+                    txtAddressError.text = getString(getErrorText(result.error))
+                    progressLoading.isVisible = false
+                    txtAddressError.isVisible = true
+                    btnAddToken.isVisible = false
+
+                    setCoinDetails(null)
+                }
+            }
+        })
+
+    }
+
+    private fun getErrorText(error: Throwable): Int {
+        return when (error) {
+            is Erc20ContractInfoProvider.ApiError.ContractDoesNotExist,
+            is AddErc20TokenModule.InvalidAddress -> R.string.AddErc20Token_InvalidAddressError
+            is Erc20ContractInfoProvider.ApiError.ApiLimitExceeded -> R.string.AddErc20Token_ApiLimitExceeded
+            else -> R.string.Error
+        }
+    }
+
+    private fun setCoinDetails(viewItem: AddErc20TokenModule.ViewItem?) {
+        coinNameTitle.isVisible = viewItem != null
+        coinNameValue.isVisible = viewItem != null
+
+        symbolTitle.isVisible = viewItem != null
+        symbolValue.isVisible = viewItem != null
+
+        decimalTitle.isVisible = viewItem != null
+        decimalsValue.isVisible = viewItem != null
+
+        coinNameValue.text = viewItem?.coinName ?: ""
+        symbolValue.text = viewItem?.symbol ?: ""
+        decimalsValue.text = viewItem?.decimal?.toString() ?: ""
     }
 }

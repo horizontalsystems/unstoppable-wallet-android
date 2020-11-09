@@ -611,6 +611,7 @@
     <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
     <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
+    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
 
     <!-- Address Format Settings List -->
 
