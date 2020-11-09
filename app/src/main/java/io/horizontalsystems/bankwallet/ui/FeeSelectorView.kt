@@ -6,7 +6,11 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ethereum.ISendFeePriorityViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.ISendFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.SendFeeSliderViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.SendPriorityViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -72,6 +76,36 @@ class FeeSelectorView(context: Context, attrs: AttributeSet) : LinearLayout(cont
                     prioritySelectListener(position)
                 }
                 .show(fragmentManager, "fee_rate_priority_selector")
+    }
+
+    fun setFeeSelectorViewInteractions(sendFeeViewModel: ISendFeeViewModel, sendFeePriorityViewModel: ISendFeePriorityViewModel, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
+        sendFeeViewModel.feeLiveData.observe(viewLifecycleOwner, Observer {
+            setFeeText(it)
+        })
+
+        sendFeePriorityViewModel.priorityLiveData.observe(viewLifecycleOwner, Observer {
+            setPriorityText(it)
+        })
+
+        sendFeePriorityViewModel.openSelectPriorityLiveEvent.observe(viewLifecycleOwner, Observer {
+            openPrioritySelector(it, fragmentManager)
+        })
+
+        sendFeePriorityViewModel.feeSliderLiveData.observe(viewLifecycleOwner, {
+            setFeeSliderViewItem(it)
+        })
+
+        onTxSpeedClickListener = {
+            sendFeePriorityViewModel.openSelectPriority()
+        }
+
+        prioritySelectListener = { position ->
+            sendFeePriorityViewModel.selectPriority(position)
+        }
+
+        customFeeSeekBarListener = {
+            sendFeePriorityViewModel.changeCustomPriority(it.toLong())
+        }
     }
 
 }
