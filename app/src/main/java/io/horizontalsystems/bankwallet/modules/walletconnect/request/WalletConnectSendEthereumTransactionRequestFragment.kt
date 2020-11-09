@@ -26,6 +26,7 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_wallet_connect_request.*
+import kotlinx.android.synthetic.main.fragment_wallet_connect_request.toolbar
 import kotlinx.android.synthetic.main.partial_transaction_info.*
 import kotlinx.android.synthetic.main.view_transaction_info_item.*
 
@@ -39,6 +40,8 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setNavigationToolbar(toolbar, findNavController())
 
         sentToSelfIcon.isVisible = false
         primaryValue.setTextColor(LayoutHelper.getAttr(R.attr.ColorJacob, requireContext().theme)
