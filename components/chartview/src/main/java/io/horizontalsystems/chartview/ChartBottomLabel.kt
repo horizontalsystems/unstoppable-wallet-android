@@ -21,7 +21,7 @@ class ChartBottomLabel(private val config: ChartConfig, override var isVisible: 
             map[string] = Paint().apply {
                 textSize = config.gridTextSize
                 color = labelColor
-                typeface = Typeface.create(config.textFont, Typeface.NORMAL)
+                typeface = config.textFont
                 isAntiAlias = true
             }
         }

@@ -15,7 +15,7 @@ class ChartGridTimeline(private val config: ChartConfig, override var isVisible:
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = config.timelineTextSize
         color = config.timelineTextColor
-        typeface = Typeface.create(config.textFont, Typeface.NORMAL)
+        typeface = config.textFont
     }
 
     fun setShape(rect: RectF) {
