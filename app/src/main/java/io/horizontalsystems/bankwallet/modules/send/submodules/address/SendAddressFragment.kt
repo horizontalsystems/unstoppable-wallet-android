@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
+import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.hodler.HodlerPlugin
 import kotlinx.android.synthetic.main.view_address_input.*
 import java.util.*
@@ -88,7 +89,8 @@ class SendAddressFragment(
                 else -> {
                     txtAddressError.text = when (error) {
                         is HodlerPlugin.UnsupportedAddressType -> getString(R.string.Send_Error_UnsupportedAddress)
-                        else -> getString(R.string.Send_Error_IncorrectAddress)
+                        is AddressValidator.AddressValidationException -> getString(R.string.Send_Error_IncorrectAddress)
+                        else -> error.message ?: error.javaClass.simpleName
                     }
                     txtAddressError.isVisible = true
                 }
