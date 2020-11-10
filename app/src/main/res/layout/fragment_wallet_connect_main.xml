@@ -27,12 +27,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <io.horizontalsystems.bankwallet.ui.extensions.PicassoRoundedImageView
             android:id="@+id/dappIcon"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_image_background_16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
