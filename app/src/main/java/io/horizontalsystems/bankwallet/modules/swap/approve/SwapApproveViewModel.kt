@@ -20,11 +20,16 @@ class SwapApproveViewModel(
 
     private val maxCoinDecimal = 8
     var amount: String
-        get() = coinService.convertToMonetaryValue(service.amount).toPlainString()
-        set(value) = try {
-            service.amount = coinService.convertToFractionalMonetaryValue(BigDecimal(value))
-        } catch (e: NumberFormatException) {
-            amountError.postValue(null)
+        get() {
+            return service.amount?.let {
+                coinService.convertToMonetaryValue(it).toPlainString()
+            } ?: ""
+        }
+        set(value) {
+            service.amount = when {
+                value.isEmpty() -> null
+                else -> coinService.convertToFractionalMonetaryValue(BigDecimal(value))
+            }
         }
 
     private val disposables = CompositeDisposable()
