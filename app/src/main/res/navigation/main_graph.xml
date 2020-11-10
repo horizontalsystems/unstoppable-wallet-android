@@ -267,6 +267,6 @@
         android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
         tools:layout="@layout/fragment_wallet_connect_request"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment"
-        android:label="@string/WalletConnect_Approve" />
+        android:label="@string/WalletConnect_Request" />
 
 </navigation>
