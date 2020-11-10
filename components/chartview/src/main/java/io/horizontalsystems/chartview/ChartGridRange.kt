@@ -21,7 +21,7 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
     private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = config.gridTextSize
         color = config.gridTextColor
-        typeface = Typeface.create(config.textFont, Typeface.NORMAL)
+        typeface = config.textFont
     }
 
     fun setShape(rect: RectF) {

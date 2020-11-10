@@ -11,7 +11,7 @@ class SeekBarConfig(context: Context) {
     val bubbleWidth = LayoutHelper.dpToPx(78f, context)
     val bubbleHeight = LayoutHelper.dpToPx(52f, context)
 
-    val notoSans: Typeface = Typeface.create(ResourcesCompat.getFont(context, R.font.roboto_regular), Typeface.NORMAL)
+    val notoSans: Typeface = Typeface.DEFAULT
 
     val primaryTextSize = LayoutHelper.spToPx(16f, context)
     val primaryTextTopMargin = LayoutHelper.dpToPx(11f, context)

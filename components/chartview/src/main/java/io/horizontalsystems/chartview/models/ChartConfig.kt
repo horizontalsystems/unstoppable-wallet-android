@@ -3,6 +3,7 @@ package io.horizontalsystems.chartview.models
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.util.AttributeSet
 import androidx.core.content.res.ResourcesCompat
 import io.horizontalsystems.chartview.ChartData
@@ -12,7 +13,7 @@ import java.math.BigDecimal
 class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     //  colors
-    var textFont = ResourcesCompat.getFont(context, R.font.roboto_regular)
+    val textFont: Typeface = Typeface.DEFAULT
     var timelineTextColor = context.getColor(R.color.grey)
     var timelineTextSize = dp2px(12f)
     var timelineTextPadding = dp2px(4f)

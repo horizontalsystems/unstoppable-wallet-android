@@ -46,12 +46,12 @@
         <item name="android:paddingBottom">14dp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="ButtonSecondary">
         <item name="android:background">@drawable/button_secondary_background</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
@@ -86,7 +86,7 @@
     <style name="ButtonPrivacySettings">
         <item name="android:background">@drawable/button_privacy_settings_background</item>
         <item name="android:textColor">@color/button_transparent_text_color</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
@@ -126,7 +126,7 @@
     </style>
 
     <style name="ImportantText">
-        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
         <item name="android:background">@drawable/background_important_text</item>
         <item name="android:textColor">?ColorOz</item>
@@ -139,7 +139,7 @@
     </style>
 
     <style name="TextFlatButton">
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
         <item name="android:includeFontPadding">false</item>
@@ -149,7 +149,7 @@
     </style>
 
     <style name="Checkbox">
-        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">top</item>
         <item name="android:buttonTint">@color/stateful_checkbox_color</item>

@@ -48,7 +48,6 @@
         android:layout_height="19dp"
         android:textColor="?ColorRemus"
         android:textSize="14sp"
-        android:fontFamily="@font/roboto_regular"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title"
