@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
@@ -53,7 +54,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
     override fun onBackPressed() {
         // todo: need to open FullTransactionInfo via navigation fragment
         supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
-            (fragment as? FullTransactionInfoFragment)?.let {
+            if (fragment is FullTransactionInfoFragment || fragment is DataProviderSettingsFragment) {
                 supportFragmentManager.popBackStack()
                 return
             }
