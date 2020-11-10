@@ -20,11 +20,11 @@ class SwapApproveViewModel(
 
     private val maxCoinDecimal = 8
     var amount: String
-        get() = coinService.convertToMonetaryUnit(service.amount).toPlainString()
+        get() = coinService.convertToMonetaryValue(service.amount).toPlainString()
         set(value) = try {
-            service.amount = coinService.convertToFractionalMonetaryUnit(BigDecimal(value))
+            service.amount = coinService.convertToFractionalMonetaryValue(BigDecimal(value))
         } catch (e: NumberFormatException) {
-            balanceError.postValue(null)
+            amountError.postValue(null)
         }
 
     private val disposables = CompositeDisposable()
@@ -32,7 +32,7 @@ class SwapApproveViewModel(
     val approveAllowed = MutableLiveData<Boolean>()
     val approveSuccessLiveEvent = SingleLiveEvent<Unit>()
     val approveError = MutableLiveData<String>()
-    val balanceError = MutableLiveData<String?>(null)
+    val amountError = MutableLiveData<String?>(null)
     val error = MutableLiveData<String?>(null)
 
     init {
@@ -73,9 +73,9 @@ class SwapApproveViewModel(
                 }
 
                 if (balanceErrorIndex != -1) {
-                    balanceError.postValue(convertError(errors.removeAt(balanceErrorIndex)))
+                    amountError.postValue(convertError(errors.removeAt(balanceErrorIndex)))
                 } else {
-                    balanceError.postValue(null)
+                    amountError.postValue(null)
                 }
 
                 error.postValue(errors.firstOrNull()?.let { convertError(it) })
