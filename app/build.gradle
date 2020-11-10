@@ -10,7 +10,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 32
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 33
     return "$buildNumber".toInteger()
 }
 
@@ -21,7 +21,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 29
         versionCode computeVersionCode()
-        versionName "0.16.2"
+        versionName "0.16.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
