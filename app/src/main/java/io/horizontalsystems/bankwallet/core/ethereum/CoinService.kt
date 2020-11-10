@@ -37,14 +37,14 @@ class CoinService(
     }
 
     fun coinValue(value: BigInteger): CoinValue {
-        return CoinValue(coin, convertToMonetaryUnit(value))
+        return CoinValue(coin, convertToMonetaryValue(value))
     }
 
-    fun convertToMonetaryUnit(value: BigInteger): BigDecimal {
+    fun convertToMonetaryValue(value: BigInteger): BigDecimal {
         return value.toBigDecimal().movePointLeft(coin.decimal).stripTrailingZeros()
     }
 
-    fun convertToFractionalMonetaryUnit(value: BigDecimal): BigInteger {
+    fun convertToFractionalMonetaryValue(value: BigDecimal): BigInteger {
         return value.movePointRight(coin.decimal).toBigInteger()
     }
 

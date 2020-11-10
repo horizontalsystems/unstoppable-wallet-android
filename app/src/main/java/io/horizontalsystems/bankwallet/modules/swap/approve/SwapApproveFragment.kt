@@ -78,7 +78,7 @@ class SwapApproveFragment : BaseFragment() {
             HudHelper.showErrorMessage(requireView(), it)
         })
 
-        viewModel.balanceError.observe(viewLifecycleOwner, Observer {
+        viewModel.amountError.observe(viewLifecycleOwner, Observer {
             amountError.isVisible = it != null
             amountError.text = it
         })
