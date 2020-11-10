@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
+import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.hodler.HodlerPlugin
 import kotlinx.android.synthetic.main.view_address_input.*
 import java.util.*
@@ -89,9 +90,10 @@ class SendAddressFragment(
                 else -> {
                     txtAddressError.text = when (error) {
                         is HodlerPlugin.UnsupportedAddressType -> getString(R.string.Send_Error_UnsupportedAddress)
+                        is AddressValidator.AddressValidationException -> getString(R.string.Send_Error_IncorrectAddress)
                         ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> getString(R.string.Send_Error_TransparentAddress)
                         ZcashAdapter.ZcashError.SendToSelfNotAllowed -> getString(R.string.Send_Error_SendToSelf)
-                        else -> getString(R.string.Send_Error_IncorrectAddress)
+                        else -> error.message ?: error.javaClass.simpleName
                     }
                     txtAddressError.isVisible = true
                 }
