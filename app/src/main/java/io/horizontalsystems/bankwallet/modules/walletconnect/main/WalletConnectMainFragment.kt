@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.zxing.integration.android.IntentIntegrator
-import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
@@ -108,8 +107,7 @@ class WalletConnectMainFragment : BaseFragment() {
 
             peerMetaViewItem?.let {
                 dappTitle.text = it.name
-                it.icon?.let { Picasso.get().load(it).into(dappIcon) }
-
+                dappIcon.loadImage(it.icon)
                 dappInfoAdapter.url = it.url
             }
         })
