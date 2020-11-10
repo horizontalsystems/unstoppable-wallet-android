@@ -187,7 +187,7 @@
 
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
-    <string name="WalletConnect_Approve">Approve</string>
+    <string name="WalletConnect_Request">Request</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_SignedTransactions">Signed Transactions</string>
