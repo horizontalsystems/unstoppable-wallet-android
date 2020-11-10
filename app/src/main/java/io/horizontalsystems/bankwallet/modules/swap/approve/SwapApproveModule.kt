@@ -51,7 +51,7 @@ object SwapApproveModule {
 }
 
 interface ISwapApproveService {
-    var amount: BigInteger
+    var amount: BigInteger?
     val stateObservable: Observable<SwapApproveService.State>
 
     fun approve()

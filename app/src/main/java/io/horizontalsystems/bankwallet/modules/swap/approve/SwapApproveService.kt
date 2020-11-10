@@ -21,10 +21,14 @@ class SwapApproveService(
 ) : ISwapApproveService, Clearable {
 
     override val stateObservable = BehaviorSubject.createDefault<State>(State.ApproveNotAllowed(listOf()))
-    override var amount = amount
+    override var amount: BigInteger? = amount
         set(value) {
             field = value
-            syncTransactionData()
+
+            when (value) {
+                null -> syncState()
+                else -> syncTransactionData(value)
+            }
         }
 
     private var state: State = State.ApproveNotAllowed(listOf())
@@ -49,10 +53,10 @@ class SwapApproveService(
                     disposables.add(it)
                 }
 
-        syncTransactionData()
+        syncTransactionData(amount)
     }
 
-    private fun syncTransactionData() {
+    private fun syncTransactionData(amount: BigInteger) {
         val erc20KitTransactionData = erc20Kit.approveTransactionData(spenderAddress, amount)
 
         transactionService.transactionData = EthereumTransactionService.TransactionData(
@@ -63,6 +67,12 @@ class SwapApproveService(
     }
 
     private fun syncState() {
+        val amount = amount
+        if (amount == null) {
+            state = State.ApproveNotAllowed(listOf())
+            return
+        }
+
         val errors = mutableListOf<Throwable>()
         var loading = false
 
