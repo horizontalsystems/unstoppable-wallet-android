@@ -56,7 +56,12 @@
             app:destination="@id/guideFragment" />
         <action
             android:id="@+id/mainFragment_to_swapFragment"
-            app:destination="@id/swapFragment" />
+            app:destination="@id/swapFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_out_bottom"
+            />
         <action
             android:id="@+id/mainFragment_to_walletConnectMainFragment"
             app:destination="@id/walletConnectMainFragment" />
@@ -225,6 +230,13 @@
         <action
             android:id="@+id/swapFragment_to_uniswapInfoFragment"
             app:destination="@id/uniswapInfoFragment" />
+        <action
+            android:id="@+id/swapFragment_to_swapSettingsFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_out_bottom"
+            app:destination="@id/swapSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectSwapCoinFragment"
@@ -243,6 +255,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.swap.view.UniswapInfoFragment"
         tools:layout="@layout/fragment_swap_info"
         android:label="@string/UniswapInfo_Title"/>
+    <fragment
+        android:id="@+id/swapSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsFragment"
+        tools:layout="@layout/fragment_swap_settings" />
     <fragment
         android:id="@+id/walletConnectMainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment"

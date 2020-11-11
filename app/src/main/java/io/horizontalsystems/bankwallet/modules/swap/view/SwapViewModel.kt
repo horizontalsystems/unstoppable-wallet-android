@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPre
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -82,6 +83,9 @@ class SwapViewModel(
 
     private val _openConfirmation = SingleLiveEvent<Boolean>()
     val openConfirmation: LiveData<Boolean> = _openConfirmation
+
+    private val _openSettings = SingleLiveEvent<Pair<SwapSettings, SwapSettings>>()
+    val openSettings: LiveData<Pair<SwapSettings, SwapSettings>> = _openSettings
 
     private val _closeWithSuccess = SingleLiveEvent<Int>()
     val closeWithSuccess: LiveData<Int> = _closeWithSuccess
@@ -248,6 +252,14 @@ class SwapViewModel(
 
     fun onSwitchClick() {
         swapService.switchCoins()
+    }
+
+    fun onSwapSettingsUpdated(swapSettings: SwapSettings) {
+        swapService.updateSwapSettings(swapSettings)
+    }
+
+    fun onSettingsClick() {
+        _openSettings.postValue(Pair(swapService.currentSwapSettings, swapService.defaultSwapSettings))
     }
 
     // endregion

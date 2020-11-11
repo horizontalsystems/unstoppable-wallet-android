@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.swap.provider.AllowanceProvider
 import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
 import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeType
@@ -59,6 +60,10 @@ class UniswapService(
                 is DataState.Loading -> value
             }
         }
+
+    override val defaultSwapSettings = SwapSettings(slippage = BigDecimal("0.5"), deadline = 20)
+
+    override var currentSwapSettings = defaultSwapSettings
 
     override val coinSendingObservable = BehaviorSubject.create<Optional<Coin>>()
     override var coinSending: Coin? = coinSending
@@ -197,6 +202,11 @@ class UniswapService(
         state.onNext(SwapState.WaitingForApprove)
     }
 
+    override fun updateSwapSettings(swapSettings: SwapSettings) {
+        currentSwapSettings = swapSettings
+        syncTrade()
+    }
+
     override fun swap() {
         val tradeData = tradeData.dataOrNull
         val feeInfo = fee.value?.dataOrNull
@@ -246,7 +256,7 @@ class UniswapService(
         tradeDisposable?.dispose()
         tradeDisposable = null
 
-        tradeDisposable = uniswapRepository.getTradeData(coinSending, coinReceiving, amount, amountType)
+        tradeDisposable = uniswapRepository.getTradeData(coinSending, coinReceiving, amount, amountType, currentSwapSettings)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe {
                     tradeData = DataState.Loading

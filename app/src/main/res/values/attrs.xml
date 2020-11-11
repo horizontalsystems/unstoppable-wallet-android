@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="GlobalAttributesDeclaration">
+        <attr name="title" format="string" />
+        <attr name="description" format="string" />
+    </declare-styleable>
     <declare-styleable name="FullTransactionInfoItemView">
         <attr name="infoTitle" format="string" />
         <attr name="infoValue" format="string" />
@@ -18,6 +22,15 @@
         <attr name="showMax" format="boolean" />
     </declare-styleable>
     <declare-styleable name="SwapCardView">
-        <attr name="title" format="string" />
+        <attr name="title" />
+    </declare-styleable>
+    <declare-styleable name="InputWithButtonsView">
+        <attr name="title" />
+        <attr name="description" />
+        <attr name="android:inputType" />
+    </declare-styleable>
+    <declare-styleable name="AddressInputView">
+        <attr name="title" />
+        <attr name="description" />
     </declare-styleable>
 </resources>

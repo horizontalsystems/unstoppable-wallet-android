@@ -26,7 +26,7 @@ class UniswapFeeProvider(
         private val feeRateProvider: IFeeRateProvider
 ) {
 
-    val feeRatePriority = FeeRatePriority.MEDIUM
+    val feeRatePriority = FeeRatePriority.RECOMMENDED
 
     fun getSwapFeeInfo(coinSending: Coin, coinFee: Coin, tradeData: TradeData): Single<SwapFeeInfo> =
             Single.create { emitter ->

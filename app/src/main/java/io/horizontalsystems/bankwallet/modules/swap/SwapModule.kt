@@ -20,6 +20,8 @@ import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
 import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
 import io.horizontalsystems.uniswapkit.UniswapKit
@@ -59,6 +61,9 @@ object SwapModule {
         val feeRatePriority: FeeRatePriority
         val transactionFee: Pair<CoinValue, CurrencyValue?>?
 
+        val defaultSwapSettings: SwapSettings
+        val currentSwapSettings: SwapSettings
+
         fun enterCoinSending(coin: Coin)
         fun enterCoinReceiving(coin: Coin)
         fun switchCoins()
@@ -68,6 +73,7 @@ object SwapModule {
         fun cancelProceed()
         fun swap()
         fun approved()
+        fun updateSwapSettings(swapSettings: SwapSettings)
     }
 
     sealed class SwapError {
