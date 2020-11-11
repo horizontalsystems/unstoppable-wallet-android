@@ -18,9 +18,6 @@
         <attr name="subtitle" />
         <attr name="bottomBorder" />
     </declare-styleable>
-    <declare-styleable name="SwapAmountView">
-        <attr name="showMax" format="boolean" />
-    </declare-styleable>
     <declare-styleable name="SwapCardView">
         <attr name="title" />
     </declare-styleable>
