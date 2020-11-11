@@ -30,7 +30,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_swap_new.*
+import kotlinx.android.synthetic.main.fragment_swap.*
 import java.math.BigDecimal
 
 class SwapFragment : BaseFragment() {
@@ -40,7 +40,7 @@ class SwapFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_swap_new, container, false)
+        return inflater.inflate(R.layout.fragment_swap, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.swap.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -119,7 +118,6 @@ class SwapSettingsFragment : BaseFragment() {
         })
 
         viewModel.enableApply.observe(viewLifecycleOwner, { swapSettings ->
-            Log.e("AAA", "applyButtonEnabled: $swapSettings")
             applyButton.apply {
                 isEnabled = swapSettings != null
                 setOnClickListener {
