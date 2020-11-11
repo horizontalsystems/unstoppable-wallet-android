@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
 
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 29
+        minSdkVersion min_sdk_version
+        targetSdkVersion compile_sdk_version
         versionCode 1
         versionName "1.0"
 
@@ -31,18 +31,18 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
+    implementation "androidx.core:core-ktx:$core_ktx_version"
 
-    implementation 'androidx.fragment:fragment-ktx:1.3.0-beta01'
+    implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     // Navigation component
-    api "androidx.navigation:navigation-fragment-ktx:2.3.1"
-    api "androidx.navigation:navigation-ui-ktx:2.3.1"
+    api "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
+    api "androidx.navigation:navigation-ui-ktx:$navigation_ktx_version"
 
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
-    implementation "androidx.biometric:biometric:1.0.1"
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "androidx.biometric:biometric:$biometric_version"
+    implementation "com.google.android.material:material:$material_version"
     implementation project(':components:views')
     implementation project(':components:snackbar')
 

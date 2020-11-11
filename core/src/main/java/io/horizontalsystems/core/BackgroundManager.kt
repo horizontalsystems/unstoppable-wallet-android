@@ -57,14 +57,14 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         }
     }
 
-    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {}
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
 
-    override fun onActivityPaused(p0: Activity?) {}
+    override fun onActivityPaused(p0: Activity) {}
 
-    override fun onActivityResumed(p0: Activity?) {}
+    override fun onActivityResumed(p0: Activity) {}
 
-    override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
-    override fun onActivityDestroyed(activity: Activity?) {}
+    override fun onActivityDestroyed(activity: Activity) {}
 
 }
