@@ -232,8 +232,24 @@
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_AdvancedSettings">Advanced Settings</string>
 
+    <!-- Swap Settings -->
+    <string name="SwapSettings_Title">Advanced Settings</string>
+    <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
+    <string name="SwapSettings_SlippageDescription">Your Transaction will revert if the price change unfavorably by more than this percentage</string>
+    <string name="SwapSettings_DeadlineTitle">Transaction Deadline</string>
+    <string name="SwapSettings_DeadlineDescription">Your Transaction will revert if it is pending for more than this long</string>
+    <string name="SwapSettings_RecipientAddressTitle">Recipient Address</string>
+    <string name="SwapSettings_RecipientAddressDescription">After the exchange operation, the amount will be transferred to the specified address</string>
+    <string name="SwapSettings_RecipientAddressHint">Own address</string>
+    <string name="SwapSettings_Apply">Apply</string>
+
+    <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Max. allowed value is %s%%</string>
+    <string name="SwapSettings_Error_DeadlineTooLow">Min. allowed value is %d</string>
+    <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
+
+    <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
     <string name="Swap_Confirmation_Pay">Pay %s</string>
     <string name="Swap_Confirmation_Get">Get %s</string>

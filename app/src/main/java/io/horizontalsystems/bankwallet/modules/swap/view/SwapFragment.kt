@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
@@ -20,6 +21,8 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsFragment
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
@@ -45,15 +48,7 @@ class SwapFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
-        //catch click on top left menu item, Info Icon
-        toolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
-        }
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         youPay.apply {
             onSelectTokenButtonClick {
@@ -85,6 +80,10 @@ class SwapFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
+        advancedSettings.setOnSingleClickListener {
+            viewModel.onSettingsClick()
+        }
+
         setFragmentResultListeners()
 
         observeViewModel()
@@ -102,6 +101,7 @@ class SwapFragment : BaseFragment() {
             }
             R.id.menuInfo -> {
                 findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
@@ -120,6 +120,14 @@ class SwapFragment : BaseFragment() {
                 when (bundle.getParcelable<SelectType>(SelectSwapCoinFragment.selectTypeResultKey)) {
                     SelectType.FromCoin -> viewModel.setCoinSending(selectedCoin)
                     SelectType.ToCoin -> viewModel.setCoinReceiving(selectedCoin)
+                }
+            }
+        })
+
+        getNavigationLiveData(SwapSettingsFragment.requestKey)?.observe(viewLifecycleOwner, { bundle ->
+            if (bundle.getBoolean(SwapSettingsFragment.resultKey)) {
+                bundle.getParcelable<SwapSettingsModule.SwapSettings>(SwapSettingsFragment.swapSettingsKey)?.let {
+                    viewModel.onSwapSettingsUpdated(it)
                 }
             }
         })
@@ -197,9 +205,7 @@ class SwapFragment : BaseFragment() {
             approveButton.isVisible = approveData != null
             approveButton.setOnSingleClickListener {
                 approveData?.let {
-                    SwapApproveFragment
-                            .newInstance(it.coin, it.amount, it.spenderAddress)
-                            .show(childFragmentManager, "SwapApproveFragment")
+                    findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to it), navOptions())
                 }
             }
         })
@@ -210,6 +216,11 @@ class SwapFragment : BaseFragment() {
             }
         })
 
+        viewModel.openSettings.observe(viewLifecycleOwner, { (currentSettings, defaultSettings) ->
+            val params = SwapSettingsFragment.params(currentSettings, defaultSettings)
+            findNavController().navigate(R.id.swapFragment_to_swapSettingsFragment, params)
+        })
+
         viewModel.loading.observe(viewLifecycleOwner, { isLoading ->
             progressBar.isVisible = isLoading
         })
@@ -217,7 +228,7 @@ class SwapFragment : BaseFragment() {
         viewModel.closeWithSuccess.observe(viewLifecycleOwner, {
             HudHelper.showSuccessMessage(requireView(), it, SnackbarDuration.LONG)
             Handler().postDelayed({
-                findNavController().popBackStack()
+                findNavController().popBackStack(R.id.swapFragment, true)
             }, 1200)
         })
     }

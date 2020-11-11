@@ -177,7 +177,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
-            findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf("tokenInKey" to wallet.coin), navOptions())
+            findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf("tokenInKey" to wallet.coin))
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {

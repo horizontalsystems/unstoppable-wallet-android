@@ -4,11 +4,14 @@ import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
+import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -20,7 +23,7 @@ class UniswapRepository(
     val routerAddress: Address
         get() = uniswapKit.routerAddress
 
-    fun getTradeData(coinSending: Coin, coinReceiving: Coin, amount: BigDecimal, amountType: AmountType): Single<TradeData> =
+    fun getTradeData(coinSending: Coin, coinReceiving: Coin, amount: BigDecimal, amountType: AmountType, swapSettings: SwapSettings): Single<TradeData> =
             Single.create { emitter ->
                 try {
                     val cacheKey = Pair(coinSending, coinReceiving)
@@ -34,10 +37,10 @@ class UniswapRepository(
 
                     val tradeData = when (amountType) {
                         AmountType.ExactSending -> {
-                            uniswapKit.bestTradeExactIn(swapData, amount)
+                            uniswapKit.bestTradeExactIn(swapData, amount, swapSettings.toTradeOptions())
                         }
                         AmountType.ExactReceiving -> {
-                            uniswapKit.bestTradeExactOut(swapData, amount)
+                            uniswapKit.bestTradeExactOut(swapData, amount, swapSettings.toTradeOptions())
                         }
                     }
                     emitter.onSuccess(tradeData)
