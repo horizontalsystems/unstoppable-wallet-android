@@ -41,8 +41,6 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setNavigationToolbar(toolbar, findNavController())
-
         sentToSelfIcon.isVisible = false
         primaryValue.setTextColor(LayoutHelper.getAttr(R.attr.ColorJacob, requireContext().theme)
                 ?: requireContext().getColor(R.color.yellow_d))
