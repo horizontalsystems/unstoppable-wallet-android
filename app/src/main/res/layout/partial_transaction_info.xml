@@ -4,6 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="@layout/transaction_info_bottom_sheet">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?ColorLawrence"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/border2"/>
+
     <TextView
         android:id="@+id/secondaryName"
         style="@style/Headline2"
