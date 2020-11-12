@@ -150,7 +150,7 @@ class WalletConnectMainFragment : BaseFragment() {
             if (it is WalletConnectSendEthereumTransactionRequest) {
                 baseViewModel.sharedSendEthereumTransactionRequest = it
 
-                findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptions())
+                findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptionsFromBottom())
             }
         })
 

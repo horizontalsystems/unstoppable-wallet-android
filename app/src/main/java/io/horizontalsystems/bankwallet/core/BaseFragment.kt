@@ -44,6 +44,15 @@ abstract class BaseFragment : Fragment() {
                 .build()
     }
 
+    protected fun navOptionsFromBottom(): NavOptions {
+        return NavOptions.Builder()
+                .setEnterAnim(R.anim.from_bottom)
+                .setExitAnim(R.anim.to_top)
+                .setPopEnterAnim(R.anim.from_top)
+                .setPopExitAnim(R.anim.to_bottom)
+                .build()
+    }
+
     protected fun showCustomKeyboardAlert() {
         AlertDialogFragment.newInstance(
                 titleString = getString(R.string.Alert_TitleWarning),
