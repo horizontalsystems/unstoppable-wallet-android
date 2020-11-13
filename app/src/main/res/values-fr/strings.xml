@@ -176,6 +176,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_TransactionFee">Frais de transaction</string>
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Frais de transaction payés en %s. Vous avez besoin de %s.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
     <string name="Swap_ErrorNoLiquidity">Pas de liquidité</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Impossible d\'accéder aux informations relatives à l\'achat</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Impossible de récupérer les informations d\'allocation</string>
