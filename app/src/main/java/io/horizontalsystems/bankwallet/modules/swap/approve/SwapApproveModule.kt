@@ -56,11 +56,3 @@ interface ISwapApproveService {
 
     fun approve()
 }
-
-interface IFeeService {
-    var gasPrice: Long
-    var gasLimit: Long
-    val feeRatePriority: FeeRatePriority
-
-    val feeValues: Observable<DataState<Pair<CoinValue, CurrencyValue?>>>
-}
