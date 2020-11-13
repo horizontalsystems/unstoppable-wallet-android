@@ -196,7 +196,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Max. allowed value is %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">Min. allowed value is %d</string>
-    <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
+    <string name="SwapSettings_Error_InvalidAddress">Неверный Адрес</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
     <string name="Swap_Confirmation_Pay">Pay %s</string>
@@ -204,7 +204,7 @@
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Choose Coin</string>
     <!--Approve-->
-    <string name="Approve_Title">Swap Approve</string>
+    <string name="Approve_Title">Подтверждение Обмена</string>
     <string name="Approve_FeeTitle">Fee</string>
     <string name="Approve_TransactionSpeedTitle">Transaction Speed</string>
     <string name="Approve_InsufficientFeeAlert">Transaction fees for approve paid in %s. You need %s.</string>
