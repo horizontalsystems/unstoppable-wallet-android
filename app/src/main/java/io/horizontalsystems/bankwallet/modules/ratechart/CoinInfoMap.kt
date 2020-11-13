@@ -17,7 +17,7 @@ object CoinInfoMap {
             "AKRO" to CoinInfo(BigDecimal(4_000_000_000), "06/07/2019", "https://akropolis.io"),
             "AMN" to CoinInfo(BigDecimal(1_209_963_685), null, "https://amon.tech/"),
             "AMPL" to CoinInfo(BigDecimal(38_207_563), "14/06/2019", "https://www.ampleforth.org"),
-            "ANJ" to CoinInfo(BigDecimal(128_645_461), null,"https://anj.aragon.org/"),
+            "ANJ" to CoinInfo(BigDecimal(128_645_461), null,"https://coin_anj.aragon.org/"),
             "ANKR" to CoinInfo(BigDecimal(10_000_000_000), "21/02/2019", "https://www.ankr.com"),
             "ANT" to CoinInfo(BigDecimal(39_609_524), "05/05/2017", "https://aragon.one"),
             "AST" to CoinInfo(BigDecimal(500_000_000), null,"https://www.airswap.io/"),
