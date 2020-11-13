@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.content.Context
-import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -11,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -49,7 +49,13 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
         App.numberFormatter.formatFiat(it.value, it.currency.symbol, 2, 2)
     }
 
-    fun getBalanceTextColor(context: Context) = ContextCompat.getColor(context, if (upToDate) R.color.yellow_d else R.color.yellow_50)
+    fun getBalanceTextColor(context: Context) : Int {
+        return if (upToDate) {
+            LayoutHelper.getAttr(R.attr.ColorJacob, context.theme, context.getColor(R.color.yellow_d))
+        } else {
+            context.getColor(R.color.yellow_50)
+        }
+    }
 
 }
 
