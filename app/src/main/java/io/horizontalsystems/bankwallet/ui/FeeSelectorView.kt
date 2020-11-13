@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.seekbar.FeeSeekBar
 import kotlinx.android.synthetic.main.view_send_fee.view.*
 
-class FeeSelectorView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
 
     var onTxSpeedClickListener: (view: View) -> Unit = { }
     var prioritySelectListener: (position: Int) -> Unit = { }

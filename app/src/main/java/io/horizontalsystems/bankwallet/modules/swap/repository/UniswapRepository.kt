@@ -4,14 +4,13 @@ import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
-import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -48,6 +47,10 @@ class UniswapRepository(
                     emitter.onError(error)
                 }
             }
+
+    fun transactionData(tradeData: TradeData): TransactionData {
+        return uniswapKit.transactionData(tradeData)
+    }
 
     fun swap(tradeData: TradeData, gasPrice: Long, gasLimit: Long): Single<String> =
             Single.create { emitter ->

@@ -1,27 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.swap.service
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.provider.AllowanceProvider
-import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
-import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
+import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeType
@@ -29,6 +26,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 
 class UniswapService(
@@ -37,8 +35,9 @@ class UniswapService(
         private val allowanceProvider: AllowanceProvider,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
-        private val feeCoinProvider: FeeCoinProvider,
-        private val uniswapFeeProvider: UniswapFeeProvider
+        private val transactionService: EthereumTransactionService,
+        private val ethereumKit: EthereumKit,
+        private val ethereumCoin: Coin
 ) : SwapModule.ISwapService, Clearable {
     private val priceImpactDesirableThreshold = BigDecimal("1")
     private val priceImpactAllowedThreshold = BigDecimal("5")
@@ -47,6 +46,7 @@ class UniswapService(
     private var allowanceDisposable: Disposable? = null
     private var feeDisposable: Disposable? = null
     private var swapDisposable: Disposable? = null
+    private var transactionServiceDisposable: Disposable? = null
 
     private val timer = Timer()
     private val allowanceRefreshInterval = 10_000L // milliseconds
@@ -55,7 +55,10 @@ class UniswapService(
         set(value) {
             field = value
             trade = when (value) {
-                is DataState.Success -> DataState.Success(value.data?.let { trade(it) })
+                is DataState.Success -> {
+                    syncTransactionData(value.data)
+                    DataState.Success(value.data?.let { trade(it) })
+                }
                 is DataState.Error -> value
                 is DataState.Loading -> value
             }
@@ -116,16 +119,18 @@ class UniswapService(
     override val allowance = BehaviorSubject.create<DataState<CoinValue?>>()
     override val errors = BehaviorSubject.create<List<SwapError>>()
     override val state = BehaviorSubject.createDefault<SwapState>(SwapState.Idle)
-    override val fee = BehaviorSubject.create<DataState<SwapFeeInfo?>>()
 
     override val swapFee: CoinValue?
         get() = trade.dataOrNull?.swapFee
 
-    override val feeRatePriority: FeeRatePriority
-        get() = uniswapFeeProvider.feeRatePriority
+    override val gasPriceType: EthereumTransactionService.GasPriceType
+        get() = transactionService.gasPriceType
 
-    override val transactionFee: Pair<CoinValue, CurrencyValue?>?
-        get() = fee.value?.dataOrNull?.let { Pair(it.coinAmount, it.fiatAmount) }
+    override val transactionFee: BigInteger?
+        get() = transactionService.transactionStatus.dataOrNull?.gasData?.fee
+
+    private val ethereumBalance: BigInteger
+        get() = ethereumKit.balance ?: BigInteger.ZERO
 
     init {
         coinSending?.let { enterCoinSending(it) }
@@ -137,6 +142,12 @@ class UniswapService(
                 }
             }
         }, 1000, allowanceRefreshInterval)
+
+        transactionServiceDisposable = transactionService.transactionStatusObservable
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    validateState()
+                }
     }
 
     override fun enterCoinSending(coin: Coin) {
@@ -190,8 +201,7 @@ class UniswapService(
         check(state.value == SwapState.ProceedAllowed) {
             throw IllegalStateException("Cannot proceed when at state: ${state.value}")
         }
-        state.onNext(SwapState.FetchingFee)
-        syncFee()
+        state.onNext(SwapState.SwapAllowed)
     }
 
     override fun cancelProceed() {
@@ -209,15 +219,15 @@ class UniswapService(
 
     override fun swap() {
         val tradeData = tradeData.dataOrNull
-        val feeInfo = fee.value?.dataOrNull
+        val transaction = transactionService.transactionStatus.dataOrNull
 
-        if (tradeData == null || feeInfo == null) {
+        if (tradeData == null || transaction == null) {
             errors.onNext(listOf(SwapError.NotEnoughDataToSwap))
             return
         }
 
         state.onNext(SwapState.Swapping)
-        swapDisposable = uniswapRepository.swap(tradeData, feeInfo.gasPrice, feeInfo.gasLimit)
+        swapDisposable = uniswapRepository.swap(tradeData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     state.onNext(SwapState.Success)
@@ -231,13 +241,12 @@ class UniswapService(
         allowanceDisposable?.dispose()
         feeDisposable?.dispose()
         swapDisposable?.dispose()
+        transactionServiceDisposable?.dispose()
 
         timer.cancel()
     }
 
     private fun syncTrade() {
-        fee.onNext(DataState.Success(null))
-
         val amountType = amountType.value
         val amount = when (amountType) {
             AmountType.ExactSending -> amountSending
@@ -271,6 +280,17 @@ class UniswapService(
                 })
     }
 
+    private fun syncTransactionData(tradeData: TradeData?) {
+        transactionService.transactionData = tradeData?.let {
+            val ethereumTransactionData = uniswapRepository.transactionData(tradeData)
+            EthereumTransactionService.TransactionData(
+                    ethereumTransactionData.to,
+                    ethereumTransactionData.value,
+                    ethereumTransactionData.input,
+            )
+        }
+    }
+
     private fun syncAllowance() {
         allowanceDisposable?.dispose()
         allowanceDisposable = null
@@ -297,29 +317,6 @@ class UniswapService(
         }
     }
 
-    private fun syncFee() {
-        val coinSending = coinSending ?: return
-        val coinFee = feeCoinProvider.feeCoinData(coinSending)?.first ?: coinSending
-        val tradeData = tradeData.dataOrNull ?: return
-
-        feeDisposable?.dispose()
-        feeDisposable = null
-
-        feeDisposable = uniswapFeeProvider.getSwapFeeInfo(coinSending, coinFee, tradeData)
-                .doOnSubscribe {
-                    fee.onNext(DataState.Loading)
-                }
-                .doFinally {
-                    validateState()
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    fee.onNext(DataState.Success(it))
-                }, {
-                    fee.onNext(DataState.Error(it))
-                })
-    }
-
     @Synchronized
     private fun validateState() {
         val newErrors = mutableListOf<SwapError>()
@@ -327,7 +324,6 @@ class UniswapService(
         val balanceSending = balanceSending.value?.let { if (it.isPresent) it.get().value else null }
         val allowanceDataState = allowance.value
         val tradeDataState = trade
-        val feeDataState = fee.value
 
         // validate balance
         if (amountSending != null && balanceSending != null && amountSending > balanceSending) {
@@ -370,22 +366,26 @@ class UniswapService(
         }
 
         // validate fee
-        when (feeDataState) {
+        val txStatus = transactionService.transactionStatus
+        when (txStatus) {
             is DataState.Success -> {
-                feeDataState.data?.let { swapFeeInfo ->
-                    if (coinSending == swapFeeInfo.coinAmount.coin) {
-                        if (amountSending != null && balance(coinSending) - amountSending < swapFeeInfo.coinAmount.value) {
-                            newErrors.add(SwapError.InsufficientBalanceForFee(swapFeeInfo.coinAmount))
-                        }
+                txStatus.data.let { tx ->
+                    if (tx.totalAmount > ethereumBalance) {
+                        newErrors.add(SwapError.InsufficientBalanceForFee(CoinValue(ethereumCoin, BigDecimal(tx.totalAmount, ethereumCoin.decimal))))
                     }
                 }
             }
             is DataState.Error -> {
-                val error = when (feeDataState.error) {
-                    is SwapApproveModule.InsufficientFeeBalance -> SwapError.InsufficientBalanceForFee(feeDataState.error.coinValue)
-                    else -> SwapError.CouldNotFetchFee
+                if (newErrors.isEmpty()) {
+                    when {
+                        txStatus.error.message?.contains("execution reverted") == true || txStatus.error.message?.contains("gas required exceeds") == true -> {
+                            newErrors.add(SwapError.InsufficientFeeCoinBalance)
+                        }
+                        txStatus.error !is EthereumTransactionService.GasDataError.NoTransactionData -> {
+                            newErrors.add(SwapError.Other(txStatus.error))
+                        }
+                    }
                 }
-                newErrors.add(error)
             }
         }
 
@@ -393,12 +393,13 @@ class UniswapService(
         val newState = when (val oldState = state.value ?: SwapState.Idle) {
             SwapState.Idle,
             is SwapState.ApproveRequired,
-            SwapState.ProceedAllowed -> {
+            SwapState.ProceedAllowed,
+            SwapState.FetchingFee -> {
                 when {
                     tradeDataState == DataState.Loading || allowanceDataState == DataState.Loading -> {
                         SwapState.Idle
                     }
-                    feeDataState == DataState.Loading -> {
+                    txStatus == DataState.Loading -> {
                         SwapState.FetchingFee
                     }
                     tradeDataState is DataState.Success && tradeDataState.data != null -> {
@@ -422,24 +423,15 @@ class UniswapService(
                     allowanceDataState == DataState.Loading || newErrors.size == 1 && newErrors.first() is SwapError.InsufficientAllowance -> {
                         SwapState.WaitingForApprove
                     }
-                    tradeDataState is DataState.Success && tradeDataState.data != null && newErrors.isEmpty() -> {
-                        SwapState.ProceedAllowed
-                    }
-                    else -> {
-                        SwapState.Idle
-                    }
-                }
-            }
-            SwapState.FetchingFee -> {
-                when {
-                    feeDataState == DataState.Loading -> {
-                        SwapState.FetchingFee
-                    }
-                    feeDataState is DataState.Error -> {
-                        SwapState.ProceedAllowed
-                    }
-                    feeDataState is DataState.Success && newErrors.isEmpty() -> {
-                        SwapState.SwapAllowed
+                    tradeDataState is DataState.Success && tradeDataState.data != null -> {
+                        if (newErrors.isEmpty())
+                            SwapState.ProceedAllowed
+                        else {
+                            if (newErrors.any { it is SwapError.Other && it.error is JsonRpc.ResponseError.RpcError }) {
+                                syncTrade()
+                            }
+                            SwapState.WaitingForApprove
+                        }
                     }
                     else -> {
                         SwapState.Idle
@@ -448,7 +440,6 @@ class UniswapService(
             }
             else -> oldState
         }
-
         state.onNext(newState)
         errors.onNext(newErrors)
     }

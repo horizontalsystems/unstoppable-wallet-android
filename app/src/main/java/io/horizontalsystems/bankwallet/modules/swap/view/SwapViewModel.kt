@@ -213,18 +213,13 @@ class SwapViewModel(
 
                     _proceedButtonEnabled.postValue(it == SwapState.ProceedAllowed)
 
+                    feeLoading = it is SwapState.FetchingFee
+
                     _openConfirmation.postValue(it == SwapState.SwapAllowed)
 
                     if (it == SwapState.Success) {
                         _closeWithSuccess.postValue(R.string.Hud_Text_Success)
                     }
-                }
-                .let { disposables.add(it) }
-
-        swapService.fee
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    feeLoading = it == DataState.Loading
                 }
                 .let { disposables.add(it) }
     }
@@ -302,6 +297,9 @@ class SwapViewModel(
                 val coinValue = error.coinValue
 
                 stringProvider.string(R.string.Approve_InsufficientFeeAlert, coinValue.coin.title, App.numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8))
+            }
+            errors.any { it is SwapError.InsufficientFeeCoinBalance } -> {
+                stringProvider.string(R.string.Swap_ErrorInsufficientEthBalance)
             }
             errors.any { it is SwapError.Other } -> {
                 val error = errors.first { it is SwapError.Other } as SwapError.Other
