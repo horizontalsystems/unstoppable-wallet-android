@@ -4,6 +4,7 @@
     <item
         android:id="@+id/menuCancel"
         android:icon="@drawable/close"
+        android:iconTint="?ColorJacob"
         android:title="@string/Button_Cancel"
         app:showAsAction="always" />
 </menu>
