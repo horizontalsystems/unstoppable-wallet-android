@@ -70,6 +70,14 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun searchExpanded(menu: Menu) {
+        menu.findItem(R.id.menuAddToken)?.isVisible = false
+    }
+
+    override fun searchCollapsed(menu: Menu) {
+        menu.findItem(R.id.menuAddToken)?.isVisible = true
+    }
+
     // ManageWalletItemsAdapter.Listener
 
     override fun enable(coin: Coin) {

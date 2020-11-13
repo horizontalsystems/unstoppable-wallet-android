@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import android.graphics.Color
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -12,6 +13,8 @@ import io.horizontalsystems.bankwallet.R
 abstract class BaseWithSearchFragment : BaseFragment() {
 
     abstract fun updateFilter(query: String)
+    open fun searchExpanded(menu: Menu) {}
+    open fun searchCollapsed(menu: Menu){}
 
     protected fun configureSearchMenu(menu: Menu, hint: Int) {
         val menuItem = menu.findItem(R.id.search) ?: return
@@ -33,6 +36,18 @@ abstract class BaseWithSearchFragment : BaseFragment() {
             }
 
             override fun onQueryTextSubmit(query: String): Boolean = false
+        })
+
+        menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener{
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                searchExpanded(menu)
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                searchCollapsed(menu)
+                return true
+            }
         })
     }
 }
