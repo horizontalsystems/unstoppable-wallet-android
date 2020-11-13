@@ -111,23 +111,20 @@ class SwapApproveService(
 
         val transaction = transactionStatus.data
 
-        state = State.Loading
+        amount?.let { amount ->
+            state = State.Loading
 
-        ethereumKit.send(
-                transaction.data.to,
-                transaction.data.value,
-                transaction.data.input,
-                transaction.gasData.gasPrice,
-                transaction.gasData.gasLimit)
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    state = State.Success
-                }, {
-                    state = State.Error(it)
-                })
-                .let {
-                    disposables.add(it)
-                }
+            erc20Kit.approve(spenderAddress, amount, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        state = State.Success
+                    }, {
+                        state = State.Error(it)
+                    })
+                    .let {
+                        disposables.add(it)
+                    }
+        }
     }
 
     override fun clear() {
