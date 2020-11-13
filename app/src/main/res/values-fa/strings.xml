@@ -26,16 +26,20 @@
     <string name="Button_Change">تغییر</string>
     <string name="Button_Add">اضافه کردن</string>
     <string name="Button_Approve">تایید</string>
+    <string name="Button_Connect">وصل شدن</string>
+    <string name="Button_Reject">رد کردن</string>
+    <string name="Button_Disconnect">قطع ارتباط</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Wallet">%s کیف پول</string>
     <!--Intro-->
-    <string name="Intro_Independence_Title">استقلال</string>
-    <string name="Intro_Independence_Description">ارزهای رمزنگاری شده را همیشه امن، غیرقابل تشخیص و قابل دسترس نگه دارید</string>
-    <string name="Intro_Knowledge_Title">دانش</string>
-    <string name="Intro_Knowledge_Description">درباره پروژه های زنجیره بلوکی در حال رشد در مراحل اولیه آن مطلع شوید و کشف کنید</string>
-    <string name="Intro_Privacy_Title">حریم خصوصی</string>
-    <string name="Intro_Privacy_Description">در حالی که ثروت خود را افزایش می دهید، ناشناس و تحت نظر رادار بمانید</string>
+    <string name="Intro_Wallet_Description">پس انداز و معامله ارز رمزنگاری شده. کنترل کامل بر دارایی ها داشته باشید. ناشناس بمانید.</string>
+    <string name="Intro_Invest_Title">سرمایه گذاری عاقلانه</string>
+    <string name="Intro_Invest_Description">توقف ناپذیر ابزارهای تجارتی ، نظارتی و تحلیلی بی نظیر را تلفیق می کند.</string>
+    <string name="Intro_Independence_Title">مستقل باشید</string>
+    <string name="Intro_Independence_Description">توقف ناپذیر برای اطمینان از قابلیت دسترسی کاربران به بودجه خود در هر زمان و مکان ساخته شده است.</string>
+    <string name="Intro_Privacy_Title">محرمانه باقی بمانید</string>
+    <string name="Intro_Privacy_Description">از این کیف پول استفاده کنید تا در حالت ناشناس باقی بمانید و بتوانید اطلاعات خود را خصوصی نگه دارید.</string>
     <!--Welcome-->
     <string name="Welcome_Title">غیرقابل توقف \nکیف پول</string>
     <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>
@@ -113,18 +117,21 @@
     <string name="Send_Error_MaximumAmount">حداقل مقدار %s</string>
     <string name="Send_Error_MinRequiredBalance">حداقل مقدار باقیمانده لازم %s</string>
     <string name="Send_Error_WrongParameters">پارامتر های اشتباه</string>
+    <string name="Send_Error_TransparentAddress">توقف ناپذیر از پرداخت به آدرس مشخص پشتیبانی نمی کند</string>
+    <string name="Send_Error_SendToSelf">ارسال به خود پشتیبانی نشده است</string>
     <string name="Send_DialogTitle">تاييد</string>
     <string name="Send_DialogAvailableBalance">موجودی در دسترس</string>
     <string name="Send_DialogSpeed">سرعت تراکنش</string>
     <string name="Send_TxSpeed_Low">پایین</string>
     <string name="Send_TxSpeed_Medium">متوسط</string>
     <string name="Send_TxSpeed_High">بالا</string>
+    <string name="Send_TxSpeed_Recommended">توصیه شده</string>
     <string name="Send_TxSpeed_Custom">شخصی سازی</string>
     <string name="Send_TxSpeed_CustomFeeHint">شنبه/بایت</string>
     <string name="Send_DialogDuration">مدت زمان</string>
     <string name="Send_DialogFee">قیمت:</string>
     <string name="Send_DialogTotal">مجموع:</string>
-    <string name="Send_DialogProceed">پردازش</string>
+    <string name="Send_DialogProceed">بعدي</string>
     <string name="Send_LockTime_Off">خاموش</string>
     <string name="Send_LockTime_Hour">۱ ساعت</string>
     <string name="Send_LockTime_Month">۱ ماه</string>
@@ -133,6 +140,22 @@
     <string name="Send_Sending">در حال ارسال</string>
     <string name="Send_ERC_Alert">هزینه تراکنش برای %s (ERC20) در اتریوم پرداخت شده است. شما به %s ETH نیاز دارید.</string>
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
+    <!--Wallet Connect-->
+    <string name="WalletConnect_Title">ارتباط کیف پول</string>
+    <string name="WalletConnect_Request">درخواست</string>
+    <string name="WalletConnect_Url">URL</string>
+    <string name="WalletConnect_Status">وضعیت</string>
+    <string name="WalletConnect_SignedTransactions">تراکنش های امضا شده</string>
+    <string name="WalletConnect_Approve_Hint">با کلیک کردن بر روی اتصال، به این برنامه اجازه می دهید آدرس عمومی شما را مشاهده کند. این مرحله امنیتی مهمی برای محافظت از داده های شما در برابر خطرات احتمالی کلاهبرداری است.</string>
+    <string name="WalletConnect_Ready_Hint">می توانید به مرورگر بروید. هنگام کار با مرورگر، این صفحه را نبندید.</string>
+    <string name="WalletConnect_Error_InvalidUrl">آدرس URL نامعتبر است</string>
+    <string name="WalletConnect_Requirement">پیش نیاز</string>
+    <string name="WalletConnect_RequirementDescription">برای استفاده از WalletConnet ، باید اتریم یا رمز ارز یا مقداری سکه ERC20 را به حساب باقیمانده اضافه کنید.</string>
+    <string name="WalletConnect_Status_Offline">آفلاین</string>
+    <string name="WalletConnect_Status_Online">آنلاین</string>
+    <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
+    <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
     <!--Swap-->
     <string name="Swap">جایگزینی</string>
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
@@ -140,13 +163,13 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">تخمینی</string>
     <string name="Swap_MaxButtonTitle">حداکثر</string>
-    <string name="Swap_TokenSelectorTitle">توکن</string>
+    <string name="Swap_TokenSelectorTitle">نشان را انتخاب کنید</string>
     <string name="Swap_Balance">بالانس</string>
     <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
-    <string name="Swap_MinimumReceived">حداقل دریافت</string>
-    <string name="Swap_MaximumSold">حداکثر پرداخت</string>
+    <string name="Swap_MinimumReceived">مقدار تضمین شده</string>
+    <string name="Swap_MaximumSold">حداکثر هزینه</string>
     <string name="Swap_SwapFee">هزینه جابجایی</string>
     <string name="Swap_TransactionSpeed">سرعت تراکنش</string>
     <string name="Swap_TransactionFee">كارمزد تراکنش</string>
@@ -160,30 +183,52 @@
     <string name="Swap_Approve">تایید</string>
     <string name="Swap_Approving">در حال تایید</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
+    <!-- Swap Settings -->
+    <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
+    <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
+    <string name="SwapSettings_SlippageDescription">در صورت تغییر نامطلوب قیمت بیش از این درصد، معامله شما برگردانده خواهد شد</string>
+    <string name="SwapSettings_DeadlineTitle">مهلت تراکنش</string>
+    <string name="SwapSettings_DeadlineDescription">اگر تراکنش شما بیش از این مدت معوق باشد برگشت می خورد</string>
+    <string name="SwapSettings_RecipientAddressTitle">آدرس گیرنده</string>
+    <string name="SwapSettings_RecipientAddressDescription">پس از انجام عملیات تراکنش، مبلغ به آدرس مشخص شده انتقال داده می شود</string>
+    <string name="SwapSettings_RecipientAddressHint">آدرس خود</string>
+    <string name="SwapSettings_Apply">درخواست دادن</string>
+    <string name="SwapSettings_Error_SlippageTooLow">تراکنش شما احتمالاً ناموفق است.</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">حداکثر مقدار مجاز %s%% است</string>
+    <string name="SwapSettings_Error_DeadlineTooLow">حداقل مقدار مجاز %d است</string>
+    <string name="SwapSettings_Error_InvalidAddress">آدرس نامعتبر</string>
+    <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">تایید</string>
     <string name="Swap_Confirmation_Pay">پرداخت %s</string>
     <string name="Swap_Confirmation_Get">دریافت %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">سکه را انتخاب کنید</string>
     <!--Approve-->
-    <string name="Approve_Title">تایید</string>
-    <string name="Approve_Subtitle">جابجایی</string>
+    <string name="Approve_Title">تایید کنید</string>
     <string name="Approve_FeeTitle">هزينه</string>
     <string name="Approve_TransactionSpeedTitle">سرعت تراکنش</string>
     <string name="Approve_InsufficientFeeAlert">هزینه تراکنش برای تایید در %sپرداخت شد. شما به %s نیاز دارید.</string>
-    <string name="Approve_Info">برای انجام تجارت با استفاده از وجوه خود باید به یک قرارداد هوشمند اجازه بدهید. این اجازه تأثیری بر بودجه فعلی شما نمی گذارد</string>
-    <!--Uniwwap Info -->
+    <string name="Approve_Info">شما باید به یک قرارداد هوشمند اجازه بدهید که به تعویض رمز داده شده از طرف شما اقدام کند. این مجوز مبلغی را تعیین می کند که می تواند در یک قرارداد هوشمند استفاده شود. این باقیمانده موجودی شما را تحت تأثیر قرار نمی دهد اما برای تأیید معامله به هزینه کمی نیاز دارد. \n\nاگرچه ممکن است قبل از هر معامله بر اساس تقاضا انجام شود ، تصویب مبلغ بالاتر برای ما در معاملات آینده ارزان تر است.</string>
+    <string name="Approve_Error_AlreadyApproved">شما از قبل مبلغی را برای این مستمری در نظر گرفته اید</string>
+    <!--Uniswap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap یک پروتکل کاملاً غیرمتمرکز برای تأمین خودکار نقدینگی در اتریوم است.
-\n\nیک معادله رسمی ساده نقدینگی غیر قابل توقف را برای هزاران کاربر و صدها برنامه هدایت می کند.
-\n\nUniswap این قابلیت را به توسعه دهندگان، ارائه دهندگان نقدینگی و تجار می دهد تا در بازار مالی مشارکت کنند که برای همه باز و در دسترس می باشد.
-    </string>
-    <string name="UniswapInfo_MinReceivedTitle">حداقل دریافت شده</string>
-    <string name="UniswapInfo_MinReceivedDescription">اگر اقدامی بزرگ و نامطلوب درباره قیمت قبل از تأیید وجود داشته باشد، تراکنش شما برگشت خواهد خورد.</string>
+    <string name="UniswapInfo_Description">این سرویس تبادل توسط Uniswap، پروتکل تبادل رمز غیرمتمرکز ساخته شده بر روی بلاک چین اتریوم تأمین می شود.\n\n سرویس Uniswap کاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می شود که با سد کردن هرگونه مسیر تقلب، مبادله رمزها را به روشی مطمئن تسهیل می کند.</string>
+    <string name="UniswapInfo_UniswapRelated">Uniswap مرتبط نیست</string>
+    <string name="UniswapInfo_AllowanceTitle">مستمری</string>
+    <string name="UniswapInfo_AllowanceDescription">مقدار کمی ارز که Uniswap می تواند هنگام اجرای مبادله های نشان از طرف شما خرج کند. قبل از اقدام به مبادله، مقدار مستمری کافی ضروری است</string>
     <string name="UniswapInfo_PriceImpactTitle">تأثیر قیمت</string>
-    <string name="UniswapInfo_PriceImpactDescription">تفاوت بین قیمت بازار و قیمت تخمینی به دلیل اندازه تجارت است.</string>
+    <string name="UniswapInfo_PriceImpactDescription">انحراف قیمت پیش بینی شده از قیمت نشان داده شده، معمولاً با مبلغ مبادله افزایش می یابد.</string>
     <string name="UniswapInfo_SwapFeeTitle">هزینه جابجایی</string>
-    <string name="UniswapInfo_SwapFeeDescription">بخشی از هر تجارت (0.30%) به عنوان یک مشوق پروتکل به ارائه دهندگان نقدینگی اختصاص داده می شود.</string>
+    <string name="UniswapInfo_SwapFeeDescription">هزینه خدمات مربوط به اقدام مبادله در پلتفرم Uniswap، به صورت ارز فروشنده کاربر نشان داده می شود. برای بیشتر سفارشات باید 0.3 % یا 0.6 % باشد.</string>
+    <string name="UniswapInfo_GuaranteedAmountTitle">مبلغ تضمین شده</string>
+    <string name="UniswapInfo_GuaranteedAmountDescription">حداقل مبلغی که کاربر قصد دارد در نتیجه اقدام به مبادله دریافت کند.</string>
+    <string name="UniswapInfo_MaxSpendTitle">حداکثر هزینه</string>
+    <string name="UniswapInfo_MaxSpendDescription">حداکثر مبلغی که یک کاربر در نتیجه شروع مبادله قرار است هزینه کند.</string>
+    <string name="UniswapInfo_Other">غیره</string>
+    <string name="UniswapInfo_TransactionFeeTitle">كارمزد تراکنش</string>
+    <string name="UniswapInfo_TransactionFeeDescription">برآورد هزینه پردازش معامله انجام شده در بلاک چین اتریوم. هزینه انجام معاملات مربوط به Uniswap معمولاً بیشتر از معاملات انتقال رمز کلی است.</string>
+    <string name="UniswapInfo_TransactionSpeedTitle">سرعت تراکنش</string>
+    <string name="UniswapInfo_TransactionSpeedDescription">معاملات با کارمزد معامله بالاتر منجر به سرعت پردازش بیشتر می شود. عکس این نیز صادق است.</string>
     <string name="UniswapInfo_UniswapSite">سایت Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت %s</string>
@@ -196,9 +241,11 @@
     <string name="Transactions_EmptyList">شما هيچ گونه معاملات يا قرارداد نداريد تا هنوز</string>
     <string name="Transactions_Receiving">در حال دریافت</string>
     <string name="Transactions_Sending">در حال ارسال</string>
+    <string name="Transactions_Approving">تأیید مبادله</string>
     <string name="Transactions_Failed">ناموفق</string>
     <!--Transaction Info-->
-    <string name="TransactionInfo_Title">تراکنش</string>
+    <string name="TransactionInfo_Transaction">معاملات</string>
+    <string name="TransactionInfo_Approval">تأیید مبادله</string>
     <string name="TransactionInfo_Status">وضعیت</string>
     <string name="TransactionInfo_Status_Confirmed">تاييد شد</string>
     <string name="TransactionInfo_Id">شناسه</string>
@@ -214,6 +261,7 @@
     <string name="TransactionInfo_Fee">قیمت</string>
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
+    <string name="TransactionInfo_Input">ورودی</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">قفل زمان</string>
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
@@ -270,6 +318,7 @@
     <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
     <string name="Settings_Report">گزارش مشکل</string>
     <string name="Settings_AppStatus">وضعیت برنامه</string>
+    <string name="Settings_WalletConnect">ارتباط کیف پول</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
     <string name="SettingsPrivacy_Info">این برنامه هیچ یک از داده های شما را به اشتراک نمی گذارد. با این حال، بخاطر ارتباط با زنجیره های بلوکی، برخی از داده های عمومی مانند آدرس آی پی می توانند به طور بالقوه فاش شوند. برای کسب اطلاعات دقیق در مورد هر بخش از دکمه اطلاعات در سمت راست بالا استفاده کنید.</string>
@@ -284,25 +333,18 @@
     <string name="SettingsPrivacy_Info_Details">not</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
-        \n\n
-Most Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.        \n\n
-Unstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\n
-a) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
-        \n\n
-b) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
+        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
+        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
+        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
-        \n\n
-In case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
-        \n\n
-When it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
+        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
+        \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\n
-a) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\n
-b) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">اثر انگشت فعال نشده است</string>
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است. به تنظيمات برويد&gt; قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
@@ -314,13 +356,12 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsSecurity_EditPin">تغییر رمزعبور</string>
     <string name="SettingsSecurity_ManageKeys">مدیریت کیف پول ها</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيباني كيف پول</string>
-    <string name="SettingsSecurity_EnableTor">فعال کردن Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">این اقدام کیف پول غیر قابل توقف را مجدداً راه اندازی می کند.</string>
     <string name="SettingsSecurity_TorConnectionDescription">هنگام استفاده از این برنامه، ترافیک اینترنت خود را کاملاً ناشناس کنید. می تواند آهسته باشد.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. باید اطلاعیه ها را فعال کنید تا Tor بتواند کار کند.</string>
     <string name="SettingsSecurity_SortingShuffle">مخلوط کردن</string>
     <string name="SettingsSecurity_SortingShuffleDescription">فهرست بندی تصادفی</string>
-    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69 قطعی</string>
     <string name="SettingsSecurity_SortingBip69Description">فهرست بندی فهرستشناختی</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">توصیه شده</string>
@@ -337,7 +378,7 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsTerms_TermAcademy">من بخش آکادمی این برنامه را گذرانده ام و با جنبه های اساسی ذخیره رمزارز آشنا هستم.</string>
     <string name="SettingsTerms_TermBackup">من از کلید(های) خصوصی کیف پول های خود که به شکل ۲۴-۱۲ کلمه به من نشان داده شده اند نسخه پشتیبان تهیه کردم. من می دانم که این کلیدهای خصوصی در تلفن هوشمند من ذخیره می شوند و نه جای دیگر.</string>
     <string name="SettingsTerms_TermOwner">من آگاه هستم که فقط صاحب کلید (های) خصوصی من می تواند به کیف پول من دسترسی پیدا کند و مبلغی را خرج کند، به همین دلیل این کلیدها هرگز نباید با کسی به اشتراک گذاشته شوند.</string>
-    <string name="SettingsTerms_TermRecover">من آگاه هستم که برای دسترسی دوباره به بودجه خود، باید تلفن خود را از دست بدهم یا در صورت خرابی برنامه، به کلیدهای خصوصی خود نیاز داشته باشم. بدون کلیدهای شخصی من بازیابی دسترسی به کیف پول من غیرممکن خواهد بود.</string>
+    <string name="SettingsTerms_TermRecover">من آگاه هستم که در صورت گم کردن تلفن خود یا خراب شدن برنامه، به کلیدهای خصوصی خود نیاز دارم تا بتوانم به منابع مالی خود دسترسی داشته باشم. بدون کلیدهای خصوصی من بازیابی دسترسی به کیف پول من غیرممکن است.</string>
     <string name="SettingsTerms_TermPhone">من آگاه هستم که انتقال تلفن من به اشخاص غیر قابل اعتماد یا ترک برنامه کیف پول بدون قفل پین ایمنی ممکن است به طور بالقوه امنیت بودجه من را به خطر بیندازد.</string>
     <string name="SettingsTerms_TermRoot">من آگاه هستم که که جیلبرینگ (ریشه کنی) تلفن من، نصب برنامه های شخص ثالث از منابع ناشناخته، نگه داشتن سیستم عامل منسوخ شده می تواند به طور بالقوه امنیت بودجه من را به خطر بیندازد.</string>
     <string name="SettingsTerms_TermBugs">من آگاه هستم که ممکن است در کد منبع اصلی این برنامه کیف پول مشکل نرم افزاری کشف نشده ای وجود داشته باشد که منجر به رفتار غیر منتظره یا نقص برنامه شود.</string>
@@ -354,7 +395,7 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="SettingsNotifications_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. برای اینکه بتوانید هشدارهای تغییر قیمت را دریافت کنید ، باید آنها را فعال کنید.</string>
     <string name="SettingsNotifications_TurnOn">روشن کردن در تنظیمات</string>
     <string name="SettingsNotifications_Off">خاموش</string>
-    <string name="SettingsNotifications_DeactivateAll">غیر فعال کردن همه</string>
+    <string name="SettingsNotifications_DeactivateAll">تنظیم مجدد همه</string>
     <string name="SettingsNotifications_PushNotification">ارسال یادآوری</string>
     <string name="Notification_Title">اطلاعیه ها</string>
     <string name="Notification_PriceUp">%1$s قیمت: بالاترین %2$s%%⬆️</string>
@@ -387,6 +428,7 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <!--Manage Coins-->
     <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
     <string name="ManageCoins_save">ذخیره</string>
+    <string name="ManageCoins_Search">جستجو</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s کیف پول</string>
     <string name="ManageCoins_Alert_CantCreateDescription">در این مرحله ، کیف پول قادر به ایجاد حساب های کیف پول جدید %s نیست. شما فقط قادر به بازیابی کیف پول موجود هستید.</string>
@@ -449,6 +491,8 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s تنظیمات</string>
     <!-- Tor -->
+    <string name="Tor_Title">Tor</string>
+    <string name="Tor_Connection_Title">ارتباط</string>
     <string name="Tor_Status_Starting">درحال راه اندازی Tor...</string>
     <string name="Tor_Status_Error">خطا در راه اندازی Tor!</string>
     <string name="TorPage_Connecting">در حال اتصال…</string>
@@ -466,26 +510,27 @@ b) from Blockchain : In this case the app tries to restore directly from a p2p n
     <string name="CoinOption_Slow_Subtitle">۱-۱۲ ساعت</string>
     <string name="CoinOption_AddressFormatTitle">ساختار آدرس</string>
     <string name="CoinOption_SyncModeTitle">بازیابی پارامتر ها</string>
-    <string name="CoinOption_bip44_Subtitle">قدیمی تر (%sشروع با)</string>
-    <string name="CoinOption_bip49_Subtitle">محبوب (%sشروع با)</string>
-    <string name="CoinOption_bip84_Subtitle">جدیدترین (%sشروع با)</string>
+    <string name="CoinOption_bip44_Subtitle">قدیمی تر (%sشروع با...)</string>
+    <string name="CoinOption_bip49_Subtitle">محبوب (%sشروع با...)</string>
+    <string name="CoinOption_bip84_Subtitle">جدیدترین (%sشروع با...)</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">۱روز</string>
+    <string name="Charts_TimeDuration_Today">امروز</string>
+    <string name="Charts_TimeDuration_Day">24 ساعت</string>
     <string name="Charts_TimeDuration_Week">۷روز</string>
     <string name="Charts_TimeDuration_Month">۱دقیقه</string>
-    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
-    <string name="Charts_TimeDuration_Month3">3M</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2 هفته</string>
+    <string name="Charts_TimeDuration_Month3">3 ماه</string>
     <string name="Charts_TimeDuration_Quartal">۳دقیقه</string>
     <string name="Charts_TimeDuration_HalfYear">۶دقیقه</string>
     <string name="Charts_TimeDuration_Year">۱سال</string>
-    <string name="Charts_TimeDuration_Year2">2Y</string>
+    <string name="Charts_TimeDuration_Year2">2 سال</string>
     <string name="Charts_Title">%s قیمت</string>
     <string name="Charts_Rate_High">بالا%s</string>
     <string name="Charts_Rate_Low">%s پایین</string>
-    <string name="Charts_MarketCap">Mkt. ظرفیت</string>
-    <string name="Charts_Volume24">درجه (۲۴ ساعت)</string>
+    <string name="Charts_MarketCap">سقف بازار</string>
+    <string name="Charts_Volume24">حجم (24 ساعت)</string>
     <string name="Charts_inCirculation">در گردش</string>
-    <string name="Charts_TotalSupply">موجودی کل</string>
+    <string name="Charts_TotalSupply">کل موجودی</string>
     <string name="Charts_StartDate">تاریخ شروع</string>
     <string name="Charts_Website">وب سایت پروژه</string>
     <string name="Charts_MarketCap_Thousand">هزار</string>

@@ -26,16 +26,20 @@
     <string name="Button_Change">Değiştir</string>
     <string name="Button_Add">Ekle</string>
     <string name="Button_Approve">Onayla</string>
+    <string name="Button_Connect">Bağlan</string>
+    <string name="Button_Reject">Reddet</string>
+    <string name="Button_Disconnect">Bağlantıyı Kes</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
     <!--Intro-->
-    <string name="Intro_Independence_Title">Bağımsızlık</string>
-    <string name="Intro_Independence_Description">Kripto varlıklarını her zaman güvende, el koyulamaz ve erişilebilir tutun</string>
-    <string name="Intro_Knowledge_Title">Bilgi</string>
-    <string name="Intro_Knowledge_Description">Haberdar olun ve erken aşamalarda büyüyen blockchain projelerini keşfedin</string>
-    <string name="Intro_Privacy_Title">Gizlilik</string>
-    <string name="Intro_Privacy_Description">Servetinizi büyütürken gizli ve radarın altında kalın</string>
+    <string name="Intro_Wallet_Description">Kripto Biriktirin ve Ticaretini Yapın. Mevduat üzerinde tam kontrole sahip olun. Anonim kalın.</string>
+    <string name="Intro_Invest_Title">Akıllıca Yatırım Yapın</string>
+    <string name="Intro_Invest_Description">Unstoppable, benzersiz alım satım, izleme ve analitik araçların entegrasyonlarını sağlar.</string>
+    <string name="Intro_Independence_Title">Bağımsız Olun</string>
+    <string name="Intro_Independence_Description">Unstoppable, kullanıcıların istedikleri anda istedikleri yerde paraya erişebilmelerini sağlamak için geliştirilmiştir.</string>
+    <string name="Intro_Privacy_Title">Gizli Kalın</string>
+    <string name="Intro_Privacy_Description">Gizli kalmak ve bilgilerinizi gizli tutmak için bu cüzdanı kullanın.</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable\nCüzdan</string>
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
@@ -113,18 +117,21 @@
     <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. gerekli bakiye %s</string>
     <string name="Send_Error_WrongParameters">Yanlış parametreler</string>
+    <string name="Send_Error_TransparentAddress">Unstoppable, bir transparan adrese yapılan ödemeleri desteklemez</string>
+    <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
     <string name="Send_DialogTitle">Onayla</string>
     <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
     <string name="Send_DialogSpeed">İşlem hızı</string>
     <string name="Send_TxSpeed_Low">Yavaş</string>
     <string name="Send_TxSpeed_Medium">Ortadüzey</string>
     <string name="Send_TxSpeed_High">Hızlı</string>
+    <string name="Send_TxSpeed_Recommended">Tavsiye Edilen</string>
     <string name="Send_TxSpeed_Custom">Özel</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">Süre</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogTotal">Toplam:</string>
-    <string name="Send_DialogProceed">Devam</string>
+    <string name="Send_DialogProceed">İleri</string>
     <string name="Send_LockTime_Off">Kapat</string>
     <string name="Send_LockTime_Hour">1 saat</string>
     <string name="Send_LockTime_Month">1 ay</string>
@@ -133,6 +140,22 @@
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
+    <!--Wallet Connect-->
+    <string name="WalletConnect_Title">Cüzdan Bağlantısı</string>
+    <string name="WalletConnect_Request">İstek</string>
+    <string name="WalletConnect_Url">URL</string>
+    <string name="WalletConnect_Status">Durum</string>
+    <string name="WalletConnect_SignedTransactions">İmzalanan İşlemler</string>
+    <string name="WalletConnect_Approve_Hint">Onayla butonunu tıklayarak, bu uygulamanın açık adresinizi görüntülemesine izin vermiş olursunuz. Bu, verilerinizi olası kimlik hırsızlığı risklerinden korumak için önemli bir güvenlik adımıdır.</string>
+    <string name="WalletConnect_Ready_Hint">Tarayıcıya gidebilirsiniz. Tarayıcıda etkileşim içindeyken bu sayfayı kapatmayın.</string>
+    <string name="WalletConnect_Error_InvalidUrl">Geçersiz URL Adresi</string>
+    <string name="WalletConnect_Requirement">Gereksinim</string>
+    <string name="WalletConnect_RequirementDescription">WalletConnect\'i kullanmak için bakiye sekmesine Ethereum veya biraz ERC20 eklemeniz gerekir.</string>
+    <string name="WalletConnect_Status_Offline">Çevrimdışı</string>
+    <string name="WalletConnect_Status_Online">Çevrimiçi</string>
+    <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
+    <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
     <!--Swap-->
     <string name="Swap">Takas</string>
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
@@ -140,13 +163,13 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">TAHMİNİ</string>
     <string name="Swap_MaxButtonTitle">Azami</string>
-    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_TokenSelectorTitle">Jeton Seçin</string>
     <string name="Swap_Balance">Bakiye</string>
     <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
-    <string name="Swap_MinimumReceived">Minimum Kazanılan</string>
-    <string name="Swap_MaximumSold">Maksimum Ödenen</string>
+    <string name="Swap_MinimumReceived">Garantili Tutar</string>
+    <string name="Swap_MaximumSold">Maksimum Harcama</string>
     <string name="Swap_SwapFee">Takas Ücreti</string>
     <string name="Swap_TransactionSpeed">İşlem hızı</string>
     <string name="Swap_TransactionFee">İşlem Ücreti</string>
@@ -160,29 +183,52 @@
     <string name="Swap_Approve">Onayla</string>
     <string name="Swap_Approving">Onaylayan</string>
     <string name="Swap_Swapping">Takas</string>
+    <!-- Swap Settings -->
+    <string name="SwapSettings_Title">Gelişmiş Ayarlar</string>
+    <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
+    <string name="SwapSettings_SlippageDescription">Fiyat bu yüzde oranından daha fazla olumsuz olarak değişirse, İşleminiz geri alınacaktır</string>
+    <string name="SwapSettings_DeadlineTitle">İşlem Son Günü</string>
+    <string name="SwapSettings_DeadlineDescription">Bundan daha uzun süre beklemede olursa, İşleminiz geri alınacaktır</string>
+    <string name="SwapSettings_RecipientAddressTitle">Alıcı Adresi</string>
+    <string name="SwapSettings_RecipientAddressDescription">Takas etme işleminden sonra, tutar belirtilen adrese transfer edilecektir</string>
+    <string name="SwapSettings_RecipientAddressHint">Kendi adresi</string>
+    <string name="SwapSettings_Apply">Uygula</string>
+    <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Maksimum izin verilen değer %s%%</string>
+    <string name="SwapSettings_Error_DeadlineTooLow">Maksimum izin verilen değer %d</string>
+    <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
+    <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Onaylama</string>
     <string name="Swap_Confirmation_Pay">Ödeyin %s</string>
     <string name="Swap_Confirmation_Get">%s al</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Kripto Parayı Seç</string>
     <!--Approve-->
-    <string name="Approve_Title">Onayla</string>
-    <string name="Approve_Subtitle">Takas</string>
+    <string name="Approve_Title">Takas Onayı</string>
     <string name="Approve_FeeTitle">Masraf</string>
     <string name="Approve_TransactionSpeedTitle">İşlem hızı</string>
     <string name="Approve_InsufficientFeeAlert">Onay için işlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
-    <string name="Approve_Info">Fonlarınızı kullanarak alım satımı gerçekleştirmek için bir akıllı sözleşmeye izin vermelisiniz. Bu izin bakiyenizdeki fonları etkilemez</string>
-    <!--Uniwwap Info -->
+    <string name="Approve_Info">Verilen jetonu sizin adınıza swap yapmak için bir akıllı sözleşmeye izin vermelisiniz. Bu izin, akıllı sözleşme tarafından kullanılabilecek tutarı belirler. Bakiyenizi etkilemez ancak onay işlemini gerçekleştirmek için küçük bir ücret gerekir.\n\nHer alım satımdan önce talep üzerine yapılabilirken, ileriki alım satımlarda bizim için önceden daha yüksek tutarı onaylamanız durumunda çok daha ucuz olur.</string>
+    <string name="Approve_Error_AlreadyApproved">Bu miktar için zaten bir ödeneğiniz var</string>
+    <!--Uniswap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap, Ethereum\'da otomatik likidite tedariki için tamamen merkezi olmayan bir protokoldür.
-\n\nBasit biçimlendirilmiş bir denklem, binlerce kullanıcı ve yüzlerce uygulama için durdurulamaz likidite sağlar.
-\n\nUniswap, geliştiricilere, likidite sağlayıcılarına ve tüccarlara herkese açık ve erişilebilir bir finans piyasasına katılma yetkisi verir.    </string>
-    <string name="UniswapInfo_MinReceivedTitle">Minimum Alınan</string>
-    <string name="UniswapInfo_MinReceivedDescription">Onaylanmadan önce büyük, olumsuz bir fiyat hareketi varsa alım satım işleminiz geri alınacaktır.</string>
+    <string name="UniswapInfo_Description">Bu takas etme hizmeti, Ethereum blok zinciri üzerine inşa edilmiş ve merkezi olmayan jeton takas etme protokolü olan Uniswap tarafından desteklenmektedir.\n\nUniswap, tamamen otomatiktir ve hile yapmadan jeton takaslarını güvenilir bir şekilde kolaylaştıran akıllı sözleşmelerle yönetilir.</string>
+    <string name="UniswapInfo_UniswapRelated">Uniswap Bağlantılı</string>
+    <string name="UniswapInfo_AllowanceTitle">Ödenek</string>
+    <string name="UniswapInfo_AllowanceDescription">Uniswap\'ın jeton swaplarını gerçekleştirirken sizin adınıza harcayabileceği bazı para birimlerindeki tutar. Swap işleminin gerçekleşebilmesi için yeterli ödeme miktarı gereklidir</string>
     <string name="UniswapInfo_PriceImpactTitle">Fiyat Etkisi</string>
-    <string name="UniswapInfo_PriceImpactDescription">Ticaret hacmine bağlı olarak piyasa fiyatı ile tahmini fiyat arasındaki fark.</string>
+    <string name="UniswapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
     <string name="UniswapInfo_SwapFeeTitle">Takas Ücreti</string>
-    <string name="UniswapInfo_SwapFeeDescription">Her işlemin bir kısmı (% 0.30) bir protokol teşvik primi olarak likidite sağlayıcılarına gider.</string>
+    <string name="UniswapInfo_SwapFeeDescription">Uniswap platformunda swap işlemi için kullanıcının sattığı para biriminde gösterilen bir hizmet ücreti. Çoğu talimatlar için % 0.3 veya % 0.6 olmalıdır.</string>
+    <string name="UniswapInfo_GuaranteedAmountTitle">Garantili Tutar</string>
+    <string name="UniswapInfo_GuaranteedAmountDescription">Bir swap işlemi sonucunda bir kullanıcının alacağı minimum tutar.</string>
+    <string name="UniswapInfo_MaxSpendTitle">Maksimum Harcama</string>
+    <string name="UniswapInfo_MaxSpendDescription">Bir swap işlemi sonucunda bir kullanıcının harcayacağı maksimum tutar.</string>
+    <string name="UniswapInfo_Other">Diğer</string>
+    <string name="UniswapInfo_TransactionFeeTitle">İşlem Ücreti</string>
+    <string name="UniswapInfo_TransactionFeeDescription">Ethereum blok zincirinde verilen işlemin tahmini işleme maliyeti. Uniswap bağlantılı işlemler genellikle eşdeğer jeton transfer işlemlerinden daha pahalı olur.</string>
+    <string name="UniswapInfo_TransactionSpeedTitle">İşlem hızı</string>
+    <string name="UniswapInfo_TransactionSpeedDescription">Daha yüksek işlem ücretli işlemler, daha hızlı işleme hızlarıyla sonuçlanacaktır. Elbette bunun tersi de doğrudur.</string>
     <string name="UniswapInfo_UniswapSite">Uniswap Web Sitesi</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
@@ -195,9 +241,11 @@
     <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
     <string name="Transactions_Receiving">Alınıyor</string>
     <string name="Transactions_Sending">Gönderiliyor</string>
+    <string name="Transactions_Approving">Swap onaylama</string>
     <string name="Transactions_Failed">Başarısız</string>
     <!--Transaction Info-->
-    <string name="TransactionInfo_Title">Hesap işlemi</string>
+    <string name="TransactionInfo_Transaction">Hesap işlemi</string>
+    <string name="TransactionInfo_Approval">Swap Onaylama</string>
     <string name="TransactionInfo_Status">Durum</string>
     <string name="TransactionInfo_Status_Confirmed">Onaylandı</string>
     <string name="TransactionInfo_Id">Kimlik</string>
@@ -213,6 +261,7 @@
     <string name="TransactionInfo_Fee">Masraf</string>
     <string name="TransactionInfo_SentToSelfNote">Bu işlem kendi adresine gönderildi</string>
     <string name="TransactionInfo_DoubleSpendNote">Çifte Harcama Riski Var!</string>
+    <string name="TransactionInfo_Input">Giriş</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
@@ -269,6 +318,7 @@
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_Report">Sorunu Bildir</string>
     <string name="Settings_AppStatus">Uygulama Durumu</string>
+    <string name="Settings_WalletConnect">Cüzdan Bağlantısı</string>
     <string name="SettingsOption_Enabled">Etkinleştirildi</string>
     <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
     <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
@@ -283,18 +333,18 @@
     <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
-        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
+        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
         \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\na) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
-        \n\nb) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
+        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
-        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
+        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
         \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Geri Yükleme</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\na) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\nb) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Parmak izi etkin değil</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
@@ -306,13 +356,12 @@
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
-    <string name="SettingsSecurity_EnableTor">Tor\'u etkinleştir</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internet trafiğinizi tamamen anonimleştirin. Yavaş olabilir.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakılmış. Tor\'un çalışması için onları etkinleştirmeniz gerekir.</string>
     <string name="SettingsSecurity_SortingShuffle">Karıştır</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Rastgele Dizinleme</string>
-    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Dizinleme</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Tavsiye Edilen</string>
@@ -346,7 +395,7 @@
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
     <string name="SettingsNotifications_TurnOn">Ayarlardan aç</string>
     <string name="SettingsNotifications_Off">Kapat</string>
-    <string name="SettingsNotifications_DeactivateAll">Etkisizleştir</string>
+    <string name="SettingsNotifications_DeactivateAll">Tümünü Sıfırla</string>
     <string name="SettingsNotifications_PushNotification">Anlık bildirimler</string>
     <string name="Notification_Title">Bildirimler</string>
     <string name="Notification_PriceUp">%1$s fiyat: Yukarı %2$s%% ⬆️</string>
@@ -379,6 +428,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Kripto Parayı Seç</string>
     <string name="ManageCoins_save">Kaydet</string>
+    <string name="ManageCoins_Search">Ara</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s cüzdanı</string>
     <string name="ManageCoins_Alert_CantCreateDescription">Uygulama henüz %s cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
@@ -441,6 +491,8 @@
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Ayarları</string>
     <!-- Tor -->
+    <string name="Tor_Title">Tor</string>
+    <string name="Tor_Connection_Title">Bağlantı</string>
     <string name="Tor_Status_Starting">Tor Başlatılıyor...</string>
     <string name="Tor_Status_Error">Tor başlatma hatası !</string>
     <string name="TorPage_Connecting">Bağlanıyor…</string>
@@ -458,11 +510,12 @@
     <string name="CoinOption_Slow_Subtitle">1-12 saat</string>
     <string name="CoinOption_AddressFormatTitle">Adres Formatı</string>
     <string name="CoinOption_SyncModeTitle">Geri Yükleme Ayarları</string>
-    <string name="CoinOption_bip44_Subtitle">Eski (%s ile başlar)</string>
-    <string name="CoinOption_bip49_Subtitle">Popüler (%s ile başlar)</string>
-    <string name="CoinOption_bip84_Subtitle">Yeni (%s ile başlar)</string>
+    <string name="CoinOption_bip44_Subtitle">Eski (%s ile başlar...)</string>
+    <string name="CoinOption_bip49_Subtitle">Popüler (%s ile başlar...)</string>
+    <string name="CoinOption_bip84_Subtitle">Yeni (%s ile başlar...)</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1G</string>
+    <string name="Charts_TimeDuration_Today">Bugün</string>
+    <string name="Charts_TimeDuration_Day">24 sa</string>
     <string name="Charts_TimeDuration_Week">7G</string>
     <string name="Charts_TimeDuration_Month">1A</string>
     <string name="Charts_TimeDuration_TwoWeeks">2H</string>
@@ -474,9 +527,9 @@
     <string name="Charts_Title">%s Fiyat</string>
     <string name="Charts_Rate_High">Yüksek</string>
     <string name="Charts_Rate_Low">Düşük</string>
-    <string name="Charts_MarketCap">P. Değeri</string>
+    <string name="Charts_MarketCap">Market kap.</string>
     <string name="Charts_Volume24">Birim(24 saat)</string>
-    <string name="Charts_inCirculation">dolaşan Arz</string>
+    <string name="Charts_inCirculation">Dolaşan Arz</string>
     <string name="Charts_TotalSupply">Toplam Arz</string>
     <string name="Charts_StartDate">Açılış Günü</string>
     <string name="Charts_Website">Proje Web Sitesi</string>

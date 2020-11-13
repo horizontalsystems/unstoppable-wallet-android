@@ -15,7 +15,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">کد عبور</string>
     <!--Set Pin-->
     <string name="SetPin_Title">رمز عبور</string>
-    <string name="SetPin_Info">برای باز کردن قفل از کد عبور استفاده خواهد شد</string>
+    <string name="SetPin_Info">از کد عبور شما برای باز کردن کیف پول و ارسال پول استفاده می شود</string>
     <string name="SetPin_ErrorShortPin">لطفا تمام ارقام را وارد كنيد.</string>
     <string name="SetPin_ConfirmInfo">تاييد</string>
     <string name="SetPin_Success">رمز عبور قفل با موفقیت تنظیم شد!</string>

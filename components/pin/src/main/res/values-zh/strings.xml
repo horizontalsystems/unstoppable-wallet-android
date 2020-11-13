@@ -15,7 +15,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">密码</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
-    <string name="SetPin_Info">密码将解锁</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet</string>
     <string name="SetPin_ErrorShortPin">请输入全部数字。</string>
     <string name="SetPin_ConfirmInfo">确认</string>
     <string name="SetPin_Success">锁定密码设置成功！</string>

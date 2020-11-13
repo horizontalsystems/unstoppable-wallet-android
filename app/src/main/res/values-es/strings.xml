@@ -26,16 +26,20 @@
     <string name="Button_Change">Cambiar</string>
     <string name="Button_Add">Añadir</string>
     <string name="Button_Approve">Aprobar</string>
+    <string name="Button_Connect">Conectar</string>
+    <string name="Button_Reject">Rechazar</string>
+    <string name="Button_Disconnect">Desconectar</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s Monedero</string>
     <!--Intro-->
-    <string name="Intro_Independence_Title">Independencia</string>
-    <string name="Intro_Independence_Description">Mantenga los activos criptográficos seguros, no confiscables y accesibles en todo momento</string>
-    <string name="Intro_Knowledge_Title">Conocimiento</string>
-    <string name="Intro_Knowledge_Description">Mantente informado y descubre proyectos de blockchain en las primeras etapas de desarrollo</string>
-    <string name="Intro_Privacy_Title">Privacidad</string>
-    <string name="Intro_Privacy_Description">Manténgase incognito y bajo el radar, mientras crece su riqueza</string>
+    <string name="Intro_Wallet_Description">Almacene y comercie criptomonedas. Tenga control total sobre los activos. Permanezca anónimo.</string>
+    <string name="Intro_Invest_Title">Invertir sabiamente</string>
+    <string name="Intro_Invest_Description">Unstoppable integra instrumentos de trading, monitoreo y analíticos sin igual.</string>
+    <string name="Intro_Independence_Title">Sea indepentiente</string>
+    <string name="Intro_Independence_Description">Unstoppable se construye para asegurar que los usuarios puedan acceder a los fondos en cualquier momento desde cualquier lugar.</string>
+    <string name="Intro_Privacy_Title">Permanezca en privado</string>
+    <string name="Intro_Privacy_Description">Utilice esta cartera para permanecer incógnito y sea capaz de resgurdar su información privada.</string>
     <!--Welcome-->
     <string name="Welcome_Title">Monedero\nUnstoppable</string>
     <string name="Welcome_PrivacySettings">Ajustes de privacidad</string>
@@ -113,18 +117,21 @@
     <string name="Send_Error_MaximumAmount">Monto máximo %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. requerido restante %s</string>
     <string name="Send_Error_WrongParameters">Parámetros incorrectos</string>
+    <string name="Send_Error_TransparentAddress">Unstoppable no soporta pagos a una dirección transparente</string>
+    <string name="Send_Error_SendToSelf">Enviarte a vos mismo no está soportado</string>
     <string name="Send_DialogTitle">Confirmar</string>
     <string name="Send_DialogAvailableBalance">Saldo disponible</string>
     <string name="Send_DialogSpeed">Velocidad de transacción</string>
     <string name="Send_TxSpeed_Low">Bajo</string>
     <string name="Send_TxSpeed_Medium">Medio</string>
     <string name="Send_TxSpeed_High">Alto</string>
+    <string name="Send_TxSpeed_Recommended">Recomendado</string>
     <string name="Send_TxSpeed_Custom">Personalizado</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">Duración</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
-    <string name="Send_DialogProceed">Continuar</string>
+    <string name="Send_DialogProceed">Siguiente</string>
     <string name="Send_LockTime_Off">Desactivado</string>
     <string name="Send_LockTime_Hour">1 hora</string>
     <string name="Send_LockTime_Month">1 mes</string>
@@ -133,6 +140,22 @@
     <string name="Send_Sending">Enviando</string>
     <string name="Send_ERC_Alert">Las comisiones de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
+    <!--Wallet Connect-->
+    <string name="WalletConnect_Title">Conectar Monedero</string>
+    <string name="WalletConnect_Request">Pedido</string>
+    <string name="WalletConnect_Url">URL</string>
+    <string name="WalletConnect_Status">Estado</string>
+    <string name="WalletConnect_SignedTransactions">Firmar Transacción</string>
+    <string name="WalletConnect_Approve_Hint">Al hacer clic en aprobar, usted puede permitir que esta aplicación vea su dirección pública. Esto es un paso importante de seguridad para proteger sus datos de posibles riesgos de phishing.</string>
+    <string name="WalletConnect_Ready_Hint">Puede ir al navegador. No cierre esta página mientras interactúa en el navegador.</string>
+    <string name="WalletConnect_Error_InvalidUrl">Dirección URL inválida</string>
+    <string name="WalletConnect_Requirement">Requisitos</string>
+    <string name="WalletConnect_RequirementDescription">Necesita añadir Ethereum o alguna moneda ERC20 para balancear la pestaña para poder usar WalletConnet.</string>
+    <string name="WalletConnect_Status_Offline">Desconectado</string>
+    <string name="WalletConnect_Status_Online">En Línea</string>
+    <string name="WalletConnect_Status_Connecting">Conectando…</string>
+    <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Error_InsufficientBalance">La transacción requiere %s para enviar</string>
     <!--Swap-->
     <string name="Swap">Permutar</string>
     <string name="Swap_FromAmountTitle">Usted paga</string>
@@ -140,13 +163,13 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">ESTIMADO</string>
     <string name="Swap_MaxButtonTitle">Máx.</string>
-    <string name="Swap_TokenSelectorTitle">Token</string>
+    <string name="Swap_TokenSelectorTitle">Seleccione un Token</string>
     <string name="Swap_Balance">Saldo</string>
     <string name="Swap_Allowance">Permiso de acceso</string>
     <string name="Swap_Price">Precio</string>
     <string name="Swap_PriceImpact">Impacto en el precio</string>
-    <string name="Swap_MinimumReceived">Mínimo Obtenido</string>
-    <string name="Swap_MaximumSold">Máximo Pagado</string>
+    <string name="Swap_MinimumReceived">Cantidad Garantizada</string>
+    <string name="Swap_MaximumSold">Gasto máximo</string>
     <string name="Swap_SwapFee">Tarifa por permutar</string>
     <string name="Swap_TransactionSpeed">Velocidad de transacción</string>
     <string name="Swap_TransactionFee">Tarifa de Transacción</string>
@@ -160,29 +183,52 @@
     <string name="Swap_Approve">Aprobar</string>
     <string name="Swap_Approving">Aprobando</string>
     <string name="Swap_Swapping">Swapping</string>
+    <!-- Swap Settings -->
+    <string name="SwapSettings_Title">Configuración avanzada</string>
+    <string name="SwapSettings_SlippageTitle">Tolerancia de deslizamiento</string>
+    <string name="SwapSettings_SlippageDescription">Su transacción se revertirá si el precio cambia desfavorablemente por encima de este porcentaje</string>
+    <string name="SwapSettings_DeadlineTitle">Fecha límite de transacción</string>
+    <string name="SwapSettings_DeadlineDescription">Su transacción se revertirá si está pendiente por más de este tiempo</string>
+    <string name="SwapSettings_RecipientAddressTitle">Dirección del destinatario</string>
+    <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
+    <string name="SwapSettings_RecipientAddressHint">Propia dirección</string>
+    <string name="SwapSettings_Apply">Aplicar</string>
+    <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Valor máximo permitido %s%%</string>
+    <string name="SwapSettings_Error_DeadlineTooLow">El valor mínimo permitido es %d</string>
+    <string name="SwapSettings_Error_InvalidAddress">Dirección invalida</string>
+    <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmaciones</string>
     <string name="Swap_Confirmation_Pay">Paga %s</string>
     <string name="Swap_Confirmation_Get">Obtén %s</string>
     <!--Swap Coin Select-->
     <string name="SwapCoinSelect_Title">Elegir moneda</string>
     <!--Approve-->
-    <string name="Approve_Title">Aprobar</string>
-    <string name="Approve_Subtitle">Permutar</string>
+    <string name="Approve_Title">Aprobación de Swap</string>
     <string name="Approve_FeeTitle">Comisión</string>
     <string name="Approve_TransactionSpeedTitle">Velocidad de transacción</string>
     <string name="Approve_InsufficientFeeAlert">Comisiones de transacción pagadas en %s. Es necesario %s.</string>
-    <string name="Approve_Info">Usted debe conceder un permiso a un contrato inteligente para ejecutar la operación usando sus fondos. Este permiso no afecta a los fondos de su saldo</string>
-    <!--Uniwwap Info -->
+    <string name="Approve_Info">Para intercambiar un token dado en tu nombre debes conceder permiso a un contrato inteligente. Este permiso establece la cantidad que puede ser utilizada por un contrato inteligente. Esto no afecta su saldo, requiere una pequeña comisión para ejecutar la transacción de aprobación.\n\nSi bien se puede hacer bajo demanda antes de cada operación, para nosotros es más barato aprobar una cantidad más alta por adelantado en operaciones futuras.</string>
+    <string name="Approve_Error_AlreadyApproved">Usted ya tiene una concesión para esta cantidad</string>
+    <!--Uniswap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">Uniswap es un protocolo totalmente descentralizado para la provisión automatizada de liquidez en Ethereum.
-\n\nUna simple ecuación formalizada impulsa una liquidez imparable para miles de usuarios y cientos de aplicaciones.
-\n\nUniswap potencia a desarrolladores, proveedores de liquidez y operadores a participar en un mercado financiero abierto y accesible para todos.</string>
-    <string name="UniswapInfo_MinReceivedTitle">Mínimo Recibido</string>
-    <string name="UniswapInfo_MinReceivedDescription">Su transacción se revertirá si hay un movimiento de precios grande y desfavorable antes de que se confirme.</string>
+    <string name="UniswapInfo_Description">Este servicio de intercambio está propulsado por Uniswap, un protocolo descentralizado de intercambio de tokens construido en blockchain de Ethereum.\n\nUniswap está completamente automatizado y gestionado por contratos inteligentes que facilitan el intercambio de tokens de una manera fiable sin ninguna intención para hacer estafas.</string>
+    <string name="UniswapInfo_UniswapRelated">Uniswap Relacionado</string>
+    <string name="UniswapInfo_AllowanceTitle">Permiso de acceso</string>
+    <string name="UniswapInfo_AllowanceDescription">La cantidad de alguna moneda que Uniswap puede gastar en su nombre al ejecutar swaps de token. Se requiere una asignación suficiente antes de que se pueda realizar la acción de intercambio</string>
     <string name="UniswapInfo_PriceImpactTitle">Impacto en el precio</string>
-    <string name="UniswapInfo_PriceImpactDescription">La diferencia entre el precio de mercado y el precio estimado debido al tamaño de la operación.</string>
+    <string name="UniswapInfo_PriceImpactDescription">Desviación de precio esperada de un valor mostrado, normalmente aumenta con la cantidad de swap.</string>
     <string name="UniswapInfo_SwapFeeTitle">Tarifa por permutar</string>
-    <string name="UniswapInfo_SwapFeeDescription">Una porción de cada transacción (0,30%) va a parar a los proveedores de liquidez como incentivo de protocolo.</string>
+    <string name="UniswapInfo_SwapFeeDescription">Una tarifa de servicio para la acción de intercambio en la plataforma Uniswap, mostrada en la moneda que vende el usuario. Para la mayoría de los pedidos debe ser del 0, 3 % o del 0, 6 %.</string>
+    <string name="UniswapInfo_GuaranteedAmountTitle">Cantidad Garantizada</string>
+    <string name="UniswapInfo_GuaranteedAmountDescription">La cantidad mínima que un usuario va a recibir como resultado de una acción de intercambio.</string>
+    <string name="UniswapInfo_MaxSpendTitle">Gasto máximo</string>
+    <string name="UniswapInfo_MaxSpendDescription">La cantidad mínima que un usuario va a recibir como resultado de una acción de intercambio.</string>
+    <string name="UniswapInfo_Other">Otro</string>
+    <string name="UniswapInfo_TransactionFeeTitle">Tarifa de Transacción</string>
+    <string name="UniswapInfo_TransactionFeeDescription">El costo estimado de procesamiento de la transacción dada en la blockchain de Ethereum. Las transacciones relacionadas con Uniswap normalmente costarán más que las transacciones genéricas de transferencia de token.</string>
+    <string name="UniswapInfo_TransactionSpeedTitle">Velocidad de transacción</string>
+    <string name="UniswapInfo_TransactionSpeedDescription">Las transacciones con una tarifa de transacción más alta darán como resultado velocidades de procesamiento más rápidas. Lo opuesto también.</string>
     <string name="UniswapInfo_UniswapSite">Website de Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
@@ -195,9 +241,11 @@
     <string name="Transactions_EmptyList">Todavía no tienes transacciones pendientes o pasadas</string>
     <string name="Transactions_Receiving">Recibiendo</string>
     <string name="Transactions_Sending">Enviando</string>
+    <string name="Transactions_Approving">Aprobación de Swap</string>
     <string name="Transactions_Failed">Falla</string>
     <!--Transaction Info-->
-    <string name="TransactionInfo_Title">Transacción</string>
+    <string name="TransactionInfo_Transaction">Transacción</string>
+    <string name="TransactionInfo_Approval">Aprobación de intercambio</string>
     <string name="TransactionInfo_Status">Estado</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Id">ID</string>
@@ -213,6 +261,7 @@
     <string name="TransactionInfo_Fee">Comisión</string>
     <string name="TransactionInfo_SentToSelfNote">Esta transacción fue enviada a su propia dirección</string>
     <string name="TransactionInfo_DoubleSpendNote">¡Riesgo de doble gasto!</string>
+    <string name="TransactionInfo_Input">Entrada</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">El remitente envió estos fondos con un bloqueo del gasto que expirará %s.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
@@ -269,6 +318,7 @@
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
     <string name="Settings_Report">Reportar un problema</string>
     <string name="Settings_AppStatus">Estado de la aplicación</string>
+    <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="SettingsOption_Enabled">Habilitado</string>
     <string name="SettingsOption_Disabled">Desabilitado</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
@@ -283,18 +333,18 @@
     <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
-        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
+        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
         \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\na) Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then this is regarded as the recommended option.
-        \n\nb) Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
+        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
-        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party service providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
+        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
         \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and figure out latest balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\na) from API Server : There is a predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\nb) from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Huella digital no habilitada</string>
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
@@ -306,13 +356,12 @@
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_BackupWallet">Backup del Monedero</string>
-    <string name="SettingsSecurity_EnableTor">Activar Tor</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Puede hacer que su tráfico de internet sea anónimo mientras usa esta aplicación. Puede tornarse lento.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones de la aplicación Monedero Unstoppable están desactivadas. Debe activarlas para que Tor funcione.</string>
     <string name="SettingsSecurity_SortingShuffle">Aleatoriamente</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexación aleatoria</string>
-    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingBip69">Bip69 determinista</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexación Lexicográfica</string>
     <string name="SettingsSecurity_SyncModeAPI">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
@@ -347,7 +396,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero Unstoppable están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
     <string name="SettingsNotifications_TurnOn">Activar en ajustes</string>
     <string name="SettingsNotifications_Off">Desactivado</string>
-    <string name="SettingsNotifications_DeactivateAll">Desactivar todo</string>
+    <string name="SettingsNotifications_DeactivateAll">Restablecer todo</string>
     <string name="SettingsNotifications_PushNotification">Notificaciones push</string>
     <string name="Notification_Title">Notificaciones</string>
     <string name="Notification_PriceUp">Precio %1$s: Subió %2$s%% ⬆</string>
@@ -380,6 +429,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Elegir monedas</string>
     <string name="ManageCoins_save">Guardar</string>
+    <string name="ManageCoins_Search">Buscar</string>
     <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_Alert_CantCreateTitle">%s Monedero</string>
     <string name="ManageCoins_Alert_CantCreateDescription">En este momento Unstoppable no es capaz de crear nuevas cuentas de monederos %s. Solo puede restaurar la existente.</string>
@@ -442,6 +492,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="BlockchainSettings_SyncMode_Api">API</string>
     <string name="BlockchainSettings_CoinSettings">%s Ajustes</string>
     <!-- Tor -->
+    <string name="Tor_Title">Tor</string>
+    <string name="Tor_Connection_Title">Conexión</string>
     <string name="Tor_Status_Starting">Iniciando Tor...</string>
     <string name="Tor_Status_Error">¡Error iniciando Tor!</string>
     <string name="TorPage_Connecting">Conectando…</string>
@@ -459,11 +511,12 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinOption_Slow_Subtitle">1-24 horas</string>
     <string name="CoinOption_AddressFormatTitle">Formato de dirección</string>
     <string name="CoinOption_SyncModeTitle">Restaurar los parámetros</string>
-    <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con %s)</string>
-    <string name="CoinOption_bip49_Subtitle">Popular (comenzar con %s)</string>
-    <string name="CoinOption_bip84_Subtitle">Más nuevo (comenzar con %s)</string>
+    <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con %s...)</string>
+    <string name="CoinOption_bip49_Subtitle">Popular (comenzar con %s...)</string>
+    <string name="CoinOption_bip84_Subtitle">Más nuevo (comenzar con %s...)</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1D</string>
+    <string name="Charts_TimeDuration_Today">Hoy</string>
+    <string name="Charts_TimeDuration_Day">24h</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
     <string name="Charts_TimeDuration_TwoWeeks">2W</string>
@@ -477,7 +530,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Charts_Rate_Low">Bajo</string>
     <string name="Charts_MarketCap">Cap. de Mercado</string>
     <string name="Charts_Volume24">Volumen (24H)</string>
-    <string name="Charts_inCirculation">en circulación</string>
+    <string name="Charts_inCirculation">En circulación</string>
     <string name="Charts_TotalSupply">Suministro total</string>
     <string name="Charts_StartDate">Fecha de lanzamiento</string>
     <string name="Charts_Website">Website del proyecto</string>
