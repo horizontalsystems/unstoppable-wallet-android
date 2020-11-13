@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.views.AlertDialogFragment
+import io.horizontalsystems.views.helpers.LayoutHelper
 
 abstract class BaseFragment : Fragment() {
 
@@ -31,8 +32,14 @@ abstract class BaseFragment : Fragment() {
 
     protected fun setMenuItemEnabled(menuItem: MenuItem, enabled: Boolean) {
         menuItem.isEnabled = enabled
-        val color = context?.getColor(if (enabled) R.color.yellow_d else R.color.grey) ?: return
-        menuItem.icon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        context?.let { ctx ->
+            val color = if (enabled) {
+                LayoutHelper.getAttr(R.attr.ColorJacob, ctx.theme, ctx.getColor(R.color.yellow_d))
+            } else {
+                ctx.getColor(R.color.grey)
+            }
+            menuItem.icon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        }
     }
 
     protected fun navOptions(): NavOptions {
