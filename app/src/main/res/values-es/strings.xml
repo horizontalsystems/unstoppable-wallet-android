@@ -175,6 +175,7 @@
     <string name="Swap_TransactionFee">Tarifa de Transacción</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Comisiones de transacción pagadas en %s. Es necesario %s.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
     <string name="Swap_ErrorNoLiquidity">Sin liquidez</string>
     <string name="Swap_ErrorCouldNotFetchTrade">No se pudo obtener la información de la compra</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">No se pudo obtener información de permisos</string>
