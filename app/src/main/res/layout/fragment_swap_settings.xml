@@ -35,15 +35,26 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
+            <io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
+                android:id="@+id/recipientAddressInputView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:description="@string/SwapSettings_RecipientAddressDescription"
+                app:layout_constraintEnd_toEndOf="@id/endBorder"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="@string/SwapSettings_RecipientAddressTitle" />
+
             <io.horizontalsystems.bankwallet.ui.extensions.InputWithButtonsView
                 android:id="@+id/slippageInputView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="42dp"
                 app:description="@string/SwapSettings_SlippageDescription"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipientAddressInputView"
                 android:inputType="numberDecimal"
                 app:title="@string/SwapSettings_SlippageTitle" />
 
@@ -59,17 +70,6 @@
                 android:inputType="number"
                 app:title="@string/SwapSettings_DeadlineTitle" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
-                android:id="@+id/recipientAddressInputView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="42dp"
-                app:description="@string/SwapSettings_RecipientAddressDescription"
-                app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/deadlineInputView"
-                app:title="@string/SwapSettings_RecipientAddressTitle" />
-
             <Button
                 android:id="@+id/applyButton"
                 style="@style/ButtonPrimaryYellow"
@@ -80,7 +80,7 @@
                 android:text="@string/SwapSettings_Apply"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/recipientAddressInputView" />
+                app:layout_constraintTop_toBottomOf="@+id/deadlineInputView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
