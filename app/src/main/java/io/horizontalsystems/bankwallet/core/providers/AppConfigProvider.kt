@@ -62,14 +62,20 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("EOS", "EOS", "EOS", 4, CoinType.Eos("eosio.token", "EOS")),
                 Coin("ZRX", "0x Protocol", "ZRX", 18, CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),
                 Coin("LEND", "Aave", "LEND", 18, CoinType.Erc20("0x80fB784B7eD66730e8b1DBd9820aFD29931aab03")),
+                Coin("ADAI", "Aave DAI", "ADAI", 18, CoinType.Erc20("0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d")),
+                Coin("AAVE", "Aave Token", "AAVE", 18, CoinType.Erc20("0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9")),
                 Coin("ELF", "Aelf", "ELF", 18, CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e")),
+                Coin("AST", "Air Swap", "AST", 4, CoinType.Erc20("0x27054b13b1b798b345b591a4d22e6562d47ea75a")),
                 Coin("AKRO", "Akropolis", "AKRO", 18, CoinType.Erc20("0x8ab7404063ec4dbcfd4598215992dc3f8ec853d7")),
+                Coin("AMN", "Amon", "AMN", 18, CoinType.Erc20("0x737f98ac8ca59f2c68ad658e3c3d8c8963e40a4c")),
                 Coin("AMPL", "Ampleforth", "AMPL", 9, CoinType.Erc20("0xd46ba6d942050d489dbd938a2c909a5d5039a161")),
                 Coin("ANKR", "Ankr Network", "ANKR", 8, CoinType.Binance("ANKR-E97")),
                 Coin("ANT", "Aragon", "ANT", 18, CoinType.Erc20("0x960b236A07cf122663c4303350609A66A7B288C0")),
+                Coin("ANJ", "Aragon Network Juror", "ANJ", 18, CoinType.Erc20("0xcD62b1C403fa761BAadFC74C525ce2B51780b184")),
                 Coin("REP", "Augur", "REP", 18, CoinType.Erc20("0x1985365e9f78359a9B6AD760e32412f4a445E862")),
                 Coin("BAL", "Balancer", "BAL", 18, CoinType.Erc20("0xba100000625a3754423978a60c9317c58a424e3D")),
                 Coin("BNT", "Bancor", "BNT", 18, CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C")),
+                Coin("BAND", "Band Token", "BAND", 18, CoinType.Erc20("0xba11d00c5f74255f56a5e366f4f77f5a186d7f55")),
                 Coin("BAT", "Basic Attention Token", "BAT", 18, CoinType.Erc20("0x0D8775F648430679A709E98d2b0Cb6250d2887EF")),
                 Coin("BNB-ERC20", "Binance ERC20", "BNB", 18, CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
                 Coin("BUSD", "Binance USD", "BUSD", 8, CoinType.Binance("BUSD-BD1")),
@@ -121,6 +127,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("PPT", "Populous", "PPT", 8, CoinType.Erc20("0xd4fa1460F537bb9085d22C7bcCB5DD450Ef28e3a")),
                 Coin("PTI", "Paytomat", "PTI", 4, CoinType.Eos("ptitokenhome", "PTI")),
                 Coin("NPXS", "Pundi X", "NPXS", 18, CoinType.Erc20("0xA15C7Ebe1f07CaF6bFF097D8a589fb8AC49Ae5B3")),
+                Coin("RARI", "Rarible", "RARI", 18, CoinType.Erc20("0xfca59cd816ab1ead66534d82bc21e7515ce441cf")) ,
                 Coin("REN", "Ren", "REN", 18, CoinType.Erc20("0x408e41876cccdc0f92210600ef50372656052a38")),
                 Coin("RENBCH", "renBCH", "RENBCH", 8, CoinType.Erc20("0x459086f2376525bdceba5bdda135e4e9d3fef5bf")),
                 Coin("RENBTC", "renBTC", "RENBTC", 8, CoinType.Erc20("0xeb4c2781e4eba804ce9a9803c67d0893436bb27d")),
@@ -135,10 +142,13 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("USDT", "Tether USD", "USDT", 6, CoinType.Erc20("0xdAC17F958D2ee523a2206206994597C13D831ec7")),
                 Coin("TUSD", "TrueUSD", "TUSD", 18, CoinType.Erc20("0x0000000000085d4780B73119b644AE5ecd22b376")),
                 Coin("SWAP", "TrustSwap", "SWAP", 18, CoinType.Erc20("0xCC4304A31d09258b0029eA7FE63d032f52e44EFe")),
+                Coin("UNI", "Uniswap", "UNI", 18, CoinType.Erc20("0x1f9840a85d5af5bf1d1762f925bdaddc4201f984")),
                 Coin("USDC", "USD Coin", "USDC", 6, CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
                 Coin("WTC", "Waltonchain", "WTC", 18, CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74")),
                 Coin("WBTC", "Wrapped Bitcoin", "WBTC", 8, CoinType.Erc20("0x2260fac5e5542a773aa44fbcfedf7c193bc2c599")),
                 Coin("WETH", "Wrapped Ethereum", "WETH", 18, CoinType.Erc20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"))
+
+
         )
     }
 

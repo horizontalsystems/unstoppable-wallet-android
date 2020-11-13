@@ -12,11 +12,17 @@ object CoinInfoMap {
             "DASH" to CoinInfo(BigDecimal(18_900_000), "18/01/2014", "http://dash.org"),
             "BNB" to CoinInfo(BigDecimal(187_536_713), "27/06/2017", "https://www.binance.com"),
             "EOS" to CoinInfo(BigDecimal(1_035_000_004), "26/06/2017", "https://eos.io"),
+            "AAVE" to CoinInfo(BigDecimal(11_721_234), "02/10/2020","https://aave.com/"),
+            "ADAI" to CoinInfo(null, null, "https://aave.com/atokens"),
             "AKRO" to CoinInfo(BigDecimal(4_000_000_000), "06/07/2019", "https://akropolis.io"),
+            "AMN" to CoinInfo(BigDecimal(1_209_963_685), null, "https://amon.tech/"),
             "AMPL" to CoinInfo(BigDecimal(38_207_563), "14/06/2019", "https://www.ampleforth.org"),
+            "ANJ" to CoinInfo(BigDecimal(128_645_461), null,"https://coin_anj.aragon.org/"),
             "ANKR" to CoinInfo(BigDecimal(10_000_000_000), "21/02/2019", "https://www.ankr.com"),
             "ANT" to CoinInfo(BigDecimal(39_609_524), "05/05/2017", "https://aragon.one"),
+            "AST" to CoinInfo(BigDecimal(500_000_000), null,"https://www.airswap.io/"),
             "BAL" to CoinInfo(BigDecimal(35_725_000), "20/06/2020", "https://balancer.finance"),
+            "BAND" to CoinInfo(BigDecimal(100_000_000), "09/09/2019","https://bandprotocol.com/"),
             "BAT" to CoinInfo(BigDecimal(1_500_000_000), "31/05/2017", "https://basicattentiontoken.org"),
             "BNT" to CoinInfo(null, "13/02/2017", "https://bancor.network"),
             "BTCB" to CoinInfo(BigDecimal(9_001), "17/06/2019", "https://bitcoin.org/en"),
@@ -71,6 +77,7 @@ object CoinInfoMap {
             "PPT" to CoinInfo(BigDecimal(53_252_246), "12/04/2017", "https://populous.world"),
             "PTI" to CoinInfo(BigDecimal(3_600_000_000), "13/03/2018", "https://tokensale.paytomat.com"),
             "R" to CoinInfo(BigDecimal(1_000_000_000), "04/08/2017", "http://revain.org"),
+            "RARI" to CoinInfo(BigDecimal(25_000_000), null,"https://rarible.com/"),
             "REN" to CoinInfo(BigDecimal(999_999_633), "31/12/2017", "https://renproject.io"),
             "RENBCH" to CoinInfo(null, null, "https://renproject.io"),
             "RENBTC" to CoinInfo(null, null, "https://renproject.io"),
@@ -82,6 +89,7 @@ object CoinInfoMap {
             "SWAP" to CoinInfo(BigDecimal(100_000_000), "09/07/2020", "https://trustswap.org"),
             "TKN" to CoinInfo(BigDecimal(39_406_760), "25/04/2017", "https://monolith.xyz"),
             "TUSD" to CoinInfo(null, "31/03/2018", "https://www.trusttoken.com"),
+            "UNI" to CoinInfo(BigDecimal(1_000_000_000), null, "https://uniswap.org/"),
             "USDC" to CoinInfo(BigDecimal(931_069_099), "17/05/2018", "https://www.centre.io/usdc"),
             "USDT" to CoinInfo(BigDecimal(9_479_177_442), "10/06/2014", "https://tether.to"),
             "WBTC" to CoinInfo(BigDecimal(21_000_000), "27/11/2018", "https://wbtc.network"),
@@ -90,6 +98,7 @@ object CoinInfoMap {
             "XRP" to CoinInfo(BigDecimal(99_990_932_726), "02/02/2013", "https://ripple.com/xrp"),
             "ZRX" to CoinInfo(BigDecimal(1_000_000_000), "15/08/2017", "https://www.0xproject.com"),
             "ZEC" to CoinInfo(BigDecimal(21_000_000), "28/10/2016", "https://z.cash")
+
     )
 }
 
