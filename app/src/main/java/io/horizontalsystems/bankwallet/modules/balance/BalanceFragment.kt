@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
+import io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -177,7 +178,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
-            findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf("tokenInKey" to wallet.coin))
+            findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf(SwapFragment.fromCoinKey to wallet.coin))
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {

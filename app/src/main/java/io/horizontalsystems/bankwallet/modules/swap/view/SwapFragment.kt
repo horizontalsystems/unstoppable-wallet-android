@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
@@ -36,9 +37,9 @@ import java.math.BigDecimal
 
 class SwapFragment : BaseFragment() {
 
-    val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) {
-        SwapModule.Factory(arguments?.getParcelable("tokenInKey")!!)
-    }
+    private val vmFactory by lazy { SwapModule.Factory(requireArguments().getParcelable(fromCoinKey)!!) }
+    private val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) { vmFactory }
+    private val feeViewModel by navGraphViewModels<EthereumFeeViewModel>(R.id.swapFragment) { vmFactory }
 
     private var approvingSnackBar: CustomSnackbar? = null
 
@@ -90,6 +91,9 @@ class SwapFragment : BaseFragment() {
         setFragmentResultListeners()
 
         observeViewModel()
+
+        feeSelectorView.setDurationVisible(false)
+        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -335,4 +339,9 @@ class SwapFragment : BaseFragment() {
     enum class SelectType : Parcelable {
         FromCoin, ToCoin
     }
+
+    companion object {
+        const val fromCoinKey = "fromCoinKey"
+    }
+
 }

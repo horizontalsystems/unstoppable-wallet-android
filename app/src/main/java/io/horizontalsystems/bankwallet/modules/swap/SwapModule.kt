@@ -4,23 +4,20 @@ import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.EthereumKitNotCreated
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.ethereum.CoinService
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.provider.AllowanceProvider
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.provider.SwapFeeInfo
-import io.horizontalsystems.bankwallet.modules.swap.provider.UniswapFeeProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
@@ -55,11 +52,10 @@ object SwapModule {
         val allowance: Observable<DataState<CoinValue?>>
         val errors: Observable<List<SwapError>>
         val state: Observable<SwapState>
-        val fee: Observable<DataState<SwapFeeInfo?>>
 
         val swapFee: CoinValue?
-        val feeRatePriority: FeeRatePriority
-        val transactionFee: Pair<CoinValue, CurrencyValue?>?
+        val gasPriceType: EthereumTransactionService.GasPriceType
+        val transactionFee: BigInteger?
 
         val defaultSwapSettings: SwapSettings
         val currentSwapSettings: SwapSettings
@@ -80,6 +76,7 @@ object SwapModule {
         object InsufficientBalance : SwapError()
         class InsufficientAllowance(val approveData: ApproveData) : SwapError()
         class InsufficientBalanceForFee(val coinValue: CoinValue) : SwapError()
+        object InsufficientFeeCoinBalance : SwapError()
         object TooHighPriceImpact : SwapError()
         object NoLiquidity : SwapError()
         object CouldNotFetchTrade : SwapError()
@@ -110,22 +107,36 @@ object SwapModule {
     }
 
     class Factory(private val coinSending: Coin?) : ViewModelProvider.Factory {
+        private val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
+        private val transactionService by lazy {
+            val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
+            EthereumTransactionService(ethereumKit, feeRateProvider)
+        }
+        private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
+
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val ethereumKit = App.ethereumKitManager.ethereumKit ?: throw EthereumKitNotCreated()
-            val uniswapKit = UniswapKit.getInstance(ethereumKit)
 
-            val allowanceProvider = AllowanceProvider(App.adapterManager)
-            val feeRateProvider = EthereumFeeRateProvider(App.feeRateProvider)
-            val uniswapFeeProvider = UniswapFeeProvider(uniswapKit, App.walletManager, App.adapterManager, App.currencyManager.baseCurrency, App.xRateManager, feeRateProvider)
-            val stringProvider = StringProvider(App.instance)
+            return when (modelClass) {
+                SwapViewModel::class.java -> {
+                    val uniswapKit = UniswapKit.getInstance(ethereumKit)
 
-            val swapRepository = UniswapRepository(uniswapKit)
-            val swapService = UniswapService(coinSending, swapRepository, allowanceProvider, App.walletManager, App.adapterManager, App.feeCoinProvider, uniswapFeeProvider)
-            val formatter = SwapItemFormatter(stringProvider, App.numberFormatter)
-            val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, formatter)
+                    val allowanceProvider = AllowanceProvider(App.adapterManager)
+                    val feeRateProvider = EthereumFeeRateProvider(App.feeRateProvider)
+                    val stringProvider = StringProvider(App.instance)
 
-            return SwapViewModel(confirmationPresenter, swapService, stringProvider, formatter, listOf(swapService, confirmationPresenter)) as T
+                    val swapRepository = UniswapRepository(uniswapKit)
+                    val swapService = UniswapService(coinSending, swapRepository, allowanceProvider, App.walletManager, App.adapterManager, transactionService, ethereumKit, App.appConfigProvider.ethereumCoin)
+                    val formatter = SwapItemFormatter(stringProvider, App.numberFormatter)
+                    val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, formatter, ethCoinService)
+
+                    return SwapViewModel(confirmationPresenter, swapService, stringProvider, formatter, listOf(swapService, confirmationPresenter)) as T
+                }
+                EthereumFeeViewModel::class.java -> {
+                    EthereumFeeViewModel(transactionService, ethCoinService) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
         }
     }
 }

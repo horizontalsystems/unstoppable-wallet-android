@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
@@ -24,13 +25,17 @@ data class ConfirmationViewItem(
         val priceImpact: String,
         val swapFee: String,
         val transactionSpeed: String,
-        val transactionFee: String
+        val transactionFee: String,
+        val slippage: String?,
+        val deadline: String?,
+        val recipientAddress: String?
 )
 
 class ConfirmationPresenter(
         private val swapService: SwapModule.ISwapService,
         private val stringProvider: StringProvider,
-        private val formatter: SwapItemFormatter
+        private val formatter: SwapItemFormatter,
+        private val ethereumCoinService: CoinService
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -86,6 +91,18 @@ class ConfirmationPresenter(
         val executionPrice = trade.executionPrice ?: return null
         val priceImpact = trade.priceImpact ?: return null
 
+        val slippage = if (swapService.currentSwapSettings.slippage == swapService.defaultSwapSettings.slippage)
+            null
+        else
+            stringProvider.string(R.string.Swap_Percent, swapService.currentSwapSettings.slippage.toString())
+
+        val txDeadline = if (swapService.currentSwapSettings.deadline == swapService.defaultSwapSettings.deadline)
+            null
+        else
+            stringProvider.string(R.string.Duration_Minutes, swapService.currentSwapSettings.deadline)
+
+        val recipientAddress = swapService.currentSwapSettings.recipientAddress
+
         return ConfirmationViewItem(
                 sendingTitle = stringProvider.string(R.string.Swap_Confirmation_Pay, coinSending.title),
                 sendingValue = formatter.coinAmount(amountSending, coinSending),
@@ -96,8 +113,11 @@ class ConfirmationPresenter(
                 price = formatter.executionPrice(executionPrice, trade.coinSending, trade.coinReceiving),
                 priceImpact = formatter.priceImpact(priceImpact),
                 swapFee = formatter.coinAmount(swapFee.value, swapFee.coin),
-                transactionSpeed = swapService.feeRatePriority.javaClass.simpleName.toLowerCase(Locale.ENGLISH).capitalize(),
-                transactionFee = formatter.fee(transactionFee)
+                transactionSpeed = swapService.gasPriceType.javaClass.simpleName.toLowerCase(Locale.ENGLISH).capitalize(),
+                transactionFee =  ethereumCoinService.amountData(transactionFee).getFormatted(),
+                slippage = slippage,
+                deadline = txDeadline,
+                recipientAddress = recipientAddress
         )
     }
 

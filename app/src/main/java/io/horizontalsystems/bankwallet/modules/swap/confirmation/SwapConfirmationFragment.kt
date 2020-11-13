@@ -2,20 +2,18 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import io.horizontalsystems.core.findNavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.TopMenuItem
-import kotlinx.android.synthetic.main.fragment_confirmation.shadowlessToolbar
 import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
 class SwapConfirmationFragment : BaseFragment() {
@@ -28,21 +26,29 @@ class SwapConfirmationFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.swap_settings_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuCancel -> {
+                presenter.onCancelConfirmation()
+                findNavController().popBackStack()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
+
         presenter = viewModel.confirmationPresenter
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.Send_Confirmation_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = {
-                    presenter.onCancelConfirmation()
-                    findNavController().popBackStack()
-                }),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Cancel, onClick = {
-                    presenter.onCancelConfirmation()
-                    findNavController().popBackStack()
-                }))
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         swapButton.setOnSingleClickListener {
             swapButton.isEnabled = false
@@ -61,6 +67,16 @@ class SwapConfirmationFragment : BaseFragment() {
             swapFee.text = it.swapFee
             txSpeed.text = it.transactionSpeed
             txFee.text = it.transactionFee
+            slippageValue.text = it.slippage
+            deadlineValue.text = it.deadline
+            recipientAddressValue.text = it.recipientAddress
+
+            slippageTitle.isVisible = it.slippage != null
+            slippageValue.isVisible = it.slippage != null
+            deadlineTitle.isVisible = it.deadline != null
+            deadlineValue.isVisible = it.deadline != null
+            recipientAddressTitle.isVisible = it.recipientAddress != null
+            recipientAddressValue.isVisible = it.recipientAddress != null
         }
 
         presenter.swapButtonEnabled.observe(viewLifecycleOwner, Observer { isEnabled ->
