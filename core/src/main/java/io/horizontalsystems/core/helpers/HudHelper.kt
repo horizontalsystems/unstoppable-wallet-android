@@ -12,7 +12,7 @@ object HudHelper {
 
     fun showInProcessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT,
                              gravity: SnackbarGravity = SnackbarGravity.BOTTOM): CustomSnackbar? {
-        return showHudNotification(contenView, contenView.context.getString(resId), R.color.green_d, duration, gravity,
+        return showHudNotification(contenView, contenView.context.getString(resId), R.color.grey, duration, gravity,
                                    true)
     }
 

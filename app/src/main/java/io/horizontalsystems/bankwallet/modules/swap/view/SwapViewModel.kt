@@ -78,6 +78,9 @@ class SwapViewModel(
     private val _approveData = MutableLiveData<SwapModule.ApproveData?>()
     val approveData: LiveData<SwapModule.ApproveData?> = _approveData
 
+    private val _showApprovingMessage = MutableLiveData<Boolean>()
+    val showApprovingMessage: LiveData<Boolean> = _showApprovingMessage
+
     private val _proceedButtonEnabled = MutableLiveData<Boolean>()
     val proceedButtonEnabled: LiveData<Boolean> = _proceedButtonEnabled
 
@@ -102,6 +105,7 @@ class SwapViewModel(
     private var approving = false
         set(value) {
             field = value
+            _showApprovingMessage.postValue(value)
             updateLoading()
         }
 

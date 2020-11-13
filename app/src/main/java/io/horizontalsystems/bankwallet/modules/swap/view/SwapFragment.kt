@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.parcel.Parcelize
@@ -38,6 +39,8 @@ class SwapFragment : BaseFragment() {
     val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) {
         SwapModule.Factory(arguments?.getParcelable("tokenInKey")!!)
     }
+
+    private var approvingSnackBar: CustomSnackbar? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_swap, container, false)
@@ -199,6 +202,17 @@ class SwapFragment : BaseFragment() {
 
         viewModel.proceedButtonEnabled.observe(viewLifecycleOwner, { proceedButtonEnabled ->
             proceedButton.isEnabled = proceedButtonEnabled
+        })
+
+        viewModel.showApprovingMessage.observe(viewLifecycleOwner, { isVisible ->
+            if (isVisible) {
+                if (approvingSnackBar == null) {
+                    approvingSnackBar = HudHelper.showInProcessMessage(requireView(), R.string.Swap_Approving, SnackbarDuration.INDEFINITE)
+                }
+            } else {
+                approvingSnackBar?.dismiss()
+                approvingSnackBar = null
+            }
         })
 
         viewModel.approveData.observe(viewLifecycleOwner, { approveData ->
