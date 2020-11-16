@@ -67,8 +67,6 @@ class TorConnectionActivity : AppCompatActivity() {
     }
 
     private fun setStatus(isError: Boolean, statusText: String) {
-
-        imgTorStatus.isInvisible= isError
         pgTorStatus.isInvisible = isError
         imgTorStatusError.isInvisible = !isError
         txTorStatus.text = statusText

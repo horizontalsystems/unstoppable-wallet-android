@@ -84,7 +84,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     private fun updateNotificationIcon() {
         toolbar?.menu?.findItem(R.id.menuNotification)?.apply {
             isVisible = presenter.notificationIconVisible
-            val iconRes = if (presenter.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_inactive_24
+            val iconRes = if (presenter.notificationIconActive) R.drawable.ic_notification else R.drawable.ic_notification_disabled
             icon = context?.let { ContextCompat.getDrawable(it, iconRes) }
         }
     }
