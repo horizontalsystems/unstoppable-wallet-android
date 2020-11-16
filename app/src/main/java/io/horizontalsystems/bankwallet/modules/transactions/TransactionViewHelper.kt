@@ -35,7 +35,7 @@ object TransactionViewHelper {
         return when (type) {
             TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing
             TransactionType.Incoming -> R.drawable.ic_incoming
-            TransactionType.Approve -> R.drawable.ic_approval
+            TransactionType.Approve -> R.drawable.ic_swap_approval
         }
     }
 }

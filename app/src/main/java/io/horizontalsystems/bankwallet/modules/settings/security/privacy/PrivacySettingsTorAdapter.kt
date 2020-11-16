@@ -66,26 +66,25 @@ class PrivacySettingsTorAdapter(private val listener: Listener) : RecyclerView.A
             when (torStatus) {
                 TorStatus.Connecting -> {
                     connectionSpinner.isVisible = true
-                    controlIcon.imageTintList = getTint(R.color.grey)
-                    controlIcon.setImageResource(R.drawable.ic_tor_connected)
+                    controlIcon.setImageDrawable(null)
                     subtitleText.text = containerView.context.getString(R.string.TorPage_Connecting)
                 }
                 TorStatus.Connected -> {
                     connectionSpinner.isVisible = false
                     controlIcon.imageTintList = getTint(R.color.yellow_d)
-                    controlIcon.setImageResource(R.drawable.ic_tor_connected)
+                    controlIcon.setImageResource(R.drawable.ic_tor_connection_success_24)
                     subtitleText.text = containerView.context.getString(R.string.TorPage_Connected)
                 }
                 TorStatus.Failed -> {
                     connectionSpinner.isVisible = false
                     controlIcon.imageTintList = getTint(R.color.yellow_d)
-                    controlIcon.setImageResource(R.drawable.ic_tor_status_error)
+                    controlIcon.setImageResource(R.drawable.ic_tor_connection_error_24)
                     subtitleText.text = containerView.context.getString(R.string.TorPage_Failed)
                 }
                 TorStatus.Closed -> {
                     connectionSpinner.isVisible = false
                     controlIcon.imageTintList = getTint(R.color.yellow_d)
-                    controlIcon.setImageResource(R.drawable.ic_tor)
+                    controlIcon.setImageResource(R.drawable.ic_tor_connection_24)
                     subtitleText.text = containerView.context.getString(R.string.TorPage_ConnectionClosed)
                 }
             }

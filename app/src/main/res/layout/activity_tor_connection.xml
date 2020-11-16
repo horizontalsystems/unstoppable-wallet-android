@@ -6,8 +6,21 @@
     android:layout_height="match_parent"
     tools:context="io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity">
 
+    <ProgressBar
+        android:id="@+id/pgTorStatus"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:backgroundTint="@color/grey"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/grey"
+        android:indeterminateTintMode="src_atop"
+        app:layout_constraintBottom_toBottomOf="@+id/imgTorStatusError"
+        app:layout_constraintEnd_toEndOf="@+id/imgTorStatusError"
+        app:layout_constraintStart_toStartOf="@+id/imgTorStatusError" />
+
     <ImageView
-        android:id="@+id/imgTorStatus"
+        android:id="@+id/imgTorStatusError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/txTorStatus"
@@ -15,31 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/ic_tor_status" />
-
-    <ProgressBar
-        android:id="@+id/pgTorStatus"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="11dp"
-        android:backgroundTint="@color/grey"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/black"
-        android:indeterminateTintMode="src_atop"
-        app:layout_constraintBottom_toBottomOf="@+id/imgTorStatus"
-        app:layout_constraintEnd_toEndOf="@+id/imgTorStatus"
-        app:layout_constraintStart_toStartOf="@+id/imgTorStatus" />
-
-    <ImageView
-        android:id="@+id/imgTorStatusError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imgTorStatus"
-        app:layout_constraintEnd_toEndOf="@+id/imgTorStatus"
-        app:layout_constraintStart_toStartOf="@+id/imgTorStatus"
-        app:layout_constraintTop_toTopOf="@+id/imgTorStatus"
-        app:srcCompat="@drawable/ic_tor_status_error" />
+        app:srcCompat="@drawable/ic_tor_connection_error_48" />
 
     <TextView
         android:id="@+id/txTorStatus"
@@ -51,7 +40,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnRetry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgTorStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/imgTorStatusError" />
 
     <Button
         android:id="@+id/btnRetry"

@@ -43,7 +43,7 @@ class FullTransactionInfoItemView : ConstraintLayout {
 
             FullTransactionIcon.TIME -> showTypeIcon(R.drawable.pending_grey)
             FullTransactionIcon.BLOCK -> showTypeIcon(R.drawable.blocks)
-            FullTransactionIcon.CHECK -> showTypeIcon(R.drawable.checkmark_grey)
+            FullTransactionIcon.CHECK -> showTypeIcon(R.drawable.ic_checkmark)
         }
 
         valueText.isVisible = !isAddress

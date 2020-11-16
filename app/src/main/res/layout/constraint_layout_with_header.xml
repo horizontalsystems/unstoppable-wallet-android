@@ -65,7 +65,7 @@
         android:layout_marginEnd="2dp"
         android:padding="5dp"
         android:background="@drawable/rounded_ripple_24dp"
-        android:src="@drawable/close"
+        android:src="@drawable/ic_close"
         android:tint="@color/grey"
         app:layout_constraintEnd_toEndOf="@+id/backgroundView"
         app:layout_constraintTop_toTopOf="@+id/backgroundView" />

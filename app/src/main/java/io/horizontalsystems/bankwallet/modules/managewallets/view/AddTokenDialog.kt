@@ -20,7 +20,7 @@ class AddTokenDialog(private val listener: Listener)
 
         setTitle(activity?.getString(R.string.AddTokenDialog_Title))
         setSubtitle(getString(R.string.AddTokenDialog_Subtitle))
-        setHeaderIcon(R.drawable.ic_plus)
+        setHeaderIcon(R.drawable.ic_plus_circled)
 
         bindActions()
     }

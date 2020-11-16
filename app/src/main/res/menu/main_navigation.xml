@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/navigation_guides"
-        android:icon="@drawable/ic_guide"
+        android:icon="@drawable/ic_academy"
         android:title="@string/Guides_Title" />
 
     <item

@@ -258,7 +258,7 @@ class PrivacySettingsFragment :
     private fun showAppRestartAlert(checked: Boolean) {
         activity?.let {
             ConfirmationDialog.show(
-                    icon = R.drawable.ic_tor,
+                    icon = R.drawable.ic_tor_connection_24,
                     title = getString(R.string.Tor_Title),
                     subtitle = getString(R.string.Tor_Connection_Title),
                     contentText = getString(R.string.SettingsSecurity_AppRestartWarning),
