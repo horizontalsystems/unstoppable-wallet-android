@@ -175,6 +175,8 @@
     <string name="Swap_TransactionFee">交易费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">交易费用以%s支付。您需要%s。</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
+
     <string name="Swap_ErrorNoLiquidity">无流动资金</string>
     <string name="Swap_ErrorCouldNotFetchTrade">无法获取交易信息</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">无法获取允许信息</string>
