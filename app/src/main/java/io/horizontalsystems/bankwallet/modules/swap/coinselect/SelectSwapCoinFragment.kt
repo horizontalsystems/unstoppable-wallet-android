@@ -30,7 +30,6 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.supportActionBar?.title = getString(R.string.ManageCoins_title)
         }
 
         val excludedCoin = arguments?.getParcelable<Coin>(EXCLUDED_COIN_KEY)

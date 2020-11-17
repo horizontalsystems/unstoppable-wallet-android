@@ -25,7 +25,6 @@ class BitcoinHodlingFragment : BaseFragment() {
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.title = getString(R.string.BitcoinHodling_Title)
         }
 
         val hodlingView = presenter.view as BitcoinHodlingView

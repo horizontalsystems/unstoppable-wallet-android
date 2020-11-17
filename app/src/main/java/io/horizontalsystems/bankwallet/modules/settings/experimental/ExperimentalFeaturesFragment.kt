@@ -27,7 +27,6 @@ class ExperimentalFeaturesFragment : BaseFragment() {
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.title = getString(R.string.ExperimentalFeatures_Title)
         }
 
         val router = presenter.router as ExperimentalFeaturesRouter
