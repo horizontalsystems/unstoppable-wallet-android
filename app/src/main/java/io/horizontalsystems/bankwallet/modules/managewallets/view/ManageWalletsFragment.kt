@@ -22,15 +22,15 @@ import io.horizontalsystems.core.findNavController
 
 class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
+    override val title
+        get() = getString(R.string.ManageCoins_title)
+
     private lateinit var viewModel: ManageWalletsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.let {
-            it.supportActionBar?.title  = getString(R.string.ManageCoins_title)
-        }
 
         viewModel = ViewModelProvider(this, ManageWalletsModule.Factory())
                 .get(ManageWalletsViewModel::class.java)

@@ -19,15 +19,15 @@ import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragme
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
+    override val title
+        get() = getString(R.string.Select_Coins)
+
     private lateinit var viewModel: RestoreSelectCoinsViewModel
     private var doneMenuButton: MenuItem? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.let {
-            it.supportActionBar?.title  = getString(R.string.Select_Coins)
-        }
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY) ?: throw Exception("Parameter missing")
 

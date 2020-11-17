@@ -19,6 +19,8 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
     private lateinit var featuredItemsAdapter: CoinListAdapter
     private lateinit var itemsAdapter: CoinListAdapter
 
+    abstract val title: CharSequence
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.manage_wallets_fragment, container, false)
@@ -30,6 +32,7 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
         (activity as? AppCompatActivity)?.let {
             it.setSupportActionBar(toolbar)
             it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            it.title = title
         }
 
         featuredItemsAdapter = CoinListAdapter(this)
