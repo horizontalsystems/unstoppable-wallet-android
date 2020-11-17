@@ -164,7 +164,7 @@
                 android:id="@+id/txSpeedMenuArrow"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_down"
+                android:src="@drawable/ic_down_arrow_20"
                 app:layout_constraintBottom_toBottomOf="@+id/txSpeedMenu"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/txSpeedMenu"

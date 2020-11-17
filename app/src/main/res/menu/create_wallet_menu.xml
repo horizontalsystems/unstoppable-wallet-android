@@ -12,7 +12,7 @@
     <item
         android:id="@+id/menuDone"
         android:enabled="false"
-        android:icon="@drawable/ic_checkmark"
+        android:icon="@drawable/ic_checkmark_24"
         android:title="@string/Button_Done"
         app:showAsAction="always" />
 

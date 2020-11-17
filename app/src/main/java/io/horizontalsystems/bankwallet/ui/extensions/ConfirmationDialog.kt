@@ -51,7 +51,7 @@ class ConfirmationDialog(
         // if null set default "Attention" ICON
         icon?.let {
           setHeaderIcon(it)
-        }?:setHeaderIcon(R.drawable.ic_attention_yellow)
+        }?:setHeaderIcon(R.drawable.ic_attention_yellow_24)
 
         contentTextView = view.findViewById(R.id.contentText)
         btnAction = view.findViewById(R.id.btnYellow)

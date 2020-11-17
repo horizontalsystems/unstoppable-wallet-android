@@ -5,7 +5,7 @@
     <item
         android:id="@+id/shareButton"
         android:title="@string/Alert_Share"
-        android:icon="@drawable/ic_share"
+        android:icon="@drawable/ic_share_24"
         android:visible="false"
         app:showAsAction="always" />
 

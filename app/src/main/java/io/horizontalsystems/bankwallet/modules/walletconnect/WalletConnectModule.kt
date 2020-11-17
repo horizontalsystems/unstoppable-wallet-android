@@ -25,7 +25,7 @@ object WalletConnectModule {
             fragment.findNavController().navigate(navigateTo, null, navOptions)
         } else {
             ConfirmationDialog.show(
-                    icon = R.drawable.ic_wallet_connect,
+                    icon = R.drawable.ic_wallet_connect_24,
                     title = fragment.getString(R.string.WalletConnect_Title),
                     subtitle = fragment.getString(R.string.WalletConnect_Requirement),
                     contentText = fragment.getString(R.string.WalletConnect_RequirementDescription),

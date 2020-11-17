@@ -51,6 +51,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginEnd="4dp"
         android:drawablePadding="4dp"
         android:ellipsize="end"
         android:gravity="end"
@@ -61,18 +62,16 @@
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/secondaryName"
         app:layout_goneMarginEnd="16dp"
-        tools:drawableEnd="@drawable/ic_lock"
+        tools:drawableEnd="@drawable/ic_lock_20"
         tools:text="$992" />
 
     <ImageView
         android:id="@+id/sentToSelfIcon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="4dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_incoming"
-        android:tint="?ColorRemus"
+        android:src="@drawable/ic_incoming_20"
         app:layout_constraintBottom_toBottomOf="@+id/primaryValue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/primaryValue" />

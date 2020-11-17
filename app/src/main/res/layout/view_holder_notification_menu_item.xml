@@ -25,7 +25,7 @@
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:src="@drawable/ic_checkmark"
+        android:src="@drawable/ic_checkmark_20"
         app:tint="?ColorJacob"
         android:visibility="invisible"
         tools:visibility="visible" />

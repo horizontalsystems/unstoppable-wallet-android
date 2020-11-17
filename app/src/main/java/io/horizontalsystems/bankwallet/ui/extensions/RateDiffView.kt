@@ -49,7 +49,7 @@ class RateDiffView : androidx.appcompat.widget.AppCompatTextView {
             val isPositive = scaledValue >= BigDecimal.ZERO
 
             val textColor = if (isPositive) positiveColor else negativeColor
-            val iconRes = if (isPositive) R.drawable.ic_up_positive else R.drawable.ic_down_negative
+            val iconRes = if (isPositive) R.drawable.ic_up_green_20 else R.drawable.ic_down_red_20
 
             setTextColor(textColor)
             setLeftIcon(context.getDrawable(iconRes))

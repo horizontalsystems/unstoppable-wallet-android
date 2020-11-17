@@ -179,7 +179,7 @@ class WalletConnectMainFragment : BaseFragment() {
 
         disconnectButton.setOnSingleClickListener {
             ConfirmationDialog.show(
-                    icon = R.drawable.ic_wallet_connect,
+                    icon = R.drawable.ic_wallet_connect_24,
                     title = getString(R.string.Button_Disconnect),
                     subtitle = dappTitle.text.toString(),
                     contentText = null,

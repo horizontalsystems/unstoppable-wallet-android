@@ -79,7 +79,7 @@
                 android:id="@+id/switchButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_switch"
+                android:src="@drawable/ic_switch_20"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toEndOf="@+id/price"
                 app:layout_constraintTop_toTopOf="@id/price" />

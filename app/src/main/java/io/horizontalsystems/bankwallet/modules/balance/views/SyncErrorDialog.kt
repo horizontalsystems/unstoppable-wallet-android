@@ -25,7 +25,7 @@ class SyncErrorDialog(
 
         setTitle(activity?.getString(R.string.BalanceSyncError_Title))
         setSubtitle(coinName)
-        setHeaderIcon(R.drawable.ic_attention_red)
+        setHeaderIcon(R.drawable.ic_attention_red_24)
 
         changeSourceBtn.isVisible = sourceChangeable
 
