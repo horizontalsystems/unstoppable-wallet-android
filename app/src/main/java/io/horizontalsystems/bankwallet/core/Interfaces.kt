@@ -313,7 +313,7 @@ interface ICoinRecordStorage{
 }
 
 interface IRateManager {
-    fun set(coins: List<String>)
+    fun set(coins: List<Coin>)
     fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
     fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal?
     fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo>

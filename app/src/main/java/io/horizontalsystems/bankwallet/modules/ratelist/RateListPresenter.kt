@@ -39,8 +39,7 @@ class RateListPresenter(
             view.setDate(it)
         }
 
-        val coinCodes = coins.map { it.code }
-        interactor.setupXRateManager(coinCodes)
+        interactor.setupXRateManager(coins)
         interactor.subscribeToMarketInfo(currency.code)
     }
 
