@@ -6,18 +6,20 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class CreateWalletFragment : CoinListBaseFragment() {
+
+    override val title
+        get() = getString(R.string.ManageCoins_title)
 
     private lateinit var viewModel: CreateWalletViewModel
     private var doneMenuButton: MenuItem? = null
@@ -27,9 +29,6 @@ class CreateWalletFragment : CoinListBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.let {
-            it.supportActionBar?.title = getString(R.string.ManageCoins_title)
-        }
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
         inApp = arguments?.getBoolean("inApp") ?: true
