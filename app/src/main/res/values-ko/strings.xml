@@ -175,6 +175,7 @@
     <string name="Swap_TransactionFee">거래 비용</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">현재 ETH 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
     <string name="Swap_ErrorNoLiquidity">유동성 없음</string>
     <string name="Swap_ErrorCouldNotFetchTrade">거래 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">수당 정보를 가져올 수 없습니다.</string>

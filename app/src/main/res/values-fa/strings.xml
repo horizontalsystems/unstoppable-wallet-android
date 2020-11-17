@@ -175,6 +175,7 @@
     <string name="Swap_TransactionFee">كارمزد تراکنش</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">هزینه تراکنش برای جابجایی در %s پرداخت شد. شما به %s نیاز دارید.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="Swap_ErrorNoLiquidity">بدون نقدینگی</string>
     <string name="Swap_ErrorCouldNotFetchTrade">اطلاعات تجارت دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">اطلاعات کمک هزینه دریافت نشد</string>

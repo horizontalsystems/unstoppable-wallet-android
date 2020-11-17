@@ -175,6 +175,7 @@
     <string name="Swap_TransactionFee">Комиссия за транзакцию</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Комиссии за транзакцию взимаются в %s. Вам нужно %s.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Текущий баланс ETH ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
     <string name="Swap_ErrorNoLiquidity">Нет Ликвидности</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Не удалось получить информацию о сделке</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Не удалось получить информацию о допустимом лимите</string>

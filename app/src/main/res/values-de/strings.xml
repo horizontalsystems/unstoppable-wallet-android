@@ -175,6 +175,7 @@
     <string name="Swap_TransactionFee">Transaktionsgebühr</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Transaktionsgebühren in %s bezahlt. Sie benötigen %s.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Das aktuelle ETH-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
     <string name="Swap_ErrorNoLiquidity">Keine Liquidität</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Die Kaufinformationen konnten nicht abgerufen werden</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Konnte Berechtigungsinformationen nicht abrufen</string>

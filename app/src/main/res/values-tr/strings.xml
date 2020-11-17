@@ -175,6 +175,7 @@
     <string name="Swap_TransactionFee">İşlem Ücreti</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">İşlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Mevcut ETH bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
     <string name="Swap_ErrorNoLiquidity">Likidite Yok</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Alım satım bilgisi alınamadı</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Ödenek bilgisi alınamadı</string>
