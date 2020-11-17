@@ -21,14 +21,14 @@
 
     <ImageView
         android:id="@+id/imgTorStatusError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintBottom_toTopOf="@+id/txTorStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/ic_tor_connection_error_48" />
+        app:srcCompat="@drawable/ic_tor_connection_error_24" />
 
     <TextView
         android:id="@+id/txTorStatus"
@@ -69,6 +69,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnRetry" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,6 @@
         app:layout_constraintBottom_toTopOf="@+id/message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_error" />
+        app:srcCompat="@drawable/ic_error_48" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
