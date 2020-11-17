@@ -14,7 +14,11 @@ import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.xrateskit.entities.ChartInfo
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CryptoNews
+import io.horizontalsystems.xrateskit.entities.TopMarket
+import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single

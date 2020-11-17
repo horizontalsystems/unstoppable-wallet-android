@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IRateCoinMapper
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -54,9 +55,32 @@ class RateManager(
                 }
     }
 
-    override fun set(coins: List<String>) {
-        val convertedCoins = coins.mapNotNull { rateCoinMapper.convert(it) }
-        kit.set(convertedCoins)
+    private fun buildXRatesInputArgs(coinCodes: List<String> ): List<Coin> {
+
+        val coins = mutableListOf<Coin>()
+        coinCodes.forEach{ coinCode ->
+            App.coinManager.coins.find { coinCode.contentEquals(it.code) }?.let {
+
+                val coinType = when (it.type){
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Bitcoin -> CoinType.Bitcoin
+                    is io.horizontalsystems.bankwallet.entities.CoinType.BitcoinCash -> CoinType.BitcoinCash
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Dash -> CoinType.Dash
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Ethereum -> CoinType.Ethereum
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Litecoin -> CoinType.Litecoin
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Zcash -> CoinType.Zcash
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Binance -> CoinType.Binance
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Eos -> CoinType.Eos
+                    is io.horizontalsystems.bankwallet.entities.CoinType.Erc20 -> CoinType.Erc20(it.type.address)
+                }
+                coins.add(Coin(it.coinId, it.code, it.title, coinType))
+            }
+        }
+
+        return coins
+    }
+
+    override fun set(coinCodes: List<String>) {
+        kit.set(buildXRatesInputArgs(coinCodes))
     }
 
     override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
@@ -125,8 +149,7 @@ class RateManager(
         val feeCoinCodes = wallets.mapNotNull { feeCoinProvider.feeCoinData(it.coin)?.first?.code }
         val coinCodes = wallets.map { it.coin.code }
         val uniqueCodes = (feeCoinCodes + coinCodes).distinct()
-        val convertedCoinCodes = uniqueCodes.mapNotNull{ rateCoinMapper.convert(it) }
-        kit.set(convertedCoinCodes)
+        kit.set(buildXRatesInputArgs(uniqueCodes))
     }
 
     private fun onBaseCurrencyUpdated() {
