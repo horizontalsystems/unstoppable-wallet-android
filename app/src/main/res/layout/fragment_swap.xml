@@ -65,13 +65,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
                 android:text="@string/Swap_Price"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/switchButton"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/youPay" />
 
@@ -80,18 +80,18 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_switch"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
-                app:layout_constraintStart_toEndOf="@+id/price"
                 app:layout_constraintTop_toTopOf="@id/price" />
 
             <io.horizontalsystems.bankwallet.modules.swap.view.SwapCardView
                 android:id="@+id/youGet"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="14dp"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/switchButton"
+                app:layout_constraintTop_toBottomOf="@+id/price"
                 app:title="@string/Swap_ToAmountTitle" />
 
             <androidx.constraintlayout.widget.Group
@@ -207,7 +207,7 @@
             <TextView
                 android:id="@+id/advancedSettings"
                 style="@style/Subhead2"
-                android:background="@color/background_pressed_lawrence"
+                android:background="@drawable/background_lawrence_onclick"
                 android:clickable="true"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
