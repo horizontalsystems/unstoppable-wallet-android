@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.BackupWordView
 import kotlinx.android.synthetic.main.fragment_backup_words_list.*
 
@@ -34,12 +36,22 @@ class BackupWordsListFragment : BaseFragment() {
             buttonNext.isVisible = !backedUp
         })
 
+        viewModel.additionalInfoLiveData.observe(viewLifecycleOwner, { additionalInfo ->
+            additionalInfoLayout.isVisible = additionalInfo != null
+            additionalInfoButton.text = additionalInfo
+        })
+
         buttonNext.setOnSingleClickListener {
             viewModel.delegate.onNextClick()
         }
 
         buttonClose.setOnSingleClickListener {
             viewModel.delegate.onCloseClick()
+        }
+
+        additionalInfoButton.setOnClickListener {
+            TextHelper.copyText(additionalInfoButton.text.toString())
+            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied)
         }
     }
 

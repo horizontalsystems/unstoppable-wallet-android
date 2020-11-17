@@ -51,7 +51,7 @@ class ZcashAdapter(
 
         val birthday = when (wallet.account.origin) {
             AccountOrigin.Created -> null
-            AccountOrigin.Restored -> saplingActivationHeight
+            AccountOrigin.Restored -> accountType.birthdayHeight?.toInt() ?: saplingActivationHeight
         }
         val nearestBirthday = WalletBirthdayTool.loadNearest(context, birthday)
 

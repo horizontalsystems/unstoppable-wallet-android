@@ -81,6 +81,7 @@ class App : CoreApp() {
         lateinit var walletConnectSessionStore: WalletConnectSessionStore
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
+        lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
     }
 
     override fun onCreate() {
@@ -141,7 +142,8 @@ class App : CoreApp() {
         accountManager = AccountManager(accountsStorage, accountCleaner)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletStorage)
-        accountCreator = AccountCreator(AccountFactory(), wordsManager)
+        zcashBirthdayProvider = ZcashBirthdayProvider(this)
+        accountCreator = AccountCreator(AccountFactory(), wordsManager, zcashBirthdayProvider)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
 
         KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {

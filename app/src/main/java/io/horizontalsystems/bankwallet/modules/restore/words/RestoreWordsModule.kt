@@ -10,15 +10,16 @@ import kotlinx.android.parcel.Parcelize
 object RestoreWordsModule {
     interface IRestoreWordsService {
         val wordCount: Int
+        val hasAdditionalInfo: Boolean
 
         @Throws
-        fun accountType(words: List<String>): AccountType
+        fun accountType(words: List<String>, additionalInfo: String?): AccountType
     }
 
     class Factory(private val restoreAccountType: RestoreAccountType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = RestoreWordsService(restoreAccountType, App.wordsManager)
+            val service = RestoreWordsService(restoreAccountType, App.wordsManager, App.zcashBirthdayProvider)
 
             return RestoreWordsViewModel(service, listOf(service)) as T
         }

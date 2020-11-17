@@ -53,6 +53,20 @@
                 android:layout_marginEnd="24dp"
                 android:text="@string/Restore_Enter_Key_Description_Mnemonic"
                 android:textColor="@color/grey" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
+                android:id="@+id/additionalInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:inputType="number"
+                app:hint="@string/Restore_BirthdayHeight_Hint"
+                app:description="@string/Restore_BirthdayHeight_Description"
+                app:showQrButton="false"
+                app:title="" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -34,9 +34,10 @@ class BackupWordsFragment : BaseFragment() {
         val backedUp = arguments?.getBoolean(ACCOUNT_BACKEDUP, false) ?: false
         val backupWords = arguments?.getStringArray(WORDS_KEY) ?: arrayOf()
         val typeTitle = arguments?.getInt(ACCOUNT_TYPE_TITLE, R.string.AccountType_Unstoppable) ?: 0
+        val additionalInfo = arguments?.getString(ACCOUNT_ADDITIONAL_INFO)
 
         viewModel.accountTypeTitle = typeTitle
-        viewModel.init(backupWords, backedUp)
+        viewModel.init(backupWords, backedUp, additionalInfo)
 
         if (savedInstanceState == null) {
             viewModel.delegate.viewDidLoad()
@@ -87,5 +88,6 @@ class BackupWordsFragment : BaseFragment() {
         const val ACCOUNT_BACKEDUP = "account_backedup"
         const val WORDS_KEY = "words"
         const val ACCOUNT_TYPE_TITLE = "account_type_title"
+        const val ACCOUNT_ADDITIONAL_INFO = "account_additional_info"
     }
 }

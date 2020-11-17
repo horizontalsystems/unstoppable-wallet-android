@@ -53,11 +53,12 @@ class BackupFragment : BaseFragment() {
             findNavController().navigate(R.id.backupFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
         })
 
-        viewModel.startBackupWordsModule.observe(viewLifecycleOwner, Observer { (words, accountTypeTitle) ->
+        viewModel.startBackupWordsModule.observe(viewLifecycleOwner, { (words, accountTypeTitle, additionalInfo) ->
             val arguments = Bundle(3).apply {
                 putStringArray(BackupWordsFragment.WORDS_KEY, words.toTypedArray())
                 putBoolean(BackupWordsFragment.ACCOUNT_BACKEDUP, account.isBackedUp)
                 putInt(BackupWordsFragment.ACCOUNT_TYPE_TITLE, accountTypeTitle)
+                putString(BackupWordsFragment.ACCOUNT_ADDITIONAL_INFO, additionalInfo)
             }
 
             findNavController().navigate(R.id.backupFragment_to_backupWordsFragment, arguments, navOptions())

@@ -66,6 +66,7 @@
         android:layout_height="28dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_scan_qr_copy"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/input"
         app:layout_constraintEnd_toStartOf="@+id/buttonPaste"
         app:layout_constraintTop_toTopOf="@id/input" />

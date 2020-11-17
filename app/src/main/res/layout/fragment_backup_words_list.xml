@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="blocksDescendants">
@@ -9,48 +10,79 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonNext">
+        app:layout_constraintBottom_toTopOf="@+id/buttonNext"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
-        android:stretchColumns="*">
-
-        <TableRow>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/topLeft"
-                android:layout_width="0dp"
+                android:id="@+id/additionalInfoLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-
-            <LinearLayout
-                android:id="@+id/topRight"
-                android:layout_width="0dp"
+                android:layout_marginTop="12dp"
+                android:background="?attr/InputBackground"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <TextView
+                    style="@style/Subhead2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/Backup_BirthdayHeight" />
+                <Button
+                    android:id="@+id/additionalInfoButton"
+                    style="@style/ButtonSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="16dp"
+                    tools:text="1232432" />
+            </LinearLayout>
+            <TableLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:stretchColumns="*">
 
-        </TableRow>
+                <TableRow>
+                    <LinearLayout
+                        android:id="@+id/topLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
-        <TableRow android:layout_marginTop="35dp">
+                    <LinearLayout
+                        android:id="@+id/topRight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
-            <LinearLayout
-                android:id="@+id/bottomLeft"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                </TableRow>
 
-            <LinearLayout
-                android:id="@+id/bottomRight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-        </TableRow>
+                <TableRow android:layout_marginTop="35dp">
 
-    </TableLayout>
+                    <LinearLayout
+                        android:id="@+id/bottomLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <LinearLayout
+                        android:id="@+id/bottomRight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </TableRow>
+
+            </TableLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <Button

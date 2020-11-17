@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 22, exportSchema = false, entities = [
+@Database(version = 23, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,

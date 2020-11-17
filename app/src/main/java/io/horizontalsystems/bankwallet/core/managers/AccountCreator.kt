@@ -11,8 +11,9 @@ import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
 class AccountCreator(
         private val accountFactory: IAccountFactory,
-        private val wordsManager: IWordsManager)
-    : IAccountCreator {
+        private val wordsManager: IWordsManager,
+        private val zcashBirthdayProvider: ZcashBirthdayProvider
+) : IAccountCreator {
 
     override fun newAccount(predefinedAccountType: PredefinedAccountType): Account {
         val accountType = accountType(predefinedAccountType)
@@ -27,7 +28,7 @@ class AccountCreator(
         return when (predefinedAccountType) {
             is PredefinedAccountType.Standard -> AccountType.Mnemonic(wordsManager.generateWords(12))
             is PredefinedAccountType.Binance -> AccountType.Mnemonic(wordsManager.generateWords(24))
-            is PredefinedAccountType.Zcash -> AccountType.Zcash(wordsManager.generateWords(24))
+            is PredefinedAccountType.Zcash -> AccountType.Zcash(wordsManager.generateWords(24), zcashBirthdayProvider.getNearestBirthdayHeight())
             is PredefinedAccountType.Eos -> throw EosUnsupportedException()
         }
     }
