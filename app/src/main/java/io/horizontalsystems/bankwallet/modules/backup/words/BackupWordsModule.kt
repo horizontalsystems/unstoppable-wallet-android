@@ -16,6 +16,7 @@ object BackupWordsModule {
 
         fun loadPage(page: Int)
         fun setBackedUp(backedUp: Boolean)
+        fun showAdditionalInfo(additionalInfo: String?)
     }
 
     interface IPresenter : IInteractorDelegate, IViewDelegate {
@@ -48,9 +49,9 @@ object BackupWordsModule {
 
     //  helpers
 
-    fun init(view: BackupWordsViewModel, router: IRouter, words: Array<String>, backedUp: Boolean) {
+    fun init(view: BackupWordsViewModel, router: IRouter, words: Array<String>, backedUp: Boolean, additionalInfo: String?) {
         val interactor = BackupWordsInteractor(RandomProvider(), words)
-        val presenter = BackupWordsPresenter(interactor, router, State(words, backedUp))
+        val presenter = BackupWordsPresenter(interactor, router, State(words, backedUp), additionalInfo)
 
         view.delegate = presenter
         presenter.view = view

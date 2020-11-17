@@ -33,7 +33,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value)
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
                             EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value)
-                            ZCASH -> AccountType.Zcash(record.words!!.list)
+                            ZCASH -> AccountType.Zcash(record.words!!.list, record.birthdayHeight)
                             else -> null
                         }
                         Account(record.id, record.name, accountType!!, AccountOrigin.valueOf(record.origin), record.isBackedUp)
@@ -90,7 +90,8 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         },
                         salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
                         key = getKey(account.type)?.let { SecretString(it) },
-                        eosAccount = (account.type as? AccountType.Eos)?.account
+                        eosAccount = (account.type as? AccountType.Eos)?.account,
+                        birthdayHeight = (account.type as? AccountType.Zcash)?.birthdayHeight
                 )
             }
             else -> throw Exception("Cannot save account with type: ${account.type}")
