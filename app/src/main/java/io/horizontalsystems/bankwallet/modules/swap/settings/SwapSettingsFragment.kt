@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.zxing.integration.android.IntentIntegrator
@@ -31,10 +30,8 @@ class SwapSettingsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
-
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        setSupportActionBar(toolbar)
 
         slippageInputView.apply {
             onTextChange { viewModel.setSlippage(it) }

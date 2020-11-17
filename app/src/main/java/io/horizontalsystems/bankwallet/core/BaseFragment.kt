@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.os.Handler
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -20,6 +21,16 @@ abstract class BaseFragment : Fragment() {
 
     protected fun hideKeyboard() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+    }
+
+    protected fun setSupportActionBar(toolbar: Toolbar, showHomeAsUp: Boolean = false, title: CharSequence? = null) {
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.setSupportActionBar(toolbar)
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(showHomeAsUp)
+            title?.let {
+                activity.supportActionBar?.title = it
+            }
+        }
     }
 
     protected fun setNavigationToolbar(toolbar: Toolbar, navController: NavController){

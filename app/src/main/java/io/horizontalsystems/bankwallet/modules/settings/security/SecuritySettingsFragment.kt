@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,7 +15,6 @@ import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import kotlinx.android.synthetic.main.fragment_settings_security.*
-import kotlinx.android.synthetic.main.fragment_settings_security.toolbar
 
 class SecuritySettingsFragment : BaseFragment() {
 
@@ -28,11 +26,7 @@ class SecuritySettingsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setSupportActionBar(toolbar, true)
 
         viewModel.init()
 

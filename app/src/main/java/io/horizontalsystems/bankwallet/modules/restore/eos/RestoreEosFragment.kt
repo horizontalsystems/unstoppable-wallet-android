@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
@@ -23,8 +22,6 @@ import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.eoskit.core.InvalidPrivateKey
 import io.horizontalsystems.views.MultipleInputEditTextView
 import kotlinx.android.synthetic.main.fragment_restore_eos.*
-import kotlinx.android.synthetic.main.fragment_restore_eos.eosAccount
-import kotlinx.android.synthetic.main.fragment_restore_eos.eosActivePrivateKey
 
 class RestoreEosFragment : BaseFragment() {
 
@@ -36,13 +33,8 @@ class RestoreEosFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setSupportActionBar(toolbar, true)
 
         viewModel = ViewModelProvider(this, RestoreEosModule.Factory())
                 .get(RestoreEosViewModel::class.java)

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
@@ -43,12 +42,10 @@ class SwapConfirmationFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
+        setSupportActionBar(toolbar)
 
         presenter = viewModel.confirmationPresenter
-
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         swapButton.setOnSingleClickListener {
             swapButton.isEnabled = false

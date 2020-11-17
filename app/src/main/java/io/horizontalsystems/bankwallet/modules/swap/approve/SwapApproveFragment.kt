@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -19,7 +18,6 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_approve.*
-import kotlinx.android.synthetic.main.fragment_swap_approve.toolbar
 
 class SwapApproveFragment : BaseFragment() {
 
@@ -30,7 +28,7 @@ class SwapApproveFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        setSupportActionBar(toolbar)
 
         val approveData = requireArguments().getParcelable<SwapModule.ApproveData>(dataKey)!!
 

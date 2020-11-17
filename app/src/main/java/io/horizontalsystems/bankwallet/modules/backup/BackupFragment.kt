@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -42,12 +41,7 @@ class BackupFragment : BaseFragment() {
             return
         }
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
-        toolbar.title = getString(if (account.isBackedUp) R.string.Backup_Intro_TitleShow else R.string.Backup_Intro_Title)
+        setSupportActionBar(toolbar, true, getString(if (account.isBackedUp) R.string.Backup_Intro_TitleShow else R.string.Backup_Intro_Title))
 
         viewModel.init(account)
         viewModel.startPinModule.observe(viewLifecycleOwner, Observer {

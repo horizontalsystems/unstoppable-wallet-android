@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.*
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_keys.*
-import kotlinx.android.synthetic.main.fragment_manage_keys.toolbar
 
 class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeysAdapter.Listener {
 
@@ -28,11 +26,7 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setSupportActionBar(toolbar, true)
 
         adapter = ManageKeysAdapter(this)
         recyclerView.adapter = adapter
