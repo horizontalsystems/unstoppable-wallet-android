@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
-            android:src="@drawable/ic_attention"
+            android:src="@drawable/ic_attention_24"
             app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
             app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
             app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
@@ -119,14 +119,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="4dp"
-                android:src="@drawable/ic_up_positive" />
+                android:layout_marginStart="1dp"
+                android:src="@drawable/ic_up_green_20" />
 
             <View
                 android:layout_width="0.5dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="21dp"
                 android:background="@color/steel_20" />
 
             <TextView
@@ -255,7 +255,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="8dp"
-                    android:drawableStart="@drawable/ic_lock"
+                    android:drawableStart="@drawable/ic_lock_16"
                     android:drawablePadding="4dp"
                     android:textColor="@color/grey"
                     tools:text="0.000078 BTC" />

@@ -59,7 +59,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
                 is TransactionDetailViewItem.Status -> bindStatus(detail)
                 is TransactionDetailViewItem.DoubleSpend -> bindDoubleSpend()
                 is TransactionDetailViewItem.SentToSelf -> {
-                    bindHint(context.getString(R.string.TransactionInfo_SentToSelfNote), iconStart = R.drawable.ic_incoming_16)
+                    bindHint(context.getString(R.string.TransactionInfo_SentToSelfNote), iconStart = R.drawable.ic_incoming_20)
                 }
                 is TransactionDetailViewItem.RawTransaction -> bindRaw()
                 is TransactionDetailViewItem.LockInfo -> bindLockInfo(detail)
@@ -74,17 +74,17 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
         private fun bindLockInfo(detail: TransactionDetailViewItem.LockInfo) {
             if (detail.lockState.locked) {
-                bindHint(context.getString(R.string.TransactionInfo_LockedUntil, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_lock, R.drawable.ic_info)
+                bindHint(context.getString(R.string.TransactionInfo_LockedUntil, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_lock_20, R.drawable.ic_info_20)
                 itemView.setOnSingleClickListener {
                     viewModel.delegate.onClickLockInfo()
                 }
             } else {
-                bindHint(context.getString(R.string.TransactionInfo_UnlockedAt, DateHelper.getFullDate(detail.lockState.date)), iconStart = R.drawable.ic_unlock)
+                bindHint(context.getString(R.string.TransactionInfo_UnlockedAt, DateHelper.getFullDate(detail.lockState.date)), iconStart = R.drawable.ic_unlock_20)
             }
         }
 
         private fun bindDoubleSpend() {
-            bindHint(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_doublespend, R.drawable.ic_info)
+            bindHint(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_double_spend_20, R.drawable.ic_info_20)
             itemView.setOnSingleClickListener {
                 viewModel.delegate.onClickDoubleSpendInfo()
             }
@@ -102,7 +102,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
         private fun bindRaw() {
             txtTitle.text = itemView.context.getString(R.string.TransactionInfo_RawTransaction)
-            btnAction.setImageResource(R.drawable.ic_copy)
+            btnAction.setImageResource(R.drawable.ic_copy_20)
             btnAction.isVisible = true
             btnAction.setOnSingleClickListener {
                 viewModel.delegate.onRawTransaction()

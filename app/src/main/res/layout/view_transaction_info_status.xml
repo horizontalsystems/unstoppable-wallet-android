@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableTint="?ColorRemus"
-        android:drawableEnd="@drawable/ic_checkmark"
+        android:drawableEnd="@drawable/ic_checkmark_20"
         android:drawablePadding="8dp"
         android:text="@string/TransactionInfo_Status_Confirmed"
         android:textColor="?TextColorBarsToDark"

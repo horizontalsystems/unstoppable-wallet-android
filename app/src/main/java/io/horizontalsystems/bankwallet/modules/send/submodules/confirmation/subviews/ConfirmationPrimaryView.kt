@@ -23,7 +23,7 @@ class ConfirmationPrimaryView : ConstraintLayout {
     fun bind(primaryItemData: SendConfirmationModule.PrimaryItemData, onReceiverClick: (() -> (Unit))) {
         primaryName.text = primaryItemData.primaryName
         primaryAmount.text = primaryItemData.primaryAmount
-        primaryAmount.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (primaryItemData.locked) R.drawable.ic_lock else 0, 0)
+        primaryAmount.setCompoundDrawablesWithIntrinsicBounds(0, 0, if (primaryItemData.locked) R.drawable.ic_lock_20 else 0, 0)
         secondaryName.text = primaryItemData.secondaryName
         secondaryAmount.text = primaryItemData.secondaryAmount
         receiverView.text = primaryItemData.receiver

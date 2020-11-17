@@ -34,7 +34,7 @@ class ManageKeysDeleteAlert(
 
         setTitle(getString(R.string.ManageKeys_Delete_Title))
         setSubtitle(subtitle)
-        setHeaderIcon(R.drawable.ic_attention_red)
+        setHeaderIcon(R.drawable.ic_attention_red_24)
 
         recyclerView = view.findViewById(R.id.recyclerView)
         btnConfirm = view.findViewById(R.id.btnConfirm)

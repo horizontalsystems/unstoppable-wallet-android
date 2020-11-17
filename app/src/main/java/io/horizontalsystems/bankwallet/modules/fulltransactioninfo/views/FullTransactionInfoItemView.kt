@@ -41,9 +41,9 @@ class FullTransactionInfoItemView : ConstraintLayout {
                 addressView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.token, 0, 0, 0)
             }
 
-            FullTransactionIcon.TIME -> showTypeIcon(R.drawable.pending_grey)
+            FullTransactionIcon.TIME -> showTypeIcon(R.drawable.ic_clock_20)
             FullTransactionIcon.BLOCK -> showTypeIcon(R.drawable.blocks)
-            FullTransactionIcon.CHECK -> showTypeIcon(R.drawable.ic_checkmark)
+            FullTransactionIcon.CHECK -> showTypeIcon(R.drawable.ic_checkmark_20)
         }
 
         valueText.isVisible = !isAddress

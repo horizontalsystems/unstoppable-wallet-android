@@ -32,7 +32,7 @@
         android:layout_width="12dp"
         android:layout_height="12dp"
         android:layout_marginStart="6.3dp"
-        android:src="@drawable/ic_checkmark"
+        android:src="@drawable/ic_checkmark_20"
         app:layout_constraintBottom_toBottomOf="@+id/txTime"
         app:layout_constraintStart_toEndOf="@+id/txTime"
         app:layout_constraintTop_toTopOf="@+id/txTime" />

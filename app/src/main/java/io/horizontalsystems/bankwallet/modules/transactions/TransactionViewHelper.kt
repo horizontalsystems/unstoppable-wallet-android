@@ -10,8 +10,8 @@ object TransactionViewHelper {
 
     fun getLockIcon(lockState: TransactionLockState?) = when {
         lockState == null -> 0
-        lockState.locked -> R.drawable.ic_lock
-        else -> R.drawable.ic_unlock
+        lockState.locked -> R.drawable.ic_lock_20
+        else -> R.drawable.ic_unlock_20
     }
 
     fun getAmountColor(type: TransactionType, context: Context): Int {
@@ -33,8 +33,8 @@ object TransactionViewHelper {
 
     fun getTransactionTypeIcon(type: TransactionType): Int {
         return when (type) {
-            TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing
-            TransactionType.Incoming -> R.drawable.ic_incoming
+            TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing_20
+            TransactionType.Incoming -> R.drawable.ic_incoming_20
             TransactionType.Approve -> R.drawable.ic_swap_approval
         }
     }

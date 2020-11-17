@@ -23,14 +23,14 @@
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_incoming" />
+        tools:src="@drawable/ic_incoming_20" />
 
     <ImageView
         android:id="@+id/doubleSpendIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
-        android:src="@drawable/ic_doublespend"
+        android:src="@drawable/ic_double_spend_20"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
         app:layout_constraintStart_toStartOf="parent" />
@@ -71,8 +71,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="4dp"
-        android:drawableEnd="@drawable/ic_lock"
+        android:layout_marginEnd="5dp"
+        android:drawableEnd="@drawable/ic_lock_20"
         android:drawablePadding="4dp"
         android:ellipsize="end"
         android:gravity="end"
@@ -90,8 +90,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_incoming"
-        android:tint="?ColorRemus"
+        android:src="@drawable/ic_incoming_20"
         app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />

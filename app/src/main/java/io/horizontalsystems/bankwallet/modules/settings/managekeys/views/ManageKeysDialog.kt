@@ -31,7 +31,7 @@ class ManageKeysDialog : BaseBottomSheetDialogFragment() {
 
         setTitle(title)
         setSubtitle(subtitle)
-        setHeaderIcon(R.drawable.ic_attention_red)
+        setHeaderIcon(R.drawable.ic_attention_red_24)
 
         alertText = view.findViewById(R.id.alertText)
         primaryActionButton = view.findViewById(R.id.createBtn)

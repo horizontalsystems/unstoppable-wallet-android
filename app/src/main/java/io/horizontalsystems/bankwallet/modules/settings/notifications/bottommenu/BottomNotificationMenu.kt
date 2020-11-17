@@ -33,7 +33,7 @@ class BottomNotificationMenu(
 
         setTitle(getString(getTitle(mode)))
         setSubtitle(coinName)
-        setHeaderIconDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_notification) })
+        setHeaderIconDrawable(context?.let { ContextCompat.getDrawable(it, R.drawable.ic_notification_24) })
 
         val itemsAdapter = NotificationMenuItemsAdapter(this)
 

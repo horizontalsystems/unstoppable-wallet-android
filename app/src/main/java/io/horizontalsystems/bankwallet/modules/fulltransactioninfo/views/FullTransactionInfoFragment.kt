@@ -126,7 +126,7 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         })
 
         viewModel.showErrorTransactionNotFound.observe(viewLifecycleOwner, Observer { providerName ->
-            setError(providerName, R.string.FullInfo_Error_TransactionNotFound, R.drawable.ic_attention, false)
+            setError(providerName, R.string.FullInfo_Error_TransactionNotFound, R.drawable.ic_attention_24, false)
             setVisible(errorContainer)
         })
 
