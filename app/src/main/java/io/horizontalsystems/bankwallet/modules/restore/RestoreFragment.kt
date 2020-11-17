@@ -5,12 +5,10 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -22,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.Restor
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_keys.*
 
 class RestoreFragment : BaseFragment() {
@@ -35,13 +34,8 @@ class RestoreFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setSupportActionBar(toolbar, true)
 
         val selectCoins = arguments?.getBoolean(SELECT_COINS_KEY)!!
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY)

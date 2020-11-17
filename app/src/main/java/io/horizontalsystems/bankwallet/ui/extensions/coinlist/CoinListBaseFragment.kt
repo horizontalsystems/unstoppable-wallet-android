@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
@@ -28,12 +27,7 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.title = title
-        }
+        setSupportActionBar(toolbar, true, title)
 
         featuredItemsAdapter = CoinListAdapter(this)
         itemsAdapter = CoinListAdapter(this)

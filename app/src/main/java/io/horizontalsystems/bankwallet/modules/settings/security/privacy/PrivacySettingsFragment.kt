@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,13 +39,8 @@ class PrivacySettingsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
-
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setSupportActionBar(toolbar, true)
 
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()

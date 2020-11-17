@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -65,11 +64,10 @@ class WalletConnectMainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        setSupportActionBar(toolbar)
 
         view.isVisible = false
-
-        setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         when (baseViewModel.initialScreen) {
             WalletConnectViewModel.InitialScreen.NoEthereumKit -> { }

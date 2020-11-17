@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -49,10 +48,8 @@ class SwapFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
-
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        setSupportActionBar(toolbar)
 
         youPay.apply {
             onSelectTokenButtonClick {

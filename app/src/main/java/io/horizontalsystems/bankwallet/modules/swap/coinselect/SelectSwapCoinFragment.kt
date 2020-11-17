@@ -3,15 +3,14 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_select_token.*
 
@@ -25,12 +24,8 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setSupportActionBar(toolbar, true)
 
         val excludedCoin = arguments?.getParcelable<Coin>(EXCLUDED_COIN_KEY)
         val hideZeroBalance = arguments?.getBoolean(HIDE_ZERO_BALANCE_KEY)
