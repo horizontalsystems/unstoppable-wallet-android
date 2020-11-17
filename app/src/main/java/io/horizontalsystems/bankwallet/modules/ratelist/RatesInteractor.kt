@@ -27,8 +27,8 @@ class RatesInteractor(
     override val coins: List<Coin>
         get() = rateListSorter.smartSort(walletStorage.enabledCoins(), appConfigProvider.featuredCoins)
 
-    override fun setupXRateManager(coinCodes: List<String>) {
-        xRateManager.set(coinCodes)
+    override fun setupXRateManager(coins: List<Coin>) {
+        xRateManager.set(coins)
     }
 
     override fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo? {

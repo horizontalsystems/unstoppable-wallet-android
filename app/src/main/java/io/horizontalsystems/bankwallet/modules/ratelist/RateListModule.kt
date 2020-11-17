@@ -36,7 +36,7 @@ object RateListModule {
         fun clear()
         fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun subscribeToMarketInfo(currencyCode: String)
-        fun setupXRateManager(coinCodes: List<String>)
+        fun setupXRateManager(coins: List<Coin>)
         fun getTopList()
     }
 
