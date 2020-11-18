@@ -34,8 +34,6 @@ class RestoreFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
-        setSupportActionBar(toolbar, true)
 
         val selectCoins = arguments?.getBoolean(SELECT_COINS_KEY)!!
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY)

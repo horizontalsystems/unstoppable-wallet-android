@@ -23,7 +23,6 @@ class BackupWordsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(false)
         setSupportActionBar(toolbar, true)
 
         val backedUp = arguments?.getBoolean(ACCOUNT_BACKEDUP, false) ?: false
