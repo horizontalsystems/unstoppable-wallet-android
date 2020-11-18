@@ -16,7 +16,7 @@ object GuidesManager {
     private val guidesUrl = App.appConfigProvider.guidesUrl
 
     private val gson = GsonBuilder()
-            .setDateFormat("dd-MM-yyyy")
+            .setDateFormat("yyyy-MM-dd")
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(Guide::class.java, GuideDeserializer(guidesUrl))
             .create()
