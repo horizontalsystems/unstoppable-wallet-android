@@ -25,7 +25,6 @@ class BackupWordsListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(false)
 
         viewModel.wordsLiveData.observe(viewLifecycleOwner, Observer {
             populateWords(it)
