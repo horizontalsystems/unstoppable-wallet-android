@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -54,13 +55,12 @@ class BackupFragment : BaseFragment() {
         })
 
         viewModel.startBackupWordsModule.observe(viewLifecycleOwner, { (words, accountTypeTitle, additionalInfo) ->
-            val arguments = Bundle(3).apply {
-                putStringArray(BackupWordsFragment.WORDS_KEY, words.toTypedArray())
-                putBoolean(BackupWordsFragment.ACCOUNT_BACKEDUP, account.isBackedUp)
-                putInt(BackupWordsFragment.ACCOUNT_TYPE_TITLE, accountTypeTitle)
-                putString(BackupWordsFragment.ACCOUNT_ADDITIONAL_INFO, additionalInfo)
-            }
-
+            val arguments = bundleOf(
+                    BackupWordsFragment.WORDS_KEY to words.toTypedArray(),
+                    BackupWordsFragment.ACCOUNT_BACKEDUP to account.isBackedUp,
+                    BackupWordsFragment.ACCOUNT_TYPE_TITLE to accountTypeTitle,
+                    BackupWordsFragment.ACCOUNT_ADDITIONAL_INFO to additionalInfo
+            )
             findNavController().navigate(R.id.backupFragment_to_backupWordsFragment, arguments, navOptions())
         })
 
