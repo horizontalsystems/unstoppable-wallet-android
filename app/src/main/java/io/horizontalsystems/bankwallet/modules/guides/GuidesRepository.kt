@@ -80,7 +80,7 @@ class GuidesRepository(
             val categoryTitle = categoriesMultiLang.category[language] ?: categoriesMultiLang.category[fallbackLanguage] ?: ""
             val guides = categoriesMultiLang.guides.mapNotNull { it[language] ?: it[fallbackLanguage] }
 
-            GuideCategory(categoriesMultiLang.id, categoryTitle, guides)
+            GuideCategory(categoriesMultiLang.id, categoryTitle, guides.sortedByDescending { it.updatedAt })
         }
 
         return categories.toTypedArray()
