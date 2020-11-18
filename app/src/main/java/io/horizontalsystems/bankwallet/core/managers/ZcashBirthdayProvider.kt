@@ -10,4 +10,10 @@ class ZcashBirthdayProvider(
         val walletBirthday = WalletBirthdayTool.loadNearest(context, birthdayHeight?.toInt())
         return walletBirthday.height.toLong()
     }
+
+    @Throws
+    fun validateBirthdayHeight(birthdayHeight: Long) {
+        WalletBirthdayTool.loadNearest(context, birthdayHeight.toInt())
+    }
+
 }

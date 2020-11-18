@@ -24,10 +24,16 @@ class RestoreWordsService(
             RestoreAccountType.STANDARD,
             RestoreAccountType.BINANCE -> AccountType.Mnemonic(words)
             RestoreAccountType.ZCASH -> {
-                val birthdayHeight = try {
-                    additionalInfo?.toLong()?.let { zcashBirthdayProvider.getNearestBirthdayHeight(it) }
-                } catch (error: Throwable) {
-                    throw RestoreWordsException.InvalidBirthdayHeightException()
+                val birthdayHeight = if (additionalInfo.isNullOrBlank()) {
+                    null
+                } else {
+                    try {
+                        additionalInfo.toLong().apply {
+                            zcashBirthdayProvider.validateBirthdayHeight(this)
+                        }
+                    } catch (error: Throwable) {
+                        throw RestoreWordsException.InvalidBirthdayHeightException()
+                    }
                 }
                 AccountType.Zcash(words, birthdayHeight)
             }
