@@ -48,7 +48,7 @@ class BackupEosFragment : BaseFragment() {
         eosActivePrivateKey.text = privateKey
         eosActivePrivateKey.bind { onCopy(privateKey) }
 
-        btnClose.setOnClickListener {
+        buttonClose.setOnClickListener {
             setNavigationResult(BackupEosModule.requestKey, bundleOf(BackupEosModule.requestResult to BackupEosModule.RESULT_SHOW))
             findNavController().popBackStack()
         }
