@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">Cuenta incorrecta</string>
     <string name="Restore_EosKeyIncorrect">Clave incorrecta</string>
     <string name="Select_Coins">Elegir Cripto</string>
+    <string name="Restore_BirthdayHeight_Hint">Talla de cumpleaños del monedero (opcional)</string>
+    <string name="Restore_BirthdayHeight_Description">Esto determina desde dónde empezar a escanear por transacciones. Déjalo en blanco para escanear desde el principio, esto puede demorar un poco.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">Talla de cumpleaños inválida</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Copia de seguridad</string>
     <string name="Backup_Intro_TitleShow">Mostrar clave</string>

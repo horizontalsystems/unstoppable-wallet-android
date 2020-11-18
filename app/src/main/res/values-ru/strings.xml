@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
     <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
     <string name="Select_Coins">Выберите Валюту</string>
+    <string name="Restore_BirthdayHeight_Hint">Блок создания кошелька(опционально)</string>
+    <string name="Restore_BirthdayHeight_Description">Это определяет, где начать сканирование транзакций. Оставьте поле пустым, чтобы сканировать с самого начала, что займет некоторое время.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">Неверный блок создания кошелька</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Резервная Копия</string>
     <string name="Backup_Intro_TitleShow">Показать Ключ</string>
