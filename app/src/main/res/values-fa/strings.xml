@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">حساب نادرست</string>
     <string name="Restore_EosKeyIncorrect">کلید نادرست</string>
     <string name="Select_Coins">کیف پول جدید</string>
+    <string name="Restore_BirthdayHeight_Hint">اندازه کیف پول تولد (اختیاری)</string>
+    <string name="Restore_BirthdayHeight_Description">این تعیین می کند که از کجا بررسی برای معاملات شروع شود. خالی بگذارید تا از اول اسکن شود که مدتی طول می کشد.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">سایز تولد نامعتبر</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">پيشتيباني</string>
     <string name="Backup_Intro_TitleShow">نمایش کلید</string>

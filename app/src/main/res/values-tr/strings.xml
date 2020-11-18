@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
     <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
     <string name="Select_Coins">Kripto Parayi Seç</string>
+    <string name="Restore_BirthdayHeight_Hint">Cüzdan oluşturulma günü üst sınırı (isteğe bağlı)</string>
+    <string name="Restore_BirthdayHeight_Description">Bu, işlemler için taramaya nereden başlanacağını belirler. Biraz zaman alacak olan en baştan tarama için boş bırakınız.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">Geçersiz oluşturulma günü üst sınırı</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Yedekle</string>
     <string name="Backup_Intro_TitleShow">Anahtarı Göster</string>
