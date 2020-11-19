@@ -60,9 +60,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Restore_EosAccountIncorrect">Compte incorrect</string>
     <string name="Restore_EosKeyIncorrect">Clé Incorrect</string>
     <string name="Select_Coins">Choisissez la Crypto</string>
-    <string name="Restore_BirthdayHeight_Hint">Hauteur d’anniversaire du porte-feuille (optionel)</string>
+    <string name="Restore_BirthdayHeight_Hint">Hauteur d\’anniversaire du porte-feuille (optionel)</string>
     <string name="Restore_BirthdayHeight_Description">Ce champ détermine où commencer à scanner les transactions. Laissez-le vide pour scanner depuis le début, ce qui prendra un certain temps.</string>
-    <string name="Restore_BirthdayHeight_InvalidError">Hauteur d'anniversaire invalide</string>
+    <string name="Restore_BirthdayHeight_InvalidError">Hauteur d\’anniversaire invalide</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
     <string name="Backup_Intro_TitleShow">Voir la clé</string>
