@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.lifecycle.ViewModel
 import com.trustwallet.walletconnect.models.WCPeerMeta
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractor
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractorDelegate
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsRouter

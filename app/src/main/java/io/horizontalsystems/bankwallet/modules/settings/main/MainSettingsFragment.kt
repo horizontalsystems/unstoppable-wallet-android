@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.getNavigationLiveData
-import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -33,85 +32,125 @@ class MainSettingsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindViewListeners()
-
-        subscribeToViewEvents(presenter.view as MainSettingsView)
         subscribeToRouterEvents(presenter.router as MainSettingsRouter)
         subscribeFragmentResult()
+
+        val manageKeys = SettingsMenuItem(R.string.SettingsSecurity_ManageKeys, R.drawable.ic_wallet_20) {
+            presenter.didTapManageKeys()
+        }
+        val privacySettings = SettingsMenuItem(R.string.Settings_SecurityCenter, R.drawable.ic_security) {
+            presenter.didTapSecurity()
+        }
+        val appStatus = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, isLast = true) {
+            presenter.didTapAppStatus()
+        }
+        val walletConnect = SettingsMenuItem(R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, isLast = true) {
+            presenter.didTapWalletConnect()
+        }
+        val notifications = SettingsMenuItem(R.string.Settings_Notifications, R.drawable.ic_notification_20, isLast = true) {
+            presenter.didTapNotifications()
+        }
+        val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency) {
+            presenter.didTapBaseCurrency()
+        }
+        val language = SettingsMenuItem(R.string.Settings_Language, R.drawable.ic_language) {
+            presenter.didTapLanguage()
+        }
+        val lightMode = SettingsMenuSwitch(R.string.Settings_LightMode, R.drawable.ic_light_mode) {
+            presenter.didSwitchLightMode(it)
+        }
+        val experimentalFeatures = SettingsMenuItem(R.string.Settings_ExperimentalFeatures, R.drawable.ic_experimental, isLast = true) {
+            presenter.didTapExperimentalFeatures()
+        }
+        val report = SettingsMenuItem(R.string.Settings_Report, R.drawable.ic_report) {
+            presenter.didTapReportProblem()
+        }
+        val shareApp = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20) {
+            presenter.didTapTellFriends()
+        }
+        val terms = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms, isLast = true) {
+            presenter.didTapAbout()
+        }
+        val settingsBottom = SettingsMenuBottom {
+            presenter.didTapCompanyLogo()
+        }
+
+        val presenterView = presenter.view as MainSettingsView
+        val mainSettingsAdapter = MainSettingsAdapter(listOf(
+                manageKeys,
+                privacySettings,
+                appStatus,
+                null,
+                walletConnect,
+                null,
+                notifications,
+                null,
+                baseCurrency,
+                language,
+                lightMode,
+                experimentalFeatures,
+                null,
+                report,
+                shareApp,
+                terms,
+                settingsBottom
+        ))
+
+        settingsRecyclerView.adapter = mainSettingsAdapter
+        settingsRecyclerView.setHasFixedSize(true)
+        settingsRecyclerView.setItemAnimator(null)
+
+        presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
+            baseCurrency.value = currency
+            mainSettingsAdapter.notifyChanged(baseCurrency)
+        })
+
+        presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
+            manageKeys.attention = !wordListBackedUp
+            mainSettingsAdapter.notifyChanged(manageKeys)
+        })
+
+        presenterView.pinSet.observe(viewLifecycleOwner, Observer { pinSet ->
+            privacySettings.attention = !pinSet
+            mainSettingsAdapter.notifyChanged(privacySettings)
+        })
+
+        presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
+            language.value = languageCode
+            mainSettingsAdapter.notifyChanged(language)
+        })
+
+        presenterView.lightMode.observe(viewLifecycleOwner, Observer { isChecked ->
+            lightMode.isChecked = isChecked
+            mainSettingsAdapter.notifyChanged(lightMode)
+        })
+
+        presenterView.appVersion.observe(viewLifecycleOwner, Observer { version ->
+            var appVersion = getString(R.string.Settings_InfoTitleWithVersion, version)
+            if (getString(R.string.is_release) == "false") {
+                appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
+            }
+
+            settingsBottom.appName = appVersion
+            mainSettingsAdapter.notifyChanged(settingsBottom)
+        })
+
+        presenterView.termsAccepted.observe(viewLifecycleOwner, Observer { termsAccepted ->
+            terms.attention = !termsAccepted
+            mainSettingsAdapter.notifyChanged(terms)
+        })
+
+        presenterView.walletConnectPeer.observe(viewLifecycleOwner, Observer { currency ->
+            walletConnect.value = currency
+            mainSettingsAdapter.notifyChanged(walletConnect)
+        })
 
         presenter.viewDidLoad()
     }
 
-    private fun bindViewListeners() {
-        manageKeys.setOnSingleClickListener { presenter.didTapManageKeys() }
-
-        privacySettings.setOnSingleClickListener { presenter.didTapSecurity() }
-
-        walletConnect.setOnSingleClickListener { presenter.didTapWalletConnect() }
-
-        notifications.setOnSingleClickListener { presenter.didTapNotifications() }
-
-        appStatus.setOnSingleClickListener { presenter.didTapAppStatus() }
-
-        baseCurrency.setOnSingleClickListener { presenter.didTapBaseCurrency() }
-
-        language.setOnSingleClickListener { presenter.didTapLanguage() }
-
-        lightMode.setOnSingleClickListener { lightMode.switchToggle() }
-
-        lightMode.setOnCheckedChangeListener {
-            presenter.didSwitchLightMode(it)
-        }
-
-        experimentalFeatures.setOnSingleClickListener { presenter.didTapExperimentalFeatures() }
-
-        terms.setOnSingleClickListener { presenter.didTapAbout() }
-
-        contact.setOnSingleClickListener { presenter.didTapReportProblem() }
-
-        shareApp.setOnSingleClickListener { presenter.didTapTellFriends() }
-
-        companyLogo.setOnSingleClickListener { presenter.didTapCompanyLogo() }
-    }
-
-    private fun subscribeToViewEvents(presenterView: MainSettingsView) {
-        presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
-            baseCurrency.showValue(currency)
-        })
-
-        presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            manageKeys.showAttention(!wordListBackedUp)
-        })
-
-        presenterView.pinSet.observe(viewLifecycleOwner, Observer { pinSet ->
-            privacySettings.showAttention(!pinSet)
-        })
-
-        presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
-            language.showValue(languageCode)
-        })
-
-        presenterView.lightMode.observe(viewLifecycleOwner, Observer {
-            lightMode.setChecked(it)
-        })
-
-        presenterView.appVersion.observe(viewLifecycleOwner, Observer { version ->
-            version?.let {
-                var appVersion = getString(R.string.Settings_InfoTitleWithVersion, it)
-                if (getString(R.string.is_release) == "false") {
-                    appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
-                }
-                appName.text = appVersion
-            }
-        })
-
-        presenterView.termsAccepted.observe(viewLifecycleOwner, Observer { termsAccepted ->
-            terms.showAttention(!termsAccepted)
-        })
-
-        presenterView.walletConnectPeer.observe(viewLifecycleOwner, Observer {
-            walletConnect.showValue(it)
-        })
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsRecyclerView.adapter = null
     }
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
