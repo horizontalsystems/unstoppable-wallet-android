@@ -73,7 +73,7 @@
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsFragment"
-        tools:layout="@layout/manage_wallets_fragment">
+        tools:layout="@layout/fragment_manage_wallets">
         <action
             android:id="@+id/manageWalletsFragment_to_restoreFragment"
             app:destination="@id/restore_graph" />
@@ -169,7 +169,7 @@
     <fragment
         android:id="@+id/createWalletFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletFragment"
-        tools:layout="@layout/manage_wallets_fragment" />
+        tools:layout="@layout/fragment_manage_wallets" />
     <fragment
         android:id="@+id/backupFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backup.BackupFragment"

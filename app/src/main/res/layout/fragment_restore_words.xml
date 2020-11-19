@@ -10,9 +10,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:paddingStart="0dp"
-        android:paddingEnd="4dp"
-        app:layout_collapseMode="pin"
         app:title="@string/Restore_Enter_Key_Title" />
 
     <androidx.core.widget.NestedScrollView
