@@ -52,8 +52,8 @@
             android:id="@+id/mainFragment_to_rateChartFragment"
             app:destination="@id/rateChartFragment" />
         <action
-            android:id="@+id/mainFragment_to_guideFragment"
-            app:destination="@id/guideFragment" />
+            android:id="@+id/mainFragment_to_markdownFragment"
+            app:destination="@id/markdownFragment" />
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
@@ -201,12 +201,12 @@
         tools:layout="@layout/fragment_bitcoin_hodling"
         android:label="@string/BitcoinHodling_Title"/>
     <fragment
-        android:id="@+id/guideFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.guideview.GuideFragment"
-        tools:layout="@layout/fragment_guide">
+        android:id="@+id/markdownFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment"
+        tools:layout="@layout/fragment_markdown">
         <action
-            android:id="@+id/guideFragment_guideFragment"
-            app:destination="@id/guideFragment" />
+            android:id="@+id/markdownFragment_markdownFragment"
+            app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
         android:id="@+id/addErc20TokenFragment"

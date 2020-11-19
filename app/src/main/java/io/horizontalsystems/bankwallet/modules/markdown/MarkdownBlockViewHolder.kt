@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guideview
+package io.horizontalsystems.bankwallet.modules.markdown
 
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -15,55 +15,55 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_guide_h1.*
-import kotlinx.android.synthetic.main.view_holder_guide_h2.*
-import kotlinx.android.synthetic.main.view_holder_guide_h3.*
-import kotlinx.android.synthetic.main.view_holder_guide_image.*
-import kotlinx.android.synthetic.main.view_holder_guide_paragraph.*
+import kotlinx.android.synthetic.main.view_holder_markdown_h1.*
+import kotlinx.android.synthetic.main.view_holder_markdown_h2.*
+import kotlinx.android.synthetic.main.view_holder_markdown_h3.*
+import kotlinx.android.synthetic.main.view_holder_markdown_image.*
+import kotlinx.android.synthetic.main.view_holder_markdown_paragraph.*
 import org.apache.commons.io.FilenameUtils
 import java.net.URL
 
-abstract class GuideBlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: GuideBlock)
+abstract class MarkdownBlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract fun bind(item: MarkdownBlock)
 }
 
-class ViewHolderFooter(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
-    override fun bind(item: GuideBlock) {}
+class ViewHolderFooter(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+    override fun bind(item: MarkdownBlock) {}
 }
 
-class ViewHolderH1(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
-    override fun bind(item: GuideBlock) {
-        if (item !is GuideBlock.Heading1) return
+class ViewHolderH1(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+    override fun bind(item: MarkdownBlock) {
+        if (item !is MarkdownBlock.Heading1) return
 
         h1.text = item.text
     }
 }
 
-class ViewHolderH2(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
-    override fun bind(item: GuideBlock) {
-        if (item !is GuideBlock.Heading2) return
+class ViewHolderH2(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+    override fun bind(item: MarkdownBlock) {
+        if (item !is MarkdownBlock.Heading2) return
 
         h2.text = item.text
     }
 }
 
-class ViewHolderH3(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
-    override fun bind(item: GuideBlock) {
-        if (item !is GuideBlock.Heading3) return
+class ViewHolderH3(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+    override fun bind(item: MarkdownBlock) {
+        if (item !is MarkdownBlock.Heading3) return
 
         h3.text = item.text
     }
 }
 
-class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderImage(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
     private val ratios = mapOf(
             "l" to "4:3",
             "p" to "9:16",
             "s" to "1:1"
     )
 
-    override fun bind(item: GuideBlock) {
-        if (item !is GuideBlock.Image) return
+    override fun bind(item: MarkdownBlock) {
+        if (item !is MarkdownBlock.Image) return
 
         setConstraints(item.destination, item.mainImage)
 
@@ -99,12 +99,12 @@ class ViewHolderImage(override val containerView: View) : GuideBlockViewHolder(c
     }
 }
 
-class ViewHolderParagraph(override val containerView: View, private val listener: GuideContentAdapter.Listener) : GuideBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderParagraph(override val containerView: View, private val listener: MarkdownContentAdapter.Listener) : MarkdownBlockViewHolder(containerView), LayoutContainer {
     private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, containerView.context)
     private val listItemIndent = LayoutHelper.dp(24f, containerView.context)
 
-    override fun bind(item: GuideBlock) {
-        if (item !is GuideBlock.Paragraph) return
+    override fun bind(item: MarkdownBlock) {
+        if (item !is MarkdownBlock.Paragraph) return
 
         val text = item.text
 
@@ -128,7 +128,7 @@ class ViewHolderParagraph(override val containerView: View, private val listener
         val flags = strBuilder.getSpanFlags(span)
         val clickable = object : ClickableSpan() {
             override fun onClick(view: View) {
-                listener.onGuideClick(span.url)
+                listener.onClick(span.url)
             }
         }
         strBuilder.setSpan(clickable, start, end, flags)
@@ -136,7 +136,7 @@ class ViewHolderParagraph(override val containerView: View, private val listener
     }
 
 
-    private fun listItem(item: GuideBlock) {
+    private fun listItem(item: MarkdownBlock) {
         val leftPadding = if (item.listItem) listItemIndent else 0
         val topPadding = if (item.listTightTop) 0 else LayoutHelper.dp(12f, containerView.context)
         val bottomPadding = if (item.listTightBottom) 0 else LayoutHelper.dp(12f, containerView.context)
@@ -147,7 +147,7 @@ class ViewHolderParagraph(override val containerView: View, private val listener
         listItemMarker.isVisible = item.listItemMarker != null
     }
 
-    private fun blockquote(item: GuideBlock) {
+    private fun blockquote(item: MarkdownBlock) {
         quoted.isVisible = item.quoted
 
         val topPadding = if (item.quotedFirst) blockQuoteVerticalPadding else 0

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guideview
+package io.horizontalsystems.bankwallet.modules.markdown
 
 abstract class ListItemMarkerGenerator {
     abstract fun getNext(): String

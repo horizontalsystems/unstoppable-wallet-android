@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guideview
+package io.horizontalsystems.bankwallet.modules.markdown
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,14 +12,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.guides.LoadStatus
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_guide.*
+import kotlinx.android.synthetic.main.fragment_markdown.*
 
-class GuideFragment : BaseFragment(), GuideContentAdapter.Listener {
+class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
-    private val contentAdapter = GuideContentAdapter(this)
+    private val contentAdapter = MarkdownContentAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_guide, container, false)
+        return inflater.inflate(R.layout.fragment_markdown, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,13 +30,13 @@ class GuideFragment : BaseFragment(), GuideContentAdapter.Listener {
 
         rvBlocks.adapter = contentAdapter
 
-        val guideUrl = arguments?.getString(guideUrlKey)
-        val viewModel by viewModels<GuideViewModel> { GuideModule.Factory(guideUrl) }
+        val markdownUrl = arguments?.getString(markdownUrlKey)
+        val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl) }
 
         observe(viewModel)
     }
 
-    private fun observe(viewModel: GuideViewModel) {
+    private fun observe(viewModel: MarkdownViewModel) {
         viewModel.blocks.observe(viewLifecycleOwner, Observer {
             contentAdapter.submitList(it)
         })
@@ -46,13 +46,13 @@ class GuideFragment : BaseFragment(), GuideContentAdapter.Listener {
         })
     }
 
-    //  GuideContentAdapter listener
+    //  MarkdownContentAdapter listener
 
-    override fun onGuideClick(url: String) {
-        findNavController().navigate(R.id.guideFragment_guideFragment, bundleOf(guideUrlKey to url), navOptions())
+    override fun onClick(url: String) {
+        findNavController().navigate(R.id.markdownFragment_markdownFragment, bundleOf(markdownUrlKey to url), navOptions())
     }
 
     companion object {
-        const val guideUrlKey = "urlKey"
+        const val markdownUrlKey = "urlKey"
     }
 }

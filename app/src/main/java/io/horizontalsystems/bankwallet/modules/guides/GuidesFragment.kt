@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Guide
-import io.horizontalsystems.bankwallet.modules.guideview.GuideFragment
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import kotlinx.android.synthetic.main.fragment_guides.*
 
@@ -46,8 +46,8 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
     }
 
     override fun onItemClick(guide: Guide) {
-        val arguments = bundleOf(GuideFragment.guideUrlKey to guide.fileUrl)
-        findNavController().navigate(R.id.mainFragment_to_guideFragment, arguments, navOptions())
+        val arguments = bundleOf(MarkdownFragment.markdownUrlKey to guide.fileUrl)
+        findNavController().navigate(R.id.mainFragment_to_markdownFragment, arguments, navOptions())
     }
 
     private fun observeLiveData() {

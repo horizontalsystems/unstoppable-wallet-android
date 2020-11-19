@@ -1,18 +1,23 @@
-package io.horizontalsystems.bankwallet.modules.guideview
+package io.horizontalsystems.bankwallet.modules.markdown
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.managers.GuidesManager
 import io.horizontalsystems.bankwallet.modules.guides.LoadStatus
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.commonmark.parser.Parser
+import java.net.URL
 
-class GuideViewModel(private val guideUrl: String?, private val guidesManager: GuidesManager, private val connectivityManager: ConnectivityManager) : ViewModel() {
+class MarkdownViewModel(
+        private val markdownUrl: String?,
+        private val connectivityManager: ConnectivityManager,
+        private val networkManager: INetworkManager) : ViewModel() {
 
     val statusLiveData = MutableLiveData<LoadStatus>()
-    val blocks = MutableLiveData<List<GuideBlock>>()
+    val blocks = MutableLiveData<List<MarkdownBlock>>()
 
     private var disposables = CompositeDisposable()
 
@@ -24,12 +29,12 @@ class GuideViewModel(private val guideUrl: String?, private val guidesManager: G
         }
 
     init {
-        loadGuide()
+        loadContent()
 
         connectivityManager.networkAvailabilitySignal
                 .subscribe {
                     if (connectivityManager.isConnected && status is LoadStatus.Failed) {
-                        loadGuide()
+                        loadContent()
                     }
                 }
                 .let {
@@ -41,20 +46,20 @@ class GuideViewModel(private val guideUrl: String?, private val guidesManager: G
         disposables.dispose()
     }
 
-    private fun didFetchGuideContent(content: String) {
+    private fun didFetchContent(content: String) {
         val parser = Parser.builder().build()
         val document = parser.parse(content)
 
-        val guideVisitor = GuideVisitorBlock(guideUrl!!)
+        val markdownVisitor = MarkdownVisitorBlock(markdownUrl!!)
 
-        document.accept(guideVisitor)
+        document.accept(markdownVisitor)
 
-        blocks.postValue(guideVisitor.blocks + GuideBlock.Footer())
+        blocks.postValue(markdownVisitor.blocks + MarkdownBlock.Footer())
     }
 
-    private fun loadGuide() {
-        guideUrl?.let {
-            guidesManager.getGuideContent(it)
+    private fun loadContent() {
+        markdownUrl?.let {
+            getContent(it)
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {
                         status = LoadStatus.Loading
@@ -62,7 +67,7 @@ class GuideViewModel(private val guideUrl: String?, private val guidesManager: G
                     .subscribe({
                         status = LoadStatus.Loaded
 
-                        didFetchGuideContent(it)
+                        didFetchContent(it)
                     }, {
                         status = LoadStatus.Failed(it)
                     })
@@ -70,5 +75,12 @@ class GuideViewModel(private val guideUrl: String?, private val guidesManager: G
                         disposables.add(it)
                     }
         }
+    }
+
+    private fun getContent(fileUrl: String): Single<String> {
+        val url = URL(fileUrl)
+        val host = "${url.protocol}://${url.host}"
+
+        return networkManager.getGuide(host, fileUrl)
     }
 }
