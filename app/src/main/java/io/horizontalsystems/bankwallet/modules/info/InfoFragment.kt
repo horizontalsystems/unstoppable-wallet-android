@@ -2,9 +2,7 @@ package io.horizontalsystems.bankwallet.modules.info
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
@@ -29,10 +27,8 @@ class InfoFragment : BaseFragment() {
             return
         }
 
-        shadowlessToolbar.bind(
-                title = infoParams.title,
-                rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { parentFragmentManager.popBackStack() })
-        )
+        setHasOptionsMenu(true)
+        setSupportActionBar(toolbar, title = infoParams.title)
 
         textDescription.text = infoParams.description
 
@@ -52,6 +48,20 @@ class InfoFragment : BaseFragment() {
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
             parentFragmentManager.popBackStack()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.info_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuClose -> {
+                parentFragmentManager.popBackStack()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
