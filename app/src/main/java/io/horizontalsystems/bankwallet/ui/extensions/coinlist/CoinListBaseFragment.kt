@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
-import kotlinx.android.synthetic.main.manage_wallets_fragment.*
+import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.Listener {
 
@@ -22,7 +22,7 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.manage_wallets_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_manage_wallets, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

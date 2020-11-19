@@ -35,6 +35,6 @@
     <fragment
         android:id="@+id/welcomeCreateWalletFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletFragment"
-        tools:layout="@layout/manage_wallets_fragment" />
+        tools:layout="@layout/fragment_manage_wallets" />
 
 </navigation>

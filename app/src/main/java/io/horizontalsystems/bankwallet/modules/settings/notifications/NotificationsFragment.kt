@@ -34,8 +34,7 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setNavigationToolbar(toolbar, findNavController())
+        setSupportActionBar(toolbar, true)
 
         buttonAndroidSettings.setOnSingleClickListener {
             viewModel.openSettings()
