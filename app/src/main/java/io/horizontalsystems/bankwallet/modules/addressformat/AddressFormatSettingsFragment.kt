@@ -26,8 +26,7 @@ class AddressFormatSettingsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setNavigationToolbar(toolbar, findNavController())
+        setSupportActionBar(toolbar, true)
 
         val coinTypes = arguments?.getParcelableArrayList(ModuleField.COIN_TYPES)
                 ?: listOf<CoinType>()
