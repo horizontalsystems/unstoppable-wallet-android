@@ -8,12 +8,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.views.AlertDialogFragment
 import io.horizontalsystems.views.helpers.LayoutHelper
 
@@ -31,14 +27,6 @@ abstract class BaseFragment : Fragment() {
                 activity.supportActionBar?.title = it
             }
         }
-    }
-
-    protected fun setNavigationToolbar(toolbar: Toolbar, navController: NavController){
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-
-        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
-        navController.addOnDestinationChangedListener(navDestinationChangeListener)
-        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
     }
 
     protected fun setMenuItemEnabled(menuItem: MenuItem, enabled: Boolean) {

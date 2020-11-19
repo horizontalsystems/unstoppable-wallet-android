@@ -26,8 +26,7 @@ class AddErc20TokenFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setNavigationToolbar(toolbar, findNavController())
+        setSupportActionBar(toolbar, true)
 
         val model: AddErc20TokenViewModel by viewModels { AddErc20TokenModule.Factory() }
 

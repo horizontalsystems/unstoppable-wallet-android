@@ -34,6 +34,7 @@ class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setSupportActionBar(toolbar, true)
 
         val coin = arguments?.getParcelable<Coin>("coinKey") ?: run {
             parentFragmentManager.popBackStack()
@@ -43,7 +44,6 @@ class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter
         viewModel = ViewModelProvider(this).get(DataProviderSettingsViewModel::class.java)
         viewModel.init(coin)
 
-        setNavigationToolbar(toolbar, findNavController())
 
         toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
 

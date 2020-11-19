@@ -50,7 +50,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
-        setNavigationToolbar(toolbar, findNavController())
+        setSupportActionBar(toolbar, true, coinTitle)
         setToolbarMenu()
 
         chart.setListener(this)

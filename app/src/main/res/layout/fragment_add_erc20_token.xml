@@ -10,7 +10,8 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/AddErc20Token_Title" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
