@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -34,16 +32,9 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
-
-        shadowlessToolbar.bind(
-                title = getString(R.string.Send_Confirmation_Title),
-                leftBtnItem = TopMenuItem(R.drawable.ic_back, onClick = { activity?.onBackPressed() }),
-                rightBtnItem = TopMenuItem(text = R.string.Button_Cancel, onClick = {
-                    requireActivity().finish()
-                })
-        )
+        setSupportActionBar(toolbar, true)
+        setHasOptionsMenu(true)
 
         sendView = sendPresenter?.view as SendView
         presenter = ViewModelProvider(this, SendConfirmationModule.Factory())
@@ -104,8 +95,20 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
             sendButtonView?.bind(state)
             sendButtonView?.isEnabled = state == SendConfirmationModule.SendButtonState.ACTIVE
         })
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.send_confirm_menu, menu)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuClose -> {
+                requireActivity().finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun getErrorText(error: Throwable): String {
