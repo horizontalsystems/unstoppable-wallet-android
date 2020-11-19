@@ -1,20 +1,20 @@
-package io.horizontalsystems.bankwallet.modules.guideview
+package io.horizontalsystems.bankwallet.modules.markdown
 
 import org.commonmark.node.*
 import java.net.URL
 
-class GuideVisitorBlock(var guideUrl: String, val level: Int = 0, private val listItemMarkerGenerator: ListItemMarkerGenerator? = null) : AbstractVisitor() {
+class MarkdownVisitorBlock(private var markdownUrl: String, val level: Int = 0, private val listItemMarkerGenerator: ListItemMarkerGenerator? = null) : AbstractVisitor() {
 
-    val blocks = mutableListOf<GuideBlock>()
+    val blocks = mutableListOf<MarkdownBlock>()
     private var quoted = false
 
     override fun visit(heading: Heading) {
-        val content = GuideVisitorString.getNodeContent(heading, guideUrl)
+        val content = MarkdownVisitorString.getNodeContent(heading, markdownUrl)
 
         val block = when (heading.level) {
-            1 -> GuideBlock.Heading1(content)
-            2 -> GuideBlock.Heading2(content)
-            3 -> GuideBlock.Heading3(content)
+            1 -> MarkdownBlock.Heading1(content)
+            2 -> MarkdownBlock.Heading2(content)
+            3 -> MarkdownBlock.Heading3(content)
             else -> null
         }
 
@@ -29,17 +29,17 @@ class GuideVisitorBlock(var guideUrl: String, val level: Int = 0, private val li
             return visit(firstChild)
         }
 
-        blocks.add(GuideBlock.Paragraph(GuideVisitorString.getNodeContent(paragraph, guideUrl), quoted))
+        blocks.add(MarkdownBlock.Paragraph(MarkdownVisitorString.getNodeContent(paragraph, markdownUrl), quoted))
     }
 
     override fun visit(image: Image) {
-        val url = URL(URL(guideUrl), image.destination).toString()
+        val url = URL(URL(markdownUrl), image.destination).toString()
 
-        blocks.add(GuideBlock.Image(url, image.title, level == 0 && blocks.isEmpty()))
+        blocks.add(MarkdownBlock.Image(url, image.title, level == 0 && blocks.isEmpty()))
     }
 
     override fun visit(blockQuote: BlockQuote) {
-        val guideVisitor = GuideVisitorBlock(guideUrl, level + 1)
+        val guideVisitor = MarkdownVisitorBlock(markdownUrl, level + 1)
 
         guideVisitor.visitChildren(blockQuote)
 
@@ -61,10 +61,10 @@ class GuideVisitorBlock(var guideUrl: String, val level: Int = 0, private val li
     }
 
     override fun visit(listItem: ListItem) {
-        val guideVisitor = GuideVisitorBlock(guideUrl, level + 1)
+        val markdownVisitor = MarkdownVisitorBlock(markdownUrl, level + 1)
 
-        guideVisitor.visitChildren(listItem)
-        guideVisitor.blocks.let { subblocks ->
+        markdownVisitor.visitChildren(listItem)
+        markdownVisitor.blocks.let { subblocks ->
             subblocks.forEach {
                 it.listItem = true
             }
@@ -74,9 +74,9 @@ class GuideVisitorBlock(var guideUrl: String, val level: Int = 0, private val li
     }
 
     private fun visitListBlock(listBlock: ListBlock, listItemMarkerGenerator: ListItemMarkerGenerator) {
-        val guideVisitor = GuideVisitorBlock(guideUrl, level + 1, listItemMarkerGenerator)
-        guideVisitor.visitChildren(listBlock)
-        guideVisitor.blocks.let { subblocks ->
+        val markdownVisitor = MarkdownVisitorBlock(markdownUrl, level + 1, listItemMarkerGenerator)
+        markdownVisitor.visitChildren(listBlock)
+        markdownVisitor.blocks.let { subblocks ->
             if (listBlock.isTight) {
                 subblocks.forEach {
                     it.listTightTop = true

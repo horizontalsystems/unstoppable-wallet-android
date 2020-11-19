@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guideview
+package io.horizontalsystems.bankwallet.modules.markdown
 
 import android.graphics.Typeface
 import android.text.SpannableStringBuilder
@@ -8,7 +8,7 @@ import android.text.style.URLSpan
 import org.commonmark.node.*
 import java.net.URL
 
-class GuideVisitorString(private val guideUrl: String) : AbstractVisitor() {
+class MarkdownVisitorString(private val markdownUrl: String) : AbstractVisitor() {
     val spannableStringBuilder = SpannableStringBuilder()
 
     override fun visit(text: Text) {
@@ -20,7 +20,7 @@ class GuideVisitorString(private val guideUrl: String) : AbstractVisitor() {
     }
 
     override fun visit(link: Link) {
-        val url = URL(URL(guideUrl), link.destination).toString()
+        val url = URL(URL(markdownUrl), link.destination).toString()
 
         spannableStringBuilder.append(getWrappedContent(link, URLSpan(url)))
     }
@@ -30,18 +30,18 @@ class GuideVisitorString(private val guideUrl: String) : AbstractVisitor() {
     }
 
     private fun getWrappedContent(node: Node, span: Any): SpannableStringBuilder {
-        val content = getNodeContent(node, guideUrl)
+        val content = getNodeContent(node, markdownUrl)
         content.setSpan(span, 0, content.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         return content
     }
 
     companion object {
-        fun getNodeContent(node: Node, guideUrl: String): SpannableStringBuilder {
-            val guideVisitor = GuideVisitorString(guideUrl)
-            guideVisitor.visitChildren(node)
+        fun getNodeContent(node: Node, markdownUrl: String): SpannableStringBuilder {
+            val markdownVisitor = MarkdownVisitorString(markdownUrl)
+            markdownVisitor.visitChildren(node)
 
-            return guideVisitor.spannableStringBuilder
+            return markdownVisitor.spannableStringBuilder
         }
     }
 }

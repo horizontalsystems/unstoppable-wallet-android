@@ -35,13 +35,6 @@ object GuidesManager {
         }
     }
 
-    fun getGuideContent(fileUrl: String): Single<String> {
-        val url = URL(fileUrl)
-        val host = "${url.protocol}://${url.host}"
-
-        return App.networkManager.getGuide(host, fileUrl)
-    }
-
     class GuideDeserializer(guidesUrl: String) : JsonDeserializer<Guide> {
         private val guidesUrlObj = URL(guidesUrl)
 
