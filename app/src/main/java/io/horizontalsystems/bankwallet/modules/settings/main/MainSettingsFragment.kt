@@ -62,6 +62,9 @@ class MainSettingsFragment : BaseFragment() {
         val experimentalFeatures = SettingsMenuItem(R.string.Settings_ExperimentalFeatures, R.drawable.ic_experimental, isLast = true) {
             presenter.didTapExperimentalFeatures()
         }
+        val faq = SettingsMenuItem(R.string.Settings_Faq, R.drawable.ic_faq_20) {
+            presenter.didTapFaq()
+        }
         val report = SettingsMenuItem(R.string.Settings_Report, R.drawable.ic_report) {
             presenter.didTapReportProblem()
         }
@@ -90,6 +93,7 @@ class MainSettingsFragment : BaseFragment() {
                 lightMode,
                 experimentalFeatures,
                 null,
+                faq,
                 report,
                 shareApp,
                 terms,
@@ -172,6 +176,10 @@ class MainSettingsFragment : BaseFragment() {
 
         router.showNotificationsLiveEvent.observe(viewLifecycleOwner, Observer {
             findNavController().navigate(R.id.mainFragment_to_notificationsFragment, null, navOptions())
+        })
+
+        router.openFaqLiveEvent.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(R.id.mainFragment_to_faqListFragment, null, navOptions())
         })
 
         router.showReportProblemLiveEvent.observe(viewLifecycleOwner, Observer {
