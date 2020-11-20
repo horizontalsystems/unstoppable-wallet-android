@@ -15,16 +15,19 @@ class PrivacySettingsInfoFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        toolbar.inflateMenu(R.menu.settings_privacy_info_menu)
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            if (menuItem.itemId == R.id.closeButton){
-                findNavController().navigateUp()
-                true
-            } else {
-                super.onOptionsItemSelected(menuItem)
-            }
-        }
+        setHasOptionsMenu(true)
+        setSupportActionBar(toolbar)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_privacy_info_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.closeButton -> {
+            findNavController().navigateUp()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
 }
