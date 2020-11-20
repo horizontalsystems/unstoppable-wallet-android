@@ -294,6 +294,7 @@ interface IAppConfigProvider {
     val infuraProjectSecret: String
     val etherscanApiKey: String
     val guidesUrl: String
+    val faqUrl: String
     val fiatDecimal: Int
     val maxDecimal: Int
     val currencies: List<Currency>

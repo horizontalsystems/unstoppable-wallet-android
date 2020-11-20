@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guides
+package io.horizontalsystems.bankwallet.modules.markdown
 
 sealed class LoadStatus {
     object Initial : LoadStatus()

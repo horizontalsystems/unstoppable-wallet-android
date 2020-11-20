@@ -40,6 +40,10 @@ class MainSettingsPresenter(
         router.openWalletConnect()
     }
 
+    override fun didTapFaq() {
+        router.openFaq()
+    }
+
     override fun didTapSecurity() {
         router.showSecuritySettings()
     }

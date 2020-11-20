@@ -34,6 +34,7 @@ object MainSettingsModule {
         fun didTapManageKeys()
         fun didTapAppStatus()
         fun didTapWalletConnect()
+        fun didTapFaq()
     }
 
     interface IMainSettingsInteractor {
@@ -73,6 +74,7 @@ object MainSettingsModule {
         fun showManageKeys()
         fun openAppStatus()
         fun openWalletConnect()
+        fun openFaq()
     }
 
     class Factory : ViewModelProvider.Factory {
