@@ -5,9 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.addCallback
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -25,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_full_transaction_info.*
-import kotlinx.android.synthetic.main.fragment_full_transaction_info.toolbar
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_item.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_link.*
@@ -34,6 +31,7 @@ import kotlinx.android.synthetic.main.view_holder_full_transaction_source.*
 class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFragment.Listener {
 
     private lateinit var viewModel: FullTransactionInfoViewModel
+    private var shareButtonVisible = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_full_transaction_info, container, false)
@@ -41,6 +39,8 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        setSupportActionBar(toolbar)
 
         val transactionHash = arguments?.getString(TRANSACTION_HASH_KEY) ?: run {
             parentFragmentManager.popBackStack()
@@ -56,21 +56,6 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         viewModel = ViewModelProvider(this).get(FullTransactionInfoViewModel::class.java)
         viewModel.init(transactionHash, wallet)
 
-        toolbar.inflateMenu(R.menu.full_transaction_info_menu)
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.shareButton -> {
-                    viewModel.share()
-                    true
-                }
-                R.id.closeButton -> {
-                    parentFragmentManager.popBackStack()
-                    true
-                }
-                else -> super.onOptionsItemSelected(menuItem)
-            }
-        }
-
         transactionIdView.text = transactionHash
 
         transactionIdView.setOnClickListener {
@@ -82,9 +67,8 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         // LiveData
         //
         viewModel.shareButtonVisibility.observe(viewLifecycleOwner, Observer { visible ->
-            toolbar?.menu?.findItem(R.id.shareButton)?.apply {
-                isVisible = visible
-            }
+            shareButtonVisible = visible
+            requireActivity().invalidateOptionsMenu()
         })
 
         viewModel.reloadEvent.observe(viewLifecycleOwner, Observer {
@@ -148,6 +132,24 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         activity?.onBackPressedDispatcher?.addCallback(this) {
             parentFragmentManager.popBackStack()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.full_transaction_info_menu, menu)
+
+        menu.findItem(R.id.shareButton)?.isVisible = shareButtonVisible
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.shareButton -> {
+            viewModel.share()
+            true
+        }
+        R.id.closeButton -> {
+            parentFragmentManager.popBackStack()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     //
