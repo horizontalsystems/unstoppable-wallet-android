@@ -12,12 +12,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.ViewHolderProgressbar
@@ -35,12 +32,9 @@ class LanguageSettingsFragment : Fragment(), LanguageSwitcherAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-
-        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
-        navController.addOnDestinationChangedListener(navDestinationChangeListener)
-        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         presenter = ViewModelProvider(this, LanguageSwitcherModule.Factory()).get(LanguageSwitcherPresenter::class.java)
 

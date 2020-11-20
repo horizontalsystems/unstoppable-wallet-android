@@ -39,10 +39,8 @@ class SendActivity : BaseActivity() {
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
-        // todo: convert SendActivity to SendFragment and use setSupportActionBar like other fragments do
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
         toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(this, wallet.coin.code, wallet.coin.type)
-        toolbar.inflateMenu(R.menu.send_menu)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
