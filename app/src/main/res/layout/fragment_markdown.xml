@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="24dp"
-        android:text="@string/Guide_Error_NotFound"
+        android:text="@string/Markdown_Error_NotFound"
         android:textColor="@color/grey" />
 
     <androidx.recyclerview.widget.RecyclerView

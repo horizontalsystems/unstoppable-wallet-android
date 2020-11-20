@@ -25,6 +25,9 @@
             android:id="@+id/mainFragment_to_appStatusFragment"
             app:destination="@id/appStatusFragment" />
         <action
+            android:id="@+id/mainFragment_to_faqListFragment"
+            app:destination="@id/faqListFragment" />
+        <action
             android:id="@+id/mainFragment_to_contactFragment"
             app:destination="@id/contactFragment" />
         <action
@@ -115,6 +118,15 @@
         android:name="io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusFragment"
         tools:layout="@layout/fragment_app_status"
         android:label="@string/Settings_AppStatus"/>
+    <fragment
+        android:id="@+id/faqListFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
+        tools:layout="@layout/fragment_faq_list"
+        android:label="@string/Settings_Faq">
+        <action
+            android:id="@+id/faqFragment_to_markdownFragment"
+            app:destination="@id/markdownFragment" />
+    </fragment>
     <fragment
         android:id="@+id/contactFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.contact.ContactFragment"
