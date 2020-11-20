@@ -44,9 +44,6 @@ class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter
         viewModel = ViewModelProvider(this).get(DataProviderSettingsViewModel::class.java)
         viewModel.init(coin)
 
-
-        toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
-
         adapter = DataProviderSettingsAdapter(this)
 
         recyclerView.adapter = adapter
