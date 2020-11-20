@@ -148,7 +148,7 @@ class MainSettingsFragment : BaseFragment() {
         presenter.viewDidLoad()
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         super.onDestroy()
         settingsRecyclerView.adapter = null
     }
