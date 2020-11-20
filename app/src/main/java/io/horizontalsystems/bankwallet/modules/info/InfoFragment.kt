@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.TopMenuItem
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_info.*
 
