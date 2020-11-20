@@ -17,8 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -26,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.navigation.NavDestinationChangeListener
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.pin.core.NumPadItem
 import io.horizontalsystems.pin.core.NumPadItemType
@@ -226,12 +223,9 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         toolbar.isVisible = true
         toolbar.title = getString(titleRes)
 
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-
-        val navDestinationChangeListener = NavDestinationChangeListener(toolbar, appBarConfiguration, true)
-        navController.addOnDestinationChangedListener(navDestinationChangeListener)
-        toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject) {
