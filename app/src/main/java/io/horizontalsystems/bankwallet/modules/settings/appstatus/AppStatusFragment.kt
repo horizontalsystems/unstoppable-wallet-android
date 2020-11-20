@@ -1,14 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_app_status.*
@@ -24,21 +21,24 @@ class AppStatusFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         setSupportActionBar(toolbar, true)
-
-        toolbar.inflateMenu(R.menu.app_status_menu)
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            if (menuItem.itemId == R.id.menuCopy){
-                presenter.didTapCopy(textAppStatus.text.toString())
-                true
-            } else {
-                super.onOptionsItemSelected(menuItem)
-            }
-        }
 
         observeView(presenter.view as AppStatusView)
 
         presenter.viewDidLoad()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_status_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.menuCopy -> {
+            presenter.didTapCopy(textAppStatus.text.toString())
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun observeView(view: AppStatusView) {
