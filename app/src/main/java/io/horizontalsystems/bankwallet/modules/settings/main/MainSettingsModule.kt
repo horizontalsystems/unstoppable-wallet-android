@@ -13,6 +13,7 @@ object MainSettingsModule {
         fun setBaseCurrency(currency: String)
         fun setLanguage(language: String)
         fun setLightMode(lightMode: Boolean)
+        fun setKeyboard(warningKeyboardMsg: Boolean)
         fun setAppVersion(appVersion: String)
         fun setTermsAccepted(termsAccepted: Boolean)
         fun setPinIsSet(pinSet: Boolean)
@@ -25,6 +26,7 @@ object MainSettingsModule {
         fun didTapBaseCurrency()
         fun didTapLanguage()
         fun didSwitchLightMode(lightMode: Boolean)
+        fun didThirdKeyboardWarningShow(warningKeyboardMsg: Boolean)
         fun didTapAbout()
         fun didTapCompanyLogo()
         fun didTapReportProblem()
@@ -45,6 +47,7 @@ object MainSettingsModule {
         val baseCurrency: Currency
         val appVersion: String
         var lightMode: Boolean
+        var thirdKeyboard: Boolean
         val termsAccepted: Boolean
         val isPinSet: Boolean
 
@@ -82,6 +85,7 @@ object MainSettingsModule {
             val router = MainSettingsRouter()
             val interactor = MainSettingsInteractor(
                     themeStorage = App.themeStorage,
+                    thirdKeyboardStorage = App.thirdKeyboardStorage,
                     backupManager = App.backupManager,
                     languageManager = App.languageManager,
                     systemInfoManager = App.systemInfoManager,

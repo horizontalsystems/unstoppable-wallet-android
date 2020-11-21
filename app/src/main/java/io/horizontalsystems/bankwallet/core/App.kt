@@ -126,6 +126,7 @@ class App : CoreApp() {
             localStorage = this
             chartTypeStorage = this
             pinStorage = this
+            thirdKeyboardStorage = this
             themeStorage = this
         }
 

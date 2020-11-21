@@ -10,6 +10,7 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
     val walletConnectPeer = MutableLiveData<String?>()
     val language = MutableLiveData<String>()
     val lightMode = MutableLiveData<Boolean>()
+    val thirdKeyboard = MutableLiveData<Boolean>()
     val appVersion = MutableLiveData<String>()
     val termsAccepted = MutableLiveData<Boolean>()
 
@@ -35,6 +36,10 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
 
     override fun setLightMode(lightMode: Boolean) {
         this.lightMode.postValue(lightMode)
+    }
+
+    override fun setKeyboard(warningKeyboardMsg: Boolean) {
+        this.thirdKeyboard.postValue(warningKeyboardMsg)
     }
 
     override fun setAppVersion(appVersion: String) {

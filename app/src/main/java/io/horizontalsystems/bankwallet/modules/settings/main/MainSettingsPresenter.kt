@@ -21,6 +21,7 @@ class MainSettingsPresenter(
         view.setBaseCurrency(helper.displayName(interactor.baseCurrency))
         view.setLanguage(interactor.currentLanguageDisplayName)
         view.setLightMode(interactor.lightMode)
+        view.setKeyboard(interactor.thirdKeyboard)
         view.setAppVersion(interactor.appVersion)
         view.setTermsAccepted(interactor.termsAccepted)
         view.setPinIsSet(interactor.isPinSet)
@@ -58,6 +59,10 @@ class MainSettingsPresenter(
     override fun didSwitchLightMode(lightMode: Boolean) {
         interactor.lightMode = lightMode
         router.reloadAppInterface()
+    }
+
+    override fun didThirdKeyboardWarning(warningKeyboardMsg: Boolean) {
+        interactor.thirdKeyboard = warningKeyboardMsg
     }
 
     override fun didTapAbout() {

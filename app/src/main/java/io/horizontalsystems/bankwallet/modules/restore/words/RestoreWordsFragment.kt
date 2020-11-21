@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -17,6 +18,9 @@ import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsService.RestoreWordsException
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsPresenter
+import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
@@ -25,6 +29,8 @@ import kotlinx.android.synthetic.main.view_input_address.view.*
 class RestoreWordsFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreWordsViewModel
+
+    private val presenter by viewModels<MainSettingsPresenter> { MainSettingsModule.Factory() }
 
     companion object {
         const val restoreAccountTypeKey = "restoreAccountTypeKey"
@@ -131,8 +137,9 @@ class RestoreWordsFragment : BaseFragment() {
     }
 
     private fun isUsingNativeKeyboard(): Boolean {
-        if (Utils.isUsingCustomKeyboard(requireContext())) {
+        if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdKeyboardMsgShowed) {
             (activity as? BaseActivity)?.showCustomKeyboardAlert()
+            presenter.didThirdKeyboardWarningShow(true)
             return false
         }
 

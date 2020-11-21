@@ -10,17 +10,17 @@ import androidx.navigation.NavDestination
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.core.CoreActivity
 import io.horizontalsystems.core.hideKeyboard
-import io.horizontalsystems.views.AlertDialogFragment
+import io.horizontalsystems.views.AlertDialogKeyboardFragment
 
 abstract class BaseActivity : CoreActivity(), NavController.OnDestinationChangedListener {
 
     fun showCustomKeyboardAlert() {
-        AlertDialogFragment.newInstance(
+        AlertDialogKeyboardFragment.newInstance(
                 titleString = getString(R.string.Alert_TitleWarning),
                 descriptionString = getString(R.string.Alert_CustomKeyboardIsUsed),
-                buttonText = R.string.Alert_Ok,
-                cancelable = false,
-                listener = object : AlertDialogFragment.Listener {
+                selectButtonText = R.string.Alert_Select,
+                skipButtonText = R.string.Alert_Skip,
+                listener = object : AlertDialogKeyboardFragment.Listener {
                     override fun onButtonClick() {
                         val imeManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imeManager.showInputMethodPicker()
