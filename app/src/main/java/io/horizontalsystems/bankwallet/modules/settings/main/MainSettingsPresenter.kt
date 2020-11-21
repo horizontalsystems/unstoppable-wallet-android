@@ -61,9 +61,10 @@ class MainSettingsPresenter(
         router.reloadAppInterface()
     }
 
-    override fun didThirdKeyboardWarning(warningKeyboardMsg: Boolean) {
+    override fun didThirdKeyboardWarningShow(warningKeyboardMsg: Boolean) {
         interactor.thirdKeyboard = warningKeyboardMsg
     }
+
 
     override fun didTapAbout() {
         router.showAbout()
