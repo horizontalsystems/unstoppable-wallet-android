@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
@@ -16,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
+import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
@@ -27,7 +25,20 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+
+        toolbar.inflateMenu(R.menu.restore_select_coin_menu)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuDone -> {
+                    hideKeyboard()
+                    viewModel.onRestore()
+                    true
+                }
+                else -> false
+            }
+        }
+        configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
+        doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY) ?: throw Exception("Parameter missing")
 
@@ -35,25 +46,6 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                 .get(RestoreSelectCoinsViewModel::class.java)
 
         observe()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.restore_select_coin_menu, menu)
-        configureSearchMenu(menu, R.string.ManageCoins_Search)
-        doneMenuButton = menu.findItem(R.id.menuDone)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuDone -> {
-                hideKeyboard()
-                viewModel.onRestore()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     // ManageWalletItemsAdapter.Listener

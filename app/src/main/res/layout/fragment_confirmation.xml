@@ -10,6 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/send_confirm_menu"
+        app:navigationIcon="@drawable/ic_back"
         app:title="@string/Send_Confirmation_Title" />
 
     <androidx.core.widget.NestedScrollView

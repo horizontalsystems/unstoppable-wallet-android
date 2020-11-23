@@ -11,7 +11,9 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/rate_chart_menu"
+        app:navigationIcon="@drawable/ic_back" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView
         android:id="@+id/scroller"

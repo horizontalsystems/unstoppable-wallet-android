@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
-import kotlinx.android.synthetic.main.fragment_backup_words.*
 
 class BackupWordsFragment : BaseFragment() {
 
@@ -23,9 +22,6 @@ class BackupWordsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
 
         val backedUp = arguments?.getBoolean(ACCOUNT_BACKEDUP, false) ?: false
         val backupWords = arguments?.getStringArray(WORDS_KEY) ?: arrayOf()
@@ -52,12 +48,6 @@ class BackupWordsFragment : BaseFragment() {
             childFragmentManager.beginTransaction().apply {
                 replace(R.id.fragmentContainer, fragment)
                 commit()
-            }
-
-            toolbar.title = when (page) {
-                1 -> getString(R.string.Backup_DisplayTitle)
-                2 -> getString(R.string.Backup_Confirmation_CheckTitle)
-                else -> null
             }
         })
 

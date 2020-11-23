@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -22,26 +24,22 @@ class AppStatusFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuCopy -> {
+                    presenter.didTapCopy(textAppStatus.text.toString())
+                    true
+                }
+                else -> false
+            }
         }
 
         observeView(presenter.view as AppStatusView)
 
         presenter.viewDidLoad()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.app_status_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.menuCopy -> {
-            presenter.didTapCopy(textAppStatus.text.toString())
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     private fun observeView(view: AppStatusView) {

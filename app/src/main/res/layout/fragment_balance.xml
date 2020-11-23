@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -21,6 +21,7 @@
             android:paddingEnd="4dp"
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:menu="@menu/balance_menu"
             app:title="@string/Balance_Title" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,7 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ShareCompat
 import androidx.core.os.bundleOf
@@ -37,7 +40,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
     private var totalBalanceTabHeight: Int = 0
     private val animationPlaybackSpeed: Double = 1.3
     private val expandDuration: Long get() = (300L / animationPlaybackSpeed).toLong()
-    private var optionsMenuVisible = false
+    private var showBalanceMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
@@ -45,7 +48,16 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuShowBalance -> {
+                    viewModel.delegate.onShowBalanceClick()
+                    true
+                }
+                else -> false
+            }
+        }
+        showBalanceMenuItem = toolbar.menu.findItem(R.id.menuShowBalance)
 
         totalBalanceTabHeight = balanceTabWrapper.measureHeight()
 
@@ -65,20 +77,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
         observeLiveData()
         setSwipeBackground()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.balance_menu, menu)
-
-        menu.findItem(R.id.menuShowBalance)?.isVisible = optionsMenuVisible
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.menuShowBalance -> {
-            viewModel.delegate.onShowBalanceClick()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
@@ -250,8 +248,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.setBalanceHidden.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
-            optionsMenuVisible = hideBalance
-            requireActivity().invalidateOptionsMenu()
+            showBalanceMenuItem?.isVisible = hideBalance
 
             if (animate) {
                 val animator = getValueAnimator(!hideBalance, expandDuration, AccelerateDecelerateInterpolator()) { progress ->

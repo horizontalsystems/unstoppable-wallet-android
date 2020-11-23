@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.BackupWordView
 import kotlinx.android.synthetic.main.fragment_backup_words_list.*
@@ -25,6 +26,9 @@ class BackupWordsListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         viewModel.wordsLiveData.observe(viewLifecycleOwner, Observer {
             populateWords(it)

@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -27,7 +29,15 @@ class SwapApproveFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuClose -> {
+                    findNavController().popBackStack()
+                    true
+                }
+                else -> false
+            }
+        }
 
         val approveData = requireArguments().getParcelable<SwapModule.ApproveData>(dataKey)!!
 
@@ -87,20 +97,6 @@ class SwapApproveFragment : BaseFragment() {
 
         feeSelectorView.setDurationVisible(false)
         feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.swap_approve_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menuClose -> {
-                findNavController().popBackStack()
-                true
-            }
-            else -> false
-        }
     }
 
     companion object {
