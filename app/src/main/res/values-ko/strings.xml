@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">계정이 존재하지 않습니다</string>
     <string name="Restore_EosKeyIncorrect">틀린 암호 입니다</string>
     <string name="Select_Coins">암호화를 선택해 주세요</string>
+    <string name="Restore_BirthdayHeight_Hint">월렛 벌스데이 (선택 사항)</string>
+    <string name="Restore_BirthdayHeight_Description">이를 통해 월렛 앱이 Zcash 블록체인과 훨씬 빠르게 동기화할 수 있습니다. 기억이 나지 않을 경우, 칸을 비워주세요.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">잘못된 벌스데이 높이</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">백업</string>
     <string name="Backup_Intro_TitleShow">암호 보이기</string>
@@ -175,6 +178,7 @@
     <string name="Swap_TransactionFee">거래 비용</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">현재 ETH 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
     <string name="Swap_ErrorNoLiquidity">유동성 없음</string>
     <string name="Swap_ErrorCouldNotFetchTrade">거래 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">수당 정보를 가져올 수 없습니다.</string>

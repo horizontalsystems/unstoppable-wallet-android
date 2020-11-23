@@ -15,7 +15,8 @@ data class AccountRecord(var id: String,
                          var words: SecretList?,
                          var salt: SecretString?,
                          var key: SecretString?,
-                         var eosAccount: String?) {
+                         var eosAccount: String?,
+                         var birthdayHeight: Long?) {
 
     var deleted = false
 

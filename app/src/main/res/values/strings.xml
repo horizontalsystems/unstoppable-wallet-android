@@ -78,6 +78,10 @@
 
     <string name="Select_Coins">Choose Crypto</string>
 
+    <string name="Restore_BirthdayHeight_Hint">Wallet birthday height (optional)</string>
+    <string name="Restore_BirthdayHeight_Description">This determines where to start scanning for transactions. Leave it blank to scan from the beginning, which takes a while.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">Invalid birthday height</string>
+
     <!--Backup-->
 
     <string name="Backup_Intro_Title">Backup</string>
@@ -87,6 +91,7 @@
     <string name="Backup_Intro_BackupNow">Backup</string>
 
     <string name="Backup_DisplayTitle">Private Key</string>
+    <string name="Backup_BirthdayHeight">Birthday Height</string>
 
     <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>

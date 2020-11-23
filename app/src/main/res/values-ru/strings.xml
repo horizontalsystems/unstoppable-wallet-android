@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
     <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
     <string name="Select_Coins">Выберите Валюту</string>
+    <string name="Restore_BirthdayHeight_Hint">Блок создания кошелька(опционально)</string>
+    <string name="Restore_BirthdayHeight_Description">Это определяет, где начать сканирование транзакций. Оставьте поле пустым, чтобы сканировать с самого начала, что займет некоторое время.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">Неверный блок создания кошелька</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Резервная Копия</string>
     <string name="Backup_Intro_TitleShow">Показать Ключ</string>
@@ -175,6 +178,7 @@
     <string name="Swap_TransactionFee">Комиссия за транзакцию</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Комиссии за транзакцию взимаются в %s. Вам нужно %s.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Текущий баланс ETH ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
     <string name="Swap_ErrorNoLiquidity">Нет Ликвидности</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Не удалось получить информацию о сделке</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Не удалось получить информацию о допустимом лимите</string>

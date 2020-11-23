@@ -5,8 +5,9 @@ import java.util.*
 class BackupWordsPresenter(
         private val interactor: BackupWordsModule.IInteractor,
         private val router: BackupWordsModule.IRouter,
-        private val state: BackupWordsModule.State)
-    : BackupWordsModule.IPresenter, BackupWordsModule.IViewDelegate, BackupWordsModule.IInteractorDelegate {
+        private val state: BackupWordsModule.State,
+        private val additionalInfo: String?
+) : BackupWordsModule.IPresenter, BackupWordsModule.IViewDelegate, BackupWordsModule.IInteractorDelegate {
 
     //  View
 
@@ -17,6 +18,7 @@ class BackupWordsPresenter(
     override fun viewDidLoad() {
         view?.showWords(state.words)
         view?.setBackedUp(state.backedUp)
+        view?.showAdditionalInfo(additionalInfo)
         loadCurrentPage()
     }
 

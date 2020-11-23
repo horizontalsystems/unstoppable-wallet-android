@@ -61,7 +61,7 @@ open class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class Zcash(val words: List<String>) : AccountType() {
+    data class Zcash(val words: List<String>, val birthdayHeight: Long? = null) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is Zcash && words.toTypedArray().contentEquals(other.words.toTypedArray())
         }

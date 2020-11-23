@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">无效账户</string>
     <string name="Restore_EosKeyIncorrect">错误密钥</string>
     <string name="Select_Coins">选择加密货币</string>
+    <string name="Restore_BirthdayHeight_Hint">钱包生日高度 (自主性)</string>
+    <string name="Restore_BirthdayHeight_Description">这将决定从哪里开始对交易进行扫描。留空即可从开始时进行扫描，这需要一定的时间。</string>
+    <string name="Restore_BirthdayHeight_InvalidError">无效的生日高度</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
@@ -175,6 +178,8 @@
     <string name="Swap_TransactionFee">交易费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">交易费用以%s支付。您需要%s。</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
+
     <string name="Swap_ErrorNoLiquidity">无流动资金</string>
     <string name="Swap_ErrorCouldNotFetchTrade">无法获取交易信息</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">无法获取允许信息</string>

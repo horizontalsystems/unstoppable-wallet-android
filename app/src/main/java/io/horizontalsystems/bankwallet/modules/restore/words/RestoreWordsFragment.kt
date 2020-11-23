@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,9 +16,11 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsService.RestoreWordsException
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
+import kotlinx.android.synthetic.main.view_input_address.view.*
 
 class RestoreWordsFragment : BaseFragment() {
 
@@ -58,6 +61,7 @@ class RestoreWordsFragment : BaseFragment() {
                 .get(RestoreWordsViewModel::class.java)
 
         description.text = getString(R.string.Restore_Enter_Key_Description_Mnemonic, getString(accountTypeTitleRes), viewModel.wordCount.toString())
+        additionalInfo.isVisible = viewModel.hasAdditionalInfo
 
         setInputViewListeners()
 
@@ -78,7 +82,7 @@ class RestoreWordsFragment : BaseFragment() {
         when (item.itemId) {
             R.id.menuRestore -> {
                 val words = wordsInput.text?.toString() ?: ""
-                viewModel.onProceed(words)
+                viewModel.onProceed(words, additionalInfo.input.text.toString())
                 return true
             }
         }
@@ -91,8 +95,12 @@ class RestoreWordsFragment : BaseFragment() {
             setFragmentResult(RestoreFragment.accountTypeRequestKey, bundleOf(RestoreFragment.accountTypeBundleKey to accountType))
         })
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
-            HudHelper.showErrorMessage(this.requireView(), getString(R.string.Restore_ValidationFailed))
+        viewModel.errorLiveData.observe(viewLifecycleOwner, {
+            val errorMessage = when (it) {
+                is RestoreWordsException.InvalidBirthdayHeightException -> getString(R.string.Restore_BirthdayHeight_InvalidError)
+                else -> getString(R.string.Restore_ValidationFailed)
+            }
+            HudHelper.showErrorMessage(this.requireView(), errorMessage)
         })
     }
 

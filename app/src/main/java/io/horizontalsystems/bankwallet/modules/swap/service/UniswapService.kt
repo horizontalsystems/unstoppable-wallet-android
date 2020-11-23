@@ -377,8 +377,9 @@ class UniswapService(
             }
             is DataState.Error -> {
                 if (newErrors.isEmpty()) {
+                    val rpcErrorMessage = (txStatus.error as? JsonRpc.ResponseError.RpcError)?.error?.message
                     when {
-                        txStatus.error.message?.contains("execution reverted") == true || txStatus.error.message?.contains("gas required exceeds") == true -> {
+                        rpcErrorMessage?.contains("execution reverted") == true || rpcErrorMessage?.contains("gas required exceeds") == true -> {
                             newErrors.add(SwapError.InsufficientFeeCoinBalance)
                         }
                         txStatus.error !is EthereumTransactionService.GasDataError.NoTransactionData -> {

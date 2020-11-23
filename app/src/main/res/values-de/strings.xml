@@ -59,6 +59,9 @@
     <string name="Restore_EosAccountIncorrect">Ungültiger Account</string>
     <string name="Restore_EosKeyIncorrect">Falscher Schlüssel</string>
     <string name="Select_Coins">Krypto auswählen</string>
+    <string name="Restore_BirthdayHeight_Hint">Wallet Geburtstagsgröße (optional)</string>
+    <string name="Restore_BirthdayHeight_Description">Dadurch wird festgelegt, an welcher Stelle mit dem Scannen nach Transaktionen begonnen werden soll. Lassen Sie das Feld leer, um von Anfang an zu scannen, dies dauert eine Weile.</string>
+    <string name="Restore_BirthdayHeight_InvalidError">Ungültige Geburtstagsgröße</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
     <string name="Backup_Intro_TitleShow">Schlüssel anzeigen</string>
@@ -175,6 +178,7 @@
     <string name="Swap_TransactionFee">Transaktionsgebühr</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Transaktionsgebühren in %s bezahlt. Sie benötigen %s.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">Das aktuelle ETH-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
     <string name="Swap_ErrorNoLiquidity">Keine Liquidität</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Die Kaufinformationen konnten nicht abgerufen werden</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Konnte Berechtigungsinformationen nicht abrufen</string>

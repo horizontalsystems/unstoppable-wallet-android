@@ -14,8 +14,9 @@ class RestoreWordsViewModel(
 ) : ViewModel() {
 
     val accountTypeLiveEvent = SingleLiveEvent<AccountType>()
-    val errorLiveData = MutableLiveData<Exception>()
+    val errorLiveData = MutableLiveData<Throwable>()
     val wordCount = service.wordCount
+    val hasAdditionalInfo = service.hasAdditionalInfo
 
     override fun onCleared() {
         clearables.forEach {
@@ -24,7 +25,7 @@ class RestoreWordsViewModel(
         super.onCleared()
     }
 
-    fun onProceed(text: String?) {
+    fun onProceed(text: String?, additionalInfo: String? = null) {
         try {
             if (text.isNullOrEmpty()) {
                 throw WordsError.EmptyWords
@@ -36,11 +37,11 @@ class RestoreWordsViewModel(
                     .replace(Regex("(\\s)+"), " ")
                     .split(" ")
 
-            val accountType = service.accountType(words)
+            val accountType = service.accountType(words, additionalInfo)
             accountTypeLiveEvent.postValue(accountType)
 
-        } catch (e: Exception) {
-            errorLiveData.postValue(e)
+        } catch (error: Throwable) {
+            errorLiveData.postValue(error)
         }
     }
 

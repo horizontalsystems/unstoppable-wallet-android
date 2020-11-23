@@ -14,6 +14,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var onTextChangeCallback: ((String?) -> Unit)? = null
+    private var showQrButton: Boolean = false
 
     private val textWatcher = object : TextWatcher {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -32,6 +33,8 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         try {
             title.text = ta.getString(R.styleable.AddressInputView_title)
             description.text = ta.getString(R.styleable.AddressInputView_description)
+            showQrButton = ta.getBoolean(R.styleable.AddressInputView_showQrButton, true)
+            input.hint = ta.getString(R.styleable.AddressInputView_hint)
         } finally {
             ta.recycle()
         }
@@ -77,7 +80,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private fun setDeleteButtonVisibility(visible: Boolean) {
         deleteButton.isVisible = visible
-        buttonQrScan.isVisible = !visible
+        buttonQrScan.isVisible = showQrButton && !visible
         buttonPaste.isVisible = !visible
     }
 

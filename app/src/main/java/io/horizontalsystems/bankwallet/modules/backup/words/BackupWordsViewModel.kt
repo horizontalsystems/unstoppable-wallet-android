@@ -13,14 +13,15 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     val loadPageLiveEvent = SingleLiveEvent<Int>()
     val errorLiveData = SingleLiveEvent<Int>()
     val wordsLiveData = MutableLiveData<Array<String>>()
+    val additionalInfoLiveData = MutableLiveData<String?>()
     val backedUpLiveData = MutableLiveData<Boolean>()
     val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
     val notifyBackedUpEvent = SingleLiveEvent<Unit>()
     val notifyClosedEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
-    fun init(words: Array<String>, backedUp: Boolean) {
-        BackupWordsModule.init(this, this, words, backedUp)
+    fun init(words: Array<String>, backedUp: Boolean, additionalInfo: String?) {
+        BackupWordsModule.init(this, this, words, backedUp, additionalInfo)
     }
 
     // view
@@ -43,6 +44,10 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
 
     override fun setBackedUp(backedUp: Boolean) {
         backedUpLiveData.postValue(backedUp)
+    }
+
+    override fun showAdditionalInfo(additionalInfo: String?) {
+        additionalInfoLiveData.postValue(additionalInfo)
     }
 
     // router
