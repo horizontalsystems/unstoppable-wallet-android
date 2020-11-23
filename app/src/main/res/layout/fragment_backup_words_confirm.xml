@@ -4,6 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/backup_words_menu"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/Backup_Confirmation_CheckTitle" />
+
     <io.horizontalsystems.views.InputTextView
         android:id="@+id/wordOne"
         android:layout_width="match_parent"
@@ -12,7 +23,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <io.horizontalsystems.views.InputTextView
         android:id="@+id/wordTwo"

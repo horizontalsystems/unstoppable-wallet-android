@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -39,9 +41,17 @@ class PrivacySettingsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuShowInfo -> {
+                    viewModel.delegate.onShowPrivacySettingsInfoClick()
+                    true
+                }
+                else -> false
+            }
         }
 
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
@@ -124,21 +134,6 @@ class PrivacySettingsFragment :
         viewModel.restartApp.observe(this, Observer {
             restartApp()
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.settings_info_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuShowInfo -> {
-                viewModel.delegate.onShowPrivacySettingsInfoClick()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onTorSwitchChecked(checked: Boolean) {

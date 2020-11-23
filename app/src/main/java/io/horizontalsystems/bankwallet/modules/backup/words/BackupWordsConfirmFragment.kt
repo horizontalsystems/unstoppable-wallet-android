@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
-import android.view.*
-import androidx.activity.addCallback
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
@@ -25,7 +25,18 @@ class BackupWordsConfirmFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        toolbar.setNavigationOnClickListener {
+            viewModel.delegate.onBackClick()
+        }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.itemDone -> {
+                    validateWords()
+                    true
+                }
+                else -> false
+            }
+        }
 
         textDescription.text = getString(R.string.Backup_Confirmation_Description, getString(viewModel.accountTypeTitle))
 
@@ -45,26 +56,6 @@ class BackupWordsConfirmFragment : BaseFragment() {
 
         activity?.let {
             KeyboardHelper.showKeyboardDelayed(it, wordOne, 200)
-
-            it.onBackPressedDispatcher.addCallback(this) {
-                viewModel.delegate.onBackClick()
-            }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.backup_words_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.itemDone -> {
-                validateWords()
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
         }
     }
 

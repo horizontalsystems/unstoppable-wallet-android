@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,10 +26,11 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+        configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
 
         val excludedCoin = arguments?.getParcelable<Coin>(EXCLUDED_COIN_KEY)
         val hideZeroBalance = arguments?.getBoolean(HIDE_ZERO_BALANCE_KEY)
@@ -48,23 +51,6 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
             adapter.notifyDataSetChanged()
         })
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.select_swap_coin_menu, menu)
-        configureSearchMenu(menu, R.string.ManageCoins_Search)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                findNavController().popBackStack()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun updateFilter(query: String) {

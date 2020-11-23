@@ -10,6 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/uniswap_info_menu"
         app:title="@string/UniswapInfo_Title"/>
 
     <androidx.core.widget.NestedScrollView

@@ -1,10 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import android.os.Bundle
-import android.view.*
-import io.horizontalsystems.core.findNavController
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.core.findNavController
+import kotlinx.android.synthetic.main.fragment_privacy_settings_info.*
 
 class PrivacySettingsInfoFragment : BaseFragment() {
 
@@ -14,18 +17,14 @@ class PrivacySettingsInfoFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.settings_privacy_info_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.closeButton -> {
-            findNavController().navigateUp()
-            true
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.closeButton -> {
+                    findNavController().popBackStack()
+                    true
+                }
+                else -> false
+            }
         }
-        else -> super.onOptionsItemSelected(item)
     }
 }

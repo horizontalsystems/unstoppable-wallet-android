@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
@@ -30,6 +33,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
     private val formatter = App.numberFormatter
     private var actions = mapOf<ChartType, View>()
+    private var notificationMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_rate_chart, container, false)
@@ -50,11 +54,21 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
-        setHasOptionsMenu(true)
         toolbar.title = coinTitle
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuNotification -> {
+                    presenter.onNotificationClick()
+                    true
+                }
+                else -> false
+            }
+        }
+        notificationMenuItem = toolbar.menu.findItem(R.id.menuNotification)
+        updateNotificationMenuItem()
 
         chart.setListener(this)
         chart.rateFormatter = presenter.rateFormatter
@@ -69,24 +83,14 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         presenter.viewDidLoad()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.rate_chart_menu, menu)
-
-        menu.findItem(R.id.menuNotification)?.apply {
+    private fun updateNotificationMenuItem() {
+        notificationMenuItem?.apply {
             isVisible = presenter.notificationIconVisible
             icon = context?.let {
                 val iconRes = if (presenter.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_disabled
                 ContextCompat.getDrawable(it, iconRes)
             }
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.menuNotification -> {
-            presenter.onNotificationClick()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     //  ChartView Listener
@@ -245,7 +249,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         })
 
         presenterView.alertNotificationUpdated.observe(viewLifecycleOwner, Observer { visible ->
-            requireActivity().invalidateOptionsMenu()
+            updateNotificationMenuItem()
         })
 
         presenterView.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinId, coinName) ->

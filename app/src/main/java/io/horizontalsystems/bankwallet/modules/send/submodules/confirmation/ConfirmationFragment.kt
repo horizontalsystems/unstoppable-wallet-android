@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -14,7 +16,6 @@ import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
@@ -34,9 +35,17 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            parentFragmentManager.popBackStack()
         }
-        setHasOptionsMenu(true)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuClose -> {
+                    requireActivity().finish()
+                    true
+                }
+                else -> false
+            }
+        }
 
         sendView = sendPresenter?.view as SendView
         presenter = ViewModelProvider(this, SendConfirmationModule.Factory())
@@ -97,20 +106,6 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
             sendButtonView?.bind(state)
             sendButtonView?.isEnabled = state == SendConfirmationModule.SendButtonState.ACTIVE
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.send_confirm_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menuClose -> {
-                requireActivity().finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun getErrorText(error: Throwable): String {

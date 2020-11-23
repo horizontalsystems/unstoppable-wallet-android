@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -30,33 +33,10 @@ import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
 class WalletConnectMainFragment : BaseFragment() {
 
-    private var closeVisible: Boolean = false
-        set(value) {
-            field = value
-
-            requireActivity().invalidateOptionsMenu()
-        }
-
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) { WalletConnectModule.Factory() }
     private val viewModelScan by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
     private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.wallet_connect_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuClose) {
-            findNavController().popBackStack()
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menuClose)?.isVisible = closeVisible
-    }
+    private var closeMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet_connect_main, container, false)
@@ -64,7 +44,18 @@ class WalletConnectMainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuClose -> {
+                    findNavController().popBackStack()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+        closeMenuItem = toolbar.menu.findItem(R.id.menuClose)
 
         view.isVisible = false
 
@@ -124,7 +115,7 @@ class WalletConnectMainFragment : BaseFragment() {
         })
 
         viewModel.closeVisibleLiveData.observe(viewLifecycleOwner, Observer {
-            closeVisible = it
+            closeMenuItem?.isVisible = it
         })
 
         viewModel.signedTransactionsVisibleLiveData.observe(viewLifecycleOwner, Observer {

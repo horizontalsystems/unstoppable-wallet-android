@@ -12,6 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/swap_approve_menu"
         app:title="@string/Approve_Title" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

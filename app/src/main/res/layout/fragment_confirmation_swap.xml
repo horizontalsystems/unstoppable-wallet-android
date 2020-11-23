@@ -11,6 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/swap_settings_menu"
         app:title="@string/Swap_Confirmation" />
 
     <androidx.core.widget.NestedScrollView
@@ -57,6 +58,7 @@
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Pay Ethereum" />
+
             <TextView
                 android:id="@+id/payValue"
                 style="@style/Subhead1"
@@ -77,6 +79,7 @@
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/payTitle"
                 tools:text="Get Chainlink" />
+
             <TextView
                 android:id="@+id/getValue"
                 style="@style/Subhead2"
@@ -96,6 +99,7 @@
                 android:text="@string/SwapSettings_SlippageTitle"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/getTitle" />
+
             <TextView
                 android:id="@+id/slippageValue"
                 style="@style/Subhead2"
@@ -114,6 +118,7 @@
                 android:text="@string/SwapSettings_DeadlineTitle"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/slippageTitle" />
+
             <TextView
                 android:id="@+id/deadlineValue"
                 style="@style/Subhead2"
@@ -132,6 +137,7 @@
                 android:text="@string/SwapSettings_RecipientAddressTitle"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/deadlineTitle" />
+
             <TextView
                 android:id="@+id/recipientAddressValue"
                 style="@style/Subhead2"
@@ -150,6 +156,7 @@
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/recipientAddressTitle"
                 tools:text="Minimum Got" />
+
             <TextView
                 android:id="@+id/minMaxValue"
                 style="@style/Subhead2"
@@ -168,6 +175,7 @@
                 android:text="@string/Swap_Price"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/minMaxTitle" />
+
             <TextView
                 android:id="@+id/price"
                 style="@style/Subhead2"
@@ -186,6 +194,7 @@
                 android:text="@string/Swap_PriceImpact"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/priceTitle" />
+
             <TextView
                 android:id="@+id/priceImpact"
                 style="@style/Subhead2"
@@ -194,6 +203,7 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintTop_toTopOf="@+id/priceImpactTitle" />
+
             <TextView
                 android:id="@+id/swapFeeTitle"
                 style="@style/Subhead2"
@@ -203,6 +213,7 @@
                 android:text="@string/Swap_SwapFee"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/priceImpactTitle" />
+
             <TextView
                 android:id="@+id/swapFee"
                 style="@style/Subhead2"
@@ -211,6 +222,7 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintTop_toTopOf="@+id/swapFeeTitle" />
+
             <TextView
                 android:id="@+id/txSpeedTitle"
                 style="@style/Subhead2"
@@ -220,6 +232,7 @@
                 android:text="@string/Swap_TransactionSpeed"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/swapFeeTitle" />
+
             <TextView
                 android:id="@+id/txSpeed"
                 style="@style/Subhead2"
@@ -228,6 +241,7 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintTop_toTopOf="@+id/txSpeedTitle" />
+
             <TextView
                 android:id="@+id/txFeeTitle"
                 style="@style/Subhead2"
@@ -237,6 +251,7 @@
                 android:text="@string/Swap_TransactionFee"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/txSpeedTitle" />
+
             <TextView
                 android:id="@+id/txFee"
                 style="@style/Subhead2"

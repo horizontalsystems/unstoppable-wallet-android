@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.restore.eos
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
@@ -34,9 +36,17 @@ class RestoreEosFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuRestore -> {
+                    viewModel.onProceed()
+                    true
+                }
+                else -> false
+            }
         }
 
         viewModel = ViewModelProvider(this, RestoreEosModule.Factory())
@@ -71,21 +81,6 @@ class RestoreEosFragment : BaseFragment() {
         activity?.let {
             KeyboardHelper.showKeyboardDelayed(it, eosAccount, 200)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.restore_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuRestore -> {
-                viewModel.onProceed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

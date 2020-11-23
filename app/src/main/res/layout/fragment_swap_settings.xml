@@ -10,6 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/swap_settings_menu"
         app:title="@string/SwapSettings_Title" />
 
     <androidx.core.widget.NestedScrollView
@@ -51,11 +52,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="42dp"
+                android:inputType="numberDecimal"
                 app:description="@string/SwapSettings_SlippageDescription"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@id/recipientAddressInputView"
-                android:inputType="numberDecimal"
                 app:title="@string/SwapSettings_SlippageTitle" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.InputWithButtonsView
@@ -63,11 +64,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="42dp"
+                android:inputType="number"
                 app:description="@string/SwapSettings_DeadlineDescription"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@id/slippageInputView"
-                android:inputType="number"
                 app:title="@string/SwapSettings_DeadlineTitle" />
 
             <Button

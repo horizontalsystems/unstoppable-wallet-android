@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/select_swap_coin_menu"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/ManageCoins_title" />
 

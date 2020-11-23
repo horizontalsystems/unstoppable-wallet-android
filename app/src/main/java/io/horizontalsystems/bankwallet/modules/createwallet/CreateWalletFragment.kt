@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
@@ -15,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class CreateWalletFragment : CoinListBaseFragment() {
 
@@ -28,7 +27,21 @@ class CreateWalletFragment : CoinListBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setHasOptionsMenu(true)
+        toolbar.inflateMenu(R.menu.create_wallet_menu)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuDone -> {
+                    hideKeyboard()
+                    Handler().postDelayed({
+                        viewModel.onCreate()
+                    }, 100)
+                    true
+                }
+                else -> false
+            }
+        }
+        configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
+        doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
         inApp = arguments?.getBoolean("inApp") ?: true
@@ -37,32 +50,6 @@ class CreateWalletFragment : CoinListBaseFragment() {
                 .get(CreateWalletViewModel::class.java)
 
         observe()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.create_wallet_menu, menu)
-        configureSearchMenu(menu, R.string.ManageCoins_Search)
-        doneMenuButton = menu.findItem(R.id.menuDone)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuDone -> {
-                hideKeyboard()
-                Handler().postDelayed({
-                    viewModel.onCreate()
-                }, 100)
-                return true
-            }
-            android.R.id.home -> {
-                findNavController().popBackStack()
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     // ManageWalletItemsAdapter.Listener

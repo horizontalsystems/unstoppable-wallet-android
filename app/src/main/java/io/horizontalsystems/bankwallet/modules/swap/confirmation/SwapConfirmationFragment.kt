@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -25,24 +27,18 @@ class SwapConfirmationFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.swap_settings_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuCancel -> {
-                presenter.onCancelConfirmation()
-                findNavController().popBackStack()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuCancel -> {
+                    presenter.onCancelConfirmation()
+                    findNavController().popBackStack()
+                    true
+                }
+                else -> false
+            }
+        }
 
         presenter = viewModel.confirmationPresenter
 

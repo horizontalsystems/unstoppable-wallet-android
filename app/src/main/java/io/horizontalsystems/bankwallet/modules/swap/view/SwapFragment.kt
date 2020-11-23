@@ -6,7 +6,9 @@ import android.os.Handler
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -48,7 +50,19 @@ class SwapFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuCancel -> {
+                    findNavController().popBackStack()
+                    true
+                }
+                R.id.menuInfo -> {
+                    findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
+                    true
+                }
+                else -> false
+            }
+        }
 
         youPay.apply {
             onSelectTokenButtonClick {
@@ -90,24 +104,6 @@ class SwapFragment : BaseFragment() {
 
         feeSelectorView.setDurationVisible(false)
         feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.swap_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuCancel -> {
-                findNavController().popBackStack()
-                return true
-            }
-            R.id.menuInfo -> {
-                findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setFragmentResultListeners() {

@@ -5,7 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -31,7 +34,7 @@ import kotlinx.android.synthetic.main.view_holder_full_transaction_source.*
 class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFragment.Listener {
 
     private lateinit var viewModel: FullTransactionInfoViewModel
-    private var shareButtonVisible = false
+    private var shareMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_full_transaction_info, container, false)
@@ -39,7 +42,21 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+
+        shareMenuItem = toolbar.menu.findItem(R.id.shareButton)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.shareButton -> {
+                    viewModel.share()
+                    true
+                }
+                R.id.closeButton -> {
+                    parentFragmentManager.popBackStack()
+                    true
+                }
+                else -> false
+            }
+        }
 
         val transactionHash = arguments?.getString(TRANSACTION_HASH_KEY) ?: run {
             parentFragmentManager.popBackStack()
@@ -66,8 +83,7 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         // LiveData
         //
         viewModel.shareButtonVisibility.observe(viewLifecycleOwner, Observer { visible ->
-            shareButtonVisible = visible
-            requireActivity().invalidateOptionsMenu()
+            shareMenuItem?.isVisible = visible
         })
 
         viewModel.reloadEvent.observe(viewLifecycleOwner, Observer {
@@ -131,24 +147,6 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         activity?.onBackPressedDispatcher?.addCallback(this) {
             parentFragmentManager.popBackStack()
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.full_transaction_info_menu, menu)
-
-        menu.findItem(R.id.shareButton)?.isVisible = shareButtonVisible
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.shareButton -> {
-            viewModel.share()
-            true
-        }
-        R.id.closeButton -> {
-            parentFragmentManager.popBackStack()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     //

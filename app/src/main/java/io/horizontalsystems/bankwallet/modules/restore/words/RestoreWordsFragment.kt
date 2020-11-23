@@ -3,7 +3,10 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
@@ -46,9 +49,18 @@ class RestoreWordsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuRestore -> {
+                    val words = wordsInput.text?.toString() ?: ""
+                    viewModel.onProceed(words, additionalInfo.input.text.toString())
+                    true
+                }
+                else -> false
+            }
         }
 
         val wordsCount = arguments?.getParcelable<RestoreAccountType>(restoreAccountTypeKey) ?: throw Exception("Invalid restore account type")
@@ -67,23 +79,6 @@ class RestoreWordsFragment : BaseFragment() {
         activity?.let {
             KeyboardHelper.showKeyboardDelayed(it, wordsInput, 200)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.restore_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuRestore -> {
-                val words = wordsInput.text?.toString() ?: ""
-                viewModel.onProceed(words, additionalInfo.input.text.toString())
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun observe() {

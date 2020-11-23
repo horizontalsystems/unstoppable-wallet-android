@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/info_menu"
         tools:title="@string/Info_DoubleSpend_Title" />
 
     <androidx.core.widget.NestedScrollView

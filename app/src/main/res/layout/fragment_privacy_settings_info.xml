@@ -10,7 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/Welcome_PrivacySettings"/>
+        app:menu="@menu/settings_privacy_info_menu"
+        app:title="@string/Welcome_PrivacySettings" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"

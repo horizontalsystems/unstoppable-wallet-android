@@ -11,15 +11,17 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/SettingsSecurity_Privacy"/>
+        app:menu="@menu/settings_info_menu"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/SettingsSecurity_Privacy" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/concatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:paddingBottom="32dp"
         android:clipToPadding="false"
+        android:paddingBottom="32dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="3"
         tools:listitem="@layout/view_settings_dropdown" />
