@@ -20,7 +20,9 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.StatusInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.snackbar.CustomSnackbar
@@ -54,7 +56,10 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
     override fun onBackPressed() {
         // todo: need to open FullTransactionInfo via navigation fragment
         supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
-            if (fragment is FullTransactionInfoFragment || fragment is DataProviderSettingsFragment) {
+            if (fragment is FullTransactionInfoFragment
+                    || fragment is DataProviderSettingsFragment
+                    || fragment is InfoFragment
+                    || fragment is StatusInfoFragment) {
                 supportFragmentManager.popBackStack()
                 return
             }

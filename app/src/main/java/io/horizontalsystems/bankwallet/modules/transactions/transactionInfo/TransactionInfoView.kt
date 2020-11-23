@@ -85,6 +85,10 @@ class TransactionInfoView : ConstraintLayoutWithHeader {
             listener?.showFragmentInTopContainerView(InfoFragment.instance(infoParameters))
         })
 
+        viewModel.showStatusInfoLiveEvent.observe(lifecycleOwner, Observer {
+            listener?.showFragmentInTopContainerView(StatusInfoFragment())
+        })
+
         viewModel.showDoubleSpendInfo.observe(lifecycleOwner, Observer { (txHash, conflictingTxHash) ->
             val title = context.getString(R.string.Info_DoubleSpend_Title)
             val description = context.getString(R.string.Info_DoubleSpend_Description)

@@ -27,6 +27,7 @@ object TransactionInfoModule {
         fun onClickFrom()
         fun onClickTransactionId()
         fun onRawTransaction()
+        fun onClickStatusInfo()
     }
 
     interface Interactor {
@@ -44,6 +45,7 @@ object TransactionInfoModule {
         fun openFullInfo(transactionHash: String, wallet: Wallet)
         fun openLockInfo(lockDate: Date)
         fun openDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
+        fun openStatusInfo()
     }
 
     fun init(view: TransactionInfoViewModel, router: Router, transactionRecord: TransactionRecord, wallet: Wallet) {

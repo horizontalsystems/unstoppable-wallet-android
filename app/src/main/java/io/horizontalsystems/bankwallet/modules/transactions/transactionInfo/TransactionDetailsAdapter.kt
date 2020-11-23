@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
@@ -46,6 +47,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             decoratedText.isVisible = false
             btnAction.isVisible = false
             valueText.isVisible = false
+            statusInfoIcon.isVisible = false
             valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             transactionStatusView.isVisible = false
 
@@ -137,6 +139,12 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             txtTitle.setText(R.string.TransactionInfo_Status)
             transactionStatusView.bind(detail.status, detail.incoming)
             transactionStatusView.isVisible = true
+            if (detail.status != TransactionStatus.Completed){
+                statusInfoIcon.isVisible = true
+                itemView.setOnSingleClickListener {
+                    viewModel.delegate.onClickStatusInfo()
+                }
+            }
         }
 
         private fun getFeeText(coinValue: CoinValue, currencyValue: CurrencyValue?): String? {
