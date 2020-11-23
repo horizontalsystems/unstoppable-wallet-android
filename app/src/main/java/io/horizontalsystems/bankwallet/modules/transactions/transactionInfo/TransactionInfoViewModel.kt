@@ -18,6 +18,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     val showLockInfo = SingleLiveEvent<Date>()
     val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
+    val showStatusInfoLiveEvent = SingleLiveEvent<Unit>()
 
     fun init(transactionRecord: TransactionRecord, wallet: Wallet) {
         TransactionInfoModule.init(this, this, transactionRecord, wallet)
@@ -56,4 +57,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         showDoubleSpendInfo.postValue(Pair(transactionHash, conflictingTxHash))
     }
 
+    override fun openStatusInfo() {
+        showStatusInfoLiveEvent.call()
+    }
 }

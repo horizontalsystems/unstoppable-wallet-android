@@ -44,6 +44,8 @@ class TransactionInfoPresenter(
 
         val viewItems = mutableListOf<TransactionDetailViewItem>()
 
+        viewItems.add(TransactionDetailViewItem.Status(status, transaction.type == TransactionType.Incoming))
+
         rate?.let {
             viewItems.add(TransactionDetailViewItem.Rate(rate, wallet.coin.code))
         }
@@ -74,8 +76,6 @@ class TransactionInfoPresenter(
         } else {
             viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
         }
-
-        viewItems.add(TransactionDetailViewItem.Status(status, transaction.type == TransactionType.Incoming))
 
         if (transaction.conflictingTxHash != null) {
             viewItems.add(TransactionDetailViewItem.DoubleSpend())
@@ -135,6 +135,10 @@ class TransactionInfoPresenter(
 
     override fun onRawTransaction() {
         onCopy(interactor.getRaw(transaction.transactionHash))
+    }
+
+    override fun onClickStatusInfo() {
+        router.openStatusInfo()
     }
 
     private fun onCopy(value: String?) {
