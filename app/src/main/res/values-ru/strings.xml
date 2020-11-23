@@ -518,7 +518,7 @@
     <string name="CoinOption_bip49_Subtitle">Популярный (начинается с %s...)</string>
     <string name="CoinOption_bip84_Subtitle">Новый (начинается с %s...)</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Today">Сегодня</string>
+    <string name="Charts_TimeDuration_Today">СГД</string>
     <string name="Charts_TimeDuration_Day">24ч</string>
     <string name="Charts_TimeDuration_Week">7Д</string>
     <string name="Charts_TimeDuration_Month">1М</string>
