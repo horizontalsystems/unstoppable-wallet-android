@@ -40,7 +40,6 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar)
 
         val transactionHash = arguments?.getString(TRANSACTION_HASH_KEY) ?: run {
             parentFragmentManager.popBackStack()

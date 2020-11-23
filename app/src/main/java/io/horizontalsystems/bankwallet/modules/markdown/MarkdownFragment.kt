@@ -23,7 +23,10 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true, "")
+        toolbar.title = ""
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         rvBlocks.adapter = contentAdapter
 

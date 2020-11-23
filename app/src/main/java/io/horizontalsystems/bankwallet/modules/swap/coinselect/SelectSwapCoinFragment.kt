@@ -25,7 +25,9 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val excludedCoin = arguments?.getParcelable<Coin>(EXCLUDED_COIN_KEY)
         val hideZeroBalance = arguments?.getBoolean(HIDE_ZERO_BALANCE_KEY)

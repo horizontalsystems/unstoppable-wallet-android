@@ -31,7 +31,9 @@ class RestoreSelectPredefinedAccountTypeFragment: BaseFragment(), RestoreNavigat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         viewModel = ViewModelProvider(this, RestoreSelectPredefinedAccountTypeModule.Factory())
                 .get(RestoreSelectPredefinedAccountTypeViewModel::class.java)

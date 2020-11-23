@@ -25,7 +25,9 @@ class ContactFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         presenter = ViewModelProvider(this, ContactModule.Factory()).get(ContactPresenter::class.java)
 

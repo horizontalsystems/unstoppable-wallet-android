@@ -26,7 +26,9 @@ class SecuritySettingsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         viewModel.init()
 

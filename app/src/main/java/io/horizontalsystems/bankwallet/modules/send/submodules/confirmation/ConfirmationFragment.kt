@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
@@ -32,7 +33,9 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         setHasOptionsMenu(true)
 
         sendView = sendPresenter?.view as SendView

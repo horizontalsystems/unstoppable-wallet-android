@@ -28,7 +28,6 @@ class SwapApproveFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar)
 
         val approveData = requireArguments().getParcelable<SwapModule.ApproveData>(dataKey)!!
 

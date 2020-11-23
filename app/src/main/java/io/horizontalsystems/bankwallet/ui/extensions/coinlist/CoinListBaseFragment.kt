@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.Listener {
@@ -27,7 +28,10 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true, title)
+        toolbar.title = title
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         featuredItemsAdapter = CoinListAdapter(this)
         itemsAdapter = CoinListAdapter(this)

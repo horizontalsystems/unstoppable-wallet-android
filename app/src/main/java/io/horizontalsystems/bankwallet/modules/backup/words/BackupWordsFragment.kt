@@ -23,7 +23,9 @@ class BackupWordsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val backedUp = arguments?.getBoolean(ACCOUNT_BACKEDUP, false) ?: false
         val backupWords = arguments?.getStringArray(WORDS_KEY) ?: arrayOf()
