@@ -27,7 +27,7 @@ class InfoFragment : BaseFragment() {
         }
 
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar, title = infoParams.title)
+        toolbar.title = infoParams.title
 
         textDescription.text = infoParams.description
 

@@ -31,7 +31,6 @@ class SwapSettingsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar)
 
         slippageInputView.apply {
             onTextChange { viewModel.setSlippage(it) }

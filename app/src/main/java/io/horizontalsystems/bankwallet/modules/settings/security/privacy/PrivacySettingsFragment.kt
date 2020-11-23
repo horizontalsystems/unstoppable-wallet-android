@@ -40,7 +40,9 @@ class PrivacySettingsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         viewModel = ViewModelProvider(this).get(PrivacySettingsViewModel::class.java)
         viewModel.init()

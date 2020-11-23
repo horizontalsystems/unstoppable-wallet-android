@@ -49,7 +49,6 @@ class SwapFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar)
 
         youPay.apply {
             onSelectTokenButtonClick {

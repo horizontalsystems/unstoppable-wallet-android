@@ -18,7 +18,6 @@ class UniswapInfoFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar)
 
         buttonUniswap.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)

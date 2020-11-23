@@ -51,7 +51,10 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         presenterView = presenter.view as RateChartView
 
         setHasOptionsMenu(true)
-        setSupportActionBar(toolbar, true, coinTitle)
+        toolbar.title = coinTitle
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         chart.setListener(this)
         chart.rateFormatter = presenter.rateFormatter

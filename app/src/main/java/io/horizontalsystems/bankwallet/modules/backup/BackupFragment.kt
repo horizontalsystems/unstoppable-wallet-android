@@ -41,7 +41,10 @@ class BackupFragment : BaseFragment() {
             return
         }
 
-        setSupportActionBar(toolbar, true, getString(if (account.isBackedUp) R.string.Backup_Intro_TitleShow else R.string.Backup_Intro_Title))
+        toolbar.title = getString(if (account.isBackedUp) R.string.Backup_Intro_TitleShow else R.string.Backup_Intro_Title)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         viewModel.init(account)
         viewModel.startPinModule.observe(viewLifecycleOwner, Observer {

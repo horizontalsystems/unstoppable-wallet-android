@@ -26,7 +26,9 @@ class AddErc20TokenFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSupportActionBar(toolbar, true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val model: AddErc20TokenViewModel by viewModels { AddErc20TokenModule.Factory() }
 
