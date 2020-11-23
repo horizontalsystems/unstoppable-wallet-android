@@ -27,7 +27,7 @@ class ZcashAdapter(
 
     private val confirmationsThreshold = 10
     private val feeInZatoshi = 10_000L //0.0001 ZEC
-    private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "lightwalletd.electriccoin.co"
+    private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
 
     private val synchronizer: Synchronizer
