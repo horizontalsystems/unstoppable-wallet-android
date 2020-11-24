@@ -97,10 +97,10 @@ interface IThemeStorage {
 }
 
 interface IThirdKeyboard {
-    var isThirdKeyboardMsgShowed: Boolean
+    var isThirdPartyKeyboardAllowed: Boolean
 }
 
-interface IKeyStoreManager  {
+interface IKeyStoreManager {
     fun validateKeyStore(): KeyStoreValidationResult
     fun removeKey()
     fun resetApp()

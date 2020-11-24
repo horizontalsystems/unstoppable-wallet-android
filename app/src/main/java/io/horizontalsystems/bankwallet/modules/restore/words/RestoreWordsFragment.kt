@@ -124,7 +124,7 @@ class RestoreWordsFragment : BaseFragment() {
     }
 
     private fun isUsingNativeKeyboard(): Boolean {
-        if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdKeyboardMsgShowed) {
+        if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed) {
             (activity as? BaseActivity)?.showCustomKeyboardAlert()
             return false
         }
