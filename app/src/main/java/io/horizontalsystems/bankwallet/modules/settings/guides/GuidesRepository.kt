@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guides
+package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager

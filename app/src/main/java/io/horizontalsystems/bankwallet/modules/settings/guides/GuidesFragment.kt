@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guides
+package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import android.os.Bundle
 import android.view.LayoutInflater

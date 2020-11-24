@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.guides
+package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
