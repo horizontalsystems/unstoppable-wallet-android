@@ -48,6 +48,18 @@ class MainSettingsPresenter(
         router.openAcademy()
     }
 
+    override fun didTapTwitter() {
+        router.openLink(interactor.companyTwitterLink)
+    }
+
+    override fun didTapTelegram() {
+        router.openLink(interactor.companyTelegramLink)
+    }
+
+    override fun didTapReddit() {
+        router.openLink(interactor.companyRedditLink)
+    }
+
     override fun didTapSecurity() {
         router.showSecuritySettings()
     }

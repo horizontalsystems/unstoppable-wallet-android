@@ -36,11 +36,17 @@ object MainSettingsModule {
         fun didTapWalletConnect()
         fun didTapFaq()
         fun didTapAcademy()
+        fun didTapTwitter()
+        fun didTapTelegram()
+        fun didTapReddit()
     }
 
     interface IMainSettingsInteractor {
         val companyWebPageLink: String
         val appWebPageLink: String
+        val companyTwitterLink: String
+        val companyTelegramLink: String
+        val companyRedditLink: String
         val allBackedUp: Boolean
         val walletConnectPeerMeta: WCPeerMeta?
         val currentLanguageDisplayName: String

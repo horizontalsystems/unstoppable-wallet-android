@@ -68,6 +68,15 @@ class MainSettingsFragment : BaseFragment() {
         val academy = SettingsMenuItem(R.string.Guides_Title, R.drawable.ic_academy_20) {
             presenter.didTapAcademy()
         }
+        val twitter = SettingsMenuItem(R.string.Settings_Twitter, R.drawable.ic_twitter) {
+            presenter.didTapTwitter()
+        }
+        val telegram = SettingsMenuItem(R.string.Settings_Telegram, R.drawable.ic_telegram) {
+            presenter.didTapTelegram()
+        }
+        val reddit = SettingsMenuItem(R.string.Settings_Reddit, R.drawable.ic_reddit) {
+            presenter.didTapReddit()
+        }
         val report = SettingsMenuItem(R.string.Settings_Report, R.drawable.ic_report) {
             presenter.didTapReportProblem()
         }
@@ -98,6 +107,11 @@ class MainSettingsFragment : BaseFragment() {
                 null,
                 faq,
                 academy,
+                null,
+                twitter,
+                telegram,
+                reddit,
+                null,
                 report,
                 shareApp,
                 terms,
