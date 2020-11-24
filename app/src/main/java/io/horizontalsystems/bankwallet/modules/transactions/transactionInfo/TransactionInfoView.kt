@@ -11,8 +11,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
-import io.horizontalsystems.bankwallet.modules.info.InfoFragment
-import io.horizontalsystems.bankwallet.modules.info.InfoParameters
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelper
 import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.core.helpers.DateHelper
