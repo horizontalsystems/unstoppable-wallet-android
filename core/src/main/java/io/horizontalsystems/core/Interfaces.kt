@@ -100,7 +100,7 @@ interface IThirdKeyboard {
     var isThirdKeyboardMsgShowed: Boolean
 }
 
-interface IKeyStoreManager {
+interface IKeyStoreManager  {
     fun validateKeyStore(): KeyStoreValidationResult
     fun removeKey()
     fun resetApp()
