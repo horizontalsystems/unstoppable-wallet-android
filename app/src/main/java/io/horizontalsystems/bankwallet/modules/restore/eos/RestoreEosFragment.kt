@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
@@ -95,7 +96,7 @@ class RestoreEosFragment : BaseFragment() {
 
     private fun checkKeyboard() {
         context?.let {
-            if (Utils.isUsingCustomKeyboard(it)) {
+            if (Utils.isUsingCustomKeyboard(it) && !CoreApp.thirdKeyboardStorage.isThirdKeyboardMsgShowed) {
                 showCustomKeyboardAlert()
             }
         }

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 
-class AlertDialogFragment(
+class AlertDialogKeyboardFragment(
         private var title: String? = null,
         private var description: String? = null,
         private var buttonText: Int,
@@ -22,6 +22,7 @@ class AlertDialogFragment(
     interface Listener {
         fun onButtonClick()
         fun onCancel()
+        fun onSkipClick()
     }
 
     override fun onCreateDialog(bundle: Bundle?): Dialog {
@@ -32,13 +33,7 @@ class AlertDialogFragment(
             isVisible = title != null
         }
         rootView.findViewById<TextView>(R.id.txtDescription)?.text = description
-        rootView.findViewById<TextView>(R.id.actionButtonTextView)?.let { btn ->
-            btn.setText(buttonText)
-            btn.setOnClickListener {
-                listener?.onButtonClick()
-                dismiss()
-            }
-        }
+
         cancelButtonText?.let{
             rootView.findViewById<TextView>(R.id.cancelButtonTextView)?.let { btn ->
                 btn.setText(it)
@@ -65,8 +60,8 @@ class AlertDialogFragment(
 
     companion object {
 
-        fun newInstance(titleString: String? = null, descriptionString: String?, buttonText: Int, cancelButtonText: Int? = null, cancelable: Boolean = false, listener: Listener? = null): AlertDialogFragment {
-            return AlertDialogFragment(
+        fun newInstance(titleString: String? = null, descriptionString: String?, buttonText: Int, cancelButtonText: Int? = null, cancelable: Boolean = false, listener: Listener? = null): AlertDialogKeyboardFragment {
+            return AlertDialogKeyboardFragment(
                     title = titleString,
                     description = descriptionString,
                     buttonText = buttonText,

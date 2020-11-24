@@ -51,7 +51,7 @@ abstract class BaseFragment : Fragment() {
         AlertDialogFragment.newInstance(
                 titleString = getString(R.string.Alert_TitleWarning),
                 descriptionString = getString(R.string.Alert_CustomKeyboardIsUsed),
-                buttonText = R.string.Alert_Ok,
+                buttonText = R.string.Alert_Cancel,
                 cancelable = false,
                 listener = object : AlertDialogFragment.Listener {
                     override fun onButtonClick() {
