@@ -11,7 +11,6 @@ import io.reactivex.disposables.CompositeDisposable
 
 class MainSettingsInteractor(
         private val themeStorage: IThemeStorage,
-        private val thirdKeyboardStorage: IThirdKeyboard,
         private val backupManager: IBackupManager,
         private val languageManager: ILanguageManager,
         private val systemInfoManager: ISystemInfoManager,
@@ -70,12 +69,6 @@ class MainSettingsInteractor(
         get() = themeStorage.isLightModeOn
         set(value) {
             themeStorage.isLightModeOn = value
-        }
-
-    override var thirdKeyboard: Boolean
-        get() = thirdKeyboardStorage.isThirdKeyboardMsgShowed
-        set(value) {
-            thirdKeyboardStorage.isThirdKeyboardMsgShowed = value
         }
 
     override val termsAccepted: Boolean

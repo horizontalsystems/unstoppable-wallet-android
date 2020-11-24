@@ -168,7 +168,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
         }
 
-    // IThirdKeyboard
+    //  IKeyboardStorage
 
     override var isThirdKeyboardMsgShowed: Boolean
         get() = preferences.getBoolean(THIRD_KEYBOARD_WARNING_MSG, false)

@@ -30,8 +30,6 @@ class RestoreWordsFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreWordsViewModel
 
-    private val presenter by viewModels<MainSettingsPresenter> { MainSettingsModule.Factory() }
-
     companion object {
         const val restoreAccountTypeKey = "restoreAccountTypeKey"
         const val titleKey = "titleKey"
@@ -139,7 +137,6 @@ class RestoreWordsFragment : BaseFragment() {
     private fun isUsingNativeKeyboard(): Boolean {
         if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdKeyboardMsgShowed) {
             (activity as? BaseActivity)?.showCustomKeyboardAlert()
-            presenter.didThirdKeyboardWarningShow(true)
             return false
         }
 

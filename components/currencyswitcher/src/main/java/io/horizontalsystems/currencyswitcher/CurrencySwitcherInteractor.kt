@@ -8,6 +8,7 @@ class CurrencySwitcherInteractor(private val currencyManager: ICurrencyManager) 
     override val currencies: List<Currency>
         get() = currencyManager.currencies
 
+
     override var baseCurrency: Currency
         get() = currencyManager.baseCurrency
         set(value) {

@@ -35,6 +35,9 @@ abstract class BaseActivity : CoreActivity(), NavController.OnDestinationChanged
                     }
 
                     override fun onCancel() {}
+                    override fun onSkipClick() {
+                        App.thirdKeyboardStorage.isThirdKeyboardMsgShowed = true
+                    }
                 }).show(supportFragmentManager, "custom_keyboard_alert")
     }
 

@@ -58,11 +58,7 @@ class MainSettingsFragment : BaseFragment() {
         language.setOnSingleClickListener { presenter.didTapLanguage() }
 
         lightMode.setOnSingleClickListener { lightMode.switchToggle() }
-
-        lightMode.setOnCheckedChangeListener {
-            presenter.didSwitchLightMode(it)
-        }
-
+        
         experimentalFeatures.setOnSingleClickListener { presenter.didTapExperimentalFeatures() }
 
         terms.setOnSingleClickListener { presenter.didTapAbout() }

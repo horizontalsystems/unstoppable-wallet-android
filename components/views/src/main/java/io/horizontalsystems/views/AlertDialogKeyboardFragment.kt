@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 
+
 class AlertDialogKeyboardFragment (
         private var title: String? = null,
         private var description: String? = null,
@@ -21,6 +22,7 @@ class AlertDialogKeyboardFragment (
     interface Listener {
         fun onButtonClick()
         fun onCancel()
+        fun onSkipClick()
     }
 
     override fun onCreateDialog(bundle: Bundle?): Dialog {
@@ -42,7 +44,7 @@ class AlertDialogKeyboardFragment (
         rootView.findViewById<TextView>(R.id.skipButtonTextView)?.let { btn ->
             btn.setText(skipButtonText)
             btn.setOnClickListener {
-
+                listener?.onSkipClick()
                 dismiss()
             }
         }
@@ -68,6 +70,7 @@ class AlertDialogKeyboardFragment (
                     selectButtonText = selectButtonText,
                     skipButtonText = skipButtonText,
                     listener = listener)
+
         }
     }
 }
