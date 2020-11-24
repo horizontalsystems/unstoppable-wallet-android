@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
+import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsService.RestoreWordsException
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -123,7 +124,7 @@ class RestoreWordsFragment : BaseFragment() {
     }
 
     private fun isUsingNativeKeyboard(): Boolean {
-        if (Utils.isUsingCustomKeyboard(requireContext())) {
+        if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdKeyboardMsgShowed) {
             (activity as? BaseActivity)?.showCustomKeyboardAlert()
             return false
         }
