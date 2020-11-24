@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/SettingsAboutApp_Title" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="20dp">
+
+            <ImageView
+                android:id="@+id/appIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:src="@mipmap/bitcoin_launcher"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/appName"
+                style="@style/Headline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/App_Name"
+                android:textColor="?ColorOz"
+                app:layout_constraintBottom_toTopOf="@+id/versionName"
+                app:layout_constraintStart_toEndOf="@+id/appIcon"
+                app:layout_constraintTop_toTopOf="@+id/appIcon"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/versionName"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/grey"
+                app:layout_constraintBottom_toBottomOf="@+id/appIcon"
+                app:layout_constraintStart_toEndOf="@+id/appIcon"
+                app:layout_constraintTop_toBottomOf="@+id/appName"
+                tools:text="Version number" />
+
+            <Button
+                android:id="@+id/githubButton"
+                style="@style/ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/SettingsAboutApp_Github"
+                app:layout_constraintEnd_toStartOf="@+id/siteButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appIcon" />
+
+            <Button
+                android:id="@+id/siteButton"
+                style="@style/ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/SettingsAboutApp_Site"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/githubButton"
+                app:layout_constraintTop_toTopOf="@+id/githubButton" />
+
+            <io.horizontalsystems.views.SettingsView
+                android:id="@+id/contactItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:icon="@drawable/ic_mail_20"
+                app:layout_constraintTop_toBottomOf="@+id/githubButton"
+                app:title="@string/SettingsContact_Title" />
+
+            <io.horizontalsystems.views.SettingsView
+                android:id="@+id/appStatusItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_app_status"
+                app:layout_constraintTop_toBottomOf="@+id/contactItem"
+                app:title="@string/Settings_AppStatus" />
+
+            <io.horizontalsystems.views.SettingsView
+                android:id="@+id/termsItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_terms_20"
+                app:layout_constraintTop_toBottomOf="@+id/appStatusItem"
+                app:title="@string/Settings_Terms" />
+
+            <io.horizontalsystems.views.SettingsView
+                android:id="@+id/rateUsItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_star_20"
+                app:layout_constraintTop_toBottomOf="@+id/termsItem"
+                app:title="@string/Settings_RateUs" />
+
+            <io.horizontalsystems.views.SettingsView
+                android:id="@+id/tellFriendsItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:bottomBorder="true"
+                app:icon="@drawable/ic_share_20"
+                app:layout_constraintTop_toBottomOf="@+id/rateUsItem"
+                app:title="@string/Settings_ShareThisWallet" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

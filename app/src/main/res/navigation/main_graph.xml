@@ -22,9 +22,6 @@
             android:id="@+id/mainFragment_to_securitySettingsFragment"
             app:destination="@id/securitySettingsFragment" />
         <action
-            android:id="@+id/mainFragment_to_appStatusFragment"
-            app:destination="@id/appStatusFragment" />
-        <action
             android:id="@+id/mainFragment_to_faqListFragment"
             app:destination="@id/faqListFragment" />
         <action
@@ -40,8 +37,8 @@
             android:id="@+id/mainFragment_to_languageSettingsFragment"
             app:destination="@id/languageSettingsFragment" />
         <action
-            android:id="@+id/mainFragment_to_termsFragment"
-            app:destination="@id/termsFragment" />
+            android:id="@+id/mainFragment_to_aboutAppFragment"
+            app:destination="@id/aboutAppFragment" />
         <action
             android:id="@+id/mainFragment_to_notificationsFragment"
             app:destination="@id/notificationsFragment" />
@@ -148,6 +145,20 @@
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"
         tools:layout="@layout/fragment_terms_settings" />
+    <fragment
+        android:id="@+id/aboutAppFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"
+        tools:layout="@layout/fragment_about">
+        <action
+            android:id="@+id/aboutAppFragment_to_contactFragment"
+            app:destination="@id/contactFragment" />
+        <action
+            android:id="@+id/aboutAppFragment_to_appStatusFragment"
+            app:destination="@id/appStatusFragment" />
+        <action
+            android:id="@+id/aboutAppFragment_to_termsFragment"
+            app:destination="@id/termsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsFragment"
