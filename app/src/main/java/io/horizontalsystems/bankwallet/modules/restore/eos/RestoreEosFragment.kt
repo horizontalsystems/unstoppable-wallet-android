@@ -96,7 +96,7 @@ class RestoreEosFragment : BaseFragment() {
 
     private fun checkKeyboard() {
         context?.let {
-            if (Utils.isUsingCustomKeyboard(it) && !CoreApp.thirdKeyboardStorage.isThirdKeyboardMsgShowed) {
+            if (Utils.isUsingCustomKeyboard(it) && !CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed) {
                 showCustomKeyboardAlert()
             }
         }
