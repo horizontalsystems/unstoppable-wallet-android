@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.info
+package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.os.Bundle
 import android.os.Parcelable

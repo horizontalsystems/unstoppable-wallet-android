@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
-import io.horizontalsystems.bankwallet.modules.info.InfoFragment
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.StatusInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
