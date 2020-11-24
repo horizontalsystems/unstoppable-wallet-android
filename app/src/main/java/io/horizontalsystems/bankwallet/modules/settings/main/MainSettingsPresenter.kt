@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.lifecycle.ViewModel
 import com.trustwallet.walletconnect.models.WCPeerMeta
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractor
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractorDelegate
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsRouter
@@ -30,10 +29,6 @@ class MainSettingsPresenter(
 
     override fun didTapManageKeys() {
         router.showManageKeys()
-    }
-
-    override fun didTapAppStatus() {
-        router.openAppStatus()
     }
 
     override fun didTapWalletConnect() {
@@ -81,20 +76,12 @@ class MainSettingsPresenter(
         router.reloadAppInterface()
     }
 
-    override fun didTapAbout() {
-        router.showAbout()
+    override fun didTapAboutApp() {
+        router.showAboutApp()
     }
 
     override fun didTapCompanyLogo() {
         router.openLink(interactor.companyWebPageLink)
-    }
-
-    override fun didTapReportProblem() {
-        router.showReportProblem()
-    }
-
-    override fun didTapTellFriends() {
-        router.showShareApp(interactor.appWebPageLink)
     }
 
     override fun didTapNotifications() {

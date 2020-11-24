@@ -41,13 +41,10 @@ class MainSettingsFragment : BaseFragment() {
         val privacySettings = SettingsMenuItem(R.string.Settings_SecurityCenter, R.drawable.ic_security) {
             presenter.didTapSecurity()
         }
-        val appStatus = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, isLast = true) {
-            presenter.didTapAppStatus()
-        }
         val walletConnect = SettingsMenuItem(R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, isLast = true) {
             presenter.didTapWalletConnect()
         }
-        val notifications = SettingsMenuItem(R.string.Settings_Notifications, R.drawable.ic_notification_20, isLast = true) {
+        val notifications = SettingsMenuItem(R.string.Settings_Notifications, R.drawable.ic_notification_20) {
             presenter.didTapNotifications()
         }
         val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency) {
@@ -77,14 +74,8 @@ class MainSettingsFragment : BaseFragment() {
         val reddit = SettingsMenuItem(R.string.Settings_Reddit, R.drawable.ic_reddit) {
             presenter.didTapReddit()
         }
-        val report = SettingsMenuItem(R.string.Settings_Report, R.drawable.ic_report) {
-            presenter.didTapReportProblem()
-        }
-        val shareApp = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20) {
-            presenter.didTapTellFriends()
-        }
-        val terms = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms, isLast = true) {
-            presenter.didTapAbout()
+        val aboutApp = SettingsMenuItem(R.string.SettingsAboutApp_Title, R.drawable.ic_about_app_20, isLast = true) {
+            presenter.didTapAboutApp()
         }
         val settingsBottom = SettingsMenuBottom {
             presenter.didTapCompanyLogo()
@@ -94,12 +85,10 @@ class MainSettingsFragment : BaseFragment() {
         val mainSettingsAdapter = MainSettingsAdapter(listOf(
                 manageKeys,
                 privacySettings,
-                appStatus,
                 null,
                 walletConnect,
                 null,
                 notifications,
-                null,
                 baseCurrency,
                 language,
                 lightMode,
@@ -112,9 +101,7 @@ class MainSettingsFragment : BaseFragment() {
                 telegram,
                 reddit,
                 null,
-                report,
-                shareApp,
-                terms,
+                aboutApp,
                 settingsBottom
         ))
 
@@ -158,8 +145,8 @@ class MainSettingsFragment : BaseFragment() {
         })
 
         presenterView.termsAccepted.observe(viewLifecycleOwner, Observer { termsAccepted ->
-            terms.attention = !termsAccepted
-            mainSettingsAdapter.notifyChanged(terms)
+            aboutApp.attention = !termsAccepted
+            mainSettingsAdapter.notifyChanged(aboutApp)
         })
 
         presenterView.walletConnectPeer.observe(viewLifecycleOwner, Observer { currency ->
@@ -171,7 +158,7 @@ class MainSettingsFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroy()
+        super.onDestroyView()
         settingsRecyclerView.adapter = null
     }
 
@@ -189,7 +176,7 @@ class MainSettingsFragment : BaseFragment() {
         })
 
         router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.mainFragment_to_termsFragment, null, navOptions())
+            findNavController().navigate(R.id.mainFragment_to_aboutAppFragment, null, navOptions())
         })
 
         router.showNotificationsLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -202,10 +189,6 @@ class MainSettingsFragment : BaseFragment() {
 
         router.openAcademyLiveEvent.observe(viewLifecycleOwner, Observer {
             findNavController().navigate(R.id.mainFragment_to_academyFragment, null, navOptions())
-        })
-
-        router.showReportProblemLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.mainFragment_to_contactFragment, null, navOptions())
         })
 
         router.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -222,24 +205,12 @@ class MainSettingsFragment : BaseFragment() {
             activity?.startActivity(intent)
         })
 
-        router.shareAppLiveEvent.observe(viewLifecycleOwner, Observer { appWebPageLink ->
-            val shareMessage = getString(R.string.SettingsShare_Text) + "\n" + appWebPageLink + "\n"
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.SettingsShare_Title)))
-        })
-
         router.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
             val nightMode = if (CoreApp.themeStorage.isLightModeOn)
                 AppCompatDelegate.MODE_NIGHT_NO else
                 AppCompatDelegate.MODE_NIGHT_YES
 
             AppCompatDelegate.setDefaultNightMode(nightMode)
-        })
-
-        router.openAppStatusLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.mainFragment_to_appStatusFragment, null, navOptions())
         })
 
         router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, Observer {

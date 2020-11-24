@@ -10,12 +10,9 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
     val showLanguageSettingsLiveEvent = SingleLiveEvent<Unit>()
     val showAboutLiveEvent = SingleLiveEvent<Unit>()
     val showNotificationsLiveEvent = SingleLiveEvent<Unit>()
-    val showReportProblemLiveEvent = SingleLiveEvent<Unit>()
     val openLinkLiveEvent = SingleLiveEvent<String>()
-    val shareAppLiveEvent = SingleLiveEvent<String>()
     val reloadAppLiveEvent = SingleLiveEvent<Unit>()
     val showManageKeysLiveEvent = SingleLiveEvent<Unit>()
-    val openAppStatusLiveEvent = SingleLiveEvent<Unit>()
     val openWalletConnectLiveEvent = SingleLiveEvent<Unit>()
     val openFaqLiveEvent = SingleLiveEvent<Unit>()
     val openAcademyLiveEvent = SingleLiveEvent<Unit>()
@@ -40,7 +37,7 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
         showLanguageSettingsLiveEvent.call()
     }
 
-    override fun showAbout() {
+    override fun showAboutApp() {
         showAboutLiveEvent.call()
     }
 
@@ -52,20 +49,8 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
         reloadAppLiveEvent.call()
     }
 
-    override fun showReportProblem() {
-        showReportProblemLiveEvent.call()
-    }
-
-    override fun showShareApp(appWebPageLink: String) {
-        shareAppLiveEvent.postValue(appWebPageLink)
-    }
-
     override fun showNotifications() {
         showNotificationsLiveEvent.call()
-    }
-
-    override fun openAppStatus() {
-        openAppStatusLiveEvent.call()
     }
 
     override fun openWalletConnect() {
