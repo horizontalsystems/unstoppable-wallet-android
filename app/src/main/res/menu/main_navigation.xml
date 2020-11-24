@@ -12,11 +12,6 @@
         android:title="@string/Transactions_Title" />
 
     <item
-        android:id="@+id/navigation_guides"
-        android:icon="@drawable/ic_academy"
-        android:title="@string/Guides_Title" />
-
-    <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/Settings_Title" />

@@ -18,6 +18,7 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
     val openAppStatusLiveEvent = SingleLiveEvent<Unit>()
     val openWalletConnectLiveEvent = SingleLiveEvent<Unit>()
     val openFaqLiveEvent = SingleLiveEvent<Unit>()
+    val openAcademyLiveEvent = SingleLiveEvent<Unit>()
 
     override fun showManageKeys() {
         showManageKeysLiveEvent.call()
@@ -73,5 +74,9 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
 
     override fun openFaq() {
         openFaqLiveEvent.call()
+    }
+
+    override fun openAcademy() {
+        openAcademyLiveEvent.call()
     }
 }

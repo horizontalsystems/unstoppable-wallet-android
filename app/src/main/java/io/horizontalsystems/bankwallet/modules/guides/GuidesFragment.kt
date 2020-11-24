@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import kotlinx.android.synthetic.main.fragment_guides.*
+import kotlinx.android.synthetic.main.fragment_guides.toolbar
 
 class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Listener {
 
@@ -31,6 +32,10 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         recyclerTags.adapter = filterAdapter
         recyclerGuides.adapter = ConcatAdapter(errorAdapter, guidesAdapter)
@@ -47,7 +52,7 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
 
     override fun onItemClick(guide: Guide) {
         val arguments = bundleOf(MarkdownFragment.markdownUrlKey to guide.fileUrl)
-        findNavController().navigate(R.id.mainFragment_to_markdownFragment, arguments, navOptions())
+        findNavController().navigate(R.id.academyFragment_to_markdownFragment, arguments, navOptions())
     }
 
     private fun observeLiveData() {

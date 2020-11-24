@@ -39,7 +39,6 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         view.viewPager.adapter = MainViewPagerAdapter(listOf(
                 BalanceFragment(),
                 TransactionsFragment(),
-                GuidesFragment(),
                 MainSettingsFragment()
         ), childFragmentManager, viewLifecycleOwner.lifecycle)
 
@@ -54,7 +53,6 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
             when (it.itemId) {
                 R.id.navigation_balance -> view.viewPager.setCurrentItem(0, false)
                 R.id.navigation_transactions -> view.viewPager.setCurrentItem(1, false)
-                R.id.navigation_guides -> view.viewPager.setCurrentItem(2, false)
                 R.id.navigation_settings -> view.viewPager.setCurrentItem(3, false)
             }
             true
