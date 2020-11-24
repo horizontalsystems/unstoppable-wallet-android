@@ -13,7 +13,6 @@ object MainSettingsModule {
         fun setBaseCurrency(currency: String)
         fun setLanguage(language: String)
         fun setLightMode(lightMode: Boolean)
-        fun setKeyboard(warningKeyboardMsg: Boolean)
         fun setAppVersion(appVersion: String)
         fun setTermsAccepted(termsAccepted: Boolean)
         fun setPinIsSet(pinSet: Boolean)

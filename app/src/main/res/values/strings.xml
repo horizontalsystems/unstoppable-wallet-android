@@ -12,6 +12,8 @@
     <string name="Alert_Copied">Copied</string>
     <string name="Alert_Loading">Loading...</string>
     <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Skip" translatable="false">SKIP</string>
+    <string name="Alert_Select" translatable="false">SELECT</string>
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
