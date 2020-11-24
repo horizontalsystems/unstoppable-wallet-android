@@ -170,7 +170,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     //  IKeyboardStorage
 
-    override var isThirdKeyboardMsgShowed: Boolean
+    override var isThirdPartyKeyboardAllowed: Boolean
         get() = preferences.getBoolean(THIRD_KEYBOARD_WARNING_MSG, false)
         set(enabled) {
             preferences.edit().putBoolean(THIRD_KEYBOARD_WARNING_MSG,enabled).apply()
