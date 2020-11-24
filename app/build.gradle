@@ -171,7 +171,10 @@ dependencies {
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.2'
+    appcenterImplementation leakCanary
+    apptestnetImplementation leakCanary
+    debugImplementation leakCanary
 
     //permission
     implementation 'pub.devrel:easypermissions:3.0.0'
