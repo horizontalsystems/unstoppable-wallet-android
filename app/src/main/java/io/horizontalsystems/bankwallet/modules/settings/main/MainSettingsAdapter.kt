@@ -68,8 +68,10 @@ class MainSettingsAdapter(private val items: List<SettingsViewItem?>)
 
     class SettingsViewHolderBottom(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         private val companyLogo = containerView.findViewById<ImageView>(R.id.companyLogo)
+        private val appName = containerView.findViewById<TextView>(R.id.appName)
 
         fun bind(item: SettingsMenuBottom) {
+            appName.text  = item.appName
             companyLogo.setOnClickListener {
                 item.onClick()
             }
@@ -114,12 +116,14 @@ class MainSettingsAdapter(private val items: List<SettingsViewItem?>)
         private val settingsIcon = containerView.findViewById<ImageView>(R.id.settingsIcon)
         private val bottomBorder = containerView.findViewById<View>(R.id.bottomBorder)
         private val arrowIcon = containerView.findViewById<ImageView>(R.id.arrowIcon)
+        private val attentionIcon = containerView.findViewById<ImageView>(R.id.attentionIcon)
 
         fun bind(item: SettingsMenuItem) {
             settingsTitle.setText(item.title)
 
             bottomBorder.isVisible = item.isLast
             arrowIcon.isVisible = true
+            attentionIcon.isVisible = item.attention
 
             settingsValue.text = item.value
             settingsValue.isVisible = item.value != null
