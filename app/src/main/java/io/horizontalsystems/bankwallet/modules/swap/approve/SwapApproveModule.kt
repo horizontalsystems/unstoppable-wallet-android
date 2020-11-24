@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
@@ -11,8 +10,6 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.guides.DataState
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Observable

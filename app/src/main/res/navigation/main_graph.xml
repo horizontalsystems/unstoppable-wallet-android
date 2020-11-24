@@ -125,7 +125,7 @@
     </fragment>
     <fragment
         android:id="@+id/academyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.guides.GuidesFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.guides.GuidesFragment"
         tools:layout="@layout/fragment_guides"
         android:label="@string/Guides_Title">
         <action

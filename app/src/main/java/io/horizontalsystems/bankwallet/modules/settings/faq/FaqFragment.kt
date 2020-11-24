@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Faq
-import io.horizontalsystems.bankwallet.modules.guides.ErrorAdapter
+import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
