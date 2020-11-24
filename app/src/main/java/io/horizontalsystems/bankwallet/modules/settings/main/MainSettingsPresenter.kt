@@ -44,6 +44,10 @@ class MainSettingsPresenter(
         router.openFaq()
     }
 
+    override fun didTapAcademy() {
+        router.openAcademy()
+    }
+
     override fun didTapSecurity() {
         router.showSecuritySettings()
     }

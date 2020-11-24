@@ -28,6 +28,9 @@
             android:id="@+id/mainFragment_to_faqListFragment"
             app:destination="@id/faqListFragment" />
         <action
+            android:id="@+id/mainFragment_to_academyFragment"
+            app:destination="@id/academyFragment" />
+        <action
             android:id="@+id/mainFragment_to_contactFragment"
             app:destination="@id/contactFragment" />
         <action
@@ -54,9 +57,6 @@
         <action
             android:id="@+id/mainFragment_to_rateChartFragment"
             app:destination="@id/rateChartFragment" />
-        <action
-            android:id="@+id/mainFragment_to_markdownFragment"
-            app:destination="@id/markdownFragment" />
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
@@ -121,6 +121,15 @@
         android:label="@string/Settings_Faq">
         <action
             android:id="@+id/faqFragment_to_markdownFragment"
+            app:destination="@id/markdownFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/academyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.guides.GuidesFragment"
+        tools:layout="@layout/fragment_guides"
+        android:label="@string/Guides_Title">
+        <action
+            android:id="@+id/academyFragment_to_markdownFragment"
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment

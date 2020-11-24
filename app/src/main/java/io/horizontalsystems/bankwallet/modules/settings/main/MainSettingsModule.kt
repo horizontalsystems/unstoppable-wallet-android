@@ -35,6 +35,7 @@ object MainSettingsModule {
         fun didTapAppStatus()
         fun didTapWalletConnect()
         fun didTapFaq()
+        fun didTapAcademy()
     }
 
     interface IMainSettingsInteractor {
@@ -75,6 +76,7 @@ object MainSettingsModule {
         fun openAppStatus()
         fun openWalletConnect()
         fun openFaq()
+        fun openAcademy()
     }
 
     class Factory : ViewModelProvider.Factory {
