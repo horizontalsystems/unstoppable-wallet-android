@@ -26,6 +26,7 @@ import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
 import kotlinx.android.synthetic.main.view_input_address.view.*
 
+
 class RestoreWordsFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreWordsViewModel

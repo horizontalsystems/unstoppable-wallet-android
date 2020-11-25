@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_restore_eos.eosAccount
 import kotlinx.android.synthetic.main.fragment_restore_eos.eosActivePrivateKey
 import io.horizontalsystems.bankwallet.core.BaseActivity
 
+
 class RestoreEosFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreEosViewModel
