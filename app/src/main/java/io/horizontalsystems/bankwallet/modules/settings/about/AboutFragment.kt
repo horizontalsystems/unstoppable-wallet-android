@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import kotlinx.android.synthetic.main.fragment_about.*
 import kotlinx.android.synthetic.main.fragment_contact.toolbar
 
@@ -90,16 +91,10 @@ class AboutFragment : BaseFragment() {
 
     private fun openRateUs() {
         context?.let { context ->
-            val uri = Uri.parse("market://details?id=io.horizontalsystems.bankwallet")  //context.packageName
-            val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
-
-            goToMarketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
-
             try {
-                ContextCompat.startActivity(context, goToMarketIntent, null)
+                ContextCompat.startActivity(context, RateAppManager.getPlayMarketAppIntent(), null)
             } catch (e: ActivityNotFoundException) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet"))
-                ContextCompat.startActivity(context, intent, null)
+                ContextCompat.startActivity(context, RateAppManager.getPlayMarketSiteIntent(), null)
             }
         }
     }
