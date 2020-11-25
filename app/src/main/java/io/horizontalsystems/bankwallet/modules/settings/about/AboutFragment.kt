@@ -90,15 +90,7 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             menuItemsAdapter.notifyChanged(termsItem)
         })
 
-        viewModel.appVersionLiveData.observe(viewLifecycleOwner, Observer { version ->
-            version?.let {
-                var appVersion = getString(R.string.Settings_InfoTitleWithVersion, it)
-                if (getString(R.string.is_release) == "false") {
-                    appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
-                }
-                headerAdapter.setVersionText(appVersion)
-            }
-        })
+        headerAdapter.setVersionText(getAppVersion())
     }
 
     //AboutAppHeaderAdapter.Listener
@@ -109,6 +101,14 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
 
     override fun onSiteLinkClick() {
         viewModel.onSiteLinkTap()
+    }
+
+    private fun getAppVersion(): String {
+        var appVersion = getString(R.string.Settings_InfoTitleWithVersion, viewModel.appVersion)
+        if (getString(R.string.is_release) == "false") {
+            appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
+        }
+        return appVersion
     }
 
     private fun openRateUs() {

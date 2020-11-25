@@ -16,14 +16,14 @@ class AboutViewModel(
 
     val openLinkLiveData = SingleLiveEvent<String>()
     val showShareAppLiveData = SingleLiveEvent<String>()
-    val appVersionLiveData = MutableLiveData<String>()
     val termsAcceptedData = MutableLiveData<Boolean>()
+
+    val appVersion = systemInfoManager.appVersion
 
     var disposable: Disposable? = null
 
     init {
         termsAcceptedData.postValue(termsManager.termsAccepted)
-        appVersionLiveData.postValue(systemInfoManager.appVersion)
 
         disposable = termsManager.termsAcceptedSignal
                 .subscribe { allAccepted ->
