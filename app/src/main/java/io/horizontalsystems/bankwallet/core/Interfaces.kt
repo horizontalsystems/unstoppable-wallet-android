@@ -293,6 +293,7 @@ interface IAppConfigProvider {
     val ipfsId: String
     val ipfsMainGateway: String
     val ipfsFallbackGateway: String
+    val cryptoCompareApiKey: String
     val infuraProjectId: String
     val infuraProjectSecret: String
     val etherscanApiKey: String
