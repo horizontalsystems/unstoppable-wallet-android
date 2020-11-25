@@ -12,14 +12,23 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
+import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
+import io.horizontalsystems.views.inflate
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_about.*
 import kotlinx.android.synthetic.main.fragment_contact.toolbar
+import kotlinx.android.synthetic.main.view_holder_about_app_header.*
 
-class AboutFragment : BaseFragment() {
+class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
+
+    val viewModel by viewModels<AboutViewModel> { AboutModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_about, container, false)
@@ -27,39 +36,41 @@ class AboutFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        val viewModel by viewModels<AboutViewModel> { AboutModule.Factory() }
-
-        githubButton.setOnSingleClickListener {
-            viewModel.onGithubLinkTap()
-        }
-        siteButton.setOnSingleClickListener {
-            viewModel.onSiteLinkTap()
-        }
-        contactItem.setOnSingleClickListener {
+        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_mail_20) {
             findNavController().navigate(R.id.aboutAppFragment_to_contactFragment, null, navOptions())
         }
-        appStatusItem.setOnSingleClickListener {
+        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status) {
             findNavController().navigate(R.id.aboutAppFragment_to_appStatusFragment, null, navOptions())
         }
-        termsItem.setOnSingleClickListener {
+        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20) {
             findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
         }
-        rateUsItem.setOnSingleClickListener {
+        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20) {
             openRateUs()
         }
-        tellFriendsItem.setOnSingleClickListener {
+        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20) {
             viewModel.onTellFriendsTap()
         }
 
-        observe(viewModel)
+        val menuItemsAdapter = MainSettingsAdapter(listOf(
+                contactItem,
+                appStatusItem,
+                termsItem,
+                rateUsItem,
+                shareAppItem
+        ))
 
-    }
+        val headerAdapter = AboutAppHeaderAdapter(this)
 
-    private fun observe(viewModel: AboutViewModel) {
+        aboutRecyclerview.adapter = ConcatAdapter(headerAdapter, menuItemsAdapter)
+
+        //observe LiveData
+
         viewModel.openLinkLiveData.observe(viewLifecycleOwner, Observer { link ->
             val uri = Uri.parse(link)
             val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -75,7 +86,8 @@ class AboutFragment : BaseFragment() {
         })
 
         viewModel.termsAcceptedData.observe(viewLifecycleOwner, Observer { termsAccepted ->
-            termsItem.showAttention(!termsAccepted)
+            termsItem.attention = !termsAccepted
+            menuItemsAdapter.notifyChanged(termsItem)
         })
 
         viewModel.appVersionLiveData.observe(viewLifecycleOwner, Observer { version ->
@@ -84,9 +96,19 @@ class AboutFragment : BaseFragment() {
                 if (getString(R.string.is_release) == "false") {
                     appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
                 }
-                versionName.text = appVersion
+                headerAdapter.setVersionText(appVersion)
             }
         })
+    }
+
+    //AboutAppHeaderAdapter.Listener
+
+    override fun onGithubLinkClick() {
+        viewModel.onGithubLinkTap()
+    }
+
+    override fun onSiteLinkClick() {
+        viewModel.onSiteLinkTap()
     }
 
     private fun openRateUs() {
@@ -99,4 +121,49 @@ class AboutFragment : BaseFragment() {
         }
     }
 
+}
+
+
+class AboutAppHeaderAdapter(private val listener: Listener) : RecyclerView.Adapter<AboutAppHeaderAdapter.HeaderViewHolder>() {
+
+    interface Listener {
+        fun onGithubLinkClick()
+        fun onSiteLinkClick()
+    }
+
+    private var versionText = ""
+
+    override fun getItemCount() = 1
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
+        return HeaderViewHolder.create(parent, listener)
+    }
+
+    override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
+        holder.bind(versionText)
+    }
+
+    fun setVersionText(appVersion: String) {
+        versionText = appVersion
+        notifyDataSetChanged()
+    }
+
+    class HeaderViewHolder(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        init {
+            githubButton.setOnSingleClickListener { listener.onGithubLinkClick() }
+            siteButton.setOnSingleClickListener { listener.onSiteLinkClick() }
+        }
+
+        fun bind(version: String) {
+            versionNameText.text = version
+        }
+
+        companion object {
+            const val layout = R.layout.view_holder_about_app_header
+
+            fun create(parent: ViewGroup, listener: Listener) = HeaderViewHolder(inflate(parent, layout, false), listener)
+        }
+
+    }
 }
