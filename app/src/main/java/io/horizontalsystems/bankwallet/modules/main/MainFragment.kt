@@ -53,7 +53,7 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
             when (it.itemId) {
                 R.id.navigation_balance -> view.viewPager.setCurrentItem(0, false)
                 R.id.navigation_transactions -> view.viewPager.setCurrentItem(1, false)
-                R.id.navigation_settings -> view.viewPager.setCurrentItem(3, false)
+                R.id.navigation_settings -> view.viewPager.setCurrentItem(2, false)
             }
             true
         }
@@ -82,7 +82,7 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
         viewModel.setBadgeVisibleLiveData.observe(viewLifecycleOwner, Observer { visible ->
             val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-            val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
+            val settingsNavigationViewItem = bottomMenu?.getChildAt(2) as? BottomNavigationItemView
 
             if (visible) {
                 if (bottomBadgeView?.parent == null) {
