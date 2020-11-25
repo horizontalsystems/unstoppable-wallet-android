@@ -37,88 +37,17 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="24dp" />
 
-            <ImageView
-                android:id="@+id/appIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:src="@mipmap/bitcoin_launcher"
-                app:layout_constraintStart_toStartOf="@+id/guideStart"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/appName"
-                style="@style/Title3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:includeFontPadding="false"
-                android:text="@string/SettingsTerms_AppTitle"
-                android:textColor="?ColorOz"
-                app:layout_constraintBottom_toTopOf="@+id/appShortDescription"
-                app:layout_constraintStart_toEndOf="@+id/appIcon"
-                app:layout_constraintTop_toTopOf="@+id/appIcon"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <TextView
-                android:id="@+id/appShortDescription"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:includeFontPadding="false"
-                android:text="@string/SettingsTerms_Subtitle"
-                android:textColor="@color/grey"
-                app:layout_constraintBottom_toBottomOf="@+id/appIcon"
-                app:layout_constraintStart_toStartOf="@+id/appName"
-                app:layout_constraintTop_toBottomOf="@+id/appName" />
-
             <TextView
                 android:id="@+id/termsText"
                 style="@style/Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/SettingsTerms_Text"
                 android:textColor="?ColorBran"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
-                app:layout_constraintTop_toBottomOf="@+id/appIcon" />
-
-            <Button
-                android:id="@+id/githubLink"
-                style="@style/ButtonSecondary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="4dp"
-                android:text="@string/SettingsTerms_Github"
-                app:layout_constraintEnd_toStartOf="@+id/siteLink"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guideStart"
-                app:layout_constraintTop_toBottomOf="@id/termsText" />
-
-            <Button
-                android:id="@+id/siteLink"
-                style="@style/ButtonSecondary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/SettingsTerms_Site"
-                app:layout_constraintEnd_toEndOf="@+id/guideEnd"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/githubLink"
-                app:layout_constraintTop_toTopOf="@id/githubLink" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="24dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="@+id/guideEnd"
-                app:layout_constraintStart_toStartOf="@+id/guideStart"
-                app:layout_constraintTop_toBottomOf="@+id/githubLink" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
                 android:id="@+id/checkboxAcademy"
@@ -129,7 +58,7 @@
                 android:text="@string/SettingsTerms_TermAcademy"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/termsText" />
 
             <CheckBox
                 android:id="@+id/checkboxBackup"
