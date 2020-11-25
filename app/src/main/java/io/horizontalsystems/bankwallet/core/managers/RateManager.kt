@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.IRateCoinMapper
-import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
@@ -20,7 +19,8 @@ class RateManager(
         walletManager: IWalletManager,
         private val currencyManager: ICurrencyManager,
         private val rateCoinMapper: IRateCoinMapper,
-        private val feeCoinProvider: FeeCoinProvider) : IRateManager {
+        private val feeCoinProvider: FeeCoinProvider,
+        private val appConfigProvider: IAppConfigProvider) : IRateManager {
 
     private val disposables = CompositeDisposable()
     private val coinMarketCapApiKey = "f33ccd44-6545-4cbb-991c-4584b9501251"
@@ -30,6 +30,7 @@ class RateManager(
                 currencyManager.baseCurrency.code,
                 rateExpirationInterval = 60 * 10,
                 topMarketsCount = 100,
+                cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey,
                 coinMarketCapApiKey = coinMarketCapApiKey
         )
     }
