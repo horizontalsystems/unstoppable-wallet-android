@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
@@ -117,16 +118,10 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
     override fun onClickRateApp() {
         context?.let { context ->
-            val uri = Uri.parse("market://details?id=io.horizontalsystems.bankwallet")  //context.packageName
-            val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
-
-            goToMarketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
-
             try {
-                ContextCompat.startActivity(context, goToMarketIntent, null)
+                ContextCompat.startActivity(context, RateAppManager.getPlayMarketAppIntent(), null)
             } catch (e: ActivityNotFoundException) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet"))
-                ContextCompat.startActivity(context, intent, null)
+                ContextCompat.startActivity(context, RateAppManager.getPlayMarketSiteIntent(), null)
             }
         }
     }

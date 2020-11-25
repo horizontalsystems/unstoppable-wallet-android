@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -96,6 +98,20 @@ class RateAppManager(
                     onCountdownPass()
                 },
                 COUNTDOWN_TIME_INTERVAL)
+    }
+
+    companion object{
+
+        fun getPlayMarketAppIntent(): Intent {
+            val uri = Uri.parse("market://details?id=io.horizontalsystems.bankwallet")  //context.packageName
+            val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
+            goToMarketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+            return goToMarketIntent
+        }
+
+         fun getPlayMarketSiteIntent(): Intent {
+             return Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet"))
+         }
     }
 
 }
