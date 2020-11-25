@@ -59,28 +59,4 @@ abstract class BaseFragment : Fragment() {
                 .setPopExitAnim(R.anim.slide_out_bottom)
                 .build()
     }
-
-    protected fun showCustomKeyboardAlert() {
-        AlertDialogFragment.newInstance(
-                titleString = getString(R.string.Alert_TitleWarning),
-                descriptionString = getString(R.string.Alert_CustomKeyboardIsUsed),
-                buttonText = R.string.Alert_Cancel,
-                cancelable = false,
-                listener = object : AlertDialogFragment.Listener {
-                    override fun onButtonClick() {
-                        val imeManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imeManager.showInputMethodPicker()
-                        hideKeyboard()
-                        Handler().postDelayed({
-                            try {
-                                requireActivity().onBackPressed()
-                            } catch (e: NullPointerException) {
-                                //do nothing
-                            }
-                        }, (1 * 750).toLong())
-                    }
-
-                    override fun onCancel() {}
-                }).show(parentFragmentManager, "custom_keyboard_alert")
-    }
 }

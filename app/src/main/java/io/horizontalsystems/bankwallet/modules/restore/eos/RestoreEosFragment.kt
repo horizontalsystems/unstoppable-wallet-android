@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
@@ -107,7 +108,7 @@ class RestoreEosFragment : BaseFragment() {
     private fun checkKeyboard() {
         context?.let {
             if (Utils.isUsingCustomKeyboard(it) && !CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed) {
-                showCustomKeyboardAlert()
+                (activity as? BaseActivity)?.showCustomKeyboardAlert()
             }
         }
     }
