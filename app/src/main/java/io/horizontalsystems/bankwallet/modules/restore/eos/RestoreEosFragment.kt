@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
@@ -27,6 +26,10 @@ import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.eoskit.core.InvalidPrivateKey
 import io.horizontalsystems.views.MultipleInputEditTextView
 import kotlinx.android.synthetic.main.fragment_restore_eos.*
+import kotlinx.android.synthetic.main.fragment_restore_eos.eosAccount
+import kotlinx.android.synthetic.main.fragment_restore_eos.eosActivePrivateKey
+import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.core.CoreApp
 
 class RestoreEosFragment : BaseFragment() {
 
