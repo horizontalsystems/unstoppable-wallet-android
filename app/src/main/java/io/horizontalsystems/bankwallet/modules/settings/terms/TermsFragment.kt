@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.terms
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,14 +28,6 @@ class TermsFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        githubLink.setOnClickListener {
-            viewModel.onGithubButtonClick()
-        }
-
-        siteLink.setOnClickListener {
-            viewModel.onSiteButtonClick()
-        }
-
         viewModel.termsLiveData.observe(viewLifecycleOwner, Observer { terms ->
             setCheckbox(checkboxAcademy, TermsManager.termIds[0], terms)
             setCheckbox(checkboxBackup, TermsManager.termIds[1], terms)
@@ -46,12 +36,6 @@ class TermsFragment : BaseFragment() {
             setCheckbox(checkboxPhone, TermsManager.termIds[4], terms)
             setCheckbox(checkboxRoot, TermsManager.termIds[5], terms)
             setCheckbox(checkboxBugs, TermsManager.termIds[6], terms)
-        })
-
-        viewModel.openLink.observe(viewLifecycleOwner, Observer { link ->
-            val uri = Uri.parse(link)
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
         })
     }
 
