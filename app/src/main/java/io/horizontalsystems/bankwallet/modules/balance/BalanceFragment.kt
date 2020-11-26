@@ -244,7 +244,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openContactPage.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.mainFragment_to_contactFragment, null, navOptions())
+//            findNavController().navigate(R.id.mainFragment_to_contactFragment, null, navOptions())
         })
 
         viewModel.setBalanceHidden.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
