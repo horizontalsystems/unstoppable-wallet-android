@@ -38,7 +38,7 @@ class MainSettingsFragment : BaseFragment() {
         val manageKeys = SettingsMenuItem(R.string.SettingsSecurity_ManageKeys, R.drawable.ic_wallet_20) {
             presenter.didTapManageKeys()
         }
-        val privacySettings = SettingsMenuItem(R.string.Settings_SecurityCenter, R.drawable.ic_security) {
+        val privacySettings = SettingsMenuItem(R.string.Settings_SecurityCenter, R.drawable.ic_security, isLast = true) {
             presenter.didTapSecurity()
         }
         val walletConnect = SettingsMenuItem(R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, isLast = true) {
@@ -62,7 +62,7 @@ class MainSettingsFragment : BaseFragment() {
         val faq = SettingsMenuItem(R.string.Settings_Faq, R.drawable.ic_faq_20) {
             presenter.didTapFaq()
         }
-        val academy = SettingsMenuItem(R.string.Guides_Title, R.drawable.ic_academy_20) {
+        val academy = SettingsMenuItem(R.string.Guides_Title, R.drawable.ic_academy_20, isLast = true) {
             presenter.didTapAcademy()
         }
         val twitter = SettingsMenuItem(R.string.Settings_Twitter, R.drawable.ic_twitter) {
@@ -71,7 +71,7 @@ class MainSettingsFragment : BaseFragment() {
         val telegram = SettingsMenuItem(R.string.Settings_Telegram, R.drawable.ic_telegram) {
             presenter.didTapTelegram()
         }
-        val reddit = SettingsMenuItem(R.string.Settings_Reddit, R.drawable.ic_reddit) {
+        val reddit = SettingsMenuItem(R.string.Settings_Reddit, R.drawable.ic_reddit, isLast = true) {
             presenter.didTapReddit()
         }
         val aboutApp = SettingsMenuItem(R.string.SettingsAboutApp_Title, R.drawable.ic_about_app_20, isLast = true) {
