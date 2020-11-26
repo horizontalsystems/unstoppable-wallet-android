@@ -13,11 +13,11 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
+import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsService.RestoreWordsException
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -123,8 +123,8 @@ class RestoreWordsFragment : BaseFragment() {
     }
 
     private fun isUsingNativeKeyboard(): Boolean {
-        if (Utils.isUsingCustomKeyboard(requireContext())) {
-            (activity as? BaseActivity)?.showCustomKeyboardAlert()
+        if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed) {
+            showCustomKeyboardAlert()
             return false
         }
 

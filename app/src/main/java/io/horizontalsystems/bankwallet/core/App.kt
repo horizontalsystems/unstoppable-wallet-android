@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessio
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
+import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.pin.PinComponent
@@ -126,6 +127,7 @@ class App : CoreApp() {
             localStorage = this
             chartTypeStorage = this
             pinStorage = this
+            thirdKeyboardStorage = this
             themeStorage = this
         }
 
