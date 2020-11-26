@@ -69,6 +69,7 @@
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Sicherung</string>
     <string name="Backup_DisplayTitle">Privater Schlüssel</string>
+    <string name="Backup_BirthdayHeight">Birthday Height</string>
     <string name="Backup_Confirmation_Description">Geben Sie die Worte Ihres %s Schlüssels ein</string>
     <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
@@ -266,6 +267,14 @@
     <string name="TransactionInfo_SentToSelfNote">Diese Transaktion wurde an die eigene Adresse gesendet</string>
     <string name="TransactionInfo_DoubleSpendNote">Double-Spend-Risiko!</string>
     <string name="TransactionInfo_Input">Eingabe</string>
+    <string name="StatusInfo_Pending">Pending</string>
+    <string name="StatusInfo_Receiving">Receiving</string>
+    <string name="StatusInfo_Confirmed">Confirmed</string>
+    <string name="StatusInfo_Failed">Failed</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
+    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Der Sender hat dieses Guthaben mit einer Ausgabesperre versehen, die zu dem %s abläuft.\n\nKeine Sorge, die erhaltenen Bitcoin sind bereits Ihre. Aber bis zum Ablauf der Sperrzeit können Sie sie nicht im Bitcoin-Netzwerk ausgeben.</string>
@@ -307,8 +316,8 @@
     <string name="FullInfoEth_Amount">Betrag</string>
     <!--Guides-->
     <string name="Guides_Title">Akademie</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">Datei nicht gefunden</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Page not found</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
@@ -320,9 +329,13 @@
     <string name="Settings_LightMode">Licht Modus</string>
     <string name="Settings_Terms">Bedingungen</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">Problem melden</string>
     <string name="Settings_AppStatus">App-Status</string>
     <string name="Settings_WalletConnect">Wallet-Verbindung</string>
+    <string name="Settings_RateUs">Rate Us</string>
+    <string name="SettingsAboutApp_Title">About App</string>
+    <string name="SettingsAboutApp_Site">Site</string>
     <string name="SettingsOption_Enabled">Aktiviert</string>
     <string name="SettingsOption_Disabled">Deaktiviert</string>
     <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können einige öffentliche Daten wie z. B. die IP-Adresse möglicherweise durchsickern. Benutzen Sie den Info-Knopf oben rechts, um detaillierte Informationen über jeden Abschnitt zu erhalten.</string>
@@ -482,6 +495,7 @@
     <string name="AddErc20Token_ContractAddressHint">Vertragsadresse</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
     <string name="AddErc20Token_InvalidAddressError">Ungültige Adresse</string>
+    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adressformat</string>
     <!-- Blockchain Settings -->
