@@ -20,10 +20,10 @@ import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_about.*
-import kotlinx.android.synthetic.main.fragment_contact.toolbar
 import kotlinx.android.synthetic.main.view_holder_about_app_header.*
 
 class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
@@ -41,8 +41,8 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             findNavController().popBackStack()
         }
 
-        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_mail_20) {
-            findNavController().navigate(R.id.aboutAppFragment_to_contactFragment, null, navOptions())
+        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email) {
+            sendEmail(viewModel.reportEmail)
         }
         val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status) {
             findNavController().navigate(R.id.aboutAppFragment_to_appStatusFragment, null, navOptions())
@@ -90,6 +90,12 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             menuItemsAdapter.notifyChanged(termsItem)
         })
 
+        viewModel.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Copied)
+            }
+        })
+
         headerAdapter.setVersionText(getAppVersion())
     }
 
@@ -118,6 +124,20 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             } catch (e: ActivityNotFoundException) {
                 ContextCompat.startActivity(context, RateAppManager.getPlayMarketSiteIntent(), null)
             }
+        }
+    }
+
+    private fun sendEmail(recipient: String) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+            putExtra(Intent.EXTRA_TEXT, "Sample text")
+        }
+
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            viewModel.didFailSendMail()
         }
     }
 

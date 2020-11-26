@@ -28,9 +28,6 @@
             android:id="@+id/mainFragment_to_academyFragment"
             app:destination="@id/academyFragment" />
         <action
-            android:id="@+id/mainFragment_to_contactFragment"
-            app:destination="@id/contactFragment" />
-        <action
             android:id="@+id/mainFragment_to_currencySwitcherFragment"
             app:destination="@id/currencySwitcherFragment" />
         <action
@@ -130,10 +127,6 @@
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
-        android:id="@+id/contactFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.contact.ContactFragment"
-        tools:layout="@layout/fragment_contact" />
-    <fragment
         android:id="@+id/currencySwitcherFragment"
         android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherFragment"
         tools:layout="@layout/fragment_currency_switcher" />
@@ -149,9 +142,6 @@
         android:id="@+id/aboutAppFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"
         tools:layout="@layout/fragment_about">
-        <action
-            android:id="@+id/aboutAppFragment_to_contactFragment"
-            app:destination="@id/contactFragment" />
         <action
             android:id="@+id/aboutAppFragment_to_appStatusFragment"
             app:destination="@id/appStatusFragment" />
