@@ -69,6 +69,7 @@
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_DisplayTitle">Clave privada</string>
+    <string name="Backup_BirthdayHeight">Birthday Height</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave %s</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
@@ -178,11 +179,11 @@
     <string name="Swap_TransactionFee">Tarifa de Transacción</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Comisiones de transacción pagadas en %s. Es necesario %s.</string>
+    <string name="Swap_ErrorInsufficientEthBalance">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <string name="Swap_ErrorNoLiquidity">Sin liquidez</string>
     <string name="Swap_ErrorCouldNotFetchTrade">No se pudo obtener la información de la compra</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">No se pudo obtener información de permisos</string>
     <string name="Swap_ErrorCouldNotFetchFee">No se pudo obtener la información de la compra</string>
-    <string name="Swap_ErrorInsufficientEthBalance">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <string name="Swap_Proceed">Continuar</string>
     <string name="Swap_Approve">Aprobar</string>
     <string name="Swap_Approving">Aprobando</string>
@@ -266,6 +267,14 @@
     <string name="TransactionInfo_SentToSelfNote">Esta transacción fue enviada a su propia dirección</string>
     <string name="TransactionInfo_DoubleSpendNote">¡Riesgo de doble gasto!</string>
     <string name="TransactionInfo_Input">Entrada</string>
+    <string name="StatusInfo_Pending">Pending</string>
+    <string name="StatusInfo_Receiving">Receiving</string>
+    <string name="StatusInfo_Confirmed">Confirmed</string>
+    <string name="StatusInfo_Failed">Failed</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
+    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">El remitente envió estos fondos con un bloqueo del gasto que expirará %s.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
@@ -307,8 +316,8 @@
     <string name="FullInfoEth_Amount">Importe</string>
     <!--Guides-->
     <string name="Guides_Title">Academia</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">Guía no encontrada</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Page not found</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
@@ -320,9 +329,13 @@
     <string name="Settings_LightMode">Modo ligero</string>
     <string name="Settings_Terms">Términos</string>
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">Reportar un problema</string>
     <string name="Settings_AppStatus">Estado de la aplicación</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_RateUs">Rate Us</string>
+    <string name="SettingsAboutApp_Title">About App</string>
+    <string name="SettingsAboutApp_Site">Site</string>
     <string name="SettingsOption_Enabled">Habilitado</string>
     <string name="SettingsOption_Disabled">Desabilitado</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
@@ -483,6 +496,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddErc20Token_ContractAddressHint">Dirección del contrato</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddErc20Token_InvalidAddressError">Dirección inválida</string>
+    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
     <!-- Blockchain Settings -->
