@@ -8,7 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.AlertDialogFragment
+import io.horizontalsystems.views.AlertDialogKeyboardFragment
 import io.horizontalsystems.views.helpers.LayoutHelper
 
 abstract class BaseFragment : Fragment() {
@@ -45,5 +45,33 @@ abstract class BaseFragment : Fragment() {
                 .setPopEnterAnim(R.anim.from_top)
                 .setPopExitAnim(R.anim.slide_out_bottom)
                 .build()
+    }
+
+    fun showCustomKeyboardAlert() {
+        AlertDialogKeyboardFragment.newInstance(
+                titleString = getString(R.string.Alert_TitleWarning),
+                descriptionString = getString(R.string.Alert_CustomKeyboardIsUsed),
+                selectButtonText = R.string.Alert_Select,
+                skipButtonText = R.string.Alert_Skip,
+                listener = object : AlertDialogKeyboardFragment.Listener {
+                    override fun onButtonClick() {
+                        val imeManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imeManager.showInputMethodPicker()
+                        hideKeyboard()
+                        Handler().postDelayed({
+                            try {
+                                requireActivity().onBackPressed()
+                            } catch (e: NullPointerException) {
+                                //do nothing
+                            }
+                        }, (1 * 750).toLong())
+                    }
+
+
+                    override fun onCancel() {}
+                    override fun onSkipClick() {
+                        App.thirdKeyboardStorage.isThirdPartyKeyboardAllowed = true
+                    }
+                }).show(parentFragmentManager, "custom_keyboard_alert")
     }
 }

@@ -13,7 +13,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
@@ -25,7 +24,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
 import kotlinx.android.synthetic.main.view_input_address.view.*
-
 
 class RestoreWordsFragment : BaseFragment() {
 
@@ -126,7 +124,7 @@ class RestoreWordsFragment : BaseFragment() {
 
     private fun isUsingNativeKeyboard(): Boolean {
         if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed) {
-            (activity as? BaseActivity)?.showCustomKeyboardAlert()
+            showCustomKeyboardAlert()
             return false
         }
 

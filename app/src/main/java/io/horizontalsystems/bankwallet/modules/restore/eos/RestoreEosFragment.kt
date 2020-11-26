@@ -28,7 +28,6 @@ import io.horizontalsystems.views.MultipleInputEditTextView
 import kotlinx.android.synthetic.main.fragment_restore_eos.*
 import kotlinx.android.synthetic.main.fragment_restore_eos.eosAccount
 import kotlinx.android.synthetic.main.fragment_restore_eos.eosActivePrivateKey
-import io.horizontalsystems.bankwallet.core.BaseActivity
 
 
 class RestoreEosFragment : BaseFragment() {
@@ -101,7 +100,7 @@ class RestoreEosFragment : BaseFragment() {
     private fun checkKeyboard() {
         context?.let {
             if (Utils.isUsingCustomKeyboard(it) && !CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed) {
-                (activity as? BaseActivity)?.showCustomKeyboardAlert()
+                showCustomKeyboardAlert()
             }
         }
     }
