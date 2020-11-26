@@ -49,6 +49,16 @@
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="36dp"
+                android:background="@color/steel_20"
+                app:layout_constraintEnd_toEndOf="@+id/guideEnd"
+                app:layout_constraintStart_toStartOf="@+id/guideStart"
+                app:layout_constraintTop_toBottomOf="@+id/termsText" />
+
             <CheckBox
                 android:id="@+id/checkboxAcademy"
                 style="@style/TermsCheckbox"
@@ -58,7 +68,7 @@
                 android:text="@string/SettingsTerms_TermAcademy"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
-                app:layout_constraintTop_toBottomOf="@+id/termsText" />
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
 
             <CheckBox
                 android:id="@+id/checkboxBackup"
