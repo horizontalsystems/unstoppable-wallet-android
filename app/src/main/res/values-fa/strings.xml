@@ -69,6 +69,7 @@
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_DisplayTitle">کلید خصوصی</string>
+    <string name="Backup_BirthdayHeight">Birthday Height</string>
     <string name="Backup_Confirmation_Description">کلمات را از %s خود وارد کنید.</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
@@ -266,6 +267,14 @@
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
     <string name="TransactionInfo_Input">ورودی</string>
+    <string name="StatusInfo_Pending">Pending</string>
+    <string name="StatusInfo_Receiving">Receiving</string>
+    <string name="StatusInfo_Confirmed">Confirmed</string>
+    <string name="StatusInfo_Failed">Failed</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
+    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">قفل زمان</string>
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
@@ -307,8 +316,8 @@
     <string name="FullInfoEth_Amount">مقدار</string>
     <!--Guides-->
     <string name="Guides_Title">آکادمی</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">راهنما یافت نشد</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Page not found</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -320,9 +329,13 @@
     <string name="Settings_LightMode">حالت روشن</string>
     <string name="Settings_Terms">شرایط</string>
     <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">گزارش مشکل</string>
     <string name="Settings_AppStatus">وضعیت برنامه</string>
     <string name="Settings_WalletConnect">ارتباط کیف پول</string>
+    <string name="Settings_RateUs">Rate Us</string>
+    <string name="SettingsAboutApp_Title">About App</string>
+    <string name="SettingsAboutApp_Site">Site</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
     <string name="SettingsPrivacy_Info">این برنامه هیچ یک از داده های شما را به اشتراک نمی گذارد. با این حال، بخاطر ارتباط با زنجیره های بلوکی، برخی از داده های عمومی مانند آدرس آی پی می توانند به طور بالقوه فاش شوند. برای کسب اطلاعات دقیق در مورد هر بخش از دکمه اطلاعات در سمت راست بالا استفاده کنید.</string>
@@ -482,6 +495,7 @@
     <string name="AddErc20Token_ContractAddressHint">آدرس قرارداد</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddErc20Token_InvalidAddressError">آدرس نامعتبر است</string>
+    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <!-- Blockchain Settings -->
