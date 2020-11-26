@@ -53,7 +53,7 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
         val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20) {
             openRateUs()
         }
-        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20) {
+        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, isLast = true) {
             viewModel.onTellFriendsTap()
         }
 
