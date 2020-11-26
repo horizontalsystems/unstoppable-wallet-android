@@ -69,6 +69,7 @@
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
     <string name="Backup_DisplayTitle">개인 암호</string>
+    <string name="Backup_BirthdayHeight">Birthday Height</string>
     <string name="Backup_Confirmation_Description">귀하의 %s 키에서 단어를 입력하십시오</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
@@ -266,6 +267,14 @@
     <string name="TransactionInfo_SentToSelfNote">이 거래는 귀하의 주소로 전송이 되었습니다</string>
     <string name="TransactionInfo_DoubleSpendNote">이중 지출 위험!</string>
     <string name="TransactionInfo_Input">입력</string>
+    <string name="StatusInfo_Pending">Pending</string>
+    <string name="StatusInfo_Receiving">Receiving</string>
+    <string name="StatusInfo_Confirmed">Confirmed</string>
+    <string name="StatusInfo_Failed">Failed</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
+    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자는 이러한 자금들을 %s 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다. \n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
@@ -307,8 +316,8 @@
     <string name="FullInfoEth_Amount">양</string>
     <!--Guides-->
     <string name="Guides_Title">아카데미</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">가이드 찾을 수 없음</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Page not found</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -320,9 +329,13 @@
     <string name="Settings_LightMode">밝은 모드</string>
     <string name="Settings_Terms">약관</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">문제점 보고</string>
     <string name="Settings_AppStatus">앱 상태</string>
     <string name="Settings_WalletConnect">지갑 연결</string>
+    <string name="Settings_RateUs">Rate Us</string>
+    <string name="SettingsAboutApp_Title">About App</string>
+    <string name="SettingsAboutApp_Site">Site</string>
     <string name="SettingsOption_Enabled">활성화</string>
     <string name="SettingsOption_Disabled">비활성화</string>
     <string name="SettingsPrivacy_Info">이 앱은 귀하의 데이터를 공유하지 않습니다. 하지만 앱이 블록체인과 통신할 때 IP 주소와 같은 일부 공개 데이터가 유출 될 수도 있습니다. 각 섹션에 대한 자세한 정보를 확인하려면 오른쪽 상단의 정보 버튼을 누르십시오.</string>
@@ -483,6 +496,7 @@
     <string name="AddErc20Token_ContractAddressHint">계약 주소</string>
     <string name="AddErc20Token_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddErc20Token_InvalidAddressError">잘못된 주소</string>
+    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <!-- Blockchain Settings -->
