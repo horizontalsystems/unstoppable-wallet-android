@@ -227,11 +227,17 @@
         tools:layout="@layout/fragment_add_erc20_token" />
     <fragment
         android:id="@+id/swapFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment"
-        tools:layout="@layout/fragment_swap">
+        android:name="io.horizontalsystems.bankwallet.modules.swap_new.SwapFragment"
+        tools:layout="@layout/fragment_swap"
+        android:label="@string/Swap">
         <action
             android:id="@+id/swapFragment_to_selectSwapCoinFragment"
-            app:destination="@id/selectSwapCoinFragment" />
+            app:destination="@id/selectSwapCoinFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
+            />
         <action
             android:id="@+id/swapFragment_to_swapApproveFragment"
             app:destination="@id/swapApproveFragment" />
@@ -251,7 +257,7 @@
     </fragment>
     <fragment
         android:id="@+id/selectSwapCoinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap_new.coinselect.SelectSwapCoinFragment"
         tools:layout="@layout/fragment_swap_select_token" />
     <fragment
         android:id="@+id/swapApproveFragment"
