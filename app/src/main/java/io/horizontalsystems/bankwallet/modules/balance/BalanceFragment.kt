@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -26,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getValueAnimator
 import io.horizontalsystems.core.helpers.HudHelper
@@ -243,8 +247,8 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             findNavController().navigate(R.id.mainFragment_to_rateChartFragment, arguments, navOptions())
         })
 
-        viewModel.openContactPage.observe(viewLifecycleOwner, Observer {
-//            findNavController().navigate(R.id.mainFragment_to_contactFragment, null, navOptions())
+        viewModel.openEmail.observe(viewLifecycleOwner, Observer { (email, report) ->
+            sendEmail(email, report)
         })
 
         viewModel.setBalanceHidden.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
@@ -282,9 +286,21 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
         })
 
-        viewModel.showErrorMessageCopied.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied)
-        })
+    }
+
+    private fun sendEmail(email: String, report: String) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            putExtra(Intent.EXTRA_TEXT, report)
+        }
+
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            TextHelper.copyText(email)
+            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_EmailAddressCopied)
+        }
     }
 
     private fun setExpandProgress(view: View, smallHeight: Int, bigHeight: Int, progress: Float) {

@@ -565,6 +565,7 @@
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <string name="Hud_UnknownError">%s</string>

@@ -92,7 +92,7 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
 
         viewModel.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
-                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_Copied)
+                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_EmailAddressCopied)
             }
         })
 
@@ -131,7 +131,6 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
-            putExtra(Intent.EXTRA_TEXT, "Sample text")
         }
 
         try {
