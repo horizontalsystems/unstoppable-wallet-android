@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap_new
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap_new.repositories.UniswapRepository
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
@@ -79,7 +80,11 @@ class SwapTradeService(
             tradeOptionsSubject.onNext(value)
         }
     val tradeOptionsObservable: Observable<TradeOptions> = tradeOptionsSubject
-    //endregion
+
+    @Throws
+    fun transactionData(tradeData: TradeData): TransactionData {
+        return uniswapRepository.transactionData(tradeData)
+    }
 
     fun enterCoinFrom(coin: Coin?) {
         if (coinFrom == coin) return
@@ -87,6 +92,8 @@ class SwapTradeService(
         coinFrom = coin
         if (coinTo == coinFrom) {
             coinTo = null
+            amountTo = null
+            tradeType = TradeType.ExactIn
         }
         syncState()
     }
@@ -97,6 +104,8 @@ class SwapTradeService(
         coinTo = coin
         if (coinFrom == coinTo) {
             coinFrom = null
+            amountFrom = null
+            tradeType = TradeType.ExactOut
         }
         syncState()
     }
@@ -121,6 +130,7 @@ class SwapTradeService(
         amountFrom = null
         syncState()
     }
+    //endregion
 
     private fun syncState() {
         val coinFrom = coinFrom

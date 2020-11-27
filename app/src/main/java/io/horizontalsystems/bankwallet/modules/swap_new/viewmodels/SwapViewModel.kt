@@ -20,7 +20,7 @@ class SwapViewModel(
 
     private val disposables = CompositeDisposable()
 
-    private val tradeViewItemLiveData = MutableLiveData<TradeViewItem?>()
+    private val tradeViewItemLiveData = MutableLiveData<TradeViewItem?>(null)
 
     //region outputs
     fun tradeViewItemLiveData(): LiveData<TradeViewItem?> = tradeViewItemLiveData

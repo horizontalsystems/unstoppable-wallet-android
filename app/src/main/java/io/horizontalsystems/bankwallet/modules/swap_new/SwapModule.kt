@@ -42,7 +42,7 @@ object SwapModule {
         private val uniswapRepository by lazy { UniswapRepository(uniswapKit) }
         private val allowanceService by lazy { SwapAllowanceService(uniswapRepository.routerAddress, App.adapterManager, ethereumKit) }
         private val service by lazy {
-            SwapService(ethereumKit, tradeService, allowanceService, App.adapterManager)
+            SwapService(ethereumKit, tradeService, allowanceService, transactionService, App.adapterManager)
         }
         private val tradeService by lazy {
             SwapTradeService(uniswapRepository, fromCoin)
@@ -82,7 +82,7 @@ object SwapModule {
                     SwapToCoinCardViewModel(service, tradeService, coinProvider, formatter, stringProvider) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
-                    SwapAllowanceViewModel(service, allowanceService, stringProvider, formatter) as T
+                    SwapAllowanceViewModel(service, allowanceService, formatter, stringProvider) as T
                 }
                 EthereumFeeViewModel::class.java -> {
                     EthereumFeeViewModel(transactionService, ethCoinService) as T

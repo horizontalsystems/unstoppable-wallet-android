@@ -14,8 +14,8 @@ import io.reactivex.schedulers.Schedulers
 class SwapAllowanceViewModel(
         private val service: SwapService,
         private val allowanceService: SwapAllowanceService,
-        private val stringProvider: StringProvider,
-        private val formatter: SwapItemFormatter
+        private val formatter: SwapItemFormatter,
+        private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()

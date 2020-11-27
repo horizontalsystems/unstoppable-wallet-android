@@ -17,6 +17,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
+import java.math.BigDecimal
 
 class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -71,9 +72,19 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private fun updateAmount(amount: String?) {
         this.amount.apply {
+            if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
             removeTextChangedListener(amountChangeListener)
             setText(amount)
+            amount?.let { setSelection(it.length) }
             addTextChangedListener(amountChangeListener)
+        }
+    }
+
+    private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
+        return when {
+            amount1 == null && amount2 == null -> true
+            amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
+            else -> false
         }
     }
 

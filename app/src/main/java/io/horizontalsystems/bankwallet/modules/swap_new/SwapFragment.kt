@@ -52,6 +52,10 @@ class SwapFragment : BaseFragment() {
             setTradeViewItem(tradeViewItem)
         })
 
+        feeSelectorView.setDurationVisible(false)
+        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
+
+
 //        youPay.apply {
 //            onSelectTokenButtonClick {
 //                val params = SelectSwapCoinFragment.params(SelectType.FromCoin, true, viewModel.coinReceiving.value)
@@ -90,8 +94,6 @@ class SwapFragment : BaseFragment() {
 //
 //        observeViewModel()
 //
-//        feeSelectorView.setDurationVisible(false)
-//        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

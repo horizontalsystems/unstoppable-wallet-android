@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swap_new
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService.PriceImpactLevel
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Observable
@@ -17,10 +19,13 @@ class SwapService(
         private val ethereumKit: EthereumKit,
         private val tradeService: SwapTradeService,
         private val allowanceService: SwapAllowanceService,
+        private val transactionService: EthereumTransactionService,
         private val adapterManager: IAdapterManager
 ) {
 
     private val disposables = CompositeDisposable()
+    private val ethereumBalance: BigInteger
+        get() = ethereumKit.balance ?: BigInteger.ZERO
 
     //region internal subjects
     private val stateSubject = PublishSubject.create<State>()
@@ -62,6 +67,13 @@ class SwapService(
 
 
     init {
+        tradeService.stateObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe { state ->
+                    onUpdateTrade(state)
+                }
+                .let { disposables.add(it) }
+
         tradeService.coinFromObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe { coin ->
@@ -83,12 +95,39 @@ class SwapService(
                     onUpdateAmountFrom(it.orElse(null))
                 }
                 .let { disposables.add(it) }
+
         allowanceService.stateObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncState()
                 }
                 .let { disposables.add(it) }
+
+        transactionService.transactionStatusObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncState()
+                }
+                .let { disposables.add(it) }
+    }
+
+    private fun onUpdateTrade(state: SwapTradeService.State) {
+        when (state) {
+            is SwapTradeService.State.Ready -> {
+                val kitTransactionData = try {
+                    tradeService.transactionData(state.trade.tradeData)
+                } catch (error: Throwable) {
+                    null
+                }
+                transactionService.transactionData = kitTransactionData?.let {
+                    EthereumTransactionService.TransactionData(it.to, it.value, it.input)
+                }
+            }
+            else -> {
+                transactionService.transactionData = null
+            }
+        }
+        syncState()
     }
 
     private fun onUpdateCoinFrom(coin: Coin?) {
@@ -146,7 +185,23 @@ class SwapService(
             }
         }
 
-        //TODO handle TransactionService state
+        when (val state = transactionService.transactionStatus) {
+            DataState.Loading -> {
+                loading = true
+            }
+            is DataState.Success -> {
+                val transaction = state.data
+                if (transaction.totalAmount > ethereumBalance) {
+                    allErrors.add(TransactionError.InsufficientBalance(transaction.totalAmount))
+                }
+            }
+            is DataState.Error -> {
+                if (!allErrors.any { it is SwapError || it is TransactionError }) {
+                    allErrors.add(state.error)
+                }
+            }
+        }
+
         //TODO handle PendingAllowance state
 
         errors = allErrors
