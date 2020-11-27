@@ -53,7 +53,7 @@ class SwapItemFormatter(
         else
             BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)
 
-        return "${coinFrom.code} = ${coinAmount(inversePrice, coinTo)} "
+        return "${coinTo.code} = ${coinAmount(inversePrice, coinFrom)} "
     }
 
     fun priceImpact(priceImpact: BigDecimal?): String? {
@@ -61,7 +61,7 @@ class SwapItemFormatter(
     }
 
     fun minMaxTitle(tradeType: TradeType): String {
-        return if (tradeType == TradeType.ExactOut)
+        return if (tradeType == TradeType.ExactIn)
             stringProvider.string(R.string.Swap_MinimumReceived)
         else
             stringProvider.string(R.string.Swap_MaximumSold)

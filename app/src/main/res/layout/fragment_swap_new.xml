@@ -44,7 +44,7 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -99,33 +99,14 @@
                 android:visibility="visible"
                 app:constraint_referenced_ids="priceImpactTitle,priceImpactValue,minMaxTitle,minMaxValue,dividerLine,advancedSettings,proceedButton" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/allowanceGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:constraint_referenced_ids="allowanceTitle,allowanceValue" />
-
-            <TextView
-                android:id="@+id/allowanceTitle"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
+            <io.horizontalsystems.bankwallet.modules.swap_new.views.SwapAllowanceView
+                android:id="@+id/allowanceView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/Swap_Allowance"
-                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
-
-            <TextView
-                android:id="@+id/allowanceValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/endBorder"
-                app:layout_constraintTop_toTopOf="@+id/allowanceTitle"
-                tools:text="0.12345678 XRP" />
 
             <TextView
                 android:id="@+id/priceImpactTitle"
@@ -136,7 +117,7 @@
                 android:text="@string/Swap_PriceImpact"
                 android:textColor="@color/grey"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/allowanceTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/allowanceView" />
 
             <TextView
                 android:id="@+id/priceImpactValue"
@@ -205,20 +186,20 @@
             <TextView
                 android:id="@+id/advancedSettings"
                 style="@style/Subhead2"
-                android:background="@drawable/background_lawrence_onclick"
-                android:clickable="true"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="12dp"
+                android:background="@drawable/background_lawrence_onclick"
+                android:clickable="true"
                 android:paddingStart="16dp"
+                android:paddingTop="12dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="12dp"
                 android:text="@string/SwapSettings_Title"
                 android:textColor="@color/grey"
+                app:drawableEndCompat="@drawable/ic_arrow_right"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dividerLine"
-                app:drawableEndCompat="@drawable/ic_arrow_right" />
+                app:layout_constraintTop_toBottomOf="@+id/dividerLine" />
 
             <Button
                 android:id="@+id/proceedButton"

@@ -9,6 +9,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapFromCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapToCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapViewModel
@@ -26,6 +27,8 @@ class SwapFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) { vmFactory }
     private val fromCoinCardViewModel by navGraphViewModels<SwapFromCoinCardViewModel>(R.id.swapFragment) { vmFactory }
     private val toCoinCardViewModel by navGraphViewModels<SwapToCoinCardViewModel>(R.id.swapFragment) { vmFactory }
+    private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
+
     private val feeViewModel by navGraphViewModels<EthereumFeeViewModel>(R.id.swapFragment) { vmFactory }
 
     private var approvingSnackBar: CustomSnackbar? = null
@@ -43,6 +46,7 @@ class SwapFragment : BaseFragment() {
 
         fromCoinCard.initialize(fromCoinCardViewModel, this, viewLifecycleOwner)
         toCoinCard.initialize(toCoinCardViewModel, this, viewLifecycleOwner)
+        allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
 
         viewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
             setTradeViewItem(tradeViewItem)

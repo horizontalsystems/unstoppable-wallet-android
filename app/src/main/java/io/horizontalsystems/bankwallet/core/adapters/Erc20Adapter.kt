@@ -15,6 +15,7 @@ import io.horizontalsystems.erc20kit.models.Transaction.TransactionType.APPROVE
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -130,8 +131,8 @@ class Erc20Adapter(
         )
     }
 
-    fun allowance(spenderAddress: Address): Single<BigDecimal> {
-        return erc20Kit.allowance(spenderAddress)
+    fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
+        return erc20Kit.allowance(spenderAddress, defaultBlockParameter)
                 .map {
                     scaleDown(it.toBigDecimal())
                 }

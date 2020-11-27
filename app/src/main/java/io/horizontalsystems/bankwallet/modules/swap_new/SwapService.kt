@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap_new
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService.PriceImpactLevel
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -15,6 +16,7 @@ import java.util.*
 class SwapService(
         private val ethereumKit: EthereumKit,
         private val tradeService: SwapTradeService,
+        private val allowanceService: SwapAllowanceService,
         private val adapterManager: IAdapterManager
 ) {
 
@@ -74,14 +76,86 @@ class SwapService(
                     onUpdateCoinTo(coin.orElse(null))
                 }
                 .let { disposables.add(it) }
+
+        tradeService.amountFromObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    onUpdateAmountFrom(it.orElse(null))
+                }
+                .let { disposables.add(it) }
+        allowanceService.stateObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncState()
+                }
+                .let { disposables.add(it) }
     }
 
     private fun onUpdateCoinFrom(coin: Coin?) {
         balanceFrom = coin?.let { balance(it) }
+        allowanceService.set(coin)
     }
 
     private fun onUpdateCoinTo(coin: Coin?) {
         balanceTo = coin?.let { balance(it) }
+    }
+
+    private fun onUpdateAmountFrom(amount: BigDecimal?) {
+        syncState()
+    }
+
+    private fun syncState() {
+        val allErrors = mutableListOf<Throwable>()
+        var loading = false
+
+        when (val state = tradeService.state) {
+            SwapTradeService.State.Loading -> {
+                loading = true
+            }
+            is SwapTradeService.State.Ready -> {
+                if (state.trade.priceImpactLevel == PriceImpactLevel.Forbidden) {
+                    allErrors.add(SwapError.ForbiddenPriceImpactLevel)
+                }
+            }
+            is SwapTradeService.State.NotReady -> {
+                allErrors.addAll(state.errors)
+            }
+        }
+
+        when (val state = allowanceService.state) {
+            SwapAllowanceService.State.Loading -> {
+                loading = true
+            }
+            is SwapAllowanceService.State.Ready -> {
+                tradeService.amountFrom?.let { amountFrom ->
+                    if (amountFrom > state.allowance.value) {
+                        allErrors.add(SwapError.InsufficientAllowance)
+                    }
+                }
+            }
+            is SwapAllowanceService.State.NotReady -> {
+                allErrors.add(state.error)
+            }
+        }
+
+        tradeService.amountFrom?.let { amountFrom ->
+            balanceFrom?.let { balanceFrom ->
+                if (amountFrom > balanceFrom) {
+                    allErrors.add(SwapError.InsufficientBalanceFrom)
+                }
+            }
+        }
+
+        //TODO handle TransactionService state
+        //TODO handle PendingAllowance state
+
+        errors = allErrors
+
+        state = when {
+            loading -> State.Loading
+            errors.isEmpty() -> State.Ready
+            else -> State.NotReady
+        }
     }
 
     private fun balance(coin: Coin): BigDecimal? =

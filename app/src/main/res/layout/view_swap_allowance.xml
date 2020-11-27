@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+    <TextView
+        style="@style/Subhead2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:text="@string/Swap_Allowance"
+        android:textColor="@color/grey" />
+    <TextView
+        android:id="@+id/allowance"
+        style="@style/Subhead2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="textEnd"
+        android:textColor="@color/grey"
+        tools:text="0.12345678 XRP" />
+</merge>

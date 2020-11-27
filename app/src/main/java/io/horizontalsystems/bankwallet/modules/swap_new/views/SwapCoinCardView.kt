@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,9 +18,7 @@ import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapCoinCardV
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_amount_input.*
 import kotlinx.android.synthetic.main.view_card_swap.view.*
-import java.math.BigDecimal
 
 class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {

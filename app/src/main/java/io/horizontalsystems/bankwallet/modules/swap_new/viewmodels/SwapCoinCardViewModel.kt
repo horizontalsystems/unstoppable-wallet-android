@@ -90,7 +90,7 @@ abstract class SwapCoinCardViewModel(
 
     protected fun update(amount: BigDecimal?) {
         if (tradeType != tradeService.tradeType) {
-            amountLiveData.postValue(amount?.toPlainString())
+            amountLiveData.postValue(amount?.setScale(validDecimals, RoundingMode.FLOOR)?.toPlainString())
         }
     }
 

@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap_new.providers.SwapCoinProvider
 import io.horizontalsystems.bankwallet.modules.swap_new.repositories.UniswapRepository
+import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapFromCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapToCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapViewModel
@@ -39,8 +40,9 @@ object SwapModule {
         }
         private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
         private val uniswapRepository by lazy { UniswapRepository(uniswapKit) }
+        private val allowanceService by lazy { SwapAllowanceService(uniswapRepository.routerAddress, App.adapterManager, ethereumKit) }
         private val service by lazy {
-            SwapService(ethereumKit, tradeService, App.adapterManager)
+            SwapService(ethereumKit, tradeService, allowanceService, App.adapterManager)
         }
         private val tradeService by lazy {
             SwapTradeService(uniswapRepository, fromCoin)
@@ -78,6 +80,9 @@ object SwapModule {
                 }
                 SwapToCoinCardViewModel::class.java -> {
                     SwapToCoinCardViewModel(service, tradeService, coinProvider, formatter, stringProvider) as T
+                }
+                SwapAllowanceViewModel::class.java -> {
+                    SwapAllowanceViewModel(service, allowanceService, stringProvider, formatter) as T
                 }
                 EthereumFeeViewModel::class.java -> {
                     EthereumFeeViewModel(transactionService, ethCoinService) as T

@@ -148,7 +148,7 @@ class SwapTradeService(
     private fun handle(tradeData: TradeData) {
         when (tradeData.type) {
             TradeType.ExactIn -> amountTo = tradeData.amountOut
-            TradeType.ExactOut -> amountFrom = tradeData.amountOut
+            TradeType.ExactOut -> amountFrom = tradeData.amountIn
         }
         state = State.Ready(Trade(tradeData))
     }
