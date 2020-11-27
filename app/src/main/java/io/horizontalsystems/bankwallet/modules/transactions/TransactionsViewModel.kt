@@ -10,7 +10,6 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     lateinit var delegate: TransactionsModule.IViewDelegate
 
     val filterItems = MutableLiveData<List<Wallet?>>()
-    val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val items = MutableLiveData<List<TransactionViewItem>>()
     val reloadTransactions = SingleLiveEvent<Unit>()
     val showSyncing = MutableLiveData<Boolean>()
@@ -37,10 +36,6 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     override fun hideSyncing() {
         showSyncing.postValue(false)
-    }
-
-    override fun openTransactionInfo(transactionViewItem: TransactionViewItem) {
-        transactionViewItemLiveEvent.postValue(transactionViewItem)
     }
 
     override fun onCleared() {

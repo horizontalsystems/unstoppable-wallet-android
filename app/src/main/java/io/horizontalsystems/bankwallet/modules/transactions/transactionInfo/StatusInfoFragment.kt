@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import kotlinx.android.synthetic.main.fragment_status_info.toolbar
+import io.horizontalsystems.bankwallet.core.BaseDialogFragment
+import io.horizontalsystems.core.dismissOnBackPressed
+import kotlinx.android.synthetic.main.fragment_status_info.*
 
-class StatusInfoFragment : BaseFragment() {
+class StatusInfoFragment : BaseDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.dismissOnBackPressed()
         return inflater.inflate(R.layout.fragment_status_info, container, false)
     }
 
@@ -22,16 +23,11 @@ class StatusInfoFragment : BaseFragment() {
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menuClose -> {
-                    parentFragmentManager.popBackStack()
+                    dismiss()
                     true
                 }
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            parentFragmentManager.popBackStack()
-        }
     }
-
 }

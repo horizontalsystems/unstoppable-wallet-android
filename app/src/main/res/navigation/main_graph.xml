@@ -54,13 +54,16 @@
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
-            app:enterAnim="@anim/slide_in_bottom"
+            app:enterAnim="@anim/from_bottom"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:popExitAnim="@anim/to_bottom" />
         <action
             android:id="@+id/mainFragment_to_walletConnectMainFragment"
             app:destination="@id/walletConnectMainFragment" />
+        <action
+            android:id="@+id/mainFragment_to_transactionInfoDialog"
+            app:destination="@id/transactionInfoDialog" />
     </fragment>
 
     <fragment
@@ -234,10 +237,10 @@
         <action
             android:id="@+id/swapFragment_to_swapSettingsFragment"
             app:destination="@id/swapSettingsFragment"
-            app:enterAnim="@anim/slide_in_bottom"
+            app:enterAnim="@anim/from_bottom"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:popExitAnim="@anim/to_bottom" />
     </fragment>
     <fragment
         android:id="@+id/selectSwapCoinFragment"
@@ -281,5 +284,27 @@
         android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment"
         tools:layout="@layout/fragment_wallet_connect_request" />
+
+    <!--  Dialogs/BottomSheets  -->
+    <dialog
+        android:id="@+id/transactionInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoFragment"
+        tools:layout="@layout/fragment_transaction_info" />
+    <dialog
+        android:id="@+id/fullTransactionInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment"
+        tools:layout="@layout/fragment_full_transaction_info" />
+    <dialog
+        android:id="@+id/fullTransactionDataProvider"
+        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment"
+        tools:layout="@layout/fragment_explorer_switcher" />
+    <dialog
+        android:id="@+id/infoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment"
+        tools:layout="@layout/fragment_info" />
+    <dialog
+        android:id="@+id/statusInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.StatusInfoFragment"
+        tools:layout="@layout/fragment_status_info" />
 
 </navigation>
