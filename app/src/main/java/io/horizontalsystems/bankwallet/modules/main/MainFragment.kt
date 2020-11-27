@@ -74,6 +74,10 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
             }
         })
 
+        viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
+            openAppInPlayMarket()
+        })
+
         viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
             screenSecureDim.isVisible = hide
         })
@@ -115,6 +119,10 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
     //  RateAppDialogFragment.Listener
 
     override fun onClickRateApp() {
+        openAppInPlayMarket()
+    }
+
+    private fun openAppInPlayMarket() {
         context?.let { context ->
             try {
                 ContextCompat.startActivity(context, RateAppManager.getPlayMarketAppIntent(), null)

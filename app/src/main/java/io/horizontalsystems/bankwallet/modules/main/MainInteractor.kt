@@ -19,7 +19,7 @@ class MainInteractor(
     override fun onStart() {
         rateAppManager.showRateAppObservable
                 .subscribe {
-                    delegate?.didShowRateApp()
+                    delegate?.showRateApp(it)
                 }
                 .let {
                     disposables.add(it)

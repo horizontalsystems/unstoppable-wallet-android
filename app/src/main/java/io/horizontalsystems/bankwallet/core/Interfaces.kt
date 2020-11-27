@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
@@ -440,12 +441,13 @@ interface ITorManager {
 }
 
 interface IRateAppManager {
-    val showRateAppObservable: Observable<Unit>
+    val showRateAppObservable: Observable<RateUsType>
 
     fun onBalancePageActive()
     fun onBalancePageInactive()
     fun onAppLaunch()
     fun onAppBecomeActive()
+    fun forceShow()
 }
 
 interface ICoinManager{

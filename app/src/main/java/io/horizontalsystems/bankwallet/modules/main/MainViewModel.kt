@@ -8,6 +8,7 @@ class MainViewModel : ViewModel(), MainModule.IView {
 
     lateinit var delegate: MainModule.IViewDelegate
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
+    val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
 
@@ -18,6 +19,10 @@ class MainViewModel : ViewModel(), MainModule.IView {
 
     override fun showRateApp() {
         showRateAppLiveEvent.postValue(Unit)
+    }
+
+    override fun openPlayMarket() {
+        openPlayMarketLiveEvent.postValue(Unit)
     }
 
     override fun hideContent(hide: Boolean) {

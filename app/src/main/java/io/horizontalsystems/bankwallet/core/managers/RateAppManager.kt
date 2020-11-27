@@ -17,12 +17,12 @@ class RateAppManager(
         private val adapterManager: IAdapterManager,
         private val localStorage: ILocalStorage) : IRateAppManager {
 
-    override val showRateAppObservable = PublishSubject.create<Unit>()
+    override val showRateAppObservable = PublishSubject.create<RateUsType>()
 
     private val MIN_LAUNCH_COUNT = 5
     private val MIN_COINS_COUNT = 2
     private val COUNTDOWN_TIME_INTERVAL: Long = 10 * 1000 // 10 seconds
-    private val REQUEST_TIME_INTERVAL = 90 * 24 * 60 * 60 // 90 Days
+    private val REQUEST_TIME_INTERVAL = 40 * 24 * 60 * 60 // 40 Days
 
     private var isCountdownAllowed = false
     private var isCountdownPassed = false
@@ -46,15 +46,6 @@ class RateAppManager(
         if (walletManager.wallets.size >= MIN_COINS_COUNT && balance > BigDecimal.ZERO) {
             isRequestAllowed = true
             showIfAllowed()
-        }
-    }
-
-    private fun showIfAllowed() {
-        if (isOnBalancePage && isRequestAllowed) {
-            localStorage.rateAppLastRequestTime = Instant.now().epochSecond
-            isRequestAllowed = false
-
-            showRateAppObservable.onNext(Unit)
         }
     }
 
@@ -84,9 +75,22 @@ class RateAppManager(
     }
 
     override fun onAppBecomeActive() {
-
         if(isCountdownAllowed && !isCountdownPassed){
             startCountdownChecker()
+        }
+    }
+
+    override fun forceShow() {
+        localStorage.rateAppLastRequestTime = Instant.now().epochSecond
+        isRequestAllowed = false
+        showRateAppObservable.onNext(RateUsType.OpenPlayMarket)
+    }
+
+    private fun showIfAllowed() {
+        if (isOnBalancePage && isRequestAllowed) {
+            localStorage.rateAppLastRequestTime = Instant.now().epochSecond
+            isRequestAllowed = false
+            showRateAppObservable.onNext(RateUsType.ShowDialog)
         }
     }
 
@@ -100,7 +104,7 @@ class RateAppManager(
                 COUNTDOWN_TIME_INTERVAL)
     }
 
-    companion object{
+    companion object {
 
         fun getPlayMarketAppIntent(): Intent {
             val uri = Uri.parse("market://details?id=io.horizontalsystems.bankwallet")  //context.packageName
@@ -109,9 +113,13 @@ class RateAppManager(
             return goToMarketIntent
         }
 
-         fun getPlayMarketSiteIntent(): Intent {
-             return Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet"))
-         }
+        fun getPlayMarketSiteIntent(): Intent {
+            return Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet"))
+        }
     }
 
+}
+
+enum class RateUsType{
+    ShowDialog, OpenPlayMarket
 }
