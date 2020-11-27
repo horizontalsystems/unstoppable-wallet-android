@@ -40,10 +40,10 @@ abstract class BaseFragment : Fragment() {
 
     protected fun navOptionsFromBottom(): NavOptions {
         return NavOptions.Builder()
-                .setEnterAnim(R.anim.slide_in_bottom)
+                .setEnterAnim(R.anim.from_bottom)
                 .setExitAnim(R.anim.to_top)
                 .setPopEnterAnim(R.anim.from_top)
-                .setPopExitAnim(R.anim.slide_out_bottom)
+                .setPopExitAnim(R.anim.to_bottom)
                 .build()
     }
 

@@ -96,4 +96,5 @@
 
     <!--  New themed gradient colors -->
     <attr name="ColorGradientWhite" format="reference" />
+    <attr name="ColorWindowBackground" format="reference" />
 </resources>

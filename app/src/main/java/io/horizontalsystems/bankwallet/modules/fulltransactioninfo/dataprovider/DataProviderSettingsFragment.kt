@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -13,33 +11,34 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseDialogFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.dismissOnBackPressed
 import io.horizontalsystems.views.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_explorer_switcher.*
 import kotlinx.android.synthetic.main.view_holder_explorer_item.*
 
-class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter.Listener {
+class DataProviderSettingsFragment : BaseDialogFragment(), DataProviderSettingsAdapter.Listener {
 
     private var adapter: DataProviderSettingsAdapter? = null
 
     private lateinit var viewModel: DataProviderSettingsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.dismissOnBackPressed()
         return inflater.inflate(R.layout.fragment_explorer_switcher, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            dismiss()
         }
 
         val coin = arguments?.getParcelable<Coin>("coinKey") ?: run {
-            parentFragmentManager.popBackStack()
+            dismiss()
             return
         }
 
@@ -52,19 +51,13 @@ class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.providerItems.observe(viewLifecycleOwner, Observer { items ->
-            items?.let {
-                adapter?.items = it
-                adapter?.notifyDataSetChanged()
-            }
+            adapter?.items = items
+            adapter?.notifyDataSetChanged()
         })
 
         viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
-            Handler().postDelayed({ parentFragmentManager.popBackStack() }, 500)
+            dismiss()
         })
-
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            parentFragmentManager.popBackStack()
-        }
     }
 
     override fun onChangeProvider(item: DataProviderSettingsItem) {
@@ -72,12 +65,8 @@ class DataProviderSettingsFragment : BaseFragment(), DataProviderSettingsAdapter
     }
 
     companion object {
-        fun instance(coin: Coin): DataProviderSettingsFragment {
-            return DataProviderSettingsFragment().apply {
-                arguments = Bundle(1).apply {
-                    putParcelable("coinKey", coin)
-                }
-            }
+        fun arguments(coin: Coin) = Bundle(1).apply {
+            putParcelable("coinKey", coin)
         }
     }
 }

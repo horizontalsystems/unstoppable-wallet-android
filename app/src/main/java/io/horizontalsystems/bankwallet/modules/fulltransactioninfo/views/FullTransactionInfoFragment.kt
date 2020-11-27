@@ -9,20 +9,20 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseDialogFragment
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment
+import io.horizontalsystems.core.dismissOnBackPressed
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_full_transaction_info.*
@@ -31,12 +31,13 @@ import kotlinx.android.synthetic.main.view_holder_full_transaction_item.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_link.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_source.*
 
-class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFragment.Listener {
+class FullTransactionInfoFragment : BaseDialogFragment(), FullTransactionInfoErrorFragment.Listener {
 
     private lateinit var viewModel: FullTransactionInfoViewModel
     private var shareMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.dismissOnBackPressed()
         return inflater.inflate(R.layout.fragment_full_transaction_info, container, false)
     }
 
@@ -51,7 +52,7 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
                     true
                 }
                 R.id.closeButton -> {
-                    parentFragmentManager.popBackStack()
+                    dismiss()
                     true
                 }
                 else -> false
@@ -59,11 +60,11 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         }
 
         val transactionHash = arguments?.getString(TRANSACTION_HASH_KEY) ?: run {
-            parentFragmentManager.popBackStack()
+            dismiss()
             return
         }
         val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY) ?: run {
-            parentFragmentManager.popBackStack()
+            dismiss()
             return
         }
 
@@ -77,7 +78,6 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         transactionIdView.setOnClickListener {
             viewModel.delegate.onTapId()
         }
-
 
         //
         // LiveData
@@ -111,12 +111,7 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         })
 
         viewModel.openProviderSettingsEvent.observe(viewLifecycleOwner, Observer { coin ->
-            val fragment = DataProviderSettingsFragment.instance(coin)
-            parentFragmentManager.commit {
-                setCustomAnimations(R.anim.from_right, R.anim.to_left, R.anim.from_left, R.anim.to_right)
-                add(R.id.topFragmentContainerView, fragment)
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.fullTransactionDataProvider, DataProviderSettingsFragment.arguments(coin))
         })
 
         viewModel.showErrorProviderOffline.observe(viewLifecycleOwner, Observer { providerName ->
@@ -143,10 +138,6 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         recyclerTransactionInfo.layoutManager = LinearLayoutManager(context)
 
         transactionRecordAdapter.viewModel = viewModel
-
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            parentFragmentManager.popBackStack()
-        }
     }
 
     //
@@ -178,12 +169,10 @@ class FullTransactionInfoFragment : BaseFragment(), FullTransactionInfoErrorFrag
         const val TRANSACTION_HASH_KEY = "transaction_hash_key"
         const val WALLET_KEY = "wallet_key"
 
-        fun instance(transactionHash: String, wallet: Wallet): FullTransactionInfoFragment {
-            return FullTransactionInfoFragment().apply {
-                arguments = Bundle(2).apply {
-                    putString(TRANSACTION_HASH_KEY, transactionHash)
-                    putParcelable(WALLET_KEY, wallet)
-                }
+        fun arguments(transactionHash: String, wallet: Wallet): Bundle {
+            return Bundle(2).apply {
+                putString(TRANSACTION_HASH_KEY, transactionHash)
+                putParcelable(WALLET_KEY, wallet)
             }
         }
     }

@@ -93,12 +93,12 @@ object TransactionsModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onTransactionItemClick(transaction: TransactionViewItem)
         fun onFilterSelect(wallet: Wallet?)
         fun onClear()
 
         fun onBottomReached()
         fun willShow(transactionViewItem: TransactionViewItem)
+        fun showDetails(item: TransactionViewItem)
     }
 
     interface IInteractor {
@@ -124,7 +124,6 @@ object TransactionsModule {
     }
 
     interface IRouter {
-        fun openTransactionInfo(transactionViewItem: TransactionViewItem)
     }
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {

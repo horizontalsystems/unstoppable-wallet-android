@@ -5,18 +5,20 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseDialogFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.dismissOnBackPressed
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_info.*
 
-class InfoFragment : BaseFragment() {
+class InfoFragment : BaseDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.dismissOnBackPressed()
         return inflater.inflate(R.layout.fragment_info, container, false)
     }
 
@@ -24,7 +26,7 @@ class InfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val infoParams = arguments?.getParcelable<InfoParameters>(INFO_PARAMETERS_KEY) ?: run {
-            parentFragmentManager.popBackStack()
+            dismiss()
             return
         }
 
@@ -32,7 +34,7 @@ class InfoFragment : BaseFragment() {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
-                    parentFragmentManager.popBackStack()
+                    dismiss()
                     true
                 }
                 else -> false
@@ -54,10 +56,6 @@ class InfoFragment : BaseFragment() {
 
             itemConflictingTxHash.setOnClickListener { copyText(conflictingTxHash) }
         }
-
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            parentFragmentManager.popBackStack()
-        }
     }
 
     private fun copyText(txHash: String) {
@@ -68,6 +66,10 @@ class InfoFragment : BaseFragment() {
     companion object {
         const val INFO_PARAMETERS_KEY = "info_parameters_key"
 
+        fun arguments(infoParameters: InfoParameters) = Bundle(1).apply {
+            putParcelable(INFO_PARAMETERS_KEY, infoParameters)
+        }
+
         fun instance(infoParameters: InfoParameters): InfoFragment {
             return InfoFragment().apply {
                 arguments = Bundle(1).apply {
@@ -76,11 +78,12 @@ class InfoFragment : BaseFragment() {
             }
         }
     }
-
 }
 
 @Parcelize
-data class InfoParameters(val title: String,
-                          val description: String,
-                          val txHash: String? = null,
-                          val conflictingTxHash: String? = null) : Parcelable
+data class InfoParameters(
+        val title: String,
+        val description: String,
+        val txHash: String? = null,
+        val conflictingTxHash: String? = null
+) : Parcelable

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -20,7 +19,9 @@ import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.navGraphViewModels
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
@@ -28,7 +29,7 @@ import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
-    private val viewModel by viewModels<TransactionsViewModel> { TransactionsModule.Factory() }
+    private val viewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
     private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter(this)
 
@@ -74,12 +75,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             filterAdapter.setFilters(filters)
         })
 
-        viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, Observer { transactionViewItem ->
-            activity?.let {
-                TransactionInfoModule.start(it, transactionViewItem.record, transactionViewItem.wallet)
-            }
-        })
-
         viewModel.items.observe(viewLifecycleOwner, Observer {
             transactionsAdapter.submitList(it)
         })
@@ -102,13 +97,13 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
     }
 
     override fun onItemClick(item: TransactionViewItem) {
-        viewModel.delegate.onTransactionItemClick(item)
+        findNavController().navigate(R.id.mainFragment_to_transactionInfoDialog)
     }
 
     override fun onFilterItemClick(item: FilterAdapter.FilterItem?, itemPosition: Int, itemWidth: Int) {
         recyclerTransactions.layoutManager?.scrollToPosition(0)
         viewModel.delegate.onFilterSelect(item as? Wallet)
-        
+
         val leftOffset = recyclerTags.width / 2 - itemWidth / 2
         (recyclerTags.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(itemPosition, leftOffset)
     }
@@ -159,7 +154,9 @@ class TransactionsAdapter(private var listener: Listener) : ListAdapter<Transact
     }
 
     override fun onClick(position: Int) {
-        listener.onItemClick(getItem(position))
+        val item = getItem(position)
+        viewModel.delegate.showDetails(item)
+        listener.onItemClick(item)
     }
 }
 
