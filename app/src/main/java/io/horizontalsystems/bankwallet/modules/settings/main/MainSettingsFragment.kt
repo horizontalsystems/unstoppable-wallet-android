@@ -33,7 +33,6 @@ class MainSettingsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeToRouterEvents(presenter.router as MainSettingsRouter)
-        subscribeFragmentResult()
 
         val manageKeys = SettingsMenuItem(R.string.SettingsSecurity_ManageKeys, R.drawable.ic_wallet_20) {
             presenter.didTapManageKeys()
@@ -155,6 +154,11 @@ class MainSettingsFragment : BaseFragment() {
         })
 
         presenter.viewDidLoad()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        subscribeFragmentResult()
     }
 
     override fun onDestroyView() {

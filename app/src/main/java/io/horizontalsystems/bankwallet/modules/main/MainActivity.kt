@@ -20,8 +20,8 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.StatusInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
@@ -35,7 +35,7 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
     private var messageInfoSnackbar: CustomSnackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(null) // null prevents fragments restoration on theme switch
+        super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
         setTransparentStatusBar()
@@ -184,6 +184,6 @@ class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
     companion object {
         const val ACTIVE_TAB_KEY = "active_tab"
-        const val SETTINGS_TAB_POSITION = 3
+        const val SETTINGS_TAB_POSITION = 2
     }
 }
