@@ -439,6 +439,7 @@
     <string name="Hud_Text_Error">Fehler</string>
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">Falscher Code</string>
     <string name="Hud_Network_Issue">Es sind Netzwerkprobleme aufgetreten. Bitte versuchen Sie es erneut</string>
     <string name="Hud_UnknownError">%s</string>
