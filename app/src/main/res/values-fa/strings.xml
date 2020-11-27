@@ -439,6 +439,7 @@
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">اینترنت ندارید</string>
     <string name="Hud_Text_Copied">کپی شد</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">رمز عبور اشتباه</string>
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
     <string name="Hud_UnknownError">%s</string>
