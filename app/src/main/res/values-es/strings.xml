@@ -440,6 +440,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">Clave incorrecta</string>
     <string name="Hud_Network_Issue">Problemas de red. Inténtelo de nuevo</string>
     <string name="Hud_UnknownError">%s</string>
