@@ -439,6 +439,7 @@
     <string name="Hud_Text_Error">出错</string>
     <string name="Hud_Text_NoInternet">没有网络</string>
     <string name="Hud_Text_Copied">已复制</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">错误密码</string>
     <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <string name="Hud_UnknownError">%s</string>
