@@ -19,7 +19,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val openSortingTypeDialogLiveEvent = SingleLiveEvent<BalanceSortType>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
-    val openContactPage = SingleLiveEvent<Void>()
+    val openEmail = SingleLiveEvent<Pair<String, String>>()
 
     val isSortOn = MutableLiveData<Boolean>()
     val setHeaderViewItem = MutableLiveData<BalanceHeaderViewItem>()
@@ -29,7 +29,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val setBalanceHidden = MutableLiveData<Pair<Boolean, Boolean>>()
     val showSyncError = SingleLiveEvent<Triple<Wallet, String, Boolean>>()
     val networkNotAvailable = SingleLiveEvent<Void>()
-    val showErrorMessageCopied = SingleLiveEvent<Void>()
 
 
     // IRouter
@@ -62,8 +61,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         openChartModule.postValue(coin)
     }
 
-    override fun openContactPage() {
-        openContactPage.call()
+    override fun openEmail(emailAddress: String, errorMessage: String) {
+        openEmail.postValue(Pair(emailAddress, errorMessage))
     }
 
     // IView
@@ -98,10 +97,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun showNetworkNotAvailable() {
         networkNotAvailable.call()
-    }
-
-    override fun showErrorMessageCopied() {
-        showErrorMessageCopied.call()
     }
 
     // ViewModel

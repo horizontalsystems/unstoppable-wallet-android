@@ -182,9 +182,7 @@ class BalancePresenter(
     }
 
     override fun onReportClick(errorMessage: String) {
-        interactor.saveToClipboard(errorMessage)
-        view?.showErrorMessageCopied()
-        router.openContactPage()
+        router.openEmail(interactor.reportEmail, errorMessage)
     }
 
     override fun refreshByWallet(wallet: Wallet) {
