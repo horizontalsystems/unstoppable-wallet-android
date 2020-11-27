@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.RateUsType
 
 object MainModule {
 
     interface IView {
         fun showRateApp()
+        fun openPlayMarket()
         fun hideContent(hide: Boolean)
         fun toggleBagdeVisibility(visible: Boolean)
     }
@@ -28,8 +30,8 @@ object MainModule {
     }
 
     interface IInteractorDelegate {
-        fun didShowRateApp()
         fun updateBadgeVisibility()
+        fun showRateApp(showRateUs: RateUsType)
     }
 
     fun init(view: MainViewModel) {

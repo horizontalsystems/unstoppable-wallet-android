@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.main
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.core.IPinComponent
 
 class MainPresenter(private val pinComponent: IPinComponent,
@@ -14,8 +15,11 @@ class MainPresenter(private val pinComponent: IPinComponent,
         updateBadgeVisibility()
     }
 
-    override fun didShowRateApp() {
-        view?.showRateApp()
+    override fun showRateApp(showRateUs: RateUsType) {
+        when (showRateUs) {
+            RateUsType.OpenPlayMarket -> view?.openPlayMarket()
+            RateUsType.ShowDialog -> view?.showRateApp()
+        }
     }
 
     override fun onResume() {

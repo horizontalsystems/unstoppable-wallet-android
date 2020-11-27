@@ -51,7 +51,7 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
         }
         val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20) {
-            openRateUs()
+            viewModel.onRateUsClicked()
         }
         val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, isLast = true) {
             viewModel.onTellFriendsTap()
@@ -115,16 +115,6 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
         }
         return appVersion
-    }
-
-    private fun openRateUs() {
-        context?.let { context ->
-            try {
-                ContextCompat.startActivity(context, RateAppManager.getPlayMarketAppIntent(), null)
-            } catch (e: ActivityNotFoundException) {
-                ContextCompat.startActivity(context, RateAppManager.getPlayMarketSiteIntent(), null)
-            }
-        }
     }
 
     private fun sendEmail(recipient: String) {
