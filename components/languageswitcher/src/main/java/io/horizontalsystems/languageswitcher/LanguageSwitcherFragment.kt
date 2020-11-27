@@ -54,7 +54,7 @@ class LanguageSettingsFragment : Fragment(), LanguageSwitcherAdapter.Listener {
         presenterRouter.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
             setNavigationResult(LANGUAGE_CHANGE, bundleOf())
 
-            activity?.onBackPressed()
+            findNavController().popBackStack()
         })
 
         presenterRouter.closeLiveEvent.observe(viewLifecycleOwner, Observer {
