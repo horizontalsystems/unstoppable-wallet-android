@@ -5,13 +5,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.animation.AnimationUtils
-import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap_new.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapCoinCardViewModel
@@ -34,21 +32,17 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         title.text = viewModel.title
 
-        viewModel.tokenCodeLiveData().observe(lifecycleOwner, {
-            setTokenCode(it)
-        })
-        viewModel.balanceLiveData().observe(lifecycleOwner, {
-            setBalance(it)
-        })
-        viewModel.isEstimatedLiveData().observe(lifecycleOwner, {
-            estimatedLabel.isVisible = it
-        })
-        viewModel.amountLiveData().observe(lifecycleOwner, {
-            updateAmount(it)
-        })
-        viewModel.revertAmountLiveData().observe(lifecycleOwner, {
-            revertAmount(it)
-        })
+        viewModel.tokenCodeLiveData().observe(lifecycleOwner, { setTokenCode(it) })
+
+        viewModel.balanceLiveData().observe(lifecycleOwner, { setBalance(it) })
+
+        viewModel.balanceErrorLiveData().observe(lifecycleOwner, { setBalanceError(it) })
+
+        viewModel.isEstimatedLiveData().observe(lifecycleOwner, { setEstimated(it) })
+
+        viewModel.amountLiveData().observe(lifecycleOwner, { updateAmount(it) })
+
+        viewModel.revertAmountLiveData().observe(lifecycleOwner, { revertAmount(it) })
 
         selectedToken.setOnClickListener {
             val params = SelectSwapCoinFragment.params(id, viewModel.tokensForSelection)
@@ -77,21 +71,11 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private fun updateAmount(amount: String?) {
         this.amount.apply {
-//            if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
             removeTextChangedListener(amountChangeListener)
             setText(amount)
-//            amount?.let { setSelection(it.length) }
             addTextChangedListener(amountChangeListener)
         }
     }
-
-//    private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
-//        return when {
-//            amount1 == null && amount2 == null -> true
-//            amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
-//            else -> false
-//        }
-//    }
 
     private fun revertAmount(amount: String) {
         this.amount.apply {
@@ -116,14 +100,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         balanceValue.text = balance
     }
 
-    val amountEditText: EditText
-        get() = amount
-
-    fun showEstimated(show: Boolean) {
-        estimatedLabel.isVisible = show
-    }
-
-    fun showBalanceError(show: Boolean) {
+    private fun setBalanceError(show: Boolean) {
         val color = if (show) {
             LayoutHelper.getAttr(R.attr.ColorLucian, context.theme, context.getColor(R.color.red_d))
         } else {
@@ -133,20 +110,8 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         balanceValue.setTextColor(color)
     }
 
-    fun setSelectedCoin(coin: Coin?) {
-        if (coin != null) {
-            selectedToken.text = coin.code
-            selectedToken.setTextColor(LayoutHelper.getAttr(R.attr.ColorLeah, context.theme, context.getColor(R.color.steel_light)))
-        } else {
-            selectedToken.text = context.getString(R.string.Swap_TokenSelectorTitle)
-            selectedToken.setTextColor(LayoutHelper.getAttr(R.attr.ColorJacob, context.theme, context.getColor(R.color.yellow_d)))
-        }
-    }
-
-    fun onSelectTokenButtonClick(callback: () -> Unit) {
-        selectedToken.setOnClickListener {
-            callback()
-        }
+    private fun setEstimated(show: Boolean) {
+        estimatedLabel.isVisible = show
     }
 
 }
