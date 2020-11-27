@@ -439,6 +439,7 @@
     <string name="Hud_Text_Error">Hata</string>
     <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
     <string name="Hud_Text_Copied">Kopyalandı</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">Şimdiki Kod</string>
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">%s</string>
