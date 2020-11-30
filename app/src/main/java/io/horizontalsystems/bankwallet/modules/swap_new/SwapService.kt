@@ -19,6 +19,7 @@ class SwapService(
         private val ethereumKit: EthereumKit,
         private val tradeService: SwapTradeService,
         private val allowanceService: SwapAllowanceService,
+        private val pendingAllowanceService: SwapPendingAllowanceService,
         private val transactionService: EthereumTransactionService,
         private val adapterManager: IAdapterManager
 ) {
@@ -63,6 +64,12 @@ class SwapService(
             balanceToSubject.onNext(Optional.ofNullable(value))
         }
     val balanceToObservable: Observable<Optional<BigDecimal>> = balanceToSubject
+
+    val approveData: SwapAllowanceService.ApproveData?
+        get() = tradeService.amountFrom?.let { amount ->
+            allowanceService.approveData(amount)
+        }
+
     //endregion
 
 
@@ -103,6 +110,13 @@ class SwapService(
                 }
                 .let { disposables.add(it) }
 
+        pendingAllowanceService.isPendingObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    onUpdateAllowancePending(it)
+                }
+                .let { disposables.add(it) }
+
         transactionService.transactionStatusObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
@@ -133,6 +147,7 @@ class SwapService(
     private fun onUpdateCoinFrom(coin: Coin?) {
         balanceFrom = coin?.let { balance(it) }
         allowanceService.set(coin)
+        pendingAllowanceService.set(coin)
     }
 
     private fun onUpdateCoinTo(coin: Coin?) {
@@ -141,6 +156,14 @@ class SwapService(
 
     private fun onUpdateAmountFrom(amount: BigDecimal?) {
         syncState()
+    }
+
+    private fun onUpdateAllowancePending(isPending: Boolean) {
+        syncState()
+
+        if (transactionService.transactionStatus is DataState.Error && !isPending) {
+            transactionService.resync() // after required allowance is approved, transaction service state should be resynced
+        }
     }
 
     private fun syncState() {
@@ -202,7 +225,9 @@ class SwapService(
             }
         }
 
-        //TODO handle PendingAllowance state
+        if (pendingAllowanceService.isPending) {
+            loading = true
+        }
 
         errors = allErrors
 

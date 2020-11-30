@@ -4,20 +4,21 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapFromCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapToCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapViewModel
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.snackbar.CustomSnackbar
+import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.fragment_swap.allowanceGroup
-import kotlinx.android.synthetic.main.fragment_swap.allowanceValue
 import kotlinx.android.synthetic.main.fragment_swap.toolbar
 import kotlinx.android.synthetic.main.fragment_swap_new.*
 
@@ -30,8 +31,6 @@ class SwapFragment : BaseFragment() {
     private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
 
     private val feeViewModel by navGraphViewModels<EthereumFeeViewModel>(R.id.swapFragment) { vmFactory }
-
-    private var approvingSnackBar: CustomSnackbar? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_swap_new, container, false)
@@ -48,42 +47,25 @@ class SwapFragment : BaseFragment() {
         toCoinCard.initialize(toCoinCardViewModel, this, viewLifecycleOwner)
         allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
 
-        viewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
-            setTradeViewItem(tradeViewItem)
-        })
+        approveButton.setOnSingleClickListener {
+            viewModel.onTapApprove()
+        }
+
+        observeViewModel()
 
         feeSelectorView.setDurationVisible(false)
         feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
 
+        getNavigationLiveData(SwapApproveFragment.requestKey)?.observe(viewLifecycleOwner, {
+            if (it.getBoolean(SwapApproveFragment.resultKey)) {
+                viewModel.didApprove()
+            }
+        })
 
-//        youPay.apply {
-//            onSelectTokenButtonClick {
-//                val params = SelectSwapCoinFragment.params(SelectType.FromCoin, true, viewModel.coinReceiving.value)
-//                findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, navOptions())
-//            }
-//
-//            amountEditText.addTextChangedListener(amountSendingListener)
-//        }
-//
-//        youGet.apply {
-//            onSelectTokenButtonClick {
-//                val params = SelectSwapCoinFragment.params(SelectType.ToCoin, false, viewModel.coinSending.value)
-//                findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, navOptions())
-//            }
-//
-//            amountEditText.addTextChangedListener(amountReceivingListener)
-//        }
-//
-//        switchButton.setOnClickListener {
-//            viewModel.onSwitchClick()
-//        }
+
 //
 //        proceedButton.setOnSingleClickListener {
 //            viewModel.onProceedClick()
-//        }
-//
-//        activity?.onBackPressedDispatcher?.addCallback(this) {
-//            findNavController().popBackStack()
 //        }
 //
 //        advancedSettings.setOnSingleClickListener {
@@ -114,6 +96,33 @@ class SwapFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun observeViewModel() {
+        viewModel.isLoadingLiveData().observe(viewLifecycleOwner, { isLoading ->
+            progressBar.isVisible = isLoading
+        })
+
+        viewModel.swapErrorLiveData().observe(viewLifecycleOwner, { error ->
+            commonError.text = error
+            commonError.isVisible = error != null
+        })
+
+        viewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
+            setTradeViewItem(tradeViewItem)
+        })
+
+        viewModel.proceedAllowedLiveData().observe(viewLifecycleOwner, { proceedAllowed ->
+            proceedButton.isEnabled = proceedAllowed
+        })
+
+        viewModel.approveActionLiveData().observe(viewLifecycleOwner, { approveActionState ->
+            syncApproveButton(approveActionState)
+        })
+
+        viewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
+            findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to approveData), navOptions())
+        })
+    }
+
     private fun setTradeViewItem(tradeViewItem: SwapViewModel.TradeViewItem?) {
         price.text = tradeViewItem?.price
 
@@ -138,208 +147,24 @@ class SwapFragment : BaseFragment() {
                         ?: ctx.getColor(R.color.red_d)
                 else -> ctx.getColor(R.color.grey)
             }
-/*
-    private fun setFragmentResultListeners() {
-        getNavigationLiveData(SwapApproveFragment.requestKey)?.observe(viewLifecycleOwner, Observer {
-            if (it.getBoolean(SwapApproveFragment.resultKey)) {
-                viewModel.onApproved()
+
+    private fun syncApproveButton(approveActionState: SwapViewModel.ApproveActionState) {
+        when (approveActionState) {
+            SwapViewModel.ApproveActionState.Hidden -> {
+                approveButton.isVisible = false
             }
-        })
-
-        getNavigationLiveData(SelectSwapCoinFragment.requestKey)?.observe(viewLifecycleOwner, Observer { bundle ->
-            val selectedCoin = bundle.getParcelable<Coin>(SelectSwapCoinFragment.coinResultKey)
-            if (selectedCoin != null) {
-                when (bundle.getParcelable<SelectType>(SelectSwapCoinFragment.selectTypeResultKey)) {
-                    SelectType.FromCoin -> viewModel.setCoinSending(selectedCoin)
-                    SelectType.ToCoin -> viewModel.setCoinReceiving(selectedCoin)
-                }
+            SwapViewModel.ApproveActionState.Visible -> {
+                approveButton.isVisible = true
+                approveButton.isEnabled = true
+                approveButton.setText(R.string.Swap_Approve)
             }
-        })
-
-        getNavigationLiveData(SwapSettingsFragment.requestKey)?.observe(viewLifecycleOwner, { bundle ->
-            if (bundle.getBoolean(SwapSettingsFragment.resultKey)) {
-                bundle.getParcelable<SwapSettingsModule.SwapSettings>(SwapSettingsFragment.swapSettingsKey)?.let {
-                    viewModel.onSwapSettingsUpdated(it)
-                }
+            SwapViewModel.ApproveActionState.Pending -> {
+                approveButton.isVisible = true
+                approveButton.isEnabled = false
+                approveButton.setText(R.string.Swap_Approving)
             }
-        })
-    }
-*/
-
-/*
-    private fun observeViewModel() {
-        viewModel.coinSending.observe(viewLifecycleOwner, { coin ->
-            youPay.setSelectedCoin(coin)
-        })
-
-        viewModel.coinReceiving.observe(viewLifecycleOwner, { coin ->
-            youGet.setSelectedCoin(coin)
-        })
-
-        viewModel.amountSending.observe(viewLifecycleOwner, { amount ->
-            setAmountSendingIfChanged(amount)
-        })
-
-        viewModel.amountReceiving.observe(viewLifecycleOwner, { amount ->
-            setAmountReceivingIfChanged(amount)
-        })
-
-        viewModel.tradeViewItem.observe(viewLifecycleOwner, { tradeViewItem ->
-            setTradeViewItem(tradeViewItem)
-        })
-
-        viewModel.balanceSending.observe(viewLifecycleOwner, { balance ->
-            youPay.setBalance(balance)
-        })
-
-        viewModel.balanceReceiving.observe(viewLifecycleOwner, { balance ->
-            youGet.setBalance(balance)
-        })
-
-        viewModel.allowance.observe(viewLifecycleOwner, { allowance ->
-            setAllowance(allowance)
-        })
-
-        viewModel.allowanceLoading.observe(viewLifecycleOwner, { isLoading ->
-            setAllowanceLoading(isLoading)
-        })
-
-        viewModel.insufficientAllowance.observe(viewLifecycleOwner, { error ->
-            context?.let {
-                val color = if (error)
-                    LayoutHelper.getAttr(R.attr.ColorLucian, it.theme) ?: it.getColor(R.color.red_d)
-                else
-                    it.getColor(R.color.grey)
-                allowanceValue.setTextColor(color)
-            }
-        })
-
-        viewModel.amountSendingError.observe(viewLifecycleOwner, { amountSendingError ->
-            youPay.showBalanceError(amountSendingError != null)
-        })
-
-        viewModel.error.observe(viewLifecycleOwner, { error ->
-            commonError.text = error
-            commonError.isVisible = error != null
-        })
-
-        viewModel.amountSendingEstimated.observe(viewLifecycleOwner, { estimated ->
-            youPay.showEstimated(estimated)
-        })
-
-        viewModel.amountReceivingEstimated.observe(viewLifecycleOwner, { estimated ->
-            youGet.showEstimated(estimated)
-        })
-
-        viewModel.proceedButtonEnabled.observe(viewLifecycleOwner, { proceedButtonEnabled ->
-            proceedButton.isEnabled = proceedButtonEnabled
-        })
-
-        viewModel.showApprovingMessage.observe(viewLifecycleOwner, { isVisible ->
-            if (isVisible) {
-                if (approvingSnackBar == null) {
-                    approvingSnackBar = HudHelper.showInProcessMessage(requireView(), R.string.Swap_Approving, SnackbarDuration.INDEFINITE)
-                }
-            } else {
-                approvingSnackBar?.dismiss()
-                approvingSnackBar = null
-            }
-        })
-
-        viewModel.approveData.observe(viewLifecycleOwner, { approveData ->
-            approveButton.isVisible = approveData != null
-            approveButton.setOnSingleClickListener {
-                approveData?.let {
-                    findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to it), navOptions())
-                }
-            }
-        })
-
-        viewModel.openConfirmation.observe(viewLifecycleOwner, { requireConfirmation ->
-            if (requireConfirmation) {
-                findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
-            }
-        })
-
-        viewModel.openSettings.observe(viewLifecycleOwner, { (currentSettings, defaultSettings) ->
-            val params = SwapSettingsFragment.params(currentSettings, defaultSettings)
-            findNavController().navigate(R.id.swapFragment_to_swapSettingsFragment, params)
-        })
-
-        viewModel.loading.observe(viewLifecycleOwner, { isLoading ->
-            progressBar.isVisible = isLoading
-        })
-
-        viewModel.closeWithSuccess.observe(viewLifecycleOwner, {
-            HudHelper.showSuccessMessage(requireView(), it, SnackbarDuration.LONG)
-            Handler().postDelayed({
-                findNavController().popBackStack(R.id.swapFragment, true)
-            }, 1200)
-        })
-    }
-*/
-
-    private fun setAllowance(allowance: String?) {
-        allowanceValue.text = allowance
-        allowanceGroup.isVisible = allowance != null
-    }
-
-    private fun setAllowanceLoading(isLoading: Boolean) {
-        if (isLoading) {
-            allowanceGroup.isVisible = true
-            allowanceValue.text = getString(R.string.Alert_Loading)
-            context?.getColor(R.color.grey_50)?.let { allowanceValue.setTextColor(it) }
         }
     }
-
-
-/*    private val amountSendingListener = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.setAmountSending(s?.toString())
-        }
-
-        override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-    }
-
-    private val amountReceivingListener = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.setAmountReceiving(s?.toString())
-        }
-
-        override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-    }
-    */
-
-    /*  private fun setAmountSendingIfChanged(amount: String?) {
-          youPay.amountEditText.apply {
-              if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
-
-              removeTextChangedListener(amountSendingListener)
-              setText(amount)
-              addTextChangedListener(amountSendingListener)
-          }
-      }
-
-      private fun setAmountReceivingIfChanged(amount: String?) {
-          youGet.amountEditText.apply {
-              if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
-
-              removeTextChangedListener(amountReceivingListener)
-              setText(amount)
-              addTextChangedListener(amountReceivingListener)
-          }
-      }
-
-      private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
-          return when {
-              amount1 == null && amount2 == null -> true
-              amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
-              else -> false
-          }
-      }*/
-
 
     companion object {
         const val fromCoinKey = "fromCoinKey"

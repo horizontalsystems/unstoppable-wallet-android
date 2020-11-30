@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapAllowanceService
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
@@ -39,7 +39,7 @@ class SwapApproveFragment : BaseFragment() {
             }
         }
 
-        val approveData = requireArguments().getParcelable<SwapModule.ApproveData>(dataKey)!!
+        val approveData = requireArguments().getParcelable<SwapAllowanceService.ApproveData>(dataKey)!!
 
         val vmFactory = SwapApproveModule.Factory(approveData)
         val viewModel by viewModels<SwapApproveViewModel> { vmFactory }

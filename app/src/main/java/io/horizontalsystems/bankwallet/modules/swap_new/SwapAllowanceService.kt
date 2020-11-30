@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap_new
 
+import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -12,6 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 import java.util.*
 
@@ -55,7 +57,7 @@ class SwapAllowanceService(
 
         return allowance?.let {
             coin?.let { coin ->
-                ApproveData(coin, spenderAddress, amount, allowance.value)
+                ApproveData(coin, spenderAddress.hex, amount, allowance.value)
             }
         }
 
@@ -82,7 +84,7 @@ class SwapAllowanceService(
         allowanceDisposable = adapter.allowance(spenderAddress, DefaultBlockParameter.Latest)
                 .subscribeOn(Schedulers.io())
                 .subscribe({ allowance ->
-                    state = State.Ready(CoinValue(coin,allowance))
+                    state = State.Ready(CoinValue(coin, allowance))
                 }, { error ->
                     state = State.NotReady(error)
                 })
@@ -111,11 +113,13 @@ class SwapAllowanceService(
         }
     }
 
+    @Parcelize
     data class ApproveData(
             val coin: Coin,
-            val spenderAddress: Address,
+            val spenderAddress: String,
             val amount: BigDecimal,
             val allowance: BigDecimal
-    )
+    ) : Parcelable
+
     //endregion
 }

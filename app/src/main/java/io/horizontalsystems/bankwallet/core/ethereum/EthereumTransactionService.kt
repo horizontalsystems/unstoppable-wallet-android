@@ -43,6 +43,10 @@ class EthereumTransactionService(
 
     private val disposable = CompositeDisposable()
 
+    fun resync() {
+        sync()
+    }
+
     private fun sync() {
         disposable.clear()
 

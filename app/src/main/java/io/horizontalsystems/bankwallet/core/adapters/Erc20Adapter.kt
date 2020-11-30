@@ -34,6 +34,9 @@ class Erc20Adapter(
     private val contractAddress: Address = Address(contractAddress)
     val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, this.contractAddress)
 
+    val pendingTransactions: List<TransactionRecord>
+        get() = erc20Kit.pendingTransactions().map { transactionRecord(it) }
+
     // IAdapter
 
     override fun start() {

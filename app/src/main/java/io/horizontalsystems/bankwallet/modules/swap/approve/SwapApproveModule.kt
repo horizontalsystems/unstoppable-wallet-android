@@ -10,14 +10,14 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapAllowanceService
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Observable
 import java.math.BigInteger
 
 object SwapApproveModule {
 
-    class Factory(private val approveData: SwapModule.ApproveData) : ViewModelProvider.Factory {
+    class Factory(private val approveData: SwapAllowanceService.ApproveData) : ViewModelProvider.Factory {
         private val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
@@ -32,7 +32,9 @@ object SwapApproveModule {
                 SwapApproveViewModel::class.java -> {
                     val wallet = checkNotNull(App.walletManager.wallet(approveData.coin))
                     val erc20Adapter = App.adapterManager.getAdapterForWallet(wallet) as Erc20Adapter
-                    val swapApproveService = SwapApproveService(transactionService, erc20Adapter.erc20Kit, ethereumKit, approveData.amount, Address(approveData.spenderAddress), approveData.allowance)
+                    val approveAmountBigInteger = approveData.amount.movePointRight(approveData.coin.decimal).toBigInteger()
+                    val allowanceAmountBigInteger = approveData.allowance.movePointRight(approveData.coin.decimal).toBigInteger()
+                    val swapApproveService = SwapApproveService(transactionService, erc20Adapter.erc20Kit, ethereumKit, approveAmountBigInteger, Address(approveData.spenderAddress), allowanceAmountBigInteger)
                     SwapApproveViewModel(swapApproveService, coinService, ethCoinService, listOf(swapApproveService)) as T
                 }
                 EthereumFeeViewModel::class.java -> {

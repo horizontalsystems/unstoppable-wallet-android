@@ -41,8 +41,9 @@ object SwapModule {
         private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
         private val uniswapRepository by lazy { UniswapRepository(uniswapKit) }
         private val allowanceService by lazy { SwapAllowanceService(uniswapRepository.routerAddress, App.adapterManager, ethereumKit) }
+        private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val service by lazy {
-            SwapService(ethereumKit, tradeService, allowanceService, transactionService, App.adapterManager)
+            SwapService(ethereumKit, tradeService, allowanceService, pendingAllowanceService, transactionService, App.adapterManager)
         }
         private val tradeService by lazy {
             SwapTradeService(uniswapRepository, fromCoin)
@@ -62,18 +63,7 @@ object SwapModule {
 
             return when (modelClass) {
                 SwapViewModel::class.java -> {
-                    val uniswapKit = UniswapKit.getInstance(ethereumKit)
-
-//                    val allowanceProvider = AllowanceProvider(App.adapterManager)
-//                    val feeRateProvider = EthereumFeeRateProvider(App.feeRateProvider)
-//                    val stringProvider = StringProvider(App.instance)
-//
-//                    val swapRepository = UniswapRepository(uniswapKit)
-//                    val swapService = UniswapService(coinSending, swapRepository, allowanceProvider, App.walletManager, App.adapterManager, transactionService, ethereumKit, App.appConfigProvider.ethereumCoin)
-//                    val formatter = SwapItemFormatter(stringProvider, App.numberFormatter)
-//                    val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, formatter, ethCoinService)
-
-                    SwapViewModel(service, tradeService, formatter) as T
+                    SwapViewModel(service, tradeService, pendingAllowanceService, ethCoinService, formatter, stringProvider) as T
                 }
                 SwapFromCoinCardViewModel::class.java -> {
                     SwapFromCoinCardViewModel(service, tradeService, coinProvider, formatter, stringProvider) as T
