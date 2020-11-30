@@ -27,6 +27,7 @@ class DataProviderSettingsFragment : BaseDialogFragment(), DataProviderSettingsA
     private lateinit var viewModel: DataProviderSettingsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.window?.setWindowAnimations(R.style.RightDialogAnimations)
         dialog?.dismissOnBackPressed()
         return inflater.inflate(R.layout.fragment_explorer_switcher, container, false)
     }

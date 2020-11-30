@@ -15,7 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/full_transaction_info_menu"
-        app:title="@string/FullInfo_Title" />
+        app:title="@string/FullInfo_Title"
+        app:titleTextColor="?TitleColor" />
 
     <TextView
         android:id="@+id/transactionIdView"
