@@ -14,7 +14,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/FullInfo_Source" />
+        app:title="@string/FullInfo_Source"
+        app:titleTextColor="?TitleColor" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

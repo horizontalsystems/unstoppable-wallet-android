@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_status_info.*
 class StatusInfoFragment : BaseDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.window?.setWindowAnimations(R.style.BottomDialogLargeAnimation)
         dialog?.dismissOnBackPressed()
         return inflater.inflate(R.layout.fragment_status_info, container, false)
     }

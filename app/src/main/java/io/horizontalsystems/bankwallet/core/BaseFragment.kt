@@ -31,19 +31,19 @@ abstract class BaseFragment : Fragment() {
 
     protected fun navOptions(): NavOptions {
         return NavOptions.Builder()
-                .setEnterAnim(R.anim.from_right)
-                .setExitAnim(R.anim.to_left)
-                .setPopEnterAnim(R.anim.from_left)
-                .setPopExitAnim(R.anim.to_right)
+                .setEnterAnim(R.anim.slide_from_right)
+                .setExitAnim(R.anim.slide_to_left)
+                .setPopEnterAnim(R.anim.slide_from_left)
+                .setPopExitAnim(R.anim.slide_to_right)
                 .build()
     }
 
     protected fun navOptionsFromBottom(): NavOptions {
         return NavOptions.Builder()
-                .setEnterAnim(R.anim.from_bottom)
-                .setExitAnim(R.anim.to_top)
-                .setPopEnterAnim(R.anim.from_top)
-                .setPopExitAnim(R.anim.to_bottom)
+                .setEnterAnim(R.anim.slide_from_bottom)
+                .setExitAnim(R.anim.slide_to_top)
+                .setPopEnterAnim(R.anim.slide_from_top)
+                .setPopExitAnim(R.anim.slide_to_bottom)
                 .build()
     }
 

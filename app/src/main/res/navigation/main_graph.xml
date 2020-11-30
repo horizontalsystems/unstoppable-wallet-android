@@ -54,10 +54,10 @@
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
-            app:enterAnim="@anim/from_bottom"
+            app:enterAnim="@anim/slide_from_bottom"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/to_bottom" />
+            app:popExitAnim="@anim/slide_to_bottom" />
         <action
             android:id="@+id/mainFragment_to_walletConnectMainFragment"
             app:destination="@id/walletConnectMainFragment" />
@@ -237,10 +237,10 @@
         <action
             android:id="@+id/swapFragment_to_swapSettingsFragment"
             app:destination="@id/swapSettingsFragment"
-            app:enterAnim="@anim/from_bottom"
+            app:enterAnim="@anim/slide_from_bottom"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/to_bottom" />
+            app:popExitAnim="@anim/slide_to_bottom" />
     </fragment>
     <fragment
         android:id="@+id/selectSwapCoinFragment"
@@ -269,7 +269,7 @@
         <action
             android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"
             app:destination="@id/walletConnectErrorFragment"
-            app:popExitAnim="@anim/to_right"
+            app:popExitAnim="@anim/slide_to_right"
             app:popUpTo="@id/walletConnectMainFragment"
             app:popUpToInclusive="true" />
         <action

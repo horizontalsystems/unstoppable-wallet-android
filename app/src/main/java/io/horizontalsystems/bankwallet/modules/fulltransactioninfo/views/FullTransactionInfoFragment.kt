@@ -37,6 +37,7 @@ class FullTransactionInfoFragment : BaseDialogFragment(), FullTransactionInfoErr
     private var shareMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.window?.setWindowAnimations(R.style.BottomDialogLargeAnimation)
         dialog?.dismissOnBackPressed()
         return inflater.inflate(R.layout.fragment_full_transaction_info, container, false)
     }
