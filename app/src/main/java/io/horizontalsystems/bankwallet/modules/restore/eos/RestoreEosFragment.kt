@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
+import io.horizontalsystems.bankwallet.core.adapters.EosError
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
@@ -113,7 +113,7 @@ class RestoreEosFragment : BaseFragment() {
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             val error = when(it){
-                is EosAdapter.EosError.InvalidAccountName -> R.string.Restore_EosAccountIncorrect
+                is EosError.InvalidAccountName -> R.string.Restore_EosAccountIncorrect
                 is InvalidPrivateKey -> R.string.Restore_EosKeyIncorrect
                 else -> R.string.default_error_msg
             }
