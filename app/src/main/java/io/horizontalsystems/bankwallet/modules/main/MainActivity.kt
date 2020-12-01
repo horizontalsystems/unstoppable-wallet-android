@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendActivity
 class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(null) // null prevents fragments restoration on theme switch
 
         setContentView(R.layout.activity_main)
         setTransparentStatusBar()
