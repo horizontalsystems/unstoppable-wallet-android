@@ -36,7 +36,7 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
     override fun getTheme() = R.style.BottomDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog?.dismissOnBackPressed()
+        dialog?.dismissOnBackPressed { dismiss() }
         dialog?.setOnShowListener {
             dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let { view ->
                 BottomSheetBehavior.from(view).apply {
