@@ -60,10 +60,10 @@ fun Fragment.setNavigationResult(key: String = "result", bundle: Bundle) {
 
 //  Dialog
 
-fun Dialog.dismissOnBackPressed() {
+fun Dialog.dismissOnBackPressed(onDismiss: () -> Unit) {
     setOnKeyListener { _, keyCode, event ->
         if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
-            dismiss()
+            onDismiss()
             true
         } else {
             false

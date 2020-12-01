@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseDialogFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.dismissOnBackPressed
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_info.*
@@ -19,7 +18,7 @@ class InfoFragment : BaseDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog?.window?.setWindowAnimations(R.style.BottomDialogLargeAnimation)
-        dialog?.dismissOnBackPressed()
+        dialog?.dismissOnBackPressed { dismiss() }
         return inflater.inflate(R.layout.fragment_info, container, false)
     }
 

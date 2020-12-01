@@ -38,7 +38,7 @@ class FullTransactionInfoFragment : BaseDialogFragment(), FullTransactionInfoErr
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog?.window?.setWindowAnimations(R.style.BottomDialogLargeAnimation)
-        dialog?.dismissOnBackPressed()
+        dialog?.dismissOnBackPressed { dismiss() }
         return inflater.inflate(R.layout.fragment_full_transaction_info, container, false)
     }
 
