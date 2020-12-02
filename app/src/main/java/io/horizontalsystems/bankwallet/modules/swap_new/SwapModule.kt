@@ -31,6 +31,19 @@ object SwapModule {
             val blockchainType: String?
     ) : Parcelable
 
+    data class ConfirmationAmountViewItem(
+            val payTitle: String,
+            val payValue: String?,
+            val getTitle: String,
+            val getValue: String?
+    )
+
+    data class ConfirmationAdditionalViewItem (val title: String, val value : String?)
+
+    data class GuaranteedAmountViewItem (val title: String, val value: String)
+
+    data class PriceImpactViewItem (val level: SwapTradeService.PriceImpactLevel, val value: String)
+
     class Factory(private val fromCoin: Coin?) : ViewModelProvider.Factory {
         private val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
         private val uniswapKit by lazy { UniswapKit.getInstance(ethereumKit) }

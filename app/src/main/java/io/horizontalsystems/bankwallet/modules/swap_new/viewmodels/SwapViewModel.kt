@@ -8,10 +8,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
-import io.horizontalsystems.bankwallet.modules.swap_new.SwapAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap_new.SwapPendingAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap_new.SwapService
-import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService
+import io.horizontalsystems.bankwallet.modules.swap_new.*
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.models.TradeOptions
@@ -19,8 +16,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class SwapViewModel(
-        private val service: SwapService,
-        private val tradeService: SwapTradeService,
+        val service: SwapService,
+        val tradeService: SwapTradeService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val ethCoinService: CoinService,
         private val formatter: SwapItemFormatter,
@@ -146,10 +143,8 @@ class SwapViewModel(
     private fun tradeViewItem(trade: SwapTradeService.Trade): TradeViewItem {
         return TradeViewItem(
                 formatter.price(trade.tradeData.executionPrice, tradeService.coinFrom, tradeService.coinTo),
-                formatter.priceImpact(trade.tradeData.priceImpact),
-                trade.priceImpactLevel,
-                formatter.minMaxTitle(trade.tradeData.type),
-                formatter.minMaxValue(trade.minMaxAmount, tradeService.coinFrom, tradeService.coinTo, trade.tradeData.type)
+                formatter.priceImpactViewItem(trade, SwapTradeService.PriceImpactLevel.Warning),
+                formatter.guaranteedAmountViewItem(trade.tradeData, tradeService.coinFrom, tradeService.coinTo)
         )
     }
 
@@ -165,10 +160,8 @@ class SwapViewModel(
     //region models
     data class TradeViewItem(
             val price: String? = null,
-            val priceImpact: String? = null,
-            val priceImpactLevel: SwapTradeService.PriceImpactLevel,
-            val minMaxTitle: String? = null,
-            val minMaxAmount: String? = null
+            val priceImpact: SwapModule.PriceImpactViewItem? = null,
+            val guaranteedAmount: SwapModule.GuaranteedAmountViewItem? = null
     )
 
     data class TradeOptionsViewItem(

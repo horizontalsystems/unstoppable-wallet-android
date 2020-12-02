@@ -238,6 +238,8 @@
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_MaximumPaid">Maximum Paid</string>
+    <string name="Swap_MinimumGot">Minimum Got</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>

@@ -8,6 +8,10 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService
+import io.horizontalsystems.uniswapkit.models.TradeData
+import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -56,26 +60,37 @@ class SwapItemFormatter(
         return "${coinTo.code} = ${coinAmount(inversePrice, coinFrom)} "
     }
 
+    fun priceImpactViewItem(
+            trade: SwapTradeService.Trade,
+            minLevel: SwapTradeService.PriceImpactLevel = SwapTradeService.PriceImpactLevel.Normal
+    ): SwapModule.PriceImpactViewItem? {
+
+        val priceImpact = trade.tradeData.priceImpact ?: return null
+        val impactLevel = trade.priceImpactLevel
+        if (impactLevel < minLevel) {
+            return null
+        }
+
+        return SwapModule.PriceImpactViewItem(impactLevel, "$priceImpact%")
+    }
+
     fun priceImpact(priceImpact: BigDecimal?): String? {
         return priceImpact?.toPlainString()?.let { stringProvider.string(R.string.Swap_Percent, it) }
     }
 
-    fun minMaxTitle(tradeType: TradeType): String {
-        return if (tradeType == TradeType.ExactIn)
-            stringProvider.string(R.string.Swap_MinimumReceived)
-        else
-            stringProvider.string(R.string.Swap_MaximumSold)
-    }
-
-    fun minMaxValue(amount: BigDecimal?, coinFrom: Coin?, coinTo: Coin?, tradeType: TradeType): String? {
-        return if (amount == null || coinFrom == null || coinTo == null)
-            null
-        else when (tradeType) {
+    fun guaranteedAmountViewItem(tradeData: TradeData, coinIn: Coin?, coinOut: Coin?): SwapModule.GuaranteedAmountViewItem? {
+        when (tradeData.type) {
             TradeType.ExactIn -> {
-                coinAmount(amount, coinTo)
+                val amount = tradeData.amountOutMin ?: return null
+                val coin = coinOut ?: return null
+
+                return SwapModule.GuaranteedAmountViewItem(stringProvider.string(R.string.Swap_MinimumGot), coinAmount(amount, coin))
             }
             TradeType.ExactOut -> {
-                coinAmount(amount, coinFrom)
+                val amount = tradeData.amountInMax ?: return null
+                val coin = coinIn ?: return null
+
+                return SwapModule.GuaranteedAmountViewItem(stringProvider.string(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
             }
         }
     }
@@ -100,4 +115,23 @@ class SwapItemFormatter(
     fun coinAmount(amount: BigDecimal, coin: Coin, maxFraction: Int): String {
         return numberFormatter.formatCoin(amount, coin.code, 0, maxFraction)
     }
+
+    fun slippage(allowedSlippage: BigDecimal): String? {
+        val defaultTradeOptions = TradeOptions()
+        return if (allowedSlippage.compareTo(defaultTradeOptions.allowedSlippagePercent) == 0){
+            null
+        } else {
+            "$allowedSlippage%"
+        }
+    }
+
+    fun deadline(ttl: Long): String? {
+        val defaultTradeOptions = TradeOptions()
+        return if (ttl == defaultTradeOptions.ttl) {
+            null
+        } else {
+            stringProvider.string(R.string.Duration_Minutes, ttl)
+        }
+    }
+
 }

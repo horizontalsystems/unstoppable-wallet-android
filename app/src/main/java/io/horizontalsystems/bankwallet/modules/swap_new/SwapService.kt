@@ -30,6 +30,7 @@ class SwapService(
 
     //region internal subjects
     private val stateSubject = PublishSubject.create<State>()
+    private val swapEventSubject = PublishSubject.create<SwapEvent>()
     private val errorsSubject = PublishSubject.create<List<Throwable>>()
     private val balanceFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val balanceToSubject = PublishSubject.create<Optional<BigDecimal>>()
@@ -43,6 +44,7 @@ class SwapService(
             stateSubject.onNext(value)
         }
     val stateObservable: Observable<State> = stateSubject
+    val swapEventObservable: Observable<SwapEvent> = swapEventSubject
 
     var errors: List<Throwable> = listOf()
         private set(value) {
@@ -122,6 +124,32 @@ class SwapService(
                 .subscribe {
                     syncState()
                 }
+                .let { disposables.add(it) }
+    }
+
+    fun swap() {
+
+        if (state != State.Ready) {
+            return
+        }
+
+        val transaction = transactionService.transactionStatus.dataOrNull ?: return
+
+        swapEventSubject.onNext(SwapEvent.Swapping)
+
+        ethereumKit.send(
+                transaction.data.to,
+                transaction.data.value,
+                transaction.data.input,
+                transaction.gasData.gasPrice,
+                transaction.gasData.gasLimit
+        )
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    swapEventSubject.onNext(SwapEvent.Completed)
+                }, {
+                    swapEventSubject.onNext(SwapEvent.Failed(it))
+                })
                 .let { disposables.add(it) }
     }
 
@@ -246,6 +274,12 @@ class SwapService(
         object Loading : State()
         object Ready : State()
         object NotReady : State()
+    }
+
+    sealed class SwapEvent {
+        object Swapping : SwapEvent()
+        object Completed : SwapEvent()
+        class Failed(val error: Throwable) : SwapEvent()
     }
 
     sealed class SwapError : Throwable() {

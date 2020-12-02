@@ -62,20 +62,17 @@ class SwapFragment : BaseFragment() {
             }
         })
 
+        proceedButton.setOnSingleClickListener {
+            findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
+        }
 
-//
-//        proceedButton.setOnSingleClickListener {
-//            viewModel.onProceedClick()
-//        }
-//
 //        advancedSettings.setOnSingleClickListener {
 //            viewModel.onSettingsClick()
 //        }
 //
 //        setFragmentResultListeners()
 //
-//        observeViewModel()
-//
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -126,13 +123,13 @@ class SwapFragment : BaseFragment() {
     private fun setTradeViewItem(tradeViewItem: SwapViewModel.TradeViewItem?) {
         price.text = tradeViewItem?.price
 
-        priceImpactValue.text = tradeViewItem?.priceImpact
+        priceImpactValue.text = tradeViewItem?.priceImpact?.value
         context?.let {
-            priceImpactValue.setTextColor(priceImpactColor(it, tradeViewItem?.priceImpactLevel))
+            priceImpactValue.setTextColor(priceImpactColor(it, tradeViewItem?.priceImpact?.level))
         }
 
-        minMaxTitle.text = tradeViewItem?.minMaxTitle
-        minMaxValue.text = tradeViewItem?.minMaxAmount
+        minMaxTitle.text = tradeViewItem?.guaranteedAmount?.title
+        minMaxValue.text = tradeViewItem?.guaranteedAmount?.value
 
         tradeDataGroup.isVisible = tradeViewItem != null
     }
