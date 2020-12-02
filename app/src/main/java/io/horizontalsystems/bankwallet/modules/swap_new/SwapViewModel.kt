@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap_new.viewmodels
+package io.horizontalsystems.bankwallet.modules.swap_new
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,8 @@ import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
-import io.horizontalsystems.bankwallet.modules.swap_new.*
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.models.TradeOptions
@@ -60,7 +61,6 @@ class SwapViewModel(
     fun didApprove() {
         pendingAllowanceService.syncAllowance()
     }
-
     //endregion
 
     private fun subscribeToServices() {

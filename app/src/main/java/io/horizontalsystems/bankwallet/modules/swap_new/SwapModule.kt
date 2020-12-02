@@ -14,13 +14,14 @@ import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapFromCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapToCoinCardService
-import io.horizontalsystems.bankwallet.modules.swap_new.providers.SwapCoinProvider
+import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinProvider
 import io.horizontalsystems.bankwallet.modules.swap_new.repositories.UniswapRepository
-import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapAllowanceViewModel
-import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapViewModel
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceViewModel
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal

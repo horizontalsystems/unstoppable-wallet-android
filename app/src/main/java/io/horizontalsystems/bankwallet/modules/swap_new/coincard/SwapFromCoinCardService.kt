@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapService
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService
-import io.horizontalsystems.bankwallet.modules.swap_new.providers.SwapCoinProvider
 import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.Observable
 import java.math.BigDecimal

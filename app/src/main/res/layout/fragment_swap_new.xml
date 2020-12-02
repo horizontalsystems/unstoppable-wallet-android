@@ -113,7 +113,7 @@
                 android:visibility="visible"
                 app:constraint_referenced_ids="dividerLine,advancedSettings"/>
 
-            <io.horizontalsystems.bankwallet.modules.swap_new.views.SwapAllowanceView
+            <io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceView
                 android:id="@+id/allowanceView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

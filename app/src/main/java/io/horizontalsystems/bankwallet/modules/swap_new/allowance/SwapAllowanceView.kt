@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap_new.views
+package io.horizontalsystems.bankwallet.modules.swap_new.allowance
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapAllowanceViewModel
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_swap_allowance.view.*
 

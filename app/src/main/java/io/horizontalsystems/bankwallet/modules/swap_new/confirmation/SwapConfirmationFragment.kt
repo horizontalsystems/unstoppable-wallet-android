@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
-import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapViewModel
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar

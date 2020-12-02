@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap_new
+package io.horizontalsystems.bankwallet.modules.swap_new.allowance
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.IAdapterManager

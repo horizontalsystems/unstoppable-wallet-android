@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap_new
+package io.horizontalsystems.bankwallet.modules.swap_new.allowance
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter

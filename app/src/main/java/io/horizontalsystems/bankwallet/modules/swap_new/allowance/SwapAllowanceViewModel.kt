@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap_new.viewmodels
+package io.horizontalsystems.bankwallet.modules.swap_new.allowance
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
-import io.horizontalsystems.bankwallet.modules.swap_new.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapService
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

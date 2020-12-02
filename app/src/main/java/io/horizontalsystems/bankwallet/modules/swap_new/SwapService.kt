@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.DataState
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService.PriceImpactLevel
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable

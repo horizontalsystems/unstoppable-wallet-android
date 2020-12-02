@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap_new.providers
+package io.horizontalsystems.bankwallet.modules.swap_new.coincard
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
