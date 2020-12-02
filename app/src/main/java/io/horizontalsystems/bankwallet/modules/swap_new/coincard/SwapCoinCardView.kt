@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap_new.views
+package io.horizontalsystems.bankwallet.modules.swap_new.coincard
 
 import android.content.Context
 import android.text.Editable
@@ -12,7 +12,6 @@ import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap_new.coinselect.SelectSwapCoinFragment
-import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapCoinCardViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -28,10 +27,10 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         inflate(context, R.layout.view_card_swap, this)
     }
 
-    fun initialize(viewModel: SwapCoinCardViewModel, fragment: Fragment, lifecycleOwner: LifecycleOwner) {
+    fun initialize(title: String, viewModel: SwapCoinCardViewModel, fragment: Fragment, lifecycleOwner: LifecycleOwner) {
         this.viewModel = viewModel
 
-        title.text = viewModel.title
+        titleTextView.text = title
 
         viewModel.tokenCodeLiveData().observe(lifecycleOwner, { setTokenCode(it) })
 
@@ -46,7 +45,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         viewModel.revertAmountLiveData().observe(lifecycleOwner, { revertAmount(it) })
 
         selectedToken.setOnClickListener {
-            val params = SelectSwapCoinFragment.params(id, viewModel.tokensForSelection)
+            val params = SelectSwapCoinFragment.params(id, ArrayList(viewModel.tokensForSelection))
             fragment.findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, null)
         }
 
@@ -54,7 +53,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             val requestId = bundle.getInt(SelectSwapCoinFragment.requestIdKey)
             val coinBalanceItem = bundle.getParcelable<SwapModule.CoinBalanceItem>(SelectSwapCoinFragment.coinBalanceItemResultKey)
             if (requestId == id && coinBalanceItem != null) {
-                viewModel.onSelectCoin(coinBalanceItem)
+                viewModel.onSelectCoin(coinBalanceItem.coin)
             }
         })
 

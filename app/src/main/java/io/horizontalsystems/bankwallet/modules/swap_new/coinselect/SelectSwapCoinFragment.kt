@@ -90,7 +90,7 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
         const val requestIdKey = "requestIdKey"
         const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
 
-        fun params(requestId: Int, coinBalanceItems: List<CoinBalanceItem>): Bundle {
+        fun params(requestId: Int, coinBalanceItems: ArrayList<CoinBalanceItem>): Bundle {
             return bundleOf(
                     requestIdKey to requestId,
                     coinBalanceItemsListKey to coinBalanceItems

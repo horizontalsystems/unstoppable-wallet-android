@@ -18,7 +18,7 @@ class SwapCardView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.SwapCardView)
         try {
-            title.text = ta.getString(R.styleable.SwapCardView_title)
+            titleTextView.text = ta.getString(R.styleable.SwapCardView_title)
         } finally {
             ta.recycle()
         }

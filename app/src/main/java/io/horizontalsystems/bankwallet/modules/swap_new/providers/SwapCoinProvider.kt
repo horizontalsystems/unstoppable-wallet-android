@@ -13,21 +13,23 @@ class SwapCoinProvider(
         private val adapterManager: IAdapterManager
 ) {
 
-    fun coins(enabledCoins: Boolean, exclude: List<Coin> = listOf()): List<CoinBalanceItem> =
-            if (enabledCoins) {
-                walletItems.filter { item ->
-                    val include = !exclude.contains(item.coin)
-                    val zeroBalance = item.balance == BigDecimal.ZERO
+    fun coins(enabledCoins: Boolean, exclude: List<Coin> = listOf()): List<CoinBalanceItem> {
+        val enabledCoinItems = walletItems.filter { item ->
+            val zeroBalance = item.balance == BigDecimal.ZERO
+            item.coin.type.swappable && !exclude.contains(item.coin) && !zeroBalance
+        }.sortedBy { it.balance }
 
-                    item.coin.type.swappable && include && !zeroBalance
-                }
-            } else {
-                coinManager.coins.filter { coin ->
-                    coin.type.swappable && !exclude.contains(coin)
-                }.map { coin ->
-                    CoinBalanceItem(coin, balance(coin), coin.type.label)
-                }
+        return if (enabledCoins) {
+            enabledCoinItems
+        } else {
+            val disabledCoinItems = coinManager.coins.filter { coin ->
+                coin.type.swappable && !exclude.contains(coin) && !enabledCoinItems.any { it.coin == coin }
+            }.map { coin ->
+                CoinBalanceItem(coin, balance(coin), coin.type.label)
             }
+            enabledCoinItems + disabledCoinItems
+        }
+    }
 
     private val walletItems: List<CoinBalanceItem>
         get() = walletManager.wallets.map { wallet ->

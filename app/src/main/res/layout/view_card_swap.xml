@@ -13,7 +13,7 @@
         android:background="?ColorLawrence">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/titleTextView"
             style="@style/Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,9 +32,9 @@
             android:layout_marginStart="10dp"
             android:text="@string/Swap_Estimated"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/title"
-            app:layout_constraintStart_toEndOf="@+id/title"
-            app:layout_constraintTop_toTopOf="@+id/title" />
+            app:layout_constraintBottom_toBottomOf="@+id/titleTextView"
+            app:layout_constraintStart_toEndOf="@+id/titleTextView"
+            app:layout_constraintTop_toTopOf="@+id/titleTextView" />
 
         <TextView
             android:id="@+id/selectedToken"
@@ -68,7 +68,7 @@
             android:textColorHint="@color/grey_50"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
             tools:text="0.123" />
 
         <TextView

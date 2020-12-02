@@ -6,15 +6,15 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
+import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapAllowanceViewModel
-import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapFromCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapToCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.viewmodels.SwapViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
@@ -24,12 +24,9 @@ import kotlinx.android.synthetic.main.fragment_swap_new.*
 
 class SwapFragment : BaseFragment() {
 
-    private val vmFactory by lazy { SwapModule.Factory(requireArguments().getParcelable(fromCoinKey)!!) }
+    private val vmFactory by lazy { SwapModule.Factory(this, requireArguments().getParcelable(fromCoinKey)!!) }
     private val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) { vmFactory }
-    private val fromCoinCardViewModel by navGraphViewModels<SwapFromCoinCardViewModel>(R.id.swapFragment) { vmFactory }
-    private val toCoinCardViewModel by navGraphViewModels<SwapToCoinCardViewModel>(R.id.swapFragment) { vmFactory }
     private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
-
     private val feeViewModel by navGraphViewModels<EthereumFeeViewModel>(R.id.swapFragment) { vmFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -43,8 +40,14 @@ class SwapFragment : BaseFragment() {
 
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
-        fromCoinCard.initialize(fromCoinCardViewModel, this, viewLifecycleOwner)
-        toCoinCard.initialize(toCoinCardViewModel, this, viewLifecycleOwner)
+        val fromCoinCardViewModel = ViewModelProvider(this, vmFactory).get(SwapModule.Factory.coinCardTypeFrom, SwapCoinCardViewModel::class.java)
+        val fromCoinCardTitle = getString(R.string.Swap_FromAmountTitle)
+        fromCoinCard.initialize(fromCoinCardTitle, fromCoinCardViewModel, this, viewLifecycleOwner)
+
+        val toCoinCardViewModel = ViewModelProvider(this, vmFactory).get(SwapModule.Factory.coinCardTypeTo, SwapCoinCardViewModel::class.java)
+        val toCoinCardTile = getString(R.string.Swap_ToAmountTitle)
+        toCoinCard.initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
+
         allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
 
         approveButton.setOnSingleClickListener {
@@ -70,9 +73,6 @@ class SwapFragment : BaseFragment() {
 //            viewModel.onSettingsClick()
 //        }
 //
-//        setFragmentResultListeners()
-//
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
