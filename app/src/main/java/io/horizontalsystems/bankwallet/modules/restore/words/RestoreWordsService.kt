@@ -9,17 +9,28 @@ import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.
 class RestoreWordsService(
         private val restoreAccountType: RestoreAccountType,
         private val wordsManager: IWordsManager,
-        private val zcashBirthdayProvider: ZcashBirthdayProvider
-) : RestoreWordsModule.IRestoreWordsService, Clearable {
+        private val zcashBirthdayProvider: ZcashBirthdayProvider)
+    : RestoreWordsModule.IRestoreWordsService, Clearable {
 
     override val wordCount: Int
         get() = restoreAccountType.wordsCount
 
-    override val hasAdditionalInfo: Boolean
+    override val birthdayHeightEnabled: Boolean
         get() = restoreAccountType == RestoreAccountType.ZCASH
 
     override fun accountType(words: List<String>, additionalInfo: String?): AccountType {
+        words.forEach {
+            if (!isWordValid(it)) {
+                throw RestoreWordsException.InvalidWordException(it)
+            }
+        }
+
+        if (words.size != wordCount) {
+            throw RestoreWordsException.InvalidWordCountException(words.size, wordCount)
+        }
+
         wordsManager.validate(words, wordCount)
+
         return when (restoreAccountType) {
             RestoreAccountType.STANDARD,
             RestoreAccountType.BINANCE -> AccountType.Mnemonic(words)
@@ -40,9 +51,19 @@ class RestoreWordsService(
         }
     }
 
+    override fun isWordValid(word: String): Boolean {
+        return wordsManager.wordExists(word)
+    }
+
+    override fun isWordPartiallyValid(word: String): Boolean {
+        return wordsManager.wordContains(word)
+    }
+
     override fun clear() {}
 
     open class RestoreWordsException : Throwable() {
         class InvalidBirthdayHeightException : RestoreWordsException()
+        class InvalidWordException(val word: String) : RestoreWordsException()
+        class InvalidWordCountException(val count: Int, val requiredCount: Int) : RestoreWordsException()
     }
 }

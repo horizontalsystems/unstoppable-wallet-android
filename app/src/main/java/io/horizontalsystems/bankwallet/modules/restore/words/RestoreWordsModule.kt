@@ -6,14 +6,17 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.AccountType
 import kotlinx.android.parcel.Parcelize
+import kotlin.jvm.Throws
 
 object RestoreWordsModule {
     interface IRestoreWordsService {
         val wordCount: Int
-        val hasAdditionalInfo: Boolean
+        val birthdayHeightEnabled: Boolean
 
         @Throws
         fun accountType(words: List<String>, additionalInfo: String?): AccountType
+        fun isWordValid(word: String): Boolean
+        fun isWordPartiallyValid(word: String): Boolean
     }
 
     class Factory(private val restoreAccountType: RestoreAccountType) : ViewModelProvider.Factory {
