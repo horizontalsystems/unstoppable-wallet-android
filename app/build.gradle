@@ -60,7 +60,7 @@ android {
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
-            resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/unstoppable-wallet-website/master/src/faq.json"
+            resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/unstoppable-wallet-website/master/src/faq_android.json"
         }
 
         apptestnet {
