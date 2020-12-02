@@ -93,11 +93,25 @@
                 app:layout_constraintTop_toBottomOf="@+id/switchButton" />
 
             <androidx.constraintlayout.widget.Group
-                android:id="@+id/tradeDataGroup"
+                android:id="@+id/priceImpactViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="priceImpactTitle,priceImpactValue,minMaxTitle,minMaxValue,dividerLine,advancedSettings" />
+                app:constraint_referenced_ids="priceImpactTitle,priceImpactValue"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/guaranteedAmountViews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="minMaxTitle,minMaxValue"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/advancedSettingsViews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="dividerLine,advancedSettings"/>
 
             <io.horizontalsystems.bankwallet.modules.swap_new.views.SwapAllowanceView
                 android:id="@+id/allowanceView"

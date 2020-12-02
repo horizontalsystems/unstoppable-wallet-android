@@ -66,12 +66,12 @@ class SwapItemFormatter(
     ): SwapModule.PriceImpactViewItem? {
 
         val priceImpact = trade.tradeData.priceImpact ?: return null
-        val impactLevel = trade.priceImpactLevel
+        val impactLevel = trade.priceImpactLevel ?: return null
         if (impactLevel < minLevel) {
             return null
         }
 
-        return SwapModule.PriceImpactViewItem(impactLevel, "$priceImpact%")
+        return SwapModule.PriceImpactViewItem(impactLevel, stringProvider.string(R.string.Swap_Percent, priceImpact))
     }
 
     fun priceImpact(priceImpact: BigDecimal?): String? {

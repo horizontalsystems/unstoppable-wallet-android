@@ -123,15 +123,23 @@ class SwapFragment : BaseFragment() {
     private fun setTradeViewItem(tradeViewItem: SwapViewModel.TradeViewItem?) {
         price.text = tradeViewItem?.price
 
-        priceImpactValue.text = tradeViewItem?.priceImpact?.value
-        context?.let {
-            priceImpactValue.setTextColor(priceImpactColor(it, tradeViewItem?.priceImpact?.level))
+        if (tradeViewItem?.priceImpact != null) {
+            priceImpactViews.isVisible = true
+            priceImpactValue.text = tradeViewItem.priceImpact.value
+            priceImpactValue.setTextColor(priceImpactColor(requireContext(), tradeViewItem.priceImpact.level))
+        } else {
+            priceImpactViews.isVisible = false
         }
 
-        minMaxTitle.text = tradeViewItem?.guaranteedAmount?.title
-        minMaxValue.text = tradeViewItem?.guaranteedAmount?.value
+        if (tradeViewItem?.guaranteedAmount != null) {
+            guaranteedAmountViews.isVisible = true
+            minMaxTitle.text = tradeViewItem.guaranteedAmount.title
+            minMaxValue.text = tradeViewItem.guaranteedAmount.value
+        } else {
+            guaranteedAmountViews.isVisible = false
+        }
 
-        tradeDataGroup.isVisible = tradeViewItem != null
+        advancedSettingsViews.isVisible = tradeViewItem != null
     }
 
     private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?) =

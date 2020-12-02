@@ -171,23 +171,19 @@ class SwapTradeService(
     }
 
     enum class PriceImpactLevel {
-        None, Normal, Warning, Forbidden
+        Normal, Warning, Forbidden
     }
 
     data class Trade(
             val tradeData: TradeData
     ) {
-        val priceImpactLevel: PriceImpactLevel = tradeData.priceImpact?.let {
+        val priceImpactLevel: PriceImpactLevel? = tradeData.priceImpact?.let {
             when {
                 it >= BigDecimal.ZERO && it < warningPriceImpact -> PriceImpactLevel.Normal
                 it >= warningPriceImpact && it < forbiddenPriceImpact -> PriceImpactLevel.Warning
                 else -> PriceImpactLevel.Forbidden
-
             }
-        } ?: PriceImpactLevel.None
-
-        val minMaxAmount: BigDecimal? =
-                if (tradeData.type == TradeType.ExactIn) tradeData.amountOutMin else tradeData.amountInMax
+        }
 
     }
     //endregion
