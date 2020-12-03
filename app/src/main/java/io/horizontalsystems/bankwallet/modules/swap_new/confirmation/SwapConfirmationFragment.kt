@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -29,7 +30,7 @@ class SwapConfirmationFragment : BaseFragment(), SwapConfirmationButtonAdapter.L
 
     private val mainViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
     private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, mainViewModel.tradeService) }
-    private val viewModel by navGraphViewModels<SwapConfirmationViewModel>(R.id.swapFragment){ vmFactory }
+    private val viewModel by viewModels<SwapConfirmationViewModel>{ vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
 
