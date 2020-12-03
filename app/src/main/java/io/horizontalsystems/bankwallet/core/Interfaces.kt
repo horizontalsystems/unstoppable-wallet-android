@@ -156,9 +156,9 @@ interface ITransactionDataProviderManager {
 }
 
 interface IWordsManager {
-    fun validate(words: List<String>, wordCount: Int)
-    fun wordExists(word: String): Boolean
-    fun wordContains(word: String): Boolean
+    fun validateChecksum(words: List<String>)
+    fun isWordValid(word: String): Boolean
+    fun isWordPartiallyValid(word: String): Boolean
     fun generateWords(count: Int = 12): List<String>
 }
 

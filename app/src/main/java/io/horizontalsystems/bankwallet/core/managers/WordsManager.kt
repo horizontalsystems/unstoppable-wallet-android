@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWordsManager
-import io.horizontalsystems.bankwallet.core.InvalidMnemonicWordsCountException
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 import kotlin.jvm.Throws
@@ -11,19 +10,15 @@ class WordsManager : IWordsManager {
     private val wordsString = wordList.joinToString(" ")
 
     @Throws
-    override fun validate(words: List<String>, wordCount: Int) {
-        if (words.size != wordCount) {
-            throw InvalidMnemonicWordsCountException()
-        }
-
-        Mnemonic().validate(words)
+    override fun validateChecksum(words: List<String>) {
+        Mnemonic().validateChecksum(words)
     }
 
-    override fun wordExists(word: String): Boolean {
+    override fun isWordValid(word: String): Boolean {
         return wordList.binarySearch(word) >= 0
     }
 
-    override fun wordContains(word: String): Boolean {
+    override fun isWordPartiallyValid(word: String): Boolean {
         return wordsString.contains(word)
     }
 
@@ -35,5 +30,4 @@ class WordsManager : IWordsManager {
 
         return Mnemonic().generate(strength)
     }
-
 }
