@@ -5,13 +5,14 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_bottom_sync_error.*
 
 class SyncErrorDialog(
         private val listener: Listener,
-        private val coinName: String,
-        private val sourceChangeable: Boolean) : BaseBottomSheetDialogFragment() {
+        private val coin: Coin) : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onClickRetry()
@@ -24,10 +25,11 @@ class SyncErrorDialog(
         setContentView(R.layout.fragment_bottom_sync_error)
 
         setTitle(activity?.getString(R.string.BalanceSyncError_Title))
-        setSubtitle(coinName)
+        setSubtitle(coin.title)
         setHeaderIcon(R.drawable.ic_attention_red_24)
 
-        changeSourceBtn.isVisible = sourceChangeable
+        if(coin.type == CoinType.Ethereum)
+        changeSourceBtn.isVisible = false
 
         bindActions()
     }
@@ -38,7 +40,7 @@ class SyncErrorDialog(
             dismiss()
         }
 
-        if (sourceChangeable) {
+        if (coin.type == CoinType.Ethereum) {
             changeSourceBtn.setOnClickListener {
                 listener.onClickChangeSource()
                 dismiss()
@@ -52,8 +54,8 @@ class SyncErrorDialog(
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coinName: String, sourceChangeable: Boolean, listener: Listener) {
-            val fragment = SyncErrorDialog(listener, coinName, sourceChangeable)
+        fun show(activity: FragmentActivity, coin: Coin, listener: Listener) {
+            val fragment = SyncErrorDialog(listener, coin)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_sync_error")
