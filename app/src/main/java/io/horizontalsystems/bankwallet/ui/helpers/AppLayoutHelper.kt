@@ -22,6 +22,10 @@ object AppLayoutHelper {
             return ContextCompat.getDrawable(context, R.drawable.ic_erc20)
         }
 
+        if (coinType is CoinType.Binance) {
+            return ContextCompat.getDrawable(context, R.drawable.ic_bep2)
+        }
+
         return null
     }
 

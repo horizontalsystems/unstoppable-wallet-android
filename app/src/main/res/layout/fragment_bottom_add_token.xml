@@ -14,10 +14,24 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/AddTokenDialog_Erc20Tokens"
-        app:layout_constraintBottom_toTopOf="@+id/eosTokensBtn"
+        app:layout_constraintBottom_toTopOf="@+id/bep2TokensBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bep2TokensBtn"
+        style="@style/ButtonPrimarySteel"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/AddTokenDialog_BinanceTokens"
+        app:layout_constraintBottom_toTopOf="@+id/eosTokensBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/erc20TokensBtn" />
 
     <Button
         android:id="@+id/eosTokensBtn"
@@ -29,24 +43,9 @@
         android:layout_marginEnd="16dp"
         android:enabled="false"
         android:text="@string/AddTokenDialog_EosTokens"
-        app:layout_constraintBottom_toTopOf="@+id/binanceTokensBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/erc20TokensBtn" />
-
-    <Button
-        android:id="@+id/binanceTokensBtn"
-        style="@style/ButtonPrimarySteel"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:enabled="false"
-        android:text="@string/AddTokenDialog_BinanceTokens"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eosTokensBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/bep2TokensBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

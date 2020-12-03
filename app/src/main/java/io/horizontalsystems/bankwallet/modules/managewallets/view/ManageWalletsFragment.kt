@@ -11,6 +11,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
+import io.horizontalsystems.bankwallet.modules.addtoken.TokenType
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
@@ -121,9 +123,20 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         activity?.let {
             AddTokenDialog.show(it, object : AddTokenDialog.Listener {
                 override fun onClickAddErc20Token() {
-                    findNavController().navigate(R.id.manageWalletsFragment_to_addErc20Token, null, navOptions())
+                    openAddToken(TokenType.Erc20)
+                }
+
+                override fun onClickAddBep2Token() {
+                    openAddToken(TokenType.Bep2)
                 }
             })
         }
+    }
+
+    private fun openAddToken(tokenType: TokenType) {
+        val arguments = Bundle(1).apply {
+            putParcelable(AddTokenFragment.TOKEN_TYPE_KEY, tokenType)
+        }
+        findNavController().navigate(R.id.manageWalletsFragment_to_addErc20Token, arguments, navOptions())
     }
 }

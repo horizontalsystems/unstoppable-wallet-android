@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.core.providers.Erc20ContractInfoProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
@@ -201,7 +200,6 @@ class App : CoreApp() {
         }
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
-        erc20ContractInfoProvider = Erc20ContractInfoProvider(appConfigTestMode, appConfigProvider, networkManager)
         walletConnectSessionStore = WalletConnectSessionStore(accountManager, predefinedAccountTypeManager)
 
         termsManager = TermsManager(localStorage)

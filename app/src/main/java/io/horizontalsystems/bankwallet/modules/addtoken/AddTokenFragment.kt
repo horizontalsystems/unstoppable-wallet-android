@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.addErc20token
+package io.horizontalsystems.bankwallet.modules.addtoken
 
 import android.os.Bundle
 import android.os.Handler
@@ -11,17 +11,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.providers.Erc20ContractInfoProvider
+import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_add_erc20_token.*
+import kotlinx.android.synthetic.main.fragment_add_token.*
 
-class AddErc20TokenFragment : BaseFragment() {
+class AddTokenFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_add_erc20_token, container, false)
+        return inflater.inflate(R.layout.fragment_add_token, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,7 +31,15 @@ class AddErc20TokenFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        val model: AddErc20TokenViewModel by viewModels { AddErc20TokenModule.Factory() }
+        val tokenType = arguments?.getParcelable<TokenType>(TOKEN_TYPE_KEY) ?: run {
+            findNavController().popBackStack()
+            return
+        }
+
+        val model: AddTokenViewModel by viewModels { AddTokenModule.Factory(tokenType) }
+
+        toolbar.title = getString(model.titleTextRes)
+        txtAddressInput.hint = getString(model.hintTextRes)
 
         btnPaste.setOnClickListener {
             val text = TextHelper.getCopiedText()
@@ -52,7 +61,11 @@ class AddErc20TokenFragment : BaseFragment() {
         observeViewModel(model)
     }
 
-    private fun observeViewModel(model: AddErc20TokenViewModel) {
+    private fun observeViewModel(model: AddTokenViewModel) {
+        model.loadingLiveData.observe(viewLifecycleOwner, Observer { visible ->
+            progressLoading.isVisible = visible
+        })
+
         model.showTrashButton.observe(viewLifecycleOwner, Observer { visible ->
             btnDeleteAddress.isVisible = visible
         })
@@ -68,56 +81,40 @@ class AddErc20TokenFragment : BaseFragment() {
             }, 1500)
         })
 
-        model.resultLiveData.observe(viewLifecycleOwner, Observer { result ->
-            when (result) {
-                AddErc20TokenModule.State.Empty -> {
-                    progressLoading.isVisible = false
-                    warningText.isVisible = false
-                    btnAddToken.isVisible = false
-                    txtAddressError.isVisible = false
+        model.viewItemLiveData.observe(viewLifecycleOwner, Observer {
+            setCoinDetails(it)
+        })
 
-                    setCoinDetails(null)
-                }
-                AddErc20TokenModule.State.Loading -> {
-                    progressLoading.isVisible = true
-                }
-                is AddErc20TokenModule.State.ExistingCoin -> {
-                    progressLoading.isVisible = false
-                    txtAddressError.isVisible = false
-                    warningText.isVisible = true
-
-                    setCoinDetails(result.viewItem)
-                }
-                is AddErc20TokenModule.State.Success -> {
-                    progressLoading.isVisible = false
-                    txtAddressError.isVisible = false
-                    btnAddToken.isVisible = true
-
-                    setCoinDetails(result.viewItem)
-                }
-                is AddErc20TokenModule.State.Failed -> {
-                    txtAddressError.text = getString(getErrorText(result.error))
-                    progressLoading.isVisible = false
-                    txtAddressError.isVisible = true
-                    btnAddToken.isVisible = false
-
-                    setCoinDetails(null)
-                }
+        model.showErrorLiveData.observe(viewLifecycleOwner, Observer { error ->
+            error?.let {
+                txtAddressError.text = getString(getErrorText(it))
             }
+            txtAddressError.isVisible = error != null
+        })
+
+        model.showWarningLiveData.observe(viewLifecycleOwner, Observer { visible ->
+            warningText.isVisible = visible
+        })
+
+        model.showAddButton.observe(viewLifecycleOwner, Observer { visible ->
+            btnAddToken.isVisible = visible
         })
 
     }
 
     private fun getErrorText(error: Throwable): Int {
         return when (error) {
-            is Erc20ContractInfoProvider.ApiError.ContractDoesNotExist,
-            is AddErc20TokenModule.InvalidAddress -> R.string.AddErc20Token_InvalidAddressError
-            is Erc20ContractInfoProvider.ApiError.ApiLimitExceeded -> R.string.AddErc20Token_ApiLimitExceeded
+            is AddressValidator.InvalidAddressLength,
+            is AddressValidator.InvalidAddressHex,
+            is AddressValidator.InvalidAddressChecksum -> R.string.AddToken_InvalidAddressError
+            is ApiError.ContractNotFound -> R.string.AddErc20Token_ContractNotFound
+            is ApiError.TokenNotFound -> R.string.AddBep2Token_TokenNotFound
+            is ApiError.ApiLimitExceeded -> R.string.AddToken_ApiLimitExceeded
             else -> R.string.Error
         }
     }
 
-    private fun setCoinDetails(viewItem: AddErc20TokenModule.ViewItem?) {
+    private fun setCoinDetails(viewItem: AddTokenModule.ViewItem?) {
         coinNameTitle.isVisible = viewItem != null
         coinNameValue.isVisible = viewItem != null
 
@@ -130,5 +127,9 @@ class AddErc20TokenFragment : BaseFragment() {
         coinNameValue.text = viewItem?.coinName ?: ""
         symbolValue.text = viewItem?.symbol ?: ""
         decimalsValue.text = viewItem?.decimal?.toString() ?: ""
+    }
+
+    companion object {
+        const val TOKEN_TYPE_KEY = "token_type_key"
     }
 }

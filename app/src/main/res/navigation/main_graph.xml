@@ -75,7 +75,7 @@
             app:destination="@id/restore_graph" />
         <action
             android:id="@+id/manageWalletsFragment_to_addErc20Token"
-            app:destination="@id/addErc20TokenFragment" />
+            app:destination="@id/addTokenFragment" />
     </fragment>
 
     <fragment
@@ -215,9 +215,9 @@
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addErc20TokenFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragment"
-        tools:layout="@layout/fragment_add_erc20_token" />
+        android:id="@+id/addTokenFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"
+        tools:layout="@layout/fragment_add_token" />
     <fragment
         android:id="@+id/swapFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.view.SwapFragment"
