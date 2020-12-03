@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -26,6 +27,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.Subject
 import java.math.BigDecimal
 import java.util.*
+import kotlin.jvm.Throws
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Unit>
@@ -126,7 +128,8 @@ interface INetworkManager {
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
-    fun getCoinInfo(host: String, path: String): Flowable<JsonObject>
+    fun getErc20CoinInfo(host: String, path: String): Flowable<JsonObject>
+    fun getBep2Tokens(host: String, path: String): Flowable<List<Bep2Token>>
 }
 
 interface IClipboardManager {
@@ -454,8 +457,13 @@ interface ICoinManager{
     val coinAddedObservable: Flowable<Coin>
     val coins: List<Coin>
     val featuredCoins: List<Coin>
-    fun existingErc20Coin(erc20Address: String): Coin?
     fun save(coin: Coin)
+}
+
+interface IAddTokenBlockchainService {
+    @Throws fun validate(reference: String)
+    fun existingCoin(reference: String, coins: List<Coin>) : Coin?
+    fun coinSingle(reference: String): Single<Coin>
 }
 
 interface IErc20ContractInfoProvider{

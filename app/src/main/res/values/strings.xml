@@ -624,20 +624,30 @@
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Choose Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
     <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
+
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">Coin Name</string>
+    <string name="AddToken_Symbol">Symbol</string>
+    <string name="AddToken_Decimals">Decimals</string>
+    <string name="AddToken_Dots">…</string>
+
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddToken_InvalidAddressError">Invalid Address</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
 
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_CoinName">Coin Name</string>
-    <string name="AddErc20Token_Symbol">Symbol</string>
-    <string name="AddErc20Token_Decimals">Decimals</string>
-    <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
-    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddErc20Token_ContractAddressHint">Contract Address</string>
+    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">Add BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
+    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
+
 
     <!-- Address Format Settings List -->
 

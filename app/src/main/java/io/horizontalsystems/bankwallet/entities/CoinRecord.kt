@@ -11,4 +11,5 @@ data class CoinRecord(
         val code: String,
         val decimal: Int,
         val tokenType: String,
-        var erc20Address: String? = null)
+        var erc20Address: String? = null,
+        var bep2Symbol: String? = null)

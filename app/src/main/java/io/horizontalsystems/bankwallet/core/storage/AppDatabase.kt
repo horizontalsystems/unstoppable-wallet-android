@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 23, exportSchema = false, entities = [
+@Database(version = 24, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -66,7 +66,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addNotificationTables,
                             addLogsTable,
                             updateEthereumCommunicationMode,
-                            addBirthdayHeightToAccount
+                            addBirthdayHeightToAccount,
+                            addBep2SymbolToRecord
                     )
                     .build()
         }
@@ -423,6 +424,12 @@ abstract class AppDatabase : RoomDatabase() {
         private val addBirthdayHeightToAccount: Migration = object : Migration(22, 23) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE AccountRecord ADD COLUMN `birthdayHeight` INTEGER")
+            }
+        }
+
+        private val addBep2SymbolToRecord: Migration = object : Migration(23, 24) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE CoinRecord ADD COLUMN `bep2Symbol` TEXT")
             }
         }
     }

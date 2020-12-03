@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/AddErc20Token_Title" />
+        tools:title="@string/AddErc20Token_Title" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -70,20 +70,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
-                    android:hint="@string/AddErc20Token_ContractAddressHint"
                     android:inputType="textMultiLine"
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp"
                     android:singleLine="false"
                     android:textColor="?attr/TextColorBarsToDark"
-                    android:textColorHint="@color/grey_50" />
+                    android:textColorHint="@color/grey_50"
+                    tools:hint="@string/AddErc20Token_ContractAddressHint" />
 
                 <TextView
                     android:id="@+id/txtAddressError"
                     style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/AddErc20Token_InvalidAddressError"
+                    android:text="@string/AddToken_InvalidAddressError"
                     android:textColor="?ColorLucian"
                     android:visibility="gone" />
 
@@ -136,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/AddErc20Token_CoinName"
+                android:text="@string/AddToken_CoinName"
                 android:textColor="@color/grey"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
@@ -150,7 +150,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"
                 android:ellipsize="end"
-                android:text="@string/AddErc20Token_Dots"
+                android:text="@string/AddToken_Dots"
                 android:textAlignment="textEnd"
                 android:textColor="@color/grey"
                 android:visibility="gone"
@@ -167,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/AddErc20Token_Symbol"
+                android:text="@string/AddToken_Symbol"
                 android:textColor="@color/grey"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
@@ -179,7 +179,7 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/AddErc20Token_Dots"
+                android:text="@string/AddToken_Dots"
                 android:textColor="@color/grey"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
@@ -192,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/AddErc20Token_Decimals"
+                android:text="@string/AddToken_Decimals"
                 android:textColor="@color/grey"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
@@ -204,7 +204,7 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/AddErc20Token_Dots"
+                android:text="@string/AddToken_Dots"
                 android:textColor="@color/grey"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
@@ -217,7 +217,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/AddErc20Token_CoinAlreadyInListWarning"
+                android:text="@string/AddToken_CoinAlreadyInListWarning"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
