@@ -484,19 +484,25 @@
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">انتخاب زنجیره بلوکی</string>
     <string name="AddTokenDialog_Subtitle">در حال اضافه کردن نشان</string>
-    <string name="AddTokenDialog_Erc20Tokens">نشان های ERC 20</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
     <string name="AddTokenDialog_EosTokens">نشانه های EOS</string>
-    <string name="AddTokenDialog_BinanceTokens">نشانه های Binance</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">Coin Name</string>
+    <string name="AddToken_Symbol">Symbol</string>
+    <string name="AddToken_Decimals">Decimals</string>
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddToken_InvalidAddressError">Invalid Address</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
-    <string name="AddErc20Token_CoinName">نام سکه</string>
-    <string name="AddErc20Token_Symbol">نماد</string>
-    <string name="AddErc20Token_Decimals">اعشارها</string>
-    <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">آدرس قرارداد</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
-    <string name="AddErc20Token_InvalidAddressError">آدرس نامعتبر است</string>
-    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddErc20Token_ContractAddressHint">Contract Address</string>
+    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">Add BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
+    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <!-- Blockchain Settings -->
