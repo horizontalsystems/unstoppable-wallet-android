@@ -55,6 +55,7 @@
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">کلید خصوصی خود را برای کیف پول %1s که از کلمات %2s تشکیل شده است وارد کنید. کلمات باید به ترتیب صحیح وارد شوند و با فاصله از هم جدا شوند.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
+    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountIncorrect">حساب نادرست</string>
     <string name="Restore_EosKeyIncorrect">کلید نادرست</string>
