@@ -96,7 +96,7 @@ object SwapModule {
                     SwapCoinCardViewModel(coinCardService, formatter, stringProvider) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
-                    SwapAllowanceViewModel(service, allowanceService, formatter, stringProvider) as T
+                    SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T
                 }
                 EthereumFeeViewModel::class.java -> {
                     EthereumFeeViewModel(transactionService, ethCoinService) as T

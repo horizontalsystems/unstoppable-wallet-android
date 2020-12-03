@@ -217,7 +217,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">ESTIMATED</string>
     <string name="Swap_MaxButtonTitle">Max</string>
-    <string name="Swap_TokenSelectorTitle">Select Token</string>
+    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">Balance</string>
     <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Price</string>

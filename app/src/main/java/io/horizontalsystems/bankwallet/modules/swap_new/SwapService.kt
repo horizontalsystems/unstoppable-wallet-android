@@ -73,9 +73,7 @@ class SwapService(
         get() = tradeService.amountFrom?.let { amount ->
             allowanceService.approveData(amount)
         }
-
     //endregion
-
 
     init {
         tradeService.stateObservable
@@ -231,10 +229,9 @@ class SwapService(
         }
 
         tradeService.amountFrom?.let { amountFrom ->
-            balanceFrom?.let { balanceFrom ->
-                if (amountFrom > balanceFrom) {
-                    allErrors.add(SwapError.InsufficientBalanceFrom)
-                }
+            val balanceFrom = balanceFrom
+            if (balanceFrom == null || balanceFrom < amountFrom) {
+                allErrors.add(SwapError.InsufficientBalanceFrom)
             }
         }
 

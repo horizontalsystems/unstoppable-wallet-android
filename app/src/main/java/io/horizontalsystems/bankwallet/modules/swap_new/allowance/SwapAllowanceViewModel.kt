@@ -13,19 +13,25 @@ import io.reactivex.schedulers.Schedulers
 class SwapAllowanceViewModel(
         private val service: SwapService,
         private val allowanceService: SwapAllowanceService,
+        private val pendingAllowanceService: SwapPendingAllowanceService,
         private val formatter: SwapItemFormatter,
         private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private val isVisibleLiveData = MutableLiveData<Boolean>()
-    private val allowanceLiveData = MutableLiveData<String>()
-    private val isErrorLiveData = MutableLiveData<Boolean>()
+    private val allowanceLiveData = MutableLiveData<String>(null)
+    private val isErrorLiveData = MutableLiveData(false)
 
-    var isVisible: Boolean = allowanceService.state != null
+    var isVisible: Boolean = false
         private set(value) {
             field = value
             isVisibleLiveData.postValue(value)
+        }
+    private var isError: Boolean = false
+        set(value) {
+            field = value
+            isErrorLiveData.postValue(value)
         }
 
     fun isVisibleLiveData(): LiveData<Boolean> = isVisibleLiveData
@@ -33,6 +39,8 @@ class SwapAllowanceViewModel(
     fun isErrorLiveData(): LiveData<Boolean> = isErrorLiveData
 
     init {
+        syncVisible()
+
         allowanceService.stateObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe { allowanceState ->
@@ -48,13 +56,26 @@ class SwapAllowanceViewModel(
                 .let { disposables.add(it) }
     }
 
+    private fun syncVisible(state: SwapAllowanceService.State? = null) {
+        val allowanceState = state ?: allowanceService.state
+
+        isVisible = when {
+            allowanceState == null -> false
+            pendingAllowanceService.isPending -> true
+            allowanceState is SwapAllowanceService.State.NotReady -> true
+            else -> isError
+        }
+    }
+
     private fun handle(errors: List<Throwable>) {
-        val isError = errors.any { it is SwapService.SwapError.InsufficientAllowance }
-        isErrorLiveData.postValue(isError)
+        isError = errors.any { it is SwapService.SwapError.InsufficientAllowance }
+
+        syncVisible()
     }
 
     private fun handle(allowanceState: SwapAllowanceService.State?) {
-        isVisible = allowanceState != null
+        syncVisible(allowanceState)
+
         allowanceState?.let {
             allowanceLiveData.postValue(allowance(allowanceState))
         }
@@ -67,6 +88,5 @@ class SwapAllowanceViewModel(
             is SwapAllowanceService.State.NotReady -> stringProvider.string(R.string.NotAvailable)
         }
     }
-
 
 }
