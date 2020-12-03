@@ -7,7 +7,6 @@ import kotlin.jvm.Throws
 
 class WordsManager : IWordsManager {
     private val wordList = WordList.getWords()
-    private val wordsString = wordList.joinToString(" ")
 
     @Throws
     override fun validateChecksum(words: List<String>) {
@@ -19,7 +18,7 @@ class WordsManager : IWordsManager {
     }
 
     override fun isWordPartiallyValid(word: String): Boolean {
-        return wordsString.contains(word)
+        return wordList.any { it.startsWith(word) }
     }
 
     override fun generateWords(count: Int): List<String> {
