@@ -484,19 +484,25 @@
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">选择区块链</string>
     <string name="AddTokenDialog_Subtitle">正在添加代币</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 代币</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
     <string name="AddTokenDialog_EosTokens">EOS 代币</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance 代币</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">Coin Name</string>
+    <string name="AddToken_Symbol">Symbol</string>
+    <string name="AddToken_Decimals">Decimals</string>
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddToken_InvalidAddressError">Invalid Address</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">添加ERC20</string>
-    <string name="AddErc20Token_CoinName">代币图片</string>
-    <string name="AddErc20Token_Symbol">标志</string>
-    <string name="AddErc20Token_Decimals">小数</string>
-    <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">智能合约地址</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
-    <string name="AddErc20Token_InvalidAddressError">错误地址</string>
-    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddErc20Token_ContractAddressHint">Contract Address</string>
+    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">Add BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
+    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
     <!-- Blockchain Settings -->
