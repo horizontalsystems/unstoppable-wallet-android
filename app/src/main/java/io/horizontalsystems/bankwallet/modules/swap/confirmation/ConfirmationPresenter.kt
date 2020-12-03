@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.net.UnknownHostException
@@ -34,7 +34,7 @@ data class ConfirmationViewItem(
 class ConfirmationPresenter(
         private val swapService: SwapModule.ISwapService,
         private val stringProvider: StringProvider,
-        private val formatter: SwapItemFormatter,
+        private val formatter: SwapViewItemHelper,
         private val ethereumCoinService: CoinService
 ) : Clearable {
 
@@ -108,10 +108,10 @@ class ConfirmationPresenter(
                 sendingValue = formatter.coinAmount(amountSending, coinSending),
                 receivingTitle = stringProvider.string(R.string.Swap_Confirmation_Get, coinReceiving.title),
                 receivingValue = formatter.coinAmount(amountReceiving, coinReceiving),
-                minMaxTitle = formatter.minMaxTitle(trade.amountType),
-                minMaxValue = formatter.minMaxValue(minMaxValue, coinSending, coinReceiving, trade.amountType),
-                price = formatter.executionPrice(executionPrice, trade.coinSending, trade.coinReceiving),
-                priceImpact = formatter.priceImpact(priceImpact),
+                minMaxTitle = "minMaxTitle",//formatter.minMaxTitle(trade.amountType),
+                minMaxValue = "minMaxValue",//formatter.minMaxValue(minMaxValue, coinSending, coinReceiving, trade.amountType),
+                price = "executionPrice",//formatter.executionPrice(executionPrice, trade.coinSending, trade.coinReceiving),
+                priceImpact = "formatter.priceImpact(priceImpact)",
                 swapFee = formatter.coinAmount(swapFee.value, swapFee.coin),
                 transactionSpeed = swapService.gasPriceType.javaClass.simpleName.toLowerCase(Locale.ENGLISH).capitalize(),
                 transactionFee =  ethereumCoinService.amountData(transactionFee).getFormatted(),

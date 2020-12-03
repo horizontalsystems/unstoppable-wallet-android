@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapService
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +14,7 @@ class SwapAllowanceViewModel(
         private val service: SwapService,
         private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
-        private val formatter: SwapItemFormatter,
+        private val formatter: SwapViewItemHelper,
         private val stringProvider: StringProvider
 ) : ViewModel() {
 

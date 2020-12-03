@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.swap.model.Trade
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
 import io.horizontalsystems.bankwallet.modules.swap.view.item.TradeViewItem
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -26,7 +27,7 @@ class SwapViewModel(
         val confirmationPresenter: ConfirmationPresenter,
         private val swapService: ISwapService,
         private val stringProvider: StringProvider,
-        private val formatter: SwapItemFormatter,
+        private val formatter: SwapViewItemHelper,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -278,11 +279,11 @@ class SwapViewModel(
 
     private fun tradeViewItem(trade: Trade): TradeViewItem {
         return TradeViewItem(
-                trade.executionPrice?.let { formatter.executionPrice(it, trade.coinSending, trade.coinReceiving) },
-                trade.priceImpact?.let { formatter.priceImpact(it) },
+                null,//trade.executionPrice?.let { formatter.executionPrice(it, trade.coinSending, trade.coinReceiving) },
+                null,//trade.priceImpact?.let { formatter.priceImpact(it) },
                 trade.priceImpact?.level,
-                formatter.minMaxTitle(trade.amountType),
-                trade.minMaxAmount?.let { formatter.minMaxValue(it, trade.coinSending, trade.coinReceiving, trade.amountType) }
+                "minMaxTitle",//formatter.minMaxTitle(trade.amountType),
+                null//trade.minMaxAmount?.let { formatter.minMaxValue(it, trade.coinSending, trade.coinReceiving, trade.amountType) }
         )
     }
 

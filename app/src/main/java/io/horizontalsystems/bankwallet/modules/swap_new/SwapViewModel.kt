@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.core.SingleLiveEvent
@@ -21,7 +20,7 @@ class SwapViewModel(
         val tradeService: SwapTradeService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val ethCoinService: CoinService,
-        private val formatter: SwapItemFormatter,
+        private val formatter: SwapViewItemHelper,
         private val stringProvider: StringProvider
 ) : ViewModel() {
 

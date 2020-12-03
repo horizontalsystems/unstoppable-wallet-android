@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapService
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService
@@ -21,7 +21,7 @@ class SwapConfirmationViewModel(
         private val transactionService: EthereumTransactionService,
         private val ethereumCoinService: CoinService,
         private val numberFormatter: IAppNumberFormatter,
-        private val formatter: SwapItemFormatter,
+        private val formatter: SwapViewItemHelper,
         private val stringProvider: StringProvider
 ) : ViewModel() {
 

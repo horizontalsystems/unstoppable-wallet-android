@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapFromCoinCardService
@@ -72,7 +71,7 @@ object SwapModule {
             StringProvider(App.instance)
         }
         private val formatter by lazy {
-            SwapItemFormatter(stringProvider, App.numberFormatter)
+            SwapViewItemHelper(stringProvider, App.numberFormatter)
         }
         private val coinProvider by lazy {
             SwapCoinProvider(App.coinManager, App.walletManager, App.adapterManager)

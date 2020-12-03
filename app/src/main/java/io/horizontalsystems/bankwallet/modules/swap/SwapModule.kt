@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.repository.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap.service.UniswapService
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettings
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.view.SwapViewModel
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
@@ -127,7 +127,7 @@ object SwapModule {
 
                     val swapRepository = UniswapRepository(uniswapKit)
                     val swapService = UniswapService(coinSending, swapRepository, allowanceProvider, App.walletManager, App.adapterManager, transactionService, ethereumKit, App.appConfigProvider.ethereumCoin)
-                    val formatter = SwapItemFormatter(stringProvider, App.numberFormatter)
+                    val formatter = SwapViewItemHelper(stringProvider, App.numberFormatter)
                     val confirmationPresenter = ConfirmationPresenter(swapService, stringProvider, formatter, ethCoinService)
 
                     return SwapViewModel(confirmationPresenter, swapService, stringProvider, formatter, listOf(swapService, confirmationPresenter)) as T

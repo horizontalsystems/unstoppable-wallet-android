@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.view.SwapItemFormatter
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -16,7 +16,7 @@ import kotlin.math.min
 
 class SwapCoinCardViewModel(
         private val coinCardService: ISwapCoinCardService,
-        private val formatter: SwapItemFormatter,
+        private val formatter: SwapViewItemHelper,
         private val stringProvider: StringProvider
 ) : ViewModel() {
 
