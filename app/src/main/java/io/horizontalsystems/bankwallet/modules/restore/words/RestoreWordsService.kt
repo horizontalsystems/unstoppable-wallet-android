@@ -29,7 +29,7 @@ class RestoreWordsService(
             throw RestoreWordsException.InvalidWordCountException(words.size, wordCount)
         }
 
-        wordsManager.validate(words, wordCount)
+        wordsManager.validateChecksum(words)
 
         return when (restoreAccountType) {
             RestoreAccountType.STANDARD,
@@ -52,11 +52,11 @@ class RestoreWordsService(
     }
 
     override fun isWordValid(word: String): Boolean {
-        return wordsManager.wordExists(word)
+        return wordsManager.isWordValid(word)
     }
 
     override fun isWordPartiallyValid(word: String): Boolean {
-        return wordsManager.wordContains(word)
+        return wordsManager.isWordPartiallyValid(word)
     }
 
     override fun clear() {}
