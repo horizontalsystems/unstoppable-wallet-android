@@ -4,8 +4,9 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -19,11 +20,14 @@ import kotlinx.android.synthetic.main.view_card_swap.view.*
 import java.math.BigDecimal
 
 class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+    : CardView(context, attrs, defStyleAttr) {
 
     private var viewModel: SwapCoinCardViewModel? = null
 
     init {
+        radius = LayoutHelper.dpToPx(16f, context)
+        layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        cardElevation = 0f
         inflate(context, R.layout.view_card_swap, this)
     }
 
