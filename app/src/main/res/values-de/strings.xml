@@ -55,6 +55,7 @@
     <string name="Restore_Enter_Key_Title">Schlüssel Eingeben</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Geben Sie Ihren Private Key für %1s Wallet ein, der aus %2s Wörtern besteht. Die Wörter müssen in der korrekten Reihenfolge eingegeben und durch Leerzeichen getrennt werden.</string>
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
+    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountIncorrect">Ungültiger Account</string>
     <string name="Restore_EosKeyIncorrect">Falscher Schlüssel</string>
