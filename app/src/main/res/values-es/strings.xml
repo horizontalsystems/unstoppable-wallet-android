@@ -485,19 +485,25 @@ poner en peligro la seguridad de mis fondos.</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Elegir Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Añadiendo Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">Tokens ERC 20</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
     <string name="AddTokenDialog_EosTokens">Tokens EOS</string>
-    <string name="AddTokenDialog_BinanceTokens">Tokens Binance</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">Coin Name</string>
+    <string name="AddToken_Symbol">Symbol</string>
+    <string name="AddToken_Decimals">Decimals</string>
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddToken_InvalidAddressError">Invalid Address</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Añadir ERC20</string>
-    <string name="AddErc20Token_CoinName">Nombre de moneda</string>
-    <string name="AddErc20Token_Symbol">Símbolo</string>
-    <string name="AddErc20Token_Decimals">Decimales</string>
-    <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Dirección del contrato</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
-    <string name="AddErc20Token_InvalidAddressError">Dirección inválida</string>
-    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddErc20Token_ContractAddressHint">Contract Address</string>
+    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">Add BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
+    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
     <!-- Blockchain Settings -->
