@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceV
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.fragment_swap.toolbar
 import kotlinx.android.synthetic.main.fragment_swap_new.*
 
 class SwapFragment : BaseFragment() {
@@ -34,10 +33,19 @@ class SwapFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setHasOptionsMenu(true)
-
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuCancel -> {
+                    findNavController().popBackStack()
+                    true
+                }
+                R.id.menuInfo -> {
+                    findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
+                    true
+                }
+                else -> false
+            }
+        }
 
         val fromCoinCardViewModel = ViewModelProvider(this, vmFactory).get(SwapModule.Factory.coinCardTypeFrom, SwapCoinCardViewModel::class.java)
         val fromCoinCardTitle = getString(R.string.Swap_FromAmountTitle)
@@ -72,24 +80,6 @@ class SwapFragment : BaseFragment() {
             findNavController().navigate(R.id.swapFragment_to_swapTradeOptionsFragment)
         }
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.swap_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuCancel -> {
-                findNavController().popBackStack()
-                return true
-            }
-            R.id.menuInfo -> {
-                findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun observeViewModel() {
