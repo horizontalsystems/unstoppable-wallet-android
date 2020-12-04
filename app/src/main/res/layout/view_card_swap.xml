@@ -13,22 +13,33 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="13dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="?ColorOz"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintEnd_toStartOf="@+id/estimatedLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/Swap_FromAmountTitle" />
+        tools:text="From Amount" />
 
     <TextView
         android:id="@+id/estimatedLabel"
         style="@style/TextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:text="@string/Swap_Estimated"
-        android:visibility="gone"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@+id/titleTextView"
+        app:layout_constraintEnd_toStartOf="@+id/selectedToken"
         app:layout_constraintStart_toEndOf="@+id/titleTextView"
-        app:layout_constraintTop_toTopOf="@+id/titleTextView" />
+        app:layout_constraintTop_toTopOf="@+id/titleTextView"
+        tools:text="Swap Estimated" />
 
     <TextView
         android:id="@+id/selectedToken"
