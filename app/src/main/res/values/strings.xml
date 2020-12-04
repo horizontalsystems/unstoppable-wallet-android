@@ -251,6 +251,8 @@
     <string name="SwapSettings_RecipientAddressDescription">After the exchange operation, the amount will be transferred to the specified address</string>
     <string name="SwapSettings_RecipientAddressHint">Own address</string>
     <string name="SwapSettings_Apply">Apply</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address</string>
 
     <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Max. allowed value is %s%%</string>

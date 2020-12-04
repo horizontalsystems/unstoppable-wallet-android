@@ -43,13 +43,13 @@ class SwapSettingsFragment : BaseFragment() {
         }
 
         slippageInputView.apply {
-            onTextChange { viewModel.setSlippage(it) }
+            onTextChange { old, new -> viewModel.setSlippage(new) }
             onLeftButtonClick { viewModel.onSlippageLeftButtonClick() }
             onRightButtonClick { viewModel.onSlippageRightButtonClick() }
         }
 
         deadlineInputView.apply {
-            onTextChange { viewModel.setDeadline(it) }
+            onTextChange { old, new -> viewModel.setDeadline(new) }
             onLeftButtonClick { viewModel.onDeadlineLeftButtonClick() }
             onRightButtonClick { viewModel.onDeadlineRightButtonClick() }
         }

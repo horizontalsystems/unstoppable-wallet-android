@@ -6,7 +6,9 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.swap_new.tradeoptions.IVerifiedInputViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import kotlinx.android.synthetic.main.view_input_address.view.*
 
@@ -46,11 +48,17 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    fun setText(text: String?) {
+    fun setText(text: String?, skipChangeEvent: Boolean = true) {
         input.apply {
-            removeTextChangedListener(textWatcher)
+            if (skipChangeEvent) {
+                removeTextChangedListener(textWatcher)
+            }
+
             setText(text)
-            addTextChangedListener(textWatcher)
+
+            if (skipChangeEvent) {
+                addTextChangedListener(textWatcher)
+            }
 
             text?.let {
                 setSelection(it.length)
@@ -82,6 +90,29 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         deleteButton.isVisible = visible
         buttonQrScan.isVisible = showQrButton && !visible
         buttonPaste.isVisible = !visible
+    }
+
+    fun setViewModel(viewModel: IVerifiedInputViewModel, lifecycleOwner: LifecycleOwner, onButtonQrScanClick: () -> Unit) {
+        input.maxLines = viewModel.inputFieldMaximumNumberOfLines
+        if (!viewModel.inputFieldCanEdit) {
+            input.keyListener = null
+        }
+        viewModel.inputFieldValueLiveData.observe(lifecycleOwner, {
+            setText(it)
+        })
+
+        viewModel.inputFieldCautionLiveData.observe(lifecycleOwner, {
+            setError(it?.text)
+        })
+
+        setHint(viewModel.inputFieldPlaceholder)
+        setText(viewModel.inputFieldInitialValue)
+
+        onTextChange {
+            viewModel.setInputFieldValue(it)
+        }
+
+        onButtonQrScanClick(onButtonQrScanClick)
     }
 
 }

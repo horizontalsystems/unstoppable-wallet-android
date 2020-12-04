@@ -68,10 +68,10 @@ class SwapFragment : BaseFragment() {
             findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
         }
 
-//        advancedSettings.setOnSingleClickListener {
-//            viewModel.onSettingsClick()
-//        }
-//
+        advancedSettings.setOnSingleClickListener {
+            findNavController().navigate(R.id.swapFragment_to_swapTradeOptionsFragment)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

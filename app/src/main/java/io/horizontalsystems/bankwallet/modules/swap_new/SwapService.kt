@@ -292,4 +292,8 @@ class SwapService(
     }
     //endregion
 
+    companion object {
+        val defaultSlippage = BigDecimal("0.5")
+    }
+
 }

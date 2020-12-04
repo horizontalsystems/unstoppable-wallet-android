@@ -253,6 +253,14 @@
             app:enterAnim="@anim/slide_in_bottom"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_out_bottom"
+            />
+        <action
+            android:id="@+id/swapFragment_to_swapTradeOptionsFragment"
+            app:destination="@id/swapTradeOptionsFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@anim/slide_out_bottom" />
     </fragment>
     <fragment
@@ -297,5 +305,9 @@
         android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment"
         tools:layout="@layout/fragment_wallet_connect_request" />
+    <fragment
+        android:id="@+id/swapTradeOptionsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap_new.tradeoptions.SwapTradeOptionsFragment"
+        android:label="SwapTradeOptionsFragment" />
 
 </navigation>
