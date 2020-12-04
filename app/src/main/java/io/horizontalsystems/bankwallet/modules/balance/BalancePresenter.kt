@@ -260,7 +260,10 @@ class BalancePresenter(
 
     private fun sourceChangeable(coinType: CoinType): Boolean {
         return when(coinType) {
-            is CoinType.Binance, is CoinType.Eos -> false
+            is CoinType.Binance,
+            is CoinType.Ethereum,
+            is CoinType.Erc20,
+            is CoinType.Eos -> false
             else -> true
         }
     }
