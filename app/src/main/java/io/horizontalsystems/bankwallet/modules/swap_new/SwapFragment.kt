@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.swap_new
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -57,10 +56,6 @@ class SwapFragment : BaseFragment() {
 
         allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
 
-        approveButton.setOnSingleClickListener {
-            viewModel.onTapApprove()
-        }
-
         observeViewModel()
 
         feeSelectorView.setDurationVisible(false)
@@ -72,14 +67,21 @@ class SwapFragment : BaseFragment() {
             }
         })
 
-        proceedButton.setOnSingleClickListener {
-            findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
+        switchButton.setOnClickListener {
+            viewModel.onTapSwitch()
         }
 
         advancedSettings.setOnSingleClickListener {
             findNavController().navigate(R.id.swapFragment_to_swapTradeOptionsFragment)
         }
 
+        approveButton.setOnSingleClickListener {
+            viewModel.onTapApprove()
+        }
+
+        proceedButton.setOnSingleClickListener {
+            findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
+        }
     }
 
     private fun observeViewModel() {

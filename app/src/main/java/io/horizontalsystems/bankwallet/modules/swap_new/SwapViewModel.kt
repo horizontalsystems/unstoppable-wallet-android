@@ -51,6 +51,9 @@ class SwapViewModel(
     fun approveActionLiveData(): LiveData<ApproveActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
 
+    fun onTapSwitch() {
+        tradeService.switchCoins()
+    }
     fun onTapApprove() {
         service.approveData?.let { approveData ->
             openApproveLiveEvent.postValue(approveData)

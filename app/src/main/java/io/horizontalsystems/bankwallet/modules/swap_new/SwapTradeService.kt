@@ -130,6 +130,13 @@ class SwapTradeService(
         amountFrom = null
         syncState()
     }
+
+    fun switchCoins() {
+        val swapCoin = coinFrom
+        coinFrom = coinTo
+
+        enterCoinTo(swapCoin)
+    }
     //endregion
 
     private fun syncState() {
