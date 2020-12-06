@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap_new.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
+import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
 import java.math.BigDecimal
@@ -23,6 +24,21 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
     : CardView(context, attrs, defStyleAttr) {
 
     private var viewModel: SwapCoinCardViewModel? = null
+
+    private var onAmountChangeCallback: ((old: String?, new: String?) -> Unit)? = null
+
+    private val textWatcher = object : TextWatcher {
+        private var prevValue: String? = null
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            onAmountChangeCallback?.invoke(prevValue, s?.toString())
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            prevValue = s?.toString()
+        }
+    }
 
     init {
         radius = LayoutHelper.dpToPx(16f, context)
@@ -36,21 +52,24 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         titleTextView.text = title
 
-        viewModel.tokenCodeLiveData().observe(lifecycleOwner, { setTokenCode(it) })
+        observe(viewModel, lifecycleOwner)
 
-        viewModel.balanceLiveData().observe(lifecycleOwner, { setBalance(it) })
-
-        viewModel.balanceErrorLiveData().observe(lifecycleOwner, { setBalanceError(it) })
-
-        viewModel.isEstimatedLiveData().observe(lifecycleOwner, { setEstimated(it) })
-
-        viewModel.amountLiveData().observe(lifecycleOwner, { updateAmount(it) })
-
-        viewModel.revertAmountLiveData().observe(lifecycleOwner, { revertAmount(it) })
-
-        selectedToken.setOnClickListener {
+        selectedToken.setOnSingleClickListener {
             val params = SelectSwapCoinFragment.params(id, ArrayList(viewModel.tokensForSelection))
             fragment.findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, null)
+        }
+
+        amountSwitchButton.setOnSingleClickListener {
+            viewModel.onSwitch()
+        }
+
+        amount.addTextChangedListener(textWatcher)
+        onAmountChangeCallback = { old, new ->
+            if (viewModel.isValid(new)) {
+                viewModel.onChangeAmount(new)
+            } else {
+                setAmount(old, true)
+            }
         }
 
         fragment.getNavigationLiveData(SelectSwapCoinFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
@@ -60,26 +79,41 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
                 viewModel.onSelectCoin(coinBalanceItem.coin)
             }
         })
-
-        amount.addTextChangedListener(amountChangeListener)
     }
 
-    private val amountChangeListener = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel?.onChangeAmount(s?.toString())
-        }
+    private fun observe(viewModel: SwapCoinCardViewModel, lifecycleOwner: LifecycleOwner) {
+        viewModel.tokenCodeLiveData().observe(lifecycleOwner, { setTokenCode(it) })
 
-        override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        viewModel.balanceLiveData().observe(lifecycleOwner, { setBalance(it) })
+
+        viewModel.balanceErrorLiveData().observe(lifecycleOwner, { setBalanceError(it) })
+
+        viewModel.isEstimatedLiveData().observe(lifecycleOwner, { setEstimated(it) })
+
+        viewModel.amountLiveData().observe(lifecycleOwner, { setAmount(it) })
+
+        viewModel.switchEnabledLiveData().observe(lifecycleOwner, { amountSwitchButton.isEnabled = it })
+
+        viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { setSecondaryAmountInfo(it) })
+
+        viewModel.prefixLiveData().observe(lifecycleOwner, { setAmountPrefix(it) })
     }
 
-    private fun updateAmount(amount: String?) {
+    private fun setAmount(amountText: String?, shakeAnimate: Boolean = false) {
         this.amount.apply {
-            if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amount?.toBigDecimalOrNull())) return
-            removeTextChangedListener(amountChangeListener)
-            setText(amount)
-            amount?.let { setSelection(it.length) }
-            addTextChangedListener(amountChangeListener)
+            if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amountText?.toBigDecimalOrNull())) return
+
+            removeTextChangedListener(textWatcher)
+            setText(amountText)
+            addTextChangedListener(textWatcher)
+
+            amountText?.let {
+                setSelection(it.length)
+            }
+
+            if (shakeAnimate) {
+                startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_edittext))
+            }
         }
     }
 
@@ -88,15 +122,6 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             amount1 == null && amount2 == null -> true
             amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
             else -> false
-        }
-    }
-
-    private fun revertAmount(amount: String) {
-        this.amount.apply {
-            setText(amount)
-            setSelection(amount.length)
-            val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
-            startAnimation(shake)
         }
     }
 
@@ -126,6 +151,20 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private fun setEstimated(show: Boolean) {
         estimatedLabel.isVisible = show
+    }
+
+    private fun setSecondaryAmountInfo(secondaryInfo: SwapCoinCardViewModel.SecondaryInfoViewItem?) {
+        secondaryAmount.text = secondaryInfo?.text
+        val textColor = if (secondaryInfo?.type == SwapCoinCardViewModel.SecondaryInfoType.Value)
+            LayoutHelper.getAttr(R.attr.ColorLeah, context.theme, context.getColor(R.color.steel_light))
+        else
+            context.getColor(R.color.grey_50)
+        secondaryAmount.setTextColor(textColor)
+    }
+
+    private fun setAmountPrefix(prefix: String?) {
+        amountPrefix.isVisible = prefix != null
+        amountPrefix.text = prefix
     }
 
 }

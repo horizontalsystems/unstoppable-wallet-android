@@ -4,10 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
+import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -16,37 +22,69 @@ import kotlin.math.min
 
 class SwapCoinCardViewModel(
         private val coinCardService: ISwapCoinCardService,
+        private val fiatService: FiatService,
+        private val switchService: AmountTypeSwitchService,
         private val formatter: SwapViewItemHelper,
         private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    private var validDecimals = maxValidDecimals
 
-    private val amountLiveData = MutableLiveData<String?>()
-    private val revertAmountLiveData = MutableLiveData<String>()
-    private val balanceLiveData = MutableLiveData<String?>()
-    private val balanceErrorLiveData = MutableLiveData<Boolean>()
-    private val tokenCodeLiveData = MutableLiveData<String?>()
-    private val isEstimatedLiveData = MutableLiveData<Boolean>()
+    private val validDecimals: Int
+        get() {
+            val decimals = when (switchService.amountType) {
+                AmountType.Coin -> coinCardService.coin?.decimal ?: maxValidDecimals
+                AmountType.Currency -> fiatService.currency.decimal
+            }
+            return min(decimals, maxValidDecimals)
+        }
+
+    private val amountLiveData = MutableLiveData<String?>(null)
+    private val balanceLiveData = MutableLiveData<String?>(null)
+    private val balanceErrorLiveData = MutableLiveData(false)
+    private val tokenCodeLiveData = MutableLiveData<String?>(null)
+    private val isEstimatedLiveData = MutableLiveData(false)
+    private val switchEnabledLiveData = MutableLiveData(false)
+    private val prefixLiveData = MutableLiveData<String?>(null)
+    private val secondaryInfoLiveData = MutableLiveData<SecondaryInfoViewItem?>(null)
 
     //region outputs
     fun amountLiveData(): LiveData<String?> = amountLiveData
-    fun revertAmountLiveData(): LiveData<String> = revertAmountLiveData
     fun balanceLiveData(): LiveData<String?> = balanceLiveData
     fun balanceErrorLiveData(): LiveData<Boolean> = balanceErrorLiveData
     fun tokenCodeLiveData(): LiveData<String?> = tokenCodeLiveData
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
+    fun switchEnabledLiveData(): LiveData<Boolean> = switchEnabledLiveData
+    fun prefixLiveData(): LiveData<String?> = prefixLiveData
+    fun secondaryInfoLiveData(): LiveData<SecondaryInfoViewItem?> = secondaryInfoLiveData
 
     val tokensForSelection: List<SwapModule.CoinBalanceItem>
         get() = coinCardService.tokensForSelection
 
     fun onSelectCoin(coin: Coin) {
         coinCardService.onSelectCoin(coin)
+        fiatService.set(coin)
     }
 
     fun onChangeAmount(amount: String?) {
-        coinCardService.onChangeAmount(validateAmount(amount))
+        val validAmount = amount?.toBigDecimalOrNull()
+        val fullAmountInfo = fiatService.buildAmountInfo(validAmount)
+
+        syncFullAmountInfo(fullAmountInfo, true, validAmount)
+    }
+
+    fun isValid(amount: String?): Boolean {
+        val newAmount = amount?.toBigDecimalOrNull()
+
+        return when {
+            amount.isNullOrBlank() -> true
+            newAmount != null && newAmount.scale() > validDecimals -> false
+            else -> true
+        }
+    }
+
+    fun onSwitch() {
+        switchService.toggle()
     }
     //endregion
 
@@ -59,6 +97,7 @@ class SwapCoinCardViewModel(
         syncAmount(coinCardService.amount)
         syncCoin(coinCardService.coin)
         syncBalance(coinCardService.balance)
+        syncFullAmountInfo(null, false)
 
         coinCardService.isEstimatedObservable
                 .subscribeOn(Schedulers.io())
@@ -84,6 +123,16 @@ class SwapCoinCardViewModel(
                 .subscribeOn(Schedulers.io())
                 .subscribe { syncError(it.orElse(null)) }
                 .let { disposables.add(it) }
+
+        fiatService.fullAmountInfoObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe { syncFullAmountInfo(it.orElse(null), false) }
+                .let { disposables.add(it) }
+
+        switchService.toggleAvailableObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe { switchEnabledLiveData.postValue(it) }
+                .let { disposables.add(it) }
     }
 
     private fun syncEstimated(estimated: Boolean) {
@@ -91,12 +140,14 @@ class SwapCoinCardViewModel(
     }
 
     private fun syncAmount(amount: BigDecimal?) {
-        val amountString = amount?.setScale(validDecimals, RoundingMode.FLOOR)?.toPlainString()
-        amountLiveData.postValue(amountString)
+        if (coinCardService.isEstimated) {
+            val fullAmountInfo = fiatService.buildForCoin(amount)
+            syncFullAmountInfo(fullAmountInfo, false)
+        }
     }
 
     private fun syncCoin(coin: Coin?) {
-        validDecimals = min(maxValidDecimals, coin?.decimal ?: maxValidDecimals)
+        fiatService.set(coin)
         tokenCodeLiveData.postValue(coin?.code)
     }
 
@@ -105,7 +156,7 @@ class SwapCoinCardViewModel(
         val formattedBalance = when {
             coin == null -> stringProvider.string(R.string.NotAvailable)
             balance == null -> null
-            else -> formatter.coinAmount(balance, coin, validDecimals)
+            else -> formatter.coinAmount(balance, coin)
         }
         balanceLiveData.postValue(formattedBalance)
     }
@@ -114,22 +165,53 @@ class SwapCoinCardViewModel(
         balanceErrorLiveData.postValue(error != null)
     }
 
-    private fun validateAmount(amount: String?): BigDecimal? {
-        val newAmount = amount?.toBigDecimalOrNull()
-        return when {
-            newAmount == null -> null
-            newAmount.scale() > validDecimals -> {
-                val amountWithValidScale = newAmount.setScale(validDecimals, RoundingMode.FLOOR)
-                revertAmountLiveData.postValue(amountWithValidScale.toPlainString())
-                amountWithValidScale
+    private fun secondaryInfoPlaceHolder(): SecondaryInfoViewItem = when (switchService.amountType) {
+        AmountType.Coin -> {
+            val amountInfo = AmountInfo.CurrencyValueInfo(CurrencyValue(fiatService.currency, BigDecimal.ZERO))
+            SecondaryInfoViewItem(amountInfo.getFormatted(), SecondaryInfoType.Placeholder)
+        }
+        AmountType.Currency -> {
+            val amountInfo = coinCardService.coin?.let { AmountInfo.CoinValueInfo(CoinValue(it, BigDecimal.ZERO)) }
+            SecondaryInfoViewItem(amountInfo?.getFormatted(), SecondaryInfoType.Placeholder)
+        }
+    }
+
+    private fun syncFullAmountInfo(fullAmountInfo: FiatService.FullAmountInfo?, force: Boolean = false, inputAmount: BigDecimal? = null) {
+        prefixLiveData.postValue(if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null)
+
+        if (fullAmountInfo == null) {
+            if (!force) {
+                amountLiveData.postValue(null)
             }
-            else -> newAmount
+            secondaryInfoLiveData.postValue(secondaryInfoPlaceHolder())
+
+            setCoinValueToService(inputAmount, force)
+        } else {
+            val decimals = min(fullAmountInfo.primaryDecimal, maxValidDecimals)
+            val amountString = fullAmountInfo.primaryValue.setScale(decimals, RoundingMode.FLOOR)?.stripTrailingZeros()?.toPlainString()
+            amountLiveData.postValue(amountString)
+
+            secondaryInfoLiveData.postValue(SecondaryInfoViewItem(fullAmountInfo.secondaryInfo?.getFormatted(), SecondaryInfoType.Value))
+
+            setCoinValueToService(fullAmountInfo.coinValue.value, force)
+        }
+    }
+
+    private fun setCoinValueToService(coinAmount: BigDecimal?, force: Boolean) {
+        if (force || !coinCardService.isEstimated) {
+            coinCardService.onChangeAmount(coinAmount)
         }
     }
 
     override fun onCleared() {
         disposables.clear()
     }
+
+    enum class SecondaryInfoType {
+        Placeholder, Value
+    }
+
+    data class SecondaryInfoViewItem(val text: String?, val type: SecondaryInfoType)
 
     companion object {
         private const val maxValidDecimals = 8

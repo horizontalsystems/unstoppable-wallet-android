@@ -113,7 +113,7 @@ class SwapTradeService(
     fun enterAmountFrom(amount: BigDecimal?) {
         tradeType = TradeType.ExactIn
 
-        if (amountFrom == amount) return
+        if (amountsEqual(amountFrom, amount)) return
 
         amountFrom = amount
         amountTo = null
@@ -124,7 +124,7 @@ class SwapTradeService(
     fun enterAmountTo(amount: BigDecimal?) {
         tradeType = TradeType.ExactOut
 
-        if (amountTo == amount) return
+        if (amountsEqual(amountTo, amount)) return
 
         amountTo = amount
         amountFrom = null
@@ -161,6 +161,14 @@ class SwapTradeService(
             TradeType.ExactOut -> amountFrom = tradeData.amountIn
         }
         state = State.Ready(Trade(tradeData))
+    }
+
+    private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
+        return when {
+            amount1 == null && amount2 == null -> true
+            amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
+            else -> false
+        }
     }
 
     //region models

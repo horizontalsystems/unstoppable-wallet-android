@@ -10,17 +10,16 @@ import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
+import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapFromCoinCardService
-import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapToCoinCardService
-import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinProvider
 import io.horizontalsystems.bankwallet.modules.swap_new.repositories.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapPendingAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap_new.coincard.*
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
@@ -82,6 +81,9 @@ object SwapModule {
         private val toCoinCardService by lazy {
             SwapToCoinCardService(service, tradeService, coinProvider)
         }
+        private val switchService by lazy {
+            AmountTypeSwitchService()
+        }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
@@ -91,8 +93,17 @@ object SwapModule {
                     SwapViewModel(service, tradeService, pendingAllowanceService, ethCoinService, formatter, stringProvider) as T
                 }
                 SwapCoinCardViewModel::class.java -> {
-                    val coinCardService = if (key == coinCardTypeFrom) fromCoinCardService else toCoinCardService
-                    SwapCoinCardViewModel(coinCardService, formatter, stringProvider) as T
+                    val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)
+                    val coinCardService: ISwapCoinCardService
+
+                    if (key == coinCardTypeFrom) {
+                        coinCardService = fromCoinCardService
+                        switchService.fromListener = fiatService
+                    } else {
+                        coinCardService = toCoinCardService
+                        switchService.toListener = fiatService
+                    }
+                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, formatter, stringProvider) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T

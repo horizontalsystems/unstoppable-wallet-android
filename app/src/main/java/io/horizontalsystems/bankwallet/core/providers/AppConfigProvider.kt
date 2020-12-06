@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.providers
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.IAppConfigTestMode
@@ -34,10 +34,10 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
     override val maxDecimal: Int = 8
 
     override val currencies: List<Currency> = listOf(
-            Currency(code = "USD", symbol = "\u0024"),
-            Currency(code = "EUR", symbol = "\u20AC"),
-            Currency(code = "GBP", symbol = "\u00A3"),
-            Currency(code = "JPY", symbol = "\u00A5")
+            Currency(code = "USD", symbol = "\u0024", decimal = 2),
+            Currency(code = "EUR", symbol = "\u20AC", decimal = 2),
+            Currency(code = "GBP", symbol = "\u00A3", decimal = 2),
+            Currency(code = "JPY", symbol = "\u00A5", decimal = 2)
     )
 
     override val featuredCoins: List<Coin>
