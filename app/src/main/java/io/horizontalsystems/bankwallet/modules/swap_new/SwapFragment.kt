@@ -131,6 +131,8 @@ class SwapFragment : BaseFragment() {
         }
 
         advancedSettingsViews.isVisible = tradeViewItem != null
+        feeSelectorView.isVisible = tradeViewItem != null
+        actionButtonViews.isVisible = tradeViewItem != null
     }
 
     private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?) =

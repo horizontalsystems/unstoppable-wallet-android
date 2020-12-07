@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceS
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
+import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -107,6 +108,9 @@ class SwapViewModel(
                 stringProvider.string(R.string.Swap_ErrorInsufficientEthBalance)
             else
                 rpcErrorMessage
+        }
+        is TradeError.TradeNotFound -> {
+            stringProvider.string(R.string.Swap_ErrorNoLiquidity)
         }
         else -> {
             error.message ?: error.javaClass.simpleName

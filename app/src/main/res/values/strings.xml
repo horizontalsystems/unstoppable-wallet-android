@@ -230,7 +230,7 @@
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Transaction fees for swap paid in %s. You need %s.</string>
     <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
-    <string name="Swap_ErrorNoLiquidity">No Liquidity</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
     <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>

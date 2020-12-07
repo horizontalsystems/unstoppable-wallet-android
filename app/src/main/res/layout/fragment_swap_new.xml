@@ -82,7 +82,8 @@
                 android:src="@drawable/ic_switch"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toEndOf="@+id/price"
-                app:layout_constraintTop_toTopOf="@id/price" />
+                app:layout_constraintTop_toTopOf="@id/price"
+                app:tint="@color/grey" />
 
             <io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinCardView
                 android:id="@+id/toCoinCard"
@@ -93,26 +94,64 @@
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/switchButton" />
 
+            <View
+                android:id="@+id/settingsLineTop"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:background="@color/steel_20"
+                app:layout_constraintBottom_toTopOf="@+id/advancedSettings"
+                app:layout_constraintEnd_toEndOf="@+id/endBorder"
+                app:layout_constraintStart_toStartOf="@+id/startBorder" />
+
+            <TextView
+                android:id="@+id/advancedSettings"
+                style="@style/Subhead2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/background_lawrence_onclick"
+                android:clickable="true"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:text="@string/SwapSettings_Title"
+                android:textColor="@color/grey"
+                app:drawableEndCompat="@drawable/ic_arrow_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
+
+            <View
+                android:id="@+id/settingsLineBottom"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/steel_20"
+                app:layout_constraintBottom_toBottomOf="@+id/advancedSettings"
+                app:layout_constraintEnd_toEndOf="@+id/endBorder"
+                app:layout_constraintStart_toStartOf="@+id/startBorder" />
+
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/priceImpactViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="priceImpactTitle,priceImpactValue"/>
+                app:constraint_referenced_ids="priceImpactTitle,priceImpactValue" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/guaranteedAmountViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="minMaxTitle,minMaxValue"/>
+                app:constraint_referenced_ids="minMaxTitle,minMaxValue" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/advancedSettingsViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="dividerLine,advancedSettings"/>
+                app:constraint_referenced_ids="settingsLineTop,settingsLineBottom,advancedSettings" />
 
             <io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceView
                 android:id="@+id/allowanceView"
@@ -121,7 +160,7 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
+                app:layout_constraintTop_toBottomOf="@+id/advancedSettings" />
 
             <TextView
                 android:id="@+id/priceImpactTitle"
@@ -188,60 +227,34 @@
                 app:layout_constraintTop_toBottomOf="@+id/feeSelectorView"
                 tools:text="No Liquidity" />
 
-            <View
-                android:id="@+id/dividerLine"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/steel_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/commonError" />
-
-            <TextView
-                android:id="@+id/advancedSettings"
-                style="@style/Subhead2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_lawrence_onclick"
-                android:clickable="true"
-                android:paddingStart="16dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp"
-                android:text="@string/SwapSettings_Title"
-                android:textColor="@color/grey"
-                app:drawableEndCompat="@drawable/ic_arrow_right"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dividerLine" />
-
-            <Button
-                android:id="@+id/approveButton"
-                style="@style/ButtonPrimarySteel"
+            <LinearLayout
+                android:id="@+id/actionButtonViews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:layout_marginEnd="4dp"
                 android:layout_marginBottom="12dp"
-                android:text="@string/Swap_Approve"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@id/proceedButton"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/advancedSettings" />
-
-            <Button
-                android:id="@+id/proceedButton"
-                style="@style/ButtonPrimaryYellow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/Swap_Proceed"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toEndOf="@id/approveButton"
-                app:layout_constraintTop_toBottomOf="@+id/advancedSettings" />
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@id/commonError">
+                <Button
+                    android:id="@+id/approveButton"
+                    style="@style/ButtonPrimarySteel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/Swap_Approve"
+                    android:visibility="visible" />
+                <Button
+                    android:id="@+id/proceedButton"
+                    style="@style/ButtonPrimaryYellow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/Swap_Proceed" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
