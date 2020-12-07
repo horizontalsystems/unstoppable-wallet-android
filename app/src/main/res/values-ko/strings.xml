@@ -169,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">예상</string>
     <string name="Swap_MaxButtonTitle">최대</string>
-    <string name="Swap_TokenSelectorTitle">토큰 선택</string>
+    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">잔액</string>
     <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
@@ -182,14 +182,16 @@
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <string name="Swap_ErrorInsufficientEthBalance">현재 ETH 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
-    <string name="Swap_ErrorNoLiquidity">유동성 없음</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">거래 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">수당 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchFee">수수료 정보를 가져올 수 없습니다.</string>
-    <string name="Swap_Proceed">진행</string>
+    <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">승인</string>
     <string name="Swap_Approving">승인 중</string>
     <string name="Swap_Swapping">스와핑</string>
+    <string name="Swap_MaximumPaid">Maximum Paid</string>
+    <string name="Swap_MinimumGot">Minimum Got</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
@@ -200,6 +202,8 @@
     <string name="SwapSettings_RecipientAddressDescription">교환 작업 후, 금액은 지정된 주소로 이체됩니다.</string>
     <string name="SwapSettings_RecipientAddressHint">자신의 주소</string>
     <string name="SwapSettings_Apply">적용</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">최대 허용치 %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">최대 허용치 %d</string>
