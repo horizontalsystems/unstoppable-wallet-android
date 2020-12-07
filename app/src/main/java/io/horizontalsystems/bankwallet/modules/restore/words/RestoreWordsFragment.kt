@@ -109,6 +109,7 @@ class RestoreWordsFragment : BaseFragment() {
             val errorMessage = when (it) {
                 is RestoreWordsException.InvalidBirthdayHeightException -> getString(R.string.Restore_BirthdayHeight_InvalidError)
                 is RestoreWordsException.InvalidWordCountException -> getString(R.string.Restore_InvalidWordCount, it.count, it.requiredCount)
+                is RestoreWordsException.ChecksumException -> getString(R.string.Restore_InvalidChecksum)
                 else -> getString(R.string.Restore_ValidationFailed)
             }
             HudHelper.showErrorMessage(this.requireView(), errorMessage)
