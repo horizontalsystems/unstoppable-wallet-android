@@ -169,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">تخمینی</string>
     <string name="Swap_MaxButtonTitle">حداکثر</string>
-    <string name="Swap_TokenSelectorTitle">نشان را انتخاب کنید</string>
+    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">بالانس</string>
     <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
@@ -182,14 +182,16 @@
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">هزینه تراکنش برای جابجایی در %s پرداخت شد. شما به %s نیاز دارید.</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
-    <string name="Swap_ErrorNoLiquidity">بدون نقدینگی</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">اطلاعات تجارت دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">اطلاعات کمک هزینه دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchFee">اطلاعات هزینه دریافت نشد</string>
-    <string name="Swap_Proceed">ادامه دادن</string>
+    <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">تایید</string>
     <string name="Swap_Approving">در حال تایید</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
+    <string name="Swap_MaximumPaid">Maximum Paid</string>
+    <string name="Swap_MinimumGot">Minimum Got</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
@@ -200,6 +202,8 @@
     <string name="SwapSettings_RecipientAddressDescription">پس از انجام عملیات تراکنش، مبلغ به آدرس مشخص شده انتقال داده می شود</string>
     <string name="SwapSettings_RecipientAddressHint">آدرس خود</string>
     <string name="SwapSettings_Apply">درخواست دادن</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address</string>
     <string name="SwapSettings_Error_SlippageTooLow">تراکنش شما احتمالاً ناموفق است.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">حداکثر مقدار مجاز %s%% است</string>
     <string name="SwapSettings_Error_DeadlineTooLow">حداقل مقدار مجاز %d است</string>
