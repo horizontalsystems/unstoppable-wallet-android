@@ -227,8 +227,8 @@
         tools:layout="@layout/fragment_add_erc20_token" />
     <fragment
         android:id="@+id/swapFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap_new.SwapFragment"
-        tools:layout="@layout/fragment_swap_new"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.SwapFragment"
+        tools:layout="@layout/fragment_swap"
         android:label="@string/Swap">
         <action
             android:id="@+id/swapFragment_to_selectSwapCoinFragment"
@@ -257,19 +257,19 @@
     </fragment>
     <fragment
         android:id="@+id/selectSwapCoinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap_new.coinselect.SelectSwapCoinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment"
         tools:layout="@layout/fragment_swap_select_token" />
     <fragment
         android:id="@+id/swapApproveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap_new.approve.SwapApproveFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment"
         tools:layout="@layout/fragment_swap_approve" />
     <fragment
         android:id="@+id/swapConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap_new.confirmation.SwapConfirmationFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_swap_new" />
     <fragment
         android:id="@+id/uniswapInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap_new.UniswapInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.UniswapInfoFragment"
         tools:layout="@layout/fragment_swap_info" />
     <fragment
         android:id="@+id/walletConnectMainFragment"
@@ -295,7 +295,7 @@
         tools:layout="@layout/fragment_wallet_connect_request" />
     <fragment
         android:id="@+id/swapTradeOptionsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap_new.tradeoptions.SwapTradeOptionsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsFragment"
         android:label="SwapTradeOptionsFragment" />
 
 </navigation>

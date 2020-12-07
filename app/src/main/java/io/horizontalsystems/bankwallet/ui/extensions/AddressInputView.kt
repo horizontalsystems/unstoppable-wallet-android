@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap_new.tradeoptions.IVerifiedInputViewModel
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IVerifiedInputViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import kotlinx.android.synthetic.main.view_input_address.view.*
 

@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
-import io.horizontalsystems.bankwallet.modules.swap_new.SwapFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
