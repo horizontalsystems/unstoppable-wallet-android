@@ -6,6 +6,9 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
@@ -31,6 +34,23 @@ fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
                 }
             })
 }
+
+fun View.fitSystemWindowsAndAdjustResize() =
+        ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+            this.fitsSystemWindows = true
+            val bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+
+            WindowInsetsCompat
+                    .Builder()
+                    .setInsets(
+                            WindowInsetsCompat.Type.systemBars(),
+                            Insets.of(0, 0, 0, bottom)
+                    )
+                    .build()
+                    .apply {
+                        ViewCompat.onApplyWindowInsets(v, this)
+                    }
+        }
 
 // String
 
