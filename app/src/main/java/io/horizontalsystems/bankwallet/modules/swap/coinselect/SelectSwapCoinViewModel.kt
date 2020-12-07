@@ -2,37 +2,29 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.entities.Coin
-import java.math.BigDecimal
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
 import java.util.*
 
 class SelectSwapCoinViewModel(
-        private val excludedCoin: Coin?,
-        private val hideZeroBalance: Boolean?,
-        private val coinManager: ICoinManager,
-        private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager
+      private val coins: List<CoinBalanceItem>
 ) : ViewModel() {
 
-    val coinItemsLivedData = MutableLiveData<List<SwapCoinItem>>()
+    val coinItemsLivedData = MutableLiveData<List<CoinBalanceItem>>()
     private var filter: String? = null
 
-    private val swappableCoins by lazy {
-        coinManager.coins.mapNotNull { coin ->
-            val wallet = walletManager.wallet(coin)
-            val balance = wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balance }
-                    ?: BigDecimal.ZERO
-
-            if (!coin.type.swappable || coin == excludedCoin || (hideZeroBalance == true && balance <= BigDecimal.ZERO)) {
-                null
-            } else {
-                SwapCoinItem(coin, if (balance <= BigDecimal.ZERO) null else balance)
-            }
-        }
-    }
+//    private val swappableCoins by lazy {
+//        coinManager.coins.mapNotNull { coin ->
+//            val wallet = walletManager.wallet(coin)
+//            val balance = wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balance }
+//                    ?: BigDecimal.ZERO
+//
+//            if (!coin.type.swappable || coin == excludedCoin || (hideZeroBalance == true && balance <= BigDecimal.ZERO)) {
+//                null
+//            } else {
+//                SwapCoinItem(coin, if (balance <= BigDecimal.ZERO) null else balance)
+//            }
+//        }
+//    }
 
     init {
         syncViewState()
@@ -44,11 +36,11 @@ class SelectSwapCoinViewModel(
     }
 
     private fun syncViewState() {
-        val filteredItems = filtered(swappableCoins)
+        val filteredItems = filtered(coins)
         coinItemsLivedData.postValue(filteredItems)
     }
 
-    private fun filtered(items: List<SwapCoinItem>): List<SwapCoinItem> {
+    private fun filtered(items: List<CoinBalanceItem>): List<CoinBalanceItem> {
         val filter = filter ?: return items
 
         return items.filter {

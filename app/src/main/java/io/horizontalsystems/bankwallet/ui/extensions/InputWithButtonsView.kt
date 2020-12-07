@@ -2,28 +2,34 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IVerifiedInputViewModel
 import kotlinx.android.synthetic.main.view_input_with_buttons.view.*
 
 class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private var onTextChangeCallback: ((String?) -> Unit)? = null
+    private var onTextChangeCallback: ((old: String?, new: String?) -> Unit)? = null
 
     private val textWatcher = object : TextWatcher {
+        private var prevValue: String? = null
+
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            onTextChangeCallback?.invoke(s?.toString())
+            onTextChangeCallback?.invoke(prevValue, s?.toString())
 
             setDeleteButtonVisibility(!s.isNullOrBlank())
         }
         override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            prevValue = s?.toString()
+        }
     }
 
     init {
@@ -42,14 +48,24 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
         deleteButton.setOnClickListener { input.text = null }
     }
 
-    fun setText(text: String?) {
+    fun setText(text: String?, skipChangeEvent: Boolean = true, shakeAnimate: Boolean = false) {
         input.apply {
-            removeTextChangedListener(textWatcher)
+            if (skipChangeEvent) {
+                removeTextChangedListener(textWatcher)
+            }
+
             setText(text)
-            addTextChangedListener(textWatcher)
+
+            if (skipChangeEvent) {
+                addTextChangedListener(textWatcher)
+            }
 
             text?.let {
                 setSelection(it.length)
+            }
+
+            if (shakeAnimate) {
+                startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_edittext))
             }
         }
         setDeleteButtonVisibility(!text.isNullOrBlank())
@@ -64,7 +80,7 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
         error.isVisible = !text.isNullOrEmpty()
     }
 
-    fun onTextChange(callback: (String?) -> Unit) {
+    fun onTextChange(callback: (old: String?, new: String?) -> Unit) {
         onTextChangeCallback = callback
     }
 
@@ -92,6 +108,42 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
         deleteButton.isVisible = visible
         inputButtonLeft.isVisible = !visible
         inputButtonRight.isVisible = !visible
+    }
+
+    fun setViewModel(viewModel: IVerifiedInputViewModel, lifecycleOwner: LifecycleOwner) {
+        input.maxLines = viewModel.inputFieldMaximumNumberOfLines
+        if (!viewModel.inputFieldCanEdit) {
+            input.keyListener = null
+        }
+        viewModel.inputFieldValueLiveData.observe(lifecycleOwner, {
+            setText(it)
+        })
+
+        viewModel.inputFieldCautionLiveData.observe(lifecycleOwner, {
+            setError(it?.text)
+        })
+
+        setHint(viewModel.inputFieldPlaceholder)
+        setText(viewModel.inputFieldInitialValue)
+
+        onTextChange { old, new ->
+            if (viewModel.inputFieldIsValid(new)) {
+                viewModel.setInputFieldValue(new)
+            } else {
+                setText(old, true, true)
+            }
+        }
+
+        // todo: it should work with any number of buttons
+        viewModel.inputFieldButtonItems.getOrNull(0)?.let { button ->
+            setLeftButtonTitle(button.title)
+            onLeftButtonClick(button.onClick)
+        }
+
+        viewModel.inputFieldButtonItems.getOrNull(1)?.let { button ->
+            setRightButtonTitle(button.title)
+            onRightButtonClick(button.onClick)
+        }
     }
 
 }
