@@ -21,7 +21,7 @@ import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_confirmation_swap_new.*
+import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 import kotlinx.android.synthetic.main.view_holder_swap_confirmation_additional_info_item.*
 import kotlinx.android.synthetic.main.view_holder_swap_confirmation_button.*
 import kotlinx.android.synthetic.main.view_holder_swap_confirmation_input.*
@@ -35,7 +35,7 @@ class SwapConfirmationFragment : BaseFragment(), SwapConfirmationButtonAdapter.L
     private var snackbarInProcess: CustomSnackbar? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_confirmation_swap_new, container, false)
+        return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

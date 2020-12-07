@@ -259,7 +259,7 @@
     <fragment
         android:id="@+id/swapConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_swap_new" />
+        tools:layout="@layout/fragment_confirmation_swap" />
     <fragment
         android:id="@+id/uniswapInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.UniswapInfoFragment"
