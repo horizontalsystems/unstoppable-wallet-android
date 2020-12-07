@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
+import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class RestoreWordsService(
         private val restoreAccountType: RestoreAccountType,
@@ -29,7 +30,11 @@ class RestoreWordsService(
             throw RestoreWordsException.InvalidWordCountException(words.size, wordCount)
         }
 
-        wordsManager.validateChecksum(words)
+        try {
+            wordsManager.validateChecksum(words)
+        } catch (e: Mnemonic.ChecksumException){
+            throw RestoreWordsException.ChecksumException()
+        }
 
         return when (restoreAccountType) {
             RestoreAccountType.STANDARD,
@@ -63,6 +68,7 @@ class RestoreWordsService(
 
     open class RestoreWordsException : Throwable() {
         class InvalidBirthdayHeightException : RestoreWordsException()
+        class ChecksumException : RestoreWordsException()
         class InvalidWordException(val word: String) : RestoreWordsException()
         class InvalidWordCountException(val count: Int, val requiredCount: Int) : RestoreWordsException()
     }
