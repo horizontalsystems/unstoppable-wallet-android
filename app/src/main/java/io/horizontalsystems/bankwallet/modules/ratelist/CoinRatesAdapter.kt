@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.extensions.setCoinImage
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
 
