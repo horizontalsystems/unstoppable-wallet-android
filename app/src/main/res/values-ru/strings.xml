@@ -169,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">ПРИБЛИЗИТЕЛЬНО</string>
     <string name="Swap_MaxButtonTitle">Макс</string>
-    <string name="Swap_TokenSelectorTitle">Выбрать Токен</string>
+    <string name="Swap_TokenSelectorTitle">Выбрать</string>
     <string name="Swap_Balance">Баланс</string>
     <string name="Swap_Allowance">Разрешение</string>
     <string name="Swap_Price">Цена</string>
@@ -182,14 +182,16 @@
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Комиссии за транзакцию взимаются в %s. Вам нужно %s.</string>
     <string name="Swap_ErrorInsufficientEthBalance">Текущий баланс ETH ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
-    <string name="Swap_ErrorNoLiquidity">Нет Ликвидности</string>
+    <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Не удалось получить информацию о сделке</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Не удалось получить информацию о допустимом лимите</string>
     <string name="Swap_ErrorCouldNotFetchFee">Не удалось получить информацию о комиссии</string>
-    <string name="Swap_Proceed">Продолжить</string>
+    <string name="Swap_Proceed">Далее</string>
     <string name="Swap_Approve">Подтвердить</string>
     <string name="Swap_Approving">Подтверждение</string>
     <string name="Swap_Swapping">Обмен</string>
+    <string name="Swap_MaximumPaid">Максимальная Выплата</string>
+    <string name="Swap_MinimumGot">Минимальная Выплата</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Дополнительные Настройки</string>
     <string name="SwapSettings_SlippageTitle">Допустимость Отклонений</string>
@@ -200,6 +202,8 @@
     <string name="SwapSettings_RecipientAddressDescription">После операции обмена сумма будет переведена на указанный адрес</string>
     <string name="SwapSettings_RecipientAddressHint">Собственный Адрес</string>
     <string name="SwapSettings_Apply">Применить</string>
+    <string name="SwapSettings_DeadlineMinute">%s мин</string>
+    <string name="SwapSettings_RecipientPlaceholder">Адрес</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Макс. допустимое значение %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">Мин. допустимое значение %d</string>
@@ -269,14 +273,14 @@
     <string name="TransactionInfo_SentToSelfNote">Данная транзакция отправлена на собственный адрес</string>
     <string name="TransactionInfo_DoubleSpendNote">Риск Двойной Траты!</string>
     <string name="TransactionInfo_Input">Ввод</string>
-    <string name="StatusInfo_Pending">Pending</string>
-    <string name="StatusInfo_Receiving">Receiving</string>
-    <string name="StatusInfo_Confirmed">Confirmed</string>
-    <string name="StatusInfo_Failed">Failed</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
-    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
-    <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
+    <string name="StatusInfo_Pending">В обработке</string>
+    <string name="StatusInfo_Receiving">Получает</string>
+    <string name="StatusInfo_Confirmed">Подтверждено</string>
+    <string name="StatusInfo_Failed">Не удалось</string>
+    <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Эта процедура может занять от нескольких минут до нескольких часов в зависимости от комиссии за транзакцию. Отправляемые с очень низкой комиссией транзакции обычно обрабатываются в течение нескольких дней или же могут быть отклонены сетью, отменяя это действие.</string>
+    <string name="StatusInfo_ReceivingDescription">Отправитель послал вам транзакцию, но она еще не завершена. В случае с крупными платежами нужно дождаться, пока статус транзакции изменится на \'обработка завершена\'. Обычно этот процесс занимает около часа. Однако, может потребоваться больше времени, если отправитель послал транзакцию с низкой комиссией.</string>
+    <string name="StatusInfo_ConfirmedDescription">Транзакция окончательна и необратима.</string>
+    <string name="StatusInfo_FailedDescription">Транзакция не была обработана как планировалось, и передача токена не состоялась. На Ethereum за отклонённые транзакции взимают комиссионные сборы.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
@@ -319,7 +323,7 @@
     <!--Guides-->
     <string name="Guides_Title">Академия</string>
     <!--Markdown-->
-    <string name="Markdown_Error_NotFound">Page not found</string>
+    <string name="Markdown_Error_NotFound">Страница не найдена</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
@@ -331,13 +335,13 @@
     <string name="Settings_LightMode">Светлый Режим</string>
     <string name="Settings_Terms">Условия Использования</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
-    <string name="Settings_Faq">FAQ</string>
+    <string name="Settings_Faq">ЧaВо</string>
     <string name="Settings_Report">Сообщить о Проблеме</string>
     <string name="Settings_AppStatus">Статус Приложения</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
-    <string name="Settings_RateUs">Rate Us</string>
-    <string name="SettingsAboutApp_Title">About App</string>
-    <string name="SettingsAboutApp_Site">Site</string>
+    <string name="Settings_RateUs">Оцените наше приложение</string>
+    <string name="SettingsAboutApp_Title">О приложении</string>
+    <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsOption_Enabled">Вкл.</string>
     <string name="SettingsOption_Disabled">Выкл.</string>
     <string name="SettingsPrivacy_Info">Это приложение не передает ваши данные, но, поскольку оно связывается с блокчейнами, возможна потенциальная утечка некоторых общедоступных данных, таких как IP-адрес. Используйте кнопку \"Информация\" в правом верхнем углу для получения более подробной информации о каждом разделе.</string>
@@ -441,7 +445,7 @@
     <string name="Hud_Text_Error">Ошибка</string>
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
-    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
+    <string name="Hud_Text_EmailAddressCopied">Адрес электронной почты скопирован</string>
     <string name="Hud_Text_InvalidPinError">Неверный Код</string>
     <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
     <string name="Hud_UnknownError">%s</string>
@@ -486,16 +490,16 @@
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Выбрать Блокчейн</string>
     <string name="AddTokenDialog_Subtitle">Добавить Токен</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
+    <string name="AddTokenDialog_Erc20Tokens">Токен ERC20</string>
     <string name="AddTokenDialog_EosTokens">Токены EOS</string>
-    <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
+    <string name="AddTokenDialog_BinanceTokens">Токен BEP2</string>
     <!-- Add Token -->
-    <string name="AddToken_CoinName">Coin Name</string>
-    <string name="AddToken_Symbol">Symbol</string>
-    <string name="AddToken_Decimals">Decimals</string>
+    <string name="AddToken_CoinName">Название Токена</string>
+    <string name="AddToken_Symbol">Символ</string>
+    <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddToken_InvalidAddressError">Invalid Address</string>
+    <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
+    <string name="AddToken_InvalidAddressError">Неверный Адрес</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Добавить ERC20</string>
