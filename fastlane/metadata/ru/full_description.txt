@@ -1,0 +1,73 @@
+If you’re a type of person who needs unrestricted access to invest in blockchains and require unconditional control over your crypto investments this wallet is for you.
+
+This wallet was built to enable any freedom loving individual to invest and grow crypto currency portfolio without limitations, in a private manner, regardless of regulatory landscape.
+
+Exercise full unconditional control over your assets. Bitcoin, Ethereum, Dash and other crypto assets.
+
+ Why Unstoppable Wallet
+
+It keeps crypto assets safe on your device
+It can only be controlled by yourself
+It doesn’t know who you are
+It doesn’t collect any data
+It's easy to migrate to/from
+It’s not dependent on any entity to function
+It integrates blockchains in a decentralized manner
+It implements latest improvements for each blockchain
+It can’t be blocked or censored
+It provides real time transaction fees
+It’s fast and beautiful  
+It's the most advanced wallet to date
+(1) UNRESTRICTED CONTROL
+
+  Transact freely and unconditionally regardless of where you live. No entity can stop you from sending/receiving crypto in Unstoppable wallet.   
+
+You’re the only person with control and access to your crypto finances. The Secret Key (that give you ownership over crypto assets) never leaves your device.
+
+(2) GENUINE PRIVACY
+
+  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
+
+Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+
+(3) HIGHLY SECURE
+
+  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+
+  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+
+ (4) ALWAYS ONLINE
+
+Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+
+No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+
+(5) ADVANCED & AHEAD
+
+Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+
+Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
+  
+(6) BEAUTIFUL  
+
+Deal with crypto without complexitites. You don’t need to understand technicalities powering different blockchains to be able to transact with them.   
+
+This wallet keeps complexities under the hood giving you a straightforward user interface to the world of blockchains.
+
+It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   Don’t take our word for it, give it a try yourself.  
+
+(7) OPEN & PUBLIC 
+
+The code powering Unstoppable wallet is fully public and open source enabling anyone to unconditionally copy and reuse its code.
+
+https://github.com/horizontalsystems/unstoppable-wallet-ios
+
+(8) SUPPORTED CURRENCIES
+
+Bitcoin
+Ethereum
+Dash
+Bitcoin Cash
+50+ ERC20 tokens
+(in progress) EOS and EOS based tokens
+(in progress) Binance Token and Binance-based tokens
