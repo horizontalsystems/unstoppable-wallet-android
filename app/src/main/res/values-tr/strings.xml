@@ -169,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">TAHMİNİ</string>
     <string name="Swap_MaxButtonTitle">Azami</string>
-    <string name="Swap_TokenSelectorTitle">Jeton Seçin</string>
+    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">Bakiye</string>
     <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
@@ -182,14 +182,16 @@
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">İşlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <string name="Swap_ErrorInsufficientEthBalance">Mevcut ETH bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
-    <string name="Swap_ErrorNoLiquidity">Likidite Yok</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Alım satım bilgisi alınamadı</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Ödenek bilgisi alınamadı</string>
     <string name="Swap_ErrorCouldNotFetchFee">Ücret bilgisi alınamadı</string>
-    <string name="Swap_Proceed">Devam</string>
+    <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">Onayla</string>
     <string name="Swap_Approving">Onaylayan</string>
     <string name="Swap_Swapping">Takas</string>
+    <string name="Swap_MaximumPaid">Maximum Paid</string>
+    <string name="Swap_MinimumGot">Minimum Got</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Gelişmiş Ayarlar</string>
     <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
@@ -200,6 +202,8 @@
     <string name="SwapSettings_RecipientAddressDescription">Takas etme işleminden sonra, tutar belirtilen adrese transfer edilecektir</string>
     <string name="SwapSettings_RecipientAddressHint">Kendi adresi</string>
     <string name="SwapSettings_Apply">Uygula</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Maksimum izin verilen değer %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">Maksimum izin verilen değer %d</string>
