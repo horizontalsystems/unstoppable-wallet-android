@@ -56,6 +56,7 @@
     <string name="Restore_Enter_Key_Description_Mnemonic">为%1s钱包输入私钥，其中应包含%2s个单词。这些单词必须以正确的顺序输入并用空格分隔。</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
+    <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
     <string name="Restore_EosAccountIncorrect">无效账户</string>
     <string name="Restore_EosKeyIncorrect">错误密钥</string>
