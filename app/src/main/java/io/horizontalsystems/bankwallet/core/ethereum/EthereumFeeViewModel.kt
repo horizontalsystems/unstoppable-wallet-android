@@ -11,7 +11,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class EthereumFeeViewModel(
-        private val transactionService: EthereumTransactionService,
+        val transactionService: EthereumTransactionService,
         private val coinService: CoinService
 ) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 

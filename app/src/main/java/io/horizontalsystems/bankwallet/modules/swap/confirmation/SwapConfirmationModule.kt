@@ -14,16 +14,13 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
 
 object SwapConfirmationModule {
 
-    class Factory(private val service: SwapService, private val tradeService: SwapTradeService) : ViewModelProvider.Factory {
-        private val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
+    class Factory(
+            private val service: SwapService,
+            private val tradeService: SwapTradeService,
+            private val transactionService: EthereumTransactionService
+    ) : ViewModelProvider.Factory {
 
         private val ethereumCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
-
-        private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
-            EthereumTransactionService(ethereumKit, feeRateProvider)
-        }
-
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

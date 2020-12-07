@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
@@ -29,7 +30,9 @@ import kotlinx.android.synthetic.main.view_holder_swap_confirmation_input.*
 class SwapConfirmationFragment : BaseFragment(), SwapConfirmationButtonAdapter.Listener {
 
     private val mainViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
-    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, mainViewModel.tradeService) }
+    private val feeViewModel by navGraphViewModels<EthereumFeeViewModel>(R.id.swapFragment)
+
+    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, mainViewModel.tradeService, feeViewModel.transactionService) }
     private val viewModel by viewModels<SwapConfirmationViewModel>{ vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
