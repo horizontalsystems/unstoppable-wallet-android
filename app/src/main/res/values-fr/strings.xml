@@ -170,7 +170,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_Percent"> %s%%</string>
     <string name="Swap_Estimated">ESTIMÉ</string>
     <string name="Swap_MaxButtonTitle">Max</string>
-    <string name="Swap_TokenSelectorTitle">Sélectionner le token</string>
+    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">Balance</string>
     <string name="Swap_Allowance">Allocation</string>
     <string name="Swap_Price">Prix</string>
@@ -183,14 +183,16 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Frais de transaction payés en %s. Vous avez besoin de %s.</string>
     <string name="Swap_ErrorInsufficientEthBalance">Le solde actuel des ETH est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
-    <string name="Swap_ErrorNoLiquidity">Pas de liquidité</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Impossible d\'accéder aux informations relatives à l\'achat</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Impossible de récupérer les informations d\'allocation</string>
     <string name="Swap_ErrorCouldNotFetchFee">Impossible d\'accéder aux informations relatives à l\'achat</string>
-    <string name="Swap_Proceed">Continuer</string>
+    <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">Approuver</string>
     <string name="Swap_Approving">En cours d\'approbation</string>
     <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_MaximumPaid">Maximum Paid</string>
+    <string name="Swap_MinimumGot">Minimum Got</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
@@ -201,6 +203,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SwapSettings_RecipientAddressDescription">Le montant sera transféré à l\'adresse indiquée après l\'opération de change</string>
     <string name="SwapSettings_RecipientAddressHint">Mon adresse</string>
     <string name="SwapSettings_Apply">Appliquer</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address</string>
     <string name="SwapSettings_Error_SlippageTooLow">Votre transaction est susceptible de ne pas aboutir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">La valeur maximale autorisée est %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">La valeur minimale autorisée est %d</string>
