@@ -169,7 +169,7 @@
     <string name="Swap_Percent">%s %%</string>
     <string name="Swap_Estimated">GESCHÄTZT</string>
     <string name="Swap_MaxButtonTitle">Max.</string>
-    <string name="Swap_TokenSelectorTitle">Token auswählen</string>
+    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">Guthaben</string>
     <string name="Swap_Allowance">Vergütung</string>
     <string name="Swap_Price">Preis</string>
@@ -182,14 +182,16 @@
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Transaktionsgebühren in %s bezahlt. Sie benötigen %s.</string>
     <string name="Swap_ErrorInsufficientEthBalance">Das aktuelle ETH-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
-    <string name="Swap_ErrorNoLiquidity">Keine Liquidität</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Die Kaufinformationen konnten nicht abgerufen werden</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Konnte Berechtigungsinformationen nicht abrufen</string>
     <string name="Swap_ErrorCouldNotFetchFee">Die Kaufinformationen konnten nicht abgerufen werden</string>
-    <string name="Swap_Proceed">Fortfahren</string>
+    <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">Bestätigen</string>
     <string name="Swap_Approving">Wird bestätigt</string>
     <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_MaximumPaid">Maximum Paid</string>
+    <string name="Swap_MinimumGot">Minimum Got</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Erweiterte Einstellungen</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
@@ -200,6 +202,8 @@
     <string name="SwapSettings_RecipientAddressDescription">Nach dem Umtauschvorgang wird der Betrag an die angegebene Adresse überwiesen</string>
     <string name="SwapSettings_RecipientAddressHint">eigene Adresse</string>
     <string name="SwapSettings_Apply">Übernehmen</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ihre Transaktion wird wahrscheinlich fehlschlagen.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Max. erlaubter Wert ist %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">Min. erlaubter Wert ist %d</string>
