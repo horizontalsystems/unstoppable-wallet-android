@@ -186,9 +186,10 @@
     <string name="Swap_ErrorCouldNotFetchTrade">Alım satım bilgisi alınamadı</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Ödenek bilgisi alınamadı</string>
     <string name="Swap_ErrorCouldNotFetchFee">Ücret bilgisi alınamadı</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">Onayla</string>
-    <string name="Swap_Approving">Onaylayan</string>
+    <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Takas</string>
     <string name="Swap_MaximumPaid">Maximum Paid</string>
     <string name="Swap_MinimumGot">Minimum Got</string>
