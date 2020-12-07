@@ -229,34 +229,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/feeSelectorView"
                 tools:text="No Liquidity" />
 
-            <LinearLayout
-                android:id="@+id/actionButtonViews"
+            <Button
+                android:id="@+id/approveButton"
+                style="@style/ButtonPrimarySteel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginBottom="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@id/endBorder"
+                android:text="@string/Swap_Approve"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/proceedButton"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/commonError">
-                <Button
-                    android:id="@+id/approveButton"
-                    style="@style/ButtonPrimarySteel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:text="@string/Swap_Approve"
-                    android:visibility="visible" />
-                <Button
-                    android:id="@+id/proceedButton"
-                    style="@style/ButtonPrimaryYellow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    android:text="@string/Swap_Proceed" />
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/commonError" />
+
+            <Button
+                android:id="@+id/proceedButton"
+                style="@style/ButtonPrimaryYellow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/Swap_Proceed"
+                app:layout_constraintEnd_toEndOf="@id/endBorder"
+                app:layout_constraintStart_toEndOf="@id/approveButton"
+                app:layout_constraintTop_toBottomOf="@+id/commonError" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
