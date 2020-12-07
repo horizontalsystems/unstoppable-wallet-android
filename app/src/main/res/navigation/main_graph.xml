@@ -269,7 +269,7 @@
         tools:layout="@layout/fragment_swap_select_token" />
     <fragment
         android:id="@+id/swapApproveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap_new.approve.SwapApproveFragment"
         tools:layout="@layout/fragment_swap_approve" />
     <fragment
         android:id="@+id/swapConfirmationFragment"

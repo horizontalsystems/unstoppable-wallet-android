@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
+import io.horizontalsystems.bankwallet.modules.swap_new.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap_new.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.core.findNavController

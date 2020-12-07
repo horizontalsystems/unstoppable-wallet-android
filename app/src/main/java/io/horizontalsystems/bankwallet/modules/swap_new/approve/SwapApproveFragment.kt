@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.swap_new.approve
 
 import android.os.Bundle
 import android.text.Editable
