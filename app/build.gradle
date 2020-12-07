@@ -188,7 +188,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:ethereum-kit-android:f1e0c4d'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:c1b62ac'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:82bf2d6'
-    implementation 'com.github.horizontalsystems:xrates-kit-android:ed36b0b'
+    implementation 'com.github.horizontalsystems:xrates-kit-android:4a1d925'
     implementation('com.github.horizontalsystems:eos-kit-android:261e51e') {
         exclude group: 'com.google.protobuf'
     }
