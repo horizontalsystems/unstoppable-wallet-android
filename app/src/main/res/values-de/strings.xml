@@ -186,9 +186,10 @@
     <string name="Swap_ErrorCouldNotFetchTrade">Die Kaufinformationen konnten nicht abgerufen werden</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Konnte Berechtigungsinformationen nicht abrufen</string>
     <string name="Swap_ErrorCouldNotFetchFee">Die Kaufinformationen konnten nicht abgerufen werden</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">Bestätigen</string>
-    <string name="Swap_Approving">Wird bestätigt</string>
+    <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Maximum Paid</string>
     <string name="Swap_MinimumGot">Minimum Got</string>
