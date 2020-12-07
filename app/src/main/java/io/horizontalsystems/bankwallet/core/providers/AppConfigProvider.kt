@@ -25,6 +25,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
     override val ipfsFallbackGateway = "ipfs.io"
 
     override val cryptoCompareApiKey = App.instance.getString(R.string.cryptoCompareApiKey)
+    override val uniswapGraphUrl = App.instance.getString(R.string.uniswapGraphUrl)
     override val infuraProjectId = App.instance.getString(R.string.infuraProjectId)
     override val infuraProjectSecret = App.instance.getString(R.string.infuraSecretKey)
     override val etherscanApiKey = App.instance.getString(R.string.etherscanKey)
