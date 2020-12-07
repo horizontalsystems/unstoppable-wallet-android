@@ -4,8 +4,8 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.ui.extensions.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_swap_coin_select.*
 
