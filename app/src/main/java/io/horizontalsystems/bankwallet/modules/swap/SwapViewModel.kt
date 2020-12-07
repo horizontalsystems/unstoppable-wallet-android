@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.modules.swap.SwapService.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.core.SingleLiveEvent
@@ -19,6 +20,7 @@ import io.reactivex.schedulers.Schedulers
 class SwapViewModel(
         val service: SwapService,
         val tradeService: SwapTradeService,
+        private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val ethCoinService: CoinService,
         private val formatter: SwapViewItemHelper,
@@ -31,9 +33,11 @@ class SwapViewModel(
     private val swapErrorLiveData = MutableLiveData<String?>(null)
     private val tradeViewItemLiveData = MutableLiveData<TradeViewItem?>(null)
     private val tradeOptionsViewItemLiveData = MutableLiveData<TradeOptionsViewItem?>(null)
-    private val proceedAllowedLiveData = MutableLiveData(false)
-    private val approveActionLiveData = MutableLiveData(ApproveActionState.Hidden)
+    private val proceedActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
+    private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
+    private val advancedSettingsVisibleLiveData = MutableLiveData(false)
+    private val feeVisibleLiveData = MutableLiveData(false)
 
     init {
         subscribeToServices()
@@ -48,13 +52,16 @@ class SwapViewModel(
     fun swapErrorLiveData(): LiveData<String?> = swapErrorLiveData
     fun tradeViewItemLiveData(): LiveData<TradeViewItem?> = tradeViewItemLiveData
     fun tradeOptionsViewItemLiveData(): LiveData<TradeOptionsViewItem?> = tradeOptionsViewItemLiveData
-    fun proceedAllowedLiveData(): LiveData<Boolean> = proceedAllowedLiveData
-    fun approveActionLiveData(): LiveData<ApproveActionState> = approveActionLiveData
+    fun proceedActionLiveData(): LiveData<ActionState> = proceedActionLiveData
+    fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
+    fun advancedSettingsVisibleLiveData(): LiveData<Boolean> = advancedSettingsVisibleLiveData
+    fun feeVisibleLiveData(): LiveData<Boolean> = feeVisibleLiveData
 
     fun onTapSwitch() {
         tradeService.switchCoins()
     }
+
     fun onTapApprove() {
         service.approveData?.let { approveData ->
             openApproveLiveEvent.postValue(approveData)
@@ -89,13 +96,16 @@ class SwapViewModel(
 
         pendingAllowanceService.isPendingObservable
                 .subscribeOn(Schedulers.io())
-                .subscribe { syncApproveAction() }
+                .subscribe {
+                    syncApproveAction()
+                    syncProceedAction()
+                }
                 .let { disposables.add(it) }
     }
 
     private fun sync(serviceState: SwapService.State) {
         isLoadingLiveData.postValue(serviceState == SwapService.State.Loading)
-        proceedAllowedLiveData.postValue(serviceState == SwapService.State.Ready)
+        syncProceedAction()
     }
 
     private fun convert(error: Throwable): String = when (error) {
@@ -118,32 +128,87 @@ class SwapViewModel(
     }
 
     private fun sync(errors: List<Throwable>) {
-        val filtered = errors.filter { it !is EthereumTransactionService.GasDataError && it !is SwapService.SwapError }
+        val filtered = errors.filter { it !is EthereumTransactionService.GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
+        syncProceedAction()
         syncApproveAction()
+        syncFeeVisible()
     }
 
     private fun sync(tradeServiceState: SwapTradeService.State) {
         when (tradeServiceState) {
             is SwapTradeService.State.Ready -> {
                 tradeViewItemLiveData.postValue(tradeViewItem(tradeServiceState.trade))
+                advancedSettingsVisibleLiveData.postValue(true)
             }
-            else -> tradeViewItemLiveData.postValue(null)
+            else -> {
+                tradeViewItemLiveData.postValue(null)
+                advancedSettingsVisibleLiveData.postValue(false)
+            }
         }
+        syncProceedAction()
+        syncApproveAction()
     }
 
     private fun sync(tradeOptions: TradeOptions) {
         tradeOptionsViewItemLiveData.postValue(tradeOptionsViewItem(tradeOptions))
     }
 
-    private fun syncApproveAction() {
-        if (pendingAllowanceService.isPending) {
-            approveActionLiveData.postValue(ApproveActionState.Pending)
-        } else {
-            val isInsufficientAllowance = service.errors.any { it == SwapService.SwapError.InsufficientAllowance }
-            approveActionLiveData.postValue(if (isInsufficientAllowance) ApproveActionState.Visible else ApproveActionState.Hidden)
+    private fun syncProceedAction() {
+        val proceedAction = when {
+            service.state == SwapService.State.Ready -> {
+                ActionState.Enabled(stringProvider.string(R.string.Swap_Proceed))
+            }
+            tradeService.state is SwapTradeService.State.Ready -> {
+                when {
+                    service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
+                        ActionState.Disabled(stringProvider.string(R.string.Swap_ErrorInsufficientBalance))
+                    }
+                    service.errors.any { it == SwapError.ForbiddenPriceImpactLevel } -> {
+                        ActionState.Disabled(stringProvider.string(R.string.Swap_ErrorHighPriceImpact))
+                    }
+                    pendingAllowanceService.isPending -> {
+                        ActionState.Hidden
+                    }
+                    else -> {
+                        ActionState.Disabled(stringProvider.string(R.string.Swap_Proceed))
+                    }
+                }
+            }
+            else -> {
+                ActionState.Hidden
+            }
         }
+        proceedActionLiveData.postValue(proceedAction)
+    }
+
+    private fun syncApproveAction() {
+        val approveAction = when {
+            tradeService.state !is SwapTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
+                ActionState.Hidden
+            }
+            pendingAllowanceService.isPending -> {
+                ActionState.Disabled(stringProvider.string(R.string.Swap_Approving))
+            }
+            service.errors.any { it == SwapError.InsufficientAllowance } -> {
+                ActionState.Enabled(stringProvider.string(R.string.Swap_Approve))
+            }
+            else -> {
+                ActionState.Hidden
+            }
+        }
+        approveActionLiveData.postValue(approveAction)
+    }
+
+    private fun syncFeeVisible() {
+        val allowanceServiceState = allowanceService.state
+        val feeVisible = tradeService.state is SwapTradeService.State.Ready &&
+                !pendingAllowanceService.isPending &&
+                (allowanceServiceState == null || allowanceService.state is SwapAllowanceService.State.Ready) &&
+                !service.errors.any { it is SwapError }
+
+        feeVisibleLiveData.postValue(feeVisible)
     }
 
     private fun tradeViewItem(trade: SwapTradeService.Trade): TradeViewItem {
@@ -176,8 +241,10 @@ class SwapViewModel(
             val recipient: String?
     )
 
-    enum class ApproveActionState {
-        Hidden, Visible, Pending
+    sealed class ActionState {
+        object Hidden : ActionState()
+        class Enabled(val title: String) : ActionState()
+        class Disabled(val title: String) : ActionState()
     }
     //endregion
 }

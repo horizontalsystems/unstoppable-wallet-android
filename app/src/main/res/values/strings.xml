@@ -238,9 +238,10 @@
     <string name="Swap_ErrorCouldNotFetchTrade">Could not fetch trade info</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Could not fetch allowance info</string>
     <string name="Swap_ErrorCouldNotFetchFee">Could not fetch fee info</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">Approve</string>
-    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Maximum Paid</string>
     <string name="Swap_MinimumGot">Minimum Got</string>
