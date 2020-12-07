@@ -169,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">估计</string>
     <string name="Swap_MaxButtonTitle">最多</string>
-    <string name="Swap_TokenSelectorTitle">选择代币</string>
+    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">余额</string>
     <string name="Swap_Allowance">补贴</string>
     <string name="Swap_Price">价格</string>
@@ -182,14 +182,16 @@
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">交易费用以%s支付。您需要%s。</string>
     <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
-    <string name="Swap_ErrorNoLiquidity">无流动资金</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">无法获取交易信息</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">无法获取允许信息</string>
     <string name="Swap_ErrorCouldNotFetchFee">无法获取交易信息</string>
-    <string name="Swap_Proceed">继续</string>
+    <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">批准</string>
     <string name="Swap_Approving">审批中</string>
     <string name="Swap_Swapping">交换文件</string>
+    <string name="Swap_MaximumPaid">Maximum Paid</string>
+    <string name="Swap_MinimumGot">Minimum Got</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">高级设置</string>
     <string name="SwapSettings_SlippageTitle">下跌容忍度</string>
@@ -200,6 +202,8 @@
     <string name="SwapSettings_RecipientAddressDescription">在兑换操作之后，金额将转移至指定地址</string>
     <string name="SwapSettings_RecipientAddressHint">本人地址</string>
     <string name="SwapSettings_Apply">应用</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address</string>
     <string name="SwapSettings_Error_SlippageTooLow">您的交易可能失败。</string>
     <string name="SwapSettings_Error_SlippageTooHigh">最大允许值是 %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">最小允许值为 %d</string>
