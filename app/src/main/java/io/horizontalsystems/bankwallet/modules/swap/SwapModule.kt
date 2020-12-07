@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.ConfirmationPresenter
 import io.horizontalsystems.bankwallet.modules.swap.model.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.model.Trade

@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapTradeService.PriceImpactLevel
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap_new.allowance.SwapPendingAllowanceService

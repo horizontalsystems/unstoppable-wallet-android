@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.ethereum
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
-import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Observable

@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.SwapState

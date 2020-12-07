@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
-import io.horizontalsystems.bankwallet.modules.swap.DataState
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
