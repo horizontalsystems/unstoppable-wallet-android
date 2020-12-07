@@ -54,7 +54,7 @@
         android:layout_height="28dp"
         android:layout_marginStart="8dp"
         android:src="@drawable/ic_share_20"
-        android:tint="?ColorLeah"
+        app:tint="?ColorLeah"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="1"
