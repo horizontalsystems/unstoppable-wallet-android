@@ -186,9 +186,10 @@
     <string name="Swap_ErrorCouldNotFetchTrade">Не удалось получить информацию о сделке</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Не удалось получить информацию о допустимом лимите</string>
     <string name="Swap_ErrorCouldNotFetchFee">Не удалось получить информацию о комиссии</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Далее</string>
     <string name="Swap_Approve">Подтвердить</string>
-    <string name="Swap_Approving">Подтверждение</string>
+    <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
     <string name="Swap_MinimumGot">Минимальная Выплата</string>
