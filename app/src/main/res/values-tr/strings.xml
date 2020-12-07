@@ -56,6 +56,7 @@
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s kelimelerinden oluşan %1s Cüzdanı için özel anahtarınızı girin. Kelimelerin doğru sırayla girilmesi ve boşluklarla ayrılması gerekir.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
+    <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
     <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
