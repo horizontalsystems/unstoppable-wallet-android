@@ -186,9 +186,10 @@
     <string name="Swap_ErrorCouldNotFetchTrade">거래 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">수당 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchFee">수수료 정보를 가져올 수 없습니다.</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">승인</string>
-    <string name="Swap_Approving">승인 중</string>
+    <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">스와핑</string>
     <string name="Swap_MaximumPaid">Maximum Paid</string>
     <string name="Swap_MinimumGot">Minimum Got</string>
