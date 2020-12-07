@@ -12,6 +12,8 @@
     <string name="Alert_Copied">Copied</string>
     <string name="Alert_Loading">Loading...</string>
     <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Skip" translatable="false">SKIP</string>
+    <string name="Alert_Select" translatable="false">SELECT</string>
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Create">Create</string>
@@ -68,6 +70,7 @@
     <string name="Restore_Enter_Key_Title">Enter Key</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
+    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
     <string name="Restore_EosAccountName" translatable="false">Account Name</string>
@@ -567,6 +570,7 @@
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <string name="Hud_UnknownError">%s</string>
@@ -625,20 +629,30 @@
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Choose Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 Tokens</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
     <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Tokens</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
+
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">Coin Name</string>
+    <string name="AddToken_Symbol">Symbol</string>
+    <string name="AddToken_Decimals">Decimals</string>
+    <string name="AddToken_Dots">…</string>
+
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
+    <string name="AddToken_InvalidAddressError">Invalid Address</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
 
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_CoinName">Coin Name</string>
-    <string name="AddErc20Token_Symbol">Symbol</string>
-    <string name="AddErc20Token_Decimals">Decimals</string>
-    <string name="AddErc20Token_Dots">…</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract  Address</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddErc20Token_InvalidAddressError">Invalid Address</string>
-    <string name="AddErc20Token_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddErc20Token_ContractAddressHint">Contract Address</string>
+    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">Add BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
+    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
+
 
     <!-- Address Format Settings List -->
 

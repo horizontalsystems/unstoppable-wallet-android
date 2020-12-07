@@ -106,5 +106,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border2" />
+        app:layout_constraintTop_toBottomOf="@id/border2"
+        tools:itemCount="5"
+        tools:listitem="@layout/view_transaction_info_item" />
 </merge>

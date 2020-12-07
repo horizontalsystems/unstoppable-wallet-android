@@ -15,14 +15,12 @@ class TransactionsPresenter(
     : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
 
     var view: TransactionsModule.IView? = null
+    var itemDetails: TransactionViewItem? = null
+
     private var adapterStates: MutableMap<Wallet, AdapterState> = mutableMapOf()
 
     override fun viewDidLoad() {
         interactor.initialFetch()
-    }
-
-    override fun onTransactionItemClick(transaction: TransactionViewItem) {
-        router.openTransactionInfo(transaction)
     }
 
     override fun onFilterSelect(wallet: Wallet?) {
@@ -43,6 +41,10 @@ class TransactionsPresenter(
                 interactor.fetchRate(transactionViewItem.wallet.coin, it.time / 1000)
             }
         }
+    }
+
+    override fun showDetails(item: TransactionViewItem) {
+        itemDetails = item
     }
 
     override fun onUpdateWalletsData(allWalletsData: List<Pair<Wallet, LastBlockInfo?>>) {

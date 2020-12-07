@@ -75,5 +75,6 @@
         <item name="ColorRaina">@color/steel_10</item>
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white_20</item>
+        <item name="ColorWindowBackground">@color/dark</item>
     </style>
 </resources>

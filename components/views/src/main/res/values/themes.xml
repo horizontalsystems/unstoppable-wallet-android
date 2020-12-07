@@ -73,6 +73,7 @@
         <item name="ColorRaina">@color/white_50</item>
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
+        <item name="ColorWindowBackground">@drawable/light_gradient_background</item>
     </style>
 
     <style name="LauncherTheme" parent="Theme.AppTheme">

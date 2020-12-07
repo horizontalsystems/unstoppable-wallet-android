@@ -1,14 +1,27 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Parcelable
 import android.view.View
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.views.SingleClickListener
 
 //View
+
+fun ImageView.setCoinImage(coinCode: String, coinType: CoinType? = null) {
+    setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinCode, coinType))
+
+    val greyColor = ContextCompat.getColor(context, io.horizontalsystems.views.R.color.grey)
+    val tintColorStateList = ColorStateList.valueOf(greyColor)
+    imageTintList = tintColorStateList
+}
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
     this.setOnClickListener(

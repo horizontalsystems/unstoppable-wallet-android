@@ -82,7 +82,7 @@ class SendActivity : BaseActivity() {
             hideSoftKeyboard()
 
             supportFragmentManager.commit {
-                setCustomAnimations(R.anim.from_right, R.anim.to_left, R.anim.from_left, R.anim.to_right)
+                setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left, R.anim.slide_from_left, R.anim.slide_to_right)
                 add(R.id.rootView, ConfirmationFragment(mainPresenter))
                 addToBackStack(null)
             }

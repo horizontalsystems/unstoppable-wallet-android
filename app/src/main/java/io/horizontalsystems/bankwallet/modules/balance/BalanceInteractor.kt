@@ -22,7 +22,7 @@ class BalanceInteractor(
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val rateAppManager: IRateAppManager,
         private val connectivityManager: ConnectivityManager,
-        private var clipboardManager: IClipboardManager)
+        appConfigProvider: IAppConfigProvider)
     : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
@@ -30,6 +30,7 @@ class BalanceInteractor(
     private var disposables = CompositeDisposable()
     private var adapterDisposables = CompositeDisposable()
     private var marketInfoDisposables = CompositeDisposable()
+    override val reportEmail = appConfigProvider.reportEmail
 
     override val wallets: List<Wallet>
         get() = walletManager.wallets
@@ -163,10 +164,6 @@ class BalanceInteractor(
 
     override fun notifyPageInactive() {
         rateAppManager.onBalancePageInactive()
-    }
-
-    override fun saveToClipboard(message: String) {
-        clipboardManager.copyText(message)
     }
 
     override fun refreshByWallet(wallet: Wallet) {

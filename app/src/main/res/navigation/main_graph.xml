@@ -28,9 +28,6 @@
             android:id="@+id/mainFragment_to_academyFragment"
             app:destination="@id/academyFragment" />
         <action
-            android:id="@+id/mainFragment_to_contactFragment"
-            app:destination="@id/contactFragment" />
-        <action
             android:id="@+id/mainFragment_to_currencySwitcherFragment"
             app:destination="@id/currencySwitcherFragment" />
         <action
@@ -57,13 +54,16 @@
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
-            app:enterAnim="@anim/slide_in_bottom"
+            app:enterAnim="@anim/slide_from_bottom"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:popExitAnim="@anim/slide_to_bottom" />
         <action
             android:id="@+id/mainFragment_to_walletConnectMainFragment"
             app:destination="@id/walletConnectMainFragment" />
+        <action
+            android:id="@+id/mainFragment_to_transactionInfoDialog"
+            app:destination="@id/transactionInfoDialog" />
     </fragment>
 
     <fragment
@@ -75,7 +75,7 @@
             app:destination="@id/restore_graph" />
         <action
             android:id="@+id/manageWalletsFragment_to_addErc20Token"
-            app:destination="@id/addErc20TokenFragment" />
+            app:destination="@id/addTokenFragment" />
     </fragment>
 
     <fragment
@@ -130,10 +130,6 @@
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
-        android:id="@+id/contactFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.contact.ContactFragment"
-        tools:layout="@layout/fragment_contact" />
-    <fragment
         android:id="@+id/currencySwitcherFragment"
         android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherFragment"
         tools:layout="@layout/fragment_currency_switcher" />
@@ -149,9 +145,6 @@
         android:id="@+id/aboutAppFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"
         tools:layout="@layout/fragment_about">
-        <action
-            android:id="@+id/aboutAppFragment_to_contactFragment"
-            app:destination="@id/contactFragment" />
         <action
             android:id="@+id/aboutAppFragment_to_appStatusFragment"
             app:destination="@id/appStatusFragment" />
@@ -222,9 +215,9 @@
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addErc20TokenFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.addErc20token.AddErc20TokenFragment"
-        tools:layout="@layout/fragment_add_erc20_token" />
+        android:id="@+id/addTokenFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"
+        tools:layout="@layout/fragment_add_token" />
     <fragment
         android:id="@+id/swapFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.SwapFragment"
@@ -233,10 +226,10 @@
         <action
             android:id="@+id/swapFragment_to_selectSwapCoinFragment"
             app:destination="@id/selectSwapCoinFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right"
             />
         <action
             android:id="@+id/swapFragment_to_swapApproveFragment"
@@ -250,10 +243,10 @@
         <action
             android:id="@+id/swapFragment_to_swapTradeOptionsFragment"
             app:destination="@id/swapTradeOptionsFragment"
-            app:enterAnim="@anim/slide_in_bottom"
+            app:enterAnim="@anim/slide_from_bottom"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:popExitAnim="@anim/slide_to_bottom" />
     </fragment>
     <fragment
         android:id="@+id/selectSwapCoinFragment"
@@ -278,7 +271,7 @@
         <action
             android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"
             app:destination="@id/walletConnectErrorFragment"
-            app:popExitAnim="@anim/to_right"
+            app:popExitAnim="@anim/slide_to_right"
             app:popUpTo="@id/walletConnectMainFragment"
             app:popUpToInclusive="true" />
         <action
@@ -297,5 +290,27 @@
         android:id="@+id/swapTradeOptionsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsFragment"
         android:label="SwapTradeOptionsFragment" />
+
+    <!--  Dialogs/BottomSheets  -->
+    <dialog
+        android:id="@+id/transactionInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoFragment"
+        tools:layout="@layout/fragment_transaction_info" />
+    <dialog
+        android:id="@+id/fullTransactionInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment"
+        tools:layout="@layout/fragment_full_transaction_info" />
+    <dialog
+        android:id="@+id/fullTransactionDataProvider"
+        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment"
+        tools:layout="@layout/fragment_explorer_switcher" />
+    <dialog
+        android:id="@+id/infoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment"
+        tools:layout="@layout/fragment_info" />
+    <dialog
+        android:id="@+id/statusInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.StatusInfoFragment"
+        tools:layout="@layout/fragment_status_info" />
 
 </navigation>

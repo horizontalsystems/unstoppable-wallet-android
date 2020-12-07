@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+
     <style name="ToolbarStyle">
         <item name="colorControlNormal">?ColorJacob</item>
     </style>
@@ -12,7 +13,19 @@
         <item name="android:windowMinWidthMajor">100%</item>
         <item name="android:windowMinWidthMinor">100%</item>
         <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
-        <item name="android:windowAnimationStyle">@style/BottomDialogAnimations</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/BottomDialogMediumAnimations</item>
+    </style>
+
+    <style name="BottomDialogFullScreen" parent="Theme.AppCompat.Dialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">?ColorWindowBackground</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowSwipeToDismiss">false</item>
     </style>
 
     <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog">
@@ -25,9 +38,19 @@
         <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
     </style>
 
-    <style name="BottomDialogAnimations" parent="@android:style/Animation.Activity">
-        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    <style name="BottomDialogMediumAnimations">
+        <item name="android:windowEnterAnimation">@anim/slide_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_to_bottom</item>
+    </style>
+
+    <style name="BottomDialogLargeAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_from_bottom_long</item>
+        <item name="android:windowExitAnimation">@anim/slide_to_bottom_long</item>
+    </style>
+
+    <style name="RightDialogAnimations">
+        <item name="android:windowEnterAnimation">@anim/slide_from_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_to_right</item>
     </style>
 
     <style name="SwitchTheme" parent="ThemeOverlay.AppCompat.Dark">

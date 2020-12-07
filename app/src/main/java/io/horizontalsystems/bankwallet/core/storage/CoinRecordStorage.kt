@@ -27,6 +27,13 @@ class CoinRecordStorage(private val appDatabase: AppDatabase): ICoinRecordStorag
 
                 return true
             }
+            is CoinType.Binance ->{
+                val record = coinRecord(coin, TokenType.Bep2)
+                record.bep2Symbol = coin.type.symbol
+                dao.insert(record)
+
+                return true
+            }
 
             else -> { }
         }
@@ -54,6 +61,10 @@ class CoinRecordStorage(private val appDatabase: AppDatabase): ICoinRecordStorag
                 val address = record.erc20Address ?: return null
                 return coin(record, CoinType.Erc20(address))
             }
+            TokenType.Bep2 -> {
+                val symbol = record.bep2Symbol ?: return null
+                return coin(record, CoinType.Binance(symbol))
+            }
             else -> return null
         }
     }
@@ -67,6 +78,6 @@ class CoinRecordStorage(private val appDatabase: AppDatabase): ICoinRecordStorag
     }
 
     enum class TokenType(val value: String){
-        Erc20("Erc20")
+        Erc20("Erc20"), Bep2("Bep2")
     }
 }

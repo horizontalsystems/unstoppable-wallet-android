@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -41,8 +42,12 @@ class NetworkManager : INetworkManager {
         return ServicePing.service(host, isSafeCall).ping(url)
     }
 
-    override fun getCoinInfo(host: String, path: String): Flowable<JsonObject> {
+    override fun getErc20CoinInfo(host: String, path: String): Flowable<JsonObject> {
         return ServiceErc20ContractInfo.service(host).getTokenInfo(path)
+    }
+
+    override fun getBep2Tokens(host: String, path: String): Flowable<List<Bep2Token>> {
+        return ServiceBep2Tokens.service(host).getTokens(path)
     }
 }
 
@@ -85,6 +90,20 @@ object ServiceErc20ContractInfo {
         @GET
         @Headers("Content-Type: application/json")
         fun getTokenInfo(@Url path: String): Flowable<JsonObject>
+    }
+
+}
+
+object ServiceBep2Tokens {
+    fun service(apiURL: String): Bep2Api {
+        return APIClient.retrofit(apiURL, 60)
+                .create(Bep2Api::class.java)
+    }
+
+    interface Bep2Api {
+        @GET
+        @Headers("Content-Type: application/json")
+        fun getTokens(@Url path: String): Flowable<List<Bep2Token>>
     }
 
 }

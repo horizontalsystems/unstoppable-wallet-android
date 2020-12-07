@@ -13,13 +13,15 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThemeStorage
+import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
 
-class LocalStorageManager(private val preferences: SharedPreferences) 
-    : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage {
+class LocalStorageManager(private val preferences: SharedPreferences)
+    : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard {
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
+    private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
     private val BASE_CURRENCY_CODE = "base_currency_code"
     private val FAILED_ATTEMPTS = "failed_attempts"
@@ -164,6 +166,14 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getBoolean(LIGHT_MODE_ENABLED, false)
         set(enabled) {
             preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
+        }
+
+    //  IKeyboardStorage
+
+    override var isThirdPartyKeyboardAllowed: Boolean
+        get() = preferences.getBoolean(THIRD_KEYBOARD_WARNING_MSG, false)
+        set(enabled) {
+            preferences.edit().putBoolean(THIRD_KEYBOARD_WARNING_MSG,enabled).apply()
         }
 
     //  IPinStorage

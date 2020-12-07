@@ -182,9 +182,7 @@ class BalancePresenter(
     }
 
     override fun onReportClick(errorMessage: String) {
-        interactor.saveToClipboard(errorMessage)
-        view?.showErrorMessageCopied()
-        router.openContactPage()
+        router.openEmail(interactor.reportEmail, errorMessage)
     }
 
     override fun refreshByWallet(wallet: Wallet) {
@@ -262,7 +260,10 @@ class BalancePresenter(
 
     private fun sourceChangeable(coinType: CoinType): Boolean {
         return when(coinType) {
-            is CoinType.Binance, is CoinType.Eos -> false
+            is CoinType.Binance,
+            is CoinType.Ethereum,
+            is CoinType.Erc20,
+            is CoinType.Eos -> false
             else -> true
         }
     }

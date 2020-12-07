@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
@@ -31,7 +30,8 @@ class RateManager(
                 rateExpirationInterval = 60 * 10,
                 topMarketsCount = 100,
                 cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey,
-                coinMarketCapApiKey = coinMarketCapApiKey
+                coinMarketCapApiKey = coinMarketCapApiKey,
+                uniswapGraphUrl = appConfigProvider.uniswapGraphUrl
         )
     }
 
@@ -70,7 +70,7 @@ class RateManager(
                 is io.horizontalsystems.bankwallet.entities.CoinType.Eos -> CoinType.Eos
                 is io.horizontalsystems.bankwallet.entities.CoinType.Erc20 -> CoinType.Erc20(coin.type.address)
             }
-            coinArgs.add(Coin(coin.coinId, coin.code, coin.title, coinType))
+            coinArgs.add(Coin(coin.code, coin.title, coinType))
         }
 
         return coinArgs

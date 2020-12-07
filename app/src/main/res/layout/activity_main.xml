@@ -13,35 +13,4 @@
         android:layout_marginTop="24dp"
         app:defaultNavHost="true" />
 
-    <View
-        android:id="@+id/bottomSheetDim"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000"
-        android:visibility="gone" />
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/transactionInfoNestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="true"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="0dp"
-        app:gestureInsetBottomIgnored="true"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="@string/bottom_sheet_behavior">
-
-        <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
-            android:id="@+id/transactionInfoView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </androidx.core.widget.NestedScrollView>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/topFragmentContainerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="24dp" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

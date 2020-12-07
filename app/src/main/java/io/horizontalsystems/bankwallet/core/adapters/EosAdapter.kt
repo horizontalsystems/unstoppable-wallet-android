@@ -143,8 +143,8 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
 
         fun validateAccountName(accountName: String) {
             //EOS account validation Regex pattern from here https://github.com/EOSIO/eos/issues/955
-            val pattern = Pattern.compile("^[a-z1-5.]{0,11}[a-j1-5]$")
-            val matches = pattern.matcher(accountName).matches()
+            val regex = Regex("(^[a-z1-5.]{0,11}[a-z1-5]$)|(^[a-z1-5.]{12}[a-j1-5]$)")
+            val matches = regex.matches(accountName)
             if (!matches) {
                 throw EosError.InvalidAccountName
             }
@@ -155,8 +155,8 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
         }
     }
 
-    sealed class EosError: Exception(){
-        object InvalidAccountName: EosError()
-    }
+}
 
+sealed class EosError: Exception(){
+    object InvalidAccountName: EosError()
 }

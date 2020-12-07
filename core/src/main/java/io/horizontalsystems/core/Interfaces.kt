@@ -24,7 +24,7 @@ interface ICoreApp {
     var pinComponent: IPinComponent
     var pinStorage: IPinStorage
     var themeStorage: IThemeStorage
-
+    var thirdKeyboardStorage: IThirdKeyboard
     var instance: CoreApp
 }
 
@@ -94,6 +94,10 @@ interface IPinStorage {
 
 interface IThemeStorage {
     var isLightModeOn: Boolean
+}
+
+interface IThirdKeyboard {
+    var isThirdPartyKeyboardAllowed: Boolean
 }
 
 interface IKeyStoreManager {

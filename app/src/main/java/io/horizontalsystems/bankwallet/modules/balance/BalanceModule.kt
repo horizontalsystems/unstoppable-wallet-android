@@ -22,7 +22,6 @@ object BalanceModule {
         fun setBalanceHidden(hidden: Boolean, animate: Boolean)
         fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean)
         fun showNetworkNotAvailable()
-        fun showErrorMessageCopied()
     }
 
     interface IViewDelegate {
@@ -53,6 +52,7 @@ object BalanceModule {
     }
 
     interface IInteractor {
+        val reportEmail: String
         val wallets: List<Wallet>
         val baseCurrency: Currency
         val sortType: BalanceSortType
@@ -80,7 +80,6 @@ object BalanceModule {
 
         fun notifyPageActive()
         fun notifyPageInactive()
-        fun saveToClipboard(message: String)
         fun refreshByWallet(wallet: Wallet)
     }
 
@@ -104,7 +103,7 @@ object BalanceModule {
         fun openSortTypeDialog(sortingType: BalanceSortType)
         fun openBackup(account: Account, coinCodesStringRes: Int)
         fun openChart(coin: Coin)
-        fun openContactPage()
+        fun openEmail(emailAddress: String, errorMessage: String)
     }
 
     interface IBalanceSorter {
@@ -146,7 +145,7 @@ object BalanceModule {
                     App.predefinedAccountTypeManager,
                     App.rateAppManager,
                     App.connectivityManager,
-                    TextHelper)
+                    App.appConfigProvider)
 
             val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 

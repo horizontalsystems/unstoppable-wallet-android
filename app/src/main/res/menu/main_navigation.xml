@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/navigation_balance"
-        android:icon="@drawable/ic_balance"
+        android:icon="@drawable/ic_wallet_24"
         android:title="@string/Balance_Title" />
 
     <item
