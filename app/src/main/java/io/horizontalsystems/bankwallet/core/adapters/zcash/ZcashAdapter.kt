@@ -27,7 +27,7 @@ class ZcashAdapter(
 
     private val confirmationsThreshold = 10
     private val feeInZatoshi = 10_000L //0.0001 ZEC
-    private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "lightwalletd.electriccoin.co"
+    private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
 
     private val synchronizer: Synchronizer
@@ -44,10 +44,11 @@ class ZcashAdapter(
     init {
         val accountType = (wallet.account.type as? AccountType.Zcash)
             ?: throw UnsupportedAccountException()
+        val isRestored = wallet.account.origin == AccountOrigin.Restored
         seed = Mnemonic().toSeed(accountType.words)
         val config = Initializer.Config { config ->
             config.server(lightWalletDHost, lightWalletDPort)
-            config.birthdayHeight = accountType.birthdayHeight?.toInt()
+            config.setBirthdayHeight(accountType.birthdayHeight?.toInt(), isRestored)
             config.alias = getValidAliasFromAccountId(wallet.account.id)
             config.setSeed(seed)
         }

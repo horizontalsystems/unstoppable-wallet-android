@@ -55,8 +55,9 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
         return transactionHash.hashCode()
     }
 
-    override fun compareTo(other: ZcashTransaction): Int = when (timestamp) {
-        other.timestamp -> transactionIndex.compareTo(other.transactionIndex)
+    override fun compareTo(other: ZcashTransaction): Int = when  {
+        transactionHash.contentEquals(other.transactionHash) -> 0
+        timestamp == other.timestamp -> transactionIndex.compareTo(other.transactionIndex)
         else -> timestamp.compareTo(other.timestamp)
     }
 

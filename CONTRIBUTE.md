@@ -22,4 +22,29 @@ Keeping above in mind we are looking forward for your input. For the sake of kee
 
 If you’re a submitting a PR with the intent to extend wallet support to additional blockchains or tokens the Horizontal Systems team is going to primarily look at how the added code interacts with the existing components and potential technical and usability issues that may arise as a result. If the PR merge is likely to increase chances of app crashes or inconsistent user behavior in the user interface we are likely to reject it. Therefore, before you jump on PR it’s important for your to get familiar with the integration of currently supported blockchains. It goes without saying that you can always fork the wallet and proceed as you wish.
 
+## Code Contribution
+
+### Terminology
+
+* **Working development branch**. It matches the pattern "version/X.Y.Z", where X.Y.Z the version of app we're working on at the time. Usually there is only one working branch
+
+Please follow these steps
+
+1. Clone the current working development branch.
+1. Make changes in your cloned version. When making changes please make sure that you follow the style-guides
+1. Send the Pull Request to the current working development branch.
+
+### Pull Requests
+
+Please follow these steps when sending pull requests
+
+1. Choose the current working development branch as base branch for Pull Request
+1. Make reference to the related issue if any in the description
+
+### Style-guides
+
+#### Git Commit Messages
+
+https://chris.beams.io/posts/git-commit/#seven-rules
+
 Peace!

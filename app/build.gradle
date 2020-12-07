@@ -194,7 +194,7 @@ dependencies {
     }
 
     //Zcash SDK
-    def zcashVersion = "1.2.1-beta01"
+    def zcashVersion = "1.2.1-beta02"
     def zcashDependencyMainNet = "cash.z.ecc.android:zcash-android-sdk-mainnet:$zcashVersion"
     def zcashDependencyTestNet = "cash.z.ecc.android:zcash-android-sdk-testnet:$zcashVersion"
     releaseImplementation zcashDependencyMainNet
