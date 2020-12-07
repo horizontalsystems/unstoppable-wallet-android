@@ -90,7 +90,7 @@ object SwapModule {
 
             return when (modelClass) {
                 SwapViewModel::class.java -> {
-                    SwapViewModel(service, tradeService, pendingAllowanceService, ethCoinService, formatter, stringProvider) as T
+                    SwapViewModel(service, tradeService, allowanceService, pendingAllowanceService, ethCoinService, formatter, stringProvider) as T
                 }
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)

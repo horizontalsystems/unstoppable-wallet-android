@@ -2,7 +2,10 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -11,15 +14,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.fitSystemWindowsAndAdjustResize
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_swap.*
-import kotlinx.android.synthetic.main.fragment_swap.toolbar
 
 class SwapFragment : BaseFragment() {
 
@@ -103,17 +105,43 @@ class SwapFragment : BaseFragment() {
             setTradeViewItem(tradeViewItem)
         })
 
-        viewModel.proceedAllowedLiveData().observe(viewLifecycleOwner, { proceedAllowed ->
-            proceedButton.isEnabled = proceedAllowed
+        viewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
+            handleButtonAction(proceedButton, action)
         })
 
         viewModel.approveActionLiveData().observe(viewLifecycleOwner, { approveActionState ->
-            syncApproveButton(approveActionState)
+            handleButtonAction(approveButton, approveActionState)
         })
 
         viewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
             findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to approveData), navOptions())
         })
+
+        viewModel.advancedSettingsVisibleLiveData().observe(viewLifecycleOwner, { visible ->
+            advancedSettingsViews.isVisible = visible
+        })
+
+        viewModel.feeVisibleLiveData().observe(viewLifecycleOwner, { visible ->
+            feeSelectorView.isVisible = visible
+        })
+    }
+
+    private fun handleButtonAction(button: Button, action: SwapViewModel.ActionState?) {
+        when (action) {
+            SwapViewModel.ActionState.Hidden -> {
+                button.isVisible = false
+            }
+            is SwapViewModel.ActionState.Enabled -> {
+                button.isVisible = true
+                button.isEnabled = true
+                button.text = action.title
+            }
+            is SwapViewModel.ActionState.Disabled -> {
+                button.isVisible = true
+                button.isEnabled = false
+                button.text = action.title
+            }
+        }
     }
 
     private fun setTradeViewItem(tradeViewItem: SwapViewModel.TradeViewItem?) {
@@ -134,10 +162,6 @@ class SwapFragment : BaseFragment() {
         } else {
             guaranteedAmountViews.isVisible = false
         }
-
-        advancedSettingsViews.isVisible = tradeViewItem != null
-        feeSelectorView.isVisible = tradeViewItem != null
-        actionButtonViews.isVisible = tradeViewItem != null
     }
 
     private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?) =
@@ -150,24 +174,6 @@ class SwapFragment : BaseFragment() {
                         ?: ctx.getColor(R.color.red_d)
                 else -> ctx.getColor(R.color.grey)
             }
-
-    private fun syncApproveButton(approveActionState: SwapViewModel.ApproveActionState) {
-        when (approveActionState) {
-            SwapViewModel.ApproveActionState.Hidden -> {
-                approveButton.isVisible = false
-            }
-            SwapViewModel.ApproveActionState.Visible -> {
-                approveButton.isVisible = true
-                approveButton.isEnabled = true
-                approveButton.setText(R.string.Swap_Approve)
-            }
-            SwapViewModel.ApproveActionState.Pending -> {
-                approveButton.isVisible = true
-                approveButton.isEnabled = false
-                approveButton.setText(R.string.Swap_Approving)
-            }
-        }
-    }
 
     companion object {
         const val fromCoinKey = "fromCoinKey"
