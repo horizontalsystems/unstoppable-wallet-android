@@ -55,8 +55,8 @@
     <string name="Restore_Enter_Key_Title">Введите ключ</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Введите приватный ключ для кошелька %1s, который состоит из %2s слов. Слова нужно ввести в правильном порядке и использовать пробелы между ними.</string>
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
-    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
-    <string name="Restore_InvalidChecksum">Invalid Checksum</string>
+    <string name="Restore_InvalidWordCount">Неправильное количество слов: %1$d, а должно быть: %2$d</string>
+    <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
     <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
@@ -71,7 +71,7 @@
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная Копия</string>
     <string name="Backup_DisplayTitle">Приватный Ключ</string>
-    <string name="Backup_BirthdayHeight">Birthday Height</string>
+    <string name="Backup_BirthdayHeight">Блок Создания</string>
     <string name="Backup_Confirmation_Description">Введите слова из вашего %s ключа</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
@@ -500,15 +500,15 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный Адрес</string>
-    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Добавить ERC20</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract Address</string>
-    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+    <string name="AddErc20Token_ContractAddressHint">Адрес Контракта</string>
+    <string name="AddErc20Token_ContractNotFound">Контракт не найден</string>
     <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">Add BEP2</string>
-    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
-    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
+    <string name="AddBep2Token_Title">Добавить BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Символ Токена</string>
+    <string name="AddBep2Token_TokenNotFound">Токен не найден</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <!-- Blockchain Settings -->
