@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.view
+package io.horizontalsystems.bankwallet.modules.swap_new
 
 import android.content.Intent
 import android.net.Uri

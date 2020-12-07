@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
-import io.horizontalsystems.bankwallet.modules.swap.provider.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap_new.SwapViewItemHelper
 import io.reactivex.disposables.CompositeDisposable
