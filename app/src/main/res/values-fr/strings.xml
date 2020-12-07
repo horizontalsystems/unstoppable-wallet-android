@@ -187,9 +187,10 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_ErrorCouldNotFetchTrade">Impossible d\'accéder aux informations relatives à l\'achat</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Impossible de récupérer les informations d\'allocation</string>
     <string name="Swap_ErrorCouldNotFetchFee">Impossible d\'accéder aux informations relatives à l\'achat</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Suivant</string>
     <string name="Swap_Approve">Approuver</string>
-    <string name="Swap_Approving">En cours d\'approbation</string>
+    <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Montant maximum payé</string>
     <string name="Swap_MinimumGot">Montant minimum reçu</string>
