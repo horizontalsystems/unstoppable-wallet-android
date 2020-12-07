@@ -186,9 +186,10 @@
     <string name="Swap_ErrorCouldNotFetchTrade">اطلاعات تجارت دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">اطلاعات کمک هزینه دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchFee">اطلاعات هزینه دریافت نشد</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_Approve">تایید</string>
-    <string name="Swap_Approving">در حال تایید</string>
+    <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
     <string name="Swap_MaximumPaid">Maximum Paid</string>
     <string name="Swap_MinimumGot">Minimum Got</string>
