@@ -289,6 +289,10 @@
     <fragment
         android:id="@+id/swapTradeOptionsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsFragment"
+        app:enterAnim="@anim/slide_from_bottom"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@anim/slide_to_bottom"
         android:label="SwapTradeOptionsFragment" />
 
     <!--  Dialogs/BottomSheets  -->

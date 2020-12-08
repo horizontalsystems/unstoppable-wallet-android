@@ -93,7 +93,6 @@ class SwapTradeService(
         if (coinTo == coinFrom) {
             coinTo = null
             amountTo = null
-            tradeType = TradeType.ExactIn
         }
         syncState()
     }
@@ -105,7 +104,6 @@ class SwapTradeService(
         if (coinFrom == coinTo) {
             coinFrom = null
             amountFrom = null
-            tradeType = TradeType.ExactOut
         }
         syncState()
     }
@@ -132,10 +130,10 @@ class SwapTradeService(
     }
 
     fun switchCoins() {
-        val swapCoin = coinFrom
-        coinFrom = coinTo
+        val swapCoin = coinTo
+        coinTo = coinFrom
 
-        enterCoinTo(swapCoin)
+        enterCoinFrom(swapCoin)
     }
     //endregion
 
@@ -144,7 +142,7 @@ class SwapTradeService(
         val coinTo = coinTo
         val amount = if (tradeType == TradeType.ExactIn) amountFrom else amountTo
 
-        if (coinFrom == null || coinTo == null || amount == null) {
+        if (coinFrom == null || coinTo == null || amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
             state = State.NotReady()
         } else {
             state = State.Loading
