@@ -35,8 +35,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/lockTimeMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/lockTimeMenu"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_down_arrow_20"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
