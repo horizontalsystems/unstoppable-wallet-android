@@ -54,10 +54,10 @@
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
-            app:enterAnim="@anim/slide_from_bottom"
+            app:enterAnim="@anim/slide_from_bottom_long"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom" />
+            app:popExitAnim="@anim/slide_to_bottom_long" />
         <action
             android:id="@+id/mainFragment_to_walletConnectMainFragment"
             app:destination="@id/walletConnectMainFragment" />
@@ -243,10 +243,10 @@
         <action
             android:id="@+id/swapFragment_to_swapTradeOptionsFragment"
             app:destination="@id/swapTradeOptionsFragment"
-            app:enterAnim="@anim/slide_from_bottom"
+            app:enterAnim="@anim/slide_from_bottom_long"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom" />
+            app:popExitAnim="@anim/slide_to_bottom_long" />
     </fragment>
     <fragment
         android:id="@+id/selectSwapCoinFragment"
