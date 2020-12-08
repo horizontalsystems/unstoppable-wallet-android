@@ -24,12 +24,10 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            it.supportActionBar?.title = getString(R.string.ManageCoins_title)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
+        configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
 
         val coinBalanceItems = arguments?.getParcelableArrayList<CoinBalanceItem>(coinBalanceItemsListKey)
         val requestId = arguments?.getInt(requestIdKey)
@@ -50,23 +48,6 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
             adapter.notifyDataSetChanged()
         })
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.select_swap_coin_menu, menu)
-        configureSearchMenu(menu, R.string.ManageCoins_Search)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                findNavController().popBackStack()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun updateFilter(query: String) {

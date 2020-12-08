@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_experimental_features.toolbar
 import kotlinx.android.synthetic.main.fragment_faq_list.*
 import kotlinx.android.synthetic.main.view_holder_faq_item.*
 
@@ -37,9 +36,8 @@ class FaqListFragment: BaseFragment(), FaqListAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
 
         faqListRecyclerview.adapter = ConcatAdapter(errorAdapter, adapter)
