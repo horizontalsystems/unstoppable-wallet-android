@@ -180,7 +180,7 @@ class SwapCoinCardViewModel(
         prefixLiveData.postValue(if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null)
 
         if (fullAmountInfo == null) {
-            if (!force) {
+            if (!force && coinCardService.isEstimated) {
                 amountLiveData.postValue(null)
             }
             secondaryInfoLiveData.postValue(secondaryInfoPlaceHolder())

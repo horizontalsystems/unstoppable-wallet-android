@@ -125,7 +125,7 @@
 
     <TextView
         android:id="@+id/secondaryAmount"
-        style="@style/Subhead1"
+        style="@style/Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
