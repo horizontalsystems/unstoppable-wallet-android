@@ -547,7 +547,7 @@
     <string name="CoinOption_bip84_Subtitle">Yeni (%s ile başlar...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">Bugün</string>
-    <string name="Charts_TimeDuration_Day">24 sa</string>
+    <string name="Charts_TimeDuration_Day">24H</string>
     <string name="Charts_TimeDuration_Week">7G</string>
     <string name="Charts_TimeDuration_Month">1A</string>
     <string name="Charts_TimeDuration_TwoWeeks">2H</string>
