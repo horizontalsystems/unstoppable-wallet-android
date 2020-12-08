@@ -549,7 +549,7 @@
     <string name="CoinOption_bip84_Subtitle">최신 (%s부터 시작...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">오늘</string>
-    <string name="Charts_TimeDuration_Day">24 시간</string>
+    <string name="Charts_TimeDuration_Day">24H</string>
     <string name="Charts_TimeDuration_Week">일주일</string>
     <string name="Charts_TimeDuration_Month">한 달</string>
     <string name="Charts_TimeDuration_TwoWeeks">2W</string>
