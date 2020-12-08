@@ -18,7 +18,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
     override val companyTwitterLink: String = "https://twitter.com/UnstoppableByHS"
     override val companyTelegramLink: String = "https://t.me/unstoppable_announcements"
     override val companyRedditLink: String = "https://reddit.com/r/UNSTOPPABLEWallet/"
-    override val reportEmail = "hsdao@protonmail.ch"
+    override val reportEmail = "unstoppable.support@protonmail.ch"
     override val walletHelpTelegramGroup = "UnstoppableWallet"
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
     override val ipfsMainGateway = "ipfs-ext.horizontalsystems.xyz"
