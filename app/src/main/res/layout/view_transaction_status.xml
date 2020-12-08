@@ -29,8 +29,8 @@
 
     <ImageView
         android:id="@+id/completedIcon"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginStart="6.3dp"
         android:src="@drawable/ic_checkmark_20"
         app:layout_constraintBottom_toBottomOf="@+id/txTime"
