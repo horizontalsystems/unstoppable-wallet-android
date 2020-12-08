@@ -41,6 +41,8 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
             dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let { view ->
                 BottomSheetBehavior.from(view).apply {
                     state = BottomSheetBehavior.STATE_EXPANDED
+                    isHideable = true
+                    skipCollapsed = true
                 }
             }
         }
