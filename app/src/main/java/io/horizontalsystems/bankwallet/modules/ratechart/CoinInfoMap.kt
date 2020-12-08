@@ -99,7 +99,28 @@ object CoinInfoMap {
             "XFT"   to CoinInfo(BigDecimal(10_000_000), null, "https://offshift.io/"),
             "XRP"   to CoinInfo(BigDecimal(99_990_932_726), "02/02/2013", "https://ripple.com/xrp"),
             "ZRX"   to CoinInfo(BigDecimal(1_000_000_000), "15/08/2017", "https://www.0xproject.com"),
-            "ZEC"   to CoinInfo(BigDecimal(21_000_000), "28/10/2016", "https://z.cash")
+            "ZEC"   to CoinInfo(BigDecimal(21_000_000), "28/10/2016", "https://z.cash"),
+            "THKDB" to CoinInfo(BigDecimal(90_000_000_000), null, "https://trusttoken.com"),
+            "TAUDB" to CoinInfo(BigDecimal(90_000_000_000), null, "https://trusttoken.com"),
+            "TUSDB" to CoinInfo(BigDecimal(90_000_000_000), null, "https://trusttoken.com"),
+            "USDSB" to CoinInfo(BigDecimal(90_000_000_000), null, "https://www.stably.io"),
+            "HYN"   to CoinInfo(BigDecimal(10_000_000_000), null, "https://www.hyn.space"),
+            "DEFI"  to CoinInfo(BigDecimal(2_500_000_000),  null, "https://www.defilab.com"),
+            "RUNE"  to CoinInfo(BigDecimal(500_000_000),    null, "https://thorchain.org"),
+            "MATIC_BEP2" to CoinInfo(BigDecimal(10_000_000_000), null, null),
+            "ONE"   to CoinInfo(BigDecimal(12_600_000_000), null, "https://harmony.one/"),
+            "IRIS"  to CoinInfo(BigDecimal(2_000_000_000), null, "https://www.irisnet.org/"),
+            "ETH_BEP2"   to CoinInfo(BigDecimal(215_000), null, null),
+            "SWINGBY"    to CoinInfo(BigDecimal(1_000_000_000), null, "https://swingby.network"),
+            "CHZ"   to CoinInfo(BigDecimal(8_888_888_888), null, "https://www.chiliz.com"),
+            "SHR"   to CoinInfo(BigDecimal(4_396_000_000), null, "https://sharering.network/"),
+            "USDT_BEP2"  to CoinInfo(BigDecimal(80_000_000), null, null),
+            "WICC"  to CoinInfo(BigDecimal(210_000_000), null, "https://www.waykichain.com/"),
+            "WRX"   to CoinInfo(BigDecimal(995_833_334), null, "https://wazirx.com"),
+            "COS"   to CoinInfo(BigDecimal(9_400_000_000), null, "https://www.contentos.io"),
+            "LTO"   to CoinInfo(BigDecimal(500_000_000), null, "https://lto.network"),
+            "MTXLT" to CoinInfo(BigDecimal(900_000), null, "https://tixl.me")
+
 
     )
 }
