@@ -229,7 +229,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         toolbar.title = getString(titleRes)
 
         toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            onCancelClick()
         }
     }
 
