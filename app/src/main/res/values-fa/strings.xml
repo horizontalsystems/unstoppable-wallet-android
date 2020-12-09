@@ -55,7 +55,7 @@
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">کلید خصوصی خود را برای کیف پول %1s که از کلمات %2s تشکیل شده است وارد کنید. کلمات باید به ترتیب صحیح وارد شوند و با فاصله از هم جدا شوند.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
-    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
+    <string name="Restore_InvalidWordCount">تعداد کلمات نامعتبر: %2$d  مورد نیاز است%1$d</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountIncorrect">حساب نادرست</string>
@@ -71,7 +71,7 @@
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_DisplayTitle">کلید خصوصی</string>
-    <string name="Backup_BirthdayHeight">Birthday Height</string>
+    <string name="Backup_BirthdayHeight">قد تولد</string>
     <string name="Backup_Confirmation_Description">کلمات را از %s خود وارد کنید.</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
@@ -182,11 +182,11 @@
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">هزینه تراکنش برای جابجایی در %s پرداخت شد. شما به %s نیاز دارید.</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
-    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
+    <string name="Swap_ErrorNoLiquidity">نمی توان این نشانه ها را عوض کر</string>
     <string name="Swap_ErrorCouldNotFetchTrade">اطلاعات تجارت دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">اطلاعات کمک هزینه دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchFee">اطلاعات هزینه دریافت نشد</string>
-    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
+    <string name="Swap_ErrorHighPriceImpact">تأثیر بالای قیمت</string>
     <string name="Swap_Proceed">بعدي</string>
     <string name="Swap_Approve">تایید</string>
     <string name="Swap_Approving">در حال تایید...</string>
@@ -278,10 +278,10 @@
     <string name="StatusInfo_Receiving">در حال دریافت</string>
     <string name="StatusInfo_Confirmed">تاييد شد</string>
     <string name="StatusInfo_Failed">ناموفق</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
-    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
-    <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
+    <string name="StatusInfo_PendingDescription">معامله هنوز در بلاکچین تأیید نشده است. این مرحله بسته به هزینه معامله ممکن است از چند دقیقه تا چند ساعت طول بکشد. معاملات ارسال شده با هزینه بسیار کم معمولاً طی چند روز انجام می شوند یا توسط شبکه رد می شوند ، یعنی هیچ معامله ای انجام نشده است.</string>
+    <string name="StatusInfo_ReceivingDescription">فرستنده معامله ای را برای شما ارسال کرده است اما هنوز نهایی نشده است. برای پرداخت های بیشتر پیشنهاد می شود صبر کنید تا وضعیت معامله به \"کامل\" تغییر کند. معمولاً این باید در عرض یک ساعت اتفاق بیفتد اما اگر فرستنده تراکنش را با هزینه کم ارسال کند ، ممکن است گاهی بیشتر طول بکشد.</string>
+    <string name="StatusInfo_ConfirmedDescription">معامله نهایی و برگشت ناپذیر است.</string>
+    <string name="StatusInfo_FailedDescription">معامله همانطور که در نظر گرفته شده بود پردازش نشد و هیچ انتقال ارزش رمز انجام نشد. در بلاکچین اتریوم معاملات ناموفق هزینه های معامله را مصرف می کنند.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">قفل زمان</string>
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
@@ -324,7 +324,7 @@
     <!--Guides-->
     <string name="Guides_Title">آکادمی</string>
     <!--Markdown-->
-    <string name="Markdown_Error_NotFound">Page not found</string>
+    <string name="Markdown_Error_NotFound">صفحه پیدا نشد</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -341,7 +341,7 @@
     <string name="Settings_AppStatus">وضعیت برنامه</string>
     <string name="Settings_WalletConnect">ارتباط کیف پول</string>
     <string name="Settings_RateUs">به ما امتیاز بدهید</string>
-    <string name="SettingsAboutApp_Title">About App</string>
+    <string name="SettingsAboutApp_Title">درباره برنامه</string>
     <string name="SettingsAboutApp_Site">سایت</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
@@ -446,7 +446,7 @@
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">اینترنت ندارید</string>
     <string name="Hud_Text_Copied">کپی شد</string>
-    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
+    <string name="Hud_Text_EmailAddressCopied">آدرس ایمیل کپی شد</string>
     <string name="Hud_Text_InvalidPinError">رمز عبور اشتباه</string>
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
     <string name="Hud_UnknownError">s%</string>
@@ -501,15 +501,15 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddToken_InvalidAddressError">آدرس نامعتبر است</string>
-    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
     <string name="AddErc20Token_ContractAddressHint">آدرس قرارداد</string>
-    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+    <string name="AddErc20Token_ContractNotFound">قرارداد یافت نشد</string>
     <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">Add BEP2</string>
-    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
-    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
+    <string name="AddBep2Token_Title">اضافه کردن بیپ۲</string>
+    <string name="AddBep2Token_TokenSymbolHint">نماد رمز</string>
+    <string name="AddBep2Token_TokenNotFound">نشانه یافت نشد</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <!-- Blockchain Settings -->
@@ -547,7 +547,7 @@
     <string name="CoinOption_bip84_Subtitle">جدیدترین (%sشروع با...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">امروز</string>
-    <string name="Charts_TimeDuration_Day">24H</string>
+    <string name="Charts_TimeDuration_Day">۲۴ ساعت</string>
     <string name="Charts_TimeDuration_Week">۷روز</string>
     <string name="Charts_TimeDuration_Month">۱دقیقه</string>
     <string name="Charts_TimeDuration_TwoWeeks">2 هفته</string>
