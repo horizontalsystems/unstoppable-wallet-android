@@ -9,11 +9,15 @@ This document describes the release process for `Unstoppable` app.
 * `LitecoinKit`
 * `DashKit`
 
-### 2. Transfer Code to Production Branch
+### 2. Update URL for Guides and FAQ
+
+* In case there are changes in Guides and FAQ repositories, update their URL's by new tags.
+
+### 3. Transfer Code to Production Branch
 
 Merge `version` branch into `master` branch.
 
-### 3. Prepare New Development Branch
+### 4. Prepare New Development Branch
 
 * Create new `version` branch.
 
@@ -24,11 +28,11 @@ $ git branch version/0.1
 * Increment version code.
 * Increase version name.
 
-### 4. Set repository tag
+### 5. Set repository tag
 
 * Create tag for current version.
 
-### 5. Build apk file
+### 6. Build apk file
 
 * Build apk file via Docker.
 
@@ -48,10 +52,10 @@ Example:
 ./build-apk.sh 0.18.0 ~/Documents/Keystore/Apk_HorSys/horsys Keystore_Psw
 ```
 
-### 6. Upload Build to Google Play
+### 7. Upload Build to Google Play
 
 * Upload apk to `Google Play Console`.
 
-### 7. Create Release in GitHub Repository
+### 8. Create Release in GitHub Repository
 
 * Create new `Release`, add changelog and upload apk file.
