@@ -55,7 +55,7 @@
     <string name="Restore_Enter_Key_Title">암호를 입력하세요</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s 의 단어로 이루어진 개인 암호를 %1s 지갑에 입력해 주십시오. 단어들은 올바르게 입력 되어야 하고 또 스페이스를 통해 분리되어야 합니다.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
-    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
+    <string name="Restore_InvalidWordCount">잘못된 단어 수입니다: %1$d.  %2$d 개여야 합니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountIncorrect">계정이 존재하지 않습니다</string>
