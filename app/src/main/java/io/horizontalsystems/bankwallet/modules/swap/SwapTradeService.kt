@@ -78,6 +78,7 @@ class SwapTradeService(
         set(value) {
             field = value
             tradeOptionsSubject.onNext(value)
+            syncState()
         }
     val tradeOptionsObservable: Observable<TradeOptions> = tradeOptionsSubject
 
