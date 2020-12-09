@@ -99,6 +99,11 @@
     <string name="Backup_Eos_ActivePrivateKey" translatable="false">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may have access to clipboard data.</string>
 
+    <!--Market-->
+
+    <string name="Market_Title">Market</string>
+    <string name="Market_Search">Search</string>
+
     <!--Balance-->
 
     <string name="Balance_Title">Balance</string>
