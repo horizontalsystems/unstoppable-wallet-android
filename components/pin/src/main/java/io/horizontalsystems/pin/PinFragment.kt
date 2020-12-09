@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
 import androidx.core.os.bundleOf
@@ -115,6 +116,10 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         numPadItemsRecyclerView.layoutManager = GridLayoutManager(context, 3)
 
         observeData()
+
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            onCancelClick()
+        }
     }
 
     override fun onCancelClick() {
@@ -129,7 +134,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         }
 
         setNavigationResult(PinModule.requestKey, bundle)
-        activity?.onBackPressed()
+        findNavController().popBackStack()
     }
 
     override fun onItemClick(item: NumPadItem) {
@@ -152,7 +157,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         }
 
         setNavigationResult(PinModule.requestKey, bundle)
-        activity?.onBackPressed()
+        findNavController().popBackStack()
     }
 
     private fun observeData() {
