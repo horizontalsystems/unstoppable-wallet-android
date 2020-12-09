@@ -147,7 +147,7 @@
     <string name="Send_ERC_Alert">هزینه تراکنش برای %s (ERC20) در اتریوم پرداخت شده است. شما به %s ETH نیاز دارید.</string>
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
     <!--Wallet Connect-->
-    <string name="WalletConnect_Title">ارتباط کیف پول</string>
+    <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">درخواست</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">وضعیت</string>
@@ -336,10 +336,10 @@
     <string name="Settings_LightMode">حالت روشن</string>
     <string name="Settings_Terms">شرایط</string>
     <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
-    <string name="Settings_Faq">پرسش و پاسخ</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">گزارش مشکل</string>
     <string name="Settings_AppStatus">وضعیت برنامه</string>
-    <string name="Settings_WalletConnect">ارتباط کیف پول</string>
+    <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">به ما امتیاز بدهید</string>
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
     <string name="SettingsAboutApp_Site">سایت</string>
