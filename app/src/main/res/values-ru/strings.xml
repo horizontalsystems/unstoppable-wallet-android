@@ -186,10 +186,10 @@
     <string name="Swap_ErrorCouldNotFetchTrade">Не удалось получить информацию о сделке</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Не удалось получить информацию о допустимом лимите</string>
     <string name="Swap_ErrorCouldNotFetchFee">Не удалось получить информацию о комиссии</string>
-    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
+    <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
     <string name="Swap_Approve">Подтвердить</string>
-    <string name="Swap_Approving">Approving...</string>
+    <string name="Swap_Approving">Подтверждение...</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
     <string name="Swap_MinimumGot">Минимальная Выплата</string>
@@ -336,7 +336,7 @@
     <string name="Settings_LightMode">Светлый Режим</string>
     <string name="Settings_Terms">Условия Использования</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
-    <string name="Settings_Faq">ЧaВо</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">Сообщить о Проблеме</string>
     <string name="Settings_AppStatus">Статус Приложения</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
@@ -547,7 +547,7 @@
     <string name="CoinOption_bip84_Subtitle">Новый (начинается с %s...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">СГД</string>
-    <string name="Charts_TimeDuration_Day">24H</string>
+    <string name="Charts_TimeDuration_Day">24ч</string>
     <string name="Charts_TimeDuration_Week">7Д</string>
     <string name="Charts_TimeDuration_Month">1М</string>
     <string name="Charts_TimeDuration_TwoWeeks">2Н</string>
