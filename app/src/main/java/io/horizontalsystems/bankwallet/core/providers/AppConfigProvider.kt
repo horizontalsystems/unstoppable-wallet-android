@@ -18,7 +18,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
     override val companyTwitterLink: String = "https://twitter.com/UnstoppableByHS"
     override val companyTelegramLink: String = "https://t.me/unstoppable_announcements"
     override val companyRedditLink: String = "https://reddit.com/r/UNSTOPPABLEWallet/"
-    override val reportEmail = "unstoppable.support@protonmail.ch"
+    override val reportEmail = "unstoppable.support@protonmail.com"
     override val walletHelpTelegramGroup = "UnstoppableWallet"
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
     override val ipfsMainGateway = "ipfs-ext.horizontalsystems.xyz"
@@ -105,7 +105,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("DOS-ERC20",   "DOSNetwork",           "DOS",      18, CoinType.Erc20("0x0A913beaD80F321E7Ac35285Ee10d9d922659cB7")),
                 Coin("ENJ",         "EnjinCoin",            "ENJ",      18, CoinType.Erc20("0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c")),
                 Coin("EOSDT",       "EOSDT",                "EOSDT",    9, CoinType.Eos("eosdtsttoken", "EOSDT")),
-                Coin("ETH_BEP2",    "ETH BEP2",             "ETH",      8, CoinType.Binance("ETH-1C9")),
+                Coin("ETH-BEP2",    "ETH BEP2",             "ETH",      8, CoinType.Binance("ETH-1C9")),
                 Coin("IQ",          "Everipedia",           "IQ",       3, CoinType.Eos("everipediaiq", "IQ")),
                 Coin("GUSD",        "Gemini Dollar",        "GUSD",     2, CoinType.Erc20("0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd")),
                 Coin("GNT",         "Golem",                "GNT",      18, CoinType.Erc20("0xa74476443119A942dE498590Fe1f2454d7D4aC0d")),
@@ -123,7 +123,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("LRC",         "Loopring",             "LRC",      18, CoinType.Erc20("0xEF68e7C694F40c8202821eDF525dE3782458639f")),
                 Coin("LTO",         "LTO Network",          "LTO",      8, CoinType.Binance("LTO-BDF")),
                 Coin("MKR",         "Maker",                "MKR",      18, CoinType.Erc20("0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2")),
-                Coin("MATIC_BEP2",  "Matic Token",          "MATIC",     8, CoinType.Binance("MATIC-84A")),
+                Coin("MATIC-BEP2",  "Matic Token",          "MATIC",     8, CoinType.Binance("MATIC-84A")),
                 Coin("MCO",         "MCO",                  "MCO",      8, CoinType.Erc20("0xB63B606Ac810a52cCa15e44bB630fd42D8d1d83d")),
                 Coin("MEETONE",     "MEET.ONE",             "MEETONE",  4, CoinType.Eos("eosiomeetone", "MEETONE")),
                 Coin("MITH",        "Mithril",              "MITH",     18, CoinType.Erc20("0x3893b9422Cd5D70a81eDeFfe3d5A1c6A978310BB")),
@@ -168,7 +168,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 Coin("UNI",         "Uniswap",              "UNI",      18, CoinType.Erc20("0x1f9840a85d5af5bf1d1762f925bdaddc4201f984")),
                 Coin("USDC",        "USD Coin",             "USDC",     6, CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")),
                 Coin("USDSB",       "USDS",                 "USDSB",    8, CoinType.Binance("USDSB-1AC")),
-                Coin("USDT_BEP2",   "USDTBEP2",             "USDT",     8, CoinType.Binance("USDT-6D8")),
+                Coin("USDT-BEP2",   "USDTBEP2",             "USDT",     8, CoinType.Binance("USDT-6D8")),
                 Coin("WICC",        "WaykiChain Coin",      "WICC",     8, CoinType.Binance("WICC-01D")),
                 Coin("WTC",         "Waltonchain",          "WTC",      18, CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74")),
                 Coin("WRX",         "WazirX Token",         "WRX",      8, CoinType.Binance("WRX-ED1")),
