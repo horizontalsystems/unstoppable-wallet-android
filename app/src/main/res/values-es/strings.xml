@@ -29,7 +29,7 @@
     <string name="Button_Connect">Conectar</string>
     <string name="Button_Reject">Rechazar</string>
     <string name="Button_Disconnect">Desconectar</string>
-    <string name="Error">Error</string>
+    <string name="Error">Erreur</string>
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s Monedero</string>
     <!--Intro-->
@@ -55,6 +55,8 @@
     <string name="Restore_Enter_Key_Title">Coloque la clave</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Introduzca su clave privada para el monedero %1s, la cual consta de %2s palabras. Las palabras deben ser introducidas en orden correcto y separadas por espacios.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
+    <string name="Restore_InvalidWordCount">Número de palabras errónes: %1$d, deberian ser %2$d</string>
+    <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountIncorrect">Cuenta incorrecta</string>
     <string name="Restore_EosKeyIncorrect">Clave incorrecta</string>
@@ -69,6 +71,7 @@
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_DisplayTitle">Clave privada</string>
+    <string name="Backup_BirthdayHeight">Altura de Cumpleaños</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave %s</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
@@ -144,7 +147,7 @@
     <string name="Send_ERC_Alert">Las comisiones de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <!--Wallet Connect-->
-    <string name="WalletConnect_Title">Conectar Monedero</string>
+    <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Pedido</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Estado</string>
@@ -166,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">ESTIMADO</string>
     <string name="Swap_MaxButtonTitle">Máx.</string>
-    <string name="Swap_TokenSelectorTitle">Seleccione un Token</string>
+    <string name="Swap_TokenSelectorTitle">Seleccionar</string>
     <string name="Swap_Balance">Saldo</string>
     <string name="Swap_Allowance">Permiso de acceso</string>
     <string name="Swap_Price">Precio</string>
@@ -178,15 +181,18 @@
     <string name="Swap_TransactionFee">Tarifa de Transacción</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">Comisiones de transacción pagadas en %s. Es necesario %s.</string>
-    <string name="Swap_ErrorNoLiquidity">Sin liquidez</string>
+    <string name="Swap_ErrorInsufficientEthBalance">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
+    <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">No se pudo obtener la información de la compra</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">No se pudo obtener información de permisos</string>
     <string name="Swap_ErrorCouldNotFetchFee">No se pudo obtener la información de la compra</string>
-    <string name="Swap_ErrorInsufficientEthBalance">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
-    <string name="Swap_Proceed">Continuar</string>
+    <string name="Swap_ErrorHighPriceImpact">Impacto de precio alto</string>
+    <string name="Swap_Proceed">Siguiente</string>
     <string name="Swap_Approve">Aprobar</string>
-    <string name="Swap_Approving">Aprobando</string>
+    <string name="Swap_Approving">Aprobando...</string>
     <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_MaximumPaid">Máximo Pagado</string>
+    <string name="Swap_MinimumGot">Mínimo Obtenido</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuración avanzada</string>
     <string name="SwapSettings_SlippageTitle">Tolerancia de deslizamiento</string>
@@ -197,6 +203,8 @@
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_RecipientAddressHint">Propia dirección</string>
     <string name="SwapSettings_Apply">Aplicar</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
+    <string name="SwapSettings_RecipientPlaceholder">Dirección</string>
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Valor máximo permitido %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">El valor mínimo permitido es %d</string>
@@ -266,6 +274,14 @@
     <string name="TransactionInfo_SentToSelfNote">Esta transacción fue enviada a su propia dirección</string>
     <string name="TransactionInfo_DoubleSpendNote">¡Riesgo de doble gasto!</string>
     <string name="TransactionInfo_Input">Entrada</string>
+    <string name="StatusInfo_Pending">Pendiente</string>
+    <string name="StatusInfo_Receiving">Recibiendo</string>
+    <string name="StatusInfo_Confirmed">Confirmado</string>
+    <string name="StatusInfo_Failed">Falló</string>
+    <string name="StatusInfo_PendingDescription">La transacción todavía no ha sido confirmada en la blockchain. Este paso puede tomar desde unos minutos hasta unas pocas horas dependiendo de la tasa de transacción. Las transacciones enviadas con una tarifa muy baja normalmente se procesan dentro de unos días o pueden ser rechazadas por la red, es decir, sin ser realizadas.</string>
+    <string name="StatusInfo_ReceivingDescription">El remitente te ha enviado una transacción pero aún no es definitiva. Para pagos más grandes se sugiere esperar hasta que el estado de la transacción cambie a \'completado\'. Normalmente esto debería ocurrir dentro de una hora, pero puede tardar más en ocasiones si el remitente envió la transacción con una tarifa baja.</string>
+    <string name="StatusInfo_ConfirmedDescription">La transacción es definitiva e irreversible.</string>
+    <string name="StatusInfo_FailedDescription">La transacción no se procesó como se pretendía y no tuvo lugar ninguna transferencia de valor de token. En las transacciones fallidas de Ethereum las transacciones consumen comisiones de transacción.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">El remitente envió estos fondos con un bloqueo del gasto que expirará %s.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
@@ -307,8 +323,8 @@
     <string name="FullInfoEth_Amount">Importe</string>
     <!--Guides-->
     <string name="Guides_Title">Academia</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">Guía no encontrada</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">No se encontró la página</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
@@ -320,9 +336,13 @@
     <string name="Settings_LightMode">Modo ligero</string>
     <string name="Settings_Terms">Términos</string>
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">Reportar un problema</string>
     <string name="Settings_AppStatus">Estado de la aplicación</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_RateUs">Califícanos</string>
+    <string name="SettingsAboutApp_Title">Sobre la aplicacion</string>
+    <string name="SettingsAboutApp_Site">Sitio</string>
     <string name="SettingsOption_Enabled">Habilitado</string>
     <string name="SettingsOption_Disabled">Desabilitado</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
@@ -424,9 +444,10 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Hud_Text_Unlock">Desbloquear</string>
     <string name="Hud_Text_Success">Completado</string>
     <string name="Hud_Text_Done">Listo</string>
-    <string name="Hud_Text_Error">Error</string>
+    <string name="Hud_Text_Error">Erreur</string>
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
+    <string name="Hud_Text_EmailAddressCopied">Dirección de correo electrónico copiada</string>
     <string name="Hud_Text_InvalidPinError">Clave incorrecta</string>
     <string name="Hud_Network_Issue">Problemas de red. Inténtelo de nuevo</string>
     <string name="Hud_UnknownError">%s</string>
@@ -471,18 +492,25 @@ poner en peligro la seguridad de mis fondos.</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Elegir Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Añadiendo Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">Tokens ERC 20</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 Token</string>
     <string name="AddTokenDialog_EosTokens">Tokens EOS</string>
-    <string name="AddTokenDialog_BinanceTokens">Tokens Binance</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 Token</string>
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">Nombre de moneda</string>
+    <string name="AddToken_Symbol">Símbolo</string>
+    <string name="AddToken_Decimals">Decimales</string>
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
+    <string name="AddToken_InvalidAddressError">Dirección inválida</string>
+    <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Añadir ERC20</string>
-    <string name="AddErc20Token_CoinName">Nombre de moneda</string>
-    <string name="AddErc20Token_Symbol">Símbolo</string>
-    <string name="AddErc20Token_Decimals">Decimales</string>
-    <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">Dirección del contrato</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
-    <string name="AddErc20Token_InvalidAddressError">Dirección inválida</string>
+    <string name="AddErc20Token_ContractNotFound">Contrato no encontrado</string>
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">Añadir BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Símbolo del token</string>
+    <string name="AddBep2Token_TokenNotFound">Token no encontrado</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
     <!-- Blockchain Settings -->
@@ -520,7 +548,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinOption_bip84_Subtitle">Más nuevo (comenzar con %s...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">Hoy</string>
-    <string name="Charts_TimeDuration_Day">24h</string>
+    <string name="Charts_TimeDuration_Day">24H</string>
     <string name="Charts_TimeDuration_Week">7D</string>
     <string name="Charts_TimeDuration_Month">1M</string>
     <string name="Charts_TimeDuration_TwoWeeks">2W</string>

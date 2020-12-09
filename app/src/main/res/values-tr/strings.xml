@@ -55,6 +55,8 @@
     <string name="Restore_Enter_Key_Title">Anahtarı girin</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s kelimelerinden oluşan %1s Cüzdanı için özel anahtarınızı girin. Kelimelerin doğru sırayla girilmesi ve boşluklarla ayrılması gerekir.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
+    <string name="Restore_InvalidWordCount">Yanlış sözcük sayısı: %1$d, %2$d olmalıdır</string>
+    <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
     <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
@@ -69,6 +71,7 @@
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_DisplayTitle">Gizli Anahtar</string>
+    <string name="Backup_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Backup_Confirmation_Description">%s Anahtarınızda ki kelimeleri girin</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
@@ -144,7 +147,7 @@
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <!--Wallet Connect-->
-    <string name="WalletConnect_Title">Cüzdan Bağlantısı</string>
+    <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">İstek</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Durum</string>
@@ -166,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">TAHMİNİ</string>
     <string name="Swap_MaxButtonTitle">Azami</string>
-    <string name="Swap_TokenSelectorTitle">Jeton Seçin</string>
+    <string name="Swap_TokenSelectorTitle">Seç</string>
     <string name="Swap_Balance">Bakiye</string>
     <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
@@ -179,14 +182,17 @@
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">İşlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <string name="Swap_ErrorInsufficientEthBalance">Mevcut ETH bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
-    <string name="Swap_ErrorNoLiquidity">Likidite Yok</string>
+    <string name="Swap_ErrorNoLiquidity">Bu token swap edilemez</string>
     <string name="Swap_ErrorCouldNotFetchTrade">Alım satım bilgisi alınamadı</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">Ödenek bilgisi alınamadı</string>
     <string name="Swap_ErrorCouldNotFetchFee">Ücret bilgisi alınamadı</string>
-    <string name="Swap_Proceed">Devam</string>
+    <string name="Swap_ErrorHighPriceImpact">Yüksek fiyat etkisi</string>
+    <string name="Swap_Proceed">İleri</string>
     <string name="Swap_Approve">Onayla</string>
-    <string name="Swap_Approving">Onaylayan</string>
+    <string name="Swap_Approving">Onaylanıyor...</string>
     <string name="Swap_Swapping">Takas</string>
+    <string name="Swap_MaximumPaid">Maksimum Ödenen</string>
+    <string name="Swap_MinimumGot">Minimum Kazanılan</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Gelişmiş Ayarlar</string>
     <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
@@ -197,6 +203,8 @@
     <string name="SwapSettings_RecipientAddressDescription">Takas etme işleminden sonra, tutar belirtilen adrese transfer edilecektir</string>
     <string name="SwapSettings_RecipientAddressHint">Kendi adresi</string>
     <string name="SwapSettings_Apply">Uygula</string>
+    <string name="SwapSettings_DeadlineMinute">%s dk</string>
+    <string name="SwapSettings_RecipientPlaceholder">Adres</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Maksimum izin verilen değer %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">Maksimum izin verilen değer %d</string>
@@ -266,6 +274,14 @@
     <string name="TransactionInfo_SentToSelfNote">Bu işlem kendi adresine gönderildi</string>
     <string name="TransactionInfo_DoubleSpendNote">Çifte Harcama Riski Var!</string>
     <string name="TransactionInfo_Input">Giriş</string>
+    <string name="StatusInfo_Pending">Devam ediyor</string>
+    <string name="StatusInfo_Receiving">Alınıyor</string>
+    <string name="StatusInfo_Confirmed">Onaylandı</string>
+    <string name="StatusInfo_Failed">Başarısız</string>
+    <string name="StatusInfo_PendingDescription">İşlem blok zincirinde henüz onaylanmadı. Bu adım, işlem ücretine bağlı olarak birkaç dakikadan birkaç saate kadar sürebilir. Çok düşük bir ücretle gönderilen işlemler genellikle birkaç gün içinde işleme alınır ya da ağ tarafından reddedilebilir, yani hiçbir işlem gerçekleşmez.</string>
+    <string name="StatusInfo_ReceivingDescription">Gönderici size bir işlem gönderdi ancak henüz sonlanmadı. Daha büyük ödemeler için işlem durumu \'tamamlandı\' olarak değişene kadar beklemeniz önerilir. Bu genellikle bir saat içinde gerçekleşir, ancak gönderici işlemi düşük bir ücretle gönderirse bazen daha da uzun sürebilir.</string>
+    <string name="StatusInfo_ConfirmedDescription">İşlem sonlandı ve geri alınamaz.</string>
+    <string name="StatusInfo_FailedDescription">İşlem amaçlandığı gibi işlenmedi ve token değeri aktarımı gerçekleşmedi. Ethereum blok zincirinde başarısız işlemler, işlem ücretlerini tüketir.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
@@ -307,8 +323,8 @@
     <string name="FullInfoEth_Amount">Tutar</string>
     <!--Guides-->
     <string name="Guides_Title">Akademi</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">Kılavuz bulunamadı</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Hiçbir sayfa bulunamadı</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
@@ -320,9 +336,13 @@
     <string name="Settings_LightMode">Aydınlık mod</string>
     <string name="Settings_Terms">Şartlar</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">Sorunu Bildir</string>
     <string name="Settings_AppStatus">Uygulama Durumu</string>
-    <string name="Settings_WalletConnect">Cüzdan Bağlantısı</string>
+    <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_RateUs">Bizi Değerlendirin</string>
+    <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
+    <string name="SettingsAboutApp_Site">Web Sitesi</string>
     <string name="SettingsOption_Enabled">Etkinleştirildi</string>
     <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
     <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
@@ -426,6 +446,7 @@
     <string name="Hud_Text_Error">Hata</string>
     <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
     <string name="Hud_Text_Copied">Kopyalandı</string>
+    <string name="Hud_Text_EmailAddressCopied">E-posta adresi kopyalandı</string>
     <string name="Hud_Text_InvalidPinError">Şimdiki Kod</string>
     <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">%s</string>
@@ -472,16 +493,23 @@
     <string name="AddTokenDialog_Subtitle">Token Ekle</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 tokenleri</string>
     <string name="AddTokenDialog_EosTokens">EOS Token</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance Token</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 tokenleri</string>
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">Kripto Para Adı</string>
+    <string name="AddToken_Symbol">Sembol</string>
+    <string name="AddToken_Decimals">Ondalıklar</string>
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
+    <string name="AddToken_InvalidAddressError">Geçersiz Adres</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">ERC20 Ekle</string>
-    <string name="AddErc20Token_CoinName">Kripto Para Adı</string>
-    <string name="AddErc20Token_Symbol">Sembol</string>
-    <string name="AddErc20Token_Decimals">Ondalıklar</string>
-    <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">Sözleşme Adresi</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
-    <string name="AddErc20Token_InvalidAddressError">Geçersiz Adres</string>
+    <string name="AddErc20Token_ContractNotFound">Sözleşme bulunamadı</string>
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">BEP2 Ekle</string>
+    <string name="AddBep2Token_TokenSymbolHint">Token Sembolü</string>
+    <string name="AddBep2Token_TokenNotFound">Token bulunamadı</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
     <!-- Blockchain Settings -->
@@ -519,7 +547,7 @@
     <string name="CoinOption_bip84_Subtitle">Yeni (%s ile başlar...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">Bugün</string>
-    <string name="Charts_TimeDuration_Day">24 sa</string>
+    <string name="Charts_TimeDuration_Day">24S</string>
     <string name="Charts_TimeDuration_Week">7G</string>
     <string name="Charts_TimeDuration_Month">1A</string>
     <string name="Charts_TimeDuration_TwoWeeks">2H</string>

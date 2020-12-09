@@ -55,6 +55,8 @@
     <string name="Restore_Enter_Key_Title">암호를 입력하세요</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s 의 단어로 이루어진 개인 암호를 %1s 지갑에 입력해 주십시오. 단어들은 올바르게 입력 되어야 하고 또 스페이스를 통해 분리되어야 합니다.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
+    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
+    <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountIncorrect">계정이 존재하지 않습니다</string>
     <string name="Restore_EosKeyIncorrect">틀린 암호 입니다</string>
@@ -69,6 +71,7 @@
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
     <string name="Backup_DisplayTitle">개인 암호</string>
+    <string name="Backup_BirthdayHeight">생일 신장</string>
     <string name="Backup_Confirmation_Description">귀하의 %s 키에서 단어를 입력하십시오</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
@@ -144,7 +147,7 @@
     <string name="Send_ERC_Alert">%@ (ERC20) 에 대한 거래 수수료는 Ethereum 로 지불되었습니다. 귀하는 %@ ETH 가 필요합니다.</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <!--Wallet Connect-->
-    <string name="WalletConnect_Title">지갑 연결</string>
+    <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">요청</string>
     <string name="WalletConnect_Url">URL 주소</string>
     <string name="WalletConnect_Status">상태</string>
@@ -166,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">예상</string>
     <string name="Swap_MaxButtonTitle">최대</string>
-    <string name="Swap_TokenSelectorTitle">토큰 선택</string>
+    <string name="Swap_TokenSelectorTitle">선택</string>
     <string name="Swap_Balance">잔액</string>
     <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
@@ -179,14 +182,17 @@
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <string name="Swap_ErrorInsufficientEthBalance">현재 ETH 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
-    <string name="Swap_ErrorNoLiquidity">유동성 없음</string>
+    <string name="Swap_ErrorNoLiquidity">이 토큰을 스왑할 수 없습니다</string>
     <string name="Swap_ErrorCouldNotFetchTrade">거래 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">수당 정보를 가져올 수 없습니다.</string>
     <string name="Swap_ErrorCouldNotFetchFee">수수료 정보를 가져올 수 없습니다.</string>
-    <string name="Swap_Proceed">진행</string>
+    <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
+    <string name="Swap_Proceed">다음</string>
     <string name="Swap_Approve">승인</string>
-    <string name="Swap_Approving">승인 중</string>
+    <string name="Swap_Approving">승인 중...</string>
     <string name="Swap_Swapping">스와핑</string>
+    <string name="Swap_MaximumPaid">최대 지불액</string>
+    <string name="Swap_MinimumGot">최대 지급액</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
@@ -197,6 +203,8 @@
     <string name="SwapSettings_RecipientAddressDescription">교환 작업 후, 금액은 지정된 주소로 이체됩니다.</string>
     <string name="SwapSettings_RecipientAddressHint">자신의 주소</string>
     <string name="SwapSettings_Apply">적용</string>
+    <string name="SwapSettings_DeadlineMinute">최소 %s</string>
+    <string name="SwapSettings_RecipientPlaceholder">주소</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">최대 허용치 %s%%</string>
     <string name="SwapSettings_Error_DeadlineTooLow">최대 허용치 %d</string>
@@ -266,6 +274,14 @@
     <string name="TransactionInfo_SentToSelfNote">이 거래는 귀하의 주소로 전송이 되었습니다</string>
     <string name="TransactionInfo_DoubleSpendNote">이중 지출 위험!</string>
     <string name="TransactionInfo_Input">입력</string>
+    <string name="StatusInfo_Pending">보류 중</string>
+    <string name="StatusInfo_Receiving">수신 중</string>
+    <string name="StatusInfo_Confirmed">확인</string>
+    <string name="StatusInfo_Failed">실패</string>
+    <string name="StatusInfo_PendingDescription">거래가 아직 블록체인에서 확인되지 않았습니다. 거래 수수료에 따라 거래 확인에 수 분에서 수 시간까지 소요될 수 있습니다. 거래 수수료가 매우 적은 경우에는 거래 확인에 수 일이 소요되거나 네트워크에 의해 거래가 거절될 수도 있습니다. 예시: 거래가 완료되지 않았습니다.</string>
+    <string name="StatusInfo_ReceivingDescription">전송자가 거래를 전송했으나 거래가 아직 완료되지는 않았습니다. 거래 금액이 큰 경우 거래 상태가 \'완료됨\'으로 변경될 때까지 대기하는 것을 권장합니다. 거래 완료는 보통 한 시간 안에 완료되나 전송자가 낮은 수수료로 거래를 보내는 경우 더 오래 걸릴 수도 있습니다.</string>
+    <string name="StatusInfo_ConfirmedDescription">거래가 완료되었으며 취소할 수 없습니다.</string>
+    <string name="StatusInfo_FailedDescription">거래가 의도한 대로 처리되지 않았으며 전송된 토큰 값이 없습니다. 이더리움 블록체인에서는 실패한 거래에도 거래 수수료가 부과됩니다.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자는 이러한 자금들을 %s 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다. \n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
@@ -307,8 +323,8 @@
     <string name="FullInfoEth_Amount">양</string>
     <!--Guides-->
     <string name="Guides_Title">아카데미</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">가이드 찾을 수 없음</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">연락처</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -320,9 +336,13 @@
     <string name="Settings_LightMode">밝은 모드</string>
     <string name="Settings_Terms">약관</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
+    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_Report">문제점 보고</string>
     <string name="Settings_AppStatus">앱 상태</string>
-    <string name="Settings_WalletConnect">지갑 연결</string>
+    <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_RateUs">앱 평가</string>
+    <string name="SettingsAboutApp_Title">앱 정보</string>
+    <string name="SettingsAboutApp_Site">사이트</string>
     <string name="SettingsOption_Enabled">활성화</string>
     <string name="SettingsOption_Disabled">비활성화</string>
     <string name="SettingsPrivacy_Info">이 앱은 귀하의 데이터를 공유하지 않습니다. 하지만 앱이 블록체인과 통신할 때 IP 주소와 같은 일부 공개 데이터가 유출 될 수도 있습니다. 각 섹션에 대한 자세한 정보를 확인하려면 오른쪽 상단의 정보 버튼을 누르십시오.</string>
@@ -426,6 +446,7 @@
     <string name="Hud_Text_Error">오류</string>
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
+    <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
     <string name="Hud_Network_Issue">네트워크에 문제가 있습니다. 잠시 후 다시 시도해 주세요</string>
     <string name="Hud_UnknownError">%s</string>
@@ -471,18 +492,25 @@
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">블록체인 선택</string>
     <string name="AddTokenDialog_Subtitle">토큰 추가 중</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC 20 토큰</string>
+    <string name="AddTokenDialog_Erc20Tokens">ERC20 토큰</string>
     <string name="AddTokenDialog_EosTokens">EOS 토큰</string>
-    <string name="AddTokenDialog_BinanceTokens">Binance 토큰</string>
+    <string name="AddTokenDialog_BinanceTokens">BEP2 토큰</string>
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">코인 이름</string>
+    <string name="AddToken_Symbol">심볼</string>
+    <string name="AddToken_Decimals">소수점</string>
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
+    <string name="AddToken_InvalidAddressError">잘못된 주소</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">ERC20 추가</string>
-    <string name="AddErc20Token_CoinName">코인 이름</string>
-    <string name="AddErc20Token_Symbol">심볼</string>
-    <string name="AddErc20Token_Decimals">소수점</string>
-    <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">계약 주소</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
-    <string name="AddErc20Token_InvalidAddressError">잘못된 주소</string>
+    <string name="AddErc20Token_ContractNotFound">거래 발견되지 않음</string>
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">BEP2 추가</string>
+    <string name="AddBep2Token_TokenSymbolHint">토큰 심볼</string>
+    <string name="AddBep2Token_TokenNotFound">토큰 찾을 수 없음</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <!-- Blockchain Settings -->
@@ -521,10 +549,10 @@
     <string name="CoinOption_bip84_Subtitle">최신 (%s부터 시작...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">오늘</string>
-    <string name="Charts_TimeDuration_Day">24 시간</string>
+    <string name="Charts_TimeDuration_Day">24시</string>
     <string name="Charts_TimeDuration_Week">일주일</string>
     <string name="Charts_TimeDuration_Month">한 달</string>
-    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
+    <string name="Charts_TimeDuration_TwoWeeks">2주</string>
     <string name="Charts_TimeDuration_Month3">3개월</string>
     <string name="Charts_TimeDuration_Quartal">3개월</string>
     <string name="Charts_TimeDuration_HalfYear">6개월</string>

@@ -55,6 +55,8 @@
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">کلید خصوصی خود را برای کیف پول %1s که از کلمات %2s تشکیل شده است وارد کنید. کلمات باید به ترتیب صحیح وارد شوند و با فاصله از هم جدا شوند.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
+    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
+    <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountIncorrect">حساب نادرست</string>
     <string name="Restore_EosKeyIncorrect">کلید نادرست</string>
@@ -69,6 +71,7 @@
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_DisplayTitle">کلید خصوصی</string>
+    <string name="Backup_BirthdayHeight">Birthday Height</string>
     <string name="Backup_Confirmation_Description">کلمات را از %s خود وارد کنید.</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
@@ -166,7 +169,7 @@
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">تخمینی</string>
     <string name="Swap_MaxButtonTitle">حداکثر</string>
-    <string name="Swap_TokenSelectorTitle">نشان را انتخاب کنید</string>
+    <string name="Swap_TokenSelectorTitle">انتخاب</string>
     <string name="Swap_Balance">بالانس</string>
     <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
@@ -179,14 +182,17 @@
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_ErrorInsufficientBalanceForFee">هزینه تراکنش برای جابجایی در %s پرداخت شد. شما به %s نیاز دارید.</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
-    <string name="Swap_ErrorNoLiquidity">بدون نقدینگی</string>
+    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorCouldNotFetchTrade">اطلاعات تجارت دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchAllowance">اطلاعات کمک هزینه دریافت نشد</string>
     <string name="Swap_ErrorCouldNotFetchFee">اطلاعات هزینه دریافت نشد</string>
-    <string name="Swap_Proceed">ادامه دادن</string>
+    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
+    <string name="Swap_Proceed">بعدي</string>
     <string name="Swap_Approve">تایید</string>
-    <string name="Swap_Approving">در حال تایید</string>
+    <string name="Swap_Approving">در حال تایید...</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
+    <string name="Swap_MaximumPaid">حداکثر پرداخت</string>
+    <string name="Swap_MinimumGot">حداقل دریافت</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
@@ -197,6 +203,8 @@
     <string name="SwapSettings_RecipientAddressDescription">پس از انجام عملیات تراکنش، مبلغ به آدرس مشخص شده انتقال داده می شود</string>
     <string name="SwapSettings_RecipientAddressHint">آدرس خود</string>
     <string name="SwapSettings_Apply">درخواست دادن</string>
+    <string name="SwapSettings_DeadlineMinute">%s دقیقه</string>
+    <string name="SwapSettings_RecipientPlaceholder">آدرس</string>
     <string name="SwapSettings_Error_SlippageTooLow">تراکنش شما احتمالاً ناموفق است.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">حداکثر مقدار مجاز %s%% است</string>
     <string name="SwapSettings_Error_DeadlineTooLow">حداقل مقدار مجاز %d است</string>
@@ -266,6 +274,14 @@
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
     <string name="TransactionInfo_Input">ورودی</string>
+    <string name="StatusInfo_Pending">در حالت انتظار</string>
+    <string name="StatusInfo_Receiving">در حال دریافت</string>
+    <string name="StatusInfo_Confirmed">تاييد شد</string>
+    <string name="StatusInfo_Failed">ناموفق</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
+    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">قفل زمان</string>
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
@@ -307,8 +323,8 @@
     <string name="FullInfoEth_Amount">مقدار</string>
     <!--Guides-->
     <string name="Guides_Title">آکادمی</string>
-    <!--Guide-->
-    <string name="Guide_Error_NotFound">راهنما یافت نشد</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Page not found</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -320,9 +336,13 @@
     <string name="Settings_LightMode">حالت روشن</string>
     <string name="Settings_Terms">شرایط</string>
     <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
+    <string name="Settings_Faq">پرسش و پاسخ</string>
     <string name="Settings_Report">گزارش مشکل</string>
     <string name="Settings_AppStatus">وضعیت برنامه</string>
     <string name="Settings_WalletConnect">ارتباط کیف پول</string>
+    <string name="Settings_RateUs">به ما امتیاز بدهید</string>
+    <string name="SettingsAboutApp_Title">About App</string>
+    <string name="SettingsAboutApp_Site">سایت</string>
     <string name="SettingsOption_Enabled">فعال شد</string>
     <string name="SettingsOption_Disabled">غیر فعال شد</string>
     <string name="SettingsPrivacy_Info">این برنامه هیچ یک از داده های شما را به اشتراک نمی گذارد. با این حال، بخاطر ارتباط با زنجیره های بلوکی، برخی از داده های عمومی مانند آدرس آی پی می توانند به طور بالقوه فاش شوند. برای کسب اطلاعات دقیق در مورد هر بخش از دکمه اطلاعات در سمت راست بالا استفاده کنید.</string>
@@ -426,9 +446,10 @@
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">اینترنت ندارید</string>
     <string name="Hud_Text_Copied">کپی شد</string>
+    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Text_InvalidPinError">رمز عبور اشتباه</string>
     <string name="Hud_Network_Issue">مشكل شبکه. لطفاً چند دقيقه بعد دوباره تلاش كنيد</string>
-    <string name="Hud_UnknownError">%s</string>
+    <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
     <string name="ManageCoins_save">ذخیره</string>
@@ -472,16 +493,23 @@
     <string name="AddTokenDialog_Subtitle">در حال اضافه کردن نشان</string>
     <string name="AddTokenDialog_Erc20Tokens">نشان های ERC 20</string>
     <string name="AddTokenDialog_EosTokens">نشانه های EOS</string>
-    <string name="AddTokenDialog_BinanceTokens">نشانه های Binance</string>
+    <string name="AddTokenDialog_BinanceTokens">نشان های BEP2</string>
+    <!-- Add Token -->
+    <string name="AddToken_CoinName">نام سکه</string>
+    <string name="AddToken_Symbol">نماد</string>
+    <string name="AddToken_Decimals">اعشارها</string>
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
+    <string name="AddToken_InvalidAddressError">آدرس نامعتبر است</string>
+    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
-    <string name="AddErc20Token_CoinName">نام سکه</string>
-    <string name="AddErc20Token_Symbol">نماد</string>
-    <string name="AddErc20Token_Decimals">اعشارها</string>
-    <string name="AddErc20Token_Dots">…</string>
     <string name="AddErc20Token_ContractAddressHint">آدرس قرارداد</string>
-    <string name="AddErc20Token_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
-    <string name="AddErc20Token_InvalidAddressError">آدرس نامعتبر است</string>
+    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+    <!-- Add Bep2 Token -->
+    <string name="AddBep2Token_Title">Add BEP2</string>
+    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
+    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <!-- Blockchain Settings -->
@@ -519,7 +547,7 @@
     <string name="CoinOption_bip84_Subtitle">جدیدترین (%sشروع با...)</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">امروز</string>
-    <string name="Charts_TimeDuration_Day">24 ساعت</string>
+    <string name="Charts_TimeDuration_Day">24H</string>
     <string name="Charts_TimeDuration_Week">۷روز</string>
     <string name="Charts_TimeDuration_Month">۱دقیقه</string>
     <string name="Charts_TimeDuration_TwoWeeks">2 هفته</string>
