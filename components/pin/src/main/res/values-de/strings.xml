@@ -15,7 +15,7 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">Code</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock your wallet</string>
+    <string name="SetPin_Info">Dein Code wird verwendet werden, um deinen Wallet zu entsperren und Geld schicken</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
     <string name="SetPin_ConfirmInfo">Bestätigen</string>
     <string name="SetPin_Success">Lock code wurde erfolgreich gesetzt!</string>
