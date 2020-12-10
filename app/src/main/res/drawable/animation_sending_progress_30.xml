@@ -3,15 +3,15 @@
     android:oneshot="false">
 
     <item
-        android:drawable="@drawable/ic_sending_1"
+        android:drawable="@drawable/ic_sending_1_20"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_sending_1_a"
+        android:drawable="@drawable/ic_sending_1_a_20"
         android:duration="@integer/animation_duration" />
 
     <item
-        android:drawable="@drawable/ic_sending_1_b"
+        android:drawable="@drawable/ic_sending_1_b_20"
         android:duration="@integer/animation_duration" />
 
 </animation-list>

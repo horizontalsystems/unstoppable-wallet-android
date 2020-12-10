@@ -43,8 +43,8 @@
     <ImageView
         android:id="@+id/progressBar"
         android:layout_width="20dp"
-        android:layout_height="18dp"
-        android:src="@drawable/animation_pending_big"
+        android:layout_height="20dp"
+        android:src="@drawable/animation_pending"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
