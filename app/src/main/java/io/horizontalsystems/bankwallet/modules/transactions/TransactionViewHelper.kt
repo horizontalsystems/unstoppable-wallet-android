@@ -35,7 +35,15 @@ object TransactionViewHelper {
         return when (type) {
             TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing_20
             TransactionType.Incoming -> R.drawable.ic_incoming_20
-            TransactionType.Approve -> R.drawable.ic_swap_approval
+            TransactionType.Approve -> R.drawable.ic_swap_approval_20
+        }
+    }
+
+    fun getBottomIconImage(status: TransactionStatus): Int? {
+        return when (status) {
+            is TransactionStatus.Failed -> R.drawable.ic_attention_red_20
+            is TransactionStatus.Completed -> R.drawable.ic_checkmark_20
+            else -> null
         }
     }
 }

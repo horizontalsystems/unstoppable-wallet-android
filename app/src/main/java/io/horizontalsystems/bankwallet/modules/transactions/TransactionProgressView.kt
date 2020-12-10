@@ -37,15 +37,17 @@ class TransactionProgressView : ConstraintLayout {
     }
 
     private fun getOneConfirmationBackground(type: TransactionType) = when (type) {
-        TransactionType.Outgoing,  TransactionType.SentToSelf -> R.drawable.animation_sending_progress_30
+        TransactionType.Outgoing,
+        TransactionType.SentToSelf,
+        TransactionType.Approve -> R.drawable.animation_sending_progress_30
         TransactionType.Incoming ->  R.drawable.animation_receiving_progress_30
-        TransactionType.Approve -> R.drawable.animation_approving_progress_30
     }
 
     private fun getTwoConfirmationBackground(type: TransactionType) = when (type) {
-        TransactionType.Outgoing,  TransactionType.SentToSelf -> R.drawable.animation_sending_progress_60
+        TransactionType.Outgoing,
+        TransactionType.SentToSelf,
+        TransactionType.Approve -> R.drawable.animation_sending_progress_60
         TransactionType.Incoming ->  R.drawable.animation_receiving_progress_60
-        TransactionType.Approve -> R.drawable.animation_approving_progress_60
     }
 
 }

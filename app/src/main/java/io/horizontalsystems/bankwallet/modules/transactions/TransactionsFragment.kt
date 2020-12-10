@@ -236,17 +236,9 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             else -> {
                 bottomIcon.isVisible = true
                 transactionProgressView.isVisible = false
-                val image = getBottomIconImage(status)
+                val image = TransactionViewHelper.getBottomIconImage(status)
                 bottomIcon.setImageDrawable(image?.let { ContextCompat.getDrawable(containerView.context, it) })
             }
-        }
-    }
-
-    private fun getBottomIconImage(status: TransactionStatus): Int? {
-        return when (status) {
-            is TransactionStatus.Failed -> R.drawable.ic_attention_red_20
-            is TransactionStatus.Completed -> R.drawable.ic_checkmark_20
-            else -> null
         }
     }
 
