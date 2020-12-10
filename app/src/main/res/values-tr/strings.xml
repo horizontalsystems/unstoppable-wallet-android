@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Ok">Tamam</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
     <string name="Alert_Share">İlet</string>
     <string name="Alert_Close">Kapat</string>
-    <string name="Alert_Success">Başarılı</string>
-    <string name="Alert_Copied">Kopyalandı</string>
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
     <string name="Button_Cancel">İptal</string>
-    <string name="Button_Create">Oluştur</string>
     <string name="Button_Skip">Atla</string>
     <string name="Button_Next">İleri</string>
-    <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_Enable">Etkinleştir</string>
     <string name="Button_Disable">Etkisizleştir</string>
-    <string name="Button_Back">Geri</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
-    <string name="Button_Share">Paylaş</string>
     <string name="Button_Done">Bitti</string>
     <string name="Button_Retry">Yeniden Dene</string>
     <string name="Button_Change">Değiştir</string>
@@ -41,7 +34,6 @@
     <string name="Intro_Privacy_Title">Gizli Kalın</string>
     <string name="Intro_Privacy_Description">Gizli kalmak ve bilgilerinizi gizli tutmak için bu cüzdanı kullanın.</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable\nCüzdan</string>
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
@@ -57,7 +49,6 @@
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_InvalidWordCount">Yanlış sözcük sayısı: %1$d, %2$d olmalıdır</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
-    <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
     <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
     <string name="Select_Coins">Kripto Parayi Seç</string>
@@ -68,16 +59,12 @@
     <string name="Backup_Intro_Title">Yedekle</string>
     <string name="Backup_Intro_TitleShow">Anahtarı Göster</string>
     <string name="Backup_Intro_Subtitle">Az sonra görüceğiniz anahtar cihazınızın kaybolması, çalınması veya bozulması durumunda hesabı geri yüklemenin tek yoludur.\n\nEkranınıza başka bir kişinin izlemediğinden emin olun.\n\nKurlar bu anahtar ile kontrol ediliyor: %s</string>
-    <string name="Backup_Intro_Later">Sonra</string>
-    <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_DisplayTitle">Gizli Anahtar</string>
     <string name="Backup_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Backup_Confirmation_Description">%s Anahtarınızda ki kelimeleri girin</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
-    <string name="Backup_Button_Confirm">Onayla</string>
     <string name="Backup_Button_Backup">Yedekle</string>
-    <string name="Backup_Button_Submit">Onayla</string>
     <string name="Backup_Button_ShowKey">Anahtarı Göster</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_Warning">Anahtarınızı \"Kopyala\" eylemiyle kopyalamanız anahtarınızın pano yönetisine ve panoya erişimi olan diğer uygulamalara sızma riskini taşır.</string>
@@ -85,7 +72,6 @@
     <string name="Balance_Title">Bakiye</string>
     <string name="Balance_Deposit">Al</string>
     <string name="Balance_Send">Gönder</string>
-    <string name="Balance_Swap">Takas</string>
     <string name="Balance_RatePerCoin">%s = 1 %s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
@@ -104,18 +90,12 @@
     <string name="Send_Hint_Amount">Tutar</string>
     <string name="Send_Fee">Masraf</string>
     <string name="Send_Button_Paste">Yapıştır</string>
-    <string name="Send_Button_Next">İleri</string>
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Confirmation_Title">Onayla</string>
-    <string name="Send_Confirmation_To">Alan: </string>
-    <string name="Send_Confirmation_Total">Toplam:</string>
     <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
     <string name="Send_Confirmation_Send_Button">Gönder</string>
-    <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Lütfen kamere erişim izni verin</string>
-    <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
-    <string name="Send_Error_InsufficientBalance">Yetersiz bakiye.</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
     <string name="Send_Error_UnsupportedAddress">Zaman kilitleme sadece P2PKH adresleriyle çalışır (1 ile başlayan)</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
@@ -125,7 +105,6 @@
     <string name="Send_Error_WrongParameters">Yanlış parametreler</string>
     <string name="Send_Error_TransparentAddress">Unstoppable, bir transparan adrese yapılan ödemeleri desteklemez</string>
     <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
-    <string name="Send_DialogTitle">Onayla</string>
     <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
     <string name="Send_DialogSpeed">İşlem hızı</string>
     <string name="Send_TxSpeed_Low">Yavaş</string>
@@ -136,7 +115,6 @@
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">Süre</string>
     <string name="Send_DialogFee">Masraf:</string>
-    <string name="Send_DialogTotal">Toplam:</string>
     <string name="Send_DialogProceed">İleri</string>
     <string name="Send_LockTime_Off">Kapat</string>
     <string name="Send_LockTime_Hour">1 saat</string>
@@ -144,7 +122,6 @@
     <string name="Send_LockTime_HalfYear">6 ay</string>
     <string name="Send_LockTime_Year">1 yıl</string>
     <string name="Send_Sending">Gönderiliyor</string>
-    <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
@@ -168,24 +145,16 @@
     <string name="Swap_ToAmountTitle">Kazandığınız</string>
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">TAHMİNİ</string>
-    <string name="Swap_MaxButtonTitle">Azami</string>
     <string name="Swap_TokenSelectorTitle">Seç</string>
     <string name="Swap_Balance">Bakiye</string>
     <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
-    <string name="Swap_MaximumSold">Maksimum Harcama</string>
     <string name="Swap_SwapFee">Takas Ücreti</string>
-    <string name="Swap_TransactionSpeed">İşlem hızı</string>
-    <string name="Swap_TransactionFee">İşlem Ücreti</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
-    <string name="Swap_ErrorInsufficientBalanceForFee">İşlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <string name="Swap_ErrorInsufficientEthBalance">Mevcut ETH bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
     <string name="Swap_ErrorNoLiquidity">Bu token swap edilemez</string>
-    <string name="Swap_ErrorCouldNotFetchTrade">Alım satım bilgisi alınamadı</string>
-    <string name="Swap_ErrorCouldNotFetchAllowance">Ödenek bilgisi alınamadı</string>
-    <string name="Swap_ErrorCouldNotFetchFee">Ücret bilgisi alınamadı</string>
     <string name="Swap_ErrorHighPriceImpact">Yüksek fiyat etkisi</string>
     <string name="Swap_Proceed">İleri</string>
     <string name="Swap_Approve">Onayla</string>
@@ -201,25 +170,17 @@
     <string name="SwapSettings_DeadlineDescription">Bundan daha uzun süre beklemede olursa, İşleminiz geri alınacaktır</string>
     <string name="SwapSettings_RecipientAddressTitle">Alıcı Adresi</string>
     <string name="SwapSettings_RecipientAddressDescription">Takas etme işleminden sonra, tutar belirtilen adrese transfer edilecektir</string>
-    <string name="SwapSettings_RecipientAddressHint">Kendi adresi</string>
     <string name="SwapSettings_Apply">Uygula</string>
     <string name="SwapSettings_DeadlineMinute">%s dk</string>
     <string name="SwapSettings_RecipientPlaceholder">Adres</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Maksimum izin verilen değer %s%%</string>
-    <string name="SwapSettings_Error_DeadlineTooLow">Maksimum izin verilen değer %d</string>
     <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Onaylama</string>
-    <string name="Swap_Confirmation_Pay">Ödeyin %s</string>
-    <string name="Swap_Confirmation_Get">%s al</string>
     <!--Swap Coin Select-->
-    <string name="SwapCoinSelect_Title">Kripto Parayı Seç</string>
     <!--Approve-->
     <string name="Approve_Title">Takas Onayı</string>
-    <string name="Approve_FeeTitle">Masraf</string>
-    <string name="Approve_TransactionSpeedTitle">İşlem hızı</string>
-    <string name="Approve_InsufficientFeeAlert">Onay için işlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <string name="Approve_Info">Verilen jetonu sizin adınıza swap yapmak için bir akıllı sözleşmeye izin vermelisiniz. Bu izin, akıllı sözleşme tarafından kullanılabilecek tutarı belirler. Bakiyenizi etkilemez ancak onay işlemini gerçekleştirmek için küçük bir ücret gerekir.\n\nHer alım satımdan önce talep üzerine yapılabilirken, ileriki alım satımlarda bizim için önceden daha yüksek tutarı onaylamanız durumunda çok daha ucuz olur.</string>
     <string name="Approve_Error_AlreadyApproved">Bu miktar için zaten bir ödeneğiniz var</string>
     <!--Uniswap Info -->
@@ -264,7 +225,6 @@
     <string name="TransactionInfo_RawTransaction">Ham işlem</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
-    <string name="TransactionInfo_Time">Tarih</string>
     <string name="TransactionInfo_ButtonVerify">Doğrula</string>
     <string name="TransactionInfo_LockedUntil">Şu zamana kadar kitlendi %s</string>
     <string name="TransactionInfo_UnlockedAt">Kilid açıldı %s</string>
@@ -275,7 +235,6 @@
     <string name="TransactionInfo_DoubleSpendNote">Çifte Harcama Riski Var!</string>
     <string name="TransactionInfo_Input">Giriş</string>
     <string name="StatusInfo_Pending">Devam ediyor</string>
-    <string name="StatusInfo_Receiving">Alınıyor</string>
     <string name="StatusInfo_Confirmed">Onaylandı</string>
     <string name="StatusInfo_Failed">Başarısız</string>
     <string name="StatusInfo_PendingDescription">İşlem blok zincirinde henüz onaylanmadı. Bu adım, işlem ücretine bağlı olarak birkaç dakikadan birkaç saate kadar sürebilir. Çok düşük bir ücretle gönderilen işlemler genellikle birkaç gün içinde işleme alınır ya da ağ tarafından reddedilebilir, yani hiçbir işlem gerçekleşmez.</string>
@@ -294,8 +253,6 @@
     <string name="FullInfo_Time">Tarih</string>
     <string name="FullInfo_Block">Blok numarası</string>
     <string name="FullInfo_Confirmations">Onaylama</string>
-    <string name="FullInfo_Inputs">Girişler</string>
-    <string name="FullInfo_Outputs">Çıkışlar</string>
     <string name="FullInfo_Size">Boyut</string>
     <string name="FullInfo_Fee">Masraf</string>
     <string name="FullInfo_Rate">Oran</string>
@@ -304,7 +261,6 @@
     <string name="FullInfo_From">Gönderen</string>
     <string name="FullInfo_To">Alan</string>
     <string name="FullInfo_Status">Durum</string>
-    <string name="FullInfo_Source_Title">Kaynak</string>
     <string name="FullInfo_Source_Online">Çevrimiçi</string>
     <string name="FullInfo_Source_Offline">Çevrimdışı</string>
     <string name="FullInfo_Error_ProviderOffline">Çevrimdışı</string>
@@ -312,12 +268,6 @@
     <string name="FullInfo_Error_Retry">Yeniden Dene</string>
     <string name="FullInfo_Error_ChangeSource">Kaynağı Değiştir</string>
     <!--no used-->
-    <string name="FullInfo_Id">Kimlik</string>
-    <string name="FullInfo_TotalInput">Toplam Giriş</string>
-    <string name="FullInfo_TotalOutput">Toplam Çıkış</string>
-    <string name="FullInfo_FeePerByte">Bayt başına ücret</string>
-    <string name="FullInfo_FeeRate">Ücret oranı</string>
-    <string name="FullInfo_NoAddress">Boş adres</string>
     <string name="FullInfo_SubtitleInputs">Girişler</string>
     <string name="FullInfo_SubtitleOutputs">Çıkışlar</string>
     <string name="FullInfoEth_Amount">Tutar</string>
@@ -330,21 +280,17 @@
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
     <string name="Settings_Notifications">Bildirimler</string>
     <string name="Settings_ExperimentalFeatures">Deneysel Özellikler</string>
-    <string name="Settings_RestoreWallet">Cüzdanı Geri Yükle</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
     <string name="Settings_LightMode">Aydınlık mod</string>
     <string name="Settings_Terms">Şartlar</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_Faq">FAQ</string>
-    <string name="Settings_Report">Sorunu Bildir</string>
     <string name="Settings_AppStatus">Uygulama Durumu</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
     <string name="SettingsAboutApp_Site">Web Sitesi</string>
-    <string name="SettingsOption_Enabled">Etkinleştirildi</string>
-    <string name="SettingsOption_Disabled">Etkisizleştirildi</string>
     <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Senk.</string>
@@ -370,8 +316,6 @@
         \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
         \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">Parmak izi etkin değil</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Gizlilik</string>
     <string name="SettingsSecurity_Biometric_Authentication">Biyometrik doğrulama</string>
@@ -379,7 +323,6 @@
     <string name="SettingsSecurity_EnablePin">Kod</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
-    <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internet trafiğinizi tamamen anonimleştirin. Yavaş olabilir.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakılmış. Tor\'un çalışması için onları etkinleştirmeniz gerekir.</string>
@@ -392,9 +335,6 @@
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain çıkışlı</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Daha Gizli</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_AppTitle">Unstoppable</string>
-    <string name="SettingsTerms_Github">Github</string>
-    <string name="SettingsTerms_Site">Web Sitesi</string>
     <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
 \n\n Bu, yalnızca kullanıcının fonlar üzerinde kontrol sahibi olduğu, gözetim dışı, uçtan uca bir cüzdandır. Herhangi bir veri toplamaz ve kullanıcının cüzdanını belirli bir cüzdan uygulamasına bağlamadan kullanıcıyı bağımsız tutar.
 \n\nDurdurulamaz cüzdan tamamen açık kaynaklıdır ve herkes uygulamanın tam olarak iddia edildiği gibi çalıştığını doğrulayabilir.
@@ -412,8 +352,6 @@
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
-    <string name="SettingsContact_Email">E-posta</string>
-    <string name="SettingsContact_Telegram">Telegram</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarı alırsınız. \n\nFiyat Trendi Uyarısı, 6 ay boyunca, 1 haftalık kısa bir süre için bir trend değişikliği durumunu uyarır.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
@@ -433,30 +371,22 @@
     <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
     <string name="NotificationBottomMenu_Long">Uzun</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
     <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
     <string name="Eos_Backend_Error_AccountNotExist">Bu hesap mevcut değil</string>
     <string name="Eos_Backend_Error_InsufficientRam">EOS hesabınızda bu kripto parayı göndermek için yeterli RAM bulunmuyor. Devam etmek için EOS RAM hissenizi arttırmak gerekiyor.</string>
     <string name="Binance_Backend_Error_MemoRequired">Aktarım işleminde alıcı boş olmayan not istiyor</string>
     <string name="Binance_Backend_Error_RequiresDigits">Notun yalnızca rakam içermesini gerektirir</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Unlock">Kilidi Aç</string>
     <string name="Hud_Text_Success">Başarılı</string>
     <string name="Hud_Text_Done">Bitti</string>
-    <string name="Hud_Text_Error">Hata</string>
     <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
     <string name="Hud_Text_Copied">Kopyalandı</string>
     <string name="Hud_Text_EmailAddressCopied">E-posta adresi kopyalandı</string>
-    <string name="Hud_Text_InvalidPinError">Şimdiki Kod</string>
-    <string name="Hud_Network_Issue">Ağ sorunu. Tekrar deneyin.</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Kripto Parayı Seç</string>
-    <string name="ManageCoins_save">Kaydet</string>
     <string name="ManageCoins_Search">Ara</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
-    <string name="ManageCoins_Alert_CantCreateTitle">%s cüzdanı</string>
-    <string name="ManageCoins_Alert_CantCreateDescription">Uygulama henüz %s cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
     <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
@@ -469,7 +399,6 @@
     <string name="ManageKeys_AddressFormat">Adres Formatı</string>
     <string name="ManageKeys_Create">Oluştur</string>
     <string name="ManageKeys_Restore">Geri Yükle</string>
-    <string name="ManageKeys_Delete">Sil</string>
     <string name="ManageKeys_Backup">Yedekle</string>
     <string name="ManageKeys_Show">Göster</string>
     <string name="ManageKeys_Unlink">Sil</string>
@@ -519,9 +448,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Geri Yükleme Ayarları</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Bu değişiklikten sonra cüzdan %s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">İletişim</string>
-    <string name="BlockchainSettings_SyncMode_Blockchain">Blockchain</string>
-    <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s Ayarları</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Bağlantı</string>
@@ -531,17 +457,10 @@
     <string name="TorPage_Connected">Bağlandı</string>
     <string name="TorPage_Failed">Başarısız</string>
     <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
-    <string name="TorPage_Title">Tor Bağlantısı</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Standart</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
-    <string name="CoinOption_Fast_Subtitle">0-2 saat (Tavsiye edilen)</string>
-    <string name="CoinOption_RestoreSource">API kaynak linki: \n%s</string>
-    <string name="CoinOption_Slow_Subtitle">1-12 saat</string>
-    <string name="CoinOption_AddressFormatTitle">Adres Formatı</string>
-    <string name="CoinOption_SyncModeTitle">Geri Yükleme Ayarları</string>
     <string name="CoinOption_bip44_Subtitle">Eski (%s ile başlar...)</string>
     <string name="CoinOption_bip49_Subtitle">Popüler (%s ile başlar...)</string>
     <string name="CoinOption_bip84_Subtitle">Yeni (%s ile başlar...)</string>
@@ -552,13 +471,9 @@
     <string name="Charts_TimeDuration_Month">1A</string>
     <string name="Charts_TimeDuration_TwoWeeks">2H</string>
     <string name="Charts_TimeDuration_Month3">3A</string>
-    <string name="Charts_TimeDuration_Quartal">3A</string>
     <string name="Charts_TimeDuration_HalfYear">6A</string>
     <string name="Charts_TimeDuration_Year">1Yıl</string>
     <string name="Charts_TimeDuration_Year2">2Yıl</string>
-    <string name="Charts_Title">%s Fiyat</string>
-    <string name="Charts_Rate_High">Yüksek</string>
-    <string name="Charts_Rate_Low">Düşük</string>
     <string name="Charts_MarketCap">Market kap.</string>
     <string name="Charts_Volume24">Birim(24 saat)</string>
     <string name="Charts_inCirculation">Dolaşan Arz</string>
@@ -570,7 +485,6 @@
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Hacim</string>
-    <string name="Charts_Price">Fiyat</string>
     <string name="Charts_Error_NotAvailable">Grafik yok</string>
     <string name="Charts_LatestNews">Son Haberler</string>
     <!--Rate list-->
@@ -581,7 +495,6 @@
     <string name="RateList_TopLosers">Çok Kaybedenler</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Senk. hatası</string>
-    <string name="BalanceSyncError_Description">Bildirmeye karar verirseniz hata metni clipboardnıza kopyalanır.</string>
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
     <string name="BalanceSyncError_ButtonChangeSource">Kaynağı Değiştir</string>
     <string name="BalanceSyncError_ButtonReport">Şikayet Et</string>
