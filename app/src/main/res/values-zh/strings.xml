@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Ok">确定</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
     <string name="Alert_Share">转发</string>
     <string name="Alert_Close">关闭</string>
-    <string name="Alert_Success">成功</string>
-    <string name="Alert_Copied">已复制</string>
     <string name="Alert_Loading">正在加载...</string>
     <string name="Alert_Restart">重新启动</string>
     <string name="Button_Cancel">取消</string>
-    <string name="Button_Create">创建</string>
     <string name="Button_Skip">跳过</string>
     <string name="Button_Next">继续</string>
-    <string name="Button_Restore">恢复</string>
     <string name="Button_Enable">启用</string>
     <string name="Button_Disable">禁用</string>
-    <string name="Button_Back">返回</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
-    <string name="Button_Share">分享</string>
     <string name="Button_Done">完成</string>
     <string name="Button_Retry">重试</string>
     <string name="Button_Change">更改</string>
@@ -41,7 +34,6 @@
     <string name="Intro_Privacy_Title">保持私密状态</string>
     <string name="Intro_Privacy_Description">使用此钱包保持隐身并能够保证您信息的私密性。</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable\n钱包</string>
     <string name="Welcome_PrivacySettings">隐私设置</string>
     <string name="Welcome_CreateWallet">创建钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
@@ -57,7 +49,6 @@
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_InvalidWordCount">字数有误: %1$d, 必须为%2$d。</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
-    <string name="Restore_RestoreFailed">无法恢复钱包</string>
     <string name="Restore_EosAccountIncorrect">无效账户</string>
     <string name="Restore_EosKeyIncorrect">错误密钥</string>
     <string name="Select_Coins">选择加密货币</string>
@@ -68,16 +59,12 @@
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
     <string name="Backup_Intro_Subtitle">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的私钥将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。\n\n此密钥控制的代币：%s</string>
-    <string name="Backup_Intro_Later">稍后</string>
-    <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_DisplayTitle">私钥</string>
     <string name="Backup_BirthdayHeight">生日高度</string>
     <string name="Backup_Confirmation_Description">输入您%s密钥中的文字</string>
     <string name="Backup_Confirmation_FailureAlertText">文字不匹配</string>
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
-    <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Backup">备份</string>
-    <string name="Backup_Button_Submit">提交</string>
     <string name="Backup_Button_ShowKey">显示密钥</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_Warning">如果您有使用任何剪贴板管理应用或其他可存取剪贴板数据的应用，那么适用”复制“操作复制您的密钥将会带来风险。</string>
@@ -85,7 +72,6 @@
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">接收</string>
     <string name="Balance_Send">发送​​</string>
-    <string name="Balance_Swap">掉期交易</string>
     <string name="Balance_RatePerCoin">%s / %s</string>
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">正在同步...</string>
@@ -104,18 +90,12 @@
     <string name="Send_Hint_Amount">金额</string>
     <string name="Send_Fee">费用</string>
     <string name="Send_Button_Paste">粘帖</string>
-    <string name="Send_Button_Next">下一步</string>
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Confirmation_Title">确认</string>
-    <string name="Send_Confirmation_To">接收人：</string>
-    <string name="Send_Confirmation_Total">总额：</string>
     <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
-    <string name="Send_ScanQrCode">扫描二维码</string>
     <string name="Send_Success">\u2713已发送</string>
     <string name="ScanQr_PleaseGrantCameraPermission">请授予相机权限</string>
-    <string name="Send_Error_InvalidAddress">地址无效。 请检查并重试！</string>
-    <string name="Send_Error_InsufficientBalance">资金不足。</string>
     <string name="Send_Error_IncorrectAddress">错误地址</string>
     <string name="Send_Error_UnsupportedAddress">时间锁定只能和P2PKH地址（以1开头）一起使用</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
@@ -125,7 +105,6 @@
     <string name="Send_Error_WrongParameters">错误参数</string>
     <string name="Send_Error_TransparentAddress">Unstoppable不支持对透明地址付款</string>
     <string name="Send_Error_SendToSelf">不支持发送给自己</string>
-    <string name="Send_DialogTitle">确认</string>
     <string name="Send_DialogAvailableBalance">可用余额</string>
     <string name="Send_DialogSpeed">交易速度</string>
     <string name="Send_TxSpeed_Low">低</string>
@@ -136,7 +115,6 @@
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogDuration">时长</string>
     <string name="Send_DialogFee">费用：</string>
-    <string name="Send_DialogTotal">总额：</string>
     <string name="Send_DialogProceed">继续</string>
     <string name="Send_LockTime_Off">关</string>
     <string name="Send_LockTime_Hour">1 小时</string>
@@ -144,7 +122,6 @@
     <string name="Send_LockTime_HalfYear">6 个月</string>
     <string name="Send_LockTime_Year">1 年</string>
     <string name="Send_Sending">正在发送</string>
-    <string name="Send_ERC_Alert">用Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
@@ -168,24 +145,16 @@
     <string name="Swap_ToAmountTitle">您获得</string>
     <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">估计</string>
-    <string name="Swap_MaxButtonTitle">最多</string>
     <string name="Swap_TokenSelectorTitle">选择</string>
     <string name="Swap_Balance">余额</string>
     <string name="Swap_Allowance">补贴</string>
     <string name="Swap_Price">价格</string>
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">保证金额</string>
-    <string name="Swap_MaximumSold">最大支出</string>
     <string name="Swap_SwapFee">掉期交易费用</string>
-    <string name="Swap_TransactionSpeed">交易速度</string>
-    <string name="Swap_TransactionFee">交易费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
-    <string name="Swap_ErrorInsufficientBalanceForFee">交易费用以%s支付。您需要%s。</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="Swap_ErrorNoLiquidity">无法交换代币</string>
-    <string name="Swap_ErrorCouldNotFetchTrade">无法获取交易信息</string>
-    <string name="Swap_ErrorCouldNotFetchAllowance">无法获取允许信息</string>
-    <string name="Swap_ErrorCouldNotFetchFee">无法获取交易信息</string>
     <string name="Swap_ErrorHighPriceImpact">高价格影响</string>
     <string name="Swap_Proceed">继续</string>
     <string name="Swap_Approve">批准</string>
@@ -201,25 +170,17 @@
     <string name="SwapSettings_DeadlineDescription">如果您交易的待定时间多于此时间，您的交易将恢复原有的状态。</string>
     <string name="SwapSettings_RecipientAddressTitle">接收人地址</string>
     <string name="SwapSettings_RecipientAddressDescription">在兑换操作之后，金额将转移至指定地址</string>
-    <string name="SwapSettings_RecipientAddressHint">本人地址</string>
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
     <string name="SwapSettings_RecipientPlaceholder">地址</string>
     <string name="SwapSettings_Error_SlippageTooLow">您的交易可能失败。</string>
     <string name="SwapSettings_Error_SlippageTooHigh">最大允许值是 %s%%</string>
-    <string name="SwapSettings_Error_DeadlineTooLow">最小允许值为 %d</string>
     <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">确认</string>
-    <string name="Swap_Confirmation_Pay">支付 %s</string>
-    <string name="Swap_Confirmation_Get">获得 %s</string>
     <!--Swap Coin Select-->
-    <string name="SwapCoinSelect_Title">选择代币</string>
     <!--Approve-->
     <string name="Approve_Title">互兑批准</string>
-    <string name="Approve_FeeTitle">费用</string>
-    <string name="Approve_TransactionSpeedTitle">交易速度</string>
-    <string name="Approve_InsufficientFeeAlert">交易费用以%s支付。您需要%s。</string>
     <string name="Approve_Info">您应为智能合约授予权限，以代表您互兑给定的代币。此权限设定了智能合约可以使用的金额。它不会影响您的余额，但需要小额费用以执行批准交易。\n\n虽然这可以在每一次交易之前按需完成，但是预先为我们对将来的交易批准较大的金额将使成本更低。</string>
     <string name="Approve_Error_AlreadyApproved">您已经有了此金额的限额</string>
     <!--Uniswap Info -->
@@ -264,7 +225,6 @@
     <string name="TransactionInfo_RawTransaction">原始交易</string>
     <string name="TransactionInfo_To">接收人</string>
     <string name="TransactionInfo_From">发送人</string>
-    <string name="TransactionInfo_Time">时间</string>
     <string name="TransactionInfo_ButtonVerify">验证</string>
     <string name="TransactionInfo_LockedUntil">锁定至 %s</string>
     <string name="TransactionInfo_UnlockedAt">在 %s 解锁了</string>
@@ -275,7 +235,6 @@
     <string name="TransactionInfo_DoubleSpendNote">双重支付风险！</string>
     <string name="TransactionInfo_Input">输入</string>
     <string name="StatusInfo_Pending">待处理</string>
-    <string name="StatusInfo_Receiving">正在接收</string>
     <string name="StatusInfo_Confirmed">已确认</string>
     <string name="StatusInfo_Failed">失败</string>
     <string name="StatusInfo_PendingDescription">交易尚未在区块链上确认。 根据交易费用的不同，此步骤可能需要几分钟到几个小时。通过极低费用发送的交易通常会在几天内得到处理或被网络拒绝，即没有进行交易。</string>
@@ -294,8 +253,6 @@
     <string name="FullInfo_Time">时间</string>
     <string name="FullInfo_Block">区块</string>
     <string name="FullInfo_Confirmations">确认</string>
-    <string name="FullInfo_Inputs">输入</string>
-    <string name="FullInfo_Outputs">输出</string>
     <string name="FullInfo_Size">大小</string>
     <string name="FullInfo_Fee">费用</string>
     <string name="FullInfo_Rate">价格</string>
@@ -304,7 +261,6 @@
     <string name="FullInfo_From">发送人</string>
     <string name="FullInfo_To">接收人</string>
     <string name="FullInfo_Status">状态</string>
-    <string name="FullInfo_Source_Title">源</string>
     <string name="FullInfo_Source_Online">在线</string>
     <string name="FullInfo_Source_Offline">离线</string>
     <string name="FullInfo_Error_ProviderOffline">离线</string>
@@ -312,12 +268,6 @@
     <string name="FullInfo_Error_Retry">重试</string>
     <string name="FullInfo_Error_ChangeSource">更改源</string>
     <!--no used-->
-    <string name="FullInfo_Id">交易ID</string>
-    <string name="FullInfo_TotalInput">输入总额</string>
-    <string name="FullInfo_TotalOutput">输出总额</string>
-    <string name="FullInfo_FeePerByte">每字节费用</string>
-    <string name="FullInfo_FeeRate">费率</string>
-    <string name="FullInfo_NoAddress">空地址</string>
     <string name="FullInfo_SubtitleInputs">输入</string>
     <string name="FullInfo_SubtitleOutputs">输出</string>
     <string name="FullInfoEth_Amount">金额</string>
@@ -330,21 +280,17 @@
     <string name="Settings_SecurityCenter">安全中心</string>
     <string name="Settings_Notifications">通知</string>
     <string name="Settings_ExperimentalFeatures">实验性功能</string>
-    <string name="Settings_RestoreWallet">恢复钱包</string>
     <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
     <string name="Settings_LightMode">简单模式</string>
     <string name="Settings_Terms">条款</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_Faq">FAQ</string>
-    <string name="Settings_Report">报告问题</string>
     <string name="Settings_AppStatus">应用状态</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">评价我们</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
     <string name="SettingsAboutApp_Site">网站</string>
-    <string name="SettingsOption_Enabled">已启用</string>
-    <string name="SettingsOption_Disabled">已禁用</string>
     <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">同步区块链</string>
@@ -370,8 +316,6 @@
         \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
         \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">指纹未启用</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">您未在此设备上启用指纹。前往“设置 &gt; 安全”设置指纹访问。</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">隐私</string>
     <string name="SettingsSecurity_Biometric_Authentication">生物认证</string>
@@ -379,7 +323,6 @@
     <string name="SettingsSecurity_EnablePin">密码</string>
     <string name="SettingsSecurity_EditPin">编辑密码</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
-    <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
@@ -392,9 +335,6 @@
     <string name="SettingsSecurity_SyncModeBlockchain">来自区块链</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">更私密</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_AppTitle">Unstoppable</string>
-    <string name="SettingsTerms_Github">Github</string>
-    <string name="SettingsTerms_Site">网站</string>
     <string name="SettingsTerms_Text">Unstoppable钱包是为寻求以私密和独立的方式投资和储存加密货币的人士而创立。
 \n\n这是一个非监护式对等钱包，只有用户能够对资金进行控制。它不收集任何数据并通过不把用户钱包锁定至特定的钱包应用来保证他/她的独立性。
 \n\nUnstoppable钱包完全开源且任何人都可以确定应用按照其宣称的方式运行。
@@ -412,8 +352,6 @@
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系信息</string>
-    <string name="SettingsContact_Email">电子邮箱</string>
-    <string name="SettingsContact_Telegram">电报</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">为您要监视的代币设定价格变动警报\n\n当过去24小时内价格变动超过选定的临界值时，您将会收到警报。\n\n价格趋势警报将对短期的1星期、长期的6个月发出趋势变动警告。</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
@@ -433,30 +371,22 @@
     <string name="NotificationBottomMenu_LongTerm">长期6个月</string>
     <string name="NotificationBottomMenu_Long">做多</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">不获支持货币</string>
     <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
     <string name="Eos_Backend_Error_AccountNotExist">目标账户不存在</string>
     <string name="Eos_Backend_Error_InsufficientRam">您的EOS账户没有足够的RAM来发送此令牌。您必须增加RAM才能继续。</string>
     <string name="Binance_Backend_Error_MemoRequired">收款人要求在转账交易中包含非空的备注</string>
     <string name="Binance_Backend_Error_RequiresDigits">要求备注仅包含数字</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Unlock">解锁​​​​</string>
     <string name="Hud_Text_Success">成功</string>
     <string name="Hud_Text_Done">完成</string>
-    <string name="Hud_Text_Error">出错</string>
     <string name="Hud_Text_NoInternet">没有网络</string>
     <string name="Hud_Text_Copied">已复制</string>
     <string name="Hud_Text_EmailAddressCopied">电子邮件地址已复制</string>
-    <string name="Hud_Text_InvalidPinError">错误密码</string>
-    <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">选择代币</string>
-    <string name="ManageCoins_save">保存</string>
     <string name="ManageCoins_Search">搜索​​​​</string>
     <string name="ManageCoins_AddToken">添加代币</string>
-    <string name="ManageCoins_Alert_CantCreateTitle">%s钱包</string>
-    <string name="ManageCoins_Alert_CantCreateDescription">Unstoppable此时无法创建新的%s钱包。您只可以恢复现有的钱包。</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">实验性</string>
     <string name="ExperimentalFeatures_Description">以下功能为实验性，应谨慎使用。虽然我们已使用自己的加密货币资金对这些功能进行了彻底测试，但是我们不保证它们在所有情况下都能如常工作。</string>
@@ -469,7 +399,6 @@
     <string name="ManageKeys_AddressFormat">地址格式</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
-    <string name="ManageKeys_Delete">删除</string>
     <string name="ManageKeys_Backup">备份</string>
     <string name="ManageKeys_Show">显示</string>
     <string name="ManageKeys_Unlink">删除</string>
@@ -520,9 +449,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
-    <string name="BlockchainSettings_SyncMode_Blockchain">区块链</string>
-    <string name="BlockchainSettings_SyncMode_Api">API</string>
-    <string name="BlockchainSettings_CoinSettings">%s 设置</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">连接</string>
@@ -532,17 +458,10 @@
     <string name="TorPage_Connected">已连接</string>
     <string name="TorPage_Failed">失败</string>
     <string name="TorPage_ConnectionClosed">已断开</string>
-    <string name="TorPage_Title">Tor连接</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">恢复选项</string>
-    <string name="CoinOption_Fast_Subtitle">0 - 2小时（推荐）</string>
-    <string name="CoinOption_RestoreSource">API 源链接： \n%s</string>
-    <string name="CoinOption_Slow_Subtitle">1- 24 小时</string>
-    <string name="CoinOption_AddressFormatTitle">地址格式</string>
-    <string name="CoinOption_SyncModeTitle">恢复参数</string>
     <string name="CoinOption_bip44_Subtitle">更旧（以%s...开头）</string>
     <string name="CoinOption_bip49_Subtitle">流行（以%s...开头）</string>
     <string name="CoinOption_bip84_Subtitle">最新（以%s...开头）</string>
@@ -553,13 +472,9 @@
     <string name="Charts_TimeDuration_Month">1个月</string>
     <string name="Charts_TimeDuration_TwoWeeks">2周</string>
     <string name="Charts_TimeDuration_Month3">3个月</string>
-    <string name="Charts_TimeDuration_Quartal">3个月</string>
     <string name="Charts_TimeDuration_HalfYear">6个月</string>
     <string name="Charts_TimeDuration_Year">1年</string>
     <string name="Charts_TimeDuration_Year2">2年</string>
-    <string name="Charts_Title">%s 价格</string>
-    <string name="Charts_Rate_High">高</string>
-    <string name="Charts_Rate_Low">低</string>
     <string name="Charts_MarketCap">市场价值</string>
     <string name="Charts_Volume24">量(24小时)</string>
     <string name="Charts_inCirculation">流通中</string>
@@ -571,7 +486,6 @@
     <string name="Charts_MarketCap_Billion">十亿</string>
     <string name="Charts_MarketCap_Trillion">万亿</string>
     <string name="Charts_Volume">量</string>
-    <string name="Charts_Price">价格</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
     <string name="Charts_LatestNews">最新消息</string>
     <!--Rate list-->
@@ -582,7 +496,6 @@
     <string name="RateList_TopLosers">顶级输家</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">同步出错</string>
-    <string name="BalanceSyncError_Description">如果您选择报告故障，则其文本将被复制</string>
     <string name="BalanceSyncError_ButtonRetry">重试</string>
     <string name="BalanceSyncError_ButtonChangeSource">更改源</string>
     <string name="BalanceSyncError_ButtonReport">报告</string>
