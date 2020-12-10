@@ -36,10 +36,12 @@
 
             <io.horizontalsystems.views.SettingsViewSwitch
                 android:id="@+id/enablePin"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:icon="@drawable/ic_passcode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/privacy"
                 app:title="@string/SettingsSecurity_EnablePin" />
 
@@ -55,11 +57,13 @@
 
             <io.horizontalsystems.views.SettingsViewSwitch
                 android:id="@+id/biometricAuth"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:bottomBorder="true"
                 app:icon="@drawable/ic_fingerprint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/changePin"
                 app:title="@string/SettingsSecurity_Biometric_Authentication" />
 
