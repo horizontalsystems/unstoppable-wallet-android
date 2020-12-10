@@ -19,28 +19,49 @@
         android:id="@+id/txTypeIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_incoming_20" />
 
     <ImageView
-        android:id="@+id/doubleSpendIcon"
+        android:id="@+id/bottomIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:src="@drawable/ic_double_spend_20"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txTypeIcon"
+        app:layout_constraintTop_toBottomOf="@+id/txTypeIcon"
+        tools:src="@drawable/ic_attention_red_20" />
+
+    <io.horizontalsystems.bankwallet.modules.transactions.TransactionProgressView
+        android:id="@+id/transactionProgressView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txTypeIcon"
+        app:layout_constraintTop_toBottomOf="@+id/txTypeIcon" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="bottomIcon,transactionProgressView"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txDate"
-        style="@style/Headline2"
+        style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:includeFontPadding="false"
         android:textAllCaps="true"
         android:textColor="?TextColorGreyLightToDark"
         app:layout_constraintStart_toEndOf="@+id/txTypeIcon"
@@ -51,49 +72,72 @@
         android:id="@+id/txStatusWithTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txDate"
-        app:layout_constraintTop_toBottomOf="@+id/txDate" />
+        app:layout_constraintBottom_toBottomOf="@+id/barrierBottom"
+        app:layout_constraintStart_toStartOf="@+id/txDate" />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
+        android:id="@+id/barrierLeft"
         android:layout_width="1dp"
         android:layout_height="wrap_content"
         app:barrierDirection="right"
-        app:constraint_referenced_ids="txDate,txStatusWithTimeView"
+        app:constraint_referenced_ids="txStatusWithTimeView,txDate"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txValueInFiat"
-        style="@style/Title3"
+        style="@style/Headline1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="5dp"
-        android:drawableEnd="@drawable/ic_lock_20"
-        android:drawablePadding="4dp"
         android:ellipsize="end"
-        android:gravity="end"
+        android:includeFontPadding="false"
         android:lines="1"
+        android:textAlignment="textEnd"
         android:textColor="?ColorRemus"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@+id/sentToSelfIcon"
-        app:layout_constraintStart_toEndOf="@+id/barrier"
+        app:layout_constraintEnd_toStartOf="@+id/doubleSpendIcon"
+        app:layout_constraintStart_toEndOf="@+id/barrierLeft"
         app:layout_constraintTop_toTopOf="@+id/txDate"
-        app:layout_goneMarginEnd="16dp"
         tools:text="$400" />
 
     <ImageView
-        android:id="@+id/sentToSelfIcon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_incoming_20"
+        android:id="@+id/doubleSpendIcon"
+        android:layout_width="24dp"
+        android:layout_height="20dp"
+        android:paddingStart="4dp"
+        android:src="@drawable/ic_double_spend_20"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lockIcon"
         app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />
+
+    <ImageView
+        android:id="@+id/lockIcon"
+        android:layout_width="24dp"
+        android:layout_height="20dp"
+        android:paddingStart="4dp"
+        android:src="@drawable/ic_lock_20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
+        app:layout_constraintEnd_toStartOf="@+id/sentToSelfIcon"
+        app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />
+
+    <ImageView
+        android:id="@+id/sentToSelfIcon"
+        android:layout_width="24dp"
+        android:layout_height="20dp"
+        android:paddingStart="4dp"
+        android:src="@drawable/ic_incoming_20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
+        app:layout_constraintEnd_toEndOf="@+id/guideEnd"
+        app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
 
     <TextView
         android:id="@+id/txValueInCoin"
@@ -106,7 +150,6 @@
         android:includeFontPadding="false"
         android:lines="1"
         android:textColor="@color/grey"
-        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/txValueInFiat"

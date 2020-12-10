@@ -6,16 +6,16 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/failedText"
+        android:id="@+id/statusText"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
-        android:text="@string/Transactions_Failed"
-        android:textColor="?ColorLucian"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/Transactions_Failed" />
 
     <TextView
         android:id="@+id/txTime"
@@ -26,24 +26,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="12:30" />
-
-    <ImageView
-        android:id="@+id/completedIcon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="6.3dp"
-        android:src="@drawable/ic_checkmark_20"
-        app:layout_constraintBottom_toBottomOf="@+id/txTime"
-        app:layout_constraintStart_toEndOf="@+id/txTime"
-        app:layout_constraintTop_toTopOf="@+id/txTime" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.TransactionProgressView
-        android:id="@+id/transactionProgressView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

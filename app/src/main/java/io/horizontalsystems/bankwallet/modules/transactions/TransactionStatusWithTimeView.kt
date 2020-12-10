@@ -29,29 +29,33 @@ class TransactionStatusWithTimeView : ConstraintLayout {
 
     fun bind(transactionStatus: TransactionStatus, type: TransactionType, time: String?) {
         txTime.isVisible = false
-        completedIcon.isVisible = false
-        transactionProgressView.isVisible = false
-        failedText.isVisible = false
+        statusText.isVisible = false
 
         when (transactionStatus) {
             is TransactionStatus.Failed -> {
-                failedText.isVisible = true
+                statusText.isVisible = true
+                statusText.setText(R.string.Transactions_Failed)
+            }
+            is TransactionStatus.Pending -> {
+                statusText.isVisible = true
+                statusText.setText(R.string.Transactions_Pending)
+            }
+            is TransactionStatus.Processing -> {
+                statusText.isVisible = true
+                statusText.setText(getText(type))
             }
             is TransactionStatus.Completed -> {
                 txTime.text = time
                 txTime.isVisible = true
-                completedIcon.isVisible = true
-            }
-            is TransactionStatus.Processing -> {
-                transactionProgressView.bind(transactionStatus.progress, type)
-                transactionProgressView.isVisible = true
-            }
-            is TransactionStatus.Pending -> {
-                transactionProgressView.bind(type = type)
-                transactionProgressView.isVisible = true
             }
         }
         invalidate()
+    }
+
+    private fun getText(type: TransactionType) = when (type) {
+        TransactionType.Outgoing, TransactionType.SentToSelf -> R.string.Transactions_Sending
+        TransactionType.Incoming -> R.string.Transactions_Receiving
+        TransactionType.Approve -> R.string.Transactions_Approving
     }
 
 }

@@ -33,7 +33,6 @@ class TransactionProgressView : ConstraintLayout {
             progress <= 0.66 -> progressBar.setBackgroundResource(getOneConfirmationBackground(type))
             progress <= 1.0 -> progressBar.setBackgroundResource(getTwoConfirmationBackground(type))
         }
-        processText.setText(getDescription(type))
         (progressBar.background as? AnimationDrawable)?.start()
     }
 
@@ -47,12 +46,6 @@ class TransactionProgressView : ConstraintLayout {
         TransactionType.Outgoing,  TransactionType.SentToSelf -> R.drawable.animation_sending_progress_60
         TransactionType.Incoming ->  R.drawable.animation_receiving_progress_60
         TransactionType.Approve -> R.drawable.animation_approving_progress_60
-    }
-
-    private fun getDescription(type: TransactionType) = when (type) {
-        TransactionType.Outgoing, TransactionType.SentToSelf -> R.string.Transactions_Sending
-        TransactionType.Incoming -> R.string.Transactions_Receiving
-        TransactionType.Approve -> R.string.Transactions_Approving
     }
 
 }
