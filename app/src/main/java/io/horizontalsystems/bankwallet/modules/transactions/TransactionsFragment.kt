@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,7 +18,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
@@ -167,7 +168,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     init {
-        containerView.setOnSingleClickListener { l.onClick(adapterPosition) }
+        containerView.setOnSingleClickListener { l.onClick(bindingAdapterPosition) }
     }
 
     fun bind(transactionRecord: TransactionViewItem, showBottomShade: Boolean) {
@@ -175,7 +176,6 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
         }
         txValueInFiat.setTextColor(TransactionViewHelper.getAmountColor(transactionRecord.type, itemView.context))
-        txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, TransactionViewHelper.getLockIcon(transactionRecord.lockState), 0)
         val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(transactionRecord.coinValue.value)
         txValueInCoin.text = App.numberFormatter.formatCoin(transactionRecord.coinValue.value, transactionRecord.coinValue.coin.code, 0, significantDecimal)
         txTypeIcon.setImageResource(TransactionViewHelper.getTransactionTypeIcon(transactionRecord.type))
@@ -183,8 +183,11 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, transactionRecord.type, time)
         bottomShade.isVisible = showBottomShade
+
         sentToSelfIcon.isVisible = transactionRecord.type == TransactionType.SentToSelf
         doubleSpendIcon.isVisible = transactionRecord.doubleSpend
+        setLockIcon(transactionRecord.lockState)
+        setBottomIcon(transactionRecord.status, transactionRecord.type, transactionRecord.doubleSpend)
     }
 
     fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
@@ -196,7 +199,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
 
         if (current.lockState != prev.lockState) {
-            txValueInFiat.setCompoundDrawablesWithIntrinsicBounds(0, 0, TransactionViewHelper.getLockIcon(current.lockState), 0)
+            setLockIcon(current.lockState)
         }
 
         if (current.coinValue != prev.coinValue) {
@@ -208,11 +211,49 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             txDate.text = current.date?.let { DateHelper.shortDate(it) }
             val time = current.date?.let { DateHelper.getOnlyTime(it) }
             txStatusWithTimeView.bind(current.status, current.type, time)
+            setBottomIcon(current.status, current.type, current.doubleSpend)
         }
 
         if (current.doubleSpend != prev.doubleSpend) {
             doubleSpendIcon.isVisible = current.doubleSpend
         }
+    }
+
+    private fun setBottomIcon(status: TransactionStatus, type: TransactionType, doubleSpend: Boolean) {
+        when (status) {
+            is TransactionStatus.Processing -> {
+                bottomIcon.isVisible = false
+                transactionProgressView.isVisible = true
+                transactionProgressView.bind(status.progress, type)
+                return
+            }
+            is TransactionStatus.Pending -> {
+                bottomIcon.isVisible = false
+                transactionProgressView.isVisible = true
+                transactionProgressView.bind(type = type)
+                return
+            }
+            else -> {
+                bottomIcon.isVisible = true
+                transactionProgressView.isVisible = false
+                val image = getBottomIconImage(status)
+                bottomIcon.setImageDrawable(image?.let { ContextCompat.getDrawable(containerView.context, it) })
+            }
+        }
+    }
+
+    private fun getBottomIconImage(status: TransactionStatus): Int? {
+        return when (status) {
+            is TransactionStatus.Failed -> R.drawable.ic_attention_red_20
+            is TransactionStatus.Completed -> R.drawable.ic_checkmark_20
+            else -> null
+        }
+    }
+
+    private fun setLockIcon(lockState: TransactionLockState?) {
+        val imgRes = TransactionViewHelper.getLockIcon(lockState)
+        lockIcon.isVisible = imgRes > 0
+        lockIcon.setImageResource(imgRes)
     }
 
 }
