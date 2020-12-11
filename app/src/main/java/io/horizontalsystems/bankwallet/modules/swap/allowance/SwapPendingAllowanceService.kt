@@ -58,6 +58,10 @@ class SwapPendingAllowanceService(
         sync()
     }
 
+    fun onCleared() {
+        disposables.clear()
+    }
+
     private fun sync() {
         val pendingAllowance = pendingAllowance
         val allowanceState = allowanceService.state

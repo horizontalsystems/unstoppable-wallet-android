@@ -153,6 +153,14 @@ class SwapService(
                 .let { disposables.add(it) }
     }
 
+    fun onCleared() {
+        disposables.clear()
+        tradeService.onCleared()
+        allowanceService.onCleared()
+        pendingAllowanceService.onCleared()
+        transactionService.onCleared()
+    }
+
     private fun onUpdateTrade(state: SwapTradeService.State) {
         when (state) {
             is SwapTradeService.State.Ready -> {

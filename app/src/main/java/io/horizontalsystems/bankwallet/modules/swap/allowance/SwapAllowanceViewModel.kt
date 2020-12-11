@@ -56,6 +56,10 @@ class SwapAllowanceViewModel(
                 .let { disposables.add(it) }
     }
 
+    override fun onCleared() {
+        disposables.clear()
+    }
+
     private fun syncVisible(state: SwapAllowanceService.State? = null) {
         val allowanceState = state ?: allowanceService.state
 

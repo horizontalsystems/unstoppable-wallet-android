@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -14,8 +13,7 @@ import kotlin.math.min
 class SwapApproveViewModel(
         private val service: ISwapApproveService,
         private val coinService: CoinService,
-        private val ethCoinService: CoinService,
-        private val clearables: List<Clearable>
+        private val ethCoinService: CoinService
 ) : ViewModel() {
 
     private val maxCoinDecimal = 8
@@ -106,9 +104,6 @@ class SwapApproveViewModel(
 
     override fun onCleared() {
         disposables.dispose()
-
-        clearables.forEach {
-            it.clear()
-        }
+        service.onCleared()
     }
 }

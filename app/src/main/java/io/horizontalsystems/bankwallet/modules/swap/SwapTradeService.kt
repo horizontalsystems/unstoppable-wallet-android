@@ -147,6 +147,11 @@ class SwapTradeService(
 
         enterCoinFrom(swapCoin)
     }
+
+    fun onCleared() {
+        lastBlockDisposable?.dispose()
+        tradeDataDisposable?.dispose()
+    }
     //endregion
 
     private fun syncState() {

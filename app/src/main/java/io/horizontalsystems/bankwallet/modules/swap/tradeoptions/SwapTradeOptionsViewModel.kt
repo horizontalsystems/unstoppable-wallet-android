@@ -23,6 +23,10 @@ class SwapTradeOptionsViewModel(private val service: ISwapTradeOptionsService, p
                 }
     }
 
+    override fun onCleared() {
+        disposable.clear()
+    }
+
     fun onDoneClick(): Boolean {
         val state = service.state
         return when (state) {
