@@ -64,7 +64,7 @@ object SwapModule {
             SwapService(ethereumKit, tradeService, allowanceService, pendingAllowanceService, transactionService, App.adapterManager)
         }
         private val tradeService by lazy {
-            SwapTradeService(uniswapRepository, fromCoin)
+            SwapTradeService(ethereumKit, uniswapRepository, fromCoin)
         }
         private val stringProvider by lazy {
             StringProvider(App.instance)
