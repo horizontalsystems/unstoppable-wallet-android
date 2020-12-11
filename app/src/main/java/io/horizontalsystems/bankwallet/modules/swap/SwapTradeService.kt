@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.repositories.UniswapRepository
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
@@ -15,11 +16,13 @@ import java.util.*
 
 
 class SwapTradeService(
+        ethereumKit: EthereumKit,
         private val uniswapRepository: UniswapRepository,
         coinFrom: Coin?
 ) {
 
     private var tradeDataDisposable: Disposable? = null
+    private var lastBlockDisposable: Disposable? = null
 
     //region internal subjects
     private val tradeTypeSubject = PublishSubject.create<TradeType>()
@@ -30,6 +33,14 @@ class SwapTradeService(
     private val stateSubject = PublishSubject.create<State>()
     private val tradeOptionsSubject = PublishSubject.create<TradeOptions>()
     //endregion
+
+    init {
+        lastBlockDisposable = ethereumKit.lastBlockHeightFlowable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncState()
+                }
+    }
 
     //region outputs
     var coinFrom: Coin? = coinFrom
