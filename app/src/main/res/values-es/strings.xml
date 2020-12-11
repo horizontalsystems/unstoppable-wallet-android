@@ -212,6 +212,7 @@
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
     <string name="Transactions_EmptyList">Todavía no tienes transacciones pendientes o pasadas</string>
+    <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receiving">Recibiendo</string>
     <string name="Transactions_Sending">Enviando</string>
     <string name="Transactions_Approving">Aprobación de Swap</string>
