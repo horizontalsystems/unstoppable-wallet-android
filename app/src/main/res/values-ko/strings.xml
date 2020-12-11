@@ -212,6 +212,7 @@
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
+    <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receiving">수신 중</string>
     <string name="Transactions_Sending">전송중</string>
     <string name="Transactions_Approving">스왑 승인</string>
