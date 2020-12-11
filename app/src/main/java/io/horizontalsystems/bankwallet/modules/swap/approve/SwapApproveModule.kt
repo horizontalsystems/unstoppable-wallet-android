@@ -35,7 +35,7 @@ object SwapApproveModule {
                     val approveAmountBigInteger = approveData.amount.movePointRight(approveData.coin.decimal).toBigInteger()
                     val allowanceAmountBigInteger = approveData.allowance.movePointRight(approveData.coin.decimal).toBigInteger()
                     val swapApproveService = SwapApproveService(transactionService, erc20Adapter.erc20Kit, ethereumKit, approveAmountBigInteger, Address(approveData.spenderAddress), allowanceAmountBigInteger)
-                    SwapApproveViewModel(swapApproveService, coinService, ethCoinService, listOf(swapApproveService)) as T
+                    SwapApproveViewModel(swapApproveService, coinService, ethCoinService) as T
                 }
                 EthereumFeeViewModel::class.java -> {
                     EthereumFeeViewModel(transactionService, ethCoinService) as T
@@ -53,5 +53,6 @@ interface ISwapApproveService {
     var amount: BigInteger?
     val stateObservable: Observable<SwapApproveService.State>
 
+    fun onCleared()
     fun approve()
 }

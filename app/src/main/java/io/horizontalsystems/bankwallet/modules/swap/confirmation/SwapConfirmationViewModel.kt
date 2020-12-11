@@ -46,7 +46,6 @@ class SwapConfirmationViewModel(
 
     override fun onCleared() {
         disposables.clear()
-        super.onCleared()
     }
 
     fun swap() {

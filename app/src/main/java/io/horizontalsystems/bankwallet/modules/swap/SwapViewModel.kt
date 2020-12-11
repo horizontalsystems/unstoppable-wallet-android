@@ -73,6 +73,11 @@ class SwapViewModel(
     }
     //endregion
 
+    override fun onCleared() {
+        service.onCleared()
+        disposables.clear()
+    }
+
     private fun subscribeToServices() {
         service.stateObservable
                 .subscribeOn(Schedulers.io())

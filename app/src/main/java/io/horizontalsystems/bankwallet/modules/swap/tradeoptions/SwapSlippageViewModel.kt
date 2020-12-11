@@ -53,6 +53,10 @@ class SwapSlippageViewModel(private val service: SwapTradeOptionsService) : View
 
     }
 
+    override fun onCleared() {
+        disposable.clear()
+    }
+
     override fun setInputFieldValue(text: String?) {
         service.slippage = text?.toBigDecimalOrNull() ?: SwapService.defaultSlippage
     }
