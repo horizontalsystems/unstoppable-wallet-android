@@ -212,6 +212,7 @@
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
     <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
+    <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receiving">Alınıyor</string>
     <string name="Transactions_Sending">Gönderiliyor</string>
     <string name="Transactions_Approving">Swap onaylama</string>
