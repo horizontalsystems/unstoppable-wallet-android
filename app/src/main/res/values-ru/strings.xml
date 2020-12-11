@@ -212,6 +212,7 @@
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
     <string name="Transactions_EmptyList">У вас ещё нет незавершенных или прошлых транзакций</string>
+    <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receiving">Получение</string>
     <string name="Transactions_Sending">Отправка</string>
     <string name="Transactions_Approving">Подтверждение обмена</string>
