@@ -80,7 +80,8 @@ object PrivacySettingsModule {
         val interactor = PrivacySettingsInteractor(
                 App.pinComponent,
                 App.torKitManager,
-                App.blockchainSettingsManager,
+                App.syncModeSettingsManager,
+                App.communicationSettingsManager,
                 App.coinManager,
                 App.walletManager,
                 App.localStorage,

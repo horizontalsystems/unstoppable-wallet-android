@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessio
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
-import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.pin.PinComponent
@@ -70,11 +69,12 @@ class App : CoreApp() {
         lateinit var notificationManager: INotificationManager
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
-        lateinit var blockchainSettingsManager: IBlockchainSettingsManager
+        lateinit var communicationSettingsManager: ICommunicationSettingsManager
+        lateinit var syncModeSettingsManager: ISyncModeSettingsManager
+        lateinit var derivationSettingsManager: IDerivationSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
         lateinit var rateAppManager: IRateAppManager
-        lateinit var derivationSettingsManager: IDerivationSettingsManager
         lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
         lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
@@ -132,10 +132,9 @@ class App : CoreApp() {
 
         torKitManager = TorManager(instance, localStorage)
 
-        val communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
         derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
-        val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
-        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
+        syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
+        communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
 
         wordsManager = WordsManager()
         networkManager = NetworkManager()
@@ -162,7 +161,7 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager, backgroundManager)
+        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager, derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
 
         rateCoinMapper = RateCoinMapper()

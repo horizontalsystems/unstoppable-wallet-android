@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 class ManageKeysInteractor(
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
-        private val blockchainSettingsManager: IBlockchainSettingsManager,
+        private val derivationSettingsManager: IDerivationSettingsManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val priceAlertManager: IPriceAlertManager)
     : ManageKeysModule.Interactor {
@@ -64,7 +64,7 @@ class ManageKeysInteractor(
 
         account?.let {
             return getWallets().find {
-                it.account.id == account.id && blockchainSettingsManager.derivationSetting(it.coin.type) != null
+                it.account.id == account.id && derivationSettingsManager.derivationSetting(it.coin.type) != null
             } != null
         }
 

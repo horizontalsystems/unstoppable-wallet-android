@@ -23,7 +23,7 @@ class SyncModeSettingsManager(
 
     override fun syncModeSetting(coinType: CoinType): SyncModeSetting? {
         val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(coinType, syncModeSettingKey)
-        return blockchainSetting?.let { SyncModeSetting(coinType, SyncMode.valueOf(it.value)) }
+        return blockchainSetting?.let { SyncModeSetting(coinType, SyncMode.valueOf(it.value)) } ?: defaultSyncModeSetting(coinType)
     }
 
     override fun updateSetting(syncModeSetting: SyncModeSetting) {

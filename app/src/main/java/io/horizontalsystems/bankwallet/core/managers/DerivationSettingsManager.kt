@@ -23,7 +23,7 @@ class DerivationSettingsManager(
 
     override fun derivationSetting(coinType: CoinType): DerivationSetting? {
         val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(coinType, derivationSettingKey)
-        return blockchainSetting?.let { DerivationSetting(coinType, AccountType.Derivation.valueOf(it.value)) }
+        return blockchainSetting?.let { DerivationSetting(coinType, AccountType.Derivation.valueOf(it.value)) } ?: defaultDerivationSetting(coinType)
     }
 
     override fun updateSetting(derivationSetting: DerivationSetting) {

@@ -393,19 +393,6 @@ interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
 }
 
-interface IBlockchainSettingsManager {
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun communicationSetting(coinType: CoinType): CommunicationSetting?
-
-    fun saveSetting(derivationSetting: DerivationSetting)
-    fun saveSetting(syncModeSetting: SyncModeSetting)
-    fun saveSetting(communicationSetting: CommunicationSetting)
-
-    fun initializeSettingsWithDefault(coinType: CoinType)
-    fun initializeSettings(coinType: CoinType)
-}
-
 interface IDerivationSettingsManager {
     fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
     fun derivationSetting(coinType: CoinType): DerivationSetting?
