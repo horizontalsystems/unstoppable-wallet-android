@@ -19,31 +19,44 @@ class UniswapRepository(
     val routerAddress: Address
         get() = uniswapKit.routerAddress
 
-    fun getTradeData(coinFrom: Coin, coinTo: Coin, amount: BigDecimal, tradeType: TradeType, tradeOptions: TradeOptions): Single<TradeData> =
+    fun getTradeData(coinFrom: Coin, coinTo: Coin, amount: BigDecimal, tradeType: TradeType, tradeOptions: TradeOptions, forcedSync: Boolean): Single<TradeData> =
             Single.create { emitter ->
                 try {
                     val cacheKey = Pair(coinFrom, coinTo)
-                    val swapData: SwapData = swapDataCache[cacheKey] ?: kotlin.run {
-                        val tokenIn = uniswapToken(coinFrom)
-                        val tokenOut = uniswapToken(coinTo)
-                        uniswapKit.swapData(tokenIn, tokenOut).blockingGet().also {
-                            swapDataCache[cacheKey] = it
-                        }
+
+                    if (forcedSync || swapDataCache[cacheKey] == null){
+                        val swapData = swapData(coinFrom, coinTo).blockingGet()
+                        val tradeData = tradeData(tradeType, swapData, amount, tradeOptions)
+                        emitter.onSuccess(tradeData)
+
+                        swapDataCache[cacheKey] = swapData
                     }
 
-                    val tradeData = when (tradeType) {
-                        TradeType.ExactIn -> {
-                            uniswapKit.bestTradeExactIn(swapData, amount, tradeOptions)
-                        }
-                        TradeType.ExactOut -> {
-                            uniswapKit.bestTradeExactOut(swapData, amount, tradeOptions)
-                        }
+                    swapDataCache[cacheKey]?.let {
+                        val tradeData = tradeData(tradeType, it, amount, tradeOptions)
+                        emitter.onSuccess(tradeData)
                     }
-                    emitter.onSuccess(tradeData)
                 } catch (error: Throwable) {
                     emitter.onError(error)
                 }
             }
+
+    private fun tradeData(tradeType: TradeType, swapData: SwapData, amount: BigDecimal, tradeOptions: TradeOptions): TradeData {
+        return when (tradeType) {
+            TradeType.ExactIn -> {
+                uniswapKit.bestTradeExactIn(swapData, amount, tradeOptions)
+            }
+            TradeType.ExactOut -> {
+                uniswapKit.bestTradeExactOut(swapData, amount, tradeOptions)
+            }
+        }
+    }
+
+    private fun swapData(coinFrom: Coin, coinTo: Coin): Single<SwapData> {
+        val tokenIn = uniswapToken(coinFrom)
+        val tokenOut = uniswapToken(coinTo)
+        return uniswapKit.swapData(tokenIn, tokenOut)
+    }
 
     fun transactionData(tradeData: TradeData): TransactionData {
         return uniswapKit.transactionData(tradeData)
