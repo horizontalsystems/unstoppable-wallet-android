@@ -10,7 +10,8 @@ import io.reactivex.disposables.CompositeDisposable
 class PrivacySettingsInteractor(
         private val pinComponent: IPinComponent,
         private val torManager: ITorManager,
-        private val blockchainSettingsManager: IBlockchainSettingsManager,
+        private val syncModeSettingsManager: ISyncModeSettingsManager,
+        private val communicationSettingsManager: ICommunicationSettingsManager,
         private val coinManager: ICoinManager,
         private val walletManager: IWalletManager,
         private val localStorageManager: ILocalStorage,
@@ -105,19 +106,19 @@ class PrivacySettingsInteractor(
     }
 
     override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
-        return blockchainSettingsManager.communicationSetting(coinType)
+        return communicationSettingsManager.communicationSetting(coinType)
     }
 
     override fun saveCommunicationSetting(communicationSetting: CommunicationSetting) {
-        blockchainSettingsManager.saveSetting(communicationSetting)
+        communicationSettingsManager.updateSetting(communicationSetting)
     }
 
     override fun syncModeSetting(coinType: CoinType): SyncModeSetting? {
-        return blockchainSettingsManager.syncModeSetting(coinType)
+        return syncModeSettingsManager.syncModeSetting(coinType)
     }
 
     override fun saveSyncModeSetting(syncModeSetting: SyncModeSetting) {
-        blockchainSettingsManager.saveSetting(syncModeSetting)
+        syncModeSettingsManager.updateSetting(syncModeSetting)
     }
 
     override fun ether(): Coin {

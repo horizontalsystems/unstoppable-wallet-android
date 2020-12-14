@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.IBlockchainSettingsManager
-import io.horizontalsystems.bankwallet.core.IEosKitManager
-import io.horizontalsystems.bankwallet.core.IEthereumKitManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
@@ -18,13 +15,15 @@ class AdapterFactory(
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager,
-        private val blockchainSettingsManager: IBlockchainSettingsManager,
-        private val backgroundManager: BackgroundManager) {
+        private val backgroundManager: BackgroundManager,
+        private val derivationSettingsManager: IDerivationSettingsManager,
+        private val syncModeSettingsManager: ISyncModeSettingsManager,
+        private val communicationSettingsManager: ICommunicationSettingsManager) {
 
     fun adapter(wallet: Wallet): IAdapter? {
-        val derivation = blockchainSettingsManager.derivationSetting(wallet.coin.type)?.derivation
-        val syncMode = blockchainSettingsManager.syncModeSetting(wallet.coin.type)?.syncMode
-        val communicationMode = blockchainSettingsManager.communicationSetting(wallet.coin.type)?.communicationMode
+        val derivation = derivationSettingsManager.derivationSetting(wallet.coin.type)?.derivation
+        val syncMode = syncModeSettingsManager.syncModeSetting(wallet.coin.type)?.syncMode
+        val communicationMode = communicationSettingsManager.communicationSetting(wallet.coin.type)?.communicationMode
 
         return when (val coinType = wallet.coin.type) {
             is CoinType.Zcash -> ZcashAdapter(context, wallet, testMode)

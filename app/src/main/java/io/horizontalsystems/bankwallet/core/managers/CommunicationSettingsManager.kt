@@ -30,7 +30,7 @@ class CommunicationSettingsManager(
 
     override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
         val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(getBaseCoinType(coinType), communicationSettingKey)
-        return blockchainSetting?.let { CommunicationSetting(getBaseCoinType(coinType), CommunicationMode.valueOf(it.value)) }
+        return blockchainSetting?.let { CommunicationSetting(getBaseCoinType(coinType), CommunicationMode.valueOf(it.value)) } ?: defaultCommunicationSetting(coinType)
     }
 
     override fun updateSetting(communicationSetting: CommunicationSetting) {
