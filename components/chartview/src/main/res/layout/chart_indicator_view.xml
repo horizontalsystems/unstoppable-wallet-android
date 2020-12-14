@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="44dp"
     android:background="@drawable/chart_indicator_background"
     android:foreground="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    tools:parentTag="android.widget.LinearLayout">
+    android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/stateIcon"
@@ -37,4 +36,4 @@
         android:includeFontPadding="false"
         tools:text="Down Trend" />
 
-</merge>
+</LinearLayout>
