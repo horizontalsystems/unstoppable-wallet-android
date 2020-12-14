@@ -38,7 +38,7 @@ class SwapTradeService(
         lastBlockDisposable = ethereumKit.lastBlockHeightFlowable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    syncState()
+                    syncState(true)
                 }
     }
 
@@ -154,7 +154,7 @@ class SwapTradeService(
     }
     //endregion
 
-    private fun syncState() {
+    private fun syncState(forcedSync: Boolean = false) {
         val coinFrom = coinFrom
         val coinTo = coinTo
         val amount = if (tradeType == TradeType.ExactIn) amountFrom else amountTo
@@ -167,7 +167,7 @@ class SwapTradeService(
             tradeDataDisposable?.dispose()
             tradeDataDisposable = null
 
-            tradeDataDisposable = uniswapRepository.getTradeData(coinFrom, coinTo, amount, tradeType, tradeOptions)
+            tradeDataDisposable = uniswapRepository.getTradeData(coinFrom, coinTo, amount, tradeType, tradeOptions, forcedSync)
                     .subscribeOn(Schedulers.io())
                     .subscribe({ tradeData ->
                         handle(tradeData)
