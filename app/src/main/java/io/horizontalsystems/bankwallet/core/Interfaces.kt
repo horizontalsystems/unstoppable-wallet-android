@@ -312,8 +312,6 @@ interface IAppConfigProvider {
     val featuredCoins: List<Coin>
     val defaultCoins: List<Coin>
     val ethereumCoin: Coin
-    val derivationSettings: List<DerivationSetting>
-    val syncModeSettings: List<SyncModeSetting>
     val communicationSettings: List<CommunicationSetting>
 }
 
@@ -365,6 +363,14 @@ interface IEnabledWalletStorage {
     fun deleteAll()
 }
 
+interface IBlockchainSettingsStorage {
+    fun derivationSetting(coinType: CoinType) : DerivationSetting?
+    fun saveDerivationSetting(derivationSetting: DerivationSetting)
+    fun deleteDerivationSettings()
+    fun initialSyncSetting(coinType: CoinType) : InitialSyncSetting?
+    fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
+}
+
 interface IWalletManager {
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
@@ -394,16 +400,17 @@ interface IAddressParser {
 }
 
 interface IDerivationSettingsManager {
-    fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun updateSetting(derivationSetting: DerivationSetting)
+    fun allActiveSettings(): List<Pair<DerivationSetting, Coin>>
+    fun defaultSetting(coinType: CoinType): DerivationSetting?
+    fun setting(coinType: CoinType): DerivationSetting?
+    fun save(setting: DerivationSetting)
     fun reset()
 }
 
-interface ISyncModeSettingsManager {
-    fun defaultSyncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun updateSetting(syncModeSetting: SyncModeSetting)
+interface IInitialSyncModeSettingsManager {
+    fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
+    fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
+    fun save(setting: InitialSyncSetting)
 }
 
 interface ICommunicationSettingsManager {

@@ -16,13 +16,14 @@ class AdapterFactory(
         private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager,
         private val backgroundManager: BackgroundManager,
-        private val derivationSettingsManager: IDerivationSettingsManager,
-        private val syncModeSettingsManager: ISyncModeSettingsManager,
         private val communicationSettingsManager: ICommunicationSettingsManager) {
 
+    var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager? = null
+    var derivationSettingsManager: IDerivationSettingsManager? = null
+
     fun adapter(wallet: Wallet): IAdapter? {
-        val derivation = derivationSettingsManager.derivationSetting(wallet.coin.type)?.derivation
-        val syncMode = syncModeSettingsManager.syncModeSetting(wallet.coin.type)?.syncMode
+        val derivation = derivationSettingsManager?.setting(wallet.coin.type)?.derivation
+        val syncMode = initialSyncModeSettingsManager?.setting(wallet.coin.type, wallet.account.origin)?.syncMode
         val communicationMode = communicationSettingsManager.communicationSetting(wallet.coin.type)?.communicationMode
 
         return when (val coinType = wallet.coin.type) {

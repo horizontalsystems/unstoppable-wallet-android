@@ -32,11 +32,11 @@ class RestoreSelectCoinsService(
     }
 
     override fun enable(coin: Coin, derivationSetting: DerivationSetting?) {
-        val coinDerivationSetting = derivationSettingsManager.derivationSetting(coin.type) ?: derivationSettingsManager.defaultDerivationSetting(coin.type)
+        val coinDerivationSetting = derivationSettingsManager.setting(coin.type) ?: derivationSettingsManager.defaultSetting(coin.type)
         coinDerivationSetting?.let { setting ->
             derivationSetting ?: throw EnableCoinError.DerivationNotConfirmed(setting.derivation)
 
-            derivationSettingsManager.updateSetting(derivationSetting)
+            derivationSettingsManager.save(derivationSetting)
         }
 
         enabledCoins.add(coin)

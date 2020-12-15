@@ -58,6 +58,7 @@ class App : CoreApp() {
         lateinit var accountsStorage: IAccountsStorage
         lateinit var priceAlertManager: IPriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
+        lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var ethereumKitManager: IEthereumKitManager
@@ -70,7 +71,7 @@ class App : CoreApp() {
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
         lateinit var communicationSettingsManager: ICommunicationSettingsManager
-        lateinit var syncModeSettingsManager: ISyncModeSettingsManager
+        lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
         lateinit var derivationSettingsManager: IDerivationSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
@@ -120,6 +121,7 @@ class App : CoreApp() {
         coinManager = CoinManager(appConfigProvider, coinRecordStorage)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
         walletStorage = WalletStorage(coinManager, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
@@ -132,8 +134,6 @@ class App : CoreApp() {
 
         torKitManager = TorManager(instance, localStorage)
 
-        derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
-        syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
         communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
 
         wordsManager = WordsManager()
@@ -161,8 +161,14 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager, derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
+        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager, communicationSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
+
+        initialSyncModeSettingsManager = InitialSyncSettingsManager(appConfigProvider, blockchainSettingsStorage, adapterManager, walletManager)
+        derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
+
+        adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
+        adapterFactory.derivationSettingsManager = derivationSettingsManager
 
         rateCoinMapper = RateCoinMapper()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)

@@ -19,8 +19,7 @@ class AddressFormatSettingsPresenter(
     }
 
     override fun onSelect(derivationSetting: DerivationSetting) {
-        if (derivations.firstOrNull{ it.coinType == derivationSetting.coinType }?.derivation != derivationSetting.derivation
-                && interactor.getWalletForUpdate(derivationSetting.coinType) != null) {
+        if (derivations.firstOrNull{ it.coinType == derivationSetting.coinType }?.derivation != derivationSetting.derivation) {
             val coin = interactor.getCoin(derivationSetting.coinType)
             view.showDerivationChangeAlert(derivationSetting, coin.title)
         } else {
@@ -30,10 +29,6 @@ class AddressFormatSettingsPresenter(
 
     override fun proceedWithDerivationChange(derivationSetting: DerivationSetting) {
         updateDerivation(derivationSetting)
-
-        interactor.getWalletForUpdate(derivationSetting.coinType)?.let {
-            interactor.reSyncWallet(it)
-        }
     }
 
     private fun updateDerivation(derivationSetting: DerivationSetting) {

@@ -49,17 +49,13 @@ object PrivacySettingsModule {
         fun disableTor()
         fun subscribeToTorStatus()
 
+        fun syncSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
         fun communicationSetting(coinType: CoinType): CommunicationSetting?
         fun saveCommunicationSetting(communicationSetting: CommunicationSetting)
-        fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-        fun saveSyncModeSetting(syncModeSetting: SyncModeSetting)
+        fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
         fun ether(): Coin
         fun eos(): Coin
         fun binance(): Coin
-        fun bitcoin(): Coin
-        fun litecoin(): Coin
-        fun bitcoinCash(): Coin
-        fun dash(): Coin
         fun getWalletsForUpdate(coinType: CoinType): List<Wallet>
         fun reSyncWallets(wallets: List<Wallet>)
 
@@ -80,7 +76,7 @@ object PrivacySettingsModule {
         val interactor = PrivacySettingsInteractor(
                 App.pinComponent,
                 App.torKitManager,
-                App.syncModeSettingsManager,
+                App.initialSyncModeSettingsManager,
                 App.communicationSettingsManager,
                 App.coinManager,
                 App.walletManager,
