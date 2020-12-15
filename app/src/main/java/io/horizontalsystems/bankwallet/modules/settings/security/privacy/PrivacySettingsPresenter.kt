@@ -33,16 +33,9 @@ class PrivacySettingsPresenter(
         }
     }
 
-    private val walletRestoreSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
-            interactor.bitcoin(),
-            interactor.litecoin(),
-            interactor.bitcoinCash(),
-            interactor.dash())
-            .map { coin ->
-                val syncMode = interactor.syncModeSetting(coin.type)?.syncMode
-                val enabled = syncMode != null
-
-                PrivacySettingsViewItem(coin, WalletRestore(syncMode ?: SyncMode.Slow), enabled)
+    private val walletRestoreSettingsViewItems: List<PrivacySettingsViewItem> =
+            interactor.syncSettings().map { (initialSyncSetting, coin, changeable) ->
+                PrivacySettingsViewItem(coin, WalletRestore(initialSyncSetting.syncMode), changeable)
             }
 
     private val communicationModeOptions = listOf(CommunicationMode.Infura)
@@ -146,7 +139,7 @@ class PrivacySettingsPresenter(
 
             if (settingType is WalletRestore) {
                 val syncMode = syncModeOptions[position]
-                onSelectSyncMode(coin, syncMode, settingType.selected)
+                onSelectSyncMode(coin, syncMode)
             } else if (settingType is Communication) {
                 val communicationMode = communicationModeOptions[position]
                 onSelectCommunicationMode(coin, communicationMode)
@@ -176,19 +169,14 @@ class PrivacySettingsPresenter(
         }
     }
 
-    private fun onSelectSyncMode(coin: Coin, selectedValue: SyncMode, currentValue: SyncMode) {
+    private fun onSelectSyncMode(coin: Coin, selectedValue: SyncMode) {
         updateSyncMode(coin, selectedValue)
-
-        val walletsForUpdate = interactor.getWalletsForUpdate(coin.type)
-        if (walletsForUpdate.isNotEmpty()) {
-            interactor.reSyncWallets(walletsForUpdate)
-        }
     }
 
     private fun updateSyncMode(coin: Coin, syncMode: SyncMode) {
         (openedPrivacySettings?.settingType as? WalletRestore)?.selected = syncMode
 
-        interactor.saveSyncModeSetting(SyncModeSetting(coin.type, syncMode))
+        interactor.saveSyncModeSetting(InitialSyncSetting(coin.type, syncMode))
         view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
 
         openedPrivacySettings = null

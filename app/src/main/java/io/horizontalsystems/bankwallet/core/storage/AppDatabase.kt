@@ -11,8 +11,6 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.CommunicationSettingsManager
-import io.horizontalsystems.bankwallet.core.managers.DerivationSettingsManager
-import io.horizontalsystems.bankwallet.core.managers.SyncModeSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
 @Database(version = 24, exportSchema = false, entities = [
@@ -298,11 +296,11 @@ abstract class AppDatabase : RoomDatabase() {
 
             private fun saveSettings(database: SupportSQLiteDatabase, coinType: String, derivation: String?, syncMode: String?, communication: String?) {
                 derivation?.let {
-                    insertIntoBlockchainSetting(database, coinType, DerivationSettingsManager.derivationSettingKey, it)
+                    insertIntoBlockchainSetting(database, coinType, BlockchainSettingsStorage.derivationSettingKey, it)
                 }
 
                 syncMode?.let {
-                    insertIntoBlockchainSetting(database, coinType, SyncModeSettingsManager.syncModeSettingKey, it)
+                    insertIntoBlockchainSetting(database, coinType, BlockchainSettingsStorage.syncModeSettingKey, it)
                 }
 
                 communication?.let {

@@ -28,11 +28,10 @@ object AddressFormatSettingsModule {
     }
 
     interface IInteractor {
+        val allActiveSettings: List<Pair<DerivationSetting, Coin>>
         fun derivation(coinType: CoinType): Derivation
         fun getCoin(coinType: CoinType): Coin
-        fun getWalletForUpdate(coinType: CoinType): Wallet?
         fun saveDerivation(derivationSetting: DerivationSetting)
-        fun reSyncWallet(wallet: Wallet)
     }
 
     interface IRouter {
@@ -44,7 +43,7 @@ object AddressFormatSettingsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = AddressFormatSettingsView()
             val router = AddressFormatSettingsRouter()
-            val interactor = AddressFormatSettingsInteractor(App.derivationSettingsManager, App.coinManager, App.walletManager, App.adapterManager)
+            val interactor = AddressFormatSettingsInteractor(App.derivationSettingsManager, App.coinManager)
             val presenter = AddressFormatSettingsPresenter(view, router, interactor, coinTypes)
 
             return presenter as T

@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 class PrivacySettingsInteractor(
         private val pinComponent: IPinComponent,
         private val torManager: ITorManager,
-        private val syncModeSettingsManager: ISyncModeSettingsManager,
+        private val syncModeSettingsManager: IInitialSyncModeSettingsManager,
         private val communicationSettingsManager: ICommunicationSettingsManager,
         private val coinManager: ICoinManager,
         private val walletManager: IWalletManager,
@@ -105,6 +105,10 @@ class PrivacySettingsInteractor(
                 }
     }
 
+    override fun syncSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>> {
+        return syncModeSettingsManager.allSettings()
+    }
+
     override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
         return communicationSettingsManager.communicationSetting(coinType)
     }
@@ -113,12 +117,8 @@ class PrivacySettingsInteractor(
         communicationSettingsManager.updateSetting(communicationSetting)
     }
 
-    override fun syncModeSetting(coinType: CoinType): SyncModeSetting? {
-        return syncModeSettingsManager.syncModeSetting(coinType)
-    }
-
-    override fun saveSyncModeSetting(syncModeSetting: SyncModeSetting) {
-        syncModeSettingsManager.updateSetting(syncModeSetting)
+    override fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting) {
+        syncModeSettingsManager.save(syncModeSetting)
     }
 
     override fun ether(): Coin {
@@ -131,22 +131,6 @@ class PrivacySettingsInteractor(
 
     override fun binance(): Coin {
         return coinManager.coins.first { it.code == "BNB" }
-    }
-
-    override fun bitcoin(): Coin {
-        return coinManager.coins.first { it.code == "BTC" }
-    }
-
-    override fun litecoin(): Coin {
-        return coinManager.coins.first { it.code == "LTC" }
-    }
-
-    override fun bitcoinCash(): Coin {
-        return coinManager.coins.first { it.code == "BCH" }
-    }
-
-    override fun dash(): Coin {
-        return coinManager.coins.first { it.code == "DASH" }
     }
 
     override fun getWalletsForUpdate(coinType: CoinType): List<Wallet> {

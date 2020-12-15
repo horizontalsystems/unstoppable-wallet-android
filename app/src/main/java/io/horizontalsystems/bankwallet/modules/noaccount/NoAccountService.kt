@@ -20,7 +20,7 @@ class NoAccountService(
     }
 
     override fun derivationSetting(coinType: CoinType): DerivationSetting? {
-        return derivationSettingsManager.derivationSetting(coinType)
+        return derivationSettingsManager.setting(coinType)
     }
 
     override fun resetDerivationSettings() {

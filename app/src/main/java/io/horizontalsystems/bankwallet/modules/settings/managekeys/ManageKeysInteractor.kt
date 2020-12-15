@@ -56,18 +56,11 @@ class ManageKeysInteractor(
         return predefinedAccountTypes.map {
 
             val account = predefinedAccountTypeManager.account(it)
-            ManageAccountItem(it, account , hasDerivationSettings(account))
+            ManageAccountItem(it, account , hasDerivationSettings(it))
         }
     }
 
-    private fun hasDerivationSettings(account: Account?): Boolean {
-
-        account?.let {
-            return getWallets().find {
-                it.account.id == account.id && derivationSettingsManager.derivationSetting(it.coin.type) != null
-            } != null
-        }
-
-        return false
+    private fun hasDerivationSettings(predefinedAccountType: PredefinedAccountType): Boolean {
+        return predefinedAccountType == PredefinedAccountType.Standard && derivationSettingsManager.allActiveSettings().isNotEmpty()
     }
 }

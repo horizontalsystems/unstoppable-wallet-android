@@ -51,13 +51,13 @@ class ManageWalletsService(
         val account = account(coin) ?: throw EnableCoinError.NoAccount
 
         if (account.origin == AccountOrigin.Restored) {
-            val derivation = derivationSettingsManager.derivationSetting(coin.type) ?: derivationSettingsManager.defaultDerivationSetting(coin.type)
+            val derivation = derivationSettingsManager.setting(coin.type) ?: derivationSettingsManager.defaultSetting(coin.type)
 
             derivation?.let { setting ->
 
                 derivationSetting ?: throw EnableCoinError.DerivationNotConfirmed(setting.derivation)
 
-                derivationSettingsManager.updateSetting(derivationSetting)
+                derivationSettingsManager.save(derivationSetting)
             }
         }
 

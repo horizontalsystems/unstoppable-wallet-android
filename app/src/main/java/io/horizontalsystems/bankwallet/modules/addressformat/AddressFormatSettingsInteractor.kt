@@ -5,18 +5,18 @@ import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.entities.Wallet
 
 class AddressFormatSettingsInteractor(
         private val derivationSettingsManager: IDerivationSettingsManager,
-        private val coinManager: ICoinManager,
-        private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager
+        private val coinManager: ICoinManager
 ) : AddressFormatSettingsModule.IInteractor {
 
+    override val allActiveSettings: List<Pair<DerivationSetting, Coin>>
+        get() = derivationSettingsManager.allActiveSettings()
+
     override fun derivation(coinType: CoinType): Derivation {
-        return derivationSettingsManager.derivationSetting(coinType)?.derivation
-                ?: derivationSettingsManager.defaultDerivationSetting(coinType)?.derivation
+        return derivationSettingsManager.setting(coinType)?.derivation
+                ?: derivationSettingsManager.defaultSetting(coinType)?.derivation
                 ?: throw Exception("No derivation found for ${coinType.javaClass.simpleName}")
     }
 
@@ -24,15 +24,8 @@ class AddressFormatSettingsInteractor(
         return coinManager.coins.first { it.type == coinType }
     }
 
-    override fun getWalletForUpdate(coinType: CoinType): Wallet? {
-        return walletManager.wallets.firstOrNull { it.coin.type == coinType }
-    }
-
     override fun saveDerivation(derivationSetting: DerivationSetting) {
-        derivationSettingsManager.updateSetting(derivationSetting)
+        derivationSettingsManager.save(derivationSetting)
     }
 
-    override fun reSyncWallet(wallet: Wallet) {
-        adapterManager.refreshAdapters(listOf(wallet))
-    }
 }
