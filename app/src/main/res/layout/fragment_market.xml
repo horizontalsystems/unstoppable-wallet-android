@@ -20,17 +20,6 @@
             app:menu="@menu/market_menu"
             app:title="@string/Market_Title">
 
-            <ProgressBar
-                android:id="@+id/toolbarSpinner"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="18dp"
-                android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/circular_spinner"
-                android:indeterminateTint="@color/grey"
-                android:visibility="invisible" />
-
         </androidx.appcompat.widget.Toolbar>
 
         <io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost
@@ -52,11 +41,9 @@
         </io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerMarketItems"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="3"
-        tools:listitem="@layout/view_holder_coin_rate" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

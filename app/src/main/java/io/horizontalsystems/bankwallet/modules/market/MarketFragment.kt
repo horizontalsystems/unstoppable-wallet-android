@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
@@ -26,9 +25,20 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
 
         recyclerTags.adapter = filterAdapter
 
-        filterAdapter.setFilters(viewModel.categories.map { FilterAdapter.FilterItem(it.name) })
+        filterAdapter.setFilters(viewModel.categories.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(viewModel.currentCategory.name))
 
-        toolbarSpinner.isVisible = true
+        viewPager.adapter = MarketTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+        viewPager.isUserInputEnabled = false
+
+        viewModel.categoryLiveData.observe(viewLifecycleOwner, { category: MarketCategoriesService.Category ->
+            val contentFragment = when (category) {
+                MarketCategoriesService.Category.Top100 -> 0
+                MarketCategoriesService.Category.DeFi -> 1
+                MarketCategoriesService.Category.Favorites -> 2
+            }
+
+            viewPager.setCurrentItem(contentFragment, false)
+        })
     }
 
     override fun updateFilter(query: String) {
@@ -36,6 +46,8 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     }
 
     override fun onFilterItemClick(item: FilterAdapter.FilterItem?, itemPosition: Int, itemWidth: Int) {
-
+        MarketCategoriesService.Category.fromString(item?.filterId)?.let {
+            viewModel.currentCategory = it
+        }
     }
 }

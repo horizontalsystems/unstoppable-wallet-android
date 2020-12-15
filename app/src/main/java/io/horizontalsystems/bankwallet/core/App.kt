@@ -37,6 +37,7 @@ class App : CoreApp() {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
+        lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
         lateinit var chartTypeStorage: IChartTypeStorage
 
@@ -130,6 +131,7 @@ class App : CoreApp() {
             pinStorage = this
             thirdKeyboardStorage = this
             themeStorage = this
+            marketStorage = this
         }
 
         torKitManager = TorManager(instance, localStorage)

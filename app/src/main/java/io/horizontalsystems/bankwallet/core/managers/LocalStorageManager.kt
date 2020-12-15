@@ -6,10 +6,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.market.MarketCategoriesService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThemeStorage
@@ -18,7 +20,7 @@ import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
 
 class LocalStorageManager(private val preferences: SharedPreferences)
-    : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard {
+    : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
@@ -47,6 +49,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
+    private val MARKET_CURRENT_CATEGORY = "market_current_category"
     private val APP_LAST_VISIT_TIME = "app_last_visit_time"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
@@ -173,7 +176,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     override var isThirdPartyKeyboardAllowed: Boolean
         get() = preferences.getBoolean(THIRD_KEYBOARD_WARNING_MSG, false)
         set(enabled) {
-            preferences.edit().putBoolean(THIRD_KEYBOARD_WARNING_MSG,enabled).apply()
+            preferences.edit().putBoolean(THIRD_KEYBOARD_WARNING_MSG, enabled).apply()
         }
 
     //  IPinStorage
@@ -305,5 +308,13 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         set(value) {
             val termsString = gson.toJson(value)
             preferences.edit().putString(CHECKED_TERMS, termsString).apply()
+        }
+
+    override var currentCategory: MarketCategoriesService.Category?
+        get() = preferences.getString(MARKET_CURRENT_CATEGORY, null)?.let {
+            MarketCategoriesService.Category.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(MARKET_CURRENT_CATEGORY, value?.name).apply()
         }
 }
