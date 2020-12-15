@@ -51,30 +51,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/availableBalanceTitle" />
 
-    <ImageButton
-        android:id="@+id/btnSwitch"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="6dp"
-        android:src="@drawable/stateful_switch_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/background" />
-
     <Button
         android:id="@+id/btnMax"
         style="@style/ButtonSecondary"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
         android:text="@string/Send_Button_Max"
-        app:layout_constraintEnd_toStartOf="@+id/btnSwitch"
-        app:layout_constraintTop_toTopOf="@+id/btnSwitch" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background" />
 
     <TextView
         android:id="@+id/topAmountPrefix"
         style="@style/Body"
+        android:visibility="go"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"

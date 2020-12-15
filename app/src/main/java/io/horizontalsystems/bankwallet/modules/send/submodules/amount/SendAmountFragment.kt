@@ -41,7 +41,7 @@ class SendAmountFragment(
         editTxtAmount.requestFocus()
 
         btnMax.setOnClickListener { presenter.onMaxClick() }
-        btnSwitch.setOnClickListener { presenter.onSwitchClick() }
+        txtHintInfo.setOnClickListener { presenter.onSwitchClick() }
 
         presenterView.amountInputPrefix.observe(viewLifecycleOwner, Observer { prefix ->
             setPrefix(prefix)
@@ -77,10 +77,6 @@ class SendAmountFragment(
 
         presenterView.validationError.observe(viewLifecycleOwner, Observer {
             setValidationError(it)
-        })
-
-        presenterView.switchButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            enableCurrencySwitch(enabled)
         })
 
         presenterView.setLoading.observe(viewLifecycleOwner, Observer { loading ->
@@ -161,10 +157,6 @@ class SendAmountFragment(
             }
             else -> null
         }
-    }
-
-    private fun enableCurrencySwitch(enabled: Boolean) {
-        btnSwitch.isEnabled = enabled
     }
 
     private val textChangeListener = object : TextWatcher {
