@@ -9,8 +9,8 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,14 +39,14 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="50dp" />
 
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/dark"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/circleIndicator"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="20dp"
         app:ci_animator="@anim/pager_indicator_animation"
         app:ci_drawable="@drawable/pin_pager_circle_selected"

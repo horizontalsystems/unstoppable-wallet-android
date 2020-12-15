@@ -25,7 +25,7 @@
 
             <io.horizontalsystems.views.SettingsView
                 android:id="@+id/privacy"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:bottomBorder="true"
@@ -47,7 +47,7 @@
 
             <io.horizontalsystems.views.SettingsView
                 android:id="@+id/changePin"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:bottomBorder="true"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
             <TextView
                 android:id="@+id/txtBiometricAuthInfo"
                 style="@style/Subhead2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="12dp"

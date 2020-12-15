@@ -43,8 +43,10 @@
             <io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
                 android:id="@+id/fromCoinCard"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -66,32 +68,30 @@
                 style="@style/Subhead2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="12dp"
                 android:text="@string/Swap_Price"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toStartOf="@+id/switchButton"
-                app:layout_constraintStart_toEndOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/fromCoinCard" />
+                app:layout_constraintStart_toEndOf="@+id/progressBar"
+                tools:layout_editor_absoluteY="189dp" />
 
             <ImageView
                 android:id="@+id/switchButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_switch"
-                app:layout_constraintEnd_toEndOf="@+id/endBorder"
-                app:layout_constraintStart_toEndOf="@+id/price"
-                app:layout_constraintTop_toTopOf="@id/price"
+                app:layout_constraintBottom_toBottomOf="@+id/price"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/price"
                 app:tint="@color/grey" />
 
             <io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
                 android:id="@+id/toCoinCard"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/advancedSettings"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/switchButton" />
@@ -108,9 +108,8 @@
             <TextView
                 android:id="@+id/advancedSettings"
                 style="@style/Subhead2"
-                android:layout_width="0dp"
+                android:layout_width="393dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:background="@drawable/background_lawrence_onclick"
                 android:clickable="true"
                 android:paddingStart="16dp"
@@ -120,9 +119,7 @@
                 android:text="@string/SwapSettings_Title"
                 android:textColor="@color/grey"
                 app:drawableEndCompat="@drawable/ic_arrow_right"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
+                tools:layout_editor_absoluteY="402dp" />
 
             <View
                 android:id="@+id/settingsLineBottom"

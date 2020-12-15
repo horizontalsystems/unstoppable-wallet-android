@@ -26,21 +26,21 @@
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/quoted"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:constraint_referenced_ids="quotedBg,quotedBorder" />
+        app:constraint_referenced_ids="quotedBg,quotedBorder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/listItemMarker"
         style="@style/Body"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="12dp"
         android:textColor="?ColorBran"
         app:layout_constraintBaseline_toBaselineOf="@id/paragraph"
+        app:layout_constraintEnd_toEndOf="@+id/paragraph"
+        app:layout_constraintStart_toStartOf="@+id/paragraph"
         tools:text="•" />
 
     <TextView
