@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/memoInput"
         style="@style/Body"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/input_background_themed"
         android:hint="@string/Send_DialogMemoHint"
@@ -20,6 +20,7 @@
         android:paddingBottom="10dp"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

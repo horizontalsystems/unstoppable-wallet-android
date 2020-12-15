@@ -10,37 +10,38 @@
     <TextView
         android:id="@+id/txtTitle"
         style="@style/Title3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="21dp"
+        android:text="@string/RateApp_Title_Rate_This_App"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/RateApp_Title_Rate_This_App" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtDescription"
         style="@style/Body"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
+        android:text="@string/RateApp_Description_Rate_This_App"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        android:text="@string/RateApp_Description_Rate_This_App" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonWrapper"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="42dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDescription">
 
         <TextView
@@ -48,32 +49,32 @@
             style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="7dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="15dp"
-            android:padding="5dp"
-            android:textColor="?ColorJacob"
             android:background="@drawable/rate_app_ripple"
+            android:padding="5dp"
+            android:text="@string/RateApp_Button_NotNow"
+            android:textColor="?ColorJacob"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnRateApp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/RateApp_Button_NotNow" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/btnRateApp"
             style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="15dp"
-            android:layout_marginTop="7dp"
-            android:padding="5dp"
-            android:textColor="?ColorJacob"
             android:background="@drawable/rate_app_ripple"
+            android:padding="5dp"
+            android:text="@string/RateApp_Button_RateIt"
+            android:textColor="?ColorJacob"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/RateApp_Button_RateIt" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

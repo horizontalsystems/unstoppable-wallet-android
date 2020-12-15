@@ -8,29 +8,35 @@
     <TextView
         android:id="@+id/connectionSettingsTitle"
         style="@style/Subhead1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/SettingsPrivacy_ConnectionSettingsTitle"
         android:textAllCaps="true"
         android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/torControlView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/clickable_background_color_lawrence"
-        app:layout_constraintTop_toBottomOf="@+id/connectionSettingsTitle"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectionSettingsTitle" />
 
     <View
         android:id="@+id/topShade"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/torControlView" />
 
     <ImageView
@@ -98,10 +104,12 @@
 
     <View
         android:id="@+id/bottomShade"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
-        app:layout_constraintBottom_toBottomOf="@+id/torControlView" />
+        app:layout_constraintBottom_toBottomOf="@+id/torControlView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/torConnectionDescription"

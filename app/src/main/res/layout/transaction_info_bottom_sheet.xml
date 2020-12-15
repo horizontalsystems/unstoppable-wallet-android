@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/txtFullInfo"
         style="@style/Headline2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/transaction_info_more_button_background"
         android:paddingTop="12dp"
