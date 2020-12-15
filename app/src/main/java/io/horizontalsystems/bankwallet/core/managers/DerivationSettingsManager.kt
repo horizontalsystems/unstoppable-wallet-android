@@ -46,7 +46,7 @@ class DerivationSettingsManager(
         }
     }
 
-    override fun reset() {
+    override fun resetStandardSettings() {
         blockchainSettingsStorage.deleteDerivationSettings()
     }
 }

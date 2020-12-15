@@ -6,6 +6,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class CreateWalletService(
         private val predefinedAccountType: PredefinedAccountType?,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val coinManager: ICoinManager,
         private val accountCreator: IAccountCreator,
         private val accountManager: IAccountManager,
@@ -53,7 +54,12 @@ class CreateWalletService(
             accountManager.save(it)
         }
 
-        derivationSettingsManager.reset()
+        for (account in accounts) {
+            if(predefinedAccountTypeManager.predefinedAccountType(account.type) == PredefinedAccountType.Standard){
+                derivationSettingsManager.resetStandardSettings()
+                break
+            }
+        }
 
         walletManager.save(wallets.map { it.value })
     }
