@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.noaccount
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.core.SingleLiveEvent
 import java.lang.Exception
 
@@ -14,7 +15,7 @@ class NoAccountViewModel(
 
     fun onClickCreateKey() {
         try {
-            if (service.derivationSetting(coin.type) != null) {
+            if (coin.type.predefinedAccountType == PredefinedAccountType.Standard) {
                 service.resetDerivationSettings()
             }
 

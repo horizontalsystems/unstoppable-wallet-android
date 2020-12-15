@@ -404,7 +404,7 @@ interface IDerivationSettingsManager {
     fun defaultSetting(coinType: CoinType): DerivationSetting?
     fun setting(coinType: CoinType): DerivationSetting?
     fun save(setting: DerivationSetting)
-    fun reset()
+    fun resetStandardSettings()
 }
 
 interface IInitialSyncModeSettingsManager {

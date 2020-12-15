@@ -24,6 +24,6 @@ class NoAccountService(
     }
 
     override fun resetDerivationSettings() {
-        derivationSettingsManager.reset()
+        derivationSettingsManager.resetStandardSettings()
     }
 }
