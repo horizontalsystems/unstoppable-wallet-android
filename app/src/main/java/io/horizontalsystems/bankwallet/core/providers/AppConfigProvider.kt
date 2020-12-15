@@ -32,7 +32,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
     override val guidesUrl = App.instance.getString(R.string.guidesUrl)
     override val faqUrl = App.instance.getString(R.string.faqUrl)
     override val fiatDecimal: Int = 2
-    override val maxDecimal: Int = 8
+    override val maxDecimal: Int = 9
 
     override val currencies: List<Currency> = listOf(
             Currency(code = "USD", symbol = "\u0024", decimal = 2),
