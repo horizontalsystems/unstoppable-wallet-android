@@ -80,8 +80,6 @@ class PrivacySettingsFragment :
 
         concatRecyclerView.itemAnimator = null
 
-        createCommunicationSettingsView()
-
 
         // IView
         viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer { enabled ->
@@ -90,10 +88,6 @@ class PrivacySettingsFragment :
 
         viewModel.torEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
             torControlAdapter.setTorSwitch(enabled)
-        })
-
-        viewModel.blockchainSettingsVisibilityLiveData.observe(viewLifecycleOwner, Observer { isVisible ->
-            createWalletRestoreSettingsView(isVisible)
         })
 
         viewModel.setTorConnectionStatus.observe(viewLifecycleOwner, Observer { torStatus ->
@@ -130,21 +124,26 @@ class PrivacySettingsFragment :
             )
         })
 
-        // IRouter
-        viewModel.restartApp.observe(this, Observer {
-            restartApp()
+        viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
+            walletRestoreSettingsAdapter.items = it
+            walletRestoreSettingsAdapter.notifyDataSetChanged()
         })
-    }
 
-    override fun onTorSwitchChecked(checked: Boolean) {
-        viewModel.delegate.didSwitchTorEnabled(checked)
-    }
+        viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+            BottomSheetSelectorDialog.show(
+                    childFragmentManager,
+                    getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
+                    coin.title,
+                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
+                    items.map { getSyncModeInfo(it) },
+                    items.indexOf(selected),
+                    onItemSelected = { position ->
+                        viewModel.delegate.onSelectSetting(position)
+                    },
+                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
+            )
+        })
 
-    override fun onClick() {
-        viewModel.delegate.onTransactionOrderSettingTap()
-    }
-
-    private fun createCommunicationSettingsView() {
         viewModel.communicationSettingsViewItems.observe(this, Observer {
             communicationSettingsAdapter.items = it
             communicationSettingsAdapter.notifyDataSetChanged()
@@ -186,31 +185,19 @@ class PrivacySettingsFragment :
                 )
             }
         })
+
+        // IRouter
+        viewModel.restartApp.observe(this, Observer {
+            restartApp()
+        })
     }
 
-    private fun createWalletRestoreSettingsView(doCreate: Boolean) {
-        if (doCreate) {
-            viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
-                walletRestoreSettingsAdapter.items = it
-                walletRestoreSettingsAdapter.notifyDataSetChanged()
-            })
+    override fun onTorSwitchChecked(checked: Boolean) {
+        viewModel.delegate.didSwitchTorEnabled(checked)
+    }
 
-            viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-                BottomSheetSelectorDialog.show(
-                        childFragmentManager,
-                        getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
-                        coin.title,
-                        context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
-                        items.map { getSyncModeInfo(it) },
-                        items.indexOf(selected),
-                        onItemSelected = { position ->
-                            viewModel.delegate.onSelectSetting(position)
-                        },
-                        warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
-                )
-            })
-        }
-
+    override fun onClick() {
+        viewModel.delegate.onTransactionOrderSettingTap()
     }
 
     private fun getSortingLocalized(sortingType: TransactionDataSortingType): String {

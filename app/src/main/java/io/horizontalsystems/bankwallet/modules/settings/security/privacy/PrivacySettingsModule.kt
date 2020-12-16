@@ -13,7 +13,6 @@ object PrivacySettingsModule {
         fun showTorPrerequisitesAlert()
         fun showRestartAlert(checked: Boolean)
         fun toggleTorEnabled(torEnabled: Boolean)
-        fun setBlockchainSettingsVisibility(isVisibile: Boolean)
         fun setCommunicationSettingsViewItems(items: List<PrivacySettingsViewItem>)
         fun setRestoreWalletSettingsViewItems(items: List<PrivacySettingsViewItem>)
         fun showCommunicationSelectorDialog(communicationModeOptions: List<CommunicationMode>, selected: CommunicationMode, coin: Coin)
@@ -30,7 +29,7 @@ object PrivacySettingsModule {
         fun onApplyTorPrerequisites(checked: Boolean)
         fun updateTorState(checked: Boolean)
         fun setTorEnabled(checked: Boolean)
-        fun didTapItem(settingType: PrivacySettingsType, position: Int)
+        fun onItemTap(settingType: PrivacySettingsType, position: Int)
         fun onSelectSetting(position: Int)
         fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode)
         fun onTransactionOrderSettingTap()
@@ -40,7 +39,7 @@ object PrivacySettingsModule {
     }
 
     interface IPrivacySettingsInteractor {
-        val walletsCount: Int
+        val wallets: List<Wallet>
         var transactionsSortingType: TransactionDataSortingType
         var isTorEnabled: Boolean
         val isTorNotificationEnabled: Boolean
@@ -53,13 +52,11 @@ object PrivacySettingsModule {
         fun ethereumConnection(): EthereumRpcMode
         fun saveEthereumRpcModeSetting(rpcModeSetting: EthereumRpcMode)
         fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
-        fun ether(): Coin
-        fun eos(): Coin
-        fun binance(): Coin
-        fun getWalletsForUpdate(coinType: CoinType): List<Wallet>
+        val ether: Coin
+        val eos: Coin
+        val binance: Coin
 
         fun clear()
-        fun isAccountOriginCreated(): Boolean
     }
 
     interface IPrivacySettingsInteractorDelegate {
@@ -79,8 +76,7 @@ object PrivacySettingsModule {
                 App.ethereumRpcModeSettingsManager,
                 App.coinManager,
                 App.walletManager,
-                App.localStorage,
-                App.accountManager)
+                App.localStorage)
 
         val presenter = PrivacySettingsPresenter(interactor, router)
         interactor.delegate = presenter
@@ -88,3 +84,23 @@ object PrivacySettingsModule {
         presenter.view = view
     }
 }
+
+sealed class PrivacySettingsType {
+    open val selectedTitle: String = ""
+
+    class CommunicationModeSettingType(var selected: CommunicationMode) : PrivacySettingsType() {
+        override val selectedTitle: String
+            get() = selected.title
+    }
+
+    class RestoreModeSettingType(var selected: SyncMode) : PrivacySettingsType() {
+        override val selectedTitle: String
+            get() = selected.title
+    }
+}
+
+data class PrivacySettingsViewItem(
+        val coin: Coin,
+        val settingType: PrivacySettingsType,
+        var enabled: Boolean = true
+)

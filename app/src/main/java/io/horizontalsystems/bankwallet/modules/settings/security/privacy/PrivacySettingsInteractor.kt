@@ -12,10 +12,9 @@ class PrivacySettingsInteractor(
         private val torManager: ITorManager,
         private val syncModeSettingsManager: IInitialSyncModeSettingsManager,
         private val ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager,
-        private val coinManager: ICoinManager,
-        private val walletManager: IWalletManager,
-        private val localStorageManager: ILocalStorage,
-        private val accountManager: IAccountManager
+        coinManager: ICoinManager,
+        walletManager: IWalletManager,
+        private val localStorageManager: ILocalStorage
 ) : PrivacySettingsModule.IPrivacySettingsInteractor {
 
     var delegate: PrivacySettingsModule.IPrivacySettingsInteractorDelegate? = null
@@ -28,8 +27,7 @@ class PrivacySettingsInteractor(
             localStorageManager.transactionSortingType = value
         }
 
-    override val walletsCount: Int
-        get() = walletManager.wallets.count()
+    override val wallets = walletManager.wallets
 
     override var isTorEnabled: Boolean
         get() = torManager.isTorEnabled
@@ -53,27 +51,6 @@ class PrivacySettingsInteractor(
                 }.let {
                     disposables.add(it)
                 }
-    }
-
-    private fun getStandartAccountOrigin(): AccountOrigin? {
-
-        // Standart Wallet mnemonic size
-        val STANDART_ACCOUNT_WORDS_COUNT = 12
-
-        accountManager.accounts.forEach {
-            if(it.type is AccountType.Mnemonic && it.type.words.size == STANDART_ACCOUNT_WORDS_COUNT){
-                return it.origin
-            }
-        }
-
-        return null
-    }
-
-    override fun isAccountOriginCreated(): Boolean {
-
-        return getStandartAccountOrigin()?.let {
-            it == AccountOrigin.Created
-        }?:false
     }
 
     override fun stopTor() {
@@ -116,22 +93,11 @@ class PrivacySettingsInteractor(
         syncModeSettingsManager.save(syncModeSetting)
     }
 
-    override fun ether(): Coin {
-        return coinManager.coins.first { it.code == "ETH" }
-    }
+    override val ether = coinManager.coins.first { it.code == "ETH" }
 
-    override fun eos(): Coin {
-        return coinManager.coins.first { it.code == "EOS" }
-    }
+    override val eos = coinManager.coins.first { it.code == "EOS" }
 
-    override fun binance(): Coin {
-        return coinManager.coins.first { it.code == "BNB" }
-    }
-
-    override fun getWalletsForUpdate(coinType: CoinType): List<Wallet> {
-        // include Erc20 wallets for CoinType.Ethereum
-        return walletManager.wallets.filter { it.coin.type == coinType || (coinType == CoinType.Ethereum && it.coin.type is CoinType.Erc20) }
-    }
+    override val binance = coinManager.coins.first { it.code == "BNB" }
 
     override fun clear() {
         disposables.clear()
