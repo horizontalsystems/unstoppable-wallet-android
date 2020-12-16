@@ -136,6 +136,17 @@
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
                 app:layout_constraintTop_toBottomOf="@+id/checkboxRoot" />
 
+            <CheckBox
+                android:id="@+id/checkboxPin"
+                style="@style/TermsCheckbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:text="@string/Settings_TermsPin"
+                app:layout_constraintEnd_toEndOf="@+id/guideEnd"
+                app:layout_constraintStart_toStartOf="@+id/guideStart"
+                app:layout_constraintTop_toBottomOf="@+id/checkboxBugs" />
+
             <TextView
                 android:id="@+id/bottomThankYou"
                 style="@style/Title3"
@@ -147,7 +158,7 @@
                 android:textColor="?ColorJacob"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
-                app:layout_constraintTop_toBottomOf="@+id/checkboxBugs" />
+                app:layout_constraintTop_toBottomOf="@+id/checkboxPin" />
 
             <View
                 android:id="@+id/dividerBottom"
