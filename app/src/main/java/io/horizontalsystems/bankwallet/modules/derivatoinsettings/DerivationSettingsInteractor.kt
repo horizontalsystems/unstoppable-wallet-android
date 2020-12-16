@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.addressformat
+package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
@@ -6,10 +6,10 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 
-class AddressFormatSettingsInteractor(
+class DerivationSettingsInteractor(
         private val derivationSettingsManager: IDerivationSettingsManager,
         private val coinManager: ICoinManager
-) : AddressFormatSettingsModule.IInteractor {
+) : DerivationSettingsModule.IInteractor {
 
     override val allActiveSettings: List<Pair<DerivationSetting, Coin>>
         get() = derivationSettingsManager.allActiveSettings()

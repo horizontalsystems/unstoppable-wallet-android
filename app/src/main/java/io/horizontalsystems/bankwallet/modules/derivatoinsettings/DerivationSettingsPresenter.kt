@@ -1,15 +1,15 @@
-package io.horizontalsystems.bankwallet.modules.addressformat
+package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 
-class AddressFormatSettingsPresenter(
-        val view: AddressFormatSettingsModule.IView,
-        val router: AddressFormatSettingsModule.IRouter,
-        private val interactor: AddressFormatSettingsModule.IInteractor,
+class DerivationSettingsPresenter(
+        val view: DerivationSettingsModule.IView,
+        val router: DerivationSettingsModule.IRouter,
+        private val interactor: DerivationSettingsModule.IInteractor,
         private val coinTypes: List<CoinType>)
-    : ViewModel(), AddressFormatSettingsModule.IViewDelegate {
+    : ViewModel(), DerivationSettingsModule.IViewDelegate {
 
     private var derivations = mutableListOf<DerivationSetting>()
 

@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.addressformat
+package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 
 import io.horizontalsystems.core.SingleLiveEvent
 
-class AddressFormatSettingsRouter: AddressFormatSettingsModule.IRouter {
+class DerivationSettingsRouter: DerivationSettingsModule.IRouter {
 
     val close = SingleLiveEvent<Unit>()
 

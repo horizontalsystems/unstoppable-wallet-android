@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.addressformat
+package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.core.SingleLiveEvent
 
-class AddressFormatSettingsView : AddressFormatSettingsModule.IView {
+class DerivationSettingsView : DerivationSettingsModule.IView {
 
     val showDerivationChangeAlert = SingleLiveEvent<Pair<DerivationSetting, String>>()
     val btcBipTitle = MutableLiveData<String>()

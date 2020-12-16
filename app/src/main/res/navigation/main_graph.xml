@@ -166,7 +166,7 @@
     </fragment>
     <fragment
         android:id="@+id/addressFormatSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.derivatoinsettings.DerivationSettingsFragment"
         tools:layout="@layout/fragment_address_format_settings" />
     <fragment
         android:id="@+id/createWalletFragment"
