@@ -36,6 +36,7 @@ class TermsFragment : BaseFragment() {
             setCheckbox(checkboxPhone, TermsManager.termIds[4], terms)
             setCheckbox(checkboxRoot, TermsManager.termIds[5], terms)
             setCheckbox(checkboxBugs, TermsManager.termIds[6], terms)
+            setCheckbox(checkboxPin, TermsManager.termIds[7], terms)
         })
     }
 
