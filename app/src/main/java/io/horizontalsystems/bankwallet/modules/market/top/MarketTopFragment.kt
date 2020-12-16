@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top100
+package io.horizontalsystems.bankwallet.modules.market.top
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
@@ -18,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_rates.*
 class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener {
 
     private lateinit var coinRatesAdapter: CoinRatesAdapter
+    private lateinit var coinRatesSortingAdapter: CoinRatesSortingAdapter
+    private val viewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
     private val presenter by viewModels<RateListPresenter> { RateListModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,9 +30,10 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        coinRatesSortingAdapter = CoinRatesSortingAdapter(viewModel)
         coinRatesAdapter = CoinRatesAdapter(this)
 
-        coinRatesRecyclerView.adapter = coinRatesAdapter
+        coinRatesRecyclerView.adapter = ConcatAdapter(coinRatesSortingAdapter, coinRatesAdapter)
 
         presenter.viewDidLoad()
         observeView(presenter.view)
