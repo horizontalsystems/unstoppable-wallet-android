@@ -312,7 +312,6 @@ interface IAppConfigProvider {
     val featuredCoins: List<Coin>
     val defaultCoins: List<Coin>
     val ethereumCoin: Coin
-    val communicationSettings: List<CommunicationSetting>
 }
 
 interface ICoinRecordStorage{
@@ -369,6 +368,8 @@ interface IBlockchainSettingsStorage {
     fun deleteDerivationSettings()
     fun initialSyncSetting(coinType: CoinType) : InitialSyncSetting?
     fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
+    fun ethereumRpcModeSetting(coinType: CoinType) : EthereumRpcMode?
+    fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
 }
 
 interface IWalletManager {
@@ -413,10 +414,9 @@ interface IInitialSyncModeSettingsManager {
     fun save(setting: InitialSyncSetting)
 }
 
-interface ICommunicationSettingsManager {
-    fun defaultCommunicationSetting(coinType: CoinType): CommunicationSetting?
-    fun communicationSetting(coinType: CoinType): CommunicationSetting?
-    fun updateSetting(communicationSetting: CommunicationSetting)
+interface IEthereumRpcModeSettingsManager {
+    fun rpcMode(): EthereumRpcMode
+    fun save(setting: EthereumRpcMode)
 }
 
 interface IAccountCleaner {

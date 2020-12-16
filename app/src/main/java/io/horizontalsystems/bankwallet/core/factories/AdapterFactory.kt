@@ -15,16 +15,16 @@ class AdapterFactory(
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager,
-        private val backgroundManager: BackgroundManager,
-        private val communicationSettingsManager: ICommunicationSettingsManager) {
+        private val backgroundManager: BackgroundManager) {
 
     var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager? = null
     var derivationSettingsManager: IDerivationSettingsManager? = null
+    var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager? = null
 
     fun adapter(wallet: Wallet): IAdapter? {
         val derivation = derivationSettingsManager?.setting(wallet.coin.type)?.derivation
         val syncMode = initialSyncModeSettingsManager?.setting(wallet.coin.type, wallet.account.origin)?.syncMode
-        val communicationMode = communicationSettingsManager.communicationSetting(wallet.coin.type)?.communicationMode
+        val communicationMode = ethereumRpcModeSettingsManager?.rpcMode()?.communicationMode
 
         return when (val coinType = wallet.coin.type) {
             is CoinType.Zcash -> ZcashAdapter(context, wallet, testMode)

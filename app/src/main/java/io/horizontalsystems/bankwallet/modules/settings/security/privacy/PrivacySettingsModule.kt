@@ -50,14 +50,13 @@ object PrivacySettingsModule {
         fun subscribeToTorStatus()
 
         fun syncSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
-        fun communicationSetting(coinType: CoinType): CommunicationSetting?
-        fun saveCommunicationSetting(communicationSetting: CommunicationSetting)
+        fun ethereumConnection(): EthereumRpcMode
+        fun saveEthereumRpcModeSetting(rpcModeSetting: EthereumRpcMode)
         fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
         fun ether(): Coin
         fun eos(): Coin
         fun binance(): Coin
         fun getWalletsForUpdate(coinType: CoinType): List<Wallet>
-        fun reSyncWallets(wallets: List<Wallet>)
 
         fun clear()
         fun isAccountOriginCreated(): Boolean
@@ -77,11 +76,10 @@ object PrivacySettingsModule {
                 App.pinComponent,
                 App.torKitManager,
                 App.initialSyncModeSettingsManager,
-                App.communicationSettingsManager,
+                App.ethereumRpcModeSettingsManager,
                 App.coinManager,
                 App.walletManager,
                 App.localStorage,
-                App.adapterManager,
                 App.accountManager)
 
         val presenter = PrivacySettingsPresenter(interactor, router)

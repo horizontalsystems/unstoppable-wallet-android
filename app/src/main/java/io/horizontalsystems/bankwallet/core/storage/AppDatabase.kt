@@ -10,7 +10,6 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.CommunicationSettingsManager
 import io.horizontalsystems.bankwallet.entities.*
 
 @Database(version = 24, exportSchema = false, entities = [
@@ -304,7 +303,7 @@ abstract class AppDatabase : RoomDatabase() {
                 }
 
                 communication?.let {
-                    insertIntoBlockchainSetting(database, coinType, CommunicationSettingsManager.communicationSettingKey, it)
+                    insertIntoBlockchainSetting(database, coinType, BlockchainSettingsStorage.ethereumRpcModeSettingKey, it)
                 }
 
             }

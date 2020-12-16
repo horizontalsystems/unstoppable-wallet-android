@@ -7,7 +7,7 @@ class InitialSyncSettingsManager(
         private val appConfigProvider: IAppConfigProvider,
         private val blockchainSettingsStorage: IBlockchainSettingsStorage,
         private val adapterManager: IAdapterManager,
-        private val walletManager: IWalletManager,
+        private val walletManager: IWalletManager
 ) : IInitialSyncModeSettingsManager {
 
     private val supportedCoinTypes = listOf(

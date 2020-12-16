@@ -180,9 +180,6 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
                 )
     }
 
-    override val communicationSettings: List<CommunicationSetting>
-        get() = listOf(CommunicationSetting(CoinType.Ethereum, CommunicationMode.Infura))
-
     //  ILanguageConfigProvider
 
     override val localizations: List<String>
