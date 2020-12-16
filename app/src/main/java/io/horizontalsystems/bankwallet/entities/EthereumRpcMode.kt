@@ -19,5 +19,5 @@ enum class CommunicationMode(val value: String) : Parcelable {
         }
 }
 
-class CommunicationSetting(val coinType: CoinType,
-                           val communicationMode: CommunicationMode)
+class EthereumRpcMode(val coinType: CoinType,
+                      val communicationMode: CommunicationMode)

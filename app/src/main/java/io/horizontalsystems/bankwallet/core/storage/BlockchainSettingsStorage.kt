@@ -8,6 +8,7 @@ class BlockchainSettingsStorage(private val appDatabase: AppDatabase): IBlockcha
     companion object {
         const val syncModeSettingKey: String = "sync_mode"
         const val derivationSettingKey: String = "derivation"
+        const val ethereumRpcModeSettingKey: String = "communication"
     }
 
     override fun derivationSetting(coinType: CoinType): DerivationSetting? {
@@ -30,5 +31,14 @@ class BlockchainSettingsStorage(private val appDatabase: AppDatabase): IBlockcha
 
     override fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting) {
         appDatabase.blockchainSettingDao().insert(BlockchainSetting(initialSyncSetting.coinType, syncModeSettingKey, initialSyncSetting.syncMode.value))
+    }
+
+    override fun ethereumRpcModeSetting(coinType: CoinType): EthereumRpcMode? {
+        val setting = appDatabase.blockchainSettingDao().getSetting(coinType, ethereumRpcModeSettingKey)
+        return setting?.let { EthereumRpcMode(coinType, CommunicationMode.valueOf(it.value)) }
+    }
+
+    override fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode) {
+        appDatabase.blockchainSettingDao().insert(BlockchainSetting(ethereumRpcModeSetting.coinType, syncModeSettingKey, ethereumRpcModeSetting.communicationMode.value))
     }
 }

@@ -11,11 +11,10 @@ class PrivacySettingsInteractor(
         private val pinComponent: IPinComponent,
         private val torManager: ITorManager,
         private val syncModeSettingsManager: IInitialSyncModeSettingsManager,
-        private val communicationSettingsManager: ICommunicationSettingsManager,
+        private val ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager,
         private val coinManager: ICoinManager,
         private val walletManager: IWalletManager,
         private val localStorageManager: ILocalStorage,
-        private val adapterManager: IAdapterManager,
         private val accountManager: IAccountManager
 ) : PrivacySettingsModule.IPrivacySettingsInteractor {
 
@@ -54,10 +53,6 @@ class PrivacySettingsInteractor(
                 }.let {
                     disposables.add(it)
                 }
-    }
-
-    override fun reSyncWallets(wallets: List<Wallet>) {
-        adapterManager.refreshAdapters(wallets)
     }
 
     private fun getStandartAccountOrigin(): AccountOrigin? {
@@ -109,12 +104,12 @@ class PrivacySettingsInteractor(
         return syncModeSettingsManager.allSettings()
     }
 
-    override fun communicationSetting(coinType: CoinType): CommunicationSetting? {
-        return communicationSettingsManager.communicationSetting(coinType)
+    override fun ethereumConnection(): EthereumRpcMode {
+        return ethereumRpcModeSettingsManager.rpcMode()
     }
 
-    override fun saveCommunicationSetting(communicationSetting: CommunicationSetting) {
-        communicationSettingsManager.updateSetting(communicationSetting)
+    override fun saveEthereumRpcModeSetting(rpcModeSetting: EthereumRpcMode) {
+        ethereumRpcModeSettingsManager.save(rpcModeSetting)
     }
 
     override fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting) {

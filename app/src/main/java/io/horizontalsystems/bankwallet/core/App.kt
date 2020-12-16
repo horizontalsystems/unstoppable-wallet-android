@@ -70,7 +70,7 @@ class App : CoreApp() {
         lateinit var notificationManager: INotificationManager
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
-        lateinit var communicationSettingsManager: ICommunicationSettingsManager
+        lateinit var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager
         lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
         lateinit var derivationSettingsManager: IDerivationSettingsManager
         lateinit var accountCleaner: IAccountCleaner
@@ -134,8 +134,6 @@ class App : CoreApp() {
 
         torKitManager = TorManager(instance, localStorage)
 
-        communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
-
         wordsManager = WordsManager()
         networkManager = NetworkManager()
         accountCleaner = AccountCleaner(appConfigTestMode.testMode)
@@ -161,14 +159,16 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager, communicationSettingsManager)
+        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(appConfigProvider, blockchainSettingsStorage, adapterManager, walletManager)
         derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
+        ethereumRpcModeSettingsManager = EthereumRpcModeSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
 
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
         adapterFactory.derivationSettingsManager = derivationSettingsManager
+        adapterFactory.ethereumRpcModeSettingsManager = ethereumRpcModeSettingsManager
 
         rateCoinMapper = RateCoinMapper()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)

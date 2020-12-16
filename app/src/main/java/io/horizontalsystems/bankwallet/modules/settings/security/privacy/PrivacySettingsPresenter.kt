@@ -65,7 +65,7 @@ class PrivacySettingsPresenter(
             }
 
             // Check if Tor needs to update Blockchain configuration
-            if(interactor.communicationSetting(CoinType.Ethereum)?.communicationMode != CommunicationMode.Infura){
+            if(interactor.ethereumConnection().communicationMode != CommunicationMode.Infura){
 
                 openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
                 openedPrivacySettings?.enabled = !checked
@@ -142,7 +142,7 @@ class PrivacySettingsPresenter(
                 onSelectSyncMode(coin, syncMode)
             } else if (settingType is Communication) {
                 val communicationMode = communicationModeOptions[position]
-                onSelectCommunicationMode(coin, communicationMode)
+                onSelectEthereumRpcMode(coin, communicationMode)
             }
         }
     }
@@ -160,13 +160,8 @@ class PrivacySettingsPresenter(
         }
     }
 
-    private fun onSelectCommunicationMode(coin: Coin, selectedValue: CommunicationMode) {
+    private fun onSelectEthereumRpcMode(coin: Coin, selectedValue: CommunicationMode) {
         updateCommunicationMode(coin, selectedValue)
-
-        val walletsForUpdate = interactor.getWalletsForUpdate(coin.type)
-        if (walletsForUpdate.isNotEmpty()) {
-            interactor.reSyncWallets(walletsForUpdate)
-        }
     }
 
     private fun onSelectSyncMode(coin: Coin, selectedValue: SyncMode) {
@@ -185,14 +180,14 @@ class PrivacySettingsPresenter(
     private fun updateCommunicationMode(coin: Coin, communicationMode: CommunicationMode) {
         (openedPrivacySettings?.settingType as? Communication)?.selected = communicationMode
 
-        interactor.saveCommunicationSetting(CommunicationSetting(coin.type, communicationMode))
+        interactor.saveEthereumRpcModeSetting(EthereumRpcMode(coin.type, communicationMode))
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
 
         openedPrivacySettings = null
     }
 
     override fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode) {
-        onSelectCommunicationMode(coin, communicationMode)
+        onSelectEthereumRpcMode(coin, communicationMode)
         updateTorState(true)
     }
 
