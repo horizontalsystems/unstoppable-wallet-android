@@ -1,15 +1,15 @@
-package io.horizontalsystems.bankwallet.modules.market.top100
+package io.horizontalsystems.bankwallet.modules.market.top
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-object MarketTop100Module {
+object MarketTopModule {
 
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return MarketTop100ViewModel() as T
+            return MarketTopViewModel() as T
         }
 
     }
