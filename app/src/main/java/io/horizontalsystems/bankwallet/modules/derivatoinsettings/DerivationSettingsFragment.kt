@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.addressformat
+package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +16,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_address_format_settings.*
 
-class AddressFormatSettingsFragment : BaseFragment() {
+class DerivationSettingsFragment : BaseFragment() {
 
-    private lateinit var presenter: AddressFormatSettingsPresenter
+    private lateinit var presenter: DerivationSettingsPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_address_format_settings, container, false)
@@ -33,14 +33,14 @@ class AddressFormatSettingsFragment : BaseFragment() {
         val coinTypes = arguments?.getParcelableArrayList(ModuleField.COIN_TYPES)
                 ?: listOf<CoinType>()
 
-        presenter = ViewModelProvider(this, AddressFormatSettingsModule.Factory(coinTypes))
-                .get(AddressFormatSettingsPresenter::class.java)
+        presenter = ViewModelProvider(this, DerivationSettingsModule.Factory(coinTypes))
+                .get(DerivationSettingsPresenter::class.java)
 
         presenter.onViewLoad()
 
-        observeView(presenter.view as AddressFormatSettingsView)
+        observeView(presenter.view as DerivationSettingsView)
 
-        (presenter.router as AddressFormatSettingsRouter).close.observe(viewLifecycleOwner, Observer {
+        (presenter.router as DerivationSettingsRouter).close.observe(viewLifecycleOwner, Observer {
             findNavController().popBackStack()
         })
 
@@ -48,7 +48,7 @@ class AddressFormatSettingsFragment : BaseFragment() {
         setLtcItems()
     }
 
-    private fun observeView(view: AddressFormatSettingsView) {
+    private fun observeView(view: DerivationSettingsView) {
         view.btcBipTitle.observe(viewLifecycleOwner, Observer { title ->
             btcHeader.text = title
         })

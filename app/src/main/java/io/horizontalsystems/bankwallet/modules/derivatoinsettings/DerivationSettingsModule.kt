@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.addressformat
+package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,9 +7,8 @@ import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.entities.Wallet
 
-object AddressFormatSettingsModule {
+object DerivationSettingsModule {
 
     interface IView {
         fun setBtcBipSelection(selectedBip: Derivation)
@@ -41,10 +40,10 @@ object AddressFormatSettingsModule {
     class Factory(private val coinTypes: List<CoinType>) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = AddressFormatSettingsView()
-            val router = AddressFormatSettingsRouter()
-            val interactor = AddressFormatSettingsInteractor(App.derivationSettingsManager, App.coinManager)
-            val presenter = AddressFormatSettingsPresenter(view, router, interactor, coinTypes)
+            val view = DerivationSettingsView()
+            val router = DerivationSettingsRouter()
+            val interactor = DerivationSettingsInteractor(App.derivationSettingsManager, App.coinManager)
+            val presenter = DerivationSettingsPresenter(view, router, interactor, coinTypes)
 
             return presenter as T
         }
