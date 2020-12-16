@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.Communication
-import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.WalletRestore
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.CommunicationModeSettingType
+import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.RestoreModeSettingType
 
 class PrivacySettingsPresenter(
         private val interactor: PrivacySettingsModule.IPrivacySettingsInteractor,
@@ -14,29 +14,23 @@ class PrivacySettingsPresenter(
 
     private var openedPrivacySettings: PrivacySettingsViewItem? = null
     private val needToRestartAppForTor: Boolean
-        get() = interactor.walletsCount > 0
+        get() = interactor.wallets.isNotEmpty()
+
+    private val standardCreatedWalletExists: Boolean
+        get() = interactor.wallets.firstOrNull {
+            it.account.origin == AccountOrigin.Created && it.coin.type.predefinedAccountType == PredefinedAccountType.Standard
+        } != null
+
+    private val syncItems: List<PrivacySettingsViewItem> =
+            interactor.syncSettings().map { (initialSyncSetting, coin, changeable) ->
+                PrivacySettingsViewItem(coin, RestoreModeSettingType(initialSyncSetting.syncMode), changeable)
+            }
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
-            interactor.ether(),
-            interactor.eos(),
-            interactor.binance())
-            .mapNotNull { coin ->
-                getCommunicationSettingsViewItem(coin)
-            }
-
-    private fun getCommunicationSettingsViewItem(coin: Coin): PrivacySettingsViewItem? {
-        return when (coin.type) {
-            is CoinType.Ethereum -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.Infura), enabled = false)
-            is CoinType.Eos -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.Greymass), enabled = false)
-            is CoinType.Binance -> PrivacySettingsViewItem(coin, Communication(CommunicationMode.BinanceDex), enabled = false)
-            else -> null
-        }
-    }
-
-    private val walletRestoreSettingsViewItems: List<PrivacySettingsViewItem> =
-            interactor.syncSettings().map { (initialSyncSetting, coin, changeable) ->
-                PrivacySettingsViewItem(coin, WalletRestore(initialSyncSetting.syncMode), changeable)
-            }
+            PrivacySettingsViewItem(interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = false),
+            PrivacySettingsViewItem(interactor.eos, CommunicationModeSettingType(CommunicationMode.Greymass), enabled = false),
+            PrivacySettingsViewItem(interactor.binance, CommunicationModeSettingType(CommunicationMode.BinanceDex), enabled = false)
+    )
 
     private val communicationModeOptions = listOf(CommunicationMode.Infura)
     private val syncModeOptions = listOf(SyncMode.Fast, SyncMode.Slow)
@@ -49,11 +43,8 @@ class PrivacySettingsPresenter(
 
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
 
-        val isBlockchainSettingVisible = !interactor.isAccountOriginCreated()
-        view?.setBlockchainSettingsVisibility(isBlockchainSettingVisible)
-
-        if(isBlockchainSettingVisible)
-            view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
+        if (!standardCreatedWalletExists)
+            view?.setRestoreWalletSettingsViewItems(syncItems)
     }
 
     override fun didSwitchTorEnabled(checked: Boolean) {
@@ -65,7 +56,7 @@ class PrivacySettingsPresenter(
             }
 
             // Check if Tor needs to update Blockchain configuration
-            if(interactor.ethereumConnection().communicationMode != CommunicationMode.Infura){
+            if (interactor.ethereumConnection().communicationMode != CommunicationMode.Infura) {
 
                 openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
                 openedPrivacySettings?.enabled = !checked
@@ -77,7 +68,7 @@ class PrivacySettingsPresenter(
         updateTorState(checked)
     }
 
-    override fun onApplyTorPrerequisites(checked: Boolean){
+    override fun onApplyTorPrerequisites(checked: Boolean) {
 
         openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
         openedPrivacySettings?.enabled = !checked
@@ -102,25 +93,25 @@ class PrivacySettingsPresenter(
         if (connectionStatus == TorStatus.Failed) {
             interactor.isTorEnabled = false
             view?.toggleTorEnabled(false)
-        } else if(connectionStatus == TorStatus.Connected){
+        } else if (connectionStatus == TorStatus.Connected) {
             interactor.isTorEnabled = true
             view?.toggleTorEnabled(true)
         }
     }
 
-    override fun didTapItem(settingType: PrivacySettingsType, position: Int) {
+    override fun onItemTap(settingType: PrivacySettingsType, position: Int) {
         when (settingType) {
-            is Communication -> {
+            is CommunicationModeSettingType -> {
                 val item = communicationSettingsViewItems[position]
-                if (item.coin == interactor.ether()) {
+                if (item.coin == interactor.ether) {
                     openedPrivacySettings = item
                     view?.showCommunicationSelectorDialog(communicationModeOptions, settingType.selected, item.coin)
                 }
             }
-            is WalletRestore -> {
-                val item = walletRestoreSettingsViewItems[position]
+            is RestoreModeSettingType -> {
+                val item = syncItems[position]
                 openedPrivacySettings = item
-                view?.showSyncModeSelectorDialog(syncModeOptions, if (settingType.selected == SyncMode.New) SyncMode.Fast else settingType.selected, item.coin)
+                view?.showSyncModeSelectorDialog(syncModeOptions, settingType.selected, item.coin)
             }
         }
     }
@@ -132,62 +123,22 @@ class PrivacySettingsPresenter(
     }
 
     override fun onSelectSetting(position: Int) {
-        openedPrivacySettings?.let { privacySettings ->
-
-            val coin = privacySettings.coin
-            val settingType = privacySettings.settingType
-
-            if (settingType is WalletRestore) {
-                val syncMode = syncModeOptions[position]
-                onSelectSyncMode(coin, syncMode)
-            } else if (settingType is Communication) {
-                val communicationMode = communicationModeOptions[position]
-                onSelectEthereumRpcMode(coin, communicationMode)
+        openedPrivacySettings?.let {
+            when (it.settingType) {
+                is RestoreModeSettingType -> {
+                    val syncMode = syncModeOptions[position]
+                    updateSyncMode(it.coin, syncMode)
+                }
+                is CommunicationModeSettingType -> {
+                    val communicationMode = communicationModeOptions[position]
+                    updateCommunicationMode(it.coin, communicationMode)
+                }
             }
         }
     }
 
-    private fun onSelectCommunicationModeByTor() {
-        val coin = interactor.ether()
-        val selectedValue = CommunicationMode.Infura
-
-        if (interactor.getWalletsForUpdate(coin.type).isNotEmpty()) {
-            view?.showCommunicationModeChangeAlert(coin, selectedValue)
-        } else {
-            view?.showTorPrerequisitesAlert()
-
-            updateCommunicationMode(coin, selectedValue)
-        }
-    }
-
-    private fun onSelectEthereumRpcMode(coin: Coin, selectedValue: CommunicationMode) {
-        updateCommunicationMode(coin, selectedValue)
-    }
-
-    private fun onSelectSyncMode(coin: Coin, selectedValue: SyncMode) {
-        updateSyncMode(coin, selectedValue)
-    }
-
-    private fun updateSyncMode(coin: Coin, syncMode: SyncMode) {
-        (openedPrivacySettings?.settingType as? WalletRestore)?.selected = syncMode
-
-        interactor.saveSyncModeSetting(InitialSyncSetting(coin.type, syncMode))
-        view?.setRestoreWalletSettingsViewItems(walletRestoreSettingsViewItems)
-
-        openedPrivacySettings = null
-    }
-
-    private fun updateCommunicationMode(coin: Coin, communicationMode: CommunicationMode) {
-        (openedPrivacySettings?.settingType as? Communication)?.selected = communicationMode
-
-        interactor.saveEthereumRpcModeSetting(EthereumRpcMode(coin.type, communicationMode))
-        view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
-
-        openedPrivacySettings = null
-    }
-
     override fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode) {
-        onSelectEthereumRpcMode(coin, communicationMode)
+        updateCommunicationMode(coin, communicationMode)
         updateTorState(true)
     }
 
@@ -217,6 +168,40 @@ class PrivacySettingsPresenter(
         if (needToRestartAppForTor) {
             router.restartApp()
         }
+    }
+
+    private fun onSelectCommunicationModeByTor() {
+        val coin = interactor.ether
+        val selectedValue = CommunicationMode.Infura
+
+        // include Erc20 wallets for CoinType.Ethereum
+        val walletsToUpdate = interactor.wallets.filter { it.coin.type == CoinType.Ethereum || it.coin.type is CoinType.Erc20 }
+
+        if (walletsToUpdate.isNotEmpty()) {
+            view?.showCommunicationModeChangeAlert(coin, selectedValue)
+        } else {
+            view?.showTorPrerequisitesAlert()
+
+            updateCommunicationMode(coin, selectedValue)
+        }
+    }
+
+    private fun updateSyncMode(coin: Coin, syncMode: SyncMode) {
+        (openedPrivacySettings?.settingType as? RestoreModeSettingType)?.selected = syncMode
+
+        interactor.saveSyncModeSetting(InitialSyncSetting(coin.type, syncMode))
+        view?.setRestoreWalletSettingsViewItems(syncItems)
+
+        openedPrivacySettings = null
+    }
+
+    private fun updateCommunicationMode(coin: Coin, communicationMode: CommunicationMode) {
+        (openedPrivacySettings?.settingType as? CommunicationModeSettingType)?.selected = communicationMode
+
+        interactor.saveEthereumRpcModeSetting(EthereumRpcMode(coin.type, communicationMode))
+        view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
+
+        openedPrivacySettings = null
     }
 
 }
