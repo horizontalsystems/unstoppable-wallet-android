@@ -245,6 +245,7 @@ class ZcashAdapter(
                         timestamp = it.timestamp,
                         failed = it.failed,
                         from = null,
+                        memo = it.memo,
                         to = it.toAddress,
                         lockInfo = null,
                         conflictingTxHash = null,

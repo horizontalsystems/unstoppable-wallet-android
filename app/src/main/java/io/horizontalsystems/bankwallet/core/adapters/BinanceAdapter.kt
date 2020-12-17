@@ -96,6 +96,7 @@ class BinanceAdapter(
                 fee = transferFee,
                 timestamp = transaction.date.time / 1000,
                 from = transaction.from,
+                memo = transaction.memo,
                 to = transaction.to,
                 type = type
         )
