@@ -65,6 +65,10 @@ class TransactionInfoPresenter(
             viewItems.add(TransactionDetailViewItem.To(transactionInfoAddressMapper.map(to)))
         }
 
+        transaction.memo?.let {memo ->
+            viewItems.add(TransactionDetailViewItem.Memo(transactionInfoAddressMapper.map(memo)))
+        }
+
         transaction.lockInfo?.originalAddress?.let { recipient ->
             if (transaction.type == TransactionType.Outgoing) {
                 viewItems.add(TransactionDetailViewItem.Recipient(transactionInfoAddressMapper.map(recipient)))

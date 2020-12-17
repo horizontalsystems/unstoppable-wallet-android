@@ -73,6 +73,7 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
                 amount = transaction.amount?.toBigDecimal() ?: BigDecimal.ZERO,
                 timestamp = transaction.date / 1000,
                 from = transaction.from,
+                memo = transaction.memo,
                 to = transaction.to,
                 type = type
         )

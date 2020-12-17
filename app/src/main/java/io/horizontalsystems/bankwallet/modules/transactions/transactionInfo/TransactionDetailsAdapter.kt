@@ -55,6 +55,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
                 is TransactionDetailViewItem.Rate -> bindRate(detail)
                 is TransactionDetailViewItem.Fee -> bindFee(detail)
                 is TransactionDetailViewItem.From -> bindFrom(detail)
+                is TransactionDetailViewItem.Memo -> bindMemo(detail)
                 is TransactionDetailViewItem.To -> bindTo(detail)
                 is TransactionDetailViewItem.Recipient -> bindRecipient(detail)
                 is TransactionDetailViewItem.Id -> bindId(detail)
@@ -121,6 +122,10 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             bindAddress(itemView.context.getString(R.string.TransactionInfo_From), detail.from) {
                 viewModel.delegate.onClickFrom()
             }
+        }
+
+        private fun bindMemo(detail: TransactionDetailViewItem.Memo) {
+            bind(itemView.context.getString(R.string.TransactionInfo_Memo), detail.memo)
         }
 
         private fun bindFee(detail: TransactionDetailViewItem.Fee) {

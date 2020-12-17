@@ -245,6 +245,7 @@ abstract class BitcoinBaseAdapter(
                 fee = satoshiToBTC(transaction.fee),
                 timestamp = transaction.timestamp,
                 from = from,
+                memo = null,
                 to = to,
                 type = type,
                 failed = transaction.status == TransactionStatus.INVALID,
