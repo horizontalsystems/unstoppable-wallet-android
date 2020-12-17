@@ -19,7 +19,7 @@ class CoinManager(
         get() = coinAddedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val coins: List<Coin>
-        get() = coinRecordStorage.coins + appConfigProvider.defaultCoins
+        get() = coinRecordStorage.coins + appConfigProvider.featuredCoins + appConfigProvider.otherCoins
 
     override val featuredCoins: List<Coin>
         get() = appConfigProvider.featuredCoins

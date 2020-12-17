@@ -93,11 +93,11 @@ class PrivacySettingsInteractor(
         syncModeSettingsManager.save(syncModeSetting)
     }
 
-    override val ether = coinManager.coins.first { it.code == "ETH" }
+    override val ether = coinManager.featuredCoins.first { it.code == "ETH" }
 
-    override val eos = coinManager.coins.first { it.code == "EOS" }
+    override val eos = coinManager.featuredCoins.first { it.code == "EOS" }
 
-    override val binance = coinManager.coins.first { it.code == "BNB" }
+    override val binance = coinManager.featuredCoins.first { it.code == "BNB" }
 
     override fun clear() {
         disposables.clear()
