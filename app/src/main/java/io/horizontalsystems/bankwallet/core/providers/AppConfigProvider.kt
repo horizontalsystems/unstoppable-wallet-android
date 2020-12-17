@@ -41,31 +41,27 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
             Currency(code = "JPY", symbol = "\u00A5", decimal = 2)
     )
 
-    override val featuredCoins: List<Coin>
-        get() = listOf(
-                defaultCoins[0],
-                defaultCoins[1],
-                defaultCoins[2],
-                defaultCoins[3],
-                defaultCoins[4],
-                defaultCoins[5],
-                defaultCoins[6],
-                defaultCoins[7]
+    override val featuredCoins: List<Coin> by lazy {
+        listOf(
+                Coin("BTC", "Bitcoin", "BTC", 8, CoinType.Bitcoin),
+                Coin("LTC", "Litecoin", "LTC", 8, CoinType.Litecoin),
+                Coin("ETH", "Ethereum", "ETH", 18, CoinType.Ethereum),
+                Coin("BCH", "Bitcoin Cash", "BCH", 8, CoinType.BitcoinCash),
+                Coin("DASH", "Dash", "DASH", 8, CoinType.Dash),
+                Coin("BNB", "Binance Chain", "BNB", 8, CoinType.Binance("BNB")),
+                Coin("ZEC", "Zcash", "ZEC", 8, CoinType.Zcash),
+                Coin("EOS", "EOS", "EOS", 4, CoinType.Eos("eosio.token", "EOS"))
         )
+    }
 
     override val ethereumCoin: Coin
-        get() = defaultCoins[2]
+        get() = featuredCoins[2]
 
-    override val defaultCoins: List<Coin> by lazy {
+    override val binanceCoin: Coin
+        get() = featuredCoins[5]
+
+    override val otherCoins: List<Coin> by lazy {
         listOf(
-                Coin("BTC",         "Bitcoin",              "BTC",      8, CoinType.Bitcoin),
-                Coin("LTC",         "Litecoin",             "LTC",      8, CoinType.Litecoin),
-                Coin("ETH",         "Ethereum",             "ETH",      18, CoinType.Ethereum),
-                Coin("BCH",         "Bitcoin Cash",         "BCH",      8, CoinType.BitcoinCash),
-                Coin("DASH",        "Dash",                 "DASH",     8, CoinType.Dash),
-                Coin("BNB",         "Binance Chain",        "BNB",      8, CoinType.Binance("BNB")),
-                Coin("ZEC",         "Zcash",                "ZEC",      8, CoinType.Zcash),
-                Coin("EOS",         "EOS",                  "EOS",      4, CoinType.Eos("eosio.token", "EOS")),
                 Coin("ZRX",         "0x Protocol",          "ZRX",      18, CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),
                 Coin("LEND",        "Aave",                 "LEND",     18, CoinType.Erc20("0x80fB784B7eD66730e8b1DBd9820aFD29931aab03")),
                 Coin("ADAI",        "Aave DAI",             "ADAI",     18, CoinType.Erc20("0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d")),

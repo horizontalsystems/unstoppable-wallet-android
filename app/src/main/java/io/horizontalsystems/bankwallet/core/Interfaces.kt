@@ -310,8 +310,9 @@ interface IAppConfigProvider {
     val maxDecimal: Int
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
-    val defaultCoins: List<Coin>
+    val otherCoins: List<Coin>
     val ethereumCoin: Coin
+    val binanceCoin: Coin
 }
 
 interface ICoinRecordStorage{

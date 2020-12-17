@@ -18,7 +18,7 @@ class InitialSyncSettingsManager(
     )
 
     override fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>> {
-        val coins = appConfigProvider.defaultCoins
+        val coins = appConfigProvider.featuredCoins
         return supportedCoinTypes.mapNotNull { supportedCoinType ->
             val coinTypeCoin = coins.firstOrNull { it.type == supportedCoinType.coinType } ?: return@mapNotNull null
             val setting = setting(supportedCoinType.coinType) ?: return@mapNotNull null
