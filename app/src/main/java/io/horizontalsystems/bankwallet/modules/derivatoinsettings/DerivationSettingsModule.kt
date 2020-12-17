@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
@@ -11,19 +12,14 @@ import io.horizontalsystems.bankwallet.entities.DerivationSetting
 object DerivationSettingsModule {
 
     interface IView {
-        fun setBtcBipSelection(selectedBip: Derivation)
-        fun setLtcBipSelection(selectedBip: Derivation)
-        fun setBtcTitle(title: String)
-        fun setLtcTitle(title: String)
         fun showDerivationChangeAlert(derivationSetting: DerivationSetting, coinTitle: String)
-        fun setLtcBipVisibility(isVisible: Boolean)
-        fun setBtcBipVisibility(isVisible: Boolean)
+        fun setViewItems(viewItems: List<DerivationSettingSectionViewItem>)
     }
 
     interface IViewDelegate {
-        fun onSelect(derivationSetting: DerivationSetting)
+        fun onSelect(sectionIndex: Int, settingIndex: Int)
         fun onViewLoad()
-        fun proceedWithDerivationChange(derivationSetting: DerivationSetting)
+        fun onConfirm(derivationSetting: DerivationSetting)
     }
 
     interface IInteractor {
@@ -37,15 +33,20 @@ object DerivationSettingsModule {
         fun close()
     }
 
-    class Factory(private val coinTypes: List<CoinType>) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = DerivationSettingsView()
-            val router = DerivationSettingsRouter()
             val interactor = DerivationSettingsInteractor(App.derivationSettingsManager, App.coinManager)
-            val presenter = DerivationSettingsPresenter(view, router, interactor, coinTypes)
+            val presenter = DerivationSettingsPresenter(view, interactor, StringProvider(App.instance))
 
             return presenter as T
         }
     }
 }
+
+data class DerivationSettingsItem (val coin: Coin, val setting: DerivationSetting)
+
+data class DerivationSettingViewItem (val title: String, val subtitle: String, val selected: Boolean)
+
+data class DerivationSettingSectionViewItem (val coinName: String, val items: List<DerivationSettingViewItem>)
