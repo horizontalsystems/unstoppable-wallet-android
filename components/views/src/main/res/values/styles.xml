@@ -85,7 +85,7 @@
         <item name="android:textColor">@color/button_secondary_text_color_selector</item>
         <item name="android:textSize">14sp</item>
         <item name="android:ellipsize">middle</item>
-        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="ButtonTransparent" parent="ButtonSecondary">
