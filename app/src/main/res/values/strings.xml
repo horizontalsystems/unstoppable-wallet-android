@@ -103,6 +103,15 @@
 
     <string name="Market_Title">Market</string>
     <string name="Market_Search">Search</string>
+    <string name="Market_Sort_HighestCap">Highest Cap</string>
+    <string name="Market_Sort_LowestCap">Lowest Cap</string>
+    <string name="Market_Sort_HighestVolume">Highest Volume</string>
+    <string name="Market_Sort_LowestVolume">Lowest Volume</string>
+    <string name="Market_Period_24h">24 hours</string>
+    <string name="Market_Period_1week">1 week</string>
+    <string name="Market_Period_1month">1 month</string>
+    <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_Period_PopupTitle">Changes</string>
 
     <!--Balance-->
 
