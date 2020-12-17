@@ -59,7 +59,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             fragment.findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, null)
         }
 
-        amountSwitchButton.setOnSingleClickListener {
+        secondaryAmount.setOnSingleClickListener {
             viewModel.onSwitch()
         }
 
@@ -91,8 +91,6 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         viewModel.isEstimatedLiveData().observe(lifecycleOwner, { setEstimated(it) })
 
         viewModel.amountLiveData().observe(lifecycleOwner, { setAmount(it) })
-
-        viewModel.switchEnabledLiveData().observe(lifecycleOwner, { amountSwitchButton.isEnabled = it })
 
         viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { setSecondaryAmountInfo(it) })
 
