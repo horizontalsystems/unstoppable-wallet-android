@@ -24,7 +24,7 @@ class FullTransactionInfoErrorFragment : Fragment() {
     private var errorImageRes: Int? = null
     private var showRetry: Boolean = false
 
-    private var listener: Listener? = null
+    var listener: Listener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_full_transaction_info_error, container, false)
@@ -50,14 +50,6 @@ class FullTransactionInfoErrorFragment : Fragment() {
 
         changeProvider.setOnClickListener {
             listener?.onChangeProvider()
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        if (context is Listener) {
-            listener = context
         }
     }
 
