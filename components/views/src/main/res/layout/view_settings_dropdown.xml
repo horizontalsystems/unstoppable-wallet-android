@@ -32,11 +32,10 @@
     <TextView
         android:id="@+id/settingsTitle"
         style="@style/Body"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:ellipsize="end"
-        android:maxEms="12"
         android:maxLines="1"
         android:textColor="?TextColorBarsToDark"
         app:layout_constraintBottom_toTopOf="@+id/settingsSubtitle"
