@@ -3,14 +3,12 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class ManageKeysInteractor(
         private val accountManager: IAccountManager,
-        private val walletManager: IWalletManager,
         private val derivationSettingsManager: IDerivationSettingsManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val priceAlertManager: IPriceAlertManager)
@@ -37,10 +35,6 @@ class ManageKeysInteractor(
                     delegate?.didLoad(mapAccounts())
                 }
                 .let { disposables.add(it) }
-    }
-
-    override fun getWallets(): List<Wallet> {
-        return walletManager.wallets
     }
 
     override fun deleteAccount(account: Account) {

@@ -83,8 +83,8 @@
         android:name="io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysFragment"
         tools:layout="@layout/fragment_manage_keys">
         <action
-            android:id="@+id/manageKeysFragment_to_addressFormatSettingsFragment"
-            app:destination="@id/addressFormatSettingsFragment" />
+            android:id="@+id/manageKeysFragment_to_derivationSettingsFragment"
+            app:destination="@id/derivationSettingsFragment" />
         <action
             android:id="@+id/manageKeysFragment_to_createWalletFragment"
             app:destination="@id/createWalletFragment" />
@@ -165,7 +165,7 @@
             app:destination="@id/bitcoinHodlingFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addressFormatSettingsFragment"
+        android:id="@+id/derivationSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.derivatoinsettings.DerivationSettingsFragment"
         tools:layout="@layout/fragment_address_format_settings" />
     <fragment

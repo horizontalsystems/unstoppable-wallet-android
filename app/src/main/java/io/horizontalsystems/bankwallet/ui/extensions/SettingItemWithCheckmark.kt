@@ -19,9 +19,10 @@ class SettingItemWithCheckmark: FrameLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
-    fun bind(title: String, subtitle: String, onClick: () -> Unit, showBottomBorder: Boolean = false){
+    fun bind(title: String, subtitle: String, checked: Boolean, onClick: () -> Unit, showBottomBorder: Boolean = false){
         setTitle(title)
         setSubtitle(subtitle)
+        checkMark.isVisible = checked
         toggleBottomBorder(showBottomBorder)
         itemWrapper.setOnClickListener { onClick.invoke() }
     }
