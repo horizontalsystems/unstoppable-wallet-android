@@ -66,6 +66,6 @@ class PinView : PinModule.IView {
     }
 
     override fun enablePinInput() {
-        enablePinInput.call()
+        enablePinInput.postValue(Unit)
     }
 }
