@@ -84,9 +84,9 @@
         style="@style/Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
         android:autofillHints="number,numberDecimal"
         android:background="?ColorLawrence"
         android:hint="@string/Swap_AmountHint"
@@ -94,22 +94,11 @@
         android:maxLines="1"
         android:textColor="?ColorLeah"
         android:textColorHint="@color/grey_50"
-        app:layout_constraintEnd_toStartOf="@id/amountSwitchButton"
+        app:layout_constraintEnd_toEndOf="@+id/background"
         app:layout_constraintStart_toEndOf="@id/amountPrefix"
         app:layout_constraintTop_toTopOf="@+id/background"
         app:layout_goneMarginStart="12dp"
         tools:text="0.123" />
-
-    <ImageButton
-        android:id="@+id/amountSwitchButton"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/stateful_switch_icon"
-        app:layout_constraintBottom_toBottomOf="@id/amount"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintTop_toTopOf="@id/amount" />
 
     <View
         android:id="@+id/dividerLine"
@@ -121,7 +110,7 @@
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="@id/background"
         app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toBottomOf="@id/amountSwitchButton" />
+        app:layout_constraintTop_toBottomOf="@id/amount" />
 
     <TextView
         android:id="@+id/secondaryAmount"
