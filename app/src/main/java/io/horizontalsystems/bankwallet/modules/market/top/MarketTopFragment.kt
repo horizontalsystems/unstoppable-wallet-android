@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_rates.*
 
-class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener {
+class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSortingAdapter.Listener {
 
     private lateinit var coinRatesAdapter: CoinRatesAdapter
     private lateinit var coinRatesSortingAdapter: CoinRatesSortingAdapter
@@ -30,7 +30,14 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        coinRatesSortingAdapter = CoinRatesSortingAdapter(viewModel)
+        coinRatesSortingAdapter = CoinRatesSortingAdapter(this)
+        viewModel.sortingFieldLiveData.observe(viewLifecycleOwner, {
+            coinRatesSortingAdapter.sortingFieldText = getString(it.titleResId)
+        })
+        viewModel.sortingPeriodLiveData.observe(viewLifecycleOwner, {
+            coinRatesSortingAdapter.sortingPeriodText = getString(it.titleResId)
+        })
+
         coinRatesAdapter = CoinRatesAdapter(this)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(coinRatesSortingAdapter, coinRatesAdapter)
@@ -39,6 +46,31 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener {
         observeView(presenter.view)
         observeRouter(presenter.router)
     }
+
+    override fun onClickSortingField() {
+        val items = viewModel.sortingFields.map {
+            SelectorItem(getString(it.titleResId), it == viewModel.sortingField)
+        }
+
+        SelectorDialog
+                .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
+                    viewModel.sortingField = viewModel.sortingFields[position]
+                }
+                .show(childFragmentManager, "sorting_field_selector")
+    }
+
+    override fun onClickSortingPeriod() {
+        val items = viewModel.sortingPeriods.map {
+            SelectorItem(getString(it.titleResId), it == viewModel.sortingPeriod)
+        }
+
+        SelectorDialog
+                .newInstance(items, getString(R.string.Market_Period_PopupTitle)) { position ->
+                    viewModel.sortingPeriod = viewModel.sortingPeriods[position]
+                }
+                .show(childFragmentManager, "sorting_period_selector")
+    }
+
 
     override fun onResume() {
         super.onResume()
