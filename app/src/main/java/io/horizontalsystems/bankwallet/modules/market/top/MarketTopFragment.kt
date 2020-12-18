@@ -20,6 +20,8 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
 
     private lateinit var coinRatesAdapter: CoinRatesAdapter
     private lateinit var coinRatesSortingAdapter: CoinRatesSortingAdapter
+    private lateinit var marketMetricsAdapter: MarketMetricsAdapter
+    private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val viewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
     private val presenter by viewModels<RateListPresenter> { RateListModule.Factory() }
 
@@ -31,6 +33,15 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
         super.onViewCreated(view, savedInstanceState)
 
         coinRatesSortingAdapter = CoinRatesSortingAdapter(this)
+        coinRatesAdapter = CoinRatesAdapter(this)
+        marketMetricsAdapter = MarketMetricsAdapter()
+
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, coinRatesSortingAdapter, coinRatesAdapter)
+
+        presenter.viewDidLoad()
+        observeView(presenter.view)
+        observeRouter(presenter.router)
+
         viewModel.sortingFieldLiveData.observe(viewLifecycleOwner, {
             coinRatesSortingAdapter.sortingFieldText = getString(it.titleResId)
         })
@@ -38,13 +49,15 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
             coinRatesSortingAdapter.sortingPeriodText = getString(it.titleResId)
         })
 
-        coinRatesAdapter = CoinRatesAdapter(this)
+        marketMetricsViewModel.metricsLiveData.observe(viewLifecycleOwner) {
+            pullToRefresh.isRefreshing = false
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(coinRatesSortingAdapter, coinRatesAdapter)
+            marketMetricsAdapter.submitList(listOf(MarketMetricsWrapper(it)))
+        }
 
-        presenter.viewDidLoad()
-        observeView(presenter.view)
-        observeRouter(presenter.router)
+        pullToRefresh.setOnRefreshListener {
+            marketMetricsViewModel.refresh()
+        }
     }
 
     override fun onClickSortingField() {

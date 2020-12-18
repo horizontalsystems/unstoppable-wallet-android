@@ -112,6 +112,11 @@
     <string name="Market_Period_1month">1 month</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
     <string name="Market_Period_PopupTitle">Changes</string>
+    <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
 
     <!--Balance-->
 
