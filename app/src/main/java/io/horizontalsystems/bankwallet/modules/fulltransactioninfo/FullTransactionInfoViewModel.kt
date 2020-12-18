@@ -14,8 +14,8 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val showTransactionInfoEvent = SingleLiveEvent<Void>()
     val reloadEvent = SingleLiveEvent<Void>()
     val showCopiedEvent = SingleLiveEvent<Unit>()
-    val showErrorProviderOffline = SingleLiveEvent<String>()
-    val showErrorTransactionNotFound = SingleLiveEvent<String>()
+    val showErrorProviderOffline = SingleLiveEvent<Unit>()
+    val showErrorTransactionNotFound = SingleLiveEvent<Unit>()
     val showShareEvent = SingleLiveEvent<String>()
     val openLinkEvent = SingleLiveEvent<String>()
     val openProviderSettingsEvent = SingleLiveEvent<Coin>()
@@ -34,10 +34,6 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         delegate.onShare()
     }
 
-    fun changeProvider() {
-        delegate.onTapChangeProvider()
-    }
-
     //
     // IView
     //
@@ -50,12 +46,12 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         showLoadingEvent.call()
     }
 
-    override fun showErrorProviderOffline(providerName: String) {
-        showErrorProviderOffline.value = providerName
+    override fun showErrorProviderOffline() {
+        showErrorProviderOffline.postValue(Unit)
     }
 
-    override fun showErrorTransactionNotFound(providerName: String) {
-        showErrorTransactionNotFound.value = providerName
+    override fun showErrorTransactionNotFound() {
+        showErrorTransactionNotFound.postValue(Unit)
     }
 
     override fun reload() {

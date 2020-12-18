@@ -48,8 +48,8 @@ class FullTransactionInfoInteractor(
                     }, { error ->
                         when (error) {
                             is UnknownHostException,
-                            is SocketTimeoutException -> delegate?.onProviderOffline(provider.providerName)
-                            else -> delegate?.onTransactionNotFound(provider.providerName)
+                            is SocketTimeoutException -> delegate?.onProviderOffline()
+                            else -> delegate?.onTransactionNotFound()
                         }
                     })
             )

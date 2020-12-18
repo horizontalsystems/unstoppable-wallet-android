@@ -14,8 +14,8 @@ object FullTransactionInfoModule {
     interface View {
         fun reload()
         fun showLoading()
-        fun showErrorProviderOffline(providerName: String)
-        fun showErrorTransactionNotFound(providerName: String)
+        fun showErrorProviderOffline()
+        fun showErrorTransactionNotFound()
         fun showCopied()
         fun openUrl(url: String)
         fun openProviderSettings(coin: Coin)
@@ -36,7 +36,6 @@ object FullTransactionInfoModule {
         fun onTapItem(item: FullTransactionItem)
         fun onTapProvider()
         fun onTapResource()
-        fun onTapChangeProvider()
         fun onShare()
         fun onClear()
     }
@@ -55,8 +54,8 @@ object FullTransactionInfoModule {
     interface InteractorDelegate {
         fun onProviderChange()
         fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord)
-        fun onProviderOffline(providerName: String)
-        fun onTransactionNotFound(providerName: String)
+        fun onProviderOffline()
+        fun onTransactionNotFound()
         fun retryLoadInfo()
     }
 
