@@ -11,15 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentOnAttachListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseDialogFragment
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
@@ -34,7 +32,7 @@ import kotlinx.android.synthetic.main.view_holder_full_transaction_item.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_link.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_source.*
 
-class FullTransactionInfoFragment : BaseDialogFragment(), FullTransactionInfoErrorFragment.Listener, FragmentOnAttachListener {
+class FullTransactionInfoFragment : BaseDialogFragment(){
 
     private lateinit var viewModel: FullTransactionInfoViewModel
     private var shareMenuItem: MenuItem? = null
@@ -118,14 +116,12 @@ class FullTransactionInfoFragment : BaseDialogFragment(), FullTransactionInfoErr
             findNavController().navigate(R.id.fullTransactionDataProvider, DataProviderSettingsFragment.arguments(coin))
         })
 
-        viewModel.showErrorProviderOffline.observe(viewLifecycleOwner, Observer { providerName ->
-            setError(providerName, R.string.FullInfo_Error_ProviderOffline, R.drawable.dragon_icon, true)
-            setVisible(errorContainer)
+        viewModel.showErrorProviderOffline.observe(viewLifecycleOwner, Observer {
+            setError(R.string.FullInfo_Error_ProviderOffline, true)
         })
 
-        viewModel.showErrorTransactionNotFound.observe(viewLifecycleOwner, Observer { providerName ->
-            setError(providerName, R.string.FullInfo_Error_TransactionNotFound, R.drawable.ic_attention_24, false)
-            setVisible(errorContainer)
+        viewModel.showErrorTransactionNotFound.observe(viewLifecycleOwner, Observer {
+            setError(R.string.FullInfo_Error_TransactionNotFound, false)
         })
 
         viewModel.showShareEvent.observe(viewLifecycleOwner, Observer { url ->
@@ -142,37 +138,27 @@ class FullTransactionInfoFragment : BaseDialogFragment(), FullTransactionInfoErr
         recyclerTransactionInfo.layoutManager = LinearLayoutManager(context)
 
         transactionRecordAdapter.viewModel = viewModel
-
-        childFragmentManager.addFragmentOnAttachListener(this)
     }
 
-    //
-    // FullTransactionInfoErrorFragment Listener
-    //
-    override fun onRetry() {
-        viewModel.retry()
-    }
+    private fun setError(errorText: Int, showRetry: Boolean) {
+        providerError.setText(errorText)
+        changeProvider.setText(R.string.FullInfo_Error_ChangeSource)
 
-    override fun onChangeProvider() {
-        viewModel.changeProvider()
-    }
+        changeProvider.setOnClickListener {
+            viewModel.delegate.onTapProvider()
+        }
+        setVisible(errorGroup)
 
-    override fun onAttachFragment(fragmentManager: FragmentManager, fragment: Fragment) {
-        if (fragment is FullTransactionInfoErrorFragment){
-            fragment.listener = this
+        btnRetry.isVisible = showRetry
+        if (showRetry) {
+            btnRetry.setOnClickListener {
+                viewModel.retry()
+            }
         }
     }
 
-    private fun setError(providerName: String, errorText: Int, icon: Int, showRetry: Boolean) {
-        val errorMessage = getString(errorText)
-        val fragment = FullTransactionInfoErrorFragment.newInstance(providerName, errorMessage, icon, showRetry)
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.errorContainer, fragment)
-        transaction.commit()
-    }
-
     private fun setVisible(view: View) {
-        listOf(errorContainer, progressLoading, recyclerTransactionInfo).forEach {
+        listOf(errorGroup, progressLoading, recyclerTransactionInfo).forEach {
             it.isInvisible = it != view
         }
     }

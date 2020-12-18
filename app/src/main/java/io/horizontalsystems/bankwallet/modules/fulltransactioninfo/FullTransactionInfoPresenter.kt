@@ -61,11 +61,6 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         view?.openProviderSettings(state.wallet.coin)
     }
 
-
-    override fun onTapChangeProvider() {
-        view?.openProviderSettings(state.wallet.coin)
-    }
-
     override fun onTapResource() {
         interactor.url(state.transactionHash)?.let {
             view?.openUrl(it)
@@ -101,12 +96,12 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         view?.showTransactionInfo()
     }
 
-    override fun onProviderOffline(providerName: String) {
-        view?.showErrorProviderOffline(providerName)
+    override fun onProviderOffline() {
+        view?.showErrorProviderOffline()
     }
 
-    override fun onTransactionNotFound(providerName: String) {
-        view?.showErrorTransactionNotFound(providerName)
+    override fun onTransactionNotFound() {
+        view?.showErrorTransactionNotFound()
     }
 
     override fun retryLoadInfo() {
