@@ -21,7 +21,9 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
     private lateinit var coinRatesAdapter: CoinRatesAdapter
     private lateinit var coinRatesSortingAdapter: CoinRatesSortingAdapter
     private lateinit var marketMetricsAdapter: MarketMetricsAdapter
+    private lateinit var feeDataAdapter: FeeDataAdapter
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
+    private val marketFeeViewModel by viewModels<MarketFeeViewModel> { MarketFeeModule.Factory() }
     private val viewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
     private val presenter by viewModels<RateListPresenter> { RateListModule.Factory() }
 
@@ -32,11 +34,12 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        marketMetricsAdapter = MarketMetricsAdapter()
+        feeDataAdapter = FeeDataAdapter()
         coinRatesSortingAdapter = CoinRatesSortingAdapter(this)
         coinRatesAdapter = CoinRatesAdapter(this)
-        marketMetricsAdapter = MarketMetricsAdapter()
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, coinRatesSortingAdapter, coinRatesAdapter)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, feeDataAdapter, coinRatesSortingAdapter, coinRatesAdapter)
 
         presenter.viewDidLoad()
         observeView(presenter.view)
@@ -57,6 +60,10 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
 
         pullToRefresh.setOnRefreshListener {
             marketMetricsViewModel.refresh()
+        }
+
+        marketFeeViewModel.feeLiveData.observe(viewLifecycleOwner) {
+            feeDataAdapter.submitList(listOf(it))
         }
     }
 
