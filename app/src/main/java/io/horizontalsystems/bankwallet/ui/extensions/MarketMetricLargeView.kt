@@ -33,10 +33,10 @@ class MarketMetricLargeView @JvmOverloads constructor(context: Context, attrs: A
 
     fun setMetricData(data: MetricData?) {
         setValue(data?.value)
-        setPercentage(data?.percentage)
+        setDiff(data?.diff)
     }
 
-    fun setPercentage(v: BigDecimal?) {
+    fun setDiff(v: BigDecimal?) {
         if (v == null) return
         val sign = if (v >= BigDecimal.ZERO) "+" else "-"
 
@@ -45,4 +45,4 @@ class MarketMetricLargeView @JvmOverloads constructor(context: Context, attrs: A
     }
 }
 
-data class MetricData(val value: String, val percentage: BigDecimal)
+data class MetricData(val value: String, val diff: BigDecimal)

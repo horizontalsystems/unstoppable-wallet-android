@@ -31,7 +31,7 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
         title.text = v
     }
 
-    fun setPercentage(v: BigDecimal?) {
+    fun setDiff(v: BigDecimal?) {
         if (v == null) return
 
         val sign = if (v >= BigDecimal.ZERO) "+" else "-"
@@ -42,7 +42,7 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
 
     fun setMetricData(data: MetricData?) {
         setValue(data?.value)
-        setPercentage(data?.percentage)
+        setDiff(data?.diff)
     }
 }
 
