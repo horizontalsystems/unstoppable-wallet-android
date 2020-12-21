@@ -349,6 +349,7 @@
     <string name="SettingsTerms_TermRoot">Entiendo que rootear mi teléfono (rooting), instalando aplicaciones de terceros de fuentes desconocidas o mantener el sistema operativo desactualizado puede, potencialmente,
 poner en peligro la seguridad de mis fondos.</string>
     <string name="SettingsTerms_TermBugs">Entiendo que puede haber problemas de software sin descubrir en el código que hace funcionar esta aplicación, lo que puede llevar a un comportamiento inesperado o al mal funcionamiento de la aplicación.</string>
+    <string name="Settings_TermsPin">I understand that disabling the phone unlock PIN (or its equivalent) in Settings of Android OS will erase wallet private keys from my device.I will need my private keys to regain access to my wallet.</string>
     <string name="SettingsTerms_BottomThankYou">¡Gracias \npor elegir \neste monedero!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
