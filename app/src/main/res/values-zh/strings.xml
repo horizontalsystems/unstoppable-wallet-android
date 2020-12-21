@@ -348,6 +348,7 @@
     <string name="SettingsTerms_TermPhone">我理解，将我的手机交给不可信的实体或者在未设置安全PIN码锁定的情况下离开钱包应用可能会危害我的资金安全。</string>
     <string name="SettingsTerms_TermRoot">我理解对我的手机进行越狱（root）、安装来源不明的第三方应用、未及时更新操作系统可能会危害我的资金安全。</string>
     <string name="SettingsTerms_TermBugs">我理解，在实现此钱包应用的代码中可能存在未发现的软件问题，这可能会导致意外行为或应用故障的发生。</string>
+    <string name="Settings_TermsPin">I understand that disabling the phone unlock PIN (or its equivalent) in Settings of Android OS will erase wallet private keys from my device.I will need my private keys to regain access to my wallet.</string>
     <string name="SettingsTerms_BottomThankYou">感谢您选择我们的钱包！</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
