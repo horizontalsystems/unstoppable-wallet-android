@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_rates.*
+import java.util.*
 
 class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSortingAdapter.Listener {
 
@@ -63,7 +64,7 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
         }
 
         marketFeeViewModel.feeLiveData.observe(viewLifecycleOwner) {
-            feeDataAdapter.submitList(listOf(it))
+            feeDataAdapter.submitList(listOf(Optional.of(it)))
         }
     }
 
