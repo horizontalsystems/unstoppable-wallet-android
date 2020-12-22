@@ -139,6 +139,7 @@
     <string name="WalletConnect_Status_Connecting">연결중...</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_WithoutAmount">Insufficient balance</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
     <string name="Swap_FromAmountTitle">지불하기</string>
