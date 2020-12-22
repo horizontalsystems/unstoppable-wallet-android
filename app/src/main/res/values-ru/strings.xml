@@ -160,8 +160,8 @@
     <string name="Swap_Approve">Подтвердить</string>
     <string name="Swap_Approving">Подтверждение...</string>
     <string name="Swap_Swapping">Обмен</string>
-    <string name="Swap_MaximumPaid">Максимальная Выплата</string>
-    <string name="Swap_MinimumGot">Минимальная Выплата</string>
+    <string name="Swap_MaximumPaid">Maximum Amount</string>
+    <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Дополнительные Настройки</string>
     <string name="SwapSettings_SlippageTitle">Допустимость Отклонений</string>
