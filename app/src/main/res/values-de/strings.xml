@@ -139,6 +139,7 @@
     <string name="WalletConnect_Status_Connecting">Verbinde…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Die Transaktion erfordert %s zum Senden</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_WithoutAmount">Insufficient balance</string>
     <!--Swap-->
     <string name="Swap">Tauschen</string>
     <string name="Swap_FromAmountTitle">Sie bezahlen</string>
