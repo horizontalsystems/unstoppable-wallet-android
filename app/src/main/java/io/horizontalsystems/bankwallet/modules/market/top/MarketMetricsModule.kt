@@ -8,7 +8,7 @@ object MarketMetricsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return MarketMetricsViewModel() as T
+            return MarketMetricsViewModel(MarketMetricsService()) as T
         }
 
     }

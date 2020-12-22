@@ -2,41 +2,47 @@ package io.horizontalsystems.bankwallet.modules.market.top
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
-import java.math.BigDecimal
-import java.util.concurrent.Executors
+import io.reactivex.disposables.CompositeDisposable
 
-class MarketMetricsViewModel : ViewModel() {
+class MarketMetricsViewModel(private val service: MarketMetricsService) : ViewModel() {
+    val marketMetricsLiveData = MutableLiveData<MarketMetrics?>(null)
+    val loadingLiveData = MutableLiveData(false)
+    val errorLiveData = MutableLiveData<String?>(null)
 
-    private val bgThread = Executors.newCachedThreadPool()
-    val metricsLiveData = MutableLiveData<MarketMetrics>()
+    private val disposables = CompositeDisposable()
 
     init {
-        fetchMarketMetrics()
+        service.marketMetricsObservable
+                .subscribe {
+                    syncMarketMetrics(it)
+                }
+                .let {
+                    disposables.add(it)
+                }
     }
 
     fun refresh() {
-        fetchMarketMetrics()
+        service.refresh()
     }
 
-
-    private fun fetchMarketMetrics() {
-        bgThread.submit {
-            Thread.sleep(1000)
-
-            metricsLiveData.postValue(MarketMetrics(
-                    MetricData("$555.61B", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-            ))
+    private fun syncMarketMetrics(dataState: DataState<MarketMetrics>) {
+        loadingLiveData.postValue(dataState.loading)
+        errorLiveData.postValue(dataState.errorOrNull?.let { convertErrorMessage(it) })
+        if (dataState is DataState.Success) {
+            marketMetricsLiveData.postValue(dataState.data)
         }
     }
 
-    private fun stubPercentage(): BigDecimal {
-        return (Math.random() - Math.random()).times(100).toBigDecimal()
+    private fun convertErrorMessage(it: Throwable): String {
+        return it.message ?: it.javaClass.simpleName
     }
+
+    override fun onCleared() {
+        disposables.clear()
+    }
+
 }
 
 data class MarketMetrics(
