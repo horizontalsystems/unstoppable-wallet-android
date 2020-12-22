@@ -139,6 +139,7 @@
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_WithoutAmount">Insufficient balance</string>
     <!--Swap-->
     <string name="Swap">جایگزینی</string>
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
