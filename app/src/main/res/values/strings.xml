@@ -187,6 +187,7 @@
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Transaction requires %s for sending</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_WithoutAmount">Insufficient balance</string>
 
     <!--Swap-->
 
