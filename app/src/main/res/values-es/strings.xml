@@ -160,8 +160,8 @@
     <string name="Swap_Approve">Aprobar</string>
     <string name="Swap_Approving">Aprobando...</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_MaximumPaid">Máximo Pagado</string>
-    <string name="Swap_MinimumGot">Mínimo Obtenido</string>
+    <string name="Swap_MaximumPaid">Maximum Amount</string>
+    <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuración avanzada</string>
     <string name="SwapSettings_SlippageTitle">Tolerancia de deslizamiento</string>
