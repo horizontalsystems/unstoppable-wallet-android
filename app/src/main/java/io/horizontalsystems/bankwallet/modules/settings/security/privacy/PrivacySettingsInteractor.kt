@@ -43,6 +43,9 @@ class PrivacySettingsInteractor(
     override val isTorNotificationEnabled: Boolean
         get() = torManager.isTorNotificationEnabled
 
+    override val ethereumCommunicationModes: List<CommunicationMode>
+        get() = ethereumRpcModeSettingsManager.communicationModes
+
     override fun subscribeToTorStatus() {
         delegate?.onTorConnectionStatusUpdated(TorStatus.Closed)
         torManager.torObservable

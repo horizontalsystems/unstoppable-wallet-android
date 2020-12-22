@@ -16,6 +16,9 @@ class EthereumRpcModeSettingsManager(
 
     private val coinType = CoinType.Ethereum
 
+    override val communicationModes: List<CommunicationMode>
+        get() = listOf(CommunicationMode.Infura)
+
     override fun rpcMode(): EthereumRpcMode {
         val storedRpcMode = blockchainSettingsStorage.ethereumRpcModeSetting(coinType)
         return storedRpcMode ?: EthereumRpcMode(coinType, CommunicationMode.Infura)

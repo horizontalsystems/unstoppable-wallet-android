@@ -416,6 +416,7 @@ interface IInitialSyncModeSettingsManager {
 }
 
 interface IEthereumRpcModeSettingsManager {
+    val communicationModes: List<CommunicationMode>
     fun rpcMode(): EthereumRpcMode
     fun save(setting: EthereumRpcMode)
 }

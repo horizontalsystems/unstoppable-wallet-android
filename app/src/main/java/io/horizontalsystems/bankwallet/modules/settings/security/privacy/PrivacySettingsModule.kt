@@ -43,6 +43,7 @@ object PrivacySettingsModule {
         var transactionsSortingType: TransactionDataSortingType
         var isTorEnabled: Boolean
         val isTorNotificationEnabled: Boolean
+        val ethereumCommunicationModes: List<CommunicationMode>
         fun stopTor()
         fun enableTor()
         fun disableTor()
