@@ -139,6 +139,7 @@
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_WithoutAmount">Insufficient balance</string>
     <!--Swap-->
     <string name="Swap">掉期交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
