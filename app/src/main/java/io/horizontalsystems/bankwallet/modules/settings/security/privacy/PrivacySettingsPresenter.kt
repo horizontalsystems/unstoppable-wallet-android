@@ -27,7 +27,7 @@ class PrivacySettingsPresenter(
             }
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
-            PrivacySettingsViewItem(interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = false),
+            PrivacySettingsViewItem(interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = ethereumCommunicationModeCanBeChanged()),
             PrivacySettingsViewItem(interactor.eos, CommunicationModeSettingType(CommunicationMode.Greymass), enabled = false),
             PrivacySettingsViewItem(interactor.binance, CommunicationModeSettingType(CommunicationMode.BinanceDex), enabled = false)
     )
@@ -69,9 +69,8 @@ class PrivacySettingsPresenter(
     }
 
     override fun onApplyTorPrerequisites(checked: Boolean) {
-
         openedPrivacySettings = communicationSettingsViewItems.find { it.coin.type == CoinType.Ethereum }
-        openedPrivacySettings?.enabled = !checked
+        openedPrivacySettings?.enabled = !checked && ethereumCommunicationModeCanBeChanged()
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
     }
 
@@ -169,6 +168,8 @@ class PrivacySettingsPresenter(
             router.restartApp()
         }
     }
+
+    private fun ethereumCommunicationModeCanBeChanged() = interactor.ethereumCommunicationModes.size > 1
 
     private fun onSelectCommunicationModeByTor() {
         val coin = interactor.ether
