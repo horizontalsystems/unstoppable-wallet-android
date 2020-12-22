@@ -160,8 +160,8 @@
     <string name="Swap_Approve">승인</string>
     <string name="Swap_Approving">승인 중...</string>
     <string name="Swap_Swapping">스와핑</string>
-    <string name="Swap_MaximumPaid">최대 지불액</string>
-    <string name="Swap_MinimumGot">최대 지급액</string>
+    <string name="Swap_MaximumPaid">Maximum Amount</string>
+    <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
