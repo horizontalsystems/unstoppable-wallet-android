@@ -117,12 +117,11 @@ class SwapViewModel(
         is SwapService.TransactionError.InsufficientBalance -> {
             stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(error.requiredBalance))
         }
+        is JsonRpc.ResponseError.InsufficientBalance -> {
+            stringProvider.string(R.string.Swap_ErrorInsufficientEthBalance)
+        }
         is JsonRpc.ResponseError.RpcError -> {
-            val rpcErrorMessage = error.error.message
-            if (rpcErrorMessage.contains("execution reverted") || rpcErrorMessage.contains("gas required exceeds"))
-                stringProvider.string(R.string.Swap_ErrorInsufficientEthBalance)
-            else
-                rpcErrorMessage
+            error.error.message
         }
         is TradeError.TradeNotFound -> {
             stringProvider.string(R.string.Swap_ErrorNoLiquidity)
