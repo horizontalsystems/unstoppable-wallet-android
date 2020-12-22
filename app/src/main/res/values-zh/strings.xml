@@ -160,8 +160,8 @@
     <string name="Swap_Approve">批准</string>
     <string name="Swap_Approving">审批中...</string>
     <string name="Swap_Swapping">交换文件</string>
-    <string name="Swap_MaximumPaid">最大支付金额</string>
-    <string name="Swap_MinimumGot">最小获取金额</string>
+    <string name="Swap_MaximumPaid">Maximum Amount</string>
+    <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">高级设置</string>
     <string name="SwapSettings_SlippageTitle">下跌容忍度</string>
