@@ -160,8 +160,8 @@
     <string name="Swap_Approve">Onayla</string>
     <string name="Swap_Approving">Onaylanıyor...</string>
     <string name="Swap_Swapping">Takas</string>
-    <string name="Swap_MaximumPaid">Maksimum Ödenen</string>
-    <string name="Swap_MinimumGot">Minimum Kazanılan</string>
+    <string name="Swap_MaximumPaid">Maximum Amount</string>
+    <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Gelişmiş Ayarlar</string>
     <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
