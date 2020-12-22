@@ -160,8 +160,8 @@
     <string name="Swap_Approve">تایید</string>
     <string name="Swap_Approving">در حال تایید...</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
-    <string name="Swap_MaximumPaid">حداکثر پرداخت</string>
-    <string name="Swap_MinimumGot">حداقل دریافت</string>
+    <string name="Swap_MaximumPaid">Maximum Amount</string>
+    <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
