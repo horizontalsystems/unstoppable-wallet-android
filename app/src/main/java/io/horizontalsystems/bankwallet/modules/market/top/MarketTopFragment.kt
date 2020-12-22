@@ -35,7 +35,7 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        marketMetricsAdapter = MarketMetricsAdapter()
+        marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
         feeDataAdapter = FeeDataAdapter()
         coinRatesSortingAdapter = CoinRatesSortingAdapter(this)
         coinRatesAdapter = CoinRatesAdapter(this)
@@ -53,14 +53,10 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
             coinRatesSortingAdapter.sortingPeriodText = getString(it.titleResId)
         })
 
-        marketMetricsViewModel.metricsLiveData.observe(viewLifecycleOwner) {
-            pullToRefresh.isRefreshing = false
-
-            marketMetricsAdapter.submitList(listOf(MarketMetricsWrapper(it)))
-        }
-
         pullToRefresh.setOnRefreshListener {
-            marketMetricsViewModel.refresh()
+            marketMetricsAdapter.refresh()
+
+            pullToRefresh.isRefreshing = false
         }
 
         marketFeeViewModel.feeLiveData.observe(viewLifecycleOwner) {
