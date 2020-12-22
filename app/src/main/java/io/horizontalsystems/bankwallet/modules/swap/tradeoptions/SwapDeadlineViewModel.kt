@@ -5,15 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
+import io.horizontalsystems.core.SingleLiveEvent
+import io.reactivex.disposables.CompositeDisposable
 import kotlin.math.floor
 
 class SwapDeadlineViewModel(private val service: SwapTradeOptionsService) : ViewModel(), IVerifiedInputViewModel {
 
     override val inputFieldButtonItems: List<InputFieldButtonItem>
         get() {
-            val bounds = service.recommendedDeadlineBounds
+            val bounds = SwapTradeOptionsService.recommendedDeadlineBounds
             val lowerMinutes = toMinutes(bounds.lower)
             val upperMinutes = toMinutes(bounds.upper)
+
             return listOf(
                     InputFieldButtonItem(App.instance.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
                         inputFieldValueLiveData.postValue(lowerMinutes)
@@ -30,18 +34,35 @@ class SwapDeadlineViewModel(private val service: SwapTradeOptionsService) : View
     override val inputFieldValueLiveData = MutableLiveData<String?>(null)
     override val inputFieldCautionLiveData = MutableLiveData<Caution?>(null)
 
-    init {
-        val state = service.state
+    private val disposable = CompositeDisposable()
 
-        if (state is ISwapTradeOptionsService.State.Valid) {
-            if (state.tradeOptions.ttl != defaultTtl) {
-                inputFieldValueLiveData.postValue(toMinutes(state.tradeOptions.ttl))
-            }
+    init {
+        if (service.deadline.state is FieldState.NotValid && service.tradeOptions.ttl != defaultTtl) {
+            inputFieldValueLiveData.postValue(toMinutes(service.tradeOptions.ttl))
         }
+
+        service.deadline.stateObservable
+                .subscribe { state ->
+                    var caution: Caution? = null
+                    if (state is FieldState.NotValid) {
+                        state.error.localizedMessage?.let {
+                            caution = Caution(it, Caution.Type.Error)
+                        }
+                    }
+
+                    inputFieldCautionLiveData.postValue(caution)
+                }.let {
+                    disposable.add(it)
+                }
     }
 
     override fun setInputFieldValue(text: String?) {
-        service.deadline = text?.toLongOrNull()?.times(60) ?: defaultTtl
+        service.deadline.state = FieldState.NotValidated
+        service.deadline.value = text?.toLongOrNull()?.times(60) ?: defaultTtl
+    }
+
+    override fun validateInputField() {
+        service.validateDeadline()
     }
 
     override fun inputFieldIsValid(text: String?): Boolean {
@@ -68,8 +89,10 @@ interface IVerifiedInputViewModel {
 
     val inputFieldValueLiveData: LiveData<String?>
     val inputFieldCautionLiveData: LiveData<Caution?>
+    val inputFieldSyncingLiveData: LiveData<Boolean> get() = SingleLiveEvent<Boolean>()
 
     fun setInputFieldValue(text: String?) = Unit
+    fun validateInputField()
     fun inputFieldIsValid(text: String?): Boolean = true
 }
 

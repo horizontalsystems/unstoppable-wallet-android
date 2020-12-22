@@ -206,6 +206,9 @@ dependencies {
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:71984f2'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
+    // Unstoppable Domains
+    implementation 'com.unstoppabledomains:resolution:1.8.1'
+
     // in case native file tor.so not loading, do full gradle clean and build.
     implementation 'com.github.horizontalsystems:tor-kit-android:7038b2d'
 

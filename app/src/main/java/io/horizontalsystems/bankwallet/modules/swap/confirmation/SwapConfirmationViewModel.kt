@@ -82,8 +82,13 @@ class SwapConfirmationViewModel(
             additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_DeadlineTitle), it))
         }
 
-        tradeService.tradeOptions.recipient?.hex?.let {
-            additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_RecipientAddressTitle), it))
+        tradeService.tradeOptions.recipient?.hex?.let { recipient ->
+            var address = recipient
+            tradeService.tradeRecipientDomain?.let {
+                address = "$it ($address)"
+            }
+
+            additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_RecipientAddressTitle), address))
         }
 
         val trade = (tradeService.state as? SwapTradeService.State.Ready)?.trade ?: return

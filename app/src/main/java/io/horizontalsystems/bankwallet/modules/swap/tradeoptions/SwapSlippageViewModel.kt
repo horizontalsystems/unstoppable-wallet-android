@@ -3,13 +3,14 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapService
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
 import io.reactivex.disposables.CompositeDisposable
 
 class SwapSlippageViewModel(private val service: SwapTradeOptionsService) : ViewModel(), IVerifiedInputViewModel {
 
     override val inputFieldButtonItems: List<InputFieldButtonItem>
         get() {
-            val bounds = service.recommendedSlippageBounds
+            val bounds = SwapTradeOptionsService.recommendedSlippageBounds
             val lowerBoundTitle = bounds.lower.toPlainString()
             val upperBoundTitle = bounds.upper.toPlainString()
             return listOf(
@@ -31,26 +32,23 @@ class SwapSlippageViewModel(private val service: SwapTradeOptionsService) : View
     private val disposable = CompositeDisposable()
 
     init {
-        val state = service.state
-        if (state is ISwapTradeOptionsService.State.Valid && state.tradeOptions.allowedSlippagePercent.compareTo(SwapService.defaultSlippage) != 0) {
-            inputFieldValueLiveData.postValue(state.tradeOptions.allowedSlippagePercent.stripTrailingZeros().toPlainString())
+        if (service.slippage.state is FieldState.Valid && service.tradeOptions.allowedSlippagePercent.compareTo(SwapService.defaultSlippage) != 0) {
+            inputFieldValueLiveData.postValue(service.tradeOptions.allowedSlippagePercent.stripTrailingZeros().toPlainString())
         }
 
-        service.errorsObservable
-                .subscribe { errors ->
-                    val caution = errors.firstOrNull {
-                        it is ISwapTradeOptionsService.TradeOptionsError.InvalidSlippage
-                    }?.localizedMessage?.let { localizedMessage ->
-                        Caution(localizedMessage, Caution.Type.Error)
+        service.slippage.stateObservable
+                .subscribe { state ->
+                    var caution: Caution? = null
+                    if (state is FieldState.NotValid) {
+                        state.error.localizedMessage?.let {
+                            caution = Caution(it, Caution.Type.Error)
+                        }
                     }
 
                     inputFieldCautionLiveData.postValue(caution)
-                }
-                .let {
+                }.let {
                     disposable.add(it)
                 }
-
-
     }
 
     override fun onCleared() {
@@ -58,7 +56,12 @@ class SwapSlippageViewModel(private val service: SwapTradeOptionsService) : View
     }
 
     override fun setInputFieldValue(text: String?) {
-        service.slippage = text?.toBigDecimalOrNull() ?: SwapService.defaultSlippage
+        service.slippage.state = FieldState.NotValidated
+        service.slippage.value = text?.toBigDecimalOrNull() ?: SwapService.defaultSlippage
+    }
+
+    override fun validateInputField() {
+        service.validateSlippage()
     }
 
     override fun inputFieldIsValid(text: String?): Boolean {
