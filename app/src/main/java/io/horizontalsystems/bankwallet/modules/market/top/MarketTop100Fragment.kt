@@ -5,28 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
-import io.horizontalsystems.bankwallet.modules.ratelist.*
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_rates.*
 import java.util.*
 
-class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSortingAdapter.Listener {
+class MarketTop100Fragment : BaseFragment(), CoinRatesSortingAdapter.Listener, MarketTopItemsAdapter.Listener {
 
-    private lateinit var coinRatesAdapter: CoinRatesAdapter
     private lateinit var coinRatesSortingAdapter: CoinRatesSortingAdapter
+    private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
     private lateinit var marketMetricsAdapter: MarketMetricsAdapter
     private lateinit var feeDataAdapter: FeeDataAdapter
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketFeeViewModel by viewModels<MarketFeeViewModel> { MarketFeeModule.Factory() }
     private val viewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
-    private val presenter by viewModels<RateListPresenter> { RateListModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rates, container, false)
@@ -38,13 +35,9 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
         marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
         feeDataAdapter = FeeDataAdapter()
         coinRatesSortingAdapter = CoinRatesSortingAdapter(this)
-        coinRatesAdapter = CoinRatesAdapter(this)
+        marketTopItemsAdapter = MarketTopItemsAdapter(this, viewModel, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, feeDataAdapter, coinRatesSortingAdapter, coinRatesAdapter)
-
-        presenter.viewDidLoad()
-        observeView(presenter.view)
-        observeRouter(presenter.router)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, feeDataAdapter, coinRatesSortingAdapter, marketTopItemsAdapter)
 
         viewModel.sortingFieldLiveData.observe(viewLifecycleOwner, {
             coinRatesSortingAdapter.sortingFieldText = getString(it.titleResId)
@@ -55,6 +48,7 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
 
         pullToRefresh.setOnRefreshListener {
             marketMetricsAdapter.refresh()
+            marketTopItemsAdapter.refresh()
 
             pullToRefresh.isRefreshing = false
         }
@@ -89,46 +83,13 @@ class MarketTopFragment : BaseFragment(), CoinRatesAdapter.Listener, CoinRatesSo
     }
 
 
-    override fun onResume() {
-        super.onResume()
-        presenter.loadTopList()
-    }
+    override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
+        val arguments = Bundle(3).apply {
+            putString(RateChartFragment.COIN_CODE_KEY, marketTopViewItem.coinCode)
+            putString(RateChartFragment.COIN_TITLE_KEY, marketTopViewItem.coinName)
+            putString(RateChartFragment.COIN_ID_KEY, null)
+        }
 
-    override fun onCoinClicked(coinItem: CoinItem) {
-        presenter.onCoinClicked(coinItem)
-    }
-
-    private fun observeView(view: RateListView) {
-        view.topViewItemsLiveData.observe(viewLifecycleOwner, Observer { viewItems ->
-            if (viewItems.isNotEmpty()) {
-                coinRatesAdapter.submitList(viewItems)
-            }
-        })
-    }
-
-    private fun observeRouter(router: RateListRouter) {
-        router.openChartLiveEvent.observe(viewLifecycleOwner, Observer { (coinCode, coinTitle) ->
-            val arguments = Bundle(3).apply {
-                putString(RateChartFragment.COIN_CODE_KEY, coinCode)
-                putString(RateChartFragment.COIN_TITLE_KEY, coinTitle)
-                putString(RateChartFragment.COIN_ID_KEY, null)
-            }
-
-            findNavController().navigate(R.id.lockScreenFragment_to_rateChartFragment, arguments, navOptions())
-        })
-
-        router.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { selected ->
-
-            val sortTypes = listOf(TopListSortType.Rank, TopListSortType.Winners, TopListSortType.Losers)
-            val selectorItems = sortTypes.map {
-                SelectorItem(getString(it.titleRes), it == selected)
-            }
-            SelectorDialog
-                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
-                        presenter.onTopListSortTypeChange(sortTypes[position])
-                    }
-                    .show(parentFragmentManager, "balance_sort_type_selector")
-
-        })
+        findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }
 }
