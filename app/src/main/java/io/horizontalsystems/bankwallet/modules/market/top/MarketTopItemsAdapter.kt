@@ -71,15 +71,15 @@ class ViewHolderMarketTopItem(override val containerView: View, listener: Market
 //            coinIcon.isVisible = true
 //            coinIcon.setCoinImage(item.coin.code, item.coin.type)
 //        } else {
-//            coinIcon.isVisible = false
+            coinIcon.isVisible = false
 //        }
 
-//        if (item.rank != null) {
-//            rank.isVisible = true
-//            rank.text = item.rank.toString()
-//        } else {
-//            rank.isVisible = false
-//        }
+        if (item.rank != null) {
+            rank.isVisible = true
+            rank.text = item.rank.toString()
+        } else {
+            rank.isVisible = false
+        }
 
         titleText.text = item.coinName
         subtitleText.text = item.coinCode

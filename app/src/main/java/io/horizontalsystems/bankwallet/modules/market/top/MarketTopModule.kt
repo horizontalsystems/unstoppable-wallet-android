@@ -33,6 +33,7 @@ enum class Period(@StringRes val titleResId: Int) {
 }
 
 data class MarketTopItem(
+        val rank: Int,
         val coinCode: String,
         val coinName: String,
         val marketCap: Double,

@@ -59,7 +59,7 @@ class MarketTopViewModel(
         val viewItems = sorted.map {
             val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
 
-            MarketTopViewItem(it.coinCode, it.coinName, formattedRate, it.diff)
+            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
         }
 
         marketTopViewItemsLiveData.postValue(viewItems)
@@ -82,6 +82,7 @@ class MarketTopViewModel(
 }
 
 data class MarketTopViewItem(
+        val rank: Int,
         val coinCode: String,
         val coinName: String,
         val rate: String,
