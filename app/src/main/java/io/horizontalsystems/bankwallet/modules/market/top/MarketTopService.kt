@@ -60,8 +60,10 @@ class MarketTopService(
     }
 
     private fun syncTopItemsByPeriod() {
+        var i = 1
         marketTopItems = fullItems.map {
             MarketTopItem(
+                    i++,
                     it.coinCode,
                     it.coinName,
                     it.marketInfo.marketCap,
