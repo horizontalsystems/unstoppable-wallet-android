@@ -84,6 +84,7 @@ class ViewHolderMarketTopItem(override val containerView: View, listener: Market
         titleText.text = item.coinName
         subtitleText.text = item.coinCode
 
+        txValueInFiat.isActivated = true
 //        txValueInFiat.isActivated = !item.rateDimmed //change color via state: activated/not activated
         txValueInFiat.text = item.rate
 
