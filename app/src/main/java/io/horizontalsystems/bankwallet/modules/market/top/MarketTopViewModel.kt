@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.top
 
-import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -15,14 +13,12 @@ class MarketTopViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val sortingFields by service::sortingFields
-    val sortingPeriods by service::sortingPeriods
+    val sortingFields: Array<Field> = Field.values()
+    val periods by service::periods
 
-    var sortingField by service::sortingField
-    var sortingPeriod by service::sortingPeriod
+    var sortingField: Field = Field.HighestCap
+    var period by service::period
 
-    val sortingFieldLiveData = LiveDataReactiveStreams.fromPublisher(service.sortingFieldObservable.toFlowable(BackpressureStrategy.LATEST))
-    val sortingPeriodLiveData = LiveDataReactiveStreams.fromPublisher(service.sortingPeriodObservable.toFlowable(BackpressureStrategy.LATEST))
     val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)

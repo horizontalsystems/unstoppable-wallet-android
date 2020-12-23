@@ -25,7 +25,7 @@
         tools:text="Highest Cap" />
 
     <Button
-        android:id="@+id/sortingPeriod"
+        android:id="@+id/period"
         style="@style/Subhead1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

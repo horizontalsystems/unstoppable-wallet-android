@@ -15,15 +15,16 @@ import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_rates.*
 import java.util.*
 
-class MarketTop100Fragment : BaseFragment(), CoinRatesSortingAdapter.Listener, MarketTopItemsAdapter.Listener {
+class MarketTop100Fragment : BaseFragment(), MarketTopHeaderAdapter.Listener, MarketTopItemsAdapter.Listener {
 
-    private lateinit var coinRatesSortingAdapter: CoinRatesSortingAdapter
-    private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
     private lateinit var marketMetricsAdapter: MarketMetricsAdapter
     private lateinit var feeDataAdapter: FeeDataAdapter
+    private lateinit var marketTopHeaderAdapter: MarketTopHeaderAdapter
+    private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
+
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketFeeViewModel by viewModels<MarketFeeViewModel> { MarketFeeModule.Factory() }
-    private val viewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
+    private val marketTopViewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rates, container, false)
@@ -34,17 +35,10 @@ class MarketTop100Fragment : BaseFragment(), CoinRatesSortingAdapter.Listener, M
 
         marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
         feeDataAdapter = FeeDataAdapter()
-        coinRatesSortingAdapter = CoinRatesSortingAdapter(this)
-        marketTopItemsAdapter = MarketTopItemsAdapter(this, viewModel, viewLifecycleOwner)
+        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel, viewLifecycleOwner)
+        marketTopItemsAdapter = MarketTopItemsAdapter(this, marketTopViewModel, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, feeDataAdapter, coinRatesSortingAdapter, marketTopItemsAdapter)
-
-        viewModel.sortingFieldLiveData.observe(viewLifecycleOwner, {
-            coinRatesSortingAdapter.sortingFieldText = getString(it.titleResId)
-        })
-        viewModel.sortingPeriodLiveData.observe(viewLifecycleOwner, {
-            coinRatesSortingAdapter.sortingPeriodText = getString(it.titleResId)
-        })
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, feeDataAdapter, marketTopHeaderAdapter, marketTopItemsAdapter)
 
         pullToRefresh.setOnRefreshListener {
             marketMetricsAdapter.refresh()
@@ -59,25 +53,25 @@ class MarketTop100Fragment : BaseFragment(), CoinRatesSortingAdapter.Listener, M
     }
 
     override fun onClickSortingField() {
-        val items = viewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == viewModel.sortingField)
+        val items = marketTopViewModel.sortingFields.map {
+            SelectorItem(getString(it.titleResId), it == marketTopViewModel.sortingField)
         }
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    viewModel.sortingField = viewModel.sortingFields[position]
+                    marketTopViewModel.sortingField = marketTopViewModel.sortingFields[position]
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onClickSortingPeriod() {
-        val items = viewModel.sortingPeriods.map {
-            SelectorItem(getString(it.titleResId), it == viewModel.sortingPeriod)
+    override fun onClickPeriod() {
+        val items = marketTopViewModel.periods.map {
+            SelectorItem(getString(it.titleResId), it == marketTopViewModel.period)
         }
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Period_PopupTitle)) { position ->
-                    viewModel.sortingPeriod = viewModel.sortingPeriods[position]
+                    marketTopViewModel.period = marketTopViewModel.periods[position]
                 }
                 .show(childFragmentManager, "sorting_period_selector")
     }
