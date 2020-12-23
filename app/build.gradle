@@ -10,7 +10,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 36
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 37
     return "$buildNumber".toInteger()
 }
 
@@ -23,7 +23,7 @@ android {
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
         versionCode computeVersionCode()
-        versionName "0.18.0"
+        versionName "0.18.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -185,7 +185,7 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:280f6cc'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:f1e0c4d'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:0.4.0'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:c1b62ac'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:82bf2d6'
     implementation 'com.github.horizontalsystems:xrates-kit-android:42546a0'
