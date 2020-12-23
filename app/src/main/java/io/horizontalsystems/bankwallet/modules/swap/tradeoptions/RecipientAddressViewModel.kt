@@ -4,43 +4,53 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.TradeOptionsError
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class RecipientAddressViewModel(private val service: SwapTradeOptionsService) : ViewModel(), IVerifiedInputViewModel {
 
     override val inputFieldMaximumNumberOfLines = 2
     override val inputFieldCanEdit = false
-    override val inputFieldValueLiveData = MutableLiveData<String?>(null)
+    override val inputFieldValueLiveData = SingleLiveEvent<String?>()
     override val inputFieldCautionLiveData = MutableLiveData<Caution?>(null)
+    override val inputFieldSyncingLiveData = SingleLiveEvent<Boolean>()
     override val inputFieldPlaceholder = App.instance.getString(R.string.SwapSettings_RecipientPlaceholder)
+    override val inputFieldInitialValue: String? = service.recipient.value
 
     private val disposable = CompositeDisposable()
 
     init {
-        val state = service.state
+        service.recipient.stateObservable
+                .subscribe { state ->
+                    var caution: Caution? = null
+                    var syncing = false
 
-        if (state is ISwapTradeOptionsService.State.Valid) {
-            inputFieldValueLiveData.postValue(state.tradeOptions.recipient?.hex)
-        }
-
-        service.errorsObservable
-                .subscribe {
-                    val caution = it.firstOrNull {
-                        it is TradeOptionsError.InvalidAddress
-                    }?.localizedMessage?.let { localizedMessage ->
-                        Caution(localizedMessage, Caution.Type.Error)
+                    when (state) {
+                        is FieldState.NotValid -> {
+                            state.error.localizedMessage?.let {
+                                caution = Caution(it, Caution.Type.Error)
+                            }
+                        }
+                        is FieldState.Validating -> {
+                            syncing = true
+                        }
                     }
 
                     inputFieldCautionLiveData.postValue(caution)
-                }
-                .let {
+                    inputFieldSyncingLiveData.postValue(syncing)
+                }.let {
                     disposable.add(it)
                 }
     }
 
     override fun setInputFieldValue(text: String?) {
-        service.recipient = text
+        service.recipient.state = FieldState.NotValidated
+        service.recipient.value = text
+    }
+
+    override fun validateInputField() {
+        service.validateRecipient()
     }
 
     override fun onCleared() {

@@ -44,16 +44,20 @@ class SwapTradeOptionsFragment : BaseFragment() {
             }
         }
 
-        viewModel.validStateLiveData.observe(viewLifecycleOwner, {
+        viewModel.buttonEnableStateLiveData.observe(viewLifecycleOwner, {
             applyButton.isEnabled = it
         })
 
-        applyButton.setOnSingleClickListener {
-            if (viewModel.onDoneClick()) {
+        viewModel.applyStateLiveData.observe(viewLifecycleOwner, { isProcessed ->
+            if (isProcessed) {
                 findNavController().popBackStack()
             } else {
                 HudHelper.showErrorMessage(this.requireView(), getString(R.string.default_error_msg))
             }
+        })
+
+        applyButton.setOnSingleClickListener {
+            viewModel.onClickApply()
         }
 
         recipientAddressInputView.setViewModel(recipientAddressViewModel, viewLifecycleOwner, {
@@ -71,7 +75,7 @@ class SwapTradeOptionsFragment : BaseFragment() {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                        recipientAddressInputView.setText(it, false)
+                        recipientAddressInputView.setText(it)
                     }
                 }
                 Activity.RESULT_CANCELED -> {

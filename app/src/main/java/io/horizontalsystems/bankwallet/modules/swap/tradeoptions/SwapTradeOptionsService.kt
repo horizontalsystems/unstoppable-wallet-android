@@ -1,94 +1,158 @@
 package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import android.util.Range
-import io.horizontalsystems.bankwallet.modules.swap.SwapService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.TradeOptionsError
+import io.horizontalsystems.bankwallet.core.managers.UnstoppableDomainsService
+import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.TradeOptionsError.*
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.uniswapkit.models.TradeOptions
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
 
-class SwapTradeOptionsService(tradeOptions: TradeOptions) : ISwapTradeOptionsService {
+class SwapTradeOptionsService(private val tradeService: SwapTradeService, private val uDomainService: UnstoppableDomainsService)
+    : ISwapTradeOptionsService {
 
-    override var state: ISwapTradeOptionsService.State = ISwapTradeOptionsService.State.Valid(tradeOptions)
-        private set(value) {
-            field = value
-            stateObservable.onNext(value)
+    private var resolveDisposable: Disposable? = null
+
+    val tradeOptions = tradeService.tradeOptions
+
+    val recipient = Field(tradeService.tradeRecipientDomain ?: tradeOptions.recipient?.hex, onValueChange = {
+        resolveDisposable?.dispose()
+        resolveDisposable = null
+    })
+
+    val slippage = Field(tradeOptions.allowedSlippagePercent, onValueChange = {
+        validateSlippage()
+    })
+
+    val deadline = Field(tradeOptions.ttl, onValueChange = {
+        validateDeadline()
+    })
+
+    fun validateSlippage() {
+        slippage.state = FieldState.Validating
+
+        if (slippage.value.compareTo(BigDecimal.ZERO) == 0) {
+            slippage.state = FieldState.NotValid(ZeroSlippage)
+        } else if (slippage.value > limitSlippageBounds.upper) {
+            slippage.state = FieldState.NotValid(InvalidSlippage(InvalidSlippageType.Higher(limitSlippageBounds.upper)))
+        } else if (slippage.value < limitSlippageBounds.lower) {
+            slippage.state = FieldState.NotValid(InvalidSlippage(InvalidSlippageType.Lower(limitSlippageBounds.lower)))
+        } else {
+            tradeOptions.allowedSlippagePercent = slippage.value
+            slippage.state = FieldState.Valid
         }
-
-    override val stateObservable = BehaviorSubject.createDefault<ISwapTradeOptionsService.State>(ISwapTradeOptionsService.State.Invalid)
-    override val errorsObservable = BehaviorSubject.createDefault<List<TradeOptionsError>>(listOf())
-
-    val recommendedSlippageBounds = Range<BigDecimal>(BigDecimal("0.1"), BigDecimal("1"))
-    private val limitSlippageBounds = Range<BigDecimal>(BigDecimal("0.01"), BigDecimal("20"))
-
-    val recommendedDeadlineBounds = Range(600L, 1800L)
-
-    var slippage: BigDecimal = tradeOptions.allowedSlippagePercent
-        set(value) {
-            field = value
-            sync()
-        }
-
-    var deadline: Long = tradeOptions.ttl
-        set(value) {
-            field = value
-            sync()
-        }
-
-    var recipient: String? = tradeOptions.recipient?.hex
-        set(value) {
-            field = value
-            sync()
-        }
-
-    init {
-        sync()
     }
 
-    private fun sync() {
-        val errors = mutableListOf<TradeOptionsError>()
+    fun validateDeadline() {
+        deadline.state = FieldState.Validating
 
-        var allowedSlippagePercent = SwapService.defaultSlippage
-
-        if (slippage.compareTo(BigDecimal.ZERO) == 0) {
-            errors.add(TradeOptionsError.ZeroSlippage)
-        } else if (slippage > limitSlippageBounds.upper) {
-            errors.add(TradeOptionsError.InvalidSlippage(ISwapTradeOptionsService.InvalidSlippageType.Higher(limitSlippageBounds.upper)))
-        } else if (slippage < limitSlippageBounds.lower) {
-            errors.add(TradeOptionsError.InvalidSlippage(ISwapTradeOptionsService.InvalidSlippageType.Lower(limitSlippageBounds.lower)))
+        if (deadline.value == 0L) {
+            deadline.state = FieldState.NotValid(ZeroDeadline)
         } else {
-            allowedSlippagePercent = slippage
+            tradeOptions.ttl = deadline.value
+            deadline.state = FieldState.Valid
+        }
+    }
+
+    fun validateRecipient() {
+        val address = recipient.value?.trim()
+        if (address.isNullOrBlank()) {
+            tradeOptions.recipient = null
+            tradeService.tradeRecipientDomain = null
+            recipient.state = FieldState.Valid
+        } else {
+            validateDomain(address)
+        }
+    }
+
+    fun apply(): Single<Boolean> {
+        val needToValidate = mutableListOf<BehaviorSubject<FieldState>>()
+
+        if (recipient.state is FieldState.NotValidated) {
+            needToValidate.add(recipient.stateObservable)
+            validateRecipient()
         }
 
-        val tradeOptions = TradeOptions(allowedSlippagePercent)
-
-        if (deadline != 0L) {
-            tradeOptions.ttl = deadline
-        } else {
-            errors.add(TradeOptionsError.ZeroDeadline)
+        if (slippage.state is FieldState.NotValidated) {
+            needToValidate.add(slippage.stateObservable)
+            validateSlippage()
         }
 
-        recipient?.trim()?.let { recipient ->
-            if (recipient.isNotEmpty()) {
-                try {
-                    tradeOptions.recipient = Address(recipient)
-                } catch (e: NumberFormatException) {
-                    errors.add(TradeOptionsError.InvalidAddress)
-                } catch (e: AddressValidator.AddressValidationException) {
-                    errors.add(TradeOptionsError.InvalidAddress)
+        if (deadline.state is FieldState.NotValidated) {
+            needToValidate.add(deadline.stateObservable)
+            validateDeadline()
+        }
+
+        if (needToValidate.isEmpty()) {
+            return Single.just(true)
+        }
+
+        return Observable.combineLatest(needToValidate) { it }
+                .filter {
+                    listOf(recipient.state, slippage.state, deadline.state).all {
+                        it !is FieldState.Validating
+                    }
                 }
+                .flatMap {
+                    Observable.just(listOf(recipient.state, slippage.state, deadline.state).all { it is FieldState.Valid })
+                }
+                .first(false)
+    }
+
+    private fun validateDomain(domain: String) {
+        when (recipient.state) {
+            is FieldState.NotValid,
+            is FieldState.Valid -> {
+                recipient.stateObservable.onNext(recipient.state)
+                return
             }
         }
 
-        errorsObservable.onNext(errors)
+        recipient.state = FieldState.Validating
+        resolveDisposable?.dispose()
 
-        state = if (errors.isEmpty()) {
-            ISwapTradeOptionsService.State.Valid(tradeOptions)
-        } else {
-            ISwapTradeOptionsService.State.Invalid
+        val ticker = tradeService.coinTo?.code
+        if (ticker == null) {
+            validateAddress(domain)
+            return
+        }
+
+        uDomainService.resolveDomain(domain, ticker)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ address ->
+                    tradeService.tradeRecipientDomain = domain
+                    validateAddress(address)
+                }, {
+                    tradeService.tradeRecipientDomain = null
+                    validateAddress(domain)
+                }).let {
+                    resolveDisposable = it
+                }
+    }
+
+    private fun validateAddress(address: String) {
+        try {
+            tradeOptions.recipient = Address(address)
+            recipient.value = address
+            recipient.state = FieldState.Valid
+        } catch (e: NumberFormatException) {
+            recipient.state = FieldState.NotValid(InvalidAddress)
+        } catch (e: AddressValidator.AddressValidationException) {
+            recipient.state = FieldState.NotValid(InvalidAddress)
         }
     }
 
+    companion object {
+        val recommendedSlippageBounds = Range(BigDecimal("0.1"), BigDecimal("1"))
+        val recommendedDeadlineBounds = Range(600L, 1800L)
+        val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("20"))
+    }
 }

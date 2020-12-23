@@ -227,6 +227,8 @@
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Address</string>
 
+    <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
+    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Max. allowed value is %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
