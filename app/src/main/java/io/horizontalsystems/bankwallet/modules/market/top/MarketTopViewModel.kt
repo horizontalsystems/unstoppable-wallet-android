@@ -54,6 +54,10 @@ class MarketTopViewModel(
             Field.LowestCap -> service.marketTopItems.sortedBy { it.marketCap }
             Field.HighestVolume -> service.marketTopItems.sortedByDescending { it.volume }
             Field.LowestVolume -> service.marketTopItems.sortedBy { it.volume }
+            Field.HighestPrice -> service.marketTopItems.sortedByDescending { it.rate }
+            Field.LowestPrice -> service.marketTopItems.sortedBy { it.rate }
+            Field.TopGainers -> service.marketTopItems.sortedByDescending { it.diff }
+            Field.TopLosers -> service.marketTopItems.sortedBy { it.diff }
         }
 
         val viewItems = sorted.map {

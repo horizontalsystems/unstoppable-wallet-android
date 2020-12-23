@@ -107,6 +107,8 @@
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
+    <string name="Market_Field_HighestPrice">Highest Price</string>
+    <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Period_24h">24 hours</string>
     <string name="Market_Period_1week">1 week</string>
     <string name="Market_Period_1month">1 month</string>
