@@ -24,10 +24,10 @@ class MarketMetricsAdapter(
         }
 
         viewModel.loadingLiveData.observe(viewLifecycleOwner) {
-            TODO()
-            loading = it
-
-            if (loading) notifyItemChanged(0)
+//            TODO()
+//            loading = it
+//
+//            if (loading) notifyItemChanged(0)
         }
     }
 
