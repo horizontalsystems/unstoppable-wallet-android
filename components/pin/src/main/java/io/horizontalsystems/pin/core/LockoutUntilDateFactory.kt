@@ -9,7 +9,7 @@ class LockoutUntilDateFactory(private val currentDateProvider: ICurrentDateProvi
 
         var timeFrame: Long = 0
 
-        val timeDiff = if (uptime > lockoutUptime) uptime - lockoutUptime else uptime
+        val timeDiff = if (uptime >= lockoutUptime) uptime - lockoutUptime else uptime
 
         when {
             failedAttempts == 5 -> timeFrame = 5 * 60 * 1000 - timeDiff
