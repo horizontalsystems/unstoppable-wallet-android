@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.fee
 
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_fee.*
 import java.util.*
 
-class FeeDataAdapter : ListAdapter<Optional<FeeData>, FeeViewHolder>(diff) {
+class MarketFeeDataAdapter : ListAdapter<Optional<FeeData>, FeeViewHolder>(diff) {
 
     init {
         submitList(listOf(Optional.empty()))

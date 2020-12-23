@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market
+package io.horizontalsystems.bankwallet.modules.market.categories
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

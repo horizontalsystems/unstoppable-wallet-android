@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
+import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesModule
+import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
+import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import kotlinx.android.synthetic.main.fragment_market.*
 
 class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     private val filterAdapter = FilterAdapter(this)
-    private val viewModel by viewModels<MarketCategoriesViewModel> { MarketModule.Factory() }
+    private val viewModel by viewModels<MarketCategoriesViewModel> { MarketCategoriesModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market, container, false)

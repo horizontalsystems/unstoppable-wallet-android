@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.market
+package io.horizontalsystems.bankwallet.modules.market.categories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 
-object MarketModule {
+object MarketCategoriesModule {
 
     class Factory : ViewModelProvider.Factory {
 

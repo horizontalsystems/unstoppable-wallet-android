@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.metrics
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

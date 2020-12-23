@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.top100
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +12,9 @@ import io.horizontalsystems.bankwallet.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
 
-class MarketTopItemsAdapter(
+class MarketTop100ItemsAdapter(
         private val listener: Listener,
-        private val viewModel: MarketTopViewModel,
+        private val viewModel: MarketTop100ViewModel,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketTopViewItem, ViewHolderMarketTopItem>(coinRateDiff) {
 
@@ -53,7 +53,7 @@ class MarketTopItemsAdapter(
     }
 }
 
-class ViewHolderMarketTopItem(override val containerView: View, listener: MarketTopItemsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderMarketTopItem(override val containerView: View, listener: MarketTop100ItemsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     private var item: MarketTopViewItem? = null
 
     init {

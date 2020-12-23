@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
-import io.horizontalsystems.bankwallet.modules.market.MarketCategoriesService
+import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThemeStorage
