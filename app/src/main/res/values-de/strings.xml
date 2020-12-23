@@ -68,6 +68,25 @@
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_Warning">Den Key einfach mit „Kopieren“ zu kopieren, ist riskant, da Sie womöglich Zwischenablage-Management-Apps oder andere Apps nutzen, die Zugriff auf die Daten in der Zwischenablage haben. Ein Hacker könnte so heimlich auf Ihre Zwischenablage zugreifen und Ihre Coins stehlen. Das gilt es natürlich zu vermeiden.</string>
+    <!--Market-->
+    <string name="Market_Title">Market</string>
+    <string name="Market_Search">Search</string>
+    <string name="Market_Field_HighestCap">Highest Cap</string>
+    <string name="Market_Field_LowestCap">Lowest Cap</string>
+    <string name="Market_Field_HighestVolume">Highest Volume</string>
+    <string name="Market_Field_LowestVolume">Lowest Volume</string>
+    <string name="Market_Field_HighestPrice">Highest Price</string>
+    <string name="Market_Field_LowestPrice">Lowest Price</string>
+    <string name="Market_Period_24h">24 hours</string>
+    <string name="Market_Period_1week">1 week</string>
+    <string name="Market_Period_1month">1 month</string>
+    <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_Period_PopupTitle">Changes</string>
+    <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
     <!--Balance-->
     <string name="Balance_Title">Guthaben</string>
     <string name="Balance_Deposit">Anfordern</string>
