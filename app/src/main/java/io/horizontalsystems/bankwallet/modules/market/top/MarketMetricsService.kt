@@ -26,7 +26,7 @@ class MarketMetricsService {
 
             marketMetricsObservable.onNext(DataState.Loading)
 
-            Thread.sleep(1000)
+            Thread.sleep(100)
 
             val marketMetrics = MarketMetrics(
                     MetricData("$555.61B", stubPercentage()),
