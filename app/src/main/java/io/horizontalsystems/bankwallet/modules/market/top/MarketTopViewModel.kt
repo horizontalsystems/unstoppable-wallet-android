@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -17,6 +16,11 @@ class MarketTopViewModel(
     val periods by service::periods
 
     var sortingField: Field = Field.HighestCap
+        set(value) {
+            field = value
+
+            syncViewItemsBySortingField()
+        }
     var period by service::period
 
     val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
@@ -26,28 +30,39 @@ class MarketTopViewModel(
     private val disposable = CompositeDisposable()
 
     init {
-        service.marketTopItemsObservable
+        service.stateObservable
                 .subscribe {
-                    syncItems(it)
+                    syncState(it)
                 }
                 .let {
                     disposable.add(it)
                 }
     }
 
-    private fun syncItems(dataState: DataState<List<MarketTopItem>>) {
-        loadingLiveData.postValue(dataState.loading)
-        errorLiveData.postValue(dataState.errorOrNull?.let { convertErrorMessage(it) })
+    private fun syncState(state: MarketTopService.State) {
+        loadingLiveData.postValue(state is MarketTopService.State.Loading)
+        errorLiveData.postValue((state as? MarketTopService.State.Error)?.error?.let { convertErrorMessage(it) })
 
-        if (dataState is DataState.Success) {
-            val viewItems = dataState.data.map {
-                val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
-
-                MarketTopViewItem(it.coinCode, it.coinName, formattedRate, it.diff)
-            }
-
-            marketTopViewItemsLiveData.postValue(viewItems)
+        if (state is MarketTopService.State.Loaded) {
+            syncViewItemsBySortingField()
         }
+    }
+
+    private fun syncViewItemsBySortingField() {
+        val sorted = when (sortingField) {
+            Field.HighestCap -> service.marketTopItems.sortedByDescending { it.marketCap }
+            Field.LowestCap -> service.marketTopItems.sortedBy { it.marketCap }
+            Field.HighestVolume -> service.marketTopItems.sortedByDescending { it.volume }
+            Field.LowestVolume -> service.marketTopItems.sortedBy { it.volume }
+        }
+
+        val viewItems = sorted.map {
+            val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
+
+            MarketTopViewItem(it.coinCode, it.coinName, formattedRate, it.diff)
+        }
+
+        marketTopViewItemsLiveData.postValue(viewItems)
     }
 
     private fun convertErrorMessage(it: Throwable): String {
