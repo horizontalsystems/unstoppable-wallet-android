@@ -68,6 +68,25 @@
     <string name="Backup_Button_ShowKey">نمایش کلید</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_Warning">در صورتی که از برنامه های مدیریتی کلیپ بورد یا برخی برنامه های دیگر که ممکن است به اطلاعات کلیپ بورد دسترسی داشته باشند استفاده می کنید، کپی کردن کلید با استفاده از عملکرد \"کپی\" می تواند ریسک هایی را به همراه داشته باشد.</string>
+    <!--Market-->
+    <string name="Market_Title">Market</string>
+    <string name="Market_Search">Search</string>
+    <string name="Market_Field_HighestCap">Highest Cap</string>
+    <string name="Market_Field_LowestCap">Lowest Cap</string>
+    <string name="Market_Field_HighestVolume">Highest Volume</string>
+    <string name="Market_Field_LowestVolume">Lowest Volume</string>
+    <string name="Market_Field_HighestPrice">Highest Price</string>
+    <string name="Market_Field_LowestPrice">Lowest Price</string>
+    <string name="Market_Period_24h">24 hours</string>
+    <string name="Market_Period_1week">1 week</string>
+    <string name="Market_Period_1month">1 month</string>
+    <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_Period_PopupTitle">Changes</string>
+    <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Deposit">دريافت</string>
