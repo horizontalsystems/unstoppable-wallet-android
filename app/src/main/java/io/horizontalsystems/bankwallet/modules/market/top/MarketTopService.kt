@@ -21,11 +21,18 @@ class MarketTopService(
             syncTopItemsByPeriod()
         }
 
-    val marketTopItemsObservable: BehaviorSubject<DataState<List<MarketTopItem>>> = BehaviorSubject.createDefault(DataState.Loading)
+    sealed class State {
+        object Loading : State()
+        object Loaded : State()
+        data class Error(val error: Throwable) : State()
+    }
+
+
+    val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
     val currency by currencyManager::baseCurrency
 
     private var fullItems: List<TopMarket> = listOf()
-    private var marketTopItems: List<MarketTopItem> = listOf()
+    var marketTopItems: List<MarketTopItem> = listOf()
 
     private val disposable = CompositeDisposable()
 
@@ -38,14 +45,14 @@ class MarketTopService(
     }
 
     private fun fetch() {
-        marketTopItemsObservable.onNext(DataState.Loading)
+        stateObservable.onNext(State.Loading)
 
         xRateManager.getTopMarketList(currencyManager.baseCurrency.code)
                 .subscribe({
                     fullItems = it
                     syncTopItemsByPeriod()
                 }, {
-                    marketTopItemsObservable.onNext(DataState.Error(it))
+                    stateObservable.onNext(State.Error(it))
                 })
                 .let {
                     disposable.add(it)
@@ -64,7 +71,7 @@ class MarketTopService(
             )
         }
 
-        marketTopItemsObservable.onNext(DataState.Success(marketTopItems))
+        stateObservable.onNext(State.Loaded)
     }
 
     override fun clear() {
