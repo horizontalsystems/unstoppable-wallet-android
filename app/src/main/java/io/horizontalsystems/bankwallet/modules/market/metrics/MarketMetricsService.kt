@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.metrics
 
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData

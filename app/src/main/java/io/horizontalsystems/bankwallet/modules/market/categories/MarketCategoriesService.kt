@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market
+package io.horizontalsystems.bankwallet.modules.market.categories
 
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.reactivex.subjects.PublishSubject

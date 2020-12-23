@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.fee
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

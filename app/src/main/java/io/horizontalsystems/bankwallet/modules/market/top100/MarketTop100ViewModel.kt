@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.top100
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
-class MarketTopViewModel(
-        private val service: MarketTopService,
+class MarketTop100ViewModel(
+        private val service: MarketTop100Service,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -39,11 +39,11 @@ class MarketTopViewModel(
                 }
     }
 
-    private fun syncState(state: MarketTopService.State) {
-        loadingLiveData.postValue(state is MarketTopService.State.Loading)
-        errorLiveData.postValue((state as? MarketTopService.State.Error)?.error?.let { convertErrorMessage(it) })
+    private fun syncState(state: MarketTop100Service.State) {
+        loadingLiveData.postValue(state is MarketTop100Service.State.Loading)
+        errorLiveData.postValue((state as? MarketTop100Service.State.Error)?.error?.let { convertErrorMessage(it) })
 
-        if (state is MarketTopService.State.Loaded) {
+        if (state is MarketTop100Service.State.Loaded) {
             syncViewItemsBySortingField()
         }
     }

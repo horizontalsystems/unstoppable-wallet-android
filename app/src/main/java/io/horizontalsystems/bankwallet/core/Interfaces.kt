@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.market.MarketCategoriesService
+import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
