@@ -37,7 +37,7 @@ class SwapDeadlineViewModel(private val service: SwapTradeOptionsService) : View
     private val disposable = CompositeDisposable()
 
     init {
-        if (service.deadline.state is FieldState.NotValid && service.tradeOptions.ttl != defaultTtl) {
+        if (service.deadline.state is FieldState.Valid && service.tradeOptions.ttl != defaultTtl) {
             inputFieldValueLiveData.postValue(toMinutes(service.tradeOptions.ttl))
         }
 
