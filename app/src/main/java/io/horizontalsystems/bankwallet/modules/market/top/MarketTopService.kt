@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.market.top
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.TopMarket
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketTopService(
-        private val xRateManager: IRateManager,
-        private val currencyManager: ICurrencyManager
+        private val currencyManager: ICurrencyManager,
+        private val marketListDataSource: IMarketListDataSource
 ) : Clearable {
 
     val periods: Array<Period> = Period.values()
@@ -37,6 +37,15 @@ class MarketTopService(
 
     init {
         fetch()
+
+        marketListDataSource.dataUpdatedAsync
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    fetch()
+                }
+                .let {
+                    disposable.add(it)
+                }
     }
 
     fun refresh() {
@@ -46,7 +55,8 @@ class MarketTopService(
     private fun fetch() {
         stateObservable.onNext(State.Loading)
 
-        xRateManager.getTopMarketList(currencyManager.baseCurrency.code)
+        marketListDataSource.getListAsync(currencyManager.baseCurrency.code)
+                .subscribeOn(Schedulers.io())
                 .subscribe({
                     fullItems = it
                     syncTopItemsByPeriod()

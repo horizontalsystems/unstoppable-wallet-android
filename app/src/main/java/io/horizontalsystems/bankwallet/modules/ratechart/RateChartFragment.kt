@@ -60,6 +60,14 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         }
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
+                R.id.menuFavorite -> {
+                    presenter.onFavoriteClick()
+                    true
+                }
+                R.id.menuUnfavorite -> {
+                    presenter.onUnfavoriteClick()
+                    true
+                }
                 R.id.menuNotification -> {
                     presenter.onNotificationClick()
                     true
@@ -254,6 +262,11 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
         presenterView.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinId, coinName) ->
             BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinId)
+        })
+
+        presenterView.isFavorite.observe(viewLifecycleOwner, Observer {
+            toolbar.menu.findItem(R.id.menuFavorite).isVisible = !it
+            toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
 
     }
