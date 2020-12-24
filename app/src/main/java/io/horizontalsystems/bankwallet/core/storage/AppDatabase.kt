@@ -12,15 +12,16 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 24, exportSchema = false, entities = [
+@Database(version = 25, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
     BlockchainSetting::class,
     CoinRecord::class,
     SubscriptionJob::class,
-    LogEntry::class]
-)
+    LogEntry::class,
+    FavoriteCoin::class,
+])
 
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -32,6 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun coinRecordDao(): CoinRecordDao
     abstract fun subscriptionJobDao(): SubscriptionJobDao
     abstract fun logsDao(): LogsDao
+    abstract fun marketFavoritesDao(): MarketFavoritesDao
 
     companion object {
 
@@ -64,7 +66,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addLogsTable,
                             updateEthereumCommunicationMode,
                             addBirthdayHeightToAccount,
-                            addBep2SymbolToRecord
+                            addBep2SymbolToRecord,
+                            addFavoriteCoinsTable,
                     )
                     .build()
         }
@@ -427,6 +430,12 @@ abstract class AppDatabase : RoomDatabase() {
         private val addBep2SymbolToRecord: Migration = object : Migration(23, 24) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE CoinRecord ADD COLUMN `bep2Symbol` TEXT")
+            }
+        }
+
+        private val addFavoriteCoinsTable: Migration = object : Migration(24, 25) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteCoin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `code` TEXT NOT NULL)")
             }
         }
     }

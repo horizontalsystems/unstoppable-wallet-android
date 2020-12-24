@@ -678,6 +678,8 @@
     <string name="Charts_Volume">Vol</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
     <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
 
     <!--Rate list-->
 

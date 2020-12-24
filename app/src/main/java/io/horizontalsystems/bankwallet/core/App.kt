@@ -84,6 +84,7 @@ class App : CoreApp() {
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
+        lateinit var marketFavoritesManager: MarketFavoritesManager
     }
 
     override fun onCreate() {
@@ -210,6 +211,8 @@ class App : CoreApp() {
         walletConnectSessionStore = WalletConnectSessionStore(accountManager, predefinedAccountTypeManager)
 
         termsManager = TermsManager(localStorage)
+
+        marketFavoritesManager = MarketFavoritesManager(appDatabase)
 
         val nightMode = if (CoreApp.themeStorage.isLightModeOn)
             AppCompatDelegate.MODE_NIGHT_NO else
