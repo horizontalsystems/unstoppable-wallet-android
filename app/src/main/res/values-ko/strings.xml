@@ -514,6 +514,8 @@
     <string name="Charts_Volume">음량</string>
     <string name="Charts_Error_NotAvailable">차트 이용불가</string>
     <string name="Charts_LatestNews">최신 뉴스</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
     <!--Rate list-->
     <string name="RateList_portfolio">포트폴리오</string>
     <string name="RateList_top100">상위 100</string>
