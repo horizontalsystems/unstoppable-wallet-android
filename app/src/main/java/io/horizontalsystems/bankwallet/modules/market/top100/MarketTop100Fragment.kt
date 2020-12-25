@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.top100
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.modules.market.fee.MarketFeeViewModel
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.market.top100.*
+import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -22,16 +22,16 @@ import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_rates.*
 import java.util.*
 
-class MarketTopFragment : BaseFragment(), MarketTop100HeaderAdapter.Listener, MarketTop100ItemsAdapter.Listener {
+class MarketTop100Fragment : BaseFragment(), MarketTopHeaderAdapter.Listener, MarketTopItemsAdapter.Listener {
 
     private lateinit var marketMetricsAdapter: MarketMetricsAdapter
     private lateinit var marketFeeDataAdapter: MarketFeeDataAdapter
-    private lateinit var marketTopHeaderAdapter: MarketTop100HeaderAdapter
-    private lateinit var marketTop100ItemsAdapter: MarketTop100ItemsAdapter
+    private lateinit var marketTopHeaderAdapter: MarketTopHeaderAdapter
+    private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
 
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketFeeViewModel by viewModels<MarketFeeViewModel> { MarketFeeModule.Factory() }
-    private val marketTopViewModel by viewModels<MarketTop100ViewModel> { MarketTop100Module.Factory() }
+    private val marketTopViewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rates, container, false)
@@ -42,14 +42,14 @@ class MarketTopFragment : BaseFragment(), MarketTop100HeaderAdapter.Listener, Ma
 
         marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
         marketFeeDataAdapter = MarketFeeDataAdapter()
-        marketTopHeaderAdapter = MarketTop100HeaderAdapter(this, marketTopViewModel, viewLifecycleOwner)
-        marketTop100ItemsAdapter = MarketTop100ItemsAdapter(this, marketTopViewModel, viewLifecycleOwner)
+        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel, viewLifecycleOwner)
+        marketTopItemsAdapter = MarketTopItemsAdapter(this, marketTopViewModel, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, marketFeeDataAdapter, marketTopHeaderAdapter, marketTop100ItemsAdapter)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, marketFeeDataAdapter, marketTopHeaderAdapter, marketTopItemsAdapter)
 
         pullToRefresh.setOnRefreshListener {
             marketMetricsAdapter.refresh()
-            marketTop100ItemsAdapter.refresh()
+            marketTopItemsAdapter.refresh()
 
             pullToRefresh.isRefreshing = false
         }

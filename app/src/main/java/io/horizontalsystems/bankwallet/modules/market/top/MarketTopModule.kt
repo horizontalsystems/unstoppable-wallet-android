@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top100
+package io.horizontalsystems.bankwallet.modules.market.top
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
@@ -7,14 +7,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import java.math.BigDecimal
 
-object MarketTop100Module {
+object MarketTopModule {
 
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = MarketTop100Service(App.xRateManager, App.currencyManager)
-            return MarketTop100ViewModel(service, listOf(service)) as T
+            val service = MarketTopService(App.xRateManager, App.currencyManager)
+            return MarketTopViewModel(service, listOf(service)) as T
         }
 
     }

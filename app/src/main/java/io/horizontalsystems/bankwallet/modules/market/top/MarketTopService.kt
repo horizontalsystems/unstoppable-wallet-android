@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top100
+package io.horizontalsystems.bankwallet.modules.market.top
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
@@ -7,7 +7,7 @@ import io.horizontalsystems.xrateskit.entities.TopMarket
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
-class MarketTop100Service(
+class MarketTopService(
         private val xRateManager: IRateManager,
         private val currencyManager: ICurrencyManager
 ) : Clearable {
