@@ -512,6 +512,8 @@
     <string name="Charts_Volume">Lautstärke</string>
     <string name="Charts_Error_NotAvailable">Diagramm nicht verfügbar</string>
     <string name="Charts_LatestNews">Neueste Nachrichten</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
