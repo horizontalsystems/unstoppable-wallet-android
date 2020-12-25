@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/clickable_background_color_lawrence"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="44dp">
 
     <TextView
@@ -31,7 +31,7 @@
         tools:visibility="visible" />
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_gravity="bottom"
         android:background="@color/steel_20" />

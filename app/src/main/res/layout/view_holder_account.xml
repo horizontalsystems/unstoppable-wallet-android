@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginTop="12dp"
@@ -15,7 +15,7 @@
     android:paddingBottom="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
@@ -63,7 +63,7 @@
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/advancedSettingsButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:arrow="true"
         app:textColor="?ColorOz"
@@ -71,7 +71,7 @@
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/backupButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:arrow="true"
         app:attention="true"
@@ -80,7 +80,7 @@
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/showKeyButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:arrow="true"
         app:textColor="?ColorOz"
@@ -88,14 +88,14 @@
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/createButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:textColor="?ColorJacob"
         app:title="@string/ManageKeys_Create" />
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/restoreButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:roundBottom="true"
         app:textColor="?ColorJacob"
@@ -103,7 +103,7 @@
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/unlinkButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:roundBottom="true"
         app:textColor="?ColorLucian"
