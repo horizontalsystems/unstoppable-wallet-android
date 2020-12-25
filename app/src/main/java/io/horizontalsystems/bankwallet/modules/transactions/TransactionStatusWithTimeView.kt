@@ -40,6 +40,12 @@ class TransactionStatusWithTimeView : ConstraintLayout {
                 statusText.isVisible = true
                 statusText.setText(R.string.Transactions_Pending)
             }
+
+            is TransactionStatus.Sending ->{
+                statusText.isVisible = true
+                statusText.setText(R.string.Transactions_Sending)
+            }
+
             is TransactionStatus.Processing -> {
                 statusText.isVisible = true
                 statusText.setText(getText(type))
