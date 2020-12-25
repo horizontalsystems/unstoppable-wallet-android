@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top100
+package io.horizontalsystems.bankwallet.modules.market.top
 
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +10,11 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_sorting.*
 
-class MarketTop100HeaderAdapter(
+class MarketTopHeaderAdapter(
         private val listener: Listener,
-        private val viewModel: MarketTop100ViewModel,
+        private val viewModel: MarketTopViewModel,
         viewLifecycleOwner: LifecycleOwner
-) : RecyclerView.Adapter<MarketTop100HeaderAdapter.ViewHolderHeader>() {
+) : RecyclerView.Adapter<MarketTopHeaderAdapter.ViewHolderHeader>() {
 
     init {
         viewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
