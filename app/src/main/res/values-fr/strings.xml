@@ -514,6 +514,8 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="Charts_Volume">Volume</string>
     <string name="Charts_Error_NotAvailable">Graphique non disponible</string>
     <string name="Charts_LatestNews">Dernières nouvelles</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
