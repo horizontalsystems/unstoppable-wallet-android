@@ -513,6 +513,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Charts_Volume">Volumen</string>
     <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
     <string name="Charts_LatestNews">Últimas noticias</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Cartera</string>
     <string name="RateList_top100">Top 100</string>
