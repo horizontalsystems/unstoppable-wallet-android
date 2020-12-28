@@ -473,6 +473,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Verbinde</string>
