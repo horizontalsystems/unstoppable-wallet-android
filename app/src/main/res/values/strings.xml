@@ -618,6 +618,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
 
     <!-- Tor -->
 

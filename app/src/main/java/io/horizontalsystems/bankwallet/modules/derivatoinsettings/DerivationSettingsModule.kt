@@ -4,49 +4,35 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.DerivationSetting
+import io.reactivex.Observable
 
 object DerivationSettingsModule {
 
-    interface IView {
-        fun showDerivationChangeAlert(derivationSetting: DerivationSetting, coinTitle: String)
-        fun setViewItems(viewItems: List<DerivationSettingSectionViewItem>)
-    }
-
-    interface IViewDelegate {
-        fun onSelect(sectionIndex: Int, settingIndex: Int)
-        fun onViewLoad()
-        fun onConfirm(derivationSetting: DerivationSetting)
-    }
-
-    interface IInteractor {
-        val allActiveSettings: List<Pair<DerivationSetting, Coin>>
-        fun derivation(coinType: CoinType): Derivation
-        fun getCoin(coinType: CoinType): Coin
-        fun saveDerivation(derivationSetting: DerivationSetting)
-    }
-
-    interface IRouter {
-        fun close()
+    interface IService {
+        val items: List<Item>
+        val itemsObservable: Observable<List<Item>>
+        fun set(derivation: Derivation, coinType: CoinType)
+        fun set(bitcoinCashCoinType: BitcoinCashCoinType)
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val view = DerivationSettingsView()
-            val interactor = DerivationSettingsInteractor(App.derivationSettingsManager, App.coinManager)
-            val presenter = DerivationSettingsPresenter(view, interactor, StringProvider(App.instance))
+            val service = DerivationSettingsService(App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
 
-            return presenter as T
+            return DerivationSettingsViewModel(service, StringProvider((App.instance))) as T
         }
     }
+
+    data class Item(val coinType: CoinType, val type: ItemType)
+
+    sealed class ItemType {
+        class Derivation(val derivations: List<AccountType.Derivation>, var current: AccountType.Derivation) : ItemType()
+        class BitcoinCashType(val types: List<BitcoinCashCoinType>, var current: BitcoinCashCoinType) : ItemType()
+    }
+
+    data class SectionItem(val coinTypeName: String, val viewItems: List<ViewItem>)
+    data class ViewItem(val title: String, val subtitle: String, val selected: Boolean)
 }
-
-data class DerivationSettingsItem (val coin: Coin, val setting: DerivationSetting)
-
-data class DerivationSettingViewItem (val title: String, val subtitle: String, val selected: Boolean)
-
-data class DerivationSettingSectionViewItem (val coinName: String, val items: List<DerivationSettingViewItem>)

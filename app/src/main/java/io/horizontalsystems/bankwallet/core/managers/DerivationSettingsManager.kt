@@ -16,13 +16,13 @@ class DerivationSettingsManager(
             CoinType.Litecoin to AccountType.Derivation.bip49
     )
 
-    override fun allActiveSettings(): List<Pair<DerivationSetting, Coin>> {
+    override fun allActiveSettings(): List<Pair<DerivationSetting, CoinType>> {
         val wallets = walletManager.wallets
 
         return supportedCoinTypes.mapNotNull { (coinType, _) ->
-            val coin = wallets.firstOrNull { it.coin.type == coinType }?.coin ?: return@mapNotNull null
+            wallets.firstOrNull { it.coin.type == coinType }?.coin ?: return@mapNotNull null
             val setting = setting(coinType) ?: return@mapNotNull null
-            Pair(setting, coin)
+            Pair(setting, coinType)
         }
     }
 

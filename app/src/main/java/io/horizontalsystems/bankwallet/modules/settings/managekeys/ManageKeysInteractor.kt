@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.BitcoinCashCoinTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,6 +12,7 @@ class ManageKeysInteractor(
         private val accountManager: IAccountManager,
         private val derivationSettingsManager: IDerivationSettingsManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val bitcoinCashCoinTypeManager: BitcoinCashCoinTypeManager,
         private val priceAlertManager: IPriceAlertManager)
     : ManageKeysModule.Interactor {
 
@@ -50,11 +52,12 @@ class ManageKeysInteractor(
         return predefinedAccountTypes.map {
 
             val account = predefinedAccountTypeManager.account(it)
-            ManageAccountItem(it, account , hasDerivationSettings(it))
+            ManageAccountItem(it, account , hasAddressFormatSettings(it))
         }
     }
 
-    private fun hasDerivationSettings(predefinedAccountType: PredefinedAccountType): Boolean {
-        return predefinedAccountType == PredefinedAccountType.Standard && derivationSettingsManager.allActiveSettings().isNotEmpty()
+    private fun hasAddressFormatSettings(predefinedAccountType: PredefinedAccountType): Boolean {
+        return predefinedAccountType == PredefinedAccountType.Standard
+                && (derivationSettingsManager.allActiveSettings().isNotEmpty() || bitcoinCashCoinTypeManager.hasActiveSetting)
     }
 }

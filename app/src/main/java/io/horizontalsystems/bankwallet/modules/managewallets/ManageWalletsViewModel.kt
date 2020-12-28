@@ -1,30 +1,26 @@
-package io.horizontalsystems.bankwallet.modules.managewallets.view
+package io.horizontalsystems.bankwallet.modules.managewallets
 
 import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
-import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class ManageWalletsViewModel(
         private val service: ManageWalletsModule.IManageWalletsService,
+        private val blockchainSettingsService: BlockchainSettingsService,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    private var disposable: Disposable? = null
-
     val viewStateLiveData = MutableLiveData<CoinViewState>()
-    val openDerivationSettingsLiveEvent = SingleLiveEvent<Pair<Coin, AccountType.Derivation>>()
+
+    private var disposables = CompositeDisposable()
     private var filter: String? = null
 
     init {
@@ -36,49 +32,45 @@ class ManageWalletsViewModel(
                     .subscribe {
                         syncViewState(it)
                     }
-                    .let { disposable = it }
+                    .let { disposables.add(it) }
+
+            blockchainSettingsService.approveEnableCoinObservable
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        service.enable(it)
+                    }
+                    .let { disposables.add(it) }
+
+            blockchainSettingsService.rejectEnableCoinObservable
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        syncViewState()
+                    }
+                    .let { disposables.add(it) }
+
         }, 500)
     }
 
     override fun onCleared() {
-        disposable?.dispose()
+        disposables.clear()
         clearables.forEach {
             it.clear()
         }
         super.onCleared()
     }
 
-    fun enable(coin: Coin){
-        enable(coin, null)
+    fun enable(coin: Coin) {
+        val account = service.account(coin) ?: return
+        blockchainSettingsService.approveEnable(coin, account.origin)
     }
 
     fun disable(coin: Coin) {
         service.disable(coin)
     }
 
-    fun onSelect(coin: Coin, derivation: DerivationSetting) {
-        enable(coin, derivation)
-    }
-
-    fun onCancelDerivationSelection() {
-        syncViewState()
-    }
-
     fun updateFilter(newText: String?) {
         filter = newText
         syncViewState()
-    }
-
-    private fun enable(coin: Coin, derivationSetting: DerivationSetting? = null){
-        try {
-            service.enable(coin, derivationSetting)
-        } catch (exception: ManageWalletsService.EnableCoinError){
-            when(val e = exception){
-                is ManageWalletsService.EnableCoinError.DerivationNotConfirmed -> {
-                    openDerivationSettingsLiveEvent.postValue(Pair(coin, e.currentDerivation))
-                }
-            }
-        }
     }
 
     private fun syncViewState(updatedState: ManageWalletsModule.State? = null) {
@@ -99,13 +91,13 @@ class ManageWalletsViewModel(
     }
 
     private fun viewItem(item: ManageWalletsModule.Item, last: Boolean): CoinViewItem {
-        return when(val itemState = item.state) {
+        return when (val itemState = item.state) {
             ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, last)
             is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last)
         }
     }
 
-    private fun filtered(items: List<ManageWalletsModule.Item>) : List<ManageWalletsModule.Item> {
+    private fun filtered(items: List<ManageWalletsModule.Item>): List<ManageWalletsModule.Item> {
         val filter = filter ?: return items
 
         return items.filter {

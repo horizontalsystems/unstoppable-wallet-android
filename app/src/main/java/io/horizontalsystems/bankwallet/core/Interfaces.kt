@@ -369,6 +369,7 @@ interface IEnabledWalletStorage {
 }
 
 interface IBlockchainSettingsStorage {
+    var bitcoinCashCoinType: BitcoinCashCoinType?
     fun derivationSetting(coinType: CoinType) : DerivationSetting?
     fun saveDerivationSetting(derivationSetting: DerivationSetting)
     fun deleteDerivationSettings()
@@ -407,7 +408,7 @@ interface IAddressParser {
 }
 
 interface IDerivationSettingsManager {
-    fun allActiveSettings(): List<Pair<DerivationSetting, Coin>>
+    fun allActiveSettings(): List<Pair<DerivationSetting, CoinType>>
     fun defaultSetting(coinType: CoinType): DerivationSetting?
     fun setting(coinType: CoinType): DerivationSetting?
     fun save(setting: DerivationSetting)

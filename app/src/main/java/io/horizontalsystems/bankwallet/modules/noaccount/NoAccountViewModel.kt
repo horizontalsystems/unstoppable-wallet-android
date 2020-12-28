@@ -16,7 +16,7 @@ class NoAccountViewModel(
     fun onClickCreateKey() {
         try {
             if (coin.type.predefinedAccountType == PredefinedAccountType.Standard) {
-                service.resetDerivationSettings()
+                service.resetAddressFormatSettings()
             }
 
             val account = service.createAccount(coin.type.predefinedAccountType)
