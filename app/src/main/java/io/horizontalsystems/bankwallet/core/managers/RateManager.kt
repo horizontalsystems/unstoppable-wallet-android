@@ -22,7 +22,6 @@ class RateManager(
         private val appConfigProvider: IAppConfigProvider) : IRateManager {
 
     private val disposables = CompositeDisposable()
-    private val coinMarketCapApiKey = "f33ccd44-6545-4cbb-991c-4584b9501251"
     private val kit: XRatesKit by lazy {
         XRatesKit.create(
                 context,
@@ -30,7 +29,6 @@ class RateManager(
                 rateExpirationInterval = 60 * 10,
                 topMarketsCount = 100,
                 cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey,
-                coinMarketCapApiKey = coinMarketCapApiKey,
                 uniswapGraphUrl = appConfigProvider.uniswapGraphUrl
         )
     }
@@ -135,7 +133,7 @@ class RateManager(
     }
 
     override fun getTopMarketList(currency: String): Single<List<TopMarket>> {
-        return kit.getTopMarkets(currency)
+        return kit.getTopMarketsAsync(currencyCode = currency)
     }
 
     override fun refresh() {
