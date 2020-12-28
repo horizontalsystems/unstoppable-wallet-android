@@ -13,11 +13,11 @@ class AddressFormatService(
         private val bitcoinCashCoinTypeManager: BitcoinCashCoinTypeManager
 ) : AddressFormatModule.IService {
 
-    override val itemsObservable = BehaviorSubject.create<List<AddressFormatModule.Item>>()
+    override val itemsAsync = BehaviorSubject.create<List<AddressFormatModule.Item>>()
     override var items = listOf<AddressFormatModule.Item>()
         private set(value) {
             field = value
-            itemsObservable.onNext(value)
+            itemsAsync.onNext(value)
         }
 
     init {

@@ -14,12 +14,12 @@ class CreateWalletService(
         private val derivationSettingsManager: IDerivationSettingsManager
 ) : CreateWalletModule.IService, Clearable {
 
-    override val stateObservable = BehaviorSubject.create<State>()
-    override val canCreate = BehaviorSubject.create<Boolean>()
+    override val stateAsync = BehaviorSubject.create<State>()
+    override val canCreateAsync = BehaviorSubject.create<Boolean>()
     override var state: State = State()
         set(value) {
             field = value
-            stateObservable.onNext(value)
+            stateAsync.onNext(value)
         }
 
     private val accounts = mutableMapOf<PredefinedAccountType, Account>()
@@ -89,7 +89,7 @@ class CreateWalletService(
     }
 
     private fun syncCanCreate() {
-        canCreate.onNext(wallets.isNotEmpty())
+        canCreateAsync.onNext(wallets.isNotEmpty())
     }
 
     private fun resolveAccount(predefinedAccountType: PredefinedAccountType) : Account {

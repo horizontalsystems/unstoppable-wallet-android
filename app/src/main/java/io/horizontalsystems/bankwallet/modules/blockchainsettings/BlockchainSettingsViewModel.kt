@@ -20,7 +20,7 @@ class BlockchainSettingsViewModel(
     private var currentRequest: BlockchainSettingsModule.Request? = null
 
     init {
-        service.requestObservable
+        service.requestAsync
                 .subscribeOn(Schedulers.io())
                 .subscribe { handle(it) }
                 .let { disposable = it }

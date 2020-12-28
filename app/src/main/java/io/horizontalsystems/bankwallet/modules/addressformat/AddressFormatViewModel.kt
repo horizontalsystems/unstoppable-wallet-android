@@ -20,7 +20,7 @@ class AddressFormatViewModel(
     private var currentIndices: Pair<Int, Int>? = null
 
     init {
-        service.itemsObservable
+        service.itemsAsync
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     sync(it)

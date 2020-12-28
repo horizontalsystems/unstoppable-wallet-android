@@ -16,9 +16,9 @@ class BlockchainSettingsService(
     private val rejectEnableCoinSubject = BehaviorSubject.create<Coin>()
     private val requestSubject = BehaviorSubject.create<BlockchainSettingsModule.Request>()
 
-    val approveEnableCoinObservable: Observable<Coin> = approveEnableCoinSubject
-    val rejectEnableCoinObservable: Observable<Coin> = rejectEnableCoinSubject
-    val requestObservable: Observable<BlockchainSettingsModule.Request> = requestSubject
+    val approveEnableCoinAsync: Observable<Coin> = approveEnableCoinSubject
+    val rejectEnableCoinAsync: Observable<Coin> = rejectEnableCoinSubject
+    val requestAsync: Observable<BlockchainSettingsModule.Request> = requestSubject
 
     fun approveEnable(coin: Coin, accountOrigin: AccountOrigin) {
         val setting = derivationSettingsManager.setting(coin.type)

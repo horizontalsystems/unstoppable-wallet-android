@@ -15,7 +15,7 @@ object ManageWalletsModule {
 
     interface IManageWalletsService {
         val state: State
-        val stateObservable: Observable<State>
+        val stateAsync: Observable<State>
         fun enable(coin: Coin, derivationSetting: DerivationSetting? = null)
         fun disable(coin: Coin)
         fun account(coin: Coin): Account?
