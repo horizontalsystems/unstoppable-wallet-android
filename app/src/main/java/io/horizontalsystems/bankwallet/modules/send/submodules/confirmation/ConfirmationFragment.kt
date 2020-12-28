@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -23,7 +23,7 @@ import java.net.UnknownHostException
 class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFragment() {
 
     private var sendButtonView: ConfirmationSendButtonView? = null
-    private var presenter: SendConfirmationPresenter? = null
+    private val presenter by activityViewModels<SendConfirmationPresenter> { SendConfirmationModule.Factory() }
     private var sendView: SendView? = null
     private var presenterView: SendConfirmationView? = null
     private val logger = AppLogger("send")
@@ -48,20 +48,18 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
         }
 
         sendView = sendPresenter?.view as SendView
-        presenter = ViewModelProvider(this, SendConfirmationModule.Factory())
-                .get(SendConfirmationPresenter::class.java)
 
         sendView?.confirmationViewItems?.observe(viewLifecycleOwner, Observer {
-            presenter?.confirmationViewItems = it
-            presenter?.onViewDidLoad()
+            presenter.confirmationViewItems = it
+            presenter.onViewDidLoad()
         })
 
-        presenterView = presenter?.view as SendConfirmationView
+        presenterView = presenter.view as SendConfirmationView
 
         presenterView?.addPrimaryDataViewItem?.observe(viewLifecycleOwner, Observer { primaryViewItem ->
             context?.let {
                 val primaryItemView = ConfirmationPrimaryView(it)
-                primaryItemView.bind(primaryViewItem) { presenter?.onReceiverClick() }
+                primaryItemView.bind(primaryViewItem) { presenter.onReceiverClick() }
                 confirmationLinearLayout.addView(primaryItemView)
             }
         })
@@ -99,7 +97,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
             errorMsgTextRes?.let {
                 HudHelper.showErrorMessage(this.requireView(), getErrorText(it))
             }
-            presenter?.onSendError()
+            presenter.onSendError()
         })
 
         presenterView?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->

@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -28,7 +28,7 @@ class SendFeeFragment(
         private val customPriorityUnit: CustomPriorityUnit?)
     : SendSubmoduleFragment() {
 
-    private var presenter: SendFeePresenter? = null
+    private val presenter by activityViewModels<SendFeePresenter> { SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate, customPriorityUnit) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_send_fee, container, false)
@@ -38,21 +38,19 @@ class SendFeeFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProvider(this, SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate, customPriorityUnit))
-                .get(SendFeePresenter::class.java)
-        val presenterView = presenter?.view as SendFeeView
+        val presenterView = presenter.view as SendFeeView
 
         txError.isVisible = false
         txSpeedLayout.isVisible = feeIsAdjustable
         txSpeedLayout.setOnClickListener {
-            presenter?.onClickFeeRatePriority()
+            presenter.onClickFeeRatePriority()
         }
         txFeeLoading.isVisible = false
         txFeeLoading.text = getString(R.string.Alert_Loading)
 
         customFeeSeekBar.setListener(object : FeeSeekBar.Listener {
             override fun onSelect(value: Int) {
-                presenter?.onChangeFeeRateValue(value.toLong())
+                presenter.onChangeFeeRateValue(value.toLong())
             }
         })
 
@@ -93,7 +91,7 @@ class SendFeeFragment(
 
             SelectorDialog
                     .newInstance(selectorItems, getString(R.string.Send_DialogSpeed)) { position ->
-                        presenter?.onChangeFeeRate(feeRates[position].feeRateInfo)
+                        presenter.onChangeFeeRate(feeRates[position].feeRateInfo)
                     }
                     .show(parentFragmentManager, "fee_rate_priority_selector")
         })
@@ -124,7 +122,7 @@ class SendFeeFragment(
                 val formattedFee = App.numberFormatter.formatCoin(error.fee.value, error.fee.coin.code, 0, 8)
 
                 feeError.text = context?.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol,
-                                                   feeCoinTitle, formattedFee)
+                        feeCoinTitle, formattedFee)
             }
         })
 
@@ -138,7 +136,7 @@ class SendFeeFragment(
     }
 
     override fun init() {
-        presenter?.onViewDidLoad()
+        presenter.onViewDidLoad()
     }
 
     private fun setLoading(loading: Boolean) {
