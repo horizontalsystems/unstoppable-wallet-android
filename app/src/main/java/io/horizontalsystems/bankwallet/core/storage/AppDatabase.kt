@@ -275,7 +275,8 @@ abstract class AppDatabase : RoomDatabase() {
                         when (coinId) {
                             "BTC" -> {
                                 coinTypeStr = dbConverter.fromCoinType(CoinType.Bitcoin)
-                                derivationStr = (App.localStorage.bitcoinDerivation ?: AccountType.Derivation.bip49).value
+                                derivationStr = (App.localStorage.bitcoinDerivation
+                                        ?: AccountType.Derivation.bip49).value
 
                             }
                             "BCH" -> {
@@ -442,19 +443,13 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val addCoinTypeBlockchainSettingForBitcoinCash: Migration = object : Migration(25, 26) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                val walletsCursor = database.query("SELECT * FROM EnabledWallet")
-                while (walletsCursor.moveToNext()) {
-                    val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
-                    if (coinIdColumnIndex >= 0) {
-                        val coinId = walletsCursor.getString(coinIdColumnIndex)
-                        if (coinId == "BCH"){
-                            database.execSQL("""
-                                                INSERT INTO BlockchainSetting (`coinType`,`key`,`value`) 
-                                                VALUES ('bitcoincash', 'network_coin_type', 'type0')
-                                                """.trimIndent())
-                            return
-                        }
-                    }
+                val walletsCursor = database.query("SELECT * FROM EnabledWallet WHERE coinId = 'BCH'")
+                while (walletsCursor.count > 0) {
+                    database.execSQL("""
+                                        INSERT INTO BlockchainSetting (`coinType`,`key`,`value`) 
+                                        VALUES ('bitcoincash', 'network_coin_type', 'type0')
+                                        """.trimIndent())
+                    return
                 }
             }
         }
