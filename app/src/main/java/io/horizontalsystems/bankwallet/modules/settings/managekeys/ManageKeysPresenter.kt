@@ -44,8 +44,8 @@ class ManageKeysPresenter(
         }
     }
 
-    override fun onClickAdvancedSettings(item: ManageAccountItem) {
-        router.showDerivationSettings()
+    override fun onClickAddressFormat(item: ManageAccountItem) {
+        router.showAddressFormat()
     }
 
     override fun onConfirmBackup() {

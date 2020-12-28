@@ -108,8 +108,8 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
             findNavController().navigate(R.id.manageKeysFragment_to_backupFragment, arguments, navOptions())
         })
 
-        router.showDerivationSettings.observe(this, Observer {
-            findNavController().navigate(R.id.manageKeysFragment_to_derivationSettingsFragment, null, navOptions())
+        router.showAddressFormat.observe(this, Observer {
+            findNavController().navigate(R.id.manageKeysFragment_to_addressFormatFragment, null, navOptions())
         })
 
         router.closeEvent.observe(this, Observer {
@@ -119,8 +119,8 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
 
     //  ManageKeysAdapter Listener
 
-    override fun onClickAdvancedSettings(item: ManageAccountItem) {
-        presenter.onClickAdvancedSettings(item)
+    override fun onClickAddressFormat(item: ManageAccountItem) {
+        presenter.onClickAddressFormat(item)
     }
 
     override fun onClickCreate(item: ManageAccountItem) {
