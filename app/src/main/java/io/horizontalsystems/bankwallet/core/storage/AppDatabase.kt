@@ -440,7 +440,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private val addCoinTypeBlockchainSettingForBitcoinCash: Migration = object : Migration(24, 25) {
+        private val addCoinTypeBlockchainSettingForBitcoinCash: Migration = object : Migration(25, 26) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 val walletsCursor = database.query("SELECT * FROM EnabledWallet")
                 while (walletsCursor.moveToNext()) {
