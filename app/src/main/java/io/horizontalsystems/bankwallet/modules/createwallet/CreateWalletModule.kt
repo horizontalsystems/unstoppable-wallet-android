@@ -10,8 +10,8 @@ import io.reactivex.Observable
 object CreateWalletModule {
 
     interface IService{
-        val stateObservable: Observable<CreateWalletService.State>
-        val canCreate: Observable<Boolean>
+        val stateAsync: Observable<CreateWalletService.State>
+        val canCreateAsync: Observable<Boolean>
         var state: CreateWalletService.State
 
         fun enable(coin: Coin)

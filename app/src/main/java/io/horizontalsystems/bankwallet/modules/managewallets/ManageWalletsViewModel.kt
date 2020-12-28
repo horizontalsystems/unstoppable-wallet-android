@@ -27,21 +27,21 @@ class ManageWalletsViewModel(
         Handler().postDelayed({
             syncViewState()
 
-            service.stateObservable
+            service.stateAsync
                     .subscribeOn(Schedulers.io())
                     .subscribe {
                         syncViewState(it)
                     }
                     .let { disposables.add(it) }
 
-            blockchainSettingsService.approveEnableCoinObservable
+            blockchainSettingsService.approveEnableCoinAsync
                     .subscribeOn(Schedulers.io())
                     .subscribe {
                         service.enable(it)
                     }
                     .let { disposables.add(it) }
 
-            blockchainSettingsService.rejectEnableCoinObservable
+            blockchainSettingsService.rejectEnableCoinAsync
                     .subscribeOn(Schedulers.io())
                     .subscribe {
                         syncViewState()

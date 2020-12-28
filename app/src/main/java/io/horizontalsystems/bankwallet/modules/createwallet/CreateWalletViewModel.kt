@@ -29,7 +29,7 @@ class CreateWalletViewModel(
         Handler().postDelayed({
             syncViewState()
 
-            service.stateObservable
+            service.stateAsync
                     .subscribeOn(Schedulers.io())
                     .subscribe {
                         syncViewState(it)
@@ -37,7 +37,7 @@ class CreateWalletViewModel(
                     .let { disposables.add(it) }
         }, 700)
 
-        service.canCreate
+        service.canCreateAsync
                 .subscribe {
                     canCreateLiveData.postValue(it)
                 }.let { disposables.add(it) }

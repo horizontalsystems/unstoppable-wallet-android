@@ -43,14 +43,14 @@ class RestoreSelectCoinsViewModel(
                         canRestoreLiveData.postValue(it)
                     }.let { disposables.add(it) }
 
-            blockchainSettingsService.approveEnableCoinObservable
+            blockchainSettingsService.approveEnableCoinAsync
                     .subscribeOn(Schedulers.io())
                     .subscribe {
                         service.enable(it)
                     }
                     .let { disposables.add(it) }
 
-            blockchainSettingsService.rejectEnableCoinObservable
+            blockchainSettingsService.rejectEnableCoinAsync
                     .subscribeOn(Schedulers.io())
                     .subscribe {
                         syncViewState()

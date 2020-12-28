@@ -12,7 +12,7 @@ object AddressFormatModule {
 
     interface IService {
         val items: List<Item>
-        val itemsObservable: Observable<List<Item>>
+        val itemsAsync: Observable<List<Item>>
         fun set(derivation: Derivation, coinType: CoinType)
         fun set(bitcoinCashCoinType: BitcoinCashCoinType)
     }
