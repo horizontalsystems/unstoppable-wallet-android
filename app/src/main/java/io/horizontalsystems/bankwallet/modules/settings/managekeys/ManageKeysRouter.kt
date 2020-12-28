@@ -10,7 +10,7 @@ class ManageKeysRouter : ManageKeysModule.IRouter {
     val showCreateWalletLiveEvent = SingleLiveEvent<PredefinedAccountType>()
     val showBackupModule = SingleLiveEvent<Pair<Account, PredefinedAccountType>>()
     val closeEvent = SingleLiveEvent<Void>()
-    val showDerivationSettings = SingleLiveEvent<Unit>()
+    val showAddressFormat = SingleLiveEvent<Unit>()
 
 
     override fun showRestore(predefinedAccountType: PredefinedAccountType) {
@@ -25,8 +25,8 @@ class ManageKeysRouter : ManageKeysModule.IRouter {
         showBackupModule.postValue(Pair(account, predefinedAccountType))
     }
 
-    override fun showDerivationSettings() {
-        showDerivationSettings.call()
+    override fun showAddressFormat() {
+        showAddressFormat.call()
     }
 
     override fun close() {

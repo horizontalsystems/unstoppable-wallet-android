@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.derivatoinsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +12,10 @@ import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_address_format_settings.*
 
-class DerivationSettingsFragment : BaseFragment(), DerivationSettingsAdapter.Listener {
+class AddressFormatFragment : BaseFragment(), AddressFormatAdapter.Listener {
 
-    private val viewModel by viewModels<DerivationSettingsViewModel> { DerivationSettingsModule.Factory() }
-    private lateinit var adapter: DerivationSettingsAdapter
+    private val viewModel by viewModels<AddressFormatViewModel> { AddressFormatModule.Factory() }
+    private lateinit var adapter: AddressFormatAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_address_format_settings, container, false)
@@ -27,7 +27,7 @@ class DerivationSettingsFragment : BaseFragment(), DerivationSettingsAdapter.Lis
             findNavController().popBackStack()
         }
 
-        adapter = DerivationSettingsAdapter(this)
+        adapter = AddressFormatAdapter(this)
         derivationSettingsRecyclerview.adapter = adapter
 
         observeView()
@@ -43,7 +43,7 @@ class DerivationSettingsFragment : BaseFragment(), DerivationSettingsAdapter.Lis
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.showDerivationChangeAlert.observe(viewLifecycleOwner, Observer { (coinTypeTitle, settingTitle) ->
+        viewModel.showAddressFormatChangeAlert.observe(viewLifecycleOwner, Observer { (coinTypeTitle, settingTitle) ->
             activity?.let {
                 ConfirmationDialog.show(
                         title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),

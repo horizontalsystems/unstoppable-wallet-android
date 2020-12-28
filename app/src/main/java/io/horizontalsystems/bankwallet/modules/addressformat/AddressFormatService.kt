@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.derivatoinsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.BitcoinCashCoinTypeManager
@@ -8,13 +8,13 @@ import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.reactivex.subjects.BehaviorSubject
 
-class DerivationSettingsService(
+class AddressFormatService(
         private val derivationSettingsManager: IDerivationSettingsManager,
         private val bitcoinCashCoinTypeManager: BitcoinCashCoinTypeManager
-) : DerivationSettingsModule.IService {
+) : AddressFormatModule.IService {
 
-    override val itemsObservable = BehaviorSubject.create<List<DerivationSettingsModule.Item>>()
-    override var items = listOf<DerivationSettingsModule.Item>()
+    override val itemsObservable = BehaviorSubject.create<List<AddressFormatModule.Item>>()
+    override var items = listOf<AddressFormatModule.Item>()
         private set(value) {
             field = value
             itemsObservable.onNext(value)
@@ -25,14 +25,14 @@ class DerivationSettingsService(
     }
 
     private fun syncItems() {
-        val settingItems = mutableListOf<DerivationSettingsModule.Item>()
+        val settingItems = mutableListOf<AddressFormatModule.Item>()
 
         derivationSettingsManager.allActiveSettings().forEach { (setting, coinType) ->
-            settingItems.add(DerivationSettingsModule.Item(coinType, DerivationSettingsModule.ItemType.Derivation(AccountType.Derivation.values().asList(), setting.derivation)))
+            settingItems.add(AddressFormatModule.Item(coinType, AddressFormatModule.ItemType.Derivation(AccountType.Derivation.values().asList(), setting.derivation)))
         }
 
         if (bitcoinCashCoinTypeManager.hasActiveSetting) {
-            settingItems.add(DerivationSettingsModule.Item(CoinType.BitcoinCash, DerivationSettingsModule.ItemType.BitcoinCashType(BitcoinCashCoinType.values().asList(), bitcoinCashCoinTypeManager.bitcoinCashCoinType)))
+            settingItems.add(AddressFormatModule.Item(CoinType.BitcoinCash, AddressFormatModule.ItemType.BitcoinCashType(BitcoinCashCoinType.values().asList(), bitcoinCashCoinTypeManager.bitcoinCashCoinType)))
         }
 
         items = settingItems

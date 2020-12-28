@@ -23,7 +23,7 @@ object ManageKeysModule {
 
         fun onConfirmBackup()
         fun onConfirmUnlink(account: Account)
-        fun onClickAdvancedSettings(item: ManageAccountItem)
+        fun onClickAddressFormat(item: ManageAccountItem)
     }
 
     interface Interactor {
@@ -44,7 +44,7 @@ object ManageKeysModule {
         fun showCreateWallet(predefinedAccountType: PredefinedAccountType)
         fun showBackup(account: Account, predefinedAccountType: PredefinedAccountType)
         fun showRestore(predefinedAccountType: PredefinedAccountType)
-        fun showDerivationSettings()
+        fun showAddressFormat()
     }
 
     class Factory : ViewModelProvider.Factory {

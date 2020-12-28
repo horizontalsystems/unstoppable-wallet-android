@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.derivatoinsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.reactivex.Observable
 
-object DerivationSettingsModule {
+object AddressFormatModule {
 
     interface IService {
         val items: List<Item>
@@ -20,9 +20,9 @@ object DerivationSettingsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = DerivationSettingsService(App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
+            val service = AddressFormatService(App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
 
-            return DerivationSettingsViewModel(service, StringProvider((App.instance))) as T
+            return AddressFormatViewModel(service, StringProvider((App.instance))) as T
         }
     }
 

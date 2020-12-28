@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.derivatoinsettings
+package io.horizontalsystems.bankwallet.modules.addressformat
 
 import android.view.View
 import android.view.ViewGroup
@@ -10,32 +10,32 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_derivation_settings.*
 
-class DerivationSettingsAdapter(private val listener: Listener) : RecyclerView.Adapter<DerivationSettingsAdapter.DerivationSettingsItemViewHolder>() {
+class AddressFormatAdapter(private val listener: Listener) : RecyclerView.Adapter<AddressFormatAdapter.AddressFormatItemViewHolder>() {
 
     interface Listener {
         fun onSettingClick(sectionIndex: Int, settingIndex: Int)
     }
 
-    var items = listOf<DerivationSettingsModule.SectionItem>()
+    var items = listOf<AddressFormatModule.SectionItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DerivationSettingsItemViewHolder {
-        return DerivationSettingsItemViewHolder(inflate(parent, DerivationSettingsItemViewHolder.layout, false), listener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressFormatItemViewHolder {
+        return AddressFormatItemViewHolder(inflate(parent, AddressFormatItemViewHolder.layout, false), listener)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: DerivationSettingsItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AddressFormatItemViewHolder, position: Int) {
         holder.bind(items[position])
     }
 
-    class DerivationSettingsItemViewHolder(override val containerView: View, private val listener: Listener)
+    class AddressFormatItemViewHolder(override val containerView: View, private val listener: Listener)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         private val optionViewIds = listOf(R.id.option1, R.id.option2, R.id.option3)
 
-        fun bind(viewItem: DerivationSettingsModule.SectionItem) {
+        fun bind(viewItem: AddressFormatModule.SectionItem) {
             bipSectionHeader.text = viewItem.coinTypeName
             option3.isVisible = viewItem.viewItems.size == 3
 
