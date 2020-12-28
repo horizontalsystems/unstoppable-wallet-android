@@ -475,6 +475,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">연결로</string>
