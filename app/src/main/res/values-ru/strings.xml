@@ -473,6 +473,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Соединение</string>
