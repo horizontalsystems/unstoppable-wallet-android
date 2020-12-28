@@ -3,13 +3,29 @@ package io.horizontalsystems.bankwallet.core.storage
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.entities.*
 
-class BlockchainSettingsStorage(private val appDatabase: AppDatabase): IBlockchainSettingsStorage {
+class BlockchainSettingsStorage(private val appDatabase: AppDatabase) : IBlockchainSettingsStorage {
 
     companion object {
         const val syncModeSettingKey: String = "sync_mode"
         const val derivationSettingKey: String = "derivation"
         const val ethereumRpcModeSettingKey: String = "communication"
+        const val networkCoinTypeKey: String = "network_coin_type"
     }
+
+    override var bitcoinCashCoinType: BitcoinCashCoinType?
+        get() {
+            val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(CoinType.BitcoinCash, networkCoinTypeKey)
+            return blockchainSetting?.let { BitcoinCashCoinType.valueOf(it.value) }
+        }
+        set(newValue) {
+            newValue ?: run {
+                appDatabase.blockchainSettingDao().deleteDerivationSettings(networkCoinTypeKey)
+                return
+            }
+
+            appDatabase.blockchainSettingDao().insert(BlockchainSetting(CoinType.BitcoinCash, networkCoinTypeKey, newValue.value))
+        }
+
 
     override fun derivationSetting(coinType: CoinType): DerivationSetting? {
         val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(coinType, derivationSettingKey)

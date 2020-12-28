@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 25, exportSchema = false, entities = [
+@Database(version = 26, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -68,6 +68,7 @@ abstract class AppDatabase : RoomDatabase() {
                             addBirthdayHeightToAccount,
                             addBep2SymbolToRecord,
                             addFavoriteCoinsTable,
+                            addCoinTypeBlockchainSettingForBitcoinCash
                     )
                     .build()
         }
@@ -436,6 +437,25 @@ abstract class AppDatabase : RoomDatabase() {
         private val addFavoriteCoinsTable: Migration = object : Migration(24, 25) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteCoin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `code` TEXT NOT NULL)")
+            }
+        }
+
+        private val addCoinTypeBlockchainSettingForBitcoinCash: Migration = object : Migration(24, 25) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                val walletsCursor = database.query("SELECT * FROM EnabledWallet")
+                while (walletsCursor.moveToNext()) {
+                    val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
+                    if (coinIdColumnIndex >= 0) {
+                        val coinId = walletsCursor.getString(coinIdColumnIndex)
+                        if (coinId == "BCH"){
+                            database.execSQL("""
+                                                INSERT INTO BlockchainSetting (`coinType`,`key`,`value`) 
+                                                VALUES ('bitcoincash', 'network_coin_type', 'type0')
+                                                """.trimIndent())
+                            return
+                        }
+                    }
+                }
             }
         }
     }

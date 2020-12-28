@@ -4,9 +4,9 @@ import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.DerivationSetting
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
 import io.horizontalsystems.core.SingleLiveEvent
@@ -16,12 +16,12 @@ import java.util.*
 
 class RestoreSelectCoinsViewModel(
         private val service: RestoreSelectCoinsModule.IService,
+        private val blockchainSettingsService: BlockchainSettingsService,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
     val viewStateLiveData = MutableLiveData<CoinViewState>()
     val enabledCoinsLiveData = SingleLiveEvent<List<Coin>>()
-    val openDerivationSettingsLiveEvent = SingleLiveEvent<Pair<Coin, AccountType.Derivation>>()
     val canRestoreLiveData = MutableLiveData<Boolean>()
 
     private var disposables = CompositeDisposable()
@@ -42,6 +42,20 @@ class RestoreSelectCoinsViewModel(
                     .subscribe {
                         canRestoreLiveData.postValue(it)
                     }.let { disposables.add(it) }
+
+            blockchainSettingsService.approveEnableCoinObservable
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        service.enable(it)
+                    }
+                    .let { disposables.add(it) }
+
+            blockchainSettingsService.rejectEnableCoinObservable
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        syncViewState()
+                    }
+                    .let { disposables.add(it) }
         }, 700)
     }
 
@@ -54,19 +68,11 @@ class RestoreSelectCoinsViewModel(
     }
 
     fun enable(coin: Coin) {
-        enable(coin, null)
+        blockchainSettingsService.approveEnable(coin, AccountOrigin.Restored)
     }
 
     fun disable(coin: Coin) {
         service.disable(coin)
-    }
-
-    fun onSelect(coin: Coin, derivation: DerivationSetting) {
-        enable(coin, derivation)
-    }
-
-    fun onCancelDerivationSelection() {
-        syncViewState()
     }
 
     fun updateFilter(newText: String?) {
@@ -76,19 +82,6 @@ class RestoreSelectCoinsViewModel(
 
     fun onRestore() {
         enabledCoinsLiveData.postValue(service.enabledCoins)
-    }
-
-
-    private fun enable(coin: Coin, derivationSetting: DerivationSetting? = null) {
-        try {
-            service.enable(coin, derivationSetting)
-        } catch (exception: RestoreSelectCoinsService.EnableCoinError) {
-            when (val e = exception) {
-                is RestoreSelectCoinsService.EnableCoinError.DerivationNotConfirmed -> {
-                    openDerivationSettingsLiveEvent.postValue(Pair(coin, e.currentDerivation))
-                }
-            }
-        }
     }
 
     private fun syncViewState(serviceState: RestoreSelectCoinsService.State? = null) {

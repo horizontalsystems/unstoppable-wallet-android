@@ -32,6 +32,14 @@ sealed class CoinType : Parcelable {
     @Parcelize
     class Eos(val token: String, val symbol: String) : CoinType()
 
+    val title: String
+        get() = when (this) {
+            is Bitcoin -> "Bitcoin"
+            is Litecoin -> "Litecoin"
+            is BitcoinCash -> "BitcoinCash"
+            else -> ""
+        }
+
     val label: String?
         get() = when (this) {
             is Erc20 -> "ERC20"

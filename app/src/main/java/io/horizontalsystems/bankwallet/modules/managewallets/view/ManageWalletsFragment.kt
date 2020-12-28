@@ -5,15 +5,16 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
 import io.horizontalsystems.bankwallet.modules.addtoken.TokenType
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
@@ -25,7 +26,9 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
     override val title
         get() = getString(R.string.ManageCoins_title)
 
-    private lateinit var viewModel: ManageWalletsViewModel
+    private val vmFactory by lazy { ManageWalletsModule.Factory() }
+    private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
+    private val blockchainSettingsViewModel by viewModels<BlockchainSettingsViewModel> { vmFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,9 +45,6 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
             }
         }
         configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
-
-        viewModel = ViewModelProvider(this, ManageWalletsModule.Factory())
-                .get(ManageWalletsViewModel::class.java)
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().popBackStack()
@@ -87,12 +87,12 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         viewModel.updateFilter(query)
     }
 
-    override fun onCancelAddressFormatSelection() {
-        viewModel.onCancelDerivationSelection()
+    override fun onCancelSelection() {
+        blockchainSettingsViewModel.onCancelSelect()
     }
 
-    override fun onSelectAddressFormat(coin: Coin, derivationSetting: DerivationSetting) {
-        viewModel.onSelect(coin, derivationSetting)
+    override fun onSelect(index: Int) {
+        blockchainSettingsViewModel.onSelect(index)
     }
 
     // NoAccountDialog.Listener
@@ -112,9 +112,9 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
             setViewState(state)
         })
 
-        viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->
+        blockchainSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
             hideKeyboard()
-            showAddressFormatSelectionDialog(coin, currentDerivation)
+            showBottomSelectorDialog(config)
         })
     }
 

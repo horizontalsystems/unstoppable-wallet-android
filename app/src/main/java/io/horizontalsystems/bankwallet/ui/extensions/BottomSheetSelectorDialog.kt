@@ -15,7 +15,7 @@ class BottomSheetSelectorDialog(
         private val title: String,
         private val subtitle: String,
         private val icon: Drawable?,
-        private val items: List<Pair<String, String>>,
+        private val items: List<BottomSheetSelectorViewItem>,
         private val selected: Int,
         private val onItemSelected: (Int) -> Unit,
         private val onCancelled: (() -> Unit)?,
@@ -58,14 +58,14 @@ class BottomSheetSelectorDialog(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Drawable?, items: List<Pair<String, String>>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Drawable?, items: List<BottomSheetSelectorViewItem>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
             BottomSheetSelectorDialog(title, subtitle, icon, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
                     .show(fragmentManager, "selector_dialog")
         }
     }
 }
 
-class SelectorItemsAdapter(private val items: List<Pair<String, String>>, var selected: Int) : RecyclerView.Adapter<ItemViewHolder>() {
+class SelectorItemsAdapter(private val items: List<BottomSheetSelectorViewItem>, var selected: Int) : RecyclerView.Adapter<ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(SettingItemWithCheckmark(parent.context)) { position ->
@@ -84,7 +84,7 @@ class SelectorItemsAdapter(private val items: List<Pair<String, String>>, var se
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int, payloads: MutableList<Any>) {
         if (payloads.isEmpty()) {
-            holder.bind(items[position].first, items[position].second, position == selected, position == itemCount - 1)
+            holder.bind(items[position].title, items[position].subtitle, position == selected, position == itemCount - 1)
         } else {
             holder.bindSelected(position == selected)
         }
@@ -96,7 +96,7 @@ class ItemViewHolder(private val settingItemWithCheckmark: SettingItemWithCheckm
 
     init {
         settingItemWithCheckmark.setOnClickListener {
-            onItemClick(adapterPosition)
+            onItemClick(bindingAdapterPosition)
         }
     }
 
@@ -111,3 +111,5 @@ class ItemViewHolder(private val settingItemWithCheckmark: SettingItemWithCheckm
         settingItemWithCheckmark.setChecked(selected)
     }
 }
+
+data class BottomSheetSelectorViewItem (val title: String, val subtitle: String)

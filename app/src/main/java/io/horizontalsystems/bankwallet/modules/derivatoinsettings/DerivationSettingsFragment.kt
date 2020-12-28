@@ -4,18 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_address_format_settings.*
 
 class DerivationSettingsFragment : BaseFragment(), DerivationSettingsAdapter.Listener {
 
-    private lateinit var presenter: DerivationSettingsPresenter
+    private val viewModel by viewModels<DerivationSettingsViewModel> { DerivationSettingsModule.Factory() }
     private lateinit var adapter: DerivationSettingsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -28,40 +27,34 @@ class DerivationSettingsFragment : BaseFragment(), DerivationSettingsAdapter.Lis
             findNavController().popBackStack()
         }
 
-        presenter = ViewModelProvider(this, DerivationSettingsModule.Factory())
-                .get(DerivationSettingsPresenter::class.java)
-
-        presenter.onViewLoad()
-
         adapter = DerivationSettingsAdapter(this)
         derivationSettingsRecyclerview.adapter = adapter
 
-        observeView(presenter.view as DerivationSettingsView)
+        observeView()
     }
 
     override fun onSettingClick(sectionIndex: Int, settingIndex: Int) {
-        presenter.onSelect(sectionIndex, settingIndex)
+        viewModel.onSelect(sectionIndex, settingIndex)
     }
 
-    private fun observeView(view: DerivationSettingsView) {
-        view.derivationSettings.observe(viewLifecycleOwner, Observer { viewItems ->
+    private fun observeView() {
+        viewModel.sections.observe(viewLifecycleOwner, Observer { viewItems ->
             adapter.items = viewItems
             adapter.notifyDataSetChanged()
         })
 
-        view.showDerivationChangeAlert.observe(viewLifecycleOwner, Observer { (derivationSetting, coinTitle) ->
+        viewModel.showDerivationChangeAlert.observe(viewLifecycleOwner, Observer { (coinTypeTitle, settingTitle) ->
             activity?.let {
-                val bipVersion = derivationSetting.derivation.title()
                 ConfirmationDialog.show(
                         title = getString(R.string.BlockchainSettings_BipChangeAlert_Title),
-                        subtitle = bipVersion,
-                        contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content, coinTitle, coinTitle),
-                        actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, bipVersion),
+                        subtitle = settingTitle,
+                        contentText = getString(R.string.BlockchainSettings_BipChangeAlert_Content, coinTypeTitle, coinTypeTitle),
+                        actionButtonTitle = getString(R.string.BlockchainSettings_ChangeAlert_ActionButtonText, settingTitle),
                         cancelButtonTitle = getString(R.string.Alert_Cancel),
                         activity = it,
                         listener = object : ConfirmationDialog.Listener {
                             override fun onActionButtonClick() {
-                                presenter.onConfirm(derivationSetting)
+                                viewModel.onConfirm()
                             }
                         }
                 )

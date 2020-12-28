@@ -3,9 +3,12 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsViewModel
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
 import io.reactivex.Observable
 
 object ManageWalletsModule {
@@ -15,6 +18,7 @@ object ManageWalletsModule {
         val stateObservable: Observable<State>
         fun enable(coin: Coin, derivationSetting: DerivationSetting? = null)
         fun disable(coin: Coin)
+        fun account(coin: Coin): Account?
     }
 
     data class State(val featuredItems: List<Item>, val items: List<Item>) {
@@ -34,12 +38,28 @@ object ManageWalletsModule {
     }
 
 
-    class Factory() : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
+
+        private val manageWalletsService by lazy {
+            ManageWalletsService(App.coinManager, App.walletManager, App.accountManager)
+        }
+
+        private val blockchainSettingsService by lazy {
+            BlockchainSettingsService(App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
+        }
+
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = ManageWalletsService(App.coinManager, App.walletManager, App.accountManager, App.derivationSettingsManager)
 
-            return ManageWalletsViewModel(service, listOf(service)) as T
+            return when (modelClass) {
+                ManageWalletsViewModel::class.java -> {
+                    ManageWalletsViewModel(manageWalletsService, blockchainSettingsService, listOf(manageWalletsService)) as T
+                }
+                BlockchainSettingsViewModel::class.java -> {
+                    BlockchainSettingsViewModel(blockchainSettingsService, StringProvider(App.instance)) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
         }
     }
 }

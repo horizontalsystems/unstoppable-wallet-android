@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.derivatoinsettings
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_derivation_settings.*
@@ -14,7 +16,7 @@ class DerivationSettingsAdapter(private val listener: Listener) : RecyclerView.A
         fun onSettingClick(sectionIndex: Int, settingIndex: Int)
     }
 
-    var items = listOf<DerivationSettingSectionViewItem>()
+    var items = listOf<DerivationSettingsModule.SectionItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DerivationSettingsItemViewHolder {
         return DerivationSettingsItemViewHolder(inflate(parent, DerivationSettingsItemViewHolder.layout, false), listener)
@@ -31,29 +33,23 @@ class DerivationSettingsAdapter(private val listener: Listener) : RecyclerView.A
     class DerivationSettingsItemViewHolder(override val containerView: View, private val listener: Listener)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(viewItem: DerivationSettingSectionViewItem) {
-            bipSectionHeader.text = viewItem.coinName
-            bip44.bind(
-                    viewItem.items[0].title,
-                    viewItem.items[0].subtitle,
-                    viewItem.items[0].selected,
-                    { listener.onSettingClick(bindingAdapterPosition, 0) },
-                    false
-            )
-            bip49.bind(
-                    viewItem.items[1].title,
-                    viewItem.items[1].subtitle,
-                    viewItem.items[1].selected,
-                    { listener.onSettingClick(bindingAdapterPosition, 1) },
-                    false
-            )
-            bip84.bind(
-                    viewItem.items[2].title,
-                    viewItem.items[2].subtitle,
-                    viewItem.items[2].selected,
-                    { listener.onSettingClick(bindingAdapterPosition, 2) },
-                    true
-            )
+        private val optionViewIds = listOf(R.id.option1, R.id.option2, R.id.option3)
+
+        fun bind(viewItem: DerivationSettingsModule.SectionItem) {
+            bipSectionHeader.text = viewItem.coinTypeName
+            option3.isVisible = viewItem.viewItems.size == 3
+
+            viewItem.viewItems.forEachIndexed { index, item ->
+                containerView.findViewById<SettingItemWithCheckmark>(optionViewIds[index])?.apply {
+                    bind(
+                            item.title,
+                            item.subtitle,
+                            item.selected,
+                            { listener.onSettingClick(bindingAdapterPosition, index) },
+                            index == viewItem.viewItems.size - 1
+                    )
+                }
+            }
         }
 
         companion object {

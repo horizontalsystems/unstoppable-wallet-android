@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
@@ -11,8 +9,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class RestoreSelectCoinsService(
         private val predefinedAccountType: PredefinedAccountType,
-        private val coinManager: ICoinManager,
-        private val derivationSettingsManager: IDerivationSettingsManager
+        private val coinManager: ICoinManager
 ) : RestoreSelectCoinsModule.IService, Clearable {
 
     override val canRestore = BehaviorSubject.create<Boolean>()
@@ -32,13 +29,6 @@ class RestoreSelectCoinsService(
     }
 
     override fun enable(coin: Coin, derivationSetting: DerivationSetting?) {
-        val coinDerivationSetting = derivationSettingsManager.setting(coin.type) ?: derivationSettingsManager.defaultSetting(coin.type)
-        coinDerivationSetting?.let { setting ->
-            derivationSetting ?: throw EnableCoinError.DerivationNotConfirmed(setting.derivation)
-
-            derivationSettingsManager.save(derivationSetting)
-        }
-
         enabledCoins.add(coin)
 
         syncState()
@@ -81,7 +71,4 @@ class RestoreSelectCoinsService(
 
     data class Item(val coin: Coin, val enabled: Boolean)
 
-    sealed class EnableCoinError : Exception() {
-        class DerivationNotConfirmed(val currentDerivation: AccountType.Derivation) : EnableCoinError()
-    }
 }

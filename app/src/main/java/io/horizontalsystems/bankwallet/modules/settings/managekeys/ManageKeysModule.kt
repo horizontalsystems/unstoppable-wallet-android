@@ -52,7 +52,7 @@ object ManageKeysModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageKeysView()
             val router = ManageKeysRouter()
-            val interactor = ManageKeysInteractor(App.accountManager, App.derivationSettingsManager, App.predefinedAccountTypeManager, App.priceAlertManager)
+            val interactor = ManageKeysInteractor(App.accountManager, App.derivationSettingsManager, App.predefinedAccountTypeManager, App.bitcoinCashCoinTypeManager, App.priceAlertManager)
             val presenter = ManageKeysPresenter(view, router, interactor)
 
             interactor.delegate = presenter
