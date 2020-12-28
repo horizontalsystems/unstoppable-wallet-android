@@ -79,7 +79,7 @@ class RateListPresenter(
 
         topMarketInfos.clear()
         topMarketInfos.addAll(items.mapIndexed { index, topMarket ->
-            TopMarketRanked(topMarket.coinCode, topMarket.coinName, topMarket.marketInfo,index + 1)
+            TopMarketRanked(topMarket.coin.code, topMarket.coin.title, topMarket.marketInfo,index + 1)
         })
 
         sortTopList()
@@ -90,8 +90,8 @@ class RateListPresenter(
     private fun sortTopList() {
         when (sortType) {
             TopListSortType.Rank -> topMarketInfos.sortBy { it.rank }
-            TopListSortType.Winners -> topMarketInfos.sortByDescending { it.marketInfo.diff }
-            TopListSortType.Losers -> topMarketInfos.sortByDescending { -it.marketInfo.diff }
+            TopListSortType.Winners -> topMarketInfos.sortByDescending { it.marketInfo.rateDiff }
+            TopListSortType.Losers -> topMarketInfos.sortByDescending { -it.marketInfo.rateDiff }
         }
     }
 

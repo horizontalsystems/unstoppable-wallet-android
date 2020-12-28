@@ -50,7 +50,7 @@ class MarketListFavoritesDataSource(
     }
 
     private fun isCoinInFavorites(topMarket: TopMarket, favoriteCoins: List<FavoriteCoin>): Boolean {
-        return favoriteCoins.find { it.code == topMarket.coinCode } != null
+        return favoriteCoins.find { it.code == topMarket.coin.code } != null
     }
 
 }

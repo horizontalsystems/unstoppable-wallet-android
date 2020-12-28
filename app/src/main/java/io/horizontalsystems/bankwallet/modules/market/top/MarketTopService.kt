@@ -73,12 +73,12 @@ class MarketTopService(
         marketTopItems = fullItems.map {
             MarketTopItem(
                     i++,
-                    it.coinCode,
-                    it.coinName,
-                    it.marketInfo.marketCap,
-                    it.marketInfo.volume,
+                    it.coin.code,
+                    it.coin.title,
+                    it.marketInfo.marketCap.toDouble(),
+                    it.marketInfo.volume.toDouble(),
                     it.marketInfo.rate,
-                    it.marketInfo.diff,
+                    it.marketInfo.rateDiff,
             )
         }
 

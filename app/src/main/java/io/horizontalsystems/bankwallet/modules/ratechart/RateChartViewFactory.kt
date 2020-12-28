@@ -62,9 +62,9 @@ class RateChartViewFactory {
     fun createMarketInfo(marketInfo: MarketInfo, currency: Currency, coinCode: String): MarketInfoViewItem {
         return MarketInfoViewItem(
                 CurrencyValue(currency, marketInfo.rate),
-                CurrencyValue(currency, marketInfo.marketCap.toBigDecimal()),
-                CurrencyValue(currency, marketInfo.volume.toBigDecimal()),
-                RateChartModule.CoinCodeWithValue(coinCode, marketInfo.supply.toBigDecimal()),
+                CurrencyValue(currency, marketInfo.marketCap),
+                CurrencyValue(currency, marketInfo.volume),
+                RateChartModule.CoinCodeWithValue(coinCode, marketInfo.supply),
                 CoinInfoMap.data[coinCode]?.supply?.let { RateChartModule.CoinCodeWithValue(coinCode, it) },
                 CoinInfoMap.data[coinCode]?.startDate,
                 CoinInfoMap.data[coinCode]?.website,
