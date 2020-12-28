@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.activity_send.*
-import kotlinx.android.synthetic.main.activity_send.toolbar
 
 class SendActivity : BaseActivity() {
 
@@ -34,7 +33,8 @@ class SendActivity : BaseActivity() {
     private var proceedButtonView: ProceedButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // prevent fragment recreations by passing null to onCreate
+        super.onCreate(null)
         setContentView(R.layout.activity_send)
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
