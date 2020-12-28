@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -19,7 +19,7 @@ class SendHodlerFragment(
         private val sendHandler: SendModule.ISendHandler
 ) : SendSubmoduleFragment() {
 
-    private lateinit var presenter: SendHodlerPresenter
+    private val presenter by activityViewModels<SendHodlerPresenter> { SendHodlerModule.Factory(sendHandler, hodlerModuleDelegate) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.view_hodler_input, container, false)
@@ -28,7 +28,6 @@ class SendHodlerFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProvider(this, SendHodlerModule.Factory(sendHandler, hodlerModuleDelegate)).get(SendHodlerPresenter::class.java)
         val presenterView = presenter.view as SendHodlerView
 
         view.setOnClickListener {

@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -24,7 +24,7 @@ class SendAmountFragment(
         private val sendHandler: SendModule.ISendHandler)
     : SendSubmoduleFragment() {
 
-    private lateinit var presenter: SendAmountPresenter
+    private val presenter by activityViewModels<SendAmountPresenter> { SendAmountModule.Factory(wallet, sendHandler) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_amount_input, container, false)
@@ -34,8 +34,6 @@ class SendAmountFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProvider(this, SendAmountModule.Factory(wallet, sendHandler))
-                .get(SendAmountPresenter::class.java)
         val presenterView = presenter.view as SendAmountView
         presenter.moduleDelegate = amountModuleDelegate
         editTxtAmount.requestFocus()
