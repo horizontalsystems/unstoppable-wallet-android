@@ -474,6 +474,10 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Comunicación</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Conexión</string>
