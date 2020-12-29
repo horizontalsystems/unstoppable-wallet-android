@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.market.top.MarketListFavoritesDataSource
 import io.horizontalsystems.bankwallet.modules.market.top.MarketTopService
 import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewModel
 
