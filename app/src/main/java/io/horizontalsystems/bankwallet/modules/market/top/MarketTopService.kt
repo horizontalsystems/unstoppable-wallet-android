@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.market.top
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.TopMarket
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -17,7 +16,7 @@ class MarketTopService(
         set(value) {
             field = value
 
-            syncTopItemsByPeriod()
+            fetch()
         }
 
     sealed class State {
@@ -30,7 +29,6 @@ class MarketTopService(
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
     val currency by currencyManager::baseCurrency
 
-    private var fullItems: List<TopMarket> = listOf()
     var marketTopItems: List<MarketTopItem> = listOf()
 
     private val disposable = CompositeDisposable()
@@ -55,34 +53,18 @@ class MarketTopService(
     private fun fetch() {
         stateObservable.onNext(State.Loading)
 
-        marketListDataSource.getListAsync(currencyManager.baseCurrency.code)
+        marketListDataSource.getListAsync(currencyManager.baseCurrency.code, period)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    fullItems = it
-                    syncTopItemsByPeriod()
+                    marketTopItems = it
+
+                    stateObservable.onNext(State.Loaded)
                 }, {
                     stateObservable.onNext(State.Error(it))
                 })
                 .let {
                     disposable.add(it)
                 }
-    }
-
-    private fun syncTopItemsByPeriod() {
-        var i = 1
-        marketTopItems = fullItems.map {
-            MarketTopItem(
-                    i++,
-                    it.coin.code,
-                    it.coin.title,
-                    it.marketInfo.marketCap.toDouble(),
-                    it.marketInfo.volume.toDouble(),
-                    it.marketInfo.rate,
-                    it.marketInfo.rateDiff,
-            )
-        }
-
-        stateObservable.onNext(State.Loaded)
     }
 
     override fun clear() {
