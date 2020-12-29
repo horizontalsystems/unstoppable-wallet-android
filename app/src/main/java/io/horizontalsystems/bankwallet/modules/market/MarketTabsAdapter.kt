@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import io.horizontalsystems.bankwallet.modules.market.defi.MarketDefiFragment
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesFragment
 import io.horizontalsystems.bankwallet.modules.market.top100.MarketTop100Fragment
 
@@ -14,7 +15,7 @@ class MarketTabsAdapter(fm: FragmentManager, lifecycle: Lifecycle) : FragmentSta
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> MarketTop100Fragment()
-            1 -> Fragment()
+            1 -> MarketDefiFragment()
             2 -> MarketFavoritesFragment()
             else -> throw IllegalStateException()
         }
