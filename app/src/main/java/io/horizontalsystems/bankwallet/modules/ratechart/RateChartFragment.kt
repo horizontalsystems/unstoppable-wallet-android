@@ -272,7 +272,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-        val shortCapValue = shortenValue(value)
+        val shortCapValue = App.numberFormatter.shortenValue(value)
         return formatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
     }
 
@@ -336,36 +336,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
     private fun setViewVisibility(vararg views: View, isVisible: Boolean) {
         views.forEach { it.isInvisible = !isVisible }
-    }
-
-    // Need to move this to helpers
-
-    private fun shortenValue(number: Number): Pair<BigDecimal, String> {
-        val suffix = arrayOf(
-                " ",
-                getString(R.string.Charts_MarketCap_Thousand),
-                getString(R.string.Charts_MarketCap_Million),
-                getString(R.string.Charts_MarketCap_Billion),
-                getString(R.string.Charts_MarketCap_Trillion)) // "P", "E"
-
-        val valueLong = number.toLong()
-        val value = Math.floor(Math.log10(valueLong.toDouble())).toInt()
-        val base = value / 3
-
-        var returnSuffix = ""
-        var valueDecimal = valueLong.toBigDecimal()
-        if (value >= 3 && base < suffix.size) {
-            valueDecimal = (valueLong / Math.pow(10.0, (base * 3).toDouble())).toBigDecimal()
-            returnSuffix = suffix[base]
-        }
-
-        val roundedDecimalValue = if (valueDecimal < BigDecimal.TEN) {
-            valueDecimal.setScale(2, RoundingMode.HALF_EVEN)
-        } else {
-            valueDecimal.setScale(1, RoundingMode.HALF_EVEN)
-        }
-
-        return Pair(roundedDecimalValue, returnSuffix)
     }
 
     companion object {
