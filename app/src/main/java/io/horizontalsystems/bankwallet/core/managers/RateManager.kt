@@ -27,7 +27,6 @@ class RateManager(
                 context,
                 currencyManager.baseCurrency.code,
                 rateExpirationInterval = 60 * 10,
-                topMarketsCount = 100,
                 cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey,
                 uniswapGraphUrl = appConfigProvider.uniswapGraphUrl
         )
