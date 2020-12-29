@@ -1,16 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.market.metrics
 
+import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.ui.extensions.MetricData
+import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.xrateskit.entities.GlobalMarketInfo
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import java.math.BigDecimal
-import java.util.concurrent.Executors
 
-class MarketMetricsService {
+class MarketMetricsService(
+        private val xRateManager: IRateManager,
+        private val currencyManager: ICurrencyManager
+) : Clearable {
 
-    val marketMetricsObservable: BehaviorSubject<DataState<MarketMetrics>> = BehaviorSubject.createDefault(DataState.Loading)
+    val marketMetricsObservable: BehaviorSubject<DataState<GlobalMarketInfo>> = BehaviorSubject.createDefault(DataState.Loading)
+    val currency by currencyManager::baseCurrency
 
-    private val bgThread = Executors.newCachedThreadPool()
+    private val disposables = CompositeDisposable()
+
     init {
         fetchMarketMetrics()
     }
@@ -19,31 +27,22 @@ class MarketMetricsService {
         fetchMarketMetrics()
     }
 
-
-
     private fun fetchMarketMetrics() {
-        bgThread.execute {
+        marketMetricsObservable.onNext(DataState.Loading)
 
-            marketMetricsObservable.onNext(DataState.Loading)
-
-            Thread.sleep(100)
-
-            val marketMetrics = MarketMetrics(
-                    MetricData("$555.61B", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-                    MetricData("69.09%", stubPercentage()),
-            )
-
-            marketMetricsObservable.onNext(DataState.Success(marketMetrics))
-        }
-
+        xRateManager.getGlobalMarketInfoAsync(currencyManager.baseCurrency.code)
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    marketMetricsObservable.onNext(DataState.Success(it))
+                }, {
+                    marketMetricsObservable.onNext(DataState.Error(it))
+                })
+                .let {
+                    disposables.add(it)
+                }
     }
 
-    private fun stubPercentage(): BigDecimal {
-        return (Math.random() - Math.random()).times(100).toBigDecimal()
+    override fun clear() {
+        disposables.clear()
     }
-
-
 }

@@ -136,6 +136,10 @@ class RateManager(
         return kit.getTopMarketsAsync(currencyCode = currency)
     }
 
+    override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalMarketInfo> {
+        return kit.getGlobalMarketInfoAsync(currency)
+    }
+
     override fun refresh() {
         kit.refresh()
     }
