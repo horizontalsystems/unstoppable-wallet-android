@@ -136,6 +136,10 @@ class RateManager(
         return kit.getTopMarketsAsync(currencyCode = currency, fetchDiffPeriod = fetchDiffPeriod)
     }
 
+    override fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>> {
+        return kit.getTopDefiMarketsAsync(currencyCode = currency, fetchDiffPeriod = fetchDiffPeriod)
+    }
+
     override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalMarketInfo> {
         return kit.getGlobalMarketInfoAsync(currency)
     }
