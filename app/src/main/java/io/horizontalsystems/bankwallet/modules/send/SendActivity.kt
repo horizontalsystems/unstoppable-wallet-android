@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFrag
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.FeeInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
@@ -100,6 +101,16 @@ class SendActivity : BaseActivity() {
             data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
                 mainPresenter.onAddressScan(it)
             }
+        }
+    }
+
+    fun showFeeInfo() {
+        hideSoftKeyboard()
+
+        supportFragmentManager.commit {
+            setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left, R.anim.slide_from_left, R.anim.slide_to_right)
+            add(R.id.rootView, FeeInfoFragment())
+            addToBackStack(null)
         }
     }
 

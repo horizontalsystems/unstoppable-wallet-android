@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -42,8 +43,11 @@ class SendFeeFragment(
 
         txError.isVisible = false
         txSpeedLayout.isVisible = feeIsAdjustable
-        txSpeedLayout.setOnClickListener {
+        txSpeedMenuClickArea.setOnClickListener {
             presenter.onClickFeeRatePriority()
+        }
+        feeInfoImageClickArea.setOnClickListener {
+            (activity as? SendActivity)?.showFeeInfo()
         }
         txFeeLoading.isVisible = false
         txFeeLoading.text = getString(R.string.Alert_Loading)
