@@ -2,11 +2,19 @@ package io.horizontalsystems.bankwallet.modules.market.metrics
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
+import io.horizontalsystems.xrateskit.entities.GlobalMarketInfo
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 
-class MarketMetricsViewModel(private val service: MarketMetricsService) : ViewModel() {
+class MarketMetricsViewModel(
+        private val service: MarketMetricsService,
+        private val clearables: List<Clearable>
+) : ViewModel() {
     val marketMetricsLiveData = MutableLiveData<MarketMetrics?>(null)
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
@@ -15,6 +23,7 @@ class MarketMetricsViewModel(private val service: MarketMetricsService) : ViewMo
 
     init {
         service.marketMetricsObservable
+                .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncMarketMetrics(it)
                 }
@@ -27,12 +36,28 @@ class MarketMetricsViewModel(private val service: MarketMetricsService) : ViewMo
         service.refresh()
     }
 
-    private fun syncMarketMetrics(dataState: DataState<MarketMetrics>) {
+    private fun syncMarketMetrics(dataState: DataState<GlobalMarketInfo>) {
         loadingLiveData.postValue(dataState.loading)
         errorLiveData.postValue(dataState.errorOrNull?.let { convertErrorMessage(it) })
         if (dataState is DataState.Success) {
-            marketMetricsLiveData.postValue(dataState.data)
+            val globalMarketInfo = dataState.data
+
+            val symbol = service.currency.symbol
+            val marketMetrics = MarketMetrics(
+                    totalMarketCap = MetricData(formatFiatShortened(globalMarketInfo.marketCap, symbol), globalMarketInfo.marketCapDiff24h),
+                    btcDominance = MetricData(formatFiatShortened(globalMarketInfo.btcDominance, symbol), globalMarketInfo.btcDominanceDiff24h),
+                    volume24h = MetricData(formatFiatShortened(globalMarketInfo.volume24h, symbol), globalMarketInfo.volume24hDiff24h),
+                    defiCap = MetricData(formatFiatShortened(globalMarketInfo.defiMarketCap, symbol), globalMarketInfo.defiMarketCapDiff24h),
+                    defiTvl = MetricData(formatFiatShortened(globalMarketInfo.defiTvl, symbol), globalMarketInfo.defiTvlDiff24h),
+            )
+
+            marketMetricsLiveData.postValue(marketMetrics)
         }
+    }
+
+    private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
+        val (shortenValue, suffix) = App.numberFormatter.shortenValue(value)
+        return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + suffix
     }
 
     private fun convertErrorMessage(it: Throwable): String {
@@ -40,6 +65,7 @@ class MarketMetricsViewModel(private val service: MarketMetricsService) : ViewMo
     }
 
     override fun onCleared() {
+        clearables.forEach(Clearable::clear)
         disposables.clear()
     }
 
