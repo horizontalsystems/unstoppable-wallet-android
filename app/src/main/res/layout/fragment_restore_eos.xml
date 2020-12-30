@@ -19,35 +19,40 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <io.horizontalsystems.views.MultipleInputEditTextView
                 android:id="@+id/eosAccount"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginEnd="16dp"
                 app:inputFromClipboard="true"
                 app:inputHint="@string/Restore_EosAccountName"
-                app:inputMaxLines="1" />
+                app:inputMaxLines="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <io.horizontalsystems.views.MultipleInputEditTextView
                 android:id="@+id/eosActivePrivateKey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 app:inputFromClipboard="true"
                 app:inputFromQRCode="true"
                 app:inputHint="@string/Restore_EosActivePrivateKey"
-                app:inputMaxLines="5" />
+                app:inputMaxLines="5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eosAccount" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>
