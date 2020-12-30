@@ -1,16 +1,10 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
-
-    <View
-        android:id="@+id/frame"
-        android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:background="@drawable/clickable_background_color_lawrence"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="@drawable/clickable_background_color_lawrence">
 
     <!-- Cell Left -->
 
@@ -20,9 +14,9 @@
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_attention_24"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
-        app:layout_constraintStart_toStartOf="@+id/frame"
-        app:layout_constraintTop_toTopOf="@+id/frame" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/settingsTitle"
@@ -34,12 +28,12 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?TextColorBarsToDark"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/settingsSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/attentionIcon"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/settingsIcon"
-        app:layout_constraintTop_toTopOf="@+id/frame"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Label" />
 
@@ -50,7 +44,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/settingsTitle"
         app:layout_constraintTop_toBottomOf="@+id/settingsTitle"
         tools:text="Subtitle" />
@@ -62,9 +56,9 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="@+id/frame"
-        app:layout_constraintStart_toStartOf="@+id/frame"
-        app:layout_constraintTop_toTopOf="@+id/frame" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/attentionIcon"
@@ -72,12 +66,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:src="@drawable/ic_attention_20"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
-        app:layout_constraintEnd_toStartOf="@+id/switchSettings"
-        app:layout_constraintTop_toTopOf="@+id/frame"
         app:tint="?ColorLucian"
-        tools:visibility="visible" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/switchSettings"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"/>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchSettings"
@@ -87,10 +81,10 @@
         android:checked="false"
         android:saveEnabled="false"
         android:theme="@style/SwitchTheme"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
-        app:layout_constraintEnd_toEndOf="@+id/frame"
-        app:layout_constraintTop_toTopOf="@+id/frame"
-        tools:visibility="visible" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"/>
 
     <View
         android:id="@+id/bottomBorder"
@@ -98,6 +92,6 @@
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/frame" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</merge>
+</androidx.constraintlayout.widget.ConstraintLayout>

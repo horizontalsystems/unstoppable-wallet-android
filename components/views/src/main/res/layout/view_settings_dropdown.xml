@@ -1,21 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/clickable_background_color_lawrence"
-    android:minHeight="44dp"
-    tools:layout_height="44dp">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <View
+        android:id="@+id/frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/clickable_background_color_lawrence"
+        android:minHeight="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="44dp" />
 
     <View
         android:id="@+id/topShade"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/frame"
+        app:layout_constraintStart_toStartOf="@+id/frame"
+        app:layout_constraintTop_toTopOf="@+id/frame" />
 
     <!-- Cell Left -->
 
@@ -25,9 +31,9 @@
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_attention_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintStart_toStartOf="@+id/frame"
+        app:layout_constraintTop_toTopOf="@+id/frame" />
 
     <TextView
         android:id="@+id/settingsTitle"
@@ -40,8 +46,8 @@
         android:textColor="?TextColorBarsToDark"
         app:layout_constraintBottom_toTopOf="@+id/settingsSubtitle"
         app:layout_constraintStart_toEndOf="@+id/settingsIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/frame"
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Label" />
 
@@ -52,7 +58,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
         app:layout_constraintStart_toStartOf="@+id/settingsTitle"
         app:layout_constraintTop_toBottomOf="@+id/settingsTitle"
         tools:text="Subtitle" />
@@ -63,11 +69,11 @@
         layout="@layout/view_settings_dropdown_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
         app:layout_constraintEnd_toStartOf="@id/dropdownIcon"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/settingsTitle"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/frame" />
 
     <ImageView
         android:id="@+id/dropdownIcon"
@@ -75,9 +81,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintEnd_toEndOf="@+id/frame"
+        app:layout_constraintTop_toTopOf="@+id/frame"
         app:srcCompat="@drawable/ic_down_arrow_20" />
 
     <View
@@ -86,6 +92,6 @@
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/frame" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

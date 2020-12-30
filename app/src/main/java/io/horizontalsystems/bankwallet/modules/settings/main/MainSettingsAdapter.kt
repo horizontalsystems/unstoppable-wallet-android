@@ -28,7 +28,7 @@ class MainSettingsAdapter(private val items: List<SettingsViewItem?>)
         return when (viewType) {
             viewTypeSpace -> SettingsViewHolderSpace(inflate(parent, R.layout.view_settings_item_space))
             viewTypeBottom -> SettingsViewHolderBottom(inflate(parent, R.layout.view_settings_item_bottom))
-            viewTypeSwitch -> SettingsViewHolderSwitch(inflate(parent, R.layout.view_settings_item_switch))
+            viewTypeSwitch -> SettingsViewHolderSwitch(inflate(parent, R.layout.view_holder_setting_item_with_switch))
             else -> SettingsViewHolderArrow(inflate(parent, R.layout.view_settings_item_arrow))
         }
     }
