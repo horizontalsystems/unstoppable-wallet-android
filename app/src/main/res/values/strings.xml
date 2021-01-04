@@ -105,6 +105,8 @@
     <string name="Market_Search">Search</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
+    <string name="Market_Field_HighestLiquidity">Highest Liquidity</string>
+    <string name="Market_Field_LowestLiquidity">Lowest Liquidity</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
     <string name="Market_Field_HighestPrice">Highest Price</string>
