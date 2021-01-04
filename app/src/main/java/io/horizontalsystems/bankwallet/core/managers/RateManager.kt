@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
+import io.horizontalsystems.bankwallet.entities.CoinType.*
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
@@ -52,29 +53,8 @@ class RateManager(
                 }
     }
 
-    private fun buildXRatesInputArgs(coins: List<io.horizontalsystems.bankwallet.entities.Coin> ): List<Coin> {
-
-        val coinArgs = mutableListOf<Coin>()
-        coins.forEach{ coin ->
-            val coinType = when (coin.type){
-                is io.horizontalsystems.bankwallet.entities.CoinType.Bitcoin -> CoinType.Bitcoin
-                is io.horizontalsystems.bankwallet.entities.CoinType.BitcoinCash -> CoinType.BitcoinCash
-                is io.horizontalsystems.bankwallet.entities.CoinType.Dash -> CoinType.Dash
-                is io.horizontalsystems.bankwallet.entities.CoinType.Ethereum -> CoinType.Ethereum
-                is io.horizontalsystems.bankwallet.entities.CoinType.Litecoin -> CoinType.Litecoin
-                is io.horizontalsystems.bankwallet.entities.CoinType.Zcash -> CoinType.Zcash
-                is io.horizontalsystems.bankwallet.entities.CoinType.Binance -> CoinType.Binance
-                is io.horizontalsystems.bankwallet.entities.CoinType.Eos -> CoinType.Eos
-                is io.horizontalsystems.bankwallet.entities.CoinType.Erc20 -> CoinType.Erc20(coin.type.address)
-            }
-            coinArgs.add(Coin(coin.code, coin.title, coinType))
-        }
-
-        return coinArgs
-    }
-
     override fun set(coins: List<io.horizontalsystems.bankwallet.entities.Coin>) {
-        kit.set(buildXRatesInputArgs(coins))
+        kit.set(mapCoinForXRates(coins))
     }
 
     override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
@@ -151,16 +131,34 @@ class RateManager(
         val feeCoins = wallets.mapNotNull { feeCoinProvider.feeCoinData(it.coin)?.first }
         val coins = wallets.map { it.coin }
         val uniqueCoins = (feeCoins + coins).distinct()
-        kit.set(buildXRatesInputArgs(uniqueCoins))
+        kit.set(mapCoinForXRates(uniqueCoins))
+    }
+
+    private fun mapCoinForXRates(coins: List<io.horizontalsystems.bankwallet.entities.Coin>): List<Coin> {
+        return coins.mapNotNull { coin ->
+            rateCoinMapper.convert(coin.code)?.let {
+                val coinType = when (coin.type) {
+                    is Bitcoin -> CoinType.Bitcoin
+                    is BitcoinCash -> CoinType.BitcoinCash
+                    is Dash -> CoinType.Dash
+                    is Ethereum -> CoinType.Ethereum
+                    is Litecoin -> CoinType.Litecoin
+                    is Zcash -> CoinType.Zcash
+                    is Binance -> CoinType.Binance
+                    is Eos -> CoinType.Eos
+                    is Erc20 -> CoinType.Erc20(coin.type.address)
+                }
+
+                Coin(coin.code, coin.title, coinType)
+            }
+        }
     }
 
     private fun onBaseCurrencyUpdated() {
         kit.set(currencyManager.baseCurrency.code)
     }
 
-
     sealed class RateError : Exception() {
         class DisabledCoin : RateError()
     }
-
 }
