@@ -20,7 +20,7 @@ class MarketTopService(
         }
 
     val sortingFields: Array<Field> = marketListDataSource.sortingFields
-    var sortingField: Field = Field.HighestCap
+    var sortingField: Field = marketListDataSource.sortingFields.first()
         set(value) {
             field = value
 

@@ -8,6 +8,17 @@ import io.reactivex.Single
 
 class MarketListTopDataSource(private val xRateManager: IRateManager) : IMarketListDataSource() {
 
+    override val sortingFields: Array<Field> = arrayOf(
+            Field.HighestCap,
+            Field.LowestCap,
+            Field.HighestVolume,
+            Field.LowestVolume,
+            Field.HighestPrice,
+            Field.LowestPrice,
+            Field.TopGainers,
+            Field.TopLosers,
+    )
+
     override val dataUpdatedAsync: Observable<Unit> = Observable.empty()
 
     override fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>> {
