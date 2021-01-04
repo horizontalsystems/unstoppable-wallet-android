@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.core.storage.FavoriteCoin
 import io.horizontalsystems.bankwallet.modules.market.top.Field
 import io.horizontalsystems.bankwallet.modules.market.top.IMarketListDataSource
 import io.horizontalsystems.xrateskit.entities.TimePeriod
@@ -17,29 +16,19 @@ class MarketListFavoritesDataSource(
 
     override val sortingFields: Array<Field> = Field.values()
     override val dataUpdatedAsync: Observable<Unit> by marketFavoritesManager::dataUpdatedAsync
-    private var cachedTopMarketList: List<TopMarket>? = null
 
     override fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>> {
-        return getTopMarketList(currencyCode)
-                .map {
-                    it.filter { isCoinInFavorites(it, marketFavoritesManager.getAll()) }
-                }
-    }
-
-    private fun getTopMarketList(currencyCode: String) = when {
-        cachedTopMarketList != null -> {
-            Single.just(cachedTopMarketList)
-        }
-        else -> {
-            xRateManager.getTopMarketList(currencyCode, TimePeriod.HOUR_24)
-                    .doOnSuccess {
-                        cachedTopMarketList = it
+        return Single.zip(
+                xRateManager.getTopDefiMarketList(currencyCode, fetchDiffPeriod),
+                xRateManager.getTopMarketList(currencyCode, fetchDiffPeriod),
+                { t1, t2 ->
+                    t1 + t2
+                })
+                .map { list ->
+                    marketFavoritesManager.getAll().mapNotNull { favoriteCoin ->
+                        list.find { it.coin.code == favoriteCoin.code }
                     }
-        }
-    }
-
-    private fun isCoinInFavorites(topMarket: TopMarket, favoriteCoins: List<FavoriteCoin>): Boolean {
-        return favoriteCoins.find { it.code == topMarket.coin.code } != null
+                }
     }
 
 }
