@@ -4,6 +4,7 @@ import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.horizontalsystems.xrateskit.entities.TopMarket
 import io.reactivex.Observable
 import io.reactivex.Single
+import java.util.*
 
 abstract class IMarketListDataSource {
     abstract val sortingFields: Array<Field>
@@ -40,18 +41,25 @@ abstract class IMarketListDataSource {
 
     private fun sort(items: List<MarketTopItem>, sortingField: Field): List<MarketTopItem> {
         return when (sortingField) {
-            Field.HighestCap -> items.sortedByDescending { it.marketCap }
-            Field.LowestCap -> items.sortedBy { it.marketCap }
-            Field.HighestLiquidity -> items.sortedByDescending { it.liquidity }
-            Field.LowestLiquidity -> items.sortedBy { it.liquidity }
-            Field.HighestVolume -> items.sortedByDescending { it.volume }
-            Field.LowestVolume -> items.sortedBy { it.volume }
-            Field.HighestPrice -> items.sortedByDescending { it.rate }
-            Field.LowestPrice -> items.sortedBy { it.rate }
-            Field.TopGainers -> items.sortedByDescending { it.diff }
-            Field.TopLosers -> items.sortedBy { it.diff }
+            Field.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
+            Field.LowestCap -> items.sortedByNullLast { it.marketCap }
+            Field.HighestLiquidity -> items.sortedByDescendingNullLast { it.liquidity }
+            Field.LowestLiquidity -> items.sortedByNullLast { it.liquidity }
+            Field.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
+            Field.LowestVolume -> items.sortedByNullLast { it.volume }
+            Field.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
+            Field.LowestPrice -> items.sortedByNullLast { it.rate }
+            Field.TopGainers -> items.sortedByDescendingNullLast { it.diff }
+            Field.TopLosers -> items.sortedByNullLast { it.diff }
         }
     }
 
 }
 
+inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {
+    return sortedWith(Comparator.nullsLast(compareByDescending(selector)))
+}
+
+inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selector: (T) -> R?): List<T> {
+    return sortedWith(Comparator.nullsLast(compareBy(selector)))
+}
