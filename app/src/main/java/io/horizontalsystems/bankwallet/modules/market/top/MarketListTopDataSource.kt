@@ -8,7 +8,7 @@ class MarketListTopDataSource(private val xRateManager: IRateManager) : IMarketL
 
     override val dataUpdatedAsync: Observable<Unit> = Observable.empty()
 
-    override fun getListAsync(currencyCode: String, period: Period): Single<List<MarketTopItem>> {
+    override fun getListAsync(currencyCode: String, period: Period, sortingField: Field): Single<List<MarketTopItem>> {
         return xRateManager.getTopMarketList(currencyCode, convertPeriod(period))
                 .map {
                     it.mapIndexed { index, topMarket ->

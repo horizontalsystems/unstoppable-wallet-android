@@ -12,15 +12,10 @@ class MarketTopViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val sortingFields: Array<Field> = Field.values()
+    val sortingFields: Array<Field> by service::sortingFields
     val periods by service::periods
 
-    var sortingField: Field = Field.HighestCap
-        set(value) {
-            field = value
-
-            syncViewItemsBySortingField()
-        }
+    var sortingField: Field by service::sortingField
     var period by service::period
 
     val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
@@ -44,29 +39,14 @@ class MarketTopViewModel(
         errorLiveData.postValue((state as? MarketTopService.State.Error)?.error?.let { convertErrorMessage(it) })
 
         if (state is MarketTopService.State.Loaded) {
-            syncViewItemsBySortingField()
+            val viewItems = service.marketTopItems.map {
+                val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
+
+                MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
+            }
+
+            marketTopViewItemsLiveData.postValue(viewItems)
         }
-    }
-
-    private fun syncViewItemsBySortingField() {
-        val sorted = when (sortingField) {
-            Field.HighestCap -> service.marketTopItems.sortedByDescending { it.marketCap }
-            Field.LowestCap -> service.marketTopItems.sortedBy { it.marketCap }
-            Field.HighestVolume -> service.marketTopItems.sortedByDescending { it.volume }
-            Field.LowestVolume -> service.marketTopItems.sortedBy { it.volume }
-            Field.HighestPrice -> service.marketTopItems.sortedByDescending { it.rate }
-            Field.LowestPrice -> service.marketTopItems.sortedBy { it.rate }
-            Field.TopGainers -> service.marketTopItems.sortedByDescending { it.diff }
-            Field.TopLosers -> service.marketTopItems.sortedBy { it.diff }
-        }
-
-        val viewItems = sorted.map {
-            val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
-
-            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
-        }
-
-        marketTopViewItemsLiveData.postValue(viewItems)
     }
 
     private fun convertErrorMessage(it: Throwable): String {
