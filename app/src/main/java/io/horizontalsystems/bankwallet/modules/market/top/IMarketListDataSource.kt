@@ -8,9 +8,19 @@ import io.reactivex.Single
 abstract class IMarketListDataSource {
     open val sortingFields: Array<Field> = Field.values()
     abstract val dataUpdatedAsync: Observable<Unit>
-    abstract fun getListAsync(currencyCode: String, period: Period, sortingField: Field): Single<List<MarketTopItem>>
 
-    protected fun convertToMarketTopItem(rank: Int, topMarket: TopMarket) =
+    fun getListAsync(currencyCode: String, period: Period, sortingField: Field): Single<List<MarketTopItem>> {
+        return doGetListAsync(currencyCode, convertPeriod(period))
+                .map {
+                    sort(it.mapIndexed { index, topMarket ->
+                        convertToMarketTopItem(index + 1, topMarket)
+                    }, sortingField)
+                }
+    }
+
+    protected abstract fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>>
+
+    private fun convertToMarketTopItem(rank: Int, topMarket: TopMarket) =
             MarketTopItem(
                     rank,
                     topMarket.coin.code,
@@ -21,13 +31,13 @@ abstract class IMarketListDataSource {
                     topMarket.marketInfo.rateDiffPeriod,
             )
 
-    protected fun convertPeriod(period: Period) = when (period) {
+    private fun convertPeriod(period: Period) = when (period) {
         Period.Period24h -> TimePeriod.HOUR_24
         Period.PeriodWeek -> TimePeriod.DAY_7
         Period.PeriodMonth -> TimePeriod.DAY_30
     }
 
-    protected fun sort(items: List<MarketTopItem>, sortingField: Field): List<MarketTopItem> {
+    private fun sort(items: List<MarketTopItem>, sortingField: Field): List<MarketTopItem> {
         return when (sortingField) {
             Field.HighestCap -> items.sortedByDescending { it.marketCap }
             Field.LowestCap -> items.sortedBy { it.marketCap }
