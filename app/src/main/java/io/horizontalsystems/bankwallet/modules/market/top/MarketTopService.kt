@@ -19,6 +19,15 @@ class MarketTopService(
             fetch()
         }
 
+    val sortingFields: Array<Field> = marketListDataSource.sortingFields
+    var sortingField: Field = Field.HighestCap
+        set(value) {
+            field = value
+
+            fetch()
+        }
+
+
     sealed class State {
         object Loading : State()
         object Loaded : State()
@@ -53,7 +62,7 @@ class MarketTopService(
     private fun fetch() {
         stateObservable.onNext(State.Loading)
 
-        marketListDataSource.getListAsync(currencyManager.baseCurrency.code, period)
+        marketListDataSource.getListAsync(currencyManager.baseCurrency.code, period, sortingField)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     marketTopItems = it
