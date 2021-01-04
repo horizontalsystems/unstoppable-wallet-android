@@ -71,4 +71,12 @@ data class MarketTopViewItem(
         val coinName: String,
         val rate: String,
         val diff: BigDecimal
-)
+) {
+    fun areItemsTheSame(other: MarketTopViewItem): Boolean {
+        return coinCode == other.coinCode && coinName == other.coinName
+    }
+
+    fun areContentsTheSame(other: MarketTopViewItem): Boolean {
+        return this == other
+    }
+}
