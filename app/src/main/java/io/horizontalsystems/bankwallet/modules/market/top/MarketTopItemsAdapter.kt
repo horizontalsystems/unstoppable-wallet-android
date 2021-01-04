@@ -32,9 +32,11 @@ class MarketTopItemsAdapter(
         return ViewHolderMarketTopItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int, payloads: MutableList<Any>) {
+        holder.bind(getItem(position), payloads.firstOrNull { it is MarketTopViewItem } as? MarketTopViewItem)
     }
+
+    override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int) = Unit
 
     fun refresh() {
         viewModel.refresh()
@@ -43,11 +45,15 @@ class MarketTopItemsAdapter(
     companion object {
         private val coinRateDiff = object : DiffUtil.ItemCallback<MarketTopViewItem>() {
             override fun areItemsTheSame(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Boolean {
-                return oldItem == newItem
+                return oldItem.areItemsTheSame(newItem)
             }
 
             override fun areContentsTheSame(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Boolean {
-                return oldItem == newItem
+                return oldItem.areContentsTheSame(newItem)
+            }
+
+            override fun getChangePayload(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Any? {
+                return oldItem
             }
         }
     }
@@ -64,7 +70,7 @@ class ViewHolderMarketTopItem(override val containerView: View, listener: Market
         }
     }
 
-    fun bind(item: MarketTopViewItem) {
+    fun bind(item: MarketTopViewItem, prev: MarketTopViewItem?) {
         this.item = item
 
 //        if (item.coin != null) {
@@ -74,25 +80,37 @@ class ViewHolderMarketTopItem(override val containerView: View, listener: Market
             coinIcon.isVisible = false
 //        }
 
-        if (item.rank != null) {
-            rank.isVisible = true
-            rank.text = item.rank.toString()
-        } else {
-            rank.isVisible = false
+        if (item.rank != prev?.rank) {
+            if (item.rank != null) {
+                rank.isVisible = true
+                rank.text = item.rank.toString()
+            } else {
+                rank.isVisible = false
+            }
         }
 
-        titleText.text = item.coinName
-        subtitleText.text = item.coinCode
+        if (item.coinName != prev?.coinName) {
+            titleText.text = item.coinName
+        }
 
-        txValueInFiat.isActivated = true
+        if (item.coinCode != prev?.coinCode) {
+            subtitleText.text = item.coinCode
+        }
+
+
+        if (item.rate != prev?.rate) {
+            txValueInFiat.isActivated = true
 //        txValueInFiat.isActivated = !item.rateDimmed //change color via state: activated/not activated
-        txValueInFiat.text = item.rate
+            txValueInFiat.text = item.rate
+        }
 
-        txDiff.isVisible = item.diff != null
-        txDiffNa.isVisible = item.diff == null
+        if (item.diff != prev?.diff) {
+            txDiff.isVisible = item.diff != null
+            txDiffNa.isVisible = item.diff == null
 
-        if (item.diff != null) {
-            txDiff.diff = item.diff
+            if (item.diff != null) {
+                txDiff.diff = item.diff
+            }
         }
     }
 }
