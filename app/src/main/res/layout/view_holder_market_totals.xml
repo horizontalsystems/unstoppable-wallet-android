@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/Market_BtcDominance"
-        tools:value="69.09%" />
+        toolsview_price_gradient.xml:value="69.09%" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
         android:id="@+id/volume24h"

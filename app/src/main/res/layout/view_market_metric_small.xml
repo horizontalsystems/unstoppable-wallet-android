@@ -13,10 +13,14 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="18dp" />
 
-    <View
-        android:layout_width="2dp"
-        android:layout_height="36dp"
-        android:background="@color/green_d"
+    <io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
+        android:id="@+id/diffCircle"
+        android:layout_width="3dp"
+        android:layout_height="32dp"
+        android:alpha="0"
+        app:cardCornerRadius="3dp"
+        app:gradient="@drawable/gradient_price_up"
+        app:gradientSecond="@drawable/gradient_price_down"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline" />
 

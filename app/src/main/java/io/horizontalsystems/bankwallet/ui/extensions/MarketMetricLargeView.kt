@@ -37,9 +37,9 @@ class MarketMetricLargeView @JvmOverloads constructor(context: Context, attrs: A
     }
 
     fun setDiff(v: BigDecimal?) {
+        diffCircle.animateHorizontal(v?.toFloat())
         if (v == null) return
         val sign = if (v >= BigDecimal.ZERO) "+" else "-"
-
 
         diffPercentage.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
     }
