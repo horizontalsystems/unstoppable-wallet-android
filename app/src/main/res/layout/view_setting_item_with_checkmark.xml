@@ -23,7 +23,7 @@
         android:layout_marginTop="8dp"
         android:textColor="?TextColorBarsToDark"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@string/BipSettings_Title" />
+        tools:text="Bip Settings Title" />
 
     <TextView
         android:id="@+id/itemSubtitle"
