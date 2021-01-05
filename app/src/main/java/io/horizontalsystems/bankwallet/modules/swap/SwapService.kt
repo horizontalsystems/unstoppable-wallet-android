@@ -70,7 +70,7 @@ class SwapService(
     val balanceToObservable: Observable<Optional<BigDecimal>> = balanceToSubject
 
     val approveData: SwapAllowanceService.ApproveData?
-        get() = tradeService.amountFrom?.let { amount ->
+        get() = balanceFrom?.let { amount ->
             allowanceService.approveData(amount)
         }
     //endregion
