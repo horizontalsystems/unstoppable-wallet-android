@@ -7,18 +7,6 @@
     android:clipChildren="false"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/feeError"
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:ellipsize="end"
-        android:layout_marginTop="12dp"
-        android:maxLines="2"
-        android:textColor="?ColorLucian"
-        android:textSize="12sp"
-        android:visibility="gone"
-        tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH." />
-
     <LinearLayout
         android:id="@+id/feeLayout"
         android:layout_width="match_parent"
@@ -217,5 +205,17 @@
             app:textColor="?ColorLeah" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/feeError"
+        style="@style/Caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="?ColorLucian"
+        android:visibility="gone"
+        tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH." />
 
 </LinearLayout>

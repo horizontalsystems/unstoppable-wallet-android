@@ -116,8 +116,6 @@ class SendFeeFragment(
 
         presenterView.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->
             feeError.isVisible = error != null
-            feeLayout.isVisible = error == null
-            txSpeedLayout.isVisible = error == null && feeIsAdjustable
 
             if (error != null) {
                 val coinCode = error.coin.code
