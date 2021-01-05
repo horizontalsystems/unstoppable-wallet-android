@@ -11,10 +11,10 @@
         style="@style/Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/Market_TotalMarketCap"
         android:textColor="@color/grey"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/Market_TotalMarketCap" />
 
     <TextView
         android:id="@+id/value"
@@ -27,12 +27,13 @@
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:text="$498.61B" />
 
-    <ImageView
+    <io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
         android:id="@+id/diffCircle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/circle_green_gradient"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:alpha="0"
+        app:cardCornerRadius="26dp"
+        app:gradient="@drawable/gradient_price"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@+id/value" />
 
@@ -44,9 +45,9 @@
         android:layout_marginStart="26dp"
         android:layout_marginTop="12dp"
         android:textColor="@color/green_d"
-        app:layout_constraintBottom_toBottomOf="@+id/diffCircle"
+        app:layout_constraintBottom_toBottomOf="@id/diffCircle"
         app:layout_constraintStart_toStartOf="@id/diffCircle"
-        app:layout_constraintTop_toTopOf="@+id/diffCircle"
+        app:layout_constraintTop_toTopOf="@id/diffCircle"
         tools:text="+24.53%" />
 
 </merge>

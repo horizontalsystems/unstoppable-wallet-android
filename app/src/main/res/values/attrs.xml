@@ -18,6 +18,10 @@
         <attr name="title" />
         <attr name="value" />
     </declare-styleable>
+    <declare-styleable name="PriceGradientView">
+        <attr name="gradient" format="reference" />
+        <attr name="gradientSecond" format="reference" />
+    </declare-styleable>
     <declare-styleable name="RateDiffView">
         <attr name="negativeColor" format="color" />
         <attr name="positiveColor" format="color" />
