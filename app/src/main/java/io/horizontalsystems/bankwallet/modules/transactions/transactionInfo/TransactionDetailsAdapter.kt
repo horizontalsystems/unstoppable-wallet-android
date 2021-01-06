@@ -30,7 +30,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
 
-        return DetailViewHolder(inflate(parent, R.layout.view_transaction_info_item), viewModel)
+        return DetailViewHolder(inflate(parent, R.layout.view_holder_transaction_info), viewModel)
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
