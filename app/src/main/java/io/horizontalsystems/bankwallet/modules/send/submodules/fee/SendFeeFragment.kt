@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
+import io.horizontalsystems.bankwallet.ui.FeeSelectorView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -33,7 +34,7 @@ class SendFeeFragment(
     private val presenter by activityViewModels<SendFeePresenter> { SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate, customPriorityUnit) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_view_send_fee, container, false)
+        return container?.context?.let { FeeSelectorView(it) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
