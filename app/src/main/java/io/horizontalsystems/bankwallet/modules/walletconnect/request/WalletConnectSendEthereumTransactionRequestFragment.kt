@@ -118,7 +118,7 @@ class TransactionDetailsAdapter(items: List<WalletConnectRequestViewItem>) : Lis
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletConnectRequestViewItemViewHolder {
-        return WalletConnectRequestViewItemViewHolder(inflate(parent, R.layout.view_transaction_info_item))
+        return WalletConnectRequestViewItemViewHolder(inflate(parent, R.layout.view_holder_transaction_info))
     }
 
     override fun onBindViewHolder(holder: WalletConnectRequestViewItemViewHolder, position: Int) {
