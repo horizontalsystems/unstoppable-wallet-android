@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -32,7 +33,7 @@ class SendFeeFragment(
     private val presenter by activityViewModels<SendFeePresenter> { SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate, customPriorityUnit) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.view_send_fee, container, false)
+        return inflater.inflate(R.layout.fragment_view_send_fee, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +43,7 @@ class SendFeeFragment(
         val presenterView = presenter.view as SendFeeView
 
         txError.isVisible = false
-        txSpeedLayout.isVisible = feeIsAdjustable
+        speedViews.isVisible = feeIsAdjustable
         txSpeedMenuClickArea.setOnClickListener {
             presenter.onClickFeeRatePriority()
         }
@@ -69,7 +70,7 @@ class SendFeeFragment(
                 val txDurationString = DateHelper.getTxDurationString(requireContext(), duration)
                 txDuration.text = requireContext().getString(R.string.Duration_Within, txDurationString)
             }
-            txDurationLayout.isVisible = duration != null
+            durationViews.isVisible = duration != null
         })
 
         presenterView.feePriority.observe(viewLifecycleOwner, Observer { feePriority ->
@@ -102,7 +103,7 @@ class SendFeeFragment(
 
         presenterView.showCustomFeePriority.observe(viewLifecycleOwner, Observer { isVisible ->
             customFeeSeekBar.isVisible = isVisible
-            txDurationLayout.isVisible = !isVisible
+            durationViews.isVisible = !isVisible
         })
 
         presenterView.setCustomFeeParams.observe(viewLifecycleOwner, Observer { (value, range, label) ->
@@ -148,7 +149,7 @@ class SendFeeFragment(
         txFeeLoading.isVisible = loading
 
         txSpeedMenu.alpha = if (loading) 0.5f else 1f
-        txSpeedLayout.isEnabled = (!loading)
+        speedViews.isEnabled = (!loading)
     }
 
     private fun setError(error: Exception) {
@@ -157,7 +158,7 @@ class SendFeeFragment(
             txError.text = getString(R.string.Send_Error_WrongParameters)
 
         txError.isVisible = true
-        txFeeTitle.isVisible = false
+        txFeeTitle.isInvisible = true
         txFeeLoading.isVisible = false
         txFeePrimary.isVisible = false
         txFeeSecondary.isVisible = false
