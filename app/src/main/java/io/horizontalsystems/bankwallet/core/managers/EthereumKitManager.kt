@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -25,6 +26,8 @@ class EthereumKitManager(
     private var kit: EthereumKit? = null
     private var useCount = 0
 
+    private var currentAccount: Account? = null
+
     override val ethereumKit: EthereumKit?
         get() = kit
 
@@ -45,8 +48,15 @@ class EthereumKitManager(
                 CommunicationMode.Incubed -> SyncSource.Incubed
                 else -> throw Exception("Invalid communication mode for Ethereum: ${communicationMode?.value}")
             }
-            kit = EthereumKit.getInstance(App.instance, accountType.words, syncMode, networkType, rpcApi, etherscanApiKey, account.id)
+
+            if(account != currentAccount) {
+                kit?.stop()
+                kit = EthereumKit.getInstance(App.instance, accountType.words, syncMode, networkType, rpcApi, etherscanApiKey, account.id)
+            }
+
             kit?.start()
+
+            currentAccount = account
 
             return kit!!
         }
