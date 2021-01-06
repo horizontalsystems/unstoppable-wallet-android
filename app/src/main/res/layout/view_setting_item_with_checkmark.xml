@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/itemWrapper"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="?ColorLawrence">
+    tools:parentTag="android.widget.FrameLayout">
+
+    <View
+        android:id="@+id/backgroundView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?ColorLawrence"/>
 
     <View
         android:layout_width="match_parent"
@@ -58,4 +61,4 @@
         android:layout_height="0.5dp"
         android:layout_gravity="bottom"
         android:background="@color/steel_20" />
-</FrameLayout>
+</merge>

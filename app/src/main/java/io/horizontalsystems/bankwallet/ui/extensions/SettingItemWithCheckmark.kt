@@ -24,12 +24,12 @@ class SettingItemWithCheckmark: FrameLayout {
         setSubtitle(subtitle)
         checkMark.isVisible = checked
         toggleBottomBorder(showBottomBorder)
-        itemWrapper.setOnClickListener { onClick.invoke() }
+        setOnClickListener { onClick.invoke() }
     }
 
     fun setEnabledState(enabled: Boolean) {
-        itemWrapper.isEnabled = enabled
-        itemWrapper.alpha = if (enabled) 1f else 0.5f
+        isEnabled = enabled
+        alpha = if (enabled) 1f else 0.5f
     }
 
     fun setChecked(checked: Boolean){
