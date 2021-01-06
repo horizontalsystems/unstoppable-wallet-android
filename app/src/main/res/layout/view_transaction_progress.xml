@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="android.widget.FrameLayout">
-
-    <ImageView
-        android:id="@+id/progressBar"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@color/yellow_50"
-        android:src="@drawable/animation_pending" />
-</merge>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/progressBar"
+    android:layout_width="20dp"
+    android:layout_height="20dp"
+    android:background="@color/yellow_50"
+    android:src="@drawable/animation_pending" />
