@@ -12,6 +12,7 @@ object KeyStoreModule {
         fun showNoSystemLockWarning()
         fun showInvalidKeyWarning()
         fun promptUserAuthentication()
+        fun showDeviceIsRootedWarning()
     }
 
     interface IViewDelegate {
@@ -46,7 +47,8 @@ object KeyStoreModule {
     enum class ModeType : Parcelable {
         NoSystemLock,
         InvalidKey,
-        UserAuthentication
+        UserAuthentication,
+        DeviceIsRooted
     }
 
 }

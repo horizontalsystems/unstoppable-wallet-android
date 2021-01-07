@@ -9,6 +9,7 @@ class KeyStoreViewModel : ViewModel(), KeyStoreModule.IView, KeyStoreModule.IRou
 
     val showNoSystemLockWarning = SingleLiveEvent<Void>()
     val showInvalidKeyWarning = SingleLiveEvent<Void>()
+    val showDeviceIsRootedWarning = SingleLiveEvent<Void>()
     val promptUserAuthentication = SingleLiveEvent<Void>()
     val openLaunchModule = SingleLiveEvent<Void>()
     val closeApplication = SingleLiveEvent<Void>()
@@ -29,6 +30,10 @@ class KeyStoreViewModel : ViewModel(), KeyStoreModule.IView, KeyStoreModule.IRou
 
     override fun promptUserAuthentication() {
         promptUserAuthentication.call()
+    }
+
+    override fun showDeviceIsRootedWarning() {
+        showDeviceIsRootedWarning.call()
     }
 
     // IRouter
