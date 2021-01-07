@@ -6,9 +6,12 @@ import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -16,11 +19,7 @@ import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CryptoNews
-import io.horizontalsystems.xrateskit.entities.TopMarket
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -73,6 +72,10 @@ interface ILocalStorage {
 
 interface IChartTypeStorage {
     var chartType: ChartType?
+}
+
+interface IMarketStorage {
+    var currentCategory: MarketCategoriesService.Category?
 }
 
 interface IAccountManager {
@@ -310,11 +313,9 @@ interface IAppConfigProvider {
     val maxDecimal: Int
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
-    val defaultCoins: List<Coin>
+    val otherCoins: List<Coin>
     val ethereumCoin: Coin
-    val derivationSettings: List<DerivationSetting>
-    val syncModeSettings: List<SyncModeSetting>
-    val communicationSettings: List<CommunicationSetting>
+    val binanceCoin: Coin
 }
 
 interface ICoinRecordStorage{
@@ -335,7 +336,9 @@ interface IRateManager {
     fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
-    fun getTopMarketList(currency: String): Single<List<TopMarket>>
+    fun getTopMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>>
+    fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>>
+    fun getGlobalMarketInfoAsync(currency: String): Single<GlobalMarketInfo>
     fun refresh()
 }
 
@@ -365,6 +368,17 @@ interface IEnabledWalletStorage {
     fun deleteAll()
 }
 
+interface IBlockchainSettingsStorage {
+    var bitcoinCashCoinType: BitcoinCashCoinType?
+    fun derivationSetting(coinType: CoinType) : DerivationSetting?
+    fun saveDerivationSetting(derivationSetting: DerivationSetting)
+    fun deleteDerivationSettings()
+    fun initialSyncSetting(coinType: CoinType) : InitialSyncSetting?
+    fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
+    fun ethereumRpcModeSetting(coinType: CoinType) : EthereumRpcMode?
+    fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
+}
+
 interface IWalletManager {
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
@@ -383,6 +397,7 @@ interface IAppNumberFormatter {
     fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
     fun getSignificantDecimalFiat(value: BigDecimal): Int
     fun getSignificantDecimalCoin(value: BigDecimal): Int
+    fun shortenValue(number: Number): Pair<BigDecimal, String>
 }
 
 interface IFeeRateProvider {
@@ -393,36 +408,24 @@ interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
 }
 
-interface IBlockchainSettingsManager {
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun communicationSetting(coinType: CoinType): CommunicationSetting?
-
-    fun saveSetting(derivationSetting: DerivationSetting)
-    fun saveSetting(syncModeSetting: SyncModeSetting)
-    fun saveSetting(communicationSetting: CommunicationSetting)
-
-    fun initializeSettingsWithDefault(coinType: CoinType)
-    fun initializeSettings(coinType: CoinType)
-}
-
 interface IDerivationSettingsManager {
-    fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun updateSetting(derivationSetting: DerivationSetting)
-    fun reset()
+    fun allActiveSettings(): List<Pair<DerivationSetting, CoinType>>
+    fun defaultSetting(coinType: CoinType): DerivationSetting?
+    fun setting(coinType: CoinType): DerivationSetting?
+    fun save(setting: DerivationSetting)
+    fun resetStandardSettings()
 }
 
-interface ISyncModeSettingsManager {
-    fun defaultSyncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun updateSetting(syncModeSetting: SyncModeSetting)
+interface IInitialSyncModeSettingsManager {
+    fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
+    fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
+    fun save(setting: InitialSyncSetting)
 }
 
-interface ICommunicationSettingsManager {
-    fun defaultCommunicationSetting(coinType: CoinType): CommunicationSetting?
-    fun communicationSetting(coinType: CoinType): CommunicationSetting?
-    fun updateSetting(communicationSetting: CommunicationSetting)
+interface IEthereumRpcModeSettingsManager {
+    val communicationModes: List<CommunicationMode>
+    fun rpcMode(): EthereumRpcMode
+    fun save(setting: EthereumRpcMode)
 }
 
 interface IAccountCleaner {

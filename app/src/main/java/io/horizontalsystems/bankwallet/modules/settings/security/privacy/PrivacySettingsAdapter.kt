@@ -5,34 +5,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CommunicationMode
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule.IPrivacySettingsViewDelegate
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-
-sealed class PrivacySettingsType {
-    open val selectedTitle: String = ""
-
-    class Communication(var selected: CommunicationMode) : PrivacySettingsType() {
-        override val selectedTitle: String
-            get() = selected.title
-    }
-
-    class WalletRestore(var selected: SyncMode) : PrivacySettingsType() {
-        override val selectedTitle: String
-            get() = selected.title
-    }
-}
-
-data class PrivacySettingsViewItem(
-        val coin: Coin,
-        val settingType: PrivacySettingsType,
-        var enabled: Boolean = true
-)
 
 class PrivacySettingsAdapter(
         private val delegate: IPrivacySettingsViewDelegate,
@@ -129,7 +106,7 @@ class PrivacySettingsAdapter(
             containerView.isEnabled = viewItem.enabled
 
             containerView.setOnClickListener {
-                viewDelegate.didTapItem(viewItem.settingType, bindingAdapterPosition - 1)
+                viewDelegate.onItemTap(viewItem.settingType, bindingAdapterPosition - 1)
             }
         }
     }

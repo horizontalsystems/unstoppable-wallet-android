@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.ui
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -18,7 +18,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.seekbar.FeeSeekBar
 import kotlinx.android.synthetic.main.view_send_fee.view.*
 
-class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
+class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : ConstraintLayout(context, attrs, defStyleAttr) {
 
     var onTxSpeedClickListener: (view: View) -> Unit = { }
     var prioritySelectListener: (position: Int) -> Unit = { }
@@ -27,7 +28,7 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
     init {
         inflate(context, R.layout.view_send_fee, this)
 
-        txSpeedLayout.setOnClickListener {
+        speedViews.setOnClickListener {
             onTxSpeedClickListener(it)
         }
 
@@ -40,11 +41,6 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
 
     fun setFeeText(value: String) {
         txFeePrimary.text = value
-        invalidate()
-    }
-
-    fun setDurationVisible(visible: Boolean) {
-        txDurationLayout.isVisible = visible
         invalidate()
     }
 

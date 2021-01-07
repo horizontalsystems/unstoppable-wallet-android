@@ -70,7 +70,7 @@ class SwapService(
     val balanceToObservable: Observable<Optional<BigDecimal>> = balanceToSubject
 
     val approveData: SwapAllowanceService.ApproveData?
-        get() = tradeService.amountFrom?.let { amount ->
+        get() = balanceFrom?.let { amount ->
             allowanceService.approveData(amount)
         }
     //endregion
@@ -151,6 +151,14 @@ class SwapService(
                     swapEventSubject.onNext(SwapEvent.Failed(it))
                 })
                 .let { disposables.add(it) }
+    }
+
+    fun onCleared() {
+        disposables.clear()
+        tradeService.onCleared()
+        allowanceService.onCleared()
+        pendingAllowanceService.onCleared()
+        transactionService.onCleared()
     }
 
     private fun onUpdateTrade(state: SwapTradeService.State) {

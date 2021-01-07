@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="20dp">
+
+    <TextView
+        android:id="@+id/bipSectionHeader"
+        style="@style/Subhead1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="7dp"
+        android:textAllCaps="true"
+        android:textColor="@color/grey"
+        tools:text="Title" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+        android:id="@+id/option1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+        android:id="@+id/option2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.SettingItemWithCheckmark
+        android:id="@+id/option3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

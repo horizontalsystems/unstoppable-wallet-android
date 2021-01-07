@@ -47,6 +47,10 @@ class EthereumTransactionService(
         sync()
     }
 
+    fun onCleared() {
+        disposable.clear()
+    }
+
     private fun sync() {
         disposable.clear()
 

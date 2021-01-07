@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
 class ManageKeysRouter : ManageKeysModule.IRouter {
@@ -11,7 +10,7 @@ class ManageKeysRouter : ManageKeysModule.IRouter {
     val showCreateWalletLiveEvent = SingleLiveEvent<PredefinedAccountType>()
     val showBackupModule = SingleLiveEvent<Pair<Account, PredefinedAccountType>>()
     val closeEvent = SingleLiveEvent<Void>()
-    val showBlockchainSettings = SingleLiveEvent<List<CoinType>>()
+    val showAddressFormat = SingleLiveEvent<Unit>()
 
 
     override fun showRestore(predefinedAccountType: PredefinedAccountType) {
@@ -26,8 +25,8 @@ class ManageKeysRouter : ManageKeysModule.IRouter {
         showBackupModule.postValue(Pair(account, predefinedAccountType))
     }
 
-    override fun showBlockchainSettings(enabledCoinTypes: List<CoinType>) {
-        showBlockchainSettings.postValue(enabledCoinTypes)
+    override fun showAddressFormat() {
+        showAddressFormat.call()
     }
 
     override fun close() {

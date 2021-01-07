@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFrag
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.FeeInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
@@ -25,7 +26,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.activity_send.*
-import kotlinx.android.synthetic.main.activity_send.toolbar
 
 class SendActivity : BaseActivity() {
 
@@ -34,7 +34,8 @@ class SendActivity : BaseActivity() {
     private var proceedButtonView: ProceedButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // prevent fragment recreations by passing null to onCreate
+        super.onCreate(null)
         setContentView(R.layout.activity_send)
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
@@ -100,6 +101,16 @@ class SendActivity : BaseActivity() {
             data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
                 mainPresenter.onAddressScan(it)
             }
+        }
+    }
+
+    fun showFeeInfo() {
+        hideSoftKeyboard()
+
+        supportFragmentManager.commit {
+            setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left, R.anim.slide_from_left, R.anim.slide_to_right)
+            add(R.id.rootView, FeeInfoFragment())
+            addToBackStack(null)
         }
     }
 

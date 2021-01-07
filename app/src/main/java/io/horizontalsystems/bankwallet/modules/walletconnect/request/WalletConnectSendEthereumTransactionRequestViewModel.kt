@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.toHexString
+import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.reactivex.disposables.CompositeDisposable
 
 class WalletConnectSendEthereumTransactionRequestViewModel(
@@ -75,7 +76,8 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
 
             App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, amountData.getFormatted())
         }
-        else -> error?.message ?: error?.javaClass?.simpleName
+        is JsonRpc.ResponseError.InsufficientBalance -> App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance_WithoutAmount)
+        else -> (error as? JsonRpc.ResponseError.RpcError)?.error?.message ?: error?.message ?: error?.javaClass?.simpleName
     }
 
 }

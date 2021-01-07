@@ -9,19 +9,18 @@ import io.reactivex.subjects.BehaviorSubject
 class ManageWalletsService(
         private val coinManager: ICoinManager,
         private val walletManager: IWalletManager,
-        private val accountManager: IAccountManager,
-        private val derivationSettingsManager: IDerivationSettingsManager
+        private val accountManager: IAccountManager
 ) : ManageWalletsModule.IManageWalletsService, Clearable {
 
     private val disposables = CompositeDisposable()
     private val wallets = mutableMapOf<Coin, Wallet>()
 
-    override val stateObservable = BehaviorSubject.create<ManageWalletsModule.State>()
+    override val stateAsync = BehaviorSubject.create<ManageWalletsModule.State>()
 
     override var state = ManageWalletsModule.State.empty()
         private set(value) {
             field = value
-            stateObservable.onNext(value)
+            stateAsync.onNext(value)
         }
 
     init {
@@ -50,17 +49,6 @@ class ManageWalletsService(
     override fun enable(coin: Coin, derivationSetting: DerivationSetting?) {
         val account = account(coin) ?: throw EnableCoinError.NoAccount
 
-        if (account.origin == AccountOrigin.Restored) {
-            val derivation = derivationSettingsManager.derivationSetting(coin.type) ?: derivationSettingsManager.defaultDerivationSetting(coin.type)
-
-            derivation?.let { setting ->
-
-                derivationSetting ?: throw EnableCoinError.DerivationNotConfirmed(setting.derivation)
-
-                derivationSettingsManager.updateSetting(derivationSetting)
-            }
-        }
-
         val wallet = Wallet(coin, account)
 
         walletManager.save(listOf(wallet))
@@ -76,6 +64,10 @@ class ManageWalletsService(
         wallets.remove(coin)
 
         syncState()
+    }
+
+    override fun account(coin: Coin): Account? {
+        return accountManager.accounts.firstOrNull { coin.type.canSupport(it.type) }
     }
 
     override fun clear() {
@@ -102,12 +94,7 @@ class ManageWalletsService(
         return ManageWalletsModule.Item(coin, state)
     }
 
-    private fun account(coin: Coin): Account? {
-        return accountManager.accounts.firstOrNull { coin.type.canSupport(it.type) }
-    }
-
     sealed class EnableCoinError: Exception() {
         object NoAccount: EnableCoinError()
-        class DerivationNotConfirmed(val currentDerivation: AccountType.Derivation): EnableCoinError()
     }
 }

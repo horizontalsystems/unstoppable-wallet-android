@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_settings_left.view.*
 import kotlinx.android.synthetic.main.view_settings_item.view.*
 
 abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)

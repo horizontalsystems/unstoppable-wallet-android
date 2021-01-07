@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -45,7 +46,7 @@ class RatesInteractor(
     }
 
     override fun getTopList() {
-        xRateManager.getTopMarketList(currency.code)
+        xRateManager.getTopMarketList(currency.code, TimePeriod.HOUR_24)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     delegate?.didFetchedTopMarketList(it)

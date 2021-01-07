@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -26,7 +26,7 @@ class SendAddressFragment(
         private val sendHandler: SendModule.ISendHandler
 ) : SendSubmoduleFragment() {
 
-    private lateinit var presenter: SendAddressPresenter
+    private val presenter by activityViewModels<SendAddressPresenter> { SendAddressModule.Factory(coin, editable, sendHandler) }
 
     private val addressChangeListener = object : TextWatcher {
         private var timer = Timer()
@@ -61,8 +61,6 @@ class SendAddressFragment(
         btnPaste.isVisible = true
         btnDeleteAddress.isVisible = false
 
-        presenter = ViewModelProvider(this, SendAddressModule.Factory(coin, editable, sendHandler))
-                .get(SendAddressPresenter::class.java)
         val presenterView = presenter.view as SendAddressView
         presenter.moduleDelegate = addressModuleDelegate
 

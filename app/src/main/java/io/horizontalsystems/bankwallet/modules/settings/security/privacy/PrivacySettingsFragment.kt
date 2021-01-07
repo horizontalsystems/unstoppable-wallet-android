@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
@@ -80,8 +81,6 @@ class PrivacySettingsFragment :
 
         concatRecyclerView.itemAnimator = null
 
-        createCommunicationSettingsView()
-
 
         // IView
         viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer { enabled ->
@@ -90,10 +89,6 @@ class PrivacySettingsFragment :
 
         viewModel.torEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
             torControlAdapter.setTorSwitch(enabled)
-        })
-
-        viewModel.blockchainSettingsVisibilityLiveData.observe(viewLifecycleOwner, Observer { isVisible ->
-            createWalletRestoreSettingsView(isVisible)
         })
 
         viewModel.setTorConnectionStatus.observe(viewLifecycleOwner, Observer { torStatus ->
@@ -130,21 +125,26 @@ class PrivacySettingsFragment :
             )
         })
 
-        // IRouter
-        viewModel.restartApp.observe(this, Observer {
-            restartApp()
+        viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
+            walletRestoreSettingsAdapter.items = it
+            walletRestoreSettingsAdapter.notifyDataSetChanged()
         })
-    }
 
-    override fun onTorSwitchChecked(checked: Boolean) {
-        viewModel.delegate.didSwitchTorEnabled(checked)
-    }
+        viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+            BottomSheetSelectorDialog.show(
+                    childFragmentManager,
+                    getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
+                    coin.title,
+                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
+                    items.map { getSyncModeInfo(it) },
+                    items.indexOf(selected),
+                    onItemSelected = { position ->
+                        viewModel.delegate.onSelectSetting(position)
+                    },
+                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
+            )
+        })
 
-    override fun onClick() {
-        viewModel.delegate.onTransactionOrderSettingTap()
-    }
-
-    private fun createCommunicationSettingsView() {
         viewModel.communicationSettingsViewItems.observe(this, Observer {
             communicationSettingsAdapter.items = it
             communicationSettingsAdapter.notifyDataSetChanged()
@@ -186,31 +186,19 @@ class PrivacySettingsFragment :
                 )
             }
         })
+
+        // IRouter
+        viewModel.restartApp.observe(this, Observer {
+            restartApp()
+        })
     }
 
-    private fun createWalletRestoreSettingsView(doCreate: Boolean) {
-        if (doCreate) {
-            viewModel.restoreWalletSettingsViewItems.observe(this, Observer {
-                walletRestoreSettingsAdapter.items = it
-                walletRestoreSettingsAdapter.notifyDataSetChanged()
-            })
+    override fun onTorSwitchChecked(checked: Boolean) {
+        viewModel.delegate.didSwitchTorEnabled(checked)
+    }
 
-            viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-                BottomSheetSelectorDialog.show(
-                        childFragmentManager,
-                        getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
-                        coin.title,
-                        context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
-                        items.map { getSyncModeInfo(it) },
-                        items.indexOf(selected),
-                        onItemSelected = { position ->
-                            viewModel.delegate.onSelectSetting(position)
-                        },
-                        warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
-                )
-            })
-        }
-
+    override fun onClick() {
+        viewModel.delegate.onTransactionOrderSettingTap()
     }
 
     private fun getSortingLocalized(sortingType: TransactionDataSortingType): String {
@@ -220,28 +208,28 @@ class PrivacySettingsFragment :
         }
     }
 
-    private fun getSortingInfo(sortingType: TransactionDataSortingType): Pair<String, String> {
+    private fun getSortingInfo(sortingType: TransactionDataSortingType): BottomSheetSelectorViewItem {
         return when (sortingType) {
             TransactionDataSortingType.Shuffle -> {
-                Pair(getString(R.string.SettingsSecurity_SortingShuffle), getString(R.string.SettingsSecurity_SortingShuffleDescription))
+                BottomSheetSelectorViewItem(getString(R.string.SettingsSecurity_SortingShuffle), getString(R.string.SettingsSecurity_SortingShuffleDescription))
             }
             TransactionDataSortingType.Bip69 -> {
-                Pair(getString(R.string.SettingsSecurity_SortingBip69), getString(R.string.SettingsSecurity_SortingBip69Description))
+                BottomSheetSelectorViewItem(getString(R.string.SettingsSecurity_SortingBip69), getString(R.string.SettingsSecurity_SortingBip69Description))
             }
         }
     }
 
-    private fun getSyncModeInfo(syncMode: SyncMode): Pair<String, String> {
+    private fun getSyncModeInfo(syncMode: SyncMode): BottomSheetSelectorViewItem {
         return when (syncMode) {
-            SyncMode.Fast -> Pair(getString(R.string.SettingsSecurity_SyncModeAPI), getString(R.string.SettingsSecurity_SyncModeAPIDescription))
-            SyncMode.Slow -> Pair(getString(R.string.SettingsSecurity_SyncModeBlockchain), getString(R.string.SettingsSecurity_SyncModeBlockchainDescription))
+            SyncMode.Fast -> BottomSheetSelectorViewItem(getString(R.string.SettingsSecurity_SyncModeAPI), getString(R.string.SettingsSecurity_SyncModeAPIDescription))
+            SyncMode.Slow -> BottomSheetSelectorViewItem(getString(R.string.SettingsSecurity_SyncModeBlockchain), getString(R.string.SettingsSecurity_SyncModeBlockchainDescription))
             SyncMode.New -> throw Exception("Unsupported syncMode: $syncMode")
         }
     }
 
-    private fun getCommunicationModeInfo(communicationMode: CommunicationMode): Pair<String, String> {
+    private fun getCommunicationModeInfo(communicationMode: CommunicationMode): BottomSheetSelectorViewItem {
         return when (communicationMode) {
-            CommunicationMode.Infura -> Pair(communicationMode.title, "infura.io")
+            CommunicationMode.Infura -> BottomSheetSelectorViewItem(communicationMode.title, "infura.io")
             else -> throw Exception("Unsupported syncMode: $communicationMode")
         }
     }

@@ -99,6 +99,29 @@
     <string name="Backup_Eos_ActivePrivateKey" translatable="false">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may have access to clipboard data.</string>
 
+    <!--Market-->
+
+    <string name="Market_Title">Market</string>
+    <string name="Market_Search">Search</string>
+    <string name="Market_Field_HighestCap">Highest Cap</string>
+    <string name="Market_Field_LowestCap">Lowest Cap</string>
+    <string name="Market_Field_HighestLiquidity">Highest Liquidity</string>
+    <string name="Market_Field_LowestLiquidity">Lowest Liquidity</string>
+    <string name="Market_Field_HighestVolume">Highest Volume</string>
+    <string name="Market_Field_LowestVolume">Lowest Volume</string>
+    <string name="Market_Field_HighestPrice">Highest Price</string>
+    <string name="Market_Field_LowestPrice">Lowest Price</string>
+    <string name="Market_Period_24h">24 hours</string>
+    <string name="Market_Period_1week">1 week</string>
+    <string name="Market_Period_1month">1 month</string>
+    <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_Period_PopupTitle">Changes</string>
+    <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
+
     <!--Balance-->
 
     <string name="Balance_Title">Balance</string>
@@ -170,6 +193,17 @@
 
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
 
+    <!--Fee Info -->
+
+    <string name="FeeInfo_Title">Transaction Speed</string>
+    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay usage fees while sending transactions on the blockchain.\n\nUnstoppable uses public fee estimate services to help user determine appropriate transaction fees for the moment. The fees are higher when there are a lot of transactions taking place and lower when the blockchain is less busy.</string>
+    <string name="FeeInfo_Slow">Slow</string>
+    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected entirely. The lower the value the longer it will take for the transaction to confirm.</string>
+    <string name="FeeInfo_Average">Average</string>
+    <string name="FeeInfo_AverageDescription">Typically, this fee range should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
+    <string name="FeeInfo_Fast">Fast</string>
+    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Request</string>
@@ -187,6 +221,7 @@
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Transaction requires %s for sending</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_WithoutAmount">Insufficient balance</string>
 
     <!--Swap-->
 
@@ -211,8 +246,8 @@
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_MaximumPaid">Maximum Paid</string>
-    <string name="Swap_MinimumGot">Minimum Got</string>
+    <string name="Swap_MaximumPaid">Maximum Amount</string>
+    <string name="Swap_MinimumGot">Guaranteed Amount</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>
@@ -226,6 +261,8 @@
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Address</string>
 
+    <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
+    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Max. allowed value is %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
@@ -291,6 +328,7 @@
     <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_LockedUntil">Locked until %s</string>
     <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
@@ -451,6 +489,7 @@
     <string name="SettingsTerms_TermPhone">I understand that passing my phone to untrusted entities or leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
     <string name="SettingsTerms_TermRoot">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
     <string name="SettingsTerms_TermBugs">I understand there may be undiscovered software issues in the code powering this wallet app which may lead to unexpected behavior or the app malfunctioning.</string>
+    <string name="Settings_TermsPin">I understand that disabling the phone unlock PIN (or its equivalent) in Settings of Android OS will erase wallet private keys from my device.I will need my private keys to regain access to my wallet.</string>
     <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
 
 
@@ -592,6 +631,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
 
     <!-- Tor -->
 
@@ -652,6 +695,8 @@
     <string name="Charts_Volume">Vol</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
     <string name="Charts_LatestNews">Latest News</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
 
     <!--Rate list-->
 
@@ -667,5 +712,6 @@
     <string name="BalanceSyncError_ButtonRetry">Retry</string>
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
+
 
 </resources>

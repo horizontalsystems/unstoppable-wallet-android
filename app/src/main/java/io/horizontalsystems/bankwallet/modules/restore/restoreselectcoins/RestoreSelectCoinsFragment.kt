@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
@@ -21,6 +21,8 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         get() = getString(R.string.Select_Coins)
 
     private lateinit var viewModel: RestoreSelectCoinsViewModel
+    private lateinit var blockchainSettingsViewModel: BlockchainSettingsViewModel
+
     private var doneMenuButton: MenuItem? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,8 +44,10 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY) ?: throw Exception("Parameter missing")
 
-        viewModel = ViewModelProvider(this, RestoreSelectCoinsModule.Factory(predefinedAccountType))
-                .get(RestoreSelectCoinsViewModel::class.java)
+        val vmFactory by lazy { RestoreSelectCoinsModule.Factory(predefinedAccountType) }
+
+        viewModel = ViewModelProvider(this, vmFactory).get(RestoreSelectCoinsViewModel::class.java)
+        blockchainSettingsViewModel = ViewModelProvider(this, vmFactory).get(BlockchainSettingsViewModel::class.java)
 
         observe()
     }
@@ -68,22 +72,17 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         viewModel.updateFilter(query)
     }
 
-    override fun onCancelAddressFormatSelection() {
-       viewModel.onCancelDerivationSelection()
+    override fun onCancelSelection() {
+        blockchainSettingsViewModel.onCancelSelect()
     }
 
-    override fun onSelectAddressFormat(coin: Coin, derivationSetting: DerivationSetting) {
-        viewModel.onSelect(coin, derivationSetting)
+    override fun onSelect(index: Int) {
+        blockchainSettingsViewModel.onSelect(index)
     }
 
     private fun observe() {
         viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer { viewState ->
             setViewState(viewState)
-        })
-
-        viewModel.openDerivationSettingsLiveEvent.observe(viewLifecycleOwner, Observer { (coin, currentDerivation) ->
-            hideKeyboard()
-            showAddressFormatSelectionDialog(coin, currentDerivation)
         })
 
         viewModel.canRestoreLiveData.observe(viewLifecycleOwner, Observer { enabled ->
@@ -94,6 +93,11 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
         viewModel.enabledCoinsLiveData.observe(viewLifecycleOwner, Observer { enabledCoins ->
             setFragmentResult(RestoreFragment.selectCoinsRequestKey, bundleOf(RestoreFragment.selectCoinsBundleKey to enabledCoins))
+        })
+
+        blockchainSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
+            hideKeyboard()
+            showBottomSelectorDialog(config)
         })
     }
 

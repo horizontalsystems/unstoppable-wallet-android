@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
 class ManageKeysPresenter(
@@ -13,7 +12,6 @@ class ManageKeysPresenter(
 
     private var currentItemForUnlink: ManageAccountItem? = null
 
-    private var accountType: AccountType? = null
     private var predefinedAccountType: PredefinedAccountType? = null
 
     var items = listOf<ManageAccountItem>()
@@ -46,11 +44,8 @@ class ManageKeysPresenter(
         }
     }
 
-    override fun onClickAdvancedSettings(item: ManageAccountItem) {
-        val enabledCoinTypes = interactor.getWallets()
-                .filter { it.account.id == item.account?.id }
-                .map{it.coin.type}
-        router.showBlockchainSettings(enabledCoinTypes)
+    override fun onClickAddressFormat(item: ManageAccountItem) {
+        router.showAddressFormat()
     }
 
     override fun onConfirmBackup() {

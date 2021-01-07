@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.erc20kit.core.Erc20Kit
@@ -18,7 +17,7 @@ class SwapApproveService(
         amount: BigInteger,
         private val spenderAddress: Address,
         private val allowance: BigInteger,
-) : ISwapApproveService, Clearable {
+) : ISwapApproveService {
 
     override val stateObservable = BehaviorSubject.createDefault<State>(State.ApproveNotAllowed(listOf()))
     override var amount: BigInteger? = amount
@@ -127,7 +126,7 @@ class SwapApproveService(
         }
     }
 
-    override fun clear() {
+    override fun onCleared() {
         disposables.clear()
     }
 

@@ -128,6 +128,7 @@ class Erc20Adapter(
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
                 from = transaction.from.hex,
+                memo = null,
                 to = transaction.to.hex,
                 type = type,
                 failed = transaction.isError

@@ -111,6 +111,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
                 fee = fee,
                 timestamp = transaction.timestamp,
                 from = fromAddress.hex,
+                memo = null,
                 to = toAddress.hex,
                 type = type,
                 failed = transaction.isError?.let { it != 0 } ?: false

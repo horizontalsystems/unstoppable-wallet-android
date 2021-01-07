@@ -76,8 +76,12 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
     }
 
     fun setError(text: String?) {
+        val isVisible = !text.isNullOrEmpty()
         error.text = text
-        error.isVisible = !text.isNullOrEmpty()
+        error.isVisible = isVisible
+
+        // Highlights background with border color
+        inputBackground.isSelected = isVisible
     }
 
     fun onTextChange(callback: (old: String?, new: String?) -> Unit) {
