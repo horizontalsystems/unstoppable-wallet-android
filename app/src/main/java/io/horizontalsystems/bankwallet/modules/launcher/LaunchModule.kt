@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.launcher
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 
 object LaunchModule {
@@ -19,6 +20,7 @@ object LaunchModule {
         val isPinNotSet: Boolean
         val isAccountsEmpty: Boolean
         val isSystemLockOff: Boolean
+        val isDeviceRooted: Boolean
 
         fun validateKeyStore(): KeyStoreValidationResult
     }
@@ -33,10 +35,11 @@ object LaunchModule {
         fun openNoSystemLockModule()
         fun openKeyInvalidatedModule()
         fun openUserAuthenticationModule()
+        fun openDeviceIsRootedWarning()
     }
 
     fun init(view: LaunchViewModel, router: IRouter) {
-        val interactor = LaunchInteractor(App.accountManager, App.pinComponent, App.systemInfoManager, App.keyStoreManager)
+        val interactor = LaunchInteractor(App.accountManager, App.pinComponent, App.systemInfoManager, App.keyStoreManager, RootUtil)
         val presenter = LaunchPresenter(interactor, router)
 
         view.delegate = presenter

@@ -53,6 +53,10 @@ class LauncherActivity : AppCompatActivity() {
             KeyStoreActivity.startForUserAuthentication(this)
         })
 
+        viewModel.openDeviceIsRootedWarning.observe(this, Observer {
+            KeyStoreActivity.startForDeviceIsRooted(this)
+        })
+
         viewModel.closeApplication.observe(this, Observer {
             finishAffinity()
         })
