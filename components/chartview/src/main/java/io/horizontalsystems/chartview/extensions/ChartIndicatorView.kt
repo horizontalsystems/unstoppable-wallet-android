@@ -2,12 +2,12 @@ package io.horizontalsystems.chartview.extensions
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.chartview.R
 import kotlinx.android.synthetic.main.chart_indicator_view.view.*
 
-class ChartIndicatorView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+class ChartIndicatorView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
 
     init {
         inflate(context, R.layout.chart_indicator_view, this)
@@ -32,7 +32,7 @@ class ChartIndicatorView(context: Context, attrs: AttributeSet) : LinearLayout(c
     }
 
     fun setStateEnabled(enabled: Boolean){
-        stateIcon.setImageResource(if (enabled) R.drawable.ic_shown_16 else R.drawable.ic_hidden_16)
+        stateIcon.setImageResource(if (enabled) R.drawable.ic_eye_enabled_20px else R.drawable.ic_eye_disabled_20px)
     }
 
     private fun getTrendText(trend: ChartInfoTrend): Int {
