@@ -87,6 +87,8 @@ class MainSettingsAdapter(private val items: List<SettingsViewItem?>)
 
         fun bind(item: SettingsMenuSwitch) {
             settingsIcon.setImageResource(item.icon)
+            settingsIcon.isVisible = true
+
             settingsTitle.setText(item.title)
 
             switchSettings.isChecked = item.isChecked
