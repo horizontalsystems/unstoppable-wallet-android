@@ -57,15 +57,17 @@
     <View
         android:id="@+id/background"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="85dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/swap_input_background"
         app:layout_constraintBottom_toBottomOf="@+id/secondaryAmount"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/amountPrefix"
@@ -81,12 +83,13 @@
 
     <EditText
         android:id="@+id/amount"
-        style="@style/Body"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
         android:autofillHints="number,numberDecimal"
         android:background="?ColorLawrence"
         android:hint="@string/Swap_AmountHint"
@@ -94,6 +97,7 @@
         android:maxLines="1"
         android:textColor="?ColorLeah"
         android:textColorHint="@color/grey_50"
+        app:layout_constraintBottom_toTopOf="@+id/dividerLine"
         app:layout_constraintEnd_toEndOf="@+id/background"
         app:layout_constraintStart_toEndOf="@id/amountPrefix"
         app:layout_constraintTop_toTopOf="@+id/background"
@@ -105,24 +109,27 @@
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toBottomOf="@id/amount" />
+        app:layout_constraintBottom_toBottomOf="@+id/background"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintStart_toStartOf="@+id/background"
+        app:layout_constraintTop_toTopOf="@+id/background" />
 
     <TextView
         android:id="@+id/secondaryAmount"
-        style="@style/Caption"
+        style="@style/Subhead2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
         android:includeFontPadding="false"
         android:paddingBottom="8dp"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintStart_toStartOf="@id/background"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintStart_toStartOf="@+id/background"
         app:layout_constraintTop_toBottomOf="@id/dividerLine"
         tools:text="$ 1234" />
 
@@ -138,7 +145,7 @@
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/secondaryAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/background" />
 
     <TextView
         android:id="@+id/balanceValue"
