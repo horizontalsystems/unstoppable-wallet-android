@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -98,16 +98,10 @@ class EthereumTransactionService(
     }
 
     private fun gasLimitSingle(gasPrice: Long, transactionData: TransactionData): Single<Long> {
-        return ethereumKit.estimateGas(transactionData.to, transactionData.value, gasPrice, transactionData.input)
+        return ethereumKit.estimateGas(transactionData, gasPrice)
     }
 
     // types
-
-    data class TransactionData(
-            var to: Address,
-            var value: BigInteger,
-            var input: ByteArray
-    )
 
     data class GasData(
             val gasLimit: Long,
