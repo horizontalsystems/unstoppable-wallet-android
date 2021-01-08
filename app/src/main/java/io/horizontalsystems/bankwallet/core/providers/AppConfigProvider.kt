@@ -5,12 +5,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.core.IAppConfigTestMode
+import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.ILanguageConfigProvider
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
-class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfigTestMode {
+class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildConfigProvider {
 
     override val companyWebPageLink: String = "https://horizontalsystems.io"
     override val appWebPageLink: String = "https://unstoppable.money"
@@ -237,8 +237,10 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IAppConfi
             return coinsString.split(",")
         }
 
-    //  IAppConfigTestMode
+    //  IBuildConfigProvider
 
     override val testMode: Boolean = BuildConfig.testMode
+
+    override val skipRootCheck: Boolean = BuildConfig.skipRootCheck
 
 }

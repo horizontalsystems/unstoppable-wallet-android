@@ -6,12 +6,12 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.core.IAppConfigTestMode
+import io.horizontalsystems.core.IBuildConfigProvider
 import io.reactivex.Single
 import java.util.*
 
 class AddBep2TokenBlockchainService(
-        private val appConfigTestModer: IAppConfigTestMode,
+        private val appConfigTestModer: IBuildConfigProvider,
         private val networkManager: INetworkManager
 ): IAddTokenBlockchainService {
 

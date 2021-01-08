@@ -21,6 +21,7 @@ object LaunchModule {
         val isAccountsEmpty: Boolean
         val isSystemLockOff: Boolean
         val isDeviceRooted: Boolean
+        val skipRootCheck: Boolean
 
         fun validateKeyStore(): KeyStoreValidationResult
     }
@@ -39,7 +40,7 @@ object LaunchModule {
     }
 
     fun init(view: LaunchViewModel, router: IRouter) {
-        val interactor = LaunchInteractor(App.accountManager, App.pinComponent, App.systemInfoManager, App.keyStoreManager, RootUtil)
+        val interactor = LaunchInteractor(App.accountManager, App.pinComponent, App.systemInfoManager, App.keyStoreManager, RootUtil, App.buildConfigProvider)
         val presenter = LaunchPresenter(interactor, router)
 
         view.delegate = presenter

@@ -10,7 +10,7 @@ abstract class CoreApp : Application() {
 
     companion object : ICoreApp {
         override lateinit var preferences: SharedPreferences
-        override lateinit var appConfigTestMode: IAppConfigTestMode
+        override lateinit var buildConfigProvider: IBuildConfigProvider
         override lateinit var languageConfigProvider: ILanguageConfigProvider
         override lateinit var backgroundManager: BackgroundManager
         override lateinit var encryptionManager: IEncryptionManager
