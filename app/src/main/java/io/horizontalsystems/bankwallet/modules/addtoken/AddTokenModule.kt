@@ -16,12 +16,12 @@ object AddTokenModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewModel = when (tokenType) {
                 TokenType.Erc20 -> {
-                    val blockchainService = AddErc20TokenBlockchainService(App.appConfigTestMode, App.appConfigProvider, App.networkManager)
+                    val blockchainService = AddErc20TokenBlockchainService(App.buildConfigProvider, App.appConfigProvider, App.networkManager)
                     val service = AddTokenService(App.coinManager, blockchainService)
                     AddTokenViewModel(service, R.string.AddErc20Token_Title, R.string.AddErc20Token_ContractAddressHint)
                 }
                 TokenType.Bep2 -> {
-                    val blockchainService = AddBep2TokenBlockchainService(App.appConfigTestMode, App.networkManager)
+                    val blockchainService = AddBep2TokenBlockchainService(App.buildConfigProvider, App.networkManager)
                     val service = AddTokenService(App.coinManager, blockchainService)
                     AddTokenViewModel(service, R.string.AddBep2Token_Title, R.string.AddBep2Token_TokenSymbolHint)
                 }

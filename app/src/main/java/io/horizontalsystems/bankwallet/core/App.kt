@@ -105,15 +105,15 @@ class App : CoreApp() {
 
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
-        appConfigTestMode = appConfig
+        buildConfigProvider = appConfig
         languageConfigProvider = appConfig
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
 
         ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode, backgroundManager)
-        eosKitManager = EosKitManager(appConfigTestMode.testMode)
-        binanceKitManager = BinanceKitManager(appConfigTestMode.testMode)
+        eosKitManager = EosKitManager(buildConfigProvider.testMode)
+        binanceKitManager = BinanceKitManager(buildConfigProvider.testMode)
 
         appDatabase = AppDatabase.getInstance(this)
         accountsStorage = AccountsStorage(appDatabase)
@@ -140,7 +140,7 @@ class App : CoreApp() {
 
         wordsManager = WordsManager()
         networkManager = NetworkManager()
-        accountCleaner = AccountCleaner(appConfigTestMode.testMode)
+        accountCleaner = AccountCleaner(buildConfigProvider.testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletStorage)
@@ -163,7 +163,7 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager)
+        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(appConfigProvider, blockchainSettingsStorage, adapterManager, walletManager)
@@ -180,7 +180,7 @@ class App : CoreApp() {
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper, feeCoinProvider, appConfigProvider)
 
-        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode.testMode, appConfigProvider.etherscanApiKey, localStorage)
+        transactionDataProviderManager = TransactionDataProviderManager(buildConfigProvider.testMode, appConfigProvider.etherscanApiKey, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
