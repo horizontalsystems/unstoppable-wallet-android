@@ -28,7 +28,7 @@ class SwapService(
 
     private val disposables = CompositeDisposable()
     private val ethereumBalance: BigInteger
-        get() = ethereumKit.balance ?: BigInteger.ZERO
+        get() = ethereumKit.accountState?.balance ?: BigInteger.ZERO
 
     //region internal subjects
     private val stateSubject = PublishSubject.create<State>()
@@ -162,19 +162,16 @@ class SwapService(
     }
 
     private fun onUpdateTrade(state: SwapTradeService.State) {
-        when (state) {
+        transactionService.transactionData = when (state) {
             is SwapTradeService.State.Ready -> {
-                val kitTransactionData = try {
+                try {
                     tradeService.transactionData(state.trade.tradeData)
                 } catch (error: Throwable) {
                     null
                 }
-                transactionService.transactionData = kitTransactionData?.let {
-                    EthereumTransactionService.TransactionData(it.to, it.value, it.input)
-                }
             }
             else -> {
-                transactionService.transactionData = null
+                null
             }
         }
         syncState()

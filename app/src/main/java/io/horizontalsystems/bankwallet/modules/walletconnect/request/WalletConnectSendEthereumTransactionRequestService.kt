@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +15,7 @@ class WalletConnectSendEthereumTransactionRequestService(
         private val transactionService: EthereumTransactionService,
         private val ethereumKit: EthereumKit
 ) {
-    val transactionData = EthereumTransactionService.TransactionData(transaction.to, transaction.value, transaction.data)
+    val transactionData = TransactionData(transaction.to, transaction.value, transaction.data)
 
     var state: State = State.NotReady(null)
         set(value) {
@@ -59,8 +60,8 @@ class WalletConnectSendEthereumTransactionRequestService(
                 transaction.gasData.gasLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe({
-                    state = State.Sent(it.transaction.hash)
+                .subscribe({ fullTransaction ->
+                    state = State.Sent(fullTransaction.transaction.hash)
                 }, {
                     state = State.NotReady(it)
                 }).let {
@@ -75,7 +76,7 @@ class WalletConnectSendEthereumTransactionRequestService(
             }
             is DataState.Success -> {
                 val transaction = transactionStatus.data
-                val balance = ethereumKit.balance ?: BigInteger.ZERO
+                val balance = ethereumKit.accountState?.balance ?: BigInteger.ZERO
 
                 if (transaction.totalAmount > balance) {
                     State.NotReady(TransactionError.InsufficientBalance(transaction.totalAmount))
