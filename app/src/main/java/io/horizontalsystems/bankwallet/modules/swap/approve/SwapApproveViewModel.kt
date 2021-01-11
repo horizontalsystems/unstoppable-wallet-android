@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import kotlin.math.min
@@ -93,6 +94,12 @@ class SwapApproveViewModel(
             }
             is SwapApproveService.TransactionEthereumAmountError.InsufficientBalance -> {
                 App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(throwable.requiredBalance))
+            }
+            is JsonRpc.ResponseError.InsufficientBalance -> {
+                App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee)
+            }
+            is JsonRpc.ResponseError.RpcError -> {
+                throwable.error.message
             }
             else -> throwable.message ?: throwable.javaClass.simpleName
         }
