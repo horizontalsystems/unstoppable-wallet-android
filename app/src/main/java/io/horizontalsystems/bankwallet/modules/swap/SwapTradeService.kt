@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.models.SwapData
@@ -33,7 +34,7 @@ class SwapTradeService(
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
-    private val tradeOptionsSubject = PublishSubject.create<TradeOptions>()
+    private val tradeOptionsSubject = PublishSubject.create<SwapTradeOptions>()
     //endregion
 
     init {
@@ -87,13 +88,14 @@ class SwapTradeService(
         }
     val stateObservable: Observable<State> = stateSubject
 
-    var tradeOptions: TradeOptions = TradeOptions()
+    var tradeOptions: SwapTradeOptions = SwapTradeOptions()
         set(value) {
             field = value
             tradeOptionsSubject.onNext(value)
             syncTradeData()
         }
-    val tradeOptionsObservable: Observable<TradeOptions> = tradeOptionsSubject
+
+    val tradeOptionsObservable: Observable<SwapTradeOptions> = tradeOptionsSubject
     var tradeRecipientDomain: String? = null
 
     @Throws
@@ -207,7 +209,7 @@ class SwapTradeService(
         }
 
         try {
-            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions)
+            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             handle(tradeData)
         } catch (e: Throwable) {
             state = State.NotReady(listOf(e))

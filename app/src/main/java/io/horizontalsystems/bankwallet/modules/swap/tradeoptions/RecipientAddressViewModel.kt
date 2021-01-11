@@ -2,58 +2,118 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
+import io.horizontalsystems.bankwallet.core.IAddressParser
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.core.SingleLiveEvent
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 
-class RecipientAddressViewModel(private val service: SwapTradeOptionsService) : ViewModel(), IVerifiedInputViewModel {
+interface IRecipientAddressService {
+    val initialAddress: Address?
+    val error: Throwable?
+    val errorObservable: Observable<Unit>
 
-    override val inputFieldMaximumNumberOfLines = 2
-    override val inputFieldCanEdit = false
-    override val inputFieldValueLiveData = SingleLiveEvent<String?>()
-    override val inputFieldCautionLiveData = MutableLiveData<Caution?>(null)
-    override val inputFieldSyncingLiveData = SingleLiveEvent<Boolean>()
-    override val inputFieldPlaceholder = App.instance.getString(R.string.SwapSettings_RecipientPlaceholder)
-    override val inputFieldInitialValue: String? = service.recipient.value
+    fun set(address: Address?)
+    fun set(amount: BigDecimal)
+}
 
-    private val disposable = CompositeDisposable()
+class RecipientAddressViewModel(
+        private val service: IRecipientAddressService,
+        private val resolutionService: AddressResolutionService,
+        private val addressParser: IAddressParser)
+    : ViewModel(), IVerifiedInputViewModel {
+
+    override val setTextLiveData = SingleLiveEvent<String?>()
+    override val cautionLiveData = MutableLiveData<Caution?>(null)
+    override val isLoadingLiveData = SingleLiveEvent<Boolean>()
+    override val initialValue: String? = service.initialAddress?.title
+
+    private var isEditing = false
+    private var forceShowError = false
+
+    private var disposables = CompositeDisposable()
 
     init {
-        service.recipient.stateObservable
-                .subscribe { state ->
-                    var caution: Caution? = null
-                    var syncing = false
-
-                    when (state) {
-                        is FieldState.NotValid -> {
-                            state.error.localizedMessage?.let {
-                                caution = Caution(it, Caution.Type.Error)
-                            }
-                        }
-                        is FieldState.Validating -> {
-                            syncing = true
-                        }
-                    }
-
-                    inputFieldCautionLiveData.postValue(caution)
-                    inputFieldSyncingLiveData.postValue(syncing)
+        service.errorObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    sync()
                 }.let {
-                    disposable.add(it)
+                    disposables.add(it)
                 }
+
+        resolutionService.resolveFinishedAsync
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { address ->
+                    forceShowError = true
+
+                    if (address.isPresent) {
+                        service.set(address.get())
+                    } else {
+                        sync()
+                    }
+                }.let {
+                    disposables.add(it)
+                }
+
+        resolutionService.isResolvingAsync
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    isLoadingLiveData.postValue(it)
+                }.let {
+                    disposables.add(it)
+                }
+
+        sync()
     }
 
-    override fun setInputFieldValue(text: String?) {
-        service.recipient.state = FieldState.NotValidated
-        service.recipient.value = text
+    override fun onChangeText(text: String?) {
+        forceShowError = false
+
+        service.set(text?.let { Address(it) })
+        resolutionService.setText(text)
     }
 
-    override fun validateInputField() {
-        service.validateRecipient()
+    fun onChangeFocus(hasFocus: Boolean) {
+        if (hasFocus) {
+            forceShowError = true
+        }
+
+        isEditing = hasFocus
+        sync()
+    }
+
+    fun onFetch(text: String?) {
+        if (text == null || text.isEmpty()) {
+            return
+        }
+
+        val addressData = addressParser.parse(text)
+        setTextLiveData.postValue(addressData.address)
+
+        addressData.amount?.let {
+            service.set(BigDecimal(it))
+        }
+    }
+
+    private fun sync() {
+        if ((isEditing && !forceShowError) || resolutionService.isResolving) {
+            cautionLiveData.postValue(null)
+        } else {
+            val caution = service.error?.localizedMessage?.let {
+                Caution(it, Caution.Type.Error)
+            }
+
+            cautionLiveData.postValue(caution)
+        }
     }
 
     override fun onCleared() {
-        disposable.clear()
+        disposables.dispose()
     }
 }

@@ -1,12 +1,16 @@
-package io.horizontalsystems.bankwallet.core.managers
+package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import com.unstoppabledomains.resolution.Resolution
 import io.reactivex.Single
 
-class UnstoppableDomainsService {
+class AddressResolutionProvider {
     private var resolution = Resolution()
 
-    fun resolveDomain(domain: String, ticker: String): Single<String> {
+    fun isValid(domain: String): Boolean {
+        return resolution.isSupported(domain)
+    }
+
+    fun resolveAsync(domain: String, ticker: String): Single<String> {
         return Single.create { emitter ->
             try {
                 val address = resolution.getAddress(domain, ticker)

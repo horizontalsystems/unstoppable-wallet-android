@@ -2,48 +2,78 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class SwapTradeOptionsViewModel(private val service: SwapTradeOptionsService) : ViewModel() {
-    val buttonEnableStateLiveData = MutableLiveData(true)
-    val applyStateLiveData = MutableLiveData<Boolean>()
+class SwapTradeOptionsViewModel(
+        private val service: SwapTradeOptionsService,
+        private val tradeService: SwapTradeService)
+    : ViewModel() {
+
+    val actionStateLiveData = MutableLiveData<ActionState>(ActionState.Enabled())
 
     private val disposable = CompositeDisposable()
-    private val formStates = listOf(
-            service.recipient.stateObservable,
-            service.deadline.stateObservable,
-            service.slippage.stateObservable
-    )
 
     init {
-        Observable.combineLatest(formStates) { it }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe { states ->
-                    val enabled = states.all { it is FieldState.Valid || it is FieldState.NotValidated }
-                    buttonEnableStateLiveData.postValue(enabled)
+        service.stateObservable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    syncAction()
                 }.let {
                     disposable.add(it)
                 }
     }
 
-    fun onClickApply() {
-        service.apply()
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe({ applied ->
-                    if (applied) {
-                        applyStateLiveData.value = true
+    private fun syncAction() {
+        when (service.state) {
+            is State.Valid -> {
+                actionStateLiveData.postValue(ActionState.Enabled())
+            }
+            State.Invalid -> {
+                val error = service.errors.firstOrNull() ?: return
+                var errorText: String? = null
+
+                when (error) {
+                    is TradeOptionsError.InvalidAddress -> {
+                        errorText = App.instance.getString(R.string.SwapSettings_Error_InvalidAddress)
                     }
-                }, {
-                    applyStateLiveData.value = false
-                }).let {
-                    disposable.add(it)
+                    is TradeOptionsError.InvalidSlippage -> {
+                        errorText = App.instance.getString(R.string.SwapSettings_Error_InvalidSlippage)
+                    }
+                    is TradeOptionsError.ZeroDeadline -> {
+                        errorText = App.instance.getString(R.string.SwapSettings_Error_InvalidDeadline)
+                    }
                 }
+
+                errorText?.let {
+                    actionStateLiveData.postValue(ActionState.Disabled(it))
+                }
+            }
+        }
     }
 
     override fun onCleared() {
         disposable.clear()
+    }
+
+    fun onDoneClick(): Boolean {
+        return when (val state = service.state) {
+            is State.Valid -> {
+                tradeService.tradeOptions = state.tradeOptions
+                true
+            }
+            is State.Invalid -> {
+                false
+            }
+        }
+    }
+
+    sealed class ActionState {
+        class Enabled : ActionState()
+        class Disabled(val title: String) : ActionState()
     }
 }
