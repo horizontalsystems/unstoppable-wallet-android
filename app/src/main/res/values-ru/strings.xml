@@ -169,7 +169,7 @@
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_WithoutAmount">Insufficient balance</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
     <!--Swap-->
     <string name="Swap">Обменять</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
