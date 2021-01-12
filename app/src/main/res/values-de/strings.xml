@@ -269,6 +269,7 @@
     <string name="TransactionInfo_SentToSelfNote">Diese Transaktion wurde an die eigene Adresse gesendet</string>
     <string name="TransactionInfo_DoubleSpendNote">Double-Spend-Risiko!</string>
     <string name="TransactionInfo_Input">Eingabe</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">Anstehend</string>
     <string name="StatusInfo_Confirmed">Bestätigt</string>
     <string name="StatusInfo_Failed">Fehlgeschlagen</string>
@@ -283,29 +284,6 @@
     <string name="Info_DoubleSpend_Description">Double-Spend-Risiko! Es gibt eine weitere Transaktion auf der Blockchain, die versucht, die in dieser Transaktion verwendeten Inputs auszugeben. Nur eine Transaktion wird vom Netzwerk akzeptiert.</string>
     <string name="Info_DoubleSpend_ThisTx">Dieser Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Gegensätzliche Tx</string>
-    <!--Full Info-->
-    <string name="FullInfo_Title">Transaktion</string>
-    <string name="FullInfo_Time">Zeit</string>
-    <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Bestätigungen</string>
-    <string name="FullInfo_Size">Größe</string>
-    <string name="FullInfo_Fee">Gebühr</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Quelle</string>
-    <string name="FullInfo_Contract">Vertrag</string>
-    <string name="FullInfo_From">Von</string>
-    <string name="FullInfo_To">An</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Source_Online">Online</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_ProviderOffline">Offline</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaktion kann in der Blockchain nicht gefunden werden</string>
-    <string name="FullInfo_Error_Retry">Wiederholen</string>
-    <string name="FullInfo_Error_ChangeSource">Quelle ändern</string>
-    <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Eingänge</string>
-    <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
-    <string name="FullInfoEth_Amount">Betrag</string>
     <!--Guides-->
     <string name="Guides_Title">Akademie</string>
     <!--Markdown-->
