@@ -358,43 +358,6 @@
     <string name="Info_DoubleSpend_ThisTx">This Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
 
-    <!--Full Info-->
-
-    <string name="FullInfo_Title">Transaction</string>
-    <string name="FullInfo_Time">Time</string>
-    <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
-    <string name="FullInfo_Size">Size</string>
-    <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_Contract">Contract</string>
-    <string name="FullInfo_From">From</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Memo" translatable="false">Memo</string>
-    <string name="FullInfo_CpuUsage" translatable="false">CPU Usage</string>
-    <string name="FullInfo_NetUsage" translatable="false">Net Usage</string>
-
-    <string name="FullInfo_GasLimit" translatable="false">Gas Limit</string>
-    <string name="FullInfo_GasUsed" translatable="false">Gas Used</string>
-    <string name="FullInfo_GasPrice" translatable="false">Gas Price</string>
-
-    <string name="FullInfo_Source_Online">Online</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-
-    <string name="FullInfo_Error_ProviderOffline">Offline</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaction can not be found on the blockchain</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
-
-    <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfoEth_Nonce" translatable="false">Nonce</string>
-    <string name="FullInfoEth_Amount">Amount</string>
-
-
     <!--Guides-->
 
     <string name="Guides_Title">Academy</string>
