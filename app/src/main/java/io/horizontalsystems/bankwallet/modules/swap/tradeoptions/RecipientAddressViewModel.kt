@@ -13,7 +13,7 @@ import java.math.BigDecimal
 
 interface IRecipientAddressService {
     val initialAddress: Address?
-    val error: Throwable?
+    var error: Throwable?
     val errorObservable: Observable<Unit>
 
     fun set(address: Address?)

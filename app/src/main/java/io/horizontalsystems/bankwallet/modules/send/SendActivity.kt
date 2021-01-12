@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter.*
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
@@ -89,10 +90,20 @@ class SendActivity : BaseActivity() {
             }
         })
 
-        presenterView.sendButtonEnabled.observe(this, Observer { enabled ->
-            proceedButtonView?.updateState(enabled)
-        })
+        presenterView.sendButtonEnabled.observe(this, Observer { actionState ->
+            val defaultTitle = getString(R.string.Send_DialogProceed)
 
+            when (actionState) {
+                is ActionState.Enabled -> {
+                    proceedButtonView?.updateState(true)
+                    proceedButtonView?.setTitle(defaultTitle)
+                }
+                is ActionState.Disabled -> {
+                    proceedButtonView?.updateState(false)
+                    proceedButtonView?.setTitle(actionState.title ?: defaultTitle)
+                }
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -130,7 +141,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Address -> {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
-                        val sendAddressFragment = SendAddressFragment(wallet.coin, input.editable, it, mainPresenter.handler)
+                        val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()

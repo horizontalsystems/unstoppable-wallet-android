@@ -36,7 +36,7 @@ object SendModule {
         var delegate: IViewDelegate
 
         fun loadInputItems(inputs: List<Input>)
-        fun setSendButtonEnabled(enabled: Boolean)
+        fun setSendButtonEnabled(actionState: SendPresenter.ActionState)
         fun showConfirmation(confirmationViewItems: List<SendConfirmationViewItem>)
         fun showErrorInToast(error: Throwable)
     }
@@ -160,7 +160,7 @@ object SendModule {
     }
 
     interface ISendHandlerDelegate {
-        fun onChange(isValid: Boolean)
+        fun onChange(isValid: Boolean, amountError: Throwable?, addressError: Throwable?)
     }
 
     abstract class SendConfirmationViewItem

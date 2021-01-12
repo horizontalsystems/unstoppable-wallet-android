@@ -17,27 +17,34 @@ class SendDashHandler(
       SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
+        var amountError: Throwable? = null
+        var addressError: Throwable? = null
+
         try {
             amountModule.validAmount()
-            addressModule.validAddress()
-
-            delegate.onChange(true)
-
         } catch (e: Exception) {
-            delegate.onChange(false)
+            amountError = e
         }
+
+        try {
+            addressModule.validAddress()
+        } catch (e: Exception) {
+            addressError = e
+        }
+
+        delegate.onChange(amountError == null && addressError == null && feeModule.isValid, amountError, addressError)
     }
 
     private fun syncAvailableBalance() {
-        interactor.fetchAvailableBalance(addressModule.currentAddress)
+        interactor.fetchAvailableBalance(addressModule.currentAddress?.hex)
     }
 
     private fun syncFee() {
-        interactor.fetchFee(amountModule.coinAmount.value, addressModule.currentAddress)
+        interactor.fetchFee(amountModule.coinAmount.value, addressModule.currentAddress?.hex)
     }
 
     private fun syncMinimumAmount() {
-        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress))
+        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress?.hex))
         syncValidation()
     }
 
@@ -64,19 +71,18 @@ class SendDashHandler(
     }
 
     override fun onAddressScan(address: String) {
-        addressModule.didScanQrCode(address)
     }
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
                                                           amountModule.secondaryAmountInfo(),
-                                                          addressModule.validAddress()),
+                                                          addressModule.validAddress().hex),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
     }
 
     override fun sendSingle(logger: AppLogger): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), logger)
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, logger)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate

@@ -16,15 +16,22 @@ class SendEosHandler(
     : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate {
 
     private fun syncValidation() {
+        var amountError: Throwable? = null
+        var addressError: Throwable? = null
+
         try {
             amountModule.validAmount()
-            addressModule.validAddress()
-
-            delegate.onChange(true)
-
         } catch (e: Exception) {
-            delegate.onChange(false)
+            amountError = e
         }
+
+        try {
+            addressModule.validAddress()
+        } catch (e: Exception) {
+            addressError = e
+        }
+
+        delegate.onChange(amountError == null && addressError == null && feeModule.isValid, amountError, addressError)
     }
 
     private fun syncAvailableBalance() {
@@ -52,12 +59,12 @@ class SendEosHandler(
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
                                                           amountModule.secondaryAmountInfo(),
-                                                          addressModule.validAddress()),
+                                                          addressModule.validAddress().hex),
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
 
     override fun sendSingle(logger: AppLogger): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), memoModule.memo, logger)
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, memoModule.memo, logger)
     }
 
     override fun onModulesDidLoad() {
@@ -65,7 +72,6 @@ class SendEosHandler(
     }
 
     override fun onAddressScan(address: String) {
-        addressModule.didScanQrCode(address)
     }
 
     // SendAmountModule.IAmountModuleDelegate

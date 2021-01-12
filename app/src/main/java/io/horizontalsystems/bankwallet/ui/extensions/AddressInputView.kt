@@ -136,7 +136,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         })
 
         viewModel.setTextLiveData.observe(lifecycleOwner, {
-            setText(it)
+            setText(it, false)
         })
 
         viewModel.cautionLiveData.observe(lifecycleOwner, {

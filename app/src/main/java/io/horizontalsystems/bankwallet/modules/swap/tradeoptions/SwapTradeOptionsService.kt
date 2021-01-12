@@ -98,7 +98,7 @@ class SwapTradeOptionsService(tradeOptions: SwapTradeOptions) : IRecipientAddres
             return null
         }
 
-    override val error: Throwable?
+    override var error: Throwable? = null
         get() = errors.find { it is TradeOptionsError.InvalidAddress }
 
     override val errorObservable: Observable<Unit> = errorsObservable.map { errors ->

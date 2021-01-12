@@ -28,4 +28,7 @@ class ProceedButtonView : ConstraintLayout {
         btnProceed.isEnabled = enabled
     }
 
+    fun setTitle(title: String) {
+        btnProceed.text = title
+    }
 }
