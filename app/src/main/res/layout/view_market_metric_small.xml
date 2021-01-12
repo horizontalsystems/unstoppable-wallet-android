@@ -16,7 +16,7 @@
     <io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
         android:id="@+id/diffCircle"
         android:layout_width="3dp"
-        android:layout_height="32dp"
+        android:layout_height="36dp"
         android:alpha="0"
         app:cardCornerRadius="3dp"
         app:gradient="@drawable/gradient_price_up"
