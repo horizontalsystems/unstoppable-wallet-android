@@ -43,9 +43,10 @@ class MarketMetricsViewModel(
             val globalMarketInfo = dataState.data
 
             val symbol = service.currency.symbol
+            val btcDominanceFormatted = App.numberFormatter.format(globalMarketInfo.btcDominance, 0, 2, suffix = "%")
             val marketMetrics = MarketMetrics(
                     totalMarketCap = MetricData(formatFiatShortened(globalMarketInfo.marketCap, symbol), globalMarketInfo.marketCapDiff24h),
-                    btcDominance = MetricData(formatFiatShortened(globalMarketInfo.btcDominance, symbol), globalMarketInfo.btcDominanceDiff24h),
+                    btcDominance = MetricData(btcDominanceFormatted, globalMarketInfo.btcDominanceDiff24h),
                     volume24h = MetricData(formatFiatShortened(globalMarketInfo.volume24h, symbol), globalMarketInfo.volume24hDiff24h),
                     defiCap = MetricData(formatFiatShortened(globalMarketInfo.defiMarketCap, symbol), globalMarketInfo.defiMarketCapDiff24h),
                     defiTvl = MetricData(formatFiatShortened(globalMarketInfo.defiTvl, symbol), globalMarketInfo.defiTvlDiff24h),
