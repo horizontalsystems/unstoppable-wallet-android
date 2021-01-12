@@ -28,8 +28,7 @@ class RateManager(
                 context,
                 currencyManager.baseCurrency.code,
                 rateExpirationInterval = 60 * 10,
-                cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey,
-                uniswapGraphUrl = appConfigProvider.uniswapGraphUrl
+                cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey
         )
     }
 
@@ -111,16 +110,16 @@ class RateManager(
         return kit.cryptoNews(coinCode)
     }
 
-    override fun getTopMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>> {
-        return kit.getTopMarketsAsync(currencyCode = currency, fetchDiffPeriod = fetchDiffPeriod)
+    override fun getTopMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
+        return kit.getTopCoinMarketsAsync(currencyCode = currency, fetchDiffPeriod = fetchDiffPeriod)
     }
 
-    override fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>> {
+    override fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return kit.getTopDefiMarketsAsync(currencyCode = currency, fetchDiffPeriod = fetchDiffPeriod)
     }
 
-    override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalMarketInfo> {
-        return kit.getGlobalMarketInfoAsync(currency)
+    override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket> {
+        return kit.getGlobalCoinMarketsAsync(currency)
     }
 
     override fun refresh() {

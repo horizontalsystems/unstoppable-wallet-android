@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
-import io.horizontalsystems.xrateskit.entities.GlobalMarketInfo
+import io.horizontalsystems.xrateskit.entities.GlobalCoinMarket
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -36,7 +36,7 @@ class MarketMetricsViewModel(
         service.refresh()
     }
 
-    private fun syncMarketMetrics(dataState: DataState<GlobalMarketInfo>) {
+    private fun syncMarketMetrics(dataState: DataState<GlobalCoinMarket>) {
         loadingLiveData.postValue(dataState.loading)
         errorLiveData.postValue(dataState.errorOrNull?.let { convertErrorMessage(it) })
         if (dataState is DataState.Success) {

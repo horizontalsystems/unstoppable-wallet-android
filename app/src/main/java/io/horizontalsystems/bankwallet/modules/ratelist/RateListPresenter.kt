@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.horizontalsystems.xrateskit.entities.MarketInfo
-import io.horizontalsystems.xrateskit.entities.TopMarket
 
 class RateListPresenter(
         val view: RateListView,
@@ -74,12 +74,12 @@ class RateListPresenter(
         syncListsAndShow()
     }
 
-    override fun didFetchedTopMarketList(items: List<TopMarket>) {
+    override fun didFetchedTopMarketList(items: List<CoinMarket>) {
         loading = false
 
         topMarketInfos.clear()
-        topMarketInfos.addAll(items.mapIndexed { index, topMarket ->
-            TopMarketRanked(topMarket.coin.code, topMarket.coin.title, topMarket.marketInfo,index + 1)
+        topMarketInfos.addAll(items.mapIndexed { index, coinMarket ->
+            TopMarketRanked(coinMarket.coin.code, coinMarket.coin.title, coinMarket.marketInfo,index + 1)
         })
 
         sortTopList()

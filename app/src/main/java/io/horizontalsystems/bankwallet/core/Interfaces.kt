@@ -285,7 +285,6 @@ interface IAppConfigProvider {
     val ipfsMainGateway: String
     val ipfsFallbackGateway: String
     val cryptoCompareApiKey: String
-    val uniswapGraphUrl: String
     val infuraProjectId: String
     val infuraProjectSecret: String
     val etherscanApiKey: String
@@ -318,9 +317,9 @@ interface IRateManager {
     fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
-    fun getTopMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>>
-    fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>>
-    fun getGlobalMarketInfoAsync(currency: String): Single<GlobalMarketInfo>
+    fun getTopMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>>
+    fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>>
+    fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun refresh()
 }
 
