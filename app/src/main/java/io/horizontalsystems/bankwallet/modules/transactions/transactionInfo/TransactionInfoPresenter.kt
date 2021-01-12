@@ -65,7 +65,7 @@ class TransactionInfoPresenter(
             viewItems.add(TransactionDetailViewItem.To(transactionInfoAddressMapper.map(to)))
         }
 
-        transaction.memo?.let {memo ->
+        transaction.memo?.let { memo ->
             viewItems.add(TransactionDetailViewItem.Memo(memo))
         }
 
@@ -94,6 +94,7 @@ class TransactionInfoPresenter(
         }
 
         view?.showDetails(viewItems)
+        view?.setExplorerButtonName(getExplorerName(coin.type))
     }
 
     private fun showFromAddress(coinType: CoinType): Boolean {
@@ -105,8 +106,9 @@ class TransactionInfoPresenter(
         view?.share(transaction.transactionHash)
     }
 
-    override fun openFullInfo() {
-        router.openFullInfo(transaction.transactionHash, wallet)
+    override fun openExplorer() {
+        val url = getFullUrl(transaction.transactionHash, interactor.testMode, wallet.coin.type) ?: return
+        router.showTransactionInfoInExplorer(url)
     }
 
     override fun onClickLockInfo() {
@@ -149,6 +151,30 @@ class TransactionInfoPresenter(
         value?.let {
             interactor.copyToClipboard(value)
             view?.showCopied()
+        }
+    }
+
+    private fun getFullUrl(hash: String, testMode: Boolean, coinType: CoinType): String? {
+        return when (coinType) {
+            is CoinType.Bitcoin -> "https://btc.com/$hash"
+            is CoinType.Litecoin -> "https://blockchair.com/litecoin/transaction/$hash"
+            is CoinType.BitcoinCash -> "https://bch.btc.com/$hash"
+            is CoinType.Dash -> "https://blockchair.com/dash/transaction/$hash"
+            is CoinType.Binance -> "https://${if (testMode) "testnet-explorer" else "explorer"}.binance.org/tx/$hash"
+            is CoinType.Eos -> null
+            is CoinType.Zcash -> "https://explorer.zcha.in/transactions/$hash"
+            else -> "https://${if (testMode) "ropsten." else ""}etherscan.io/tx/$hash" // ETH, ETHt
+        }
+    }
+
+    private fun getExplorerName(coinType: CoinType): String {
+        return when (coinType) {
+            is CoinType.Bitcoin, is CoinType.BitcoinCash -> "btc.com"
+            is CoinType.Litecoin, is CoinType.Dash -> "blockchair.com"
+            is CoinType.Binance -> "binance.org"
+            is CoinType.Eos -> ""
+            is CoinType.Zcash -> "zcha.in"
+            else -> "etherscan.io"
         }
     }
 }

@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="@layout/transaction_info_bottom_sheet">
+    tools:showIn="@layout/fragment_wallet_connect_request">
 
     <View
         android:layout_width="match_parent"

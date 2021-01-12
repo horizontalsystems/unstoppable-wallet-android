@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -63,8 +64,8 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
     }
 
     private fun setTransactionInfoDialog() {
-        txtFullInfo.setOnSingleClickListener {
-            viewModel.delegate.openFullInfo()
+        txtViewOnExplorer.setOnSingleClickListener {
+            viewModel.delegate.openExplorer()
         }
 
         closeButton.setOnClickListener {
@@ -73,6 +74,10 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
 
         val transactionDetailsAdapter = TransactionDetailsAdapter(viewModel)
         rvDetails.adapter = transactionDetailsAdapter
+
+        viewModel.explorerButtonName.observe(this, Observer { explorerName ->
+            txtViewOnExplorer.text = getString(R.string.TransactionInfo_ButtonViewOnExplorerName, explorerName)
+        })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
             snackBar = HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied, gravity = SnackbarGravity.TOP_OF_VIEW)
@@ -102,6 +107,12 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
 
         viewModel.showStatusInfoLiveEvent.observe(this, Observer {
             findNavController().navigate(R.id.statusInfoDialog)
+        })
+
+        viewModel.showTransactionLiveEvent.observe(this, Observer { url ->
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
         })
 
         viewModel.showDoubleSpendInfo.observe(this, Observer { (txHash, conflictingTxHash) ->
