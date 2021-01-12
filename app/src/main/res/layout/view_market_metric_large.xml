@@ -31,6 +31,7 @@
         android:id="@+id/diffCircle"
         android:layout_width="52dp"
         android:layout_height="52dp"
+        android:layout_marginTop="13dp"
         android:alpha="0"
         app:cardCornerRadius="26dp"
         app:gradient="@drawable/gradient_price"
