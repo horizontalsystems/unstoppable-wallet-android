@@ -42,7 +42,6 @@ object TransactionInfoModule {
     interface InteractorDelegate
 
     interface Router {
-        fun openFullInfo(transactionHash: String, wallet: Wallet)
         fun openLockInfo(lockDate: Date)
         fun openDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
         fun openStatusInfo()

@@ -14,7 +14,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.TransactionType
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelper
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPresenter
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -89,10 +88,6 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
                 putExtra(Intent.EXTRA_TEXT, url)
                 type = "text/plain"
             })
-        })
-
-        viewModel.showFullInfoLiveEvent.observe(this, Observer { (txHash, wallet) ->
-            findNavController().navigate(R.id.fullTransactionInfoDialog, FullTransactionInfoFragment.arguments(txHash, wallet))
         })
 
         viewModel.showLockInfo.observe(this, Observer { lockDate ->
