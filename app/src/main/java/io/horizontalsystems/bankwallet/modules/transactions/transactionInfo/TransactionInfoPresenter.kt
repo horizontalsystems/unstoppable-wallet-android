@@ -14,6 +14,7 @@ class TransactionInfoPresenter(
 ) : TransactionInfoModule.ViewDelegate, TransactionInfoModule.InteractorDelegate {
 
     var view: TransactionInfoModule.View? = null
+    private var explorerData: TransactionInfoModule.ExplorerData = getExplorerData(transaction.transactionHash, interactor.testMode, wallet.coin.type)
 
     // IViewDelegate methods
 
@@ -94,7 +95,8 @@ class TransactionInfoPresenter(
         }
 
         view?.showDetails(viewItems)
-        view?.setExplorerButtonName(getExplorerName(coin.type))
+
+        view?.setExplorerButton(explorerData.title, explorerData.url != null)
     }
 
     private fun showFromAddress(coinType: CoinType): Boolean {
@@ -107,8 +109,8 @@ class TransactionInfoPresenter(
     }
 
     override fun openExplorer() {
-        val url = getFullUrl(transaction.transactionHash, interactor.testMode, wallet.coin.type) ?: return
-        router.showTransactionInfoInExplorer(url)
+        val url = explorerData.url ?: return
+        router.openUrl(url)
     }
 
     override fun onClickLockInfo() {
@@ -154,27 +156,18 @@ class TransactionInfoPresenter(
         }
     }
 
-    private fun getFullUrl(hash: String, testMode: Boolean, coinType: CoinType): String? {
+    private fun getExplorerData(hash: String, testMode: Boolean, coinType: CoinType): TransactionInfoModule.ExplorerData {
         return when (coinType) {
-            is CoinType.Bitcoin -> "https://btc.com/$hash"
-            is CoinType.Litecoin -> "https://blockchair.com/litecoin/transaction/$hash"
-            is CoinType.BitcoinCash -> "https://bch.btc.com/$hash"
-            is CoinType.Dash -> "https://blockchair.com/dash/transaction/$hash"
-            is CoinType.Binance -> "https://${if (testMode) "testnet-explorer" else "explorer"}.binance.org/tx/$hash"
-            is CoinType.Eos -> null
-            is CoinType.Zcash -> "https://explorer.zcha.in/transactions/$hash"
-            else -> "https://${if (testMode) "ropsten." else ""}etherscan.io/tx/$hash" // ETH, ETHt
+            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData( "btc.com", if (testMode) null else "https://btc.com/$hash")
+            is CoinType.BitcoinCash -> TransactionInfoModule.ExplorerData( "btc.com", if (testMode) null else "https://bch.btc.com/$hash")
+            is CoinType.Litecoin -> TransactionInfoModule.ExplorerData( "blockchair.com", if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash")
+            is CoinType.Dash -> TransactionInfoModule.ExplorerData( "dash.org", if (testMode) null else "https://insight.dash.org/insight/tx/$hash")
+            is CoinType.Ethereum,
+            is CoinType.Erc20 -> TransactionInfoModule.ExplorerData( "etherscan.io", if (testMode) "https://ropsten.etherscan.io/tx/$hash" else "https://etherscan.io/tx/$hash")
+            is CoinType.Binance -> TransactionInfoModule.ExplorerData( "binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
+            is CoinType.Zcash -> TransactionInfoModule.ExplorerData( "zcha.in", if (testMode) null else "https://explorer.zcha.in/transactions/$hash")
+            is CoinType.Eos -> TransactionInfoModule.ExplorerData( "greymass.com", null)
         }
     }
 
-    private fun getExplorerName(coinType: CoinType): String {
-        return when (coinType) {
-            is CoinType.Bitcoin, is CoinType.BitcoinCash -> "btc.com"
-            is CoinType.Litecoin, is CoinType.Dash -> "blockchair.com"
-            is CoinType.Binance -> "binance.org"
-            is CoinType.Eos -> ""
-            is CoinType.Zcash -> "zcha.in"
-            else -> "etherscan.io"
-        }
-    }
 }
