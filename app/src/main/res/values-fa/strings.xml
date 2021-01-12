@@ -269,6 +269,7 @@
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
     <string name="TransactionInfo_Input">ورودی</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">در حالت انتظار</string>
     <string name="StatusInfo_Confirmed">تاييد شد</string>
     <string name="StatusInfo_Failed">ناموفق</string>
@@ -283,29 +284,6 @@
     <string name="Info_DoubleSpend_Description">خطر دو برابر هزینه کردن! تراکنش دیگری در زنجیره بلوکی وجود دارد که سعی می کنید ورودی های استفاده شده در این تراکنش را استفاده کند. فقط یک تراکنش توسط شبکه پذیرفته خواهد شد.</string>
     <string name="Info_DoubleSpend_ThisTx">این Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx متناقص</string>
-    <!--Full Info-->
-    <string name="FullInfo_Title">تراکنش</string>
-    <string name="FullInfo_Time">زمان</string>
-    <string name="FullInfo_Block">مسدود</string>
-    <string name="FullInfo_Confirmations">تاييدات</string>
-    <string name="FullInfo_Size">اندازه</string>
-    <string name="FullInfo_Fee">هزينه</string>
-    <string name="FullInfo_Rate">امتیاز</string>
-    <string name="FullInfo_Source">منبع</string>
-    <string name="FullInfo_Contract">قرارداد</string>
-    <string name="FullInfo_From">از</string>
-    <string name="FullInfo_To">به</string>
-    <string name="FullInfo_Status">وضعیت</string>
-    <string name="FullInfo_Source_Online">آنلاین</string>
-    <string name="FullInfo_Source_Offline">آفلاین</string>
-    <string name="FullInfo_Error_ProviderOffline">آفلاین</string>
-    <string name="FullInfo_Error_TransactionNotFound">تراکنش در زنجیره بلوکی یافت نمی شود</string>
-    <string name="FullInfo_Error_Retry">دوباره تلاش کنید</string>
-    <string name="FullInfo_Error_ChangeSource">تغییر منبع</string>
-    <!--no used-->
-    <string name="FullInfo_SubtitleInputs">ورودي ها</string>
-    <string name="FullInfo_SubtitleOutputs">خروجي ها</string>
-    <string name="FullInfoEth_Amount">مقدار</string>
     <!--Guides-->
     <string name="Guides_Title">آکادمی</string>
     <!--Markdown-->
