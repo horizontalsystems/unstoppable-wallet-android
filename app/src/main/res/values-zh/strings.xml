@@ -269,6 +269,7 @@
     <string name="TransactionInfo_SentToSelfNote">交易已发送至自有地址</string>
     <string name="TransactionInfo_DoubleSpendNote">双重支付风险！</string>
     <string name="TransactionInfo_Input">输入</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">待处理</string>
     <string name="StatusInfo_Confirmed">已确认</string>
     <string name="StatusInfo_Failed">失败</string>
@@ -283,29 +284,6 @@
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">冲突Tx</string>
-    <!--Full Info-->
-    <string name="FullInfo_Title">交易</string>
-    <string name="FullInfo_Time">时间</string>
-    <string name="FullInfo_Block">区块</string>
-    <string name="FullInfo_Confirmations">确认</string>
-    <string name="FullInfo_Size">大小</string>
-    <string name="FullInfo_Fee">费用</string>
-    <string name="FullInfo_Rate">价格</string>
-    <string name="FullInfo_Source">源</string>
-    <string name="FullInfo_Contract">合同</string>
-    <string name="FullInfo_From">发送人</string>
-    <string name="FullInfo_To">接收人</string>
-    <string name="FullInfo_Status">状态</string>
-    <string name="FullInfo_Source_Online">在线</string>
-    <string name="FullInfo_Source_Offline">离线</string>
-    <string name="FullInfo_Error_ProviderOffline">离线</string>
-    <string name="FullInfo_Error_TransactionNotFound">无法在区块链上找到交易</string>
-    <string name="FullInfo_Error_Retry">重试</string>
-    <string name="FullInfo_Error_ChangeSource">更改源</string>
-    <!--no used-->
-    <string name="FullInfo_SubtitleInputs">输入</string>
-    <string name="FullInfo_SubtitleOutputs">输出</string>
-    <string name="FullInfoEth_Amount">金额</string>
     <!--Guides-->
     <string name="Guides_Title">学院</string>
     <!--Markdown-->
