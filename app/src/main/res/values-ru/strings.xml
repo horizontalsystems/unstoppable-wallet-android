@@ -269,6 +269,7 @@
     <string name="TransactionInfo_SentToSelfNote">Данная транзакция отправлена на собственный адрес</string>
     <string name="TransactionInfo_DoubleSpendNote">Риск Двойной Траты!</string>
     <string name="TransactionInfo_Input">Ввод</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">В обработке</string>
     <string name="StatusInfo_Confirmed">Подтверждено</string>
     <string name="StatusInfo_Failed">Не удалось</string>
@@ -283,29 +284,6 @@
     <string name="Info_DoubleSpend_Description">Двойная Трата! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью.</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
     <string name="Info_DoubleSpend_ConflictingTx">Конфликтующая транзакция</string>
-    <!--Full Info-->
-    <string name="FullInfo_Title">Транзакция</string>
-    <string name="FullInfo_Time">Время</string>
-    <string name="FullInfo_Block">Блок</string>
-    <string name="FullInfo_Confirmations">Подтверждения</string>
-    <string name="FullInfo_Size">Размер</string>
-    <string name="FullInfo_Fee">Комиссия</string>
-    <string name="FullInfo_Rate">Ставка</string>
-    <string name="FullInfo_Source">Источник</string>
-    <string name="FullInfo_Contract">Контракт</string>
-    <string name="FullInfo_From">От</string>
-    <string name="FullInfo_To">Кому</string>
-    <string name="FullInfo_Status">Статус</string>
-    <string name="FullInfo_Source_Online">Доступен</string>
-    <string name="FullInfo_Source_Offline">Не доступен</string>
-    <string name="FullInfo_Error_ProviderOffline">Не доступен</string>
-    <string name="FullInfo_Error_TransactionNotFound">Транзакция не найдена в блокчейне</string>
-    <string name="FullInfo_Error_Retry">Повторить</string>
-    <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
-    <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Входы</string>
-    <string name="FullInfo_SubtitleOutputs">Выходы</string>
-    <string name="FullInfoEth_Amount">Сумма</string>
     <!--Guides-->
     <string name="Guides_Title">Академия</string>
     <!--Markdown-->
