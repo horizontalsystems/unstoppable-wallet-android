@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
@@ -139,23 +138,6 @@ interface IClipboardManager {
     fun copyText(text: String)
     fun getCopiedText(): String
     val hasPrimaryClip: Boolean
-}
-
-interface ITransactionDataProviderManager {
-    val baseProviderUpdatedSignal: Observable<Unit>
-
-    fun providers(coin: Coin): List<FullTransactionInfoModule.Provider>
-    fun baseProvider(coin: Coin): FullTransactionInfoModule.Provider
-    fun setBaseProvider(name: String, coin: Coin)
-
-    fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun litecoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun dash(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
-    fun binance(name: String): FullTransactionInfoModule.BinanceProvider
-    fun eos(name: String): FullTransactionInfoModule.EosProvider
-    fun zcash(name: String): FullTransactionInfoModule.BitcoinForksProvider
 }
 
 interface IWordsManager {

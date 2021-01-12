@@ -301,14 +301,6 @@
         android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoFragment"
         tools:layout="@layout/fragment_transaction_info" />
     <dialog
-        android:id="@+id/fullTransactionInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment"
-        tools:layout="@layout/fragment_full_transaction_info" />
-    <dialog
-        android:id="@+id/fullTransactionDataProvider"
-        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment"
-        tools:layout="@layout/fragment_explorer_switcher" />
-    <dialog
         android:id="@+id/infoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment"
         tools:layout="@layout/fragment_info" />

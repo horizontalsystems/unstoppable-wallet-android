@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -60,8 +59,6 @@ class App : CoreApp() {
         lateinit var priceAlertManager: IPriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
-        lateinit var transactionInfoFactory: FullTransactionInfoFactory
-        lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var eosKitManager: IEosKitManager
         lateinit var binanceKitManager: BinanceKitManager
@@ -179,9 +176,6 @@ class App : CoreApp() {
         rateCoinMapper = RateCoinMapper()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper, feeCoinProvider, appConfigProvider)
-
-        transactionDataProviderManager = TransactionDataProviderManager(buildConfigProvider.testMode, appConfigProvider.etherscanApiKey, localStorage)
-        transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
 

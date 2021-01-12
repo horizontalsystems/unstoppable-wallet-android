@@ -13,7 +13,6 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
 
     val titleLiveData = MutableLiveData<TransactionInfoModule.TitleViewItem>()
     val detailsLiveData = SingleLiveEvent<List<TransactionDetailViewItem>>()
-    val showFullInfoLiveEvent = SingleLiveEvent<Pair<String, Wallet>>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val showLockInfo = SingleLiveEvent<Date>()
     val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
@@ -50,10 +49,6 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     }
 
     // IRouter
-
-    override fun openFullInfo(transactionHash: String, wallet: Wallet) {
-        showFullInfoLiveEvent.value = Pair(transactionHash, wallet)
-    }
 
     override fun openLockInfo(lockDate: Date) {
         showLockInfo.postValue(lockDate)
