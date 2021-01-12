@@ -269,6 +269,7 @@
     <string name="TransactionInfo_SentToSelfNote">Esta transacción fue enviada a su propia dirección</string>
     <string name="TransactionInfo_DoubleSpendNote">¡Riesgo de doble gasto!</string>
     <string name="TransactionInfo_Input">Entrada</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">Pendiente</string>
     <string name="StatusInfo_Confirmed">Confirmado</string>
     <string name="StatusInfo_Failed">Falló</string>
@@ -283,29 +284,6 @@
     <string name="Info_DoubleSpend_Description">¡Riesgo de doble gasto! Hay otra transacción en blockchain que intenta gastar entradas usadas en esta transacción. Solo una transacción será aceptada por la red.</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx en conlicto</string>
-    <!--Full Info-->
-    <string name="FullInfo_Title">Transacción</string>
-    <string name="FullInfo_Time">Hora</string>
-    <string name="FullInfo_Block">Bloque</string>
-    <string name="FullInfo_Confirmations">Confirmaciones</string>
-    <string name="FullInfo_Size">Tamaño</string>
-    <string name="FullInfo_Fee">Comisión</string>
-    <string name="FullInfo_Rate">Puntuación</string>
-    <string name="FullInfo_Source">Origen</string>
-    <string name="FullInfo_Contract">Contrato</string>
-    <string name="FullInfo_From">Desde </string>
-    <string name="FullInfo_To">Para</string>
-    <string name="FullInfo_Status">Estado</string>
-    <string name="FullInfo_Source_Online">En Línea</string>
-    <string name="FullInfo_Source_Offline">Desconectado</string>
-    <string name="FullInfo_Error_ProviderOffline">Desconectado</string>
-    <string name="FullInfo_Error_TransactionNotFound">La transacción no se pudo encontrar en el blockchain</string>
-    <string name="FullInfo_Error_Retry">Reintentar</string>
-    <string name="FullInfo_Error_ChangeSource">Cambiar Origen</string>
-    <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Inversiones</string>
-    <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
-    <string name="FullInfoEth_Amount">Importe</string>
     <!--Guides-->
     <string name="Guides_Title">Academia</string>
     <!--Markdown-->
