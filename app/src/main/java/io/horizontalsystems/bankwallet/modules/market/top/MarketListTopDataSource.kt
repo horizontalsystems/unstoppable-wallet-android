@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.top
 
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.xrateskit.entities.TimePeriod
-import io.horizontalsystems.xrateskit.entities.TopMarket
+import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -21,7 +21,7 @@ class MarketListTopDataSource(private val xRateManager: IRateManager) : IMarketL
 
     override val dataUpdatedAsync: Observable<Unit> = Observable.empty()
 
-    override fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>> {
+    override fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return xRateManager.getTopMarketList(currencyCode, fetchDiffPeriod)
     }
 }

@@ -39,9 +39,9 @@ data class MarketTopItem(
         val rank: Int,
         val coinCode: String,
         val coinName: String,
-        val marketCap: Double,
         val volume: Double,
         val rate: BigDecimal,
         val diff: BigDecimal,
-        val liquidity: BigDecimal
+        val marketCap: Double?,
+        val liquidity: BigDecimal?
 )

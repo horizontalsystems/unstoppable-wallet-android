@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.top
 
 import io.horizontalsystems.xrateskit.entities.TimePeriod
-import io.horizontalsystems.xrateskit.entities.TopMarket
+import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
@@ -19,17 +19,17 @@ abstract class IMarketListDataSource {
                 }
     }
 
-    protected abstract fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<TopMarket>>
+    protected abstract fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>>
 
-    private fun convertToMarketTopItem(rank: Int, topMarket: TopMarket) =
+    private fun convertToMarketTopItem(rank: Int, topMarket: CoinMarket) =
             MarketTopItem(
                     rank,
                     topMarket.coin.code,
                     topMarket.coin.title,
-                    topMarket.marketInfo.marketCap.toDouble(),
                     topMarket.marketInfo.volume.toDouble(),
                     topMarket.marketInfo.rate,
                     topMarket.marketInfo.rateDiffPeriod,
+                    topMarket.marketInfo.marketCap?.toDouble(),
                     topMarket.marketInfo.liquidity,
             )
 
