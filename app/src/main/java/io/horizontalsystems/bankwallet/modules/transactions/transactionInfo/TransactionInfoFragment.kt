@@ -74,8 +74,9 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
         val transactionDetailsAdapter = TransactionDetailsAdapter(viewModel)
         rvDetails.adapter = transactionDetailsAdapter
 
-        viewModel.explorerButtonName.observe(this, Observer { explorerName ->
+        viewModel.explorerButton.observe(this, Observer { (explorerName, enabled) ->
             txtViewOnExplorer.text = getString(R.string.TransactionInfo_ButtonViewOnExplorerName, explorerName)
+            txtViewOnExplorer.isEnabled = enabled
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {

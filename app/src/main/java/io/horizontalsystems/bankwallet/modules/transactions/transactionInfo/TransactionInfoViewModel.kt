@@ -19,7 +19,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     val showShareLiveEvent = SingleLiveEvent<String>()
     val showStatusInfoLiveEvent = SingleLiveEvent<Unit>()
     val showTransactionLiveEvent = SingleLiveEvent<String>()
-    val explorerButtonName = MutableLiveData<String>()
+    val explorerButton = MutableLiveData<Pair<String, Boolean>>()
 
     fun init(transactionRecord: TransactionRecord, wallet: Wallet) {
         TransactionInfoModule.init(this, this, transactionRecord, wallet)
@@ -44,8 +44,8 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         detailsLiveData.postValue(items)
     }
 
-    override fun setExplorerButtonName(explorerName: String) {
-        explorerButtonName.postValue(explorerName)
+    override fun setExplorerButton(explorerName: String, enabled: Boolean) {
+        explorerButton.postValue(Pair(explorerName, enabled))
     }
 
     // IRouter
@@ -62,7 +62,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         showStatusInfoLiveEvent.call()
     }
 
-    override fun showTransactionInfoInExplorer(url: String) {
+    override fun openUrl(url: String) {
         showTransactionLiveEvent.postValue(url)
     }
 }

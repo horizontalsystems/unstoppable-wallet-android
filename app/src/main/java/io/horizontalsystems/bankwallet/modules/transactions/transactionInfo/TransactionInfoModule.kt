@@ -12,7 +12,7 @@ object TransactionInfoModule {
         fun share(value: String)
         fun showTitle(titleViewItem: TitleViewItem)
         fun showDetails(items: List<TransactionDetailViewItem>)
-        fun setExplorerButtonName(explorerName: String)
+        fun setExplorerButton(explorerName: String, enabled: Boolean)
     }
 
     interface ViewDelegate {
@@ -45,7 +45,7 @@ object TransactionInfoModule {
         fun openLockInfo(lockDate: Date)
         fun openDoubleSpendInfo(transactionHash: String, conflictingTxHash: String)
         fun openStatusInfo()
-        fun showTransactionInfoInExplorer(url: String)
+        fun openUrl(url: String)
     }
 
     fun init(view: TransactionInfoViewModel, router: Router, transactionRecord: TransactionRecord, wallet: Wallet) {
@@ -59,4 +59,6 @@ object TransactionInfoModule {
     }
 
     data class TitleViewItem(val date: Date?, val primaryAmountInfo: SendModule.AmountInfo, val secondaryAmountInfo: SendModule.AmountInfo?, val type: TransactionType, val lockState: TransactionLockState?)
+
+    data class ExplorerData (val title: String, val url: String?)
 }
