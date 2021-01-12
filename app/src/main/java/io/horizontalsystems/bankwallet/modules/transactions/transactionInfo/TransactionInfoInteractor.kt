@@ -16,15 +16,14 @@ class TransactionInfoInteractor(
         private val xRateManager: IRateManager,
         private val currencyManager: ICurrencyManager,
         private val feeCoinProvider: FeeCoinProvider,
-        private val buildConfigProvider: IBuildConfigProvider
+        buildConfigProvider: IBuildConfigProvider
 ) : TransactionInfoModule.Interactor {
     var delegate: TransactionInfoModule.InteractorDelegate? = null
 
     override val lastBlockInfo: LastBlockInfo?
         get() = adapter.lastBlockInfo
 
-    override val testMode: Boolean
-        get() = buildConfigProvider.testMode
+    override val testMode = buildConfigProvider.testMode
 
     override fun getRate(code: String, timestamp: Long): CurrencyValue? {
         val baseCurrency = currencyManager.baseCurrency
