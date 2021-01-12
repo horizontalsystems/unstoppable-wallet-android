@@ -19,6 +19,8 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
     val showStatusInfoLiveEvent = SingleLiveEvent<Unit>()
+    val showTransactionLiveEvent = SingleLiveEvent<String>()
+    val explorerButtonName = MutableLiveData<String>()
 
     fun init(transactionRecord: TransactionRecord, wallet: Wallet) {
         TransactionInfoModule.init(this, this, transactionRecord, wallet)
@@ -43,6 +45,10 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         detailsLiveData.postValue(items)
     }
 
+    override fun setExplorerButtonName(explorerName: String) {
+        explorerButtonName.postValue(explorerName)
+    }
+
     // IRouter
 
     override fun openFullInfo(transactionHash: String, wallet: Wallet) {
@@ -59,5 +65,9 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
 
     override fun openStatusInfo() {
         showStatusInfoLiveEvent.call()
+    }
+
+    override fun showTransactionInfoInExplorer(url: String) {
+        showTransactionLiveEvent.postValue(url)
     }
 }
