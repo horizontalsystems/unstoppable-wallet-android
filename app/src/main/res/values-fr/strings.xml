@@ -270,6 +270,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_SentToSelfNote">Cette transaction a été envoyée à votre propre adresse</string>
     <string name="TransactionInfo_DoubleSpendNote">Risque de double dépense !</string>
     <string name="TransactionInfo_Input">Entrées</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">En attente</string>
     <string name="StatusInfo_Confirmed">Confirmé</string>
     <string name="StatusInfo_Failed">Échec</string>
@@ -284,29 +285,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau.</string>
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx conflictuelle</string>
-    <!--Full Info-->
-    <string name="FullInfo_Title">Transactions</string>
-    <string name="FullInfo_Time">Heure</string>
-    <string name="FullInfo_Block">Bloc</string>
-    <string name="FullInfo_Confirmations">Confirmation</string>
-    <string name="FullInfo_Size">Taille</string>
-    <string name="FullInfo_Fee">Frais</string>
-    <string name="FullInfo_Rate">Taux</string>
-    <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_Contract">Contrat</string>
-    <string name="FullInfo_From">De</string>
-    <string name="FullInfo_To">À</string>
-    <string name="FullInfo_Status">Statut</string>
-    <string name="FullInfo_Source_Online">En ligne</string>
-    <string name="FullInfo_Source_Offline">Déconnecté</string>
-    <string name="FullInfo_Error_ProviderOffline">Déconnecté</string>
-    <string name="FullInfo_Error_TransactionNotFound">La transaction est introuvable sur la blockchain</string>
-    <string name="FullInfo_Error_Retry">Réessayer</string>
-    <string name="FullInfo_Error_ChangeSource">Changer la Source</string>
-    <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Entrées</string>
-    <string name="FullInfo_SubtitleOutputs">Sorties</string>
-    <string name="FullInfoEth_Amount">Montant</string>
     <!--Guides-->
     <string name="Guides_Title">Académie</string>
     <!--Markdown-->
