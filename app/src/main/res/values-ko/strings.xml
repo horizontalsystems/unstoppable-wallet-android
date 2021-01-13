@@ -102,12 +102,14 @@
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
-    <string name="Send_Hint_Address">주소</string>
+    <string name="Send_Hint_Address">Address or Domain</string>
     <string name="Send_Hint_Amount">양</string>
     <string name="Send_Fee">수수료</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Confirmation_Title">확인</string>
+    <string name="Send_Confirmation_Domain">Domain</string>
+    <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_Success">\u2713 보냄</string>
@@ -198,12 +200,14 @@
     <string name="SwapSettings_RecipientAddressDescription">교환 작업 후, 금액은 지정된 주소로 이체됩니다.</string>
     <string name="SwapSettings_Apply">적용</string>
     <string name="SwapSettings_DeadlineMinute">최소 %s</string>
-    <string name="SwapSettings_RecipientPlaceholder">주소</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">최대 허용치 %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">잘못된 주소</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">확인</string>
     <!--Swap Coin Select-->
