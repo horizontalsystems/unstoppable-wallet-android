@@ -27,7 +27,7 @@ class ConfirmationPrimaryView : ConstraintLayout {
         secondaryName.text = primaryItemData.secondaryName
         secondaryAmount.text = primaryItemData.secondaryAmount
 
-        primaryItemData.domain.let {
+        primaryItemData.domain?.let {
             domainValue.text = it
             domainValue.isVisible = true
             domainTitle.isVisible = true
