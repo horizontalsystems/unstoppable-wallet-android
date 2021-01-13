@@ -6,7 +6,7 @@
 
     <View
         android:id="@+id/frameView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="44dp"
         android:background="@drawable/chart_indicator_background"
         android:foreground="?attr/selectableItemBackground"
