@@ -45,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginTop="12dp"
+        android:elevation="2dp"
         android:textColor="@color/green_d"
         app:layout_constraintBottom_toBottomOf="@id/diffCircle"
         app:layout_constraintStart_toStartOf="@id/diffCircle"
