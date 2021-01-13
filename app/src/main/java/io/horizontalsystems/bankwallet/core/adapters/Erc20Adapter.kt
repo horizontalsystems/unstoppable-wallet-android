@@ -53,15 +53,11 @@ class Erc20Adapter(
 
     // IBalanceAdapter
 
-    override val state: AdapterState
-        get() = when (val kitSyncState = erc20Kit.syncState) {
-            is SyncState.Synced -> AdapterState.Synced
-            is SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
-            is SyncState.Syncing -> AdapterState.Syncing(50, null)
-        }
+    override val balanceState: AdapterState
+        get() = convertToAdapterState(erc20Kit.syncState)
 
-    override val stateUpdatedFlowable: Flowable<Unit>
-        get() = erc20Kit.syncStateFlowable.map { Unit }
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
+        get() = erc20Kit.syncStateFlowable.map { }
 
     override val balance: BigDecimal
         get() = balanceInBigDecimal(erc20Kit.balance, decimal)
@@ -70,6 +66,12 @@ class Erc20Adapter(
         get() = erc20Kit.balanceFlowable.map { Unit }
 
     // ITransactionsAdapter
+
+    override val transactionsState: AdapterState
+        get() = convertToAdapterState(erc20Kit.transactionsSyncState)
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = erc20Kit.transactionsSyncStateFlowable.map { }
 
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
         return erc20Kit.getTransactionsAsync(from?.let { TransactionKey(it.transactionHash.hexStringToByteArray(), it.interTransactionIndex) }, limit).map {
@@ -108,6 +110,12 @@ class Erc20Adapter(
 
     override val ethereumBalance: BigDecimal
         get() = balanceInBigDecimal(ethereumKit.accountState?.balance, EthereumAdapter.decimal)
+
+    private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
+        is SyncState.Synced -> AdapterState.Synced
+        is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
+        is SyncState.Syncing -> AdapterState.Syncing(50, null)
+    }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
         val myAddress = ethereumKit.receiveAddress

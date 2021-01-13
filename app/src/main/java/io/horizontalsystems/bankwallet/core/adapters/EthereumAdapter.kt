@@ -33,12 +33,11 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
     // IBalanceAdapter
 
-    override val state: AdapterState
-        get() = when (val kitSyncState = ethereumKit.syncState) {
-            is EthereumKit.SyncState.Synced -> AdapterState.Synced
-            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
-            is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
-        }
+    override val balanceState: AdapterState
+        get() = convertToAdapterState(ethereumKit.syncState)
+
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
+        get() = ethereumKit.syncStateFlowable.map {}
 
     override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
         return ethereumKit.send(address, amount, byteArrayOf(), gasPrice, gasLimit)
@@ -51,9 +50,6 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
         return ethereumKit.estimateGas(toAddress, value, gasPrice)
     }
-
-    override val stateUpdatedFlowable: Flowable<Unit>
-        get() = ethereumKit.syncStateFlowable.map {}
 
     override val balance: BigDecimal
         get() = balanceInBigDecimal(ethereumKit.accountState?.balance, decimal)
@@ -69,6 +65,12 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
     // ITransactionsAdapter
 
+    override val transactionsState: AdapterState
+        get() = convertToAdapterState(ethereumKit.transactionsSyncState)
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = ethereumKit.transactionsSyncStateFlowable.map {}
+
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
         return ethereumKit.etherTransactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
             it.map { tx -> transactionRecord(tx) }
@@ -78,6 +80,11 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = ethereumKit.etherTransactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
+    private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState = when (syncState) {
+        is EthereumKit.SyncState.Synced -> AdapterState.Synced
+        is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
+        is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+    }
 
     private fun transactionRecord(fullTransaction: FullTransaction): TransactionRecord {
         val transaction = fullTransaction.transaction

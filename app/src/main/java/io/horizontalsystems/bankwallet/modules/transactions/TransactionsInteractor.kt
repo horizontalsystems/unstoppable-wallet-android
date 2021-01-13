@@ -162,7 +162,7 @@ class TransactionsInteractor(
         walletManager.wallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 walletsData.add(Pair(wallet, adapter.lastBlockInfo))
-                adapterStates[wallet] = adapter.state
+                adapterStates[wallet] = adapter.transactionsState
 
                 adapter.transactionRecordsFlowable
                         .subscribeOn(Schedulers.io())
@@ -172,11 +172,11 @@ class TransactionsInteractor(
                         }
                         .let { transactionUpdatesDisposables.add(it) }
 
-                adapter.stateUpdatedFlowable
+                adapter.transactionsStateUpdatedFlowable
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
                         .subscribe {
-                            delegate?.onUpdateAdapterState(adapter.state, wallet)
+                            delegate?.onUpdateAdapterState(adapter.transactionsState, wallet)
                         }
                         .let { adapterStateUpdatesDisposables.add(it) }
             }
