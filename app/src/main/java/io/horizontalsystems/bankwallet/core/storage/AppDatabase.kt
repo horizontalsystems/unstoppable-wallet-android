@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 26, exportSchema = false, entities = [
+@Database(version = 27, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -68,7 +68,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addBirthdayHeightToAccount,
                             addBep2SymbolToRecord,
                             addFavoriteCoinsTable,
-                            addCoinTypeBlockchainSettingForBitcoinCash
+                            addCoinTypeBlockchainSettingForBitcoinCash,
+                            deleteEosColumnFromAccountRecord
                     )
                     .build()
         }
@@ -451,6 +452,33 @@ abstract class AppDatabase : RoomDatabase() {
                                         """.trimIndent())
                     return
                 }
+            }
+        }
+
+        private val deleteEosColumnFromAccountRecord: Migration = object : Migration(26, 27) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE AccountRecord RENAME TO TempAccountRecord")
+                database.execSQL("""
+                CREATE TABLE AccountRecord (
+                    `deleted` INTEGER NOT NULL, 
+                    `id` TEXT NOT NULL, 
+                    `name` TEXT NOT NULL, 
+                    `type` TEXT NOT NULL, 
+                    `origin` TEXT NOT NULL DEFAULT '',
+                    `isBackedUp` INTEGER NOT NULL,
+                    `words` TEXT, 
+                    `salt` TEXT, 
+                    `key` TEXT, 
+                    `birthdayHeight` INTEGER, 
+                    PRIMARY KEY(`id`)
+                    )
+                """.trimIndent())
+                database.execSQL("""
+                    INSERT INTO AccountRecord (`deleted`,`id`,`name`,`type`,`origin`,`isBackedUp`,`words`,`salt`,`key`,`birthdayHeight`)
+                    SELECT `deleted`,`id`,`name`,`type`,`origin`,`isBackedUp`,`words`,`salt`,`key`,`birthdayHeight` FROM TempAccountRecord
+                    WHERE `type` != 'eos'
+                """.trimIndent())
+                database.execSQL("DROP TABLE TempAccountRecord")
             }
         }
     }

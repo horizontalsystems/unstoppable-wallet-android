@@ -87,7 +87,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         },
                         salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
                         key = getKey(account.type)?.let { SecretString(it) },
-                        eosAccount = null,
                         birthdayHeight = (account.type as? AccountType.Zcash)?.birthdayHeight
                 )
             }
