@@ -12,8 +12,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinHandler
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashHandler
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
-import io.horizontalsystems.bankwallet.modules.send.eos.SendEosHandler
-import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
 import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumHandler
 import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
@@ -104,13 +102,6 @@ object SendModule {
 
         fun validate(address: String)
         fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
-    }
-
-    interface ISendEosInteractor {
-        val availableBalance: BigDecimal
-
-        fun validate(account: String)
-        fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
     }
 
     interface ISendZcashInteractor {
@@ -236,15 +227,6 @@ object SendModule {
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
                     presenter.feeModuleDelegate = handler
-
-                    handler
-                }
-                is ISendEosAdapter -> {
-                    val eosInteractor = SendEosInteractor(adapter)
-                    val handler = SendEosHandler(eosInteractor, router)
-
-                    presenter.amountModuleDelegate = handler
-                    presenter.addressModuleDelegate = handler
 
                     handler
                 }

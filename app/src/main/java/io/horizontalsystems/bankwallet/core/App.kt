@@ -60,7 +60,6 @@ class App : CoreApp() {
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
         lateinit var ethereumKitManager: IEthereumKitManager
-        lateinit var eosKitManager: IEosKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
@@ -109,7 +108,6 @@ class App : CoreApp() {
         backgroundManager = BackgroundManager(this)
 
         ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode, backgroundManager)
-        eosKitManager = EosKitManager(buildConfigProvider.testMode)
         binanceKitManager = BinanceKitManager(buildConfigProvider.testMode)
 
         appDatabase = AppDatabase.getInstance(this)
@@ -160,8 +158,8 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, eosKitManager, binanceKitManager, backgroundManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceKitManager, backgroundManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceKitManager)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(appConfigProvider, blockchainSettingsStorage, adapterManager, walletManager)
         derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
@@ -185,7 +183,7 @@ class App : CoreApp() {
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
         priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, coinManager)
 
-        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, eosKitManager, binanceKitManager)
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }

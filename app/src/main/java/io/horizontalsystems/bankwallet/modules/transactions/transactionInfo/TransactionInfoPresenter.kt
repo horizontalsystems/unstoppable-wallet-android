@@ -166,7 +166,6 @@ class TransactionInfoPresenter(
             is CoinType.Erc20 -> TransactionInfoModule.ExplorerData( "etherscan.io", if (testMode) "https://ropsten.etherscan.io/tx/$hash" else "https://etherscan.io/tx/$hash")
             is CoinType.Binance -> TransactionInfoModule.ExplorerData( "binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
             is CoinType.Zcash -> TransactionInfoModule.ExplorerData( "zcha.in", if (testMode) null else "https://explorer.zcha.in/transactions/$hash")
-            is CoinType.Eos -> TransactionInfoModule.ExplorerData( "greymass.com", null)
         }
     }
 

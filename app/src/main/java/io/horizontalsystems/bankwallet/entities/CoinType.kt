@@ -29,9 +29,6 @@ sealed class CoinType : Parcelable {
     @Parcelize
     object Zcash : CoinType()
 
-    @Parcelize
-    class Eos(val token: String, val symbol: String) : CoinType()
-
     val title: String
         get() = when (this) {
             is Bitcoin -> "Bitcoin"
@@ -43,7 +40,6 @@ sealed class CoinType : Parcelable {
     val label: String?
         get() = when (this) {
             is Erc20 -> "ERC20"
-            is Eos -> if (symbol != "EOS") "EOSIO" else null
             is Binance -> if (symbol != "BNB") "BEP2" else null
             else -> null
         }
@@ -52,7 +48,6 @@ sealed class CoinType : Parcelable {
         get() = when (this) {
             Bitcoin, Litecoin, BitcoinCash, Dash, Ethereum, is Erc20 -> PredefinedAccountType.Standard
             is Binance -> PredefinedAccountType.Binance
-            is Eos -> PredefinedAccountType.Eos
             Zcash -> PredefinedAccountType.Zcash
         }
 
@@ -60,9 +55,6 @@ sealed class CoinType : Parcelable {
         get() = this is Ethereum || this is Erc20
 
     fun canSupport(accountType: AccountType) = when (this) {
-        is Eos -> {
-            accountType is AccountType.Eos
-        }
         Bitcoin, Litecoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
             accountType is AccountType.Mnemonic && accountType.words.size == 12 && accountType.salt == null
         }

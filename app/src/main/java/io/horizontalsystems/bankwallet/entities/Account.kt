@@ -50,17 +50,6 @@ open class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class Eos(val account: String, val activePrivateKey: String) : AccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Eos && account == other.account && activePrivateKey == other.activePrivateKey
-        }
-
-        override fun hashCode(): Int {
-            return Objects.hash(account, activePrivateKey)
-        }
-    }
-
-    @Parcelize
     data class Zcash(val words: List<String>, val birthdayHeight: Long? = null) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is Zcash && words.toTypedArray().contentEquals(other.words.toTypedArray())

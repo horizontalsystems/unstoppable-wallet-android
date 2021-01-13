@@ -144,7 +144,6 @@ class RateManager(
                     is Litecoin -> CoinType.Litecoin
                     is Zcash -> CoinType.Zcash
                     is Binance -> CoinType.Binance
-                    is Eos -> CoinType.Eos
                     is Erc20 -> CoinType.Erc20(coin.type.address)
                 }
 

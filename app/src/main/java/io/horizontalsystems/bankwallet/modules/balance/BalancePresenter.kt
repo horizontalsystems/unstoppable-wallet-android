@@ -262,8 +262,7 @@ class BalancePresenter(
         return when(coinType) {
             is CoinType.Binance,
             is CoinType.Ethereum,
-            is CoinType.Erc20,
-            is CoinType.Eos -> false
+            is CoinType.Erc20 -> false
             else -> true
         }
     }

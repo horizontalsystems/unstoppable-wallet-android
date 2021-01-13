@@ -19,7 +19,6 @@ class AccountCleaner(private val testMode: Boolean) : IAccountCleaner {
             CoinType.Ethereum -> EthereumAdapter.clear(accountId, testMode)
             is CoinType.Erc20 -> Erc20Adapter.clear(accountId, testMode)
             is CoinType.Binance -> BinanceAdapter.clear(accountId, testMode)
-            is CoinType.Eos -> EosAdapter.clear(accountId, testMode)
             CoinType.Zcash -> ZcashAdapter.clear(accountId)
         }
     }
@@ -29,7 +28,6 @@ class AccountCleaner(private val testMode: Boolean) : IAccountCleaner {
         BitcoinAdapter.clear(accountId, testMode)
         BitcoinCashAdapter.clear(accountId, testMode)
         DashAdapter.clear(accountId, testMode)
-        EosAdapter.clear(accountId, testMode)
         EthereumAdapter.clear(accountId, testMode)
         Erc20Adapter.clear(accountId, testMode)
         ZcashAdapter.clear(accountId)

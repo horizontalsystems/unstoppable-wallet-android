@@ -73,19 +73,15 @@ class CreateWalletService(
         } ?: coins
     }
 
-    private fun item(coin: Coin): Item? {
-        return if (coin.type.predefinedAccountType.isCreationSupported()) {
-            Item(coin, wallets.containsKey(coin))
-        } else {
-            null
-        }
+    private fun item(coin: Coin): Item {
+        return Item(coin, wallets.containsKey(coin))
     }
 
     private fun syncState() {
         val featuredCoins = filteredCoins(coinManager.featuredCoins)
         val coins = filteredCoins(coinManager.coins).filter { !featuredCoins.contains(it) }
 
-        state = State(featuredCoins.mapNotNull { item(it) }, coins.mapNotNull { item(it) })
+        state = State(featuredCoins.map { item(it) }, coins.map { item(it) })
     }
 
     private fun syncCanCreate() {

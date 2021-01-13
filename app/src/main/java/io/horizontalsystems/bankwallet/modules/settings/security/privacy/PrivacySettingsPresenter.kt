@@ -28,7 +28,6 @@ class PrivacySettingsPresenter(
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
             PrivacySettingsViewItem(interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = ethereumCommunicationModeCanBeChanged()),
-            PrivacySettingsViewItem(interactor.eos, CommunicationModeSettingType(CommunicationMode.Greymass), enabled = false),
             PrivacySettingsViewItem(interactor.binance, CommunicationModeSettingType(CommunicationMode.BinanceDex), enabled = false)
     )
 
