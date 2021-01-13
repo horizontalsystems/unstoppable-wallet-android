@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
-    <string name="Alert_Share">Переслать</string>
     <string name="Alert_Close">Закрыть</string>
     <string name="Alert_Loading">Загрузка...</string>
     <string name="Alert_Restart">Перезапустить</string>
@@ -49,8 +48,6 @@
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
     <string name="Restore_InvalidWordCount">Неправильное количество слов: %1$d, а должно быть: %2$d</string>
     <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
-    <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
-    <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
     <string name="Select_Coins">Выберите Валюту</string>
     <string name="Restore_BirthdayHeight_Hint">Блок создания кошелька(опционально)</string>
     <string name="Restore_BirthdayHeight_Description">Это определяет, где начать сканирование транзакций. Оставьте поле пустым, чтобы сканировать с самого начала, что займет некоторое время.</string>
@@ -67,7 +64,6 @@
     <string name="Backup_Button_Backup">Резервная копия</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Копирование ключа с помощью действия «копировать» подвергает вас определенному риску, если вы используете какие-либо приложения для управления буфером обмена, или другие приложения, которые могут иметь доступ к данным буфера обмена.</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Deposit">Получить</string>
@@ -207,7 +203,6 @@
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
-    <string name="Deposit_Your_Account">Ваш Аккаунт</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
@@ -225,7 +220,6 @@
     <string name="TransactionInfo_RawTransaction">Неподтвержденная Транзакция</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
-    <string name="TransactionInfo_ButtonVerify">Проверить</string>
     <string name="TransactionInfo_LockedUntil">Заблокировано до %s</string>
     <string name="TransactionInfo_UnlockedAt">Разблокировано %s</string>
     <string name="TransactionInfo_RecipientHash">Получатель</string>
@@ -249,28 +243,7 @@
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
     <string name="Info_DoubleSpend_ConflictingTx">Конфликтующая транзакция</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Транзакция</string>
-    <string name="FullInfo_Time">Время</string>
-    <string name="FullInfo_Block">Блок</string>
-    <string name="FullInfo_Confirmations">Подтверждения</string>
-    <string name="FullInfo_Size">Размер</string>
-    <string name="FullInfo_Fee">Комиссия</string>
-    <string name="FullInfo_Rate">Ставка</string>
-    <string name="FullInfo_Source">Источник</string>
-    <string name="FullInfo_Contract">Контракт</string>
-    <string name="FullInfo_From">От</string>
-    <string name="FullInfo_To">Кому</string>
-    <string name="FullInfo_Status">Статус</string>
-    <string name="FullInfo_Source_Online">Доступен</string>
-    <string name="FullInfo_Source_Offline">Не доступен</string>
-    <string name="FullInfo_Error_ProviderOffline">Не доступен</string>
-    <string name="FullInfo_Error_TransactionNotFound">Транзакция не найдена в блокчейне</string>
-    <string name="FullInfo_Error_Retry">Повторить</string>
-    <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Входы</string>
-    <string name="FullInfo_SubtitleOutputs">Выходы</string>
-    <string name="FullInfoEth_Amount">Сумма</string>
     <!--Guides-->
     <string name="Guides_Title">Академия</string>
     <!--Markdown-->
@@ -371,9 +344,6 @@
     <string name="NotificationBottomMenu_LongTerm">Долгосрочный 6М</string>
     <string name="NotificationBottomMenu_Long">Long</string>
     <!--Errors-->
-    <string name="Eos_Backend_Error_SelfTransfer">Не удается отправить токен на свой аккаунт</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
-    <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
     <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
     <!--Hud texts-->
@@ -414,14 +384,12 @@
     <string name="AddCoin_Title">Добавить %s</string>
     <string name="AddCoin_Subtitle">%s Кошелек</string>
     <string name="AddCoin_Description">Вам нужно настроить кошелек %1$s, чтобы иметь возможность отправлять или получать %2$s.\n\nИспользуйте кнопку \'Создать\', чтобы настроить новый кошелек %3$s или \'Восстановить\', чтобы импортировать существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">Вам нужно настроить кошелек %1$s, чтобы иметь возможность отправлять или получать %2$s.\n\nВ данный момент кошелек Unstoppable не может создавать новый %3$s кошелек. Вы можете восстановить только существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Выбрать Блокчейн</string>
     <string name="AddTokenDialog_Subtitle">Добавить Токен</string>
     <string name="AddTokenDialog_Erc20Tokens">Токен ERC20</string>
-    <string name="AddTokenDialog_EosTokens">Токены EOS</string>
     <string name="AddTokenDialog_BinanceTokens">Токен BEP2</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Название Токена</string>

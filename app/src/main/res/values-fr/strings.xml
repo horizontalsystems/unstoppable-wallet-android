@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">Annuler</string>
     <string name="Alert_Copy">Copier</string>
-    <string name="Alert_Share">Transférer</string>
     <string name="Alert_Close">Fermer</string>
     <string name="Alert_Loading">Chargement en cours...</string>
     <string name="Alert_Restart">Redémarrer</string>
@@ -50,8 +49,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_InvalidWordCount">Mauvais nombre de mots: %1$d, doit être %2$d</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
-    <string name="Restore_EosAccountIncorrect">Compte incorrect</string>
-    <string name="Restore_EosKeyIncorrect">Clé Incorrect</string>
     <string name="Select_Coins">Choisissez la Crypto</string>
     <string name="Restore_BirthdayHeight_Hint">Hauteur d\’anniversaire du porte-feuille (optionel)</string>
     <string name="Restore_BirthdayHeight_Description">Ce champ détermine où commencer à scanner les transactions. Laissez-le vide pour scanner depuis le début, ce qui prendra un certain temps.</string>
@@ -68,7 +65,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Backup_Button_Backup">Sauvegarde</string>
     <string name="Backup_Button_ShowKey">Voir la clé</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Copier votre clé en utilisant l\'action « copier » apporte le des risques si vous utilisez des applications de gestion du presse-papiers ou d\'autres applications qui peuvent avoir accès aux données du presse-papiers.</string>
     <!--Balance-->
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Recevoir</string>
@@ -208,7 +204,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
     <string name="Deposit_Your_Address">Votre address</string>
-    <string name="Deposit_Your_Account">Votre compte</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
@@ -226,7 +221,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
-    <string name="TransactionInfo_ButtonVerify">Vérifiez</string>
     <string name="TransactionInfo_LockedUntil">Verrouillé jusqu\'au %s</string>
     <string name="TransactionInfo_UnlockedAt">Déverrouillé à %s</string>
     <string name="TransactionInfo_RecipientHash">Destinataire</string>
@@ -250,28 +244,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx conflictuelle</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transactions</string>
-    <string name="FullInfo_Time">Heure</string>
-    <string name="FullInfo_Block">Bloc</string>
-    <string name="FullInfo_Confirmations">Confirmation</string>
-    <string name="FullInfo_Size">Taille</string>
-    <string name="FullInfo_Fee">Frais</string>
-    <string name="FullInfo_Rate">Taux</string>
-    <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_Contract">Contrat</string>
-    <string name="FullInfo_From">De</string>
-    <string name="FullInfo_To">À</string>
-    <string name="FullInfo_Status">Statut</string>
-    <string name="FullInfo_Source_Online">En ligne</string>
-    <string name="FullInfo_Source_Offline">Déconnecté</string>
-    <string name="FullInfo_Error_ProviderOffline">Déconnecté</string>
-    <string name="FullInfo_Error_TransactionNotFound">La transaction est introuvable sur la blockchain</string>
-    <string name="FullInfo_Error_Retry">Réessayer</string>
-    <string name="FullInfo_Error_ChangeSource">Changer la Source</string>
     <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Entrées</string>
-    <string name="FullInfo_SubtitleOutputs">Sorties</string>
-    <string name="FullInfoEth_Amount">Montant</string>
     <!--Guides-->
     <string name="Guides_Title">Académie</string>
     <!--Markdown-->
@@ -372,9 +345,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="NotificationBottomMenu_LongTerm">Long terme 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
     <!--Errors-->
-    <string name="Eos_Backend_Error_SelfTransfer">Impossible de transférer des tokens sur votre propre compte</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Ce compte n\'existe pas</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Votre compte EOS ne dispose pas de suffisamment de RAM pour envoyer ce token. Vous devez augmenter la participation RAM pour continuer.</string>
     <string name="Binance_Backend_Error_MemoRequired">Le destinataire a besoin d\'une note non vide pour une opération de transfert</string>
     <string name="Binance_Backend_Error_RequiresDigits">Nécessite que le mémo ne contienne que des chiffres</string>
     <!--Hud texts-->
@@ -415,14 +385,12 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddCoin_Title">Ajouter %s</string>
     <string name="AddCoin_Subtitle">%s Portefeuille</string>
     <string name="AddCoin_Description">Vous devez créer un portefeuille%1$s pour envoyer ou recevoir des %2$s.\n\nUtilisez le bouton Créer ci-dessous pour créer un nouveau portefeuille%3$s , ou le bouton Restaurer pour importer le portefeuille existant.\n\nVous pourrez utiliser ce portefeuille pour : %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">Vous devez créer un portefeuille %1$s pour envoyer ou recevoir des %2$s.\n\nÀ ce stade, Unstoppable n\'est pas en mesure de créer de nouveaux portefeuilles %3$s.. Vous ne pouvez restaurer que celui déjà existant.\n\nVous pourrez utiliser ce portefeuille pour: %4$s.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Choisir la blockchain</string>
     <string name="AddTokenDialog_Subtitle">Ajouter le token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Token</string>
-    <string name="AddTokenDialog_EosTokens">Tokens EOS</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Token</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Nom de la pièce</string>

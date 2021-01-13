@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">Abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>
-    <string name="Alert_Share">Teilen</string>
     <string name="Alert_Close">Schließen</string>
     <string name="Alert_Loading">Wird geladen ...</string>
     <string name="Alert_Restart">Neustart</string>
@@ -49,8 +48,6 @@
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_InvalidWordCount">Ungültige Wörteranzahl: %1$d aber benötigt %2$d</string>
     <string name="Restore_InvalidChecksum">Ungültige Prüfsumme</string>
-    <string name="Restore_EosAccountIncorrect">Ungültiger Account</string>
-    <string name="Restore_EosKeyIncorrect">Falscher Schlüssel</string>
     <string name="Select_Coins">Krypto auswählen</string>
     <string name="Restore_BirthdayHeight_Hint">Wallet Geburtstagsgröße (optional)</string>
     <string name="Restore_BirthdayHeight_Description">Dadurch wird festgelegt, an welcher Stelle mit dem Scannen nach Transaktionen begonnen werden soll. Lassen Sie das Feld leer, um von Anfang an zu scannen, dies dauert eine Weile.</string>
@@ -67,7 +64,6 @@
     <string name="Backup_Button_Backup">Sicherung</string>
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Den Key einfach mit „Kopieren“ zu kopieren, ist riskant, da Sie womöglich Zwischenablage-Management-Apps oder andere Apps nutzen, die Zugriff auf die Daten in der Zwischenablage haben. Ein Hacker könnte so heimlich auf Ihre Zwischenablage zugreifen und Ihre Coins stehlen. Das gilt es natürlich zu vermeiden.</string>
     <!--Balance-->
     <string name="Balance_Title">Guthaben</string>
     <string name="Balance_Deposit">Anfordern</string>
@@ -207,7 +203,6 @@
     <string name="Deposit_Title">%s Anfordern</string>
     <string name="Deposit_Share">Teilen</string>
     <string name="Deposit_Your_Address">Deine Adresse</string>
-    <string name="Deposit_Your_Account">Dein Konto</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transaktionen</string>
     <string name="Transactions_FilterAll">ALLE</string>
@@ -225,7 +220,6 @@
     <string name="TransactionInfo_RawTransaction">Rohdaten der Transaktion</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
-    <string name="TransactionInfo_ButtonVerify">Prüfen</string>
     <string name="TransactionInfo_LockedUntil">Gesperrt bis %s</string>
     <string name="TransactionInfo_UnlockedAt">Freigegeben am %s</string>
     <string name="TransactionInfo_RecipientHash">Empfänger</string>
@@ -249,28 +243,7 @@
     <string name="Info_DoubleSpend_ThisTx">Dieser Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Gegensätzliche Tx</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaktion</string>
-    <string name="FullInfo_Time">Zeit</string>
-    <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Bestätigungen</string>
-    <string name="FullInfo_Size">Größe</string>
-    <string name="FullInfo_Fee">Gebühr</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Quelle</string>
-    <string name="FullInfo_Contract">Vertrag</string>
-    <string name="FullInfo_From">Von</string>
-    <string name="FullInfo_To">An</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Source_Online">Online</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_ProviderOffline">Offline</string>
-    <string name="FullInfo_Error_TransactionNotFound">Transaktion kann in der Blockchain nicht gefunden werden</string>
-    <string name="FullInfo_Error_Retry">Wiederholen</string>
-    <string name="FullInfo_Error_ChangeSource">Quelle ändern</string>
     <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Eingänge</string>
-    <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
-    <string name="FullInfoEth_Amount">Betrag</string>
     <!--Guides-->
     <string name="Guides_Title">Akademie</string>
     <!--Markdown-->
@@ -371,9 +344,6 @@
     <string name="NotificationBottomMenu_LongTerm">Langfristig 6M</string>
     <string name="NotificationBottomMenu_Long">Lang</string>
     <!--Errors-->
-    <string name="Eos_Backend_Error_SelfTransfer">Token kann nicht auf das eigene Konto übertragen werden</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Das Zielkonto existiert nicht</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Ihr EOS-Konto hat nicht genügend RAM, um dieses Token zu senden. Um fortfahren zu können, müssen Sie den RAM-Stake erhöhen.</string>
     <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
     <string name="Binance_Backend_Error_RequiresDigits">Der Vermerk darf nur Zahlen enthalten</string>
     <!--Hud texts-->
@@ -414,14 +384,12 @@
     <string name="AddCoin_Title">%s hinzufügen</string>
     <string name="AddCoin_Subtitle">%s wallet</string>
     <string name="AddCoin_Description">Sie müssen das %1$s Wallet einrichten, um %2$s senden oder empfangen zu können.\n\nTippen Sie auf den Button „Erstellen“, um ein neues %3$s Wallet zu erstellen. Sie können auch auf den Button „Wiederherstellen“ tippen, um ein bereits bestehendes Wallet zu importieren.\n\nSie können dieses Wallet benutzen für: %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">Sie müssen das %1$s. Wallet einrichten, um %2$s. senden oder empfangen zu können.\n\nIm Moment kann das Unstoppable leider keine neuen %3$s. Wallets anlegen. Sie können nur bestehende Wallets wiederherstellen.\n\nSie können dieses Wallet verwenden für: %4$s.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Blockchain auswählen</string>
     <string name="AddTokenDialog_Subtitle">Token wird hinzugefügt</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20-Token</string>
-    <string name="AddTokenDialog_EosTokens">EOS-Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2-Token</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Coin Name</string>

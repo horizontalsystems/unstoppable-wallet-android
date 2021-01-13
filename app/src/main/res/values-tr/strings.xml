@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
-    <string name="Alert_Share">İlet</string>
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
@@ -49,8 +48,6 @@
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_InvalidWordCount">Yanlış sözcük sayısı: %1$d, %2$d olmalıdır</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
-    <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
-    <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
     <string name="Select_Coins">Kripto Parayi Seç</string>
     <string name="Restore_BirthdayHeight_Hint">Cüzdan oluşturulma günü üst sınırı (isteğe bağlı)</string>
     <string name="Restore_BirthdayHeight_Description">Bu, işlemler için taramaya nereden başlanacağını belirler. Biraz zaman alacak olan en baştan tarama için boş bırakınız.</string>
@@ -67,7 +64,6 @@
     <string name="Backup_Button_Backup">Yedekle</string>
     <string name="Backup_Button_ShowKey">Anahtarı Göster</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Anahtarınızı \"Kopyala\" eylemiyle kopyalamanız anahtarınızın pano yönetisine ve panoya erişimi olan diğer uygulamalara sızma riskini taşır.</string>
     <!--Balance-->
     <string name="Balance_Title">Bakiye</string>
     <string name="Balance_Deposit">Al</string>
@@ -207,7 +203,6 @@
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Paylaş</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
-    <string name="Deposit_Your_Account">Hesabınız</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
@@ -225,7 +220,6 @@
     <string name="TransactionInfo_RawTransaction">Ham işlem</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
-    <string name="TransactionInfo_ButtonVerify">Doğrula</string>
     <string name="TransactionInfo_LockedUntil">Şu zamana kadar kitlendi %s</string>
     <string name="TransactionInfo_UnlockedAt">Kilid açıldı %s</string>
     <string name="TransactionInfo_RecipientHash">Alıcı</string>
@@ -249,28 +243,7 @@
     <string name="Info_DoubleSpend_ThisTx">Bu Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Çakışan Tx</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Hesap işlemi</string>
-    <string name="FullInfo_Time">Tarih</string>
-    <string name="FullInfo_Block">Blok numarası</string>
-    <string name="FullInfo_Confirmations">Onaylama</string>
-    <string name="FullInfo_Size">Boyut</string>
-    <string name="FullInfo_Fee">Masraf</string>
-    <string name="FullInfo_Rate">Oran</string>
-    <string name="FullInfo_Source">Kaynak</string>
-    <string name="FullInfo_Contract">Sözleşme</string>
-    <string name="FullInfo_From">Gönderen</string>
-    <string name="FullInfo_To">Alan</string>
-    <string name="FullInfo_Status">Durum</string>
-    <string name="FullInfo_Source_Online">Çevrimiçi</string>
-    <string name="FullInfo_Source_Offline">Çevrimdışı</string>
-    <string name="FullInfo_Error_ProviderOffline">Çevrimdışı</string>
-    <string name="FullInfo_Error_TransactionNotFound">Işlem Blockchain\'de bulunamadı</string>
-    <string name="FullInfo_Error_Retry">Yeniden Dene</string>
-    <string name="FullInfo_Error_ChangeSource">Kaynağı Değiştir</string>
     <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Girişler</string>
-    <string name="FullInfo_SubtitleOutputs">Çıkışlar</string>
-    <string name="FullInfoEth_Amount">Tutar</string>
     <!--Guides-->
     <string name="Guides_Title">Akademi</string>
     <!--Markdown-->
@@ -371,9 +344,6 @@
     <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
     <string name="NotificationBottomMenu_Long">Uzun</string>
     <!--Errors-->
-    <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Bu hesap mevcut değil</string>
-    <string name="Eos_Backend_Error_InsufficientRam">EOS hesabınızda bu kripto parayı göndermek için yeterli RAM bulunmuyor. Devam etmek için EOS RAM hissenizi arttırmak gerekiyor.</string>
     <string name="Binance_Backend_Error_MemoRequired">Aktarım işleminde alıcı boş olmayan not istiyor</string>
     <string name="Binance_Backend_Error_RequiresDigits">Notun yalnızca rakam içermesini gerektirir</string>
     <!--Hud texts-->
@@ -414,14 +384,12 @@
     <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Subtitle">%s cüzdanı</string>
     <string name="AddCoin_Description">Öncelikle %1$s cüzdanınızı yedeklemeniz gerekiyor daha sonra %2$s kripto parasını alabilirsiniz.\n\nYeni bir %3$s cüzdanı oluşturmak için aşağıdaki Oluştur düğmesini veya mevcut olanı geri yükleme için Geri Yükle düğmesini kullanın.\n\nBu cüzdanı %4$s için kullanabilirsiniz.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">Öncelikle %1$s cüzdanınızı yedeklemeniz gerekiyor daha sonra %2$s kripto parasını alabilirsiniz.\n\nUygulama henüz yeni %3$s cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.\n\nBu cüzdanı %4$s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Blockchain Seç</string>
     <string name="AddTokenDialog_Subtitle">Token Ekle</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 tokenleri</string>
-    <string name="AddTokenDialog_EosTokens">EOS Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 tokenleri</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Kripto Para Adı</string>

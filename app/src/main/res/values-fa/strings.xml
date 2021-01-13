@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
-    <string name="Alert_Share">فرستادن به ديگران</string>
     <string name="Alert_Close">بستن</string>
     <string name="Alert_Loading">درحال بارگذاری...</string>
     <string name="Alert_Restart">راه اندازی مجدد</string>
@@ -49,8 +48,6 @@
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_InvalidWordCount">تعداد کلمات نامعتبر: %2$d  مورد نیاز است%1$d</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
-    <string name="Restore_EosAccountIncorrect">حساب نادرست</string>
-    <string name="Restore_EosKeyIncorrect">کلید نادرست</string>
     <string name="Select_Coins">کیف پول جدید</string>
     <string name="Restore_BirthdayHeight_Hint">اندازه کیف پول تولد (اختیاری)</string>
     <string name="Restore_BirthdayHeight_Description">این تعیین می کند که از کجا بررسی برای معاملات شروع شود. خالی بگذارید تا از اول اسکن شود که مدتی طول می کشد.</string>
@@ -67,7 +64,6 @@
     <string name="Backup_Button_Backup">پيشتيباني</string>
     <string name="Backup_Button_ShowKey">نمایش کلید</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">در صورتی که از برنامه های مدیریتی کلیپ بورد یا برخی برنامه های دیگر که ممکن است به اطلاعات کلیپ بورد دسترسی داشته باشند استفاده می کنید، کپی کردن کلید با استفاده از عملکرد \"کپی\" می تواند ریسک هایی را به همراه داشته باشد.</string>
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Deposit">دريافت</string>
@@ -207,7 +203,6 @@
     <string name="Deposit_Title">دریافت %s</string>
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
     <string name="Deposit_Your_Address">آدرس شما</string>
-    <string name="Deposit_Your_Account">حساب کاربری شما</string>
     <!--Transactions-->
     <string name="Transactions_Title">تراکنش ها</string>
     <string name="Transactions_FilterAll">همه</string>
@@ -225,7 +220,6 @@
     <string name="TransactionInfo_RawTransaction">تراکنش خام</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
-    <string name="TransactionInfo_ButtonVerify">تایید</string>
     <string name="TransactionInfo_LockedUntil">قفل شده تا %s</string>
     <string name="TransactionInfo_UnlockedAt">باز شده در %s</string>
     <string name="TransactionInfo_RecipientHash">گیرنده</string>
@@ -249,28 +243,7 @@
     <string name="Info_DoubleSpend_ThisTx">این Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx متناقص</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">تراکنش</string>
-    <string name="FullInfo_Time">زمان</string>
-    <string name="FullInfo_Block">مسدود</string>
-    <string name="FullInfo_Confirmations">تاييدات</string>
-    <string name="FullInfo_Size">اندازه</string>
-    <string name="FullInfo_Fee">هزينه</string>
-    <string name="FullInfo_Rate">امتیاز</string>
-    <string name="FullInfo_Source">منبع</string>
-    <string name="FullInfo_Contract">قرارداد</string>
-    <string name="FullInfo_From">از</string>
-    <string name="FullInfo_To">به</string>
-    <string name="FullInfo_Status">وضعیت</string>
-    <string name="FullInfo_Source_Online">آنلاین</string>
-    <string name="FullInfo_Source_Offline">آفلاین</string>
-    <string name="FullInfo_Error_ProviderOffline">آفلاین</string>
-    <string name="FullInfo_Error_TransactionNotFound">تراکنش در زنجیره بلوکی یافت نمی شود</string>
-    <string name="FullInfo_Error_Retry">دوباره تلاش کنید</string>
-    <string name="FullInfo_Error_ChangeSource">تغییر منبع</string>
     <!--no used-->
-    <string name="FullInfo_SubtitleInputs">ورودي ها</string>
-    <string name="FullInfo_SubtitleOutputs">خروجي ها</string>
-    <string name="FullInfoEth_Amount">مقدار</string>
     <!--Guides-->
     <string name="Guides_Title">آکادمی</string>
     <!--Markdown-->
@@ -371,9 +344,6 @@
     <string name="NotificationBottomMenu_LongTerm">بلندمدت 6M</string>
     <string name="NotificationBottomMenu_Long">بلند</string>
     <!--Errors-->
-    <string name="Eos_Backend_Error_SelfTransfer">مبلغ نمی تواند به حساب خودتان منتقل شود</string>
-    <string name="Eos_Backend_Error_AccountNotExist">حساب کاربری مقصد وجود ندارد</string>
-    <string name="Eos_Backend_Error_InsufficientRam">حساب EOS شما RAM یا حافظه کافی برای ارسال این مبلغ ندارد. برای ادامه پردازش باید RAM را افزایش دهید.</string>
     <string name="Binance_Backend_Error_MemoRequired">دریافت کننده در انتقال تراکنش ها به نمونه غیر خالی نیاز دارد</string>
     <string name="Binance_Backend_Error_RequiresDigits">به نمونه شامل تنها رقم نیاز دارد</string>
     <!--Hud texts-->
@@ -414,14 +384,12 @@
     <string name="AddCoin_Title">اضافه کردن %s</string>
     <string name="AddCoin_Subtitle">%s کیف پول</string>
     <string name="AddCoin_Description">برای اینکه بتوانید %2$s ارسال یا دریافت کنید، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">برای اینکه بتوانید %2$s ارسال یا دریافت کنید، باید کیف پول %1$s را تنظیم کنید. \n\n از دکمه ایجاد زیر استفاده کنید تا یک کیف پول %3$s جدید تنظیم کنید یا از دکمه بازیابی برای وارد کردن کیف پول موجود استفاده کنید. \n\n شما می توانید از این کیف پول استفاده کنید برای: %4$s.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">انتخاب زنجیره بلوکی</string>
     <string name="AddTokenDialog_Subtitle">در حال اضافه کردن نشان</string>
     <string name="AddTokenDialog_Erc20Tokens">نشان های ERC 20</string>
-    <string name="AddTokenDialog_EosTokens">نشانه های EOS</string>
     <string name="AddTokenDialog_BinanceTokens">نشان های BEP2</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">نام سکه</string>
