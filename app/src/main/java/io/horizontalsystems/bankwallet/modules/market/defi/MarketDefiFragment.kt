@@ -33,6 +33,7 @@ class MarketDefiFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, Mark
         marketTopItemsAdapter = MarketTopItemsAdapter(this, marketTopViewModel, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketTopHeaderAdapter, marketTopItemsAdapter)
+        coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
             marketTopItemsAdapter.refresh()
