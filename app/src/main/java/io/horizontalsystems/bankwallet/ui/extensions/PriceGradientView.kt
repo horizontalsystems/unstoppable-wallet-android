@@ -135,13 +135,13 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
         }
 
         fun getTranslateY(to: Float): Pair<Float, Float> {
-            val start = (imageView.drawable.intrinsicHeight - imageView.height)
+            val middle = imageView.drawable.intrinsicHeight / 2f
 
             val prevPosition = matrix.values()[Matrix.MTRANS_Y]
             val movePosition = if (to == 0f) {
                 0f
             } else {
-                abs(diff(to)) / 100 * start
+                abs(diff(to)) / 100 * middle
             }
 
             return Pair(prevPosition, -movePosition)
