@@ -39,6 +39,7 @@ class MarketTop100Fragment : BaseFragment(), MarketTopHeaderAdapter.Listener, Ma
         marketTopItemsAdapter = MarketTopItemsAdapter(this, marketTopViewModel, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, marketTopHeaderAdapter, marketTopItemsAdapter)
+        coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
             marketMetricsAdapter.refresh()
