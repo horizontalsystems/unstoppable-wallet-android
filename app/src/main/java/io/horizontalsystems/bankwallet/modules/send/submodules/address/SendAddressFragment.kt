@@ -52,6 +52,5 @@ class SendAddressFragment(
     }
 
     override fun init() {
-        // presenter.onViewDidLoad()
     }
 }
