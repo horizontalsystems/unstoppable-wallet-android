@@ -57,7 +57,8 @@ object SendAddressModule {
             private val coin: Coin,
             private val sendHandler: SendModule.ISendHandler,
             private val addressModuleDelete: IAddressModuleDelegate,
-            private val isResolutionEnabled: Boolean = true
+            private val isResolutionEnabled: Boolean = true,
+            private val placeholder: String
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -67,7 +68,7 @@ object SendAddressModule {
             val presenter = SendAddressPresenter(addressModuleDelete)
 
             val resolutionService = AddressResolutionService(coin.code, isResolutionEnabled)
-            val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser)
+            val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser, placeholder)
 
             sendHandler.addressModule = presenter
 

@@ -144,7 +144,7 @@
 
     <string name="Send_Title">Send %s</string>
 
-    <string name="Send_Hint_Address">Address</string>
+    <string name="Send_Hint_Address">Address or Domain</string>
     <string name="Send_Hint_Amount">Amount</string>
 
     <string name="Send_Fee">Fee</string>
@@ -152,6 +152,8 @@
     <string name="Send_Button_Max">Max</string>
 
     <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_Domain">Domain</string>
+    <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
     <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
@@ -259,7 +261,7 @@
     <string name="SwapSettings_RecipientAddressDescription">After the exchange operation, the amount will be transferred to the specified address</string>
     <string name="SwapSettings_Apply">Apply</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
-    <string name="SwapSettings_RecipientPlaceholder">Address</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
 
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>

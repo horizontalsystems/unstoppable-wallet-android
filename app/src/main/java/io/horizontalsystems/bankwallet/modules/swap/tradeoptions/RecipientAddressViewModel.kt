@@ -23,7 +23,8 @@ interface IRecipientAddressService {
 class RecipientAddressViewModel(
         private val service: IRecipientAddressService,
         private val resolutionService: AddressResolutionService,
-        private val addressParser: IAddressParser)
+        private val addressParser: IAddressParser,
+        override val inputFieldPlaceholder: String)
     : ViewModel(), IVerifiedInputViewModel {
 
     override val setTextLiveData = SingleLiveEvent<String?>()

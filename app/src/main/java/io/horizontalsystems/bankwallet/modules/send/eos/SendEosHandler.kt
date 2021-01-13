@@ -59,7 +59,7 @@ class SendEosHandler(
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
                                                           amountModule.secondaryAmountInfo(),
-                                                          addressModule.validAddress().hex),
+                                                          addressModule.validAddress()),
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
 

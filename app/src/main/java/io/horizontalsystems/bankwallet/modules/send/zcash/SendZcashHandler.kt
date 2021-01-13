@@ -61,7 +61,7 @@ class SendZcashHandler(
                 SendModule.SendConfirmationAmountViewItem(
                         amountModule.primaryAmountInfo(),
                         amountModule.secondaryAmountInfo(),
-                        addressModule.validAddress().hex,
+                        addressModule.validAddress(),
                 ),
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo)

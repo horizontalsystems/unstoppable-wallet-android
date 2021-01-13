@@ -33,6 +33,7 @@
         android:background="@color/transparent"
         android:includeFontPadding="false"
         android:inputType="textMultiLine"
+        android:hint="@string/Send_Hint_Address"
         android:padding="12dp"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"

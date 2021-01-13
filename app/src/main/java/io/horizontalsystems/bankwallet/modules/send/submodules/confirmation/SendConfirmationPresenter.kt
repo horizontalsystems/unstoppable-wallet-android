@@ -23,6 +23,7 @@ class SendConfirmationPresenter(
         var secondaryAmount: String? = null
         var primaryFeeAmount: String? = null
         var secondaryFeeAmount: String? = null
+        var domain: String? = null
         var memo: String? = null
         var duration: Long? = null
         var lockTimeInterval: LockTimeInterval? = null
@@ -31,10 +32,11 @@ class SendConfirmationPresenter(
             when (item) {
                 is SendConfirmationAmountViewItem -> {
                     primaryName = item.primaryInfo.getAmountName()
-                    primaryAmount = item.primaryInfo.getFormatted() ?: ""
+                    primaryAmount = item.primaryInfo.getFormatted()
                     secondaryName = item.secondaryInfo?.getAmountName()
                     secondaryAmount = item.secondaryInfo?.getFormatted()
-                    receiver = item.receiver
+                    domain = item.receiver.domain
+                    receiver = item.receiver.hex
                 }
                 is SendConfirmationFeeViewItem -> {
                     primaryFeeAmount = item.primaryInfo.getFormatted()
@@ -57,6 +59,7 @@ class SendConfirmationPresenter(
                 primaryAmount = primaryAmount,
                 secondaryName = secondaryName,
                 secondaryAmount = secondaryAmount,
+                domain = domain,
                 receiver = receiver,
                 memo = memo,
                 locked = lockTimeInterval != null

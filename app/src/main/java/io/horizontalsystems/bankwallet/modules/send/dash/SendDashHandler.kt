@@ -77,7 +77,7 @@ class SendDashHandler(
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
                                                           amountModule.secondaryAmountInfo(),
-                                                          addressModule.validAddress().hex),
+                                                          addressModule.validAddress()),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
     }
 

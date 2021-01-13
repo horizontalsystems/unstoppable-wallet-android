@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
 
@@ -22,7 +23,8 @@ object SwapTradeOptionsModule {
                 RecipientAddressViewModel::class.java -> {
                     val addressParser = App.addressParserFactory.parser(ethereumCoin)
                     val resolutionService = AddressResolutionService(ethereumCoin.code, true)
-                    RecipientAddressViewModel(service, resolutionService, addressParser) as T
+                    val placeholder = App.instance.getString(R.string.SwapSettings_RecipientPlaceholder)
+                    RecipientAddressViewModel(service, resolutionService, addressParser, placeholder) as T
                 }
                 else -> throw IllegalArgumentException()
             }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.google.zxing.integration.android.IntentIntegrator
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
@@ -27,7 +28,7 @@ class SendAddressFragment(
     }
 
     private val presenter by activityViewModels<RecipientAddressViewModel> {
-        SendAddressModule.Factory(coin, sendHandler, addressModuleDelegate)
+        SendAddressModule.Factory(coin, sendHandler, addressModuleDelegate, placeholder = getString(R.string.Send_Hint_Address))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

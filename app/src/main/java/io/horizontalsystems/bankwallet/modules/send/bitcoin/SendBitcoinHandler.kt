@@ -125,7 +125,7 @@ class SendBitcoinHandler(
             add(SendModule.SendConfirmationAmountViewItem(
                     amountModule.primaryAmountInfo(),
                     amountModule.secondaryAmountInfo(),
-                    addressModule.validAddress().hex,
+                    addressModule.validAddress(),
                     lockTimeInterval != null))
 
             add(SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
