@@ -8,7 +8,7 @@ import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Observable
 import io.reactivex.Single
 
-class MarketListDefiDataSource(private val xRateManager: IRateManager) : IMarketListDataSource() {
+class MarketListDefiDataSource(private val xRateManager: IRateManager) : IMarketListDataSource {
 
     override val sortingFields: Array<Field> = arrayOf(
             Field.HighestLiquidity,
@@ -23,7 +23,7 @@ class MarketListDefiDataSource(private val xRateManager: IRateManager) : IMarket
 
     override val dataUpdatedAsync: Observable<Unit> = Observable.empty()
 
-    override fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
+    override fun getListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return xRateManager.getTopDefiMarketList(currencyCode, fetchDiffPeriod)
     }
 

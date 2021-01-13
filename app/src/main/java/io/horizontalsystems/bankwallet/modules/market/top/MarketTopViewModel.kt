@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
+import java.util.Comparator
 
 class MarketTopViewModel(
         private val service: MarketTopService,
@@ -15,7 +16,12 @@ class MarketTopViewModel(
     val sortingFields: Array<Field> by service::sortingFields
     val periods by service::periods
 
-    var sortingField: Field by service::sortingField
+    var sortingField: Field = sortingFields.first()
+        set(value) {
+            field = value
+
+            syncViewItemsBySortingField()
+        }
     var period by service::period
 
     val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
@@ -39,14 +45,18 @@ class MarketTopViewModel(
         errorLiveData.postValue((state as? MarketTopService.State.Error)?.error?.let { convertErrorMessage(it) })
 
         if (state is MarketTopService.State.Loaded) {
-            val viewItems = service.marketTopItems.map {
-                val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
-
-                MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
-            }
-
-            marketTopViewItemsLiveData.postValue(viewItems)
+            syncViewItemsBySortingField()
         }
+    }
+
+    private fun syncViewItemsBySortingField() {
+        val viewItems = sort(service.marketTopItems, sortingField).map {
+            val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
+
+            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
+        }
+
+        marketTopViewItemsLiveData.postValue(viewItems)
     }
 
     private fun convertErrorMessage(it: Throwable): String {
@@ -63,6 +73,20 @@ class MarketTopViewModel(
     fun refresh() {
         service.refresh()
     }
+
+    private fun sort(items: List<MarketTopItem>, sortingField: Field) = when (sortingField) {
+        Field.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
+        Field.LowestCap -> items.sortedByNullLast { it.marketCap }
+        Field.HighestLiquidity -> items.sortedByDescendingNullLast { it.liquidity }
+        Field.LowestLiquidity -> items.sortedByNullLast { it.liquidity }
+        Field.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
+        Field.LowestVolume -> items.sortedByNullLast { it.volume }
+        Field.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
+        Field.LowestPrice -> items.sortedByNullLast { it.rate }
+        Field.TopGainers -> items.sortedByDescendingNullLast { it.diff }
+        Field.TopLosers -> items.sortedByNullLast { it.diff }
+    }
+
 }
 
 data class MarketTopViewItem(
@@ -79,4 +103,12 @@ data class MarketTopViewItem(
     fun areContentsTheSame(other: MarketTopViewItem): Boolean {
         return this == other
     }
+}
+
+inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {
+    return sortedWith(Comparator.nullsLast(compareByDescending(selector)))
+}
+
+inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selector: (T) -> R?): List<T> {
+    return sortedWith(Comparator.nullsLast(compareBy(selector)))
 }
