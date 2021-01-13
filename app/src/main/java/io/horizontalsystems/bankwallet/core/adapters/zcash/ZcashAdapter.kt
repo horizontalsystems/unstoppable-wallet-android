@@ -65,6 +65,14 @@ class ZcashAdapter(
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
+    private var syncState: AdapterState = AdapterState.Syncing(0, null)
+        set(value) {
+            if (value != field) {
+                field = value
+                adapterStateUpdatedSubject.onNext(Unit)
+            }
+        }
+
     //region IAdapter
     override fun start() {
         synchronizer.start()
@@ -82,15 +90,10 @@ class ZcashAdapter(
     //endregion
 
     //region IBalanceAdapter
-    override var state: AdapterState = AdapterState.Syncing(0, null)
-        set(value) {
-            if (value != field) {
-                field = value
-                adapterStateUpdatedSubject.onNext(Unit)
-            }
-        }
+    override val balanceState: AdapterState
+        get() = syncState
 
-    override val stateUpdatedFlowable: Flowable<Unit>
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val balance: BigDecimal
@@ -123,6 +126,13 @@ class ZcashAdapter(
     //endregion
 
     //region ITransactionsAdapter
+
+    override val transactionsState: AdapterState
+        get() = syncState
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     override val lastBlockInfo: LastBlockInfo?
         get() = LastBlockInfo(synchronizer.latestHeight)
 
@@ -191,11 +201,11 @@ class ZcashAdapter(
     }
 
     private fun onStatus(status: Synchronizer.Status) {
-        state = when (status) {
+        syncState = when (status) {
             Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
             Synchronizer.Status.SYNCED -> AdapterState.Synced
-            else -> state
+            else -> syncState
         }
     }
 
@@ -219,7 +229,7 @@ class ZcashAdapter(
         val totalProgress = (downloadProgress + scanProgress) / 2
 
         if (totalProgress < 100) {
-            state = AdapterState.Syncing(totalProgress, null)
+            syncState = AdapterState.Syncing(totalProgress, null)
         }
     }
 

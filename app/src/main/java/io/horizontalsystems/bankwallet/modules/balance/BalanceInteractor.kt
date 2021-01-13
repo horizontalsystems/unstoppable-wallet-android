@@ -67,7 +67,7 @@ class BalanceInteractor(
     }
 
     override fun state(wallet: Wallet): AdapterState? {
-        return adapterManager.getBalanceAdapterForWallet(wallet)?.state
+        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceState
     }
 
     override fun subscribeToWallets() {
@@ -113,11 +113,11 @@ class BalanceInteractor(
                         adapterDisposables.add(it)
                     }
 
-            adapter.stateUpdatedFlowable
+            adapter.balanceStateUpdatedFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateState(wallet, adapter.state)
+                        delegate?.didUpdateState(wallet, adapter.balanceState)
                     }.let {
                         adapterDisposables.add(it)
                     }

@@ -169,8 +169,8 @@ interface IBinanceKitManager {
 }
 
 interface ITransactionsAdapter {
-    val state: AdapterState
-    val stateUpdatedFlowable: Flowable<Unit>
+    val transactionsState: AdapterState
+    val transactionsStateUpdatedFlowable: Flowable<Unit>
 
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
@@ -182,8 +182,8 @@ interface ITransactionsAdapter {
 }
 
 interface IBalanceAdapter {
-    val state: AdapterState
-    val stateUpdatedFlowable: Flowable<Unit>
+    val balanceState: AdapterState
+    val balanceStateUpdatedFlowable: Flowable<Unit>
 
     val balance: BigDecimal
     val balanceLocked: BigDecimal? get() = null
