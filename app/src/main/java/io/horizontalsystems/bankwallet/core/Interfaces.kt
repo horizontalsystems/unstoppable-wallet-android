@@ -16,7 +16,6 @@ import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
@@ -50,7 +49,6 @@ interface ILocalStorage {
     var baseEthereumProvider: String?
     var baseDashProvider: String?
     var baseBinanceProvider: String?
-    var baseEosProvider: String?
     var baseZcashProvider: String?
     var syncMode: SyncMode?
     var sortType: BalanceSortType
@@ -162,14 +160,6 @@ interface IEthereumKitManager {
     fun unlink()
 }
 
-interface IEosKitManager {
-    val eosKit: EosKit?
-    val statusInfo: Map<String, Any>?
-
-    fun eosKit(wallet: Wallet): EosKit
-    fun unlink()
-}
-
 interface IBinanceKitManager {
     val binanceKit: BinanceChainKit?
     val statusInfo: Map<String, Any>?
@@ -243,13 +233,6 @@ interface ISendBinanceAdapter {
 
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
-}
-
-interface ISendEosAdapter {
-    val availableBalance: BigDecimal
-
-    fun validate(account: String)
-    fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
 }
 
 interface ISendZcashAdapter {

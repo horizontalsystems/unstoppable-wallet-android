@@ -65,12 +65,6 @@
     <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
 
-    <string name="Restore_EosAccountName" translatable="false">Account Name</string>
-    <string name="Restore_EosActivePrivateKey" translatable="false">Active Private Key</string>
-
-    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
-    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
-
     <string name="Select_Coins">Choose Crypto</string>
 
     <string name="Restore_BirthdayHeight_Hint">Wallet birthday height (optional)</string>
@@ -92,12 +86,6 @@
 
     <string name="Backup_Button_Backup">Backup</string>
     <string name="Backup_Button_ShowKey">Show Key</string>
-
-    <!--Backup Eos-->
-
-    <string name="Backup_Eos_AccountName" translatable="false">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey" translatable="false">Private Key</string>
-    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may have access to clipboard data.</string>
 
     <!--Market-->
 
@@ -493,9 +481,6 @@
 
     <!--Errors-->
 
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
     <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
     <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
 
@@ -559,7 +544,6 @@
     <string name="AddTokenDialog_Title">Choose Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Adding Token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
-    <string name="AddTokenDialog_EosTokens">EOS Tokens</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
 
     <!-- Add Token -->
@@ -617,8 +601,6 @@
 
     <string name="AccountType_Unstoppable">Standard</string>
     <string name="AccountType_Unstoppable_Text" translatable="false">BTC, LTC, BCH, DASH, ETH, ERC20 tokens</string>
-    <string name="AccountType_Eos" translatable="false">EOS</string>
-    <string name="AccountType_Eos_Text" translatable="false">EOS, EOSIO tokens</string>
     <string name="AccountType_Binance" translatable="false">Binance</string>
     <string name="AccountType_Binance_Text" translatable="false">BNB, BEP2 tokens</string>
     <string name="AccountType_Zcash" translatable="false">Zcash</string>

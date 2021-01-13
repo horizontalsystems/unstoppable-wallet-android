@@ -14,7 +14,6 @@ class AdapterFactory(
         private val context: Context,
         private val testMode: Boolean,
         private val ethereumKitManager: IEthereumKitManager,
-        private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager,
         private val backgroundManager: BackgroundManager) {
 
@@ -34,7 +33,6 @@ class AdapterFactory(
             is CoinType.Litecoin -> LitecoinAdapter(wallet, derivation, syncMode, testMode, backgroundManager)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, bitcoinCashCoinTypeManager?.bitcoinCashCoinType, testMode, backgroundManager)
             is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet, communicationMode))
             is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet, communicationMode), wallet.coin.decimal, coinType.address, coinType.fee, coinType.minimumRequiredBalance, coinType.minimumSendAmount)
@@ -45,9 +43,6 @@ class AdapterFactory(
         when (adapter) {
             is EthereumBaseAdapter -> {
                 ethereumKitManager.unlink()
-            }
-            is EosAdapter -> {
-                eosKitManager.unlink()
             }
             is BinanceAdapter -> {
                 binanceKitManager.unlink()

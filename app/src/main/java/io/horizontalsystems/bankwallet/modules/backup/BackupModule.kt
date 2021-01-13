@@ -29,7 +29,6 @@ object BackupModule {
     interface Router {
         fun startUnlockPinModule()
         fun startBackupWordsModule(words: List<String>, accountTypeTitle: Int, additionalInfo: String?)
-        fun startBackupEosModule(account: String, activePrivateKey: String)
         fun close()
         fun showSuccessAndFinish()
     }

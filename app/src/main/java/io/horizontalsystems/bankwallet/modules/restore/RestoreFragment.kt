@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment
@@ -96,9 +95,6 @@ class RestoreFragment : BaseFragment() {
                             else -> RestoreAccountType.ZCASH
                         }
                         RestoreWordsFragment.instance(restoreAccountType, screen.predefinedAccountType.title)
-                    }
-                    PredefinedAccountType.Eos -> {
-                        RestoreEosFragment()
                     }
                 }
             }

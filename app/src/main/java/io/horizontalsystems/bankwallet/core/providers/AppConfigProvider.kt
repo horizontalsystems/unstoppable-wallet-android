@@ -48,8 +48,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("BCH", "Bitcoin Cash", "BCH", 8, CoinType.BitcoinCash),
                 Coin("DASH", "Dash", "DASH", 8, CoinType.Dash),
                 Coin("BNB", "Binance Chain", "BNB", 8, CoinType.Binance("BNB")),
-                Coin("ZEC", "Zcash", "ZEC", 8, CoinType.Zcash),
-                Coin("EOS", "EOS", "EOS", 4, CoinType.Eos("eosio.token", "EOS"))
+                Coin("ZEC", "Zcash", "ZEC", 8, CoinType.Zcash)
         )
     }
 
@@ -115,9 +114,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("DOS",         "DOSNetwork",           "DOS",      8, CoinType.Binance("DOS-120")),
                 Coin("DOS-ERC20",   "DOSNetwork",           "DOS",      18, CoinType.Erc20("0x0A913beaD80F321E7Ac35285Ee10d9d922659cB7")),
                 Coin("ENJ",         "EnjinCoin",            "ENJ",      18, CoinType.Erc20("0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c")),
-                Coin("EOSDT",       "EOSDT",                "EOSDT",    9, CoinType.Eos("eosdtsttoken", "EOSDT")),
                 Coin("ETH-BEP2",    "ETH BEP2",             "ETH",      8, CoinType.Binance("ETH-1C9")),
-                Coin("IQ",          "Everipedia",           "IQ",       3, CoinType.Eos("everipediaiq", "IQ")),
                 Coin("FLASH",       "Flash Token",          "FLASH",    18, CoinType.Erc20("0xb4467e8d621105312a914f1d42f10770c0ffe3c8")),
                 Coin("FOAM",        "FOAM Token",           "FOAM",     18, CoinType.Erc20("0x4946fcea7c692606e8908002e55a582af44ac121")),
                 Coin("FUN",         "FunFair",              "FUN",      8, CoinType.Erc20("0x419d0d8bdd9af5e606ae2232ed285aff190e711b")),
@@ -147,8 +144,6 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("MCO",         "MCO",                  "MCO",      8, CoinType.Erc20("0xB63B606Ac810a52cCa15e44bB630fd42D8d1d83d")),
                 Coin("TKN",         "Monolith",             "TKN",      8, CoinType.Erc20("0xaaaf91d9b90df800df4f55c205fd6989c977e73a")),
                 Coin("NEXO",        "Nexo",                 "NEXO",     18, CoinType.Erc20("0xB62132e35a6c13ee1EE0f84dC5d40bad8d815206")),
-                Coin("NDX",         "Newdex",               "NDX",      4, CoinType.Eos("newdexissuer", "NDX")),
-                Coin("NUT",         "Native Utility Token", "NUT",      9, CoinType.Eos("eosdtnutoken", "NUT")),
                 Coin("XFT",         "Offshift",             "XFT",      18, CoinType.Erc20("0xabe580e7ee158da464b51ee1a83ac0289622e6be")),
                 Coin("OMG",         "OmiseGO",              "OMG",      18, CoinType.Erc20("0xd26114cd6EE289AccF82350c8d8487fedB8A0C07")),
                 Coin("ORBS",        "Orbs",                 "ORBS",     18, CoinType.Erc20("0xff56Cc6b1E6dEd347aA0B7676C85AB0B3D08B0FA")),
@@ -157,11 +152,9 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("PAN",         "Panvala pan",          "PAN",      18, CoinType.Erc20("0xD56daC73A4d6766464b38ec6D91eB45Ce7457c44")),
                 Coin("PAR",         "Parachute",            "PAR",      18, CoinType.Erc20("0x1beef31946fbbb40b877a72e4ae04a8d1a5cee06")),
                 Coin("PAX",         "Paxos Standard",       "PAX",      18, CoinType.Erc20("0x8E870D67F660D95d5be530380D0eC0bd388289E1")),
-                Coin("PGL",         "Prospectors Gold",     "PGL",      4, CoinType.Eos("prospectorsg", "PGL")),
                 Coin("POLS",        "PolkastarterToken",    "POLS",     18, CoinType.Erc20("0x83e6f1E41cdd28eAcEB20Cb649155049Fac3D5Aa")),
                 Coin("POLY",        "Polymath",             "POLY",     18, CoinType.Erc20("0x9992eC3cF6A55b00978cdDF2b27BC6882d88D1eC")),
                 Coin("PPT",         "Populous",             "PPT",      8, CoinType.Erc20("0xd4fa1460F537bb9085d22C7bcCB5DD450Ef28e3a")),
-                Coin("PTI",         "Paytomat",             "PTI",      4, CoinType.Eos("ptitokenhome", "PTI")),
                 Coin("NPXS",        "Pundi X",              "NPXS",     18, CoinType.Erc20("0xA15C7Ebe1f07CaF6bFF097D8a589fb8AC49Ae5B3")),
                 Coin("RARI",        "Rarible",              "RARI",     18, CoinType.Erc20("0xfca59cd816ab1ead66534d82bc21e7515ce441cf")) ,
                 Coin("RFI",         "reflect.finance",      "RFI",      9, CoinType.Erc20("0xA1AFFfE3F4D611d252010E3EAf6f4D77088b0cd7")),

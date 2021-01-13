@@ -12,8 +12,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosFragment
-import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsFragment
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.core.findNavController
@@ -61,15 +59,6 @@ class BackupFragment : BaseFragment() {
             findNavController().navigate(R.id.backupFragment_to_backupWordsFragment, arguments, navOptions())
         })
 
-        viewModel.startBackupEosModule.observe(viewLifecycleOwner, Observer { (account, activePrivateKey) ->
-            val arguments = Bundle(2).apply {
-                putString(BackupEosFragment.ACCOUNT, account)
-                putString(BackupEosFragment.ACTIVE_PRIVATE_KEY, activePrivateKey)
-            }
-
-            findNavController().navigate(R.id.backupFragment_to_backupEosFragment, arguments, navOptions())
-        })
-
         viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
             findNavController().popBackStack()
         })
@@ -113,14 +102,5 @@ class BackupFragment : BaseFragment() {
             }
         })
 
-        getNavigationLiveData(BackupEosModule.requestKey)?.observe(viewLifecycleOwner, Observer {
-            when (it.getInt(BackupEosModule.requestResult)) {
-                BackupEosModule.RESULT_SHOW -> {
-                    findNavController().popBackStack()
-                }
-                else -> {
-                }
-            }
-        })
     }
 }

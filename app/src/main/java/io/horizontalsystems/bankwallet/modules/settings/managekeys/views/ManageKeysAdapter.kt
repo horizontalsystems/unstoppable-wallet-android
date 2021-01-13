@@ -82,7 +82,7 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             backupButton.isVisible = hasAccount && !isBackedUp
             showKeyButton.isVisible = hasAccount && isBackedUp
             unlinkButton.isVisible = hasAccount
-            createButton.isVisible = !hasAccount && predefinedAccount.isCreationSupported()
+            createButton.isVisible = !hasAccount
             restoreButton.isVisible = !hasAccount
 
 
