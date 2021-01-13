@@ -100,10 +100,12 @@
 
     <View
         android:id="@+id/bottomBorder"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/frame" />
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </merge>

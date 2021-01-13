@@ -101,7 +101,7 @@
 
     <View
         android:id="@+id/speedLayoutFrame"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,9 +117,10 @@
 
     <View
         android:id="@+id/border1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/speedLayoutFrame" />
 
@@ -191,7 +192,7 @@
 
     <io.horizontalsystems.seekbar.FeeSeekBar
         android:id="@+id/customFeeSeekBar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="24dp"
         android:background="@null"
         android:max="200"
@@ -210,7 +211,7 @@
     <TextView
         android:id="@+id/feeError"
         style="@style/Caption"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
