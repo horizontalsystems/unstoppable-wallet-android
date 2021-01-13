@@ -12,12 +12,12 @@ import io.reactivex.Single
 class MarketListFavoritesDataSource(
         private val xRateManager: IRateManager,
         private val marketFavoritesManager: MarketFavoritesManager
-) : IMarketListDataSource() {
+) : IMarketListDataSource {
 
     override val sortingFields: Array<Field> = Field.values()
     override val dataUpdatedAsync: Observable<Unit> by marketFavoritesManager::dataUpdatedAsync
 
-    override fun doGetListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
+    override fun getListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return Single.zip(
                 xRateManager.getTopDefiMarketList(currencyCode, fetchDiffPeriod),
                 xRateManager.getTopMarketList(currencyCode, fetchDiffPeriod),

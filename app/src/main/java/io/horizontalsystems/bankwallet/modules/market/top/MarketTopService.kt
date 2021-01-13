@@ -2,7 +2,10 @@ package io.horizontalsystems.bankwallet.modules.market.top
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.xrateskit.entities.CoinMarket
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
@@ -20,13 +23,6 @@ class MarketTopService(
         }
 
     val sortingFields: Array<Field> = marketListDataSource.sortingFields
-    var sortingField: Field = marketListDataSource.sortingFields.first()
-        set(value) {
-            field = value
-
-            fetch()
-        }
-
 
     sealed class State {
         object Loading : State()
@@ -40,6 +36,7 @@ class MarketTopService(
 
     var marketTopItems: List<MarketTopItem> = listOf()
 
+    private var topItemsDisposable: Disposable? = null
     private val disposable = CompositeDisposable()
 
     init {
@@ -60,24 +57,46 @@ class MarketTopService(
     }
 
     private fun fetch() {
+        topItemsDisposable?.let { disposable.remove(it) }
+
         stateObservable.onNext(State.Loading)
 
-        marketListDataSource.getListAsync(currencyManager.baseCurrency.code, period, sortingField)
+        topItemsDisposable = marketListDataSource.getListAsync(currencyManager.baseCurrency.code, convertPeriod(period))
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    marketTopItems = it
+                    marketTopItems = it.mapIndexed { index, topMarket ->
+                        convertToMarketTopItem(index + 1, topMarket)
+                    }
 
                     stateObservable.onNext(State.Loaded)
                 }, {
                     stateObservable.onNext(State.Error(it))
                 })
-                .let {
-                    disposable.add(it)
-                }
+
+        topItemsDisposable?.let {
+            disposable.add(it)
+        }
     }
 
     override fun clear() {
         disposable.clear()
     }
 
+    private fun convertToMarketTopItem(rank: Int, topMarket: CoinMarket) =
+            MarketTopItem(
+                    rank,
+                    topMarket.coin.code,
+                    topMarket.coin.title,
+                    topMarket.marketInfo.volume.toDouble(),
+                    topMarket.marketInfo.rate,
+                    topMarket.marketInfo.rateDiffPeriod,
+                    topMarket.marketInfo.marketCap?.toDouble(),
+                    topMarket.marketInfo.liquidity,
+            )
+
+    private fun convertPeriod(period: Period) = when (period) {
+        Period.Period24h -> TimePeriod.HOUR_24
+        Period.PeriodWeek -> TimePeriod.DAY_7
+        Period.PeriodMonth -> TimePeriod.DAY_30
+    }
 }
