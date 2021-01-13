@@ -102,12 +102,14 @@
     <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
-    <string name="Send_Hint_Address">Adres</string>
+    <string name="Send_Hint_Address">Address or Domain</string>
     <string name="Send_Hint_Amount">Tutar</string>
     <string name="Send_Fee">Masraf</string>
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Confirmation_Title">Onayla</string>
+    <string name="Send_Confirmation_Domain">Domain</string>
+    <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
     <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
@@ -198,12 +200,14 @@
     <string name="SwapSettings_RecipientAddressDescription">Takas etme işleminden sonra, tutar belirtilen adrese transfer edilecektir</string>
     <string name="SwapSettings_Apply">Uygula</string>
     <string name="SwapSettings_DeadlineMinute">%s dk</string>
-    <string name="SwapSettings_RecipientPlaceholder">Adres</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Maksimum izin verilen değer %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Onaylama</string>
     <!--Swap Coin Select-->
