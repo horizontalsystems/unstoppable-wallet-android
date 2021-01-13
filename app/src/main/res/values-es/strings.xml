@@ -102,12 +102,14 @@
     <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
-    <string name="Send_Hint_Address">Dirección</string>
+    <string name="Send_Hint_Address">Address or Domain</string>
     <string name="Send_Hint_Amount">Importe</string>
     <string name="Send_Fee">Comisión</string>
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
+    <string name="Send_Confirmation_Domain">Domain</string>
+    <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_EstimateTime">Tiempo estimado:</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
     <string name="Send_Success">\u2713 Enviado</string>
@@ -198,12 +200,14 @@
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
-    <string name="SwapSettings_RecipientPlaceholder">Dirección</string>
+    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Valor máximo permitido %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Dirección invalida</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmaciones</string>
     <!--Swap Coin Select-->
