@@ -1,13 +1,14 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IVerifiedInputViewModel
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_input_address.view.*
@@ -16,6 +17,18 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var showQrButton: Boolean = false
+    private var onTextChangeCallback: ((text: String?) -> Unit)? = null
+
+    private val textWatcher = object : TextWatcher {
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            onTextChangeCallback?.invoke(s?.toString())
+            setDeleteButtonVisibility(!s.isNullOrBlank())
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+    }
 
     private val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
         rightMargin = LayoutHelper.dp(8f, context)
@@ -62,10 +75,21 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         actionsLayout.addView(buttonPaste)
+        input.addTextChangedListener(textWatcher)
     }
 
-    fun setText(text: String?) {
-        input.setText(text)
+    fun setText(text: String?, skipChangeEvent: Boolean = true) {
+        input.apply {
+            if (skipChangeEvent) {
+                removeTextChangedListener(textWatcher)
+            }
+
+            setText(text)
+
+            if (skipChangeEvent) {
+                addTextChangedListener(textWatcher)
+            }
+        }
         setDeleteButtonVisibility(!text.isNullOrBlank())
     }
 
@@ -81,6 +105,10 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         // Highlights background with border color
         // todo: need to implement custom states
         inputBackground.isSelected = isVisible
+    }
+
+    fun onTextChange(callback: (new: String?) -> Unit) {
+        onTextChangeCallback = callback
     }
 
     fun setSpinner(isVisible: Boolean) {
@@ -99,40 +127,32 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         buttonPaste.isVisible = !visible
     }
 
-    fun setViewModel(viewModel: IVerifiedInputViewModel, lifecycleOwner: LifecycleOwner, onClickQrScan: () -> Unit) {
-        input.maxLines = viewModel.inputFieldMaximumNumberOfLines
+    fun setViewModel(viewModel: RecipientAddressViewModel, lifecycleOwner: LifecycleOwner, onClickQrScan: () -> Unit) {
+        setHint(viewModel.inputFieldPlaceholder)
+        setText(viewModel.initialValue)
 
-        viewModel.inputFieldSyncingLiveData.observe(lifecycleOwner, { visible ->
+        viewModel.isLoadingLiveData.observe(lifecycleOwner, { visible ->
             setSpinner(visible)
         })
 
-        viewModel.inputFieldValueLiveData.observe(lifecycleOwner, {
-            setText(it)
+        viewModel.setTextLiveData.observe(lifecycleOwner, {
+            setText(it, false)
         })
 
-        viewModel.inputFieldCautionLiveData.observe(lifecycleOwner, {
+        viewModel.cautionLiveData.observe(lifecycleOwner, {
             setError(it?.text)
         })
 
-        setHint(viewModel.inputFieldPlaceholder)
-        setText(viewModel.inputFieldInitialValue)
-
         input.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                viewModel.validateInputField()
-            }
+            viewModel.onChangeFocus(hasFocus)
         }
 
-        input.doOnTextChanged { text, _, _, _ ->
-            viewModel.setInputFieldValue(text.toString())
-
-            setDeleteButtonVisibility(!text.isNullOrBlank())
+        onTextChange {
+            viewModel.onChangeText(it)
         }
 
         buttonPaste.setOnClickListener {
-            input.setText(TextHelper.getCopiedText().trim())
-
-            viewModel.validateInputField()
+            viewModel.onFetch(TextHelper.getCopiedText().trim())
         }
 
         onButtonQrScanClick(onClickQrScan)

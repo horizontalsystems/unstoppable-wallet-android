@@ -119,20 +119,20 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
         if (!viewModel.inputFieldCanEdit) {
             input.keyListener = null
         }
-        viewModel.inputFieldValueLiveData.observe(lifecycleOwner, {
+        viewModel.setTextLiveData.observe(lifecycleOwner, {
             setText(it)
         })
 
-        viewModel.inputFieldCautionLiveData.observe(lifecycleOwner, {
+        viewModel.cautionLiveData.observe(lifecycleOwner, {
             setError(it?.text)
         })
 
         setHint(viewModel.inputFieldPlaceholder)
-        setText(viewModel.inputFieldInitialValue)
+        setText(viewModel.initialValue)
 
         onTextChange { old, new ->
-            if (viewModel.inputFieldIsValid(new)) {
-                viewModel.setInputFieldValue(new)
+            if (viewModel.isValid(new)) {
+                viewModel.onChangeText(new)
             } else {
                 setText(old, true, true)
             }

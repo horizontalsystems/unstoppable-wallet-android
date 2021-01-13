@@ -3,9 +3,11 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.AddressResolutionService
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
 import java.math.BigDecimal
 
 object SendAddressModule {
@@ -18,10 +20,7 @@ object SendAddressModule {
 
     interface IViewDelegate {
         fun onViewDidLoad()
-        fun onAddressPasteClicked()
         fun onAddressDeleteClicked()
-        fun onAddressScanClicked()
-        fun onManualAddressEnter(addressText: String)
     }
 
     interface IInteractor {
@@ -33,11 +32,11 @@ object SendAddressModule {
     interface IInteractorDelegate
 
     interface IAddressModule {
-        val currentAddress: String?
+        var currentAddress: Address?
 
         @Throws
-        fun validAddress(): String
-        fun didScanQrCode(address: String)
+        fun validAddress(): Address
+        fun validateAddress()
     }
 
     interface IAddressModuleDelegate {
@@ -51,25 +50,29 @@ object SendAddressModule {
 
     open class ValidationError : Exception() {
         class InvalidAddress : ValidationError()
+        class EmptyValue : ValidationError()
     }
 
+    class Factory(
+            private val coin: Coin,
+            private val sendHandler: SendModule.ISendHandler,
+            private val addressModuleDelete: IAddressModuleDelegate,
+            private val isResolutionEnabled: Boolean = true,
+            private val placeholder: String
+    ) : ViewModelProvider.Factory {
 
-    class Factory(private val coin: Coin,
-                  private val editable: Boolean,
-                  private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            val view = SendAddressView()
             val addressParser = App.addressParserFactory.parser(coin)
-            val interactor = SendAddressInteractor(TextHelper, addressParser)
-            val presenter = SendAddressPresenter(view, editable, interactor)
+            val presenter = SendAddressPresenter(addressModuleDelete)
 
-            interactor.delegate = presenter
+            val resolutionService = AddressResolutionService(coin.code, isResolutionEnabled)
+            val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser, placeholder)
+
             sendHandler.addressModule = presenter
 
-            return presenter as T
+            return viewModel as T
         }
     }
-
 }

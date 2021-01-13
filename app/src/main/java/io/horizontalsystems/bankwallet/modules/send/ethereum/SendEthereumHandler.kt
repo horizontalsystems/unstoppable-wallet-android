@@ -39,19 +39,27 @@ class SendEthereumHandler(
                 SendModule.Input.ProceedButton)
 
     private fun syncValidation(): Boolean {
-        var success = false
+        var amountError: Throwable? = null
+        var addressError: Throwable? = null
+
         try {
             amountModule.validAmount()
-            addressModule.validAddress()
-
-            val currentState = feeModule.isValid && feeModule.feeRateState.isValid && estimateGasLimitState.isValid
-            delegate.onChange(currentState)
-            success = true
         } catch (e: Exception) {
-            delegate.onChange(false)
+            amountError = e
         }
 
-        return success
+        try {
+            addressModule.validAddress()
+        } catch (e: Exception) {
+            addressError = e
+        }
+
+        val isValid = feeModule.isValid && feeModule.feeRateState.isValid && estimateGasLimitState.isValid
+                && amountError == null && addressError == null
+
+        delegate.onChange(isValid, amountError, addressError)
+
+        return isValid
     }
 
     private fun syncState() {
@@ -101,7 +109,7 @@ class SendEthereumHandler(
             syncState()
 
             disposable?.dispose()
-            disposable = interactor.estimateGasLimit(address, amount, feeModule.feeRate)
+            disposable = interactor.estimateGasLimit(address?.hex, amount, feeModule.feeRate)
                     .subscribeOn(Schedulers.io())
                     .subscribe({ gasLimit ->
                         onReceiveGasLimit(gasLimit)
@@ -128,7 +136,7 @@ class SendEthereumHandler(
             throw Exception("SendTransactionError.unknown")
         }
 
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate, gasLimit.value, logger)
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeModule.feeRate, gasLimit.value, logger)
     }
 
     override fun onModulesDidLoad() {
@@ -141,7 +149,6 @@ class SendEthereumHandler(
     }
 
     override fun onAddressScan(address: String) {
-        addressModule.didScanQrCode(address)
     }
 
     override fun onClear() {

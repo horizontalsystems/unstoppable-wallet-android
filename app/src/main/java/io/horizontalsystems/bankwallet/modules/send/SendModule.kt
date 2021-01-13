@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -34,7 +35,7 @@ object SendModule {
         var delegate: IViewDelegate
 
         fun loadInputItems(inputs: List<Input>)
-        fun setSendButtonEnabled(enabled: Boolean)
+        fun setSendButtonEnabled(actionState: SendPresenter.ActionState)
         fun showConfirmation(confirmationViewItems: List<SendConfirmationViewItem>)
         fun showErrorInToast(error: Throwable)
     }
@@ -151,21 +152,27 @@ object SendModule {
     }
 
     interface ISendHandlerDelegate {
-        fun onChange(isValid: Boolean)
+        fun onChange(isValid: Boolean, amountError: Throwable?, addressError: Throwable?)
     }
 
     abstract class SendConfirmationViewItem
 
-    data class SendConfirmationAmountViewItem(val primaryInfo: AmountInfo,
-                                              val secondaryInfo: AmountInfo?,
-                                              val receiver: String,
-                                              val locked: Boolean = false) : SendConfirmationViewItem()
+    data class SendConfirmationAmountViewItem(
+            val primaryInfo: AmountInfo,
+            val secondaryInfo: AmountInfo?,
+            val receiver: Address,
+            val locked: Boolean = false
+    ) : SendConfirmationViewItem()
 
-    data class SendConfirmationFeeViewItem(val primaryInfo: AmountInfo,
-                                           val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
+    data class SendConfirmationFeeViewItem(
+            val primaryInfo: AmountInfo,
+            val secondaryInfo: AmountInfo?
+    ) : SendConfirmationViewItem()
 
-    data class SendConfirmationTotalViewItem(val primaryInfo: AmountInfo,
-                                             val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
+    data class SendConfirmationTotalViewItem(
+            val primaryInfo: AmountInfo,
+            val secondaryInfo: AmountInfo?
+    ) : SendConfirmationViewItem()
 
     data class SendConfirmationMemoViewItem(val memo: String?) : SendConfirmationViewItem()
 

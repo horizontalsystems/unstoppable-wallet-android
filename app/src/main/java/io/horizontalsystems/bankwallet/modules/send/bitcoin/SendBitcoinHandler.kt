@@ -24,19 +24,26 @@ class SendBitcoinHandler(
       SendHodlerModule.IHodlerModuleDelegate {
 
     private fun syncValidation() {
+        var amountError: Throwable? = null
+        var addressError: Throwable? = null
+
         try {
             amountModule.validAmount()
-            addressModule.validAddress()
-
-            delegate.onChange(true)
-
         } catch (e: Exception) {
-            delegate.onChange(false)
+            amountError = e
         }
+
+        try {
+            addressModule.validAddress()
+        } catch (e: Exception) {
+            addressError = e
+        }
+
+        delegate.onChange(amountError == null && addressError == null && feeModule.isValid, amountError, addressError)
     }
 
     private fun syncMinimumAmount() {
-        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress))
+        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress?.hex))
         syncValidation()
     }
 
@@ -84,9 +91,8 @@ class SendBitcoinHandler(
 
             val feeRateValue = (feeModule.feeRateState as FeeState.Value).value
             feeModule.setError(null)
-            interactor.fetchAvailableBalance(feeRateValue, addressModule.currentAddress, hodlerModule?.pluginData())
-            interactor.fetchFee(amountModule.currentAmount, feeRateValue, addressModule.currentAddress,
-                                hodlerModule?.pluginData())
+            interactor.fetchAvailableBalance(feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
+            interactor.fetchFee(amountModule.currentAmount, feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
         }
     }
 
@@ -109,7 +115,6 @@ class SendBitcoinHandler(
     }
 
     override fun onAddressScan(address: String) {
-        addressModule.didScanQrCode(address)
     }
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
@@ -135,8 +140,7 @@ class SendBitcoinHandler(
     }
 
     override fun sendSingle(logger: AppLogger): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate,
-                               hodlerModule?.pluginData(), logger)
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeModule.feeRate, hodlerModule?.pluginData(), logger)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate

@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapService.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptions
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.TradeError
@@ -155,8 +156,8 @@ class SwapViewModel(
         syncApproveAction()
     }
 
-    private fun sync(tradeOptions: TradeOptions) {
-        tradeOptionsViewItemLiveData.postValue(tradeOptionsViewItem(tradeOptions))
+    private fun sync(swapTradeOptions: SwapTradeOptions) {
+        tradeOptionsViewItemLiveData.postValue(tradeOptionsViewItem(swapTradeOptions))
     }
 
     private fun syncProceedAction() {
@@ -223,9 +224,9 @@ class SwapViewModel(
         )
     }
 
-    private fun tradeOptionsViewItem(tradeOptions: TradeOptions): TradeOptionsViewItem {
+    private fun tradeOptionsViewItem(tradeOptions: SwapTradeOptions): TradeOptionsViewItem {
         val defaultTradeOptions = TradeOptions()
-        val slippage = if (tradeOptions.allowedSlippagePercent.compareTo(defaultTradeOptions.allowedSlippagePercent) == 0) null else tradeOptions.allowedSlippagePercent.stripTrailingZeros().toPlainString()
+        val slippage = if (tradeOptions.allowedSlippage.compareTo(defaultTradeOptions.allowedSlippagePercent) == 0) null else tradeOptions.allowedSlippage.stripTrailingZeros().toPlainString()
         val deadline = if (tradeOptions.ttl == defaultTradeOptions.ttl) null else tradeOptions.ttl.toString()
         val recipientAddress = tradeOptions.recipient?.hex
 

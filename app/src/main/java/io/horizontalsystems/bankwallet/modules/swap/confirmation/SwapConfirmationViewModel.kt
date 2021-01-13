@@ -74,7 +74,7 @@ class SwapConfirmationViewModel(
 
         val additionalData = mutableListOf<SwapModule.ConfirmationAdditionalViewItem>()
 
-        formatter.slippage(tradeService.tradeOptions.allowedSlippagePercent)?.let {
+        formatter.slippage(tradeService.tradeOptions.allowedSlippage)?.let {
             additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_SlippageTitle), it))
         }
 
