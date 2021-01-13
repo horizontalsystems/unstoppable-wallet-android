@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
-    <string name="Alert_Share">앞으로</string>
     <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Loading">로딩중...</string>
     <string name="Alert_Restart">재시작</string>
@@ -49,8 +48,6 @@
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_InvalidWordCount">잘못된 단어 수입니다: %1$d.  %2$d 개여야 합니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
-    <string name="Restore_EosAccountIncorrect">계정이 존재하지 않습니다</string>
-    <string name="Restore_EosKeyIncorrect">틀린 암호 입니다</string>
     <string name="Select_Coins">암호화를 선택해 주세요</string>
     <string name="Restore_BirthdayHeight_Hint">월렛 벌스데이 (선택 사항)</string>
     <string name="Restore_BirthdayHeight_Description">이를 통해 월렛 앱이 Zcash 블록체인과 훨씬 빠르게 동기화할 수 있습니다. 기억이 나지 않을 경우, 칸을 비워주세요.</string>
@@ -67,7 +64,6 @@
     <string name="Backup_Button_Backup">백업</string>
     <string name="Backup_Button_ShowKey">암호 보이기</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">클립보드 관리 앱 또는 클립보드 데이터에 접근할 수 있는 다른 앱을 사용하고 있다면 \"복사\"작업을 사용하여 암호를 복사하는 것은 위험할 수 있습니다.</string>
     <!--Balance-->
     <string name="Balance_Title">잔액</string>
     <string name="Balance_Deposit">수신</string>
@@ -207,7 +203,6 @@
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">공유</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
-    <string name="Deposit_Your_Account">내 계정</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
@@ -225,7 +220,6 @@
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
-    <string name="TransactionInfo_ButtonVerify">확인</string>
     <string name="TransactionInfo_LockedUntil">까지 잠그기 %s</string>
     <string name="TransactionInfo_UnlockedAt">%s에서 잠금 해제됨</string>
     <string name="TransactionInfo_RecipientHash">수령인</string>
@@ -249,28 +243,7 @@
     <string name="Info_DoubleSpend_ThisTx">이 Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">충돌하는 Tx</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">거래기록</string>
-    <string name="FullInfo_Time">시간</string>
-    <string name="FullInfo_Block">덩어리</string>
-    <string name="FullInfo_Confirmations">확인</string>
-    <string name="FullInfo_Size">크기</string>
-    <string name="FullInfo_Fee">수수료</string>
-    <string name="FullInfo_Rate">비율, 속도, 평가</string>
-    <string name="FullInfo_Source">원천, 자료</string>
-    <string name="FullInfo_Contract">계약</string>
-    <string name="FullInfo_From">로 부터</string>
-    <string name="FullInfo_To">에게</string>
-    <string name="FullInfo_Status">상태</string>
-    <string name="FullInfo_Source_Online">온라인</string>
-    <string name="FullInfo_Source_Offline">오프라인</string>
-    <string name="FullInfo_Error_ProviderOffline">오프라인</string>
-    <string name="FullInfo_Error_TransactionNotFound">블록 체인에서 거래를 찾을 수 없습니다</string>
-    <string name="FullInfo_Error_Retry">재시도</string>
-    <string name="FullInfo_Error_ChangeSource">출처를 변경하다</string>
     <!--no used-->
-    <string name="FullInfo_SubtitleInputs">입력값</string>
-    <string name="FullInfo_SubtitleOutputs">산출값</string>
-    <string name="FullInfoEth_Amount">양</string>
     <!--Guides-->
     <string name="Guides_Title">아카데미</string>
     <!--Markdown-->
@@ -371,9 +344,6 @@
     <string name="NotificationBottomMenu_LongTerm">장기 6M</string>
     <string name="NotificationBottomMenu_Long">장기</string>
     <!--Errors-->
-    <string name="Eos_Backend_Error_SelfTransfer">토큰을 개인계정으로 옮길 수 없습니다</string>
-    <string name="Eos_Backend_Error_AccountNotExist">회원 계정이 존재하지 않습니다</string>
-    <string name="Eos_Backend_Error_InsufficientRam">귀하의 EOS계정은 이 토큰을 보내기엔 RAM이 충분하지 않습니다. 진행하시려면 RAM량을 늘리셔야 합니다.</string>
     <string name="Binance_Backend_Error_MemoRequired">수신자는 송금 내역에 메모 기록을 필요로 합니다</string>
     <string name="Binance_Backend_Error_RequiresDigits">메모에는 숫자만 포함하셔야 합니다</string>
     <!--Hud texts-->
@@ -415,14 +385,12 @@
     <string name="AddCoin_Title">추가하기 %s</string>
     <string name="AddCoin_Subtitle">%s 지갑</string>
     <string name="AddCoin_Description">귀하께서는 %1$s 을 보내거나 받으시려면 %2$s 지갑을 설정하셔야 합니다.\n\n아래의 생성 버튼을 사용하여 새로운 %3$s 지갑을 설정하거나 복원 버튼을 사용하여 기존 지갑을 가져옵니다.\n\n귀하께서는 이 지갑을 %4$s 를 위해 사용하실 수 있습니다.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">%2$s을(를) 보내거나 받으려면 %1$s 지갑을 설정해야 합니다.\n\n현재 Ustoppable은 신규 %3$s 지갑을 생성할 수 없으며, 기존의 지갑을 복원하는 것만 가능합니다.\n\n귀하는 이 지갑을 다음 용도를 위해 사용할 수 있습니다: %4$s</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">블록체인 선택</string>
     <string name="AddTokenDialog_Subtitle">토큰 추가 중</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 토큰</string>
-    <string name="AddTokenDialog_EosTokens">EOS 토큰</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 토큰</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">코인 이름</string>

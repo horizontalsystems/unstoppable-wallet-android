@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
-    <string name="Alert_Share">Reenviar</string>
     <string name="Alert_Close">Cerrar</string>
     <string name="Alert_Loading">Cargando...</string>
     <string name="Alert_Restart">Reiniciar</string>
@@ -49,8 +48,6 @@
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_InvalidWordCount">Número de palabras errónes: %1$d, deberian ser %2$d</string>
     <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
-    <string name="Restore_EosAccountIncorrect">Cuenta incorrecta</string>
-    <string name="Restore_EosKeyIncorrect">Clave incorrecta</string>
     <string name="Select_Coins">Elegir Cripto</string>
     <string name="Restore_BirthdayHeight_Hint">Talla de cumpleaños del monedero (opcional)</string>
     <string name="Restore_BirthdayHeight_Description">Esto determina desde dónde empezar a escanear por transacciones. Déjalo en blanco para escanear desde el principio, esto puede demorar un poco.</string>
@@ -67,7 +64,6 @@
     <string name="Backup_Button_Backup">Copia de seguridad</string>
     <string name="Backup_Button_ShowKey">Mostrar clave</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Warning">Copiar su clave utilizando la acción \"copiar\" implica ciertos riesgos si utiliza aplicaciones de gestión de portapapeles u otra aplicación que pueda tener acceso a la información del portapapeles.</string>
     <!--Balance-->
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Deposit">Recibir</string>
@@ -207,7 +203,6 @@
     <string name="Deposit_Title">Recibir %s</string>
     <string name="Deposit_Share">Compartir</string>
     <string name="Deposit_Your_Address">Su dirección</string>
-    <string name="Deposit_Your_Account">Su cuenta</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
@@ -225,7 +220,6 @@
     <string name="TransactionInfo_RawTransaction">Transacción sin procesar</string>
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">Desde </string>
-    <string name="TransactionInfo_ButtonVerify">Verificar</string>
     <string name="TransactionInfo_LockedUntil">Bloqueado hasta %s</string>
     <string name="TransactionInfo_UnlockedAt">Desbloqueado en %s</string>
     <string name="TransactionInfo_RecipientHash">Destinatario</string>
@@ -249,28 +243,7 @@
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx en conlicto</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transacción</string>
-    <string name="FullInfo_Time">Hora</string>
-    <string name="FullInfo_Block">Bloque</string>
-    <string name="FullInfo_Confirmations">Confirmaciones</string>
-    <string name="FullInfo_Size">Tamaño</string>
-    <string name="FullInfo_Fee">Comisión</string>
-    <string name="FullInfo_Rate">Puntuación</string>
-    <string name="FullInfo_Source">Origen</string>
-    <string name="FullInfo_Contract">Contrato</string>
-    <string name="FullInfo_From">Desde </string>
-    <string name="FullInfo_To">Para</string>
-    <string name="FullInfo_Status">Estado</string>
-    <string name="FullInfo_Source_Online">En Línea</string>
-    <string name="FullInfo_Source_Offline">Desconectado</string>
-    <string name="FullInfo_Error_ProviderOffline">Desconectado</string>
-    <string name="FullInfo_Error_TransactionNotFound">La transacción no se pudo encontrar en el blockchain</string>
-    <string name="FullInfo_Error_Retry">Reintentar</string>
-    <string name="FullInfo_Error_ChangeSource">Cambiar Origen</string>
     <!--no used-->
-    <string name="FullInfo_SubtitleInputs">Inversiones</string>
-    <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
-    <string name="FullInfoEth_Amount">Importe</string>
     <!--Guides-->
     <string name="Guides_Title">Academia</string>
     <!--Markdown-->
@@ -372,9 +345,6 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
     <string name="NotificationBottomMenu_Long">Largo plazo</string>
     <!--Errors-->
-    <string name="Eos_Backend_Error_SelfTransfer">No se puede transferir el token a su propia cuenta</string>
-    <string name="Eos_Backend_Error_AccountNotExist">La cuenta de destino no existe</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Su cuenta EOS no tiene suficiente memoria RAM para enviar este token. Necesita aumentar la participación en RAM para continuar.</string>
     <string name="Binance_Backend_Error_MemoRequired">El receptor requiere que el memo no esté vacío en la transacción de transferencia</string>
     <string name="Binance_Backend_Error_RequiresDigits">Es necesario que el memo contenga únicamente dígitos</string>
     <!--Hud texts-->
@@ -415,14 +385,12 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddCoin_Title">Añadir %s</string>
     <string name="AddCoin_Subtitle">%s Monedero</string>
     <string name="AddCoin_Description">Necesita configurar %1$s el monedero para poder enviar o recibir %2$s.\n\nUtiliza el botón de crear para configurar un nuevo %3$s monedero, o el botón Restaurar para importar el ya existente.\n\n Podrás usar este monedero para: %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">Necesitas configurar el monedero %1$s para poder enviar o recibir %2$s.\n\nEn este momento Unstoppable no puede crear un nuevo monedero %3$s. Solo puedes restaurar uno ya existente.\n\nPodrás utilizar este monedero a partir del: %4$s.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Elegir Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Añadiendo Token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Token</string>
-    <string name="AddTokenDialog_EosTokens">Tokens EOS</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Token</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Nombre de moneda</string>

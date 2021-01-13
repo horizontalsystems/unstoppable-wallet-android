@@ -5,7 +5,6 @@
 
     <string name="Alert_Cancel">Cancel</string>
     <string name="Alert_Copy">Copy</string>
-    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">Close</string>
     <string name="Alert_Loading">Loading...</string>
     <string name="Alert_Restart">Restart</string>
@@ -293,7 +292,6 @@
     <string name="Deposit_Title">Receive %s</string>
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Your Address</string>
-    <string name="Deposit_Your_Account">Your Account</string>
 
     <!--Transactions-->
 
@@ -317,7 +315,6 @@
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Memo">Memo</string>
-    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_LockedUntil">Locked until %s</string>
     <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
@@ -536,7 +533,6 @@
     <string name="AddCoin_Title">Add %s</string>
     <string name="AddCoin_Subtitle">%s Wallet</string>
     <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
-    <string name="AddCoin_CreationNotSupportedDescription">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nAt this point Unstoppable is not able to create new %3$s wallet. You’re only able to restore the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
