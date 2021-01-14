@@ -10,11 +10,12 @@ class Account(val id: String,
               val name: String,
               val type: AccountType,
               val origin: AccountOrigin,
-              var isBackedUp: Boolean = false) : Parcelable {
+              var isBackedUp: Boolean = false
+) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
-            return id == other.id && type == other.type
+            return id == other.id
         }
 
         return false
