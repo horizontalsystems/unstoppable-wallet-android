@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/Transactions_Failed" />
 
