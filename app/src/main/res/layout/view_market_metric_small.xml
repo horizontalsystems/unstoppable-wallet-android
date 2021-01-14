@@ -6,23 +6,17 @@
     tools:layout_width="wrap_content"
     tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="18dp" />
-
     <io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
         android:id="@+id/diffCircle"
         android:layout_width="3dp"
         android:layout_height="36dp"
+        android:layout_marginTop="6dp"
         android:alpha="0"
         app:cardCornerRadius="3dp"
         app:gradient="@drawable/gradient_price_up"
         app:gradientSecond="@drawable/gradient_price_down"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <TextView
         android:id="@+id/title"
@@ -40,9 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
+        android:includeFontPadding="false"
         android:textColor="?ColorBran"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/diffCircle"
         tools:text="64.09%" />
 
     <TextView
@@ -50,8 +45,9 @@
         style="@style/Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:includeFontPadding="false"
         android:textColor="@color/green_d"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/diffCircle"
         app:layout_constraintStart_toStartOf="@+id/value"
         tools:text="+6.91%" />
 
