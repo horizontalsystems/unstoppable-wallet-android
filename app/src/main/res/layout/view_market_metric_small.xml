@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
-        android:textColor="@color/green_d"
+        android:textColor="?ColorRemus"
         app:layout_constraintBottom_toBottomOf="@id/diffCircle"
         app:layout_constraintStart_toStartOf="@+id/value"
         tools:text="+6.91%" />
