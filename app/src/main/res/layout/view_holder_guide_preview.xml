@@ -64,6 +64,5 @@
             app:layout_constraintTop_toBottomOf="@+id/date"
             tools:text="Bitcoin Explained In Simple Terms" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

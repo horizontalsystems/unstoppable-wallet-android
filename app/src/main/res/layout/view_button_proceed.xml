@@ -7,7 +7,7 @@
     <Button
         android:id="@+id/btnProceed"
         style="@style/ButtonPrimaryYellow"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginBottom="12dp"

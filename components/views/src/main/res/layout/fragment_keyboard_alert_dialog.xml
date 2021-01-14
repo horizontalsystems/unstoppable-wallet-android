@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/txtDescription"
         style="@style/Subhead2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
@@ -42,10 +42,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonWrapper"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDescription">
 
         <TextView
@@ -58,7 +59,6 @@
             android:paddingEnd="6dp"
             android:paddingBottom="16dp"
             android:textColor="?ColorJacob"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/selectButtonTextView"
             app:layout_constraintHorizontal_bias="0.703"
@@ -78,7 +78,6 @@
             android:paddingEnd="6dp"
             android:paddingBottom="16dp"
             android:textColor="?ColorJacob"
-
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

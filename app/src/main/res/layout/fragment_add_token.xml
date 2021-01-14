@@ -214,7 +214,7 @@
             <TextView
                 android:id="@+id/warningText"
                 style="@style/ImportantText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/AddToken_CoinAlreadyInListWarning"
@@ -227,7 +227,7 @@
             <Button
                 android:id="@+id/btnAddToken"
                 style="@style/ButtonPrimaryYellow"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="28dp"

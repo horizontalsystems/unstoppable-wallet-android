@@ -9,7 +9,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.views.inflate
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
+import kotlinx.android.synthetic.main.view_holder_setting_with_checkmark_wrapper.*
 
 class BottomSheetSelectorDialog(
         private val title: String,
@@ -68,7 +71,7 @@ class BottomSheetSelectorDialog(
 class SelectorItemsAdapter(private val items: List<BottomSheetSelectorViewItem>, var selected: Int) : RecyclerView.Adapter<ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(SettingItemWithCheckmark(parent.context)) { position ->
+        return ItemViewHolder(inflate(parent, R.layout.view_holder_setting_with_checkmark_wrapper, false)) { position ->
             if (selected == position) return@ItemViewHolder
 
             notifyItemChanged(selected, true)
@@ -92,23 +95,24 @@ class SelectorItemsAdapter(private val items: List<BottomSheetSelectorViewItem>,
 
 }
 
-class ItemViewHolder(private val settingItemWithCheckmark: SettingItemWithCheckmark, val onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(settingItemWithCheckmark) {
+class ItemViewHolder(override val containerView: View, val onItemClick: (Int) -> Unit)
+    : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     init {
-        settingItemWithCheckmark.setOnClickListener {
+        containerView.setOnClickListener {
             onItemClick(bindingAdapterPosition)
         }
     }
 
     fun bind(title: String, subtitle: String, selected: Boolean, showBottomBorder: Boolean) {
-        settingItemWithCheckmark.setTitle(title)
-        settingItemWithCheckmark.setSubtitle(subtitle)
-        settingItemWithCheckmark.setChecked(selected)
-        settingItemWithCheckmark.toggleBottomBorder(showBottomBorder)
+        settingWithCheckmark.setTitle(title)
+        settingWithCheckmark.setSubtitle(subtitle)
+        settingWithCheckmark.setChecked(selected)
+        settingWithCheckmark.toggleBottomBorder(showBottomBorder)
     }
 
     fun bindSelected(selected: Boolean) {
-        settingItemWithCheckmark.setChecked(selected)
+        settingWithCheckmark.setChecked(selected)
     }
 }
 

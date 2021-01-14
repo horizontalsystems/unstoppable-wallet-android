@@ -66,7 +66,7 @@
 
             <HorizontalScrollView
                 android:id="@+id/chartActionsWrap"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -151,7 +151,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/chartPointsInfo"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="7dp"
@@ -245,7 +245,7 @@
 
             <io.horizontalsystems.chartview.Chart
                 android:id="@+id/chart"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="232dp"
                 android:layout_marginTop="4dp"
                 app:cursorColor="?ColorOz"
@@ -272,7 +272,7 @@
 
             <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/emaChartIndicator"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -281,7 +281,7 @@
 
             <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/macdChartIndicator"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -290,7 +290,7 @@
 
             <io.horizontalsystems.chartview.extensions.ChartIndicatorView
                 android:id="@+id/rsiChartIndicator"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
