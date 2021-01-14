@@ -20,7 +20,7 @@ class SendAddressInteractor(
     override fun parseAddress(address: String): Pair<String, BigDecimal?> {
         val addressData = addressParser.parse(address)
 
-        return Pair(addressData.address, addressData.amount?.toBigDecimal())
+        return Pair(addressData.address, addressData.amount)
     }
 
 }

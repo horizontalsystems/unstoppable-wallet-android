@@ -98,7 +98,7 @@ class RecipientAddressViewModel(
         setTextLiveData.postValue(addressData.address)
 
         addressData.amount?.let {
-            service.set(it.toBigDecimal())
+            service.set(it)
         }
     }
 

@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.entities
 
+import java.math.BigDecimal
+
 data class AddressData(
         val address: String,
         val version: String? = null,
-        val amount: Double? = null,
+        val amount: BigDecimal? = null,
         val label: String? = null,
         val message: String? = null,
         val parameters: MutableMap<String, String>? = null) {
