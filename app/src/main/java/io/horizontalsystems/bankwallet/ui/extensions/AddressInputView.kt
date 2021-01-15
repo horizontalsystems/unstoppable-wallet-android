@@ -67,6 +67,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         val ta = context.obtainStyledAttributes(attrs, R.styleable.AddressInputView)
         try {
             title.text = ta.getString(R.styleable.AddressInputView_title)
+            title.isVisible = title.text.isNotEmpty()
             description.text = ta.getString(R.styleable.AddressInputView_description)
             showQrButton = ta.getBoolean(R.styleable.AddressInputView_showQrButton, true)
             input.hint = ta.getString(R.styleable.AddressInputView_hint)

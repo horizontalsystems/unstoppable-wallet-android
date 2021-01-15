@@ -8,7 +8,7 @@ class SendAmountView : SendAmountModule.IView {
     val amount = MutableLiveData<String>()
     val availableBalance = MutableLiveData<String>()
     val hint = MutableLiveData<String?>()
-    val amountInputPrefix = MutableLiveData<String?>()
+    val amountInputPrefix = MutableLiveData<String>()
     val maxButtonVisibleValue = MutableLiveData<Boolean>()
     val addTextChangeListener = SingleLiveEvent<Unit>()
     val removeTextChangeListener = SingleLiveEvent<Unit>()
@@ -17,7 +17,7 @@ class SendAmountView : SendAmountModule.IView {
     val switchButtonEnabled = MutableLiveData<Boolean>()
     val setLoading = MutableLiveData<Boolean>()
 
-    override fun setAmountType(prefix: String?) {
+    override fun setAmountType(prefix: String) {
         amountInputPrefix.value = prefix
     }
 

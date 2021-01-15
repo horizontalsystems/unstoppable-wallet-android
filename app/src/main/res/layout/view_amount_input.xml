@@ -39,15 +39,14 @@
         android:indeterminateTint="@color/grey"
         android:indeterminateTintMode="src_atop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/background"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="85dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/input_background_themed"
+        android:background="@drawable/input_background_stateful"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,32 +59,30 @@
         style="@style/ButtonSecondary"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/Send_Button_Max"
+        app:layout_constraintBottom_toTopOf="@id/amountDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background" />
 
     <TextView
         android:id="@+id/topAmountPrefix"
-        style="@style/Body"
+        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
-        android:includeFontPadding="true"
         android:textColor="?attr/TextColorBarsToDark"
-        app:layout_constraintBottom_toBottomOf="@id/btnMax"
+        app:layout_constraintBottom_toTopOf="@id/amountDivider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background"
-        tools:text="BTC" />
+        tools:text="$" />
 
     <EditText
         android:id="@+id/editTxtAmount"
-        style="@style/Body"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
+        android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:hint="@string/Send_Hint_Amount"
@@ -93,10 +90,11 @@
         android:maxLines="1"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
-        app:layout_constraintBottom_toBottomOf="@+id/topAmountPrefix"
+        app:layout_constraintBottom_toTopOf="@+id/amountDivider"
         app:layout_constraintEnd_toStartOf="@+id/btnMax"
         app:layout_constraintStart_toEndOf="@+id/topAmountPrefix"
-        app:layout_constraintTop_toTopOf="@+id/topAmountPrefix"
+        app:layout_constraintTop_toTopOf="@+id/background"
+        app:layout_goneMarginStart="12dp"
         tools:text="0.0021" />
 
     <View
@@ -104,24 +102,30 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginTop="6dp"
         android:background="@color/steel_20"
+        app:layout_constraintBottom_toBottomOf="@+id/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnMax" />
+        app:layout_constraintTop_toTopOf="@+id/background" />
+
+    <View
+        android:id="@+id/bottomClickArea"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountDivider" />
 
     <TextView
         android:id="@+id/txtHintInfo"
-        style="@style/Caption"
-        android:layout_width="wrap_content"
+        style="@style/Subhead2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:textColor="?attr/TextColorBarsToDark"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/amountDivider"
         tools:text="$ 210" />
@@ -129,18 +133,18 @@
     <TextView
         android:id="@+id/txtHintError"
         style="@style/Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:textColor="?ColorLucian"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountDivider"
-        tools:text="$ 210" />
+        app:layout_constraintTop_toBottomOf="@+id/background"
+        tools:text="Error text"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

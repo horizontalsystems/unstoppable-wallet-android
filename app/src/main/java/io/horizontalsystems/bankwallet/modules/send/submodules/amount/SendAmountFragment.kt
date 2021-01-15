@@ -39,7 +39,7 @@ class SendAmountFragment(
         editTxtAmount.requestFocus()
 
         btnMax.setOnClickListener { presenter.onMaxClick() }
-        txtHintInfo.setOnClickListener { presenter.onSwitchClick() }
+        bottomClickArea.setOnClickListener { presenter.onSwitchClick() }
 
         presenterView.amountInputPrefix.observe(viewLifecycleOwner, Observer { prefix ->
             setPrefix(prefix)
@@ -86,8 +86,9 @@ class SendAmountFragment(
         presenter.onViewDidLoad()
     }
 
-    private fun setPrefix(prefix: String?) {
+    private fun setPrefix(prefix: String) {
         topAmountPrefix.text = prefix
+        topAmountPrefix.isVisible = prefix.isNotBlank()
     }
 
     private fun setLoading(loading: Boolean) {
@@ -129,10 +130,9 @@ class SendAmountFragment(
     }
 
     private fun setValidationError(error: SendAmountModule.ValidationError?) {
-
         processSpinner.isInvisible = true
         txtHintError.isVisible = error != null
-        txtHintInfo.isVisible = error == null
+        background.isSelected = error != null
 
         txtHintError.text = when (error) {
             is SendAmountModule.ValidationError.InsufficientBalance -> {

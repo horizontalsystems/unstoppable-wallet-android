@@ -60,9 +60,8 @@ class SendAmountPresenterHelper(
 
     fun getAmountPrefix(inputType: SendModule.InputType, rate: BigDecimal?): String? {
         return when {
-            inputType == SendModule.InputType.COIN -> coin.code
-            rate == null -> null
-            else -> baseCurrency.symbol
+            inputType == SendModule.InputType.CURRENCY && rate != null -> baseCurrency.symbol
+            else -> null
         }
     }
 
