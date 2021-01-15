@@ -97,9 +97,10 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
     // NoAccountDialog.Listener
 
-    override fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {
+    override fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType, coin: Coin) {
         val arguments = Bundle(3).apply {
             putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+            putParcelable(RestoreFragment.COIN_TO_ENABLE, coin)
             putBoolean(RestoreFragment.SELECT_COINS_KEY, false)
             putBoolean(RestoreFragment.IN_APP_KEY, true)
         }

@@ -35,10 +35,11 @@ class RestoreFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val selectCoins = arguments?.getBoolean(SELECT_COINS_KEY)!!
+        val coinToEnable = arguments?.getParcelable<Coin>(COIN_TO_ENABLE)
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY)
         inApp = arguments?.getBoolean(IN_APP_KEY) ?: true
 
-        viewModel = ViewModelProvider(this, RestoreModule.Factory(selectCoins, predefinedAccountType))
+        viewModel = ViewModelProvider(this, RestoreModule.Factory(selectCoins, predefinedAccountType, coinToEnable))
                 .get(RestoreViewModel::class.java)
 
         Handler().postDelayed({
@@ -147,6 +148,7 @@ class RestoreFragment : BaseFragment() {
 
         const val PREDEFINED_ACCOUNT_TYPE_KEY = "predefined_account_type_key"
         const val SELECT_COINS_KEY = "select_coins_key"
+        const val COIN_TO_ENABLE = "coin_to_enable"
         const val IN_APP_KEY = "in_app_key"
     }
 }

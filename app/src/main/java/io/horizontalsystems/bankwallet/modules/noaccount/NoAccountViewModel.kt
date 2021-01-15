@@ -21,6 +21,7 @@ class NoAccountViewModel(
 
             val account = service.createAccount(coin.type.predefinedAccountType)
             service.save(account)
+            service.createWallet(coin, account)
 
             accountCreateSuccessLiveEvent.call()
         } catch (e: Exception) {
