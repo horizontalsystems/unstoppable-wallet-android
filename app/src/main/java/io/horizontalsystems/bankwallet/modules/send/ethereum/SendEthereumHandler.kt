@@ -131,12 +131,10 @@ class SendEthereumHandler(
     }
 
     override fun sendSingle(logger: AppLogger): Single<Unit> {
-        val gasLimit = estimateGasLimitState
-        if (gasLimit !is FeeState.Value) {
-            throw Exception("SendTransactionError.unknown")
+        return when (val gasLimit = estimateGasLimitState) {
+            is FeeState.Value -> interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeModule.feeRate, gasLimit.value, logger)
+            else -> Single.error(Exception("SendTransactionError.NoFee"))
         }
-
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeModule.feeRate, gasLimit.value, logger)
     }
 
     override fun onModulesDidLoad() {
