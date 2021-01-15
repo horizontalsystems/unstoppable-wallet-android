@@ -7,7 +7,8 @@ class SendAmountView : SendAmountModule.IView {
 
     val amount = MutableLiveData<String>()
     val availableBalance = MutableLiveData<String>()
-    val hint = MutableLiveData<String?>()
+    val hint = MutableLiveData<String>()
+    val hintStateEnabled = MutableLiveData<Boolean>()
     val amountInputPrefix = MutableLiveData<String>()
     val maxButtonVisibleValue = MutableLiveData<Boolean>()
     val addTextChangeListener = SingleLiveEvent<Unit>()
@@ -29,8 +30,12 @@ class SendAmountView : SendAmountModule.IView {
         this.availableBalance.postValue(availableBalance)
     }
 
-    override fun setHint(hint: String?) {
+    override fun setHint(hint: String) {
         this.hint.postValue(hint)
+    }
+
+    override fun setHintStateEnabled(enabled: Boolean) {
+        hintStateEnabled.postValue(enabled)
     }
 
     override fun setMaxButtonVisible(visible: Boolean) {
