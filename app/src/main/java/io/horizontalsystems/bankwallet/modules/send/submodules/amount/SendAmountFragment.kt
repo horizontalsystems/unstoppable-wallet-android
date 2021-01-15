@@ -54,7 +54,15 @@ class SendAmountFragment(
         })
 
         presenterView.hint.observe(viewLifecycleOwner, Observer { hint ->
-            setHint(hint)
+            txtHintInfo.text = hint
+        })
+
+        presenterView.hintStateEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            bottomClickArea.isEnabled = enabled
+            context?.let { ctx ->
+                val color = ctx.getColor(if (enabled) R.color.grey else R.color.grey_50)
+                txtHintInfo.setTextColor(color)
+            }
         })
 
         presenterView.maxButtonVisibleValue.observe(viewLifecycleOwner, Observer { visible ->
@@ -103,10 +111,6 @@ class SendAmountFragment(
 
     private fun setAvailableBalance(availableBalance: String) {
         availableBalanceValue.setText(availableBalance)
-    }
-
-    private fun setHint(hint: String?) {
-        txtHintInfo.text = hint
     }
 
     private fun setMaxButtonVisibility(visible: Boolean) {

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -19,7 +20,8 @@ object SendAmountModule {
         fun setAmountType(prefix: String)
         fun setAmount(amount: String)
         fun setAvailableBalance(availableBalance: String)
-        fun setHint(hint: String?)
+        fun setHint(hint: String)
+        fun setHintStateEnabled(enabled: Boolean)
         fun setValidationError(error: ValidationError?)
 
         fun setSwitchButtonEnabled(enabled: Boolean)
@@ -100,7 +102,7 @@ object SendAmountModule {
             val sendAmountPresenterHelper =
                     SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal,
                             currencyDecimal)
-            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
+            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency, StringProvider(App.instance))
 
             sendHandler.amountModule = presenter
             interactor.delegate = presenter
