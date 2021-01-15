@@ -238,7 +238,7 @@ class SendAmountPresenter(
     }
 
     private fun syncAmountType() {
-        val prefix = presenterHelper.getAmountPrefix(inputType, xRate)
+        val prefix = presenterHelper.getAmountPrefix(inputType, xRate) ?: ""
         view.setAmountType(prefix)
     }
 

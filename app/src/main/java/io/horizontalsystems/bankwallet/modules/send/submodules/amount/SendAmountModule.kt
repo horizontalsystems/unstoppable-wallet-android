@@ -16,7 +16,7 @@ object SendAmountModule {
     interface IView {
 
         fun setLoading(loading: Boolean)
-        fun setAmountType(prefix: String?)
+        fun setAmountType(prefix: String)
         fun setAmount(amount: String)
         fun setAvailableBalance(availableBalance: String)
         fun setHint(hint: String?)
