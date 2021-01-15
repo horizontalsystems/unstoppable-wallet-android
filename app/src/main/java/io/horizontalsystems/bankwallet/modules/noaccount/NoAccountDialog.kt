@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_bottom_manage_wallets.*
 class NoAccountDialog: BaseBottomSheetDialogFragment() {
 
     interface Listener {
-        fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {}
+        fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType, coin: Coin) {}
         fun onCancel() {}
     }
 
@@ -55,7 +55,7 @@ class NoAccountDialog: BaseBottomSheetDialogFragment() {
         }
 
         restoreBtn.setOnClickListener {
-            listener?.onClickRestoreKey(coin.type.predefinedAccountType)
+            listener?.onClickRestoreKey(coin.type.predefinedAccountType, coin)
             dismiss()
         }
 

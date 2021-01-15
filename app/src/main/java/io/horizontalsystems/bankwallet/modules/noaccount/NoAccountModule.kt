@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-
 object NoAccountModule {
 
     interface INoAccountService{
         fun createAccount(predefinedAccountType: PredefinedAccountType): Account
         fun save(account: Account)
+        fun createWallet(coin: Coin, account: Account)
         fun resetAddressFormatSettings()
     }
 
@@ -18,7 +18,7 @@ object NoAccountModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            val service = NoAccountService(App.accountManager, App.accountCreator, App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
+            val service = NoAccountService(App.accountManager, App.accountCreator, App.walletManager, App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
             return NoAccountViewModel(coin, service) as T
         }
     }
