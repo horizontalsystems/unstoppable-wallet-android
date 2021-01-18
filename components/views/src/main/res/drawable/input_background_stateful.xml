@@ -8,5 +8,12 @@
             <stroke android:width="1dp" android:color="@color/red_d" />
         </shape>
     </item>
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/InputBackground" />
+            <corners android:radius="8dp" />
+            <stroke android:width="1dp" android:color="@color/yellow_d" />
+        </shape>
+    </item>
     <item android:drawable="@drawable/input_background_themed" />
 </selector>
