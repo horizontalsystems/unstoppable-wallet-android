@@ -3,11 +3,13 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.KeyListener
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -18,6 +20,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private var showQrButton: Boolean = false
     private var onTextChangeCallback: ((text: String?) -> Unit)? = null
+    private var onPasteCallback: ((text: String?) -> Unit)? = null
 
     private val textWatcher = object : TextWatcher {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -35,7 +38,9 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private val buttonPaste by lazy {
-        createButton(context, R.style.ButtonSecondary, R.string.Send_Button_Paste, params)
+        createButton(context, R.style.ButtonSecondary, R.string.Send_Button_Paste, params) {
+            onPasteCallback?.invoke(TextHelper.getCopiedText().trim())
+        }
     }
 
     private val buttonQrScan by lazy {
@@ -97,18 +102,34 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         input.hint = text
     }
 
-    fun setError(text: String?) {
-        val isVisible = !text.isNullOrEmpty()
-        error.text = text
-        error.isVisible = isVisible
+    fun setError(caution: Caution?) {
+        error.text = caution?.text
+        error.isVisible = caution != null
 
         // Highlights background with border color
         // todo: need to implement custom states
-        inputBackground.isSelected = isVisible
+        when (caution?.type) {
+            Caution.Type.Error -> {
+                inputBackground.isSelected = true
+                error.setTextColor(context.getColor(R.color.red_d))
+            }
+            Caution.Type.Warning -> {
+                inputBackground.isActivated = true
+                error.setTextColor(context.getColor(R.color.yellow_d))
+            }
+            else -> {
+                inputBackground.isSelected = false
+                inputBackground.isActivated = false
+            }
+        }
     }
 
-    fun onTextChange(callback: (new: String?) -> Unit) {
+    fun onTextChange(callback: (String?) -> Unit) {
         onTextChangeCallback = callback
+    }
+
+    fun onPasteText(callback: (String?) -> Unit) {
+        onPasteCallback = callback
     }
 
     fun setSpinner(isVisible: Boolean) {
@@ -118,6 +139,14 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
     fun onButtonQrScanClick(callback: () -> Unit) {
         buttonQrScan.setOnClickListener {
             callback()
+        }
+    }
+
+    fun setEditable(isEditable: Boolean) {
+        if (isEditable) {
+            input.keyListener = null
+        } else {
+            input.keyListener = input.tag as KeyListener
         }
     }
 
@@ -140,7 +169,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         })
 
         viewModel.cautionLiveData.observe(lifecycleOwner, {
-            setError(it?.text)
+            setError(it)
         })
 
         input.setOnFocusChangeListener { _, hasFocus ->
@@ -151,8 +180,8 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
             viewModel.onChangeText(it)
         }
 
-        buttonPaste.setOnClickListener {
-            viewModel.onFetch(TextHelper.getCopiedText().trim())
+        onPasteText {
+            viewModel.onFetch(it)
         }
 
         onButtonQrScanClick(onClickQrScan)
