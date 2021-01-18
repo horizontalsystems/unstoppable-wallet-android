@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.xrateskit.entities.ChartInfo
@@ -51,9 +52,9 @@ object RateChartModule {
         fun clear()
         fun observeAlertNotification(coinCode: String)
         fun getPriceAlert(coinCode: String): PriceAlert
-        fun isCoinFavorite(coinCode: String): Boolean
-        fun favorite(coinCode: String)
-        fun unfavorite(coinCode: String)
+        fun isCoinFavorite(coinCode: String, coinType: CoinType?): Boolean
+        fun favorite(coinCode: String, coinType: CoinType?)
+        fun unfavorite(coinCode: String, coinType: CoinType?)
     }
 
     interface InteractorDelegate {
@@ -66,7 +67,7 @@ object RateChartModule {
 
     interface Router
 
-    class Factory(private val coinTitle: String, private val coinCode: String, private val coinId: String?) : ViewModelProvider.Factory {
+    class Factory(private val coinTitle: String, private val coinCode: String, private val coinId: String?, private val coinType: CoinType?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
@@ -74,7 +75,7 @@ object RateChartModule {
 
             val view = RateChartView()
             val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager)
-            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, coinTitle, coinId, currency, RateChartViewFactory())
+            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, coinTitle, coinId, coinType, currency, RateChartViewFactory())
 
             interactor.delegate = presenter
 

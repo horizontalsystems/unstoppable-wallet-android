@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.util.Comparator
@@ -53,7 +54,7 @@ class MarketTopViewModel(
         val viewItems = sort(service.marketTopItems, sortingField).map {
             val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
 
-            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
+            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, it.coinType)
         }
 
         marketTopViewItemsLiveData.postValue(viewItems)
@@ -94,7 +95,8 @@ data class MarketTopViewItem(
         val coinCode: String,
         val coinName: String,
         val rate: String,
-        val diff: BigDecimal
+        val diff: BigDecimal,
+        val coinType: CoinType?
 ) {
     fun areItemsTheSame(other: MarketTopViewItem): Boolean {
         return coinCode == other.coinCode && coinName == other.coinName

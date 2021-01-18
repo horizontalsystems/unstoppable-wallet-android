@@ -135,20 +135,37 @@ class RateManager(
 
     private fun mapCoinForXRates(coins: List<io.horizontalsystems.bankwallet.entities.Coin>): List<Coin> {
         return coins.mapNotNull { coin ->
+            val coinType = coin.type
             rateCoinMapper.convert(coin.code)?.let {
-                val coinType = when (coin.type) {
-                    is Bitcoin -> CoinType.Bitcoin
-                    is BitcoinCash -> CoinType.BitcoinCash
-                    is Dash -> CoinType.Dash
-                    is Ethereum -> CoinType.Ethereum
-                    is Litecoin -> CoinType.Litecoin
-                    is Zcash -> CoinType.Zcash
-                    is Binance -> CoinType.Binance
-                    is Erc20 -> CoinType.Erc20(coin.type.address)
-                }
-
-                Coin(coin.code, coin.title, coinType)
+                Coin(coin.code, coin.title, convertCoinTypeToXRateKitCoinType(coinType))
             }
+        }
+    }
+
+    override fun convertCoinTypeToXRateKitCoinType(coinType: io.horizontalsystems.bankwallet.entities.CoinType): CoinType {
+        return when (coinType) {
+            is Bitcoin -> CoinType.Bitcoin
+            is BitcoinCash -> CoinType.BitcoinCash
+            is Dash -> CoinType.Dash
+            is Ethereum -> CoinType.Ethereum
+            is Litecoin -> CoinType.Litecoin
+            is Zcash -> CoinType.Zcash
+            is Binance -> CoinType.Binance
+            is Erc20 -> CoinType.Erc20(coinType.address)
+        }
+    }
+
+    override fun convertXRateCoinTypeToCoinType(coinType: CoinType): io.horizontalsystems.bankwallet.entities.CoinType? {
+        return when (coinType) {
+            is CoinType.Bitcoin -> Bitcoin
+            is CoinType.BitcoinCash -> BitcoinCash
+            is CoinType.Dash -> Dash
+            is CoinType.Ethereum -> Ethereum
+            is CoinType.Litecoin -> Litecoin
+            is CoinType.Zcash -> Zcash
+            is CoinType.Binance -> Binance("")
+            is CoinType.Erc20 -> Erc20(coinType.address)
+            else -> null
         }
     }
 

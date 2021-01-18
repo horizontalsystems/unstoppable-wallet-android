@@ -75,11 +75,7 @@ class MarketTop100Fragment : BaseFragment(), MarketTopHeaderAdapter.Listener, Ma
 
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
-        val arguments = Bundle(3).apply {
-            putString(RateChartFragment.COIN_CODE_KEY, marketTopViewItem.coinCode)
-            putString(RateChartFragment.COIN_TITLE_KEY, marketTopViewItem.coinName)
-            putString(RateChartFragment.COIN_ID_KEY, null)
-        }
+        val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null, marketTopViewItem.coinType)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }

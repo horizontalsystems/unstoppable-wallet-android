@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.top
 
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.horizontalsystems.xrateskit.entities.TimePeriod
@@ -11,7 +12,8 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MarketTopService(
         private val currencyManager: ICurrencyManager,
-        private val marketListDataSource: IMarketListDataSource
+        private val marketListDataSource: IMarketListDataSource,
+        private val rateManager: IRateManager
 ) : Clearable {
 
     val periods: Array<Period> = Period.values()
@@ -92,6 +94,7 @@ class MarketTopService(
                     topMarket.marketInfo.rateDiffPeriod,
                     topMarket.marketInfo.marketCap?.toDouble(),
                     topMarket.marketInfo.liquidity,
+                    topMarket.coin.type?.let { rateManager.convertXRateCoinTypeToCoinType(it) }
             )
 
     private fun convertPeriod(period: Period) = when (period) {
