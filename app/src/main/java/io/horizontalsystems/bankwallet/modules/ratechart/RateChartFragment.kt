@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -24,7 +26,6 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.synthetic.main.fragment_rate_chart.*
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.*
 
 class RateChartFragment : BaseFragment(), Chart.Listener {
@@ -50,8 +51,9 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         }
 
         val coinTitle = arguments?.getString(COIN_TITLE_KEY) ?: ""
+        val coinType: CoinType? = arguments?.getParcelable(COIN_TYPE_KEY)
 
-        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
+        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId, coinType)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         toolbar.title = coinTitle
@@ -339,8 +341,17 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     }
 
     companion object {
-        const val COIN_CODE_KEY = "coin_code_key"
-        const val COIN_TITLE_KEY = "coin_title_key"
-        const val COIN_ID_KEY = "coin_id_key"
+        private const val COIN_CODE_KEY = "coin_code_key"
+        private const val COIN_TITLE_KEY = "coin_title_key"
+        private const val COIN_ID_KEY = "coin_id_key"
+        private const val COIN_TYPE_KEY = "coin_type_key"
+
+        fun prepareParams(coinCode: String, coinTitle: String, coinId: String?, coinType: CoinType?) : Bundle {
+            return bundleOf(
+                    COIN_CODE_KEY to coinCode,
+                    COIN_TITLE_KEY to coinTitle,
+                    COIN_ID_KEY to coinId,
+            )
+        }
     }
 }

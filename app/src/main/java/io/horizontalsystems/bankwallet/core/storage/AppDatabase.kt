@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 27, exportSchema = false, entities = [
+@Database(version = 28, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -68,6 +68,7 @@ abstract class AppDatabase : RoomDatabase() {
                             addBirthdayHeightToAccount,
                             addBep2SymbolToRecord,
                             addFavoriteCoinsTable,
+                            addColumnCoinTypeToFavoriteCoins,
                             addCoinTypeBlockchainSettingForBitcoinCash,
                             deleteEosColumnFromAccountRecord
                     )
@@ -479,6 +480,12 @@ abstract class AppDatabase : RoomDatabase() {
                     WHERE `type` != 'eos'
                 """.trimIndent())
                 database.execSQL("DROP TABLE TempAccountRecord")
+            }
+        }
+
+        private val addColumnCoinTypeToFavoriteCoins: Migration = object : Migration(27, 28) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE `FavoriteCoin` ADD COLUMN `coinType` TEXT NOT NULL DEFAULT ''")
             }
         }
     }

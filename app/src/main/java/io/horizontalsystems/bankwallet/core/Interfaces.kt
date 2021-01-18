@@ -304,6 +304,8 @@ interface IRateManager {
     fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun refresh()
+    fun convertCoinTypeToXRateKitCoinType(coinType: CoinType): io.horizontalsystems.xrateskit.entities.CoinType
+    fun convertXRateCoinTypeToCoinType(coinType: io.horizontalsystems.xrateskit.entities.CoinType): CoinType?
 }
 
 interface IAccountsStorage {

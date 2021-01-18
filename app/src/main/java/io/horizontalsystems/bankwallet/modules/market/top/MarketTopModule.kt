@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.CoinType
 import java.math.BigDecimal
 
 object MarketTopModule {
@@ -13,7 +14,7 @@ object MarketTopModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = MarketTopService(App.currencyManager, MarketListTopDataSource(App.xRateManager))
+            val service = MarketTopService(App.currencyManager, MarketListTopDataSource(App.xRateManager), App.xRateManager)
             return MarketTopViewModel(service, listOf(service)) as T
         }
 
@@ -43,5 +44,6 @@ data class MarketTopItem(
         val rate: BigDecimal,
         val diff: BigDecimal,
         val marketCap: Double?,
-        val liquidity: BigDecimal?
+        val liquidity: BigDecimal?,
+        val coinType: CoinType?
 )
