@@ -60,27 +60,13 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun fromCoinType(coinType: CoinType): String {
-        return when(coinType) {
-            CoinType.Bitcoin -> bitcoin
-            CoinType.Litecoin -> litecoin
-            CoinType.BitcoinCash -> bitcoinCash
-            CoinType.Dash -> dash
-            CoinType.Ethereum -> ethereum
-            else -> ""
-        }
+    fun fromCoinType(coinType: CoinType?): String {
+        return coinType?.serialize() ?: ""
     }
 
     @TypeConverter
     fun toCoinType(value: String): CoinType? {
-        return when (value) {
-            bitcoin -> CoinType.Bitcoin
-            litecoin -> CoinType.Litecoin
-            bitcoinCash -> CoinType.BitcoinCash
-            dash -> CoinType.Dash
-            ethereum -> CoinType.Ethereum
-            else -> null
-        }
+        return CoinType.deserialize(value)
     }
 
     @TypeConverter
@@ -121,14 +107,6 @@ class DatabaseConverters {
     @TypeConverter
     fun toJobType(value: String?): SubscriptionJob.JobType?{
         return SubscriptionJob.JobType.valueOf(value)
-    }
-
-    companion object {
-        const val bitcoin = "bitcoin"
-        const val litecoin = "litecoin"
-        const val bitcoinCash = "bitcoincash"
-        const val dash = "dash"
-        const val ethereum = "ethereum"
     }
 
 }
