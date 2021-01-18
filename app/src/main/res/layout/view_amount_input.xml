@@ -44,91 +44,22 @@
     <View
         android:id="@+id/background"
         android:layout_width="0dp"
-        android:layout_height="85dp"
+        android:layout_height="84dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/input_background_stateful"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/availableBalanceTitle"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="41dp" />
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btnMax"
-        style="@style/ButtonSecondary"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/Send_Button_Max"
-        app:layout_constraintBottom_toTopOf="@id/amountDivider"
+    <io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
+        android:id="@+id/amountInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background" />
-
-    <TextView
-        android:id="@+id/topAmountPrefix"
-        style="@style/Headline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textColor="?attr/TextColorBarsToDark"
-        app:layout_constraintBottom_toTopOf="@id/amountDivider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/background"
-        tools:text="$" />
-
-    <EditText
-        android:id="@+id/editTxtAmount"
-        style="@style/Headline2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        android:hint="@string/Send_Hint_Amount"
-        android:inputType="number|numberDecimal"
-        android:maxLines="1"
-        android:textColor="?attr/TextColorBarsToDark"
-        android:textColorHint="@color/grey_50"
-        app:layout_constraintBottom_toTopOf="@+id/amountDivider"
-        app:layout_constraintEnd_toStartOf="@+id/btnMax"
-        app:layout_constraintStart_toEndOf="@+id/topAmountPrefix"
-        app:layout_constraintTop_toTopOf="@+id/background"
-        app:layout_goneMarginStart="12dp"
-        tools:text="0.0021" />
-
-    <View
-        android:id="@+id/amountDivider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="8dp"
-        android:background="@color/steel_20"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/background" />
-
-    <View
-        android:id="@+id/bottomClickArea"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountDivider" />
-
-    <TextView
-        android:id="@+id/txtHintInfo"
-        style="@style/Subhead2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountDivider"
-        tools:text="$ 210" />
 
     <TextView
         android:id="@+id/txtHintError"

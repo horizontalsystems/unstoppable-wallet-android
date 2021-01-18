@@ -94,7 +94,6 @@ class SendAmountPresenter(
 
         syncAmount()
         syncHint()
-        syncMaxButton()
         syncError()
 
         moduleDelegate?.onChangeAmount()
@@ -133,16 +132,11 @@ class SendAmountPresenter(
         moduleDelegate?.onChangeInputType(inputType)
 
         syncAmountType()
-        syncSwitchButton()
         syncAmount()
         syncHint()
-
-        view.addTextChangeListener()
     }
 
     override fun onSwitchClick() {
-        view.removeTextChangeListener()
-
         inputType = when (inputType) {
             SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
             else -> SendModule.InputType.CURRENCY
@@ -155,8 +149,6 @@ class SendAmountPresenter(
         syncHint()
         syncError()
         syncAvailableBalance()
-
-        view.addTextChangeListener()
     }
 
     override fun onAmountChange(amountString: String) {
@@ -171,7 +163,6 @@ class SendAmountPresenter(
             this.amount = presenterHelper.getCoinAmount(amount, inputType, xRate)
 
             syncHint()
-            syncMaxButton()
             syncError()
 
             moduleDelegate?.onChangeAmount()
@@ -181,15 +172,11 @@ class SendAmountPresenter(
     override fun onMaxClick() {
         amount = availableBalance?.subtract(minimumRequiredBalance)
 
-        view.removeTextChangeListener()
-
         syncAmount()
         syncHint()
-        syncMaxButton()
         syncError()
 
         moduleDelegate?.onChangeAmount()
-        view.addTextChangeListener()
     }
 
     // IInteractorDelegate
@@ -226,7 +213,6 @@ class SendAmountPresenter(
         syncAvailableBalance()
         syncAmountType()
         syncHint()
-        syncSwitchButton()
     }
 
     private fun syncAmount() {
@@ -267,10 +253,6 @@ class SendAmountPresenter(
 
         val hasSpendableBalance = noneNullAvailableBalance - minimumRequiredBalance > BigDecimal.ZERO
         view.setMaxButtonVisible(hasSpendableBalance)
-    }
-
-    private fun syncSwitchButton() {
-        view.setSwitchButtonEnabled(xRate != null)
     }
 
     private fun validate() {

@@ -23,14 +23,8 @@ object SendAmountModule {
         fun setHint(hint: String)
         fun setHintStateEnabled(enabled: Boolean)
         fun setValidationError(error: ValidationError?)
-
-        fun setSwitchButtonEnabled(enabled: Boolean)
-        fun setMaxButtonVisible(visible: Boolean)
-
-        fun addTextChangeListener()
-        fun removeTextChangeListener()
-
         fun revertAmount(amount: String)
+        fun setMaxButtonVisible(visible: Boolean)
     }
 
     interface IViewDelegate {
