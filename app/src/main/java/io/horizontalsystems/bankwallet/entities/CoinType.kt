@@ -66,4 +66,46 @@ sealed class CoinType : Parcelable {
         }
     }
 
+    fun serialize(): String {
+        return when (this) {
+            Bitcoin -> bitcoin
+            Litecoin -> litecoin
+            BitcoinCash -> bitcoinCash
+            Dash -> dash
+            Ethereum -> ethereum
+            is Erc20 -> arrayOf(erc20, address).joinToString(separator)
+            is Binance -> arrayOf(binance, symbol).joinToString(separator)
+            Zcash -> zcash
+        }
+    }
+
+    companion object {
+        const val bitcoin = "bitcoin"
+        const val litecoin = "litecoin"
+        const val bitcoinCash = "bitcoincash"
+        const val dash = "dash"
+        const val ethereum = "ethereum"
+        const val erc20 = "erc20"
+        const val binance = "binance"
+        const val zcash = "zcash"
+
+        private const val separator = ":"
+
+        fun deserialize(value: String): CoinType? {
+            val parts = value.split(separator)
+
+            return when (parts.firstOrNull()) {
+                bitcoin -> Bitcoin
+                litecoin -> Litecoin
+                bitcoinCash -> BitcoinCash
+                dash -> Dash
+                ethereum -> Ethereum
+                erc20 -> Erc20(parts[1])
+                binance -> Binance(parts[1])
+                zcash -> Zcash
+                else -> null
+            }
+        }
+    }
+
 }
