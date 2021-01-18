@@ -1,12 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -36,17 +33,17 @@ class SendAmountFragment(
 
         val presenterView = presenter.view as SendAmountView
         presenter.moduleDelegate = amountModuleDelegate
-        editTxtAmount.requestFocus()
 
-        btnMax.setOnClickListener { presenter.onMaxClick() }
-        bottomClickArea.setOnClickListener { presenter.onSwitchClick() }
+        amountInput.onTextChangeCallback = { presenter.onAmountChange(it ?: "") }
+        amountInput.onTapSecondaryCallback = { presenter.onSwitchClick() }
+        amountInput.onTapMaxCallback = { presenter.onMaxClick() }
 
         presenterView.amountInputPrefix.observe(viewLifecycleOwner, Observer { prefix ->
-            setPrefix(prefix)
+            amountInput.setPrefix(prefix)
         })
 
         presenterView.amount.observe(viewLifecycleOwner, Observer { amount ->
-            setAmount(amount)
+            amountInput.setAmount(amount)
         })
 
         presenterView.availableBalance.observe(viewLifecycleOwner, Observer { amount ->
@@ -54,31 +51,19 @@ class SendAmountFragment(
         })
 
         presenterView.hint.observe(viewLifecycleOwner, Observer { hint ->
-            txtHintInfo.text = hint
+            amountInput.setSecondary(hint)
         })
 
         presenterView.hintStateEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            bottomClickArea.isEnabled = enabled
-            context?.let { ctx ->
-                val color = ctx.getColor(if (enabled) R.color.grey else R.color.grey_50)
-                txtHintInfo.setTextColor(color)
-            }
+            amountInput.setSecondaryEnabled(enabled)
         })
 
         presenterView.maxButtonVisibleValue.observe(viewLifecycleOwner, Observer { visible ->
-            setMaxButtonVisibility(visible)
-        })
-
-        presenterView.addTextChangeListener.observe(viewLifecycleOwner, Observer {
-            enableAmountChangeListener()
-        })
-
-        presenterView.removeTextChangeListener.observe(viewLifecycleOwner, Observer {
-            removeAmountChangeListener()
+            amountInput.maxButtonVisible = visible
         })
 
         presenterView.revertAmount.observe(viewLifecycleOwner, Observer { amount ->
-            revertAmount(amount)
+            amountInput.revertAmount(amount)
         })
 
         presenterView.validationError.observe(viewLifecycleOwner, Observer {
@@ -94,43 +79,13 @@ class SendAmountFragment(
         presenter.onViewDidLoad()
     }
 
-    private fun setPrefix(prefix: String) {
-        topAmountPrefix.text = prefix
-        topAmountPrefix.isVisible = prefix.isNotBlank()
-    }
-
     private fun setLoading(loading: Boolean) {
         availableBalanceValue.isInvisible = loading
         processSpinner.isVisible = loading
     }
 
-    private fun setAmount(amount: String) {
-        editTxtAmount.setText(amount)
-        editTxtAmount.setSelection(editTxtAmount.text.length)
-    }
-
     private fun setAvailableBalance(availableBalance: String) {
         availableBalanceValue.setText(availableBalance)
-    }
-
-    private fun setMaxButtonVisibility(visible: Boolean) {
-        // since the max button used to align amount field title it may be "invisible" not "gone"
-        btnMax.isInvisible = !visible
-    }
-
-    private fun enableAmountChangeListener() {
-        editTxtAmount.addTextChangedListener(textChangeListener)
-    }
-
-    private fun removeAmountChangeListener() {
-        editTxtAmount.removeTextChangedListener(textChangeListener)
-    }
-
-    private fun revertAmount(amount: String) {
-        editTxtAmount.setText(amount)
-        editTxtAmount.setSelection(amount.length)
-        val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
-        editTxtAmount.startAnimation(shake)
     }
 
     private fun setValidationError(error: SendAmountModule.ValidationError?) {
@@ -161,13 +116,4 @@ class SendAmountFragment(
         }
     }
 
-    private val textChangeListener = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            val amountText = s?.toString() ?: ""
-            presenter.onAmountChange(amountText)
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-    }
 }

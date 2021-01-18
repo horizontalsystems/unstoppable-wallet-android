@@ -11,11 +11,8 @@ class SendAmountView : SendAmountModule.IView {
     val hintStateEnabled = MutableLiveData<Boolean>()
     val amountInputPrefix = MutableLiveData<String>()
     val maxButtonVisibleValue = MutableLiveData<Boolean>()
-    val addTextChangeListener = SingleLiveEvent<Unit>()
-    val removeTextChangeListener = SingleLiveEvent<Unit>()
     val revertAmount = SingleLiveEvent<String>()
     val validationError = MutableLiveData<SendAmountModule.ValidationError?>()
-    val switchButtonEnabled = MutableLiveData<Boolean>()
     val setLoading = MutableLiveData<Boolean>()
 
     override fun setAmountType(prefix: String) {
@@ -42,24 +39,12 @@ class SendAmountView : SendAmountModule.IView {
         maxButtonVisibleValue.postValue(visible)
     }
 
-    override fun addTextChangeListener() {
-        addTextChangeListener.call()
-    }
-
-    override fun removeTextChangeListener() {
-        removeTextChangeListener.call()
-    }
-
     override fun revertAmount(amount: String) {
         revertAmount.value = amount
     }
 
     override fun setValidationError(error: SendAmountModule.ValidationError?) {
         this.validationError.postValue(error)
-    }
-
-    override fun setSwitchButtonEnabled(enabled: Boolean) {
-        switchButtonEnabled.postValue(enabled)
     }
 
     override fun setLoading(loading: Boolean) {
