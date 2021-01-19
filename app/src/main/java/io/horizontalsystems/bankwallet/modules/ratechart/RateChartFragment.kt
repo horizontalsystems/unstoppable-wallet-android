@@ -351,6 +351,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
                     COIN_CODE_KEY to coinCode,
                     COIN_TITLE_KEY to coinTitle,
                     COIN_ID_KEY to coinId,
+                    COIN_TYPE_KEY to coinType,
             )
         }
     }
