@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import io.horizontalsystems.xrateskit.entities.CoinMarket
@@ -18,7 +19,7 @@ object RateListModule {
     }
 
     interface IRouter {
-        fun openChart(coinCode: String, coinTitle: String)
+        fun openChart(coinCode: String, coinTitle: String, coinType: CoinType?)
         fun openSortingTypeDialog(sortType: TopListSortType)
     }
 
@@ -62,7 +63,7 @@ object RateListModule {
                     App.walletStorage,
                     App.appConfigProvider,
                     RateListSorter())
-            val presenter = RateListPresenter(view, router, interactor, RateListFactory(App.numberFormatter))
+            val presenter = RateListPresenter(view, router, interactor, RateListFactory(App.numberFormatter, App.xRateManager))
 
             interactor.delegate = presenter
 
@@ -87,6 +88,12 @@ class RateListSorter {
     }
 }
 
-data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean, val rank: Int? = null)
+data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean, val rank: Int? = null, val coinType: CoinType?)
 
-data class TopMarketRanked(val coinCode: String, val coinName: String, val marketInfo: MarketInfo, val rank: Int)
+data class TopMarketRanked(
+        val coinCode: String,
+        val coinName: String,
+        val marketInfo: MarketInfo,
+        val rank: Int,
+        val coinType: io.horizontalsystems.xrateskit.entities.CoinType?
+)
