@@ -36,8 +36,7 @@
         android:textColor="?attr/TextColorBarsToDark"
         app:layout_constraintBottom_toTopOf="@id/amountDivider"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="$" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTxtAmount"

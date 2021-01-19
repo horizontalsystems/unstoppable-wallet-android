@@ -19,25 +19,28 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
             syncButtonStates()
         }
 
-    var onTextChangeCallback: ((text: String?) -> Unit)? = null
+    var onTextChangeCallback: ((prevText: String?, newText: String?) -> Unit)? = null
     var onTapMaxCallback: (() -> Unit)? = null
     var onTapSecondaryCallback: (() -> Unit)? = null
 
     private val textWatcher = object : TextWatcher {
+        private var prevValue: String? = null
+
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            onTextChangeCallback?.invoke(s?.toString())
+            onTextChangeCallback?.invoke(prevValue, s?.toString())
             syncButtonStates()
         }
 
         override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            prevValue = s?.toString()
+        }
     }
 
     init {
         inflate(context, R.layout.view_input_amount, this)
 
         editTxtAmount.addTextChangedListener(textWatcher)
-        editTxtAmount.requestFocus()
 
         btnMax.setOnClickListener {
             onTapMaxCallback?.invoke()
@@ -45,6 +48,10 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         secondaryArea.setOnClickListener {
             onTapSecondaryCallback?.invoke()
         }
+    }
+
+    fun getAmount(): String? {
+        return editTxtAmount.text?.toString()
     }
 
     fun setAmount(text: String?, skipChangeEvent: Boolean = true) {
@@ -63,16 +70,22 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         }
     }
 
-    fun setPrefix(prefix: String) {
+    fun setPrefix(prefix: String?) {
         topAmountPrefix.text = prefix
-        topAmountPrefix.isVisible = prefix.isNotBlank()
+        topAmountPrefix.isVisible = prefix?.isNotBlank() ?: false
     }
 
-    fun setSecondary(text: String){
+    fun setSecondaryText(text: String?){
         txtHintInfo.text = text
     }
 
-    fun revertAmount(amount: String) {
+    fun setFocus(){
+        editTxtAmount.requestFocus()
+    }
+
+    fun revertAmount(amount: String?) {
+        amount ?: return
+
         setAmount(amount)
         val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
         editTxtAmount.startAnimation(shake)
