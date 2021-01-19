@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -25,6 +27,7 @@ import io.horizontalsystems.core.navGraphViewModels
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarGravity
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_transaction_info.*
 
 class TransactionInfoFragment : BottomSheetDialogFragment() {
@@ -106,9 +109,7 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
         })
 
         viewModel.showTransactionLiveEvent.observe(this, Observer { url ->
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            startActivity(intent)
+            openUrlInCustomTabs(url)
         })
 
         viewModel.showDoubleSpendInfo.observe(this, Observer { (txHash, conflictingTxHash) ->
@@ -146,6 +147,28 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
         viewModel.detailsLiveData.observe(this, Observer {
             transactionDetailsAdapter.setItems(it)
         })
+    }
+
+    private fun openUrlInCustomTabs(url: String) {
+        context?.let { ctx ->
+            val builder = CustomTabsIntent.Builder()
+
+            val color = LayoutHelper.getAttr(R.attr.ColorTyler, ctx.theme) ?: ctx.getColor(R.color.dark)
+
+            val params = CustomTabColorSchemeParams.Builder()
+                    .setNavigationBarColor(color)
+                    .setToolbarColor(color)
+                    .build()
+
+            builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params)
+            builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, params)
+            builder.setStartAnimations(ctx, R.anim.slide_from_right, R.anim.slide_to_left)
+            builder.setExitAnimations(ctx, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+
+            val customTabsIntent = builder.build()
+
+            customTabsIntent.launchUrl(ctx, Uri.parse(url))
+        }
     }
 
     override fun onDestroyView() {
