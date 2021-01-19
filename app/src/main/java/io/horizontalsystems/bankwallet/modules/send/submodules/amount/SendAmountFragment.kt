@@ -34,9 +34,10 @@ class SendAmountFragment(
         val presenterView = presenter.view as SendAmountView
         presenter.moduleDelegate = amountModuleDelegate
 
-        amountInput.onTextChangeCallback = { presenter.onAmountChange(it ?: "") }
+        amountInput.onTextChangeCallback = { _, new -> presenter.onAmountChange(new ?: "") }
         amountInput.onTapSecondaryCallback = { presenter.onSwitchClick() }
         amountInput.onTapMaxCallback = { presenter.onMaxClick() }
+        amountInput.setFocus()
 
         presenterView.amountInputPrefix.observe(viewLifecycleOwner, Observer { prefix ->
             amountInput.setPrefix(prefix)
@@ -51,7 +52,7 @@ class SendAmountFragment(
         })
 
         presenterView.hint.observe(viewLifecycleOwner, Observer { hint ->
-            amountInput.setSecondary(hint)
+            amountInput.setSecondaryText(hint)
         })
 
         presenterView.hintStateEnabled.observe(viewLifecycleOwner, Observer { enabled ->

@@ -95,15 +95,17 @@ object SwapModule {
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)
                     val coinCardService: ISwapCoinCardService
+                    var maxButtonEnabled = false
 
                     if (key == coinCardTypeFrom) {
                         coinCardService = fromCoinCardService
                         switchService.fromListener = fiatService
+                        maxButtonEnabled = true
                     } else {
                         coinCardService = toCoinCardService
                         switchService.toListener = fiatService
                     }
-                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, formatter, stringProvider) as T
+                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, maxButtonEnabled, formatter, stringProvider) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T

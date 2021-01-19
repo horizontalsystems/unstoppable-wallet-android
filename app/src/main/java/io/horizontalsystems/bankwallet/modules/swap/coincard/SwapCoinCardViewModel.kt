@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.reactivex.disposables.CompositeDisposable
@@ -24,6 +25,7 @@ class SwapCoinCardViewModel(
         private val coinCardService: ISwapCoinCardService,
         private val fiatService: FiatService,
         private val switchService: AmountTypeSwitchService,
+        private val maxButtonSupported: Boolean,
         private val formatter: SwapViewItemHelper,
         private val stringProvider: StringProvider
 ) : ViewModel() {
@@ -46,7 +48,8 @@ class SwapCoinCardViewModel(
     private val isEstimatedLiveData = MutableLiveData(false)
     private val switchEnabledLiveData = MutableLiveData(false)
     private val prefixLiveData = MutableLiveData<String?>(null)
-    private val secondaryInfoLiveData = MutableLiveData<SecondaryInfoViewItem?>(null)
+    private val secondaryInfoLiveData = MutableLiveData<String?>(null)
+    private val maxEnabledLiveData = MutableLiveData(false)
 
     //region outputs
     fun amountLiveData(): LiveData<String?> = amountLiveData
@@ -56,7 +59,8 @@ class SwapCoinCardViewModel(
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
     fun switchEnabledLiveData(): LiveData<Boolean> = switchEnabledLiveData
     fun prefixLiveData(): LiveData<String?> = prefixLiveData
-    fun secondaryInfoLiveData(): LiveData<SecondaryInfoViewItem?> = secondaryInfoLiveData
+    fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
+    fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
 
     val tokensForSelection: List<SwapModule.CoinBalanceItem>
         get() = coinCardService.tokensForSelection
@@ -85,6 +89,13 @@ class SwapCoinCardViewModel(
 
     fun onSwitch() {
         switchService.toggle()
+    }
+
+    fun onTapMax() {
+        val balance = coinCardService.balance ?: return
+
+        val fullAmountInfo = fiatService.buildForCoin(balance)
+        syncFullAmountInfo(fullAmountInfo, true, balance)
     }
     //endregion
 
@@ -159,20 +170,22 @@ class SwapCoinCardViewModel(
             else -> formatter.coinAmount(balance, coin)
         }
         balanceLiveData.postValue(formattedBalance)
+        val balanceNonNull = balance ?: BigDecimal.ZERO
+        maxEnabledLiveData.postValue(balanceNonNull > BigDecimal.ZERO && coin?.type is CoinType.Erc20 && maxButtonSupported)
     }
 
     private fun syncError(error: Throwable?) {
         balanceErrorLiveData.postValue(error != null)
     }
 
-    private fun secondaryInfoPlaceHolder(): SecondaryInfoViewItem = when (switchService.amountType) {
+    private fun secondaryInfoPlaceHolder(): String? = when (switchService.amountType) {
         AmountType.Coin -> {
             val amountInfo = AmountInfo.CurrencyValueInfo(CurrencyValue(fiatService.currency, BigDecimal.ZERO))
-            SecondaryInfoViewItem(amountInfo.getFormatted(), SecondaryInfoType.Placeholder)
+            amountInfo.getFormatted()
         }
         AmountType.Currency -> {
             val amountInfo = coinCardService.coin?.let { AmountInfo.CoinValueInfo(CoinValue(it, BigDecimal.ZERO)) }
-            SecondaryInfoViewItem(amountInfo?.getFormatted(), SecondaryInfoType.Placeholder)
+            amountInfo?.getFormatted()
         }
     }
 
@@ -191,7 +204,7 @@ class SwapCoinCardViewModel(
             val amountString = fullAmountInfo.primaryValue.setScale(decimals, RoundingMode.FLOOR)?.stripTrailingZeros()?.toPlainString()
             amountLiveData.postValue(amountString)
 
-            secondaryInfoLiveData.postValue(SecondaryInfoViewItem(fullAmountInfo.secondaryInfo?.getFormatted(), SecondaryInfoType.Value))
+            secondaryInfoLiveData.postValue(fullAmountInfo.secondaryInfo?.getFormatted())
 
             setCoinValueToService(fullAmountInfo.coinValue.value, force)
         }
@@ -206,12 +219,6 @@ class SwapCoinCardViewModel(
     override fun onCleared() {
         disposables.clear()
     }
-
-    enum class SecondaryInfoType {
-        Placeholder, Value
-    }
-
-    data class SecondaryInfoViewItem(val text: String?, val type: SecondaryInfoType)
 
     companion object {
         private const val maxValidDecimals = 8
