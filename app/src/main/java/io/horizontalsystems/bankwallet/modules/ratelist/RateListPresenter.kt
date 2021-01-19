@@ -52,7 +52,7 @@ class RateListPresenter(
     }
 
     override fun onCoinClicked(coinItem: CoinItem) {
-        router.openChart(coinItem.coinCode, coinItem.coinName)
+        router.openChart(coinItem.coinCode, coinItem.coinName, coinItem.coinType)
     }
 
     override fun onTopListSortClick() {
@@ -79,7 +79,7 @@ class RateListPresenter(
 
         topMarketInfos.clear()
         topMarketInfos.addAll(items.mapIndexed { index, coinMarket ->
-            TopMarketRanked(coinMarket.coin.code, coinMarket.coin.title, coinMarket.marketInfo,index + 1)
+            TopMarketRanked(coinMarket.coin.code, coinMarket.coin.title, coinMarket.marketInfo,index + 1, coinMarket.coin.type)
         })
 
         sortTopList()
@@ -110,7 +110,7 @@ class RateListPresenter(
             topMarketInfos.forEachIndexed { index, topMarket ->
                 if (topMarket.coinCode == coinCode) {
                     if (portfolioMarketInfo.timestamp > topMarket.marketInfo.timestamp) {
-                        topMarketInfos[index] = TopMarketRanked(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo, topMarket.rank)
+                        topMarketInfos[index] = TopMarketRanked(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo, topMarket.rank, topMarket.coinType)
                     } else {
                         portfolioMarketInfos[coinCode] = topMarket.marketInfo
                     }

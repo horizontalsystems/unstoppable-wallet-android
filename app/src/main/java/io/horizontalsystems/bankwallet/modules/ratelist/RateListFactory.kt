@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 
-class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateListModule.IRateListFactory {
+class RateListFactory(private val numberFormatter: IAppNumberFormatter, private val rateManager: IRateManager) : RateListModule.IRateListFactory {
 
     override fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<CoinItem> {
         return coins.map { coin ->
@@ -16,7 +17,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
             val dimRate = (marketInfo?.rate != null && marketInfo.isExpired())
             val timestamp = marketInfo?.timestamp ?: 0L
 
-            CoinItem(coin.code, coin.title, rate(rateCurrencyValue), diff, coin, timestamp, rateDimmed = dimRate)
+            CoinItem(coin.code, coin.title, rate(rateCurrencyValue), diff, coin, timestamp, rateDimmed = dimRate, coinType = coin.type)
         }
     }
 
@@ -29,7 +30,8 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
                     topMarket.marketInfo.rateDiff,
                     timestamp = topMarket.marketInfo.timestamp,
                     rateDimmed = topMarket.marketInfo.isExpired(),
-                    rank = topMarket.rank
+                    rank = topMarket.rank,
+                    coinType = topMarket.coinType?.let { rateManager.convertXRateCoinTypeToCoinType(it) }
             )
         }
     }
