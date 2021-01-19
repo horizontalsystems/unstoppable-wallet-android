@@ -4,8 +4,9 @@ import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.modules.market.top.Field
 import io.horizontalsystems.bankwallet.modules.market.top.IMarketListDataSource
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.xrateskit.entities.Coin
 import io.horizontalsystems.xrateskit.entities.CoinMarket
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -18,17 +19,11 @@ class MarketListFavoritesDataSource(
     override val dataUpdatedAsync: Observable<Unit> by marketFavoritesManager::dataUpdatedAsync
 
     override fun getListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
-        return Single.zip(
-                xRateManager.getTopDefiMarketList(currencyCode, fetchDiffPeriod),
-                xRateManager.getTopMarketList(currencyCode, fetchDiffPeriod),
-                { t1, t2 ->
-                    t1 + t2
-                })
-                .map { list ->
-                    marketFavoritesManager.getAll().mapNotNull { favoriteCoin ->
-                        list.find { it.coin.code == favoriteCoin.code }
-                    }
-                }
+        val coins = marketFavoritesManager.getAll().map { favoriteCoin ->
+            Coin(favoriteCoin.code, type = favoriteCoin.coinType?.let { xRateManager.convertCoinTypeToXRateKitCoinType(it) })
+        }
+
+        return xRateManager.getCoinMarketList(coins, currencyCode, fetchDiffPeriod)
     }
 
 }

@@ -302,6 +302,7 @@ interface IRateManager {
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun getTopMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>>
     fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>>
+    fun getCoinMarketList(coins: List<io.horizontalsystems.xrateskit.entities.Coin>, currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun refresh()
     fun convertCoinTypeToXRateKitCoinType(coinType: CoinType): io.horizontalsystems.xrateskit.entities.CoinType
