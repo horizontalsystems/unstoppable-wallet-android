@@ -158,7 +158,7 @@ class TransactionInfoPresenter(
 
     private fun getExplorerData(hash: String, testMode: Boolean, coinType: CoinType): TransactionInfoModule.ExplorerData {
         return when (coinType) {
-            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData( "btc.com", if (testMode) null else "https://btc.com/$hash")
+            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData( "blockchair.com", if (testMode) null else "https://blockchair.com/bitcoin/transaction/$hash")
             is CoinType.BitcoinCash -> TransactionInfoModule.ExplorerData( "btc.com", if (testMode) null else "https://bch.btc.com/$hash")
             is CoinType.Litecoin -> TransactionInfoModule.ExplorerData( "blockchair.com", if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash")
             is CoinType.Dash -> TransactionInfoModule.ExplorerData( "dash.org", if (testMode) null else "https://insight.dash.org/insight/tx/$hash")
