@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 
-class RateListFactory(private val numberFormatter: IAppNumberFormatter, private val rateManager: IRateManager) : RateListModule.IRateListFactory {
+class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateListModule.IRateListFactory {
 
     override fun portfolioViewItems(coins: List<Coin>, currency: Currency, marketInfos: Map<String, MarketInfo>): List<CoinItem> {
         return coins.map { coin ->
@@ -31,7 +30,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter, private 
                     timestamp = topMarket.marketInfo.timestamp,
                     rateDimmed = topMarket.marketInfo.isExpired(),
                     rank = topMarket.rank,
-                    coinType = topMarket.coinType?.let { rateManager.convertXRateCoinTypeToCoinType(it) }
+                    coinType = topMarket.coinType
             )
         }
     }

@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.MarketInfo
-import io.horizontalsystems.xrateskit.entities.CoinMarket
 import java.math.BigDecimal
 
 object RateListModule {
@@ -43,7 +42,7 @@ object RateListModule {
 
     interface IInteractorDelegate {
         fun didUpdateMarketInfo(marketInfos: Map<String, MarketInfo>)
-        fun didFetchedTopMarketList(items: List<CoinMarket>)
+        fun didFetchedTopMarketList(items: List<TopMarketRanked>)
         fun didFailToFetchTopList()
     }
 
@@ -63,7 +62,7 @@ object RateListModule {
                     App.walletStorage,
                     App.appConfigProvider,
                     RateListSorter())
-            val presenter = RateListPresenter(view, router, interactor, RateListFactory(App.numberFormatter, App.xRateManager))
+            val presenter = RateListPresenter(view, router, interactor, RateListFactory(App.numberFormatter))
 
             interactor.delegate = presenter
 
@@ -94,6 +93,6 @@ data class TopMarketRanked(
         val coinCode: String,
         val coinName: String,
         val marketInfo: MarketInfo,
-        val rank: Int,
-        val coinType: io.horizontalsystems.xrateskit.entities.CoinType?
+        val coinType: CoinType?,
+        val rank: Int
 )
