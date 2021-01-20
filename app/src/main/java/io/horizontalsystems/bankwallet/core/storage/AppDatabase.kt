@@ -485,7 +485,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val addColumnCoinTypeToFavoriteCoins: Migration = object : Migration(27, 28) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE `FavoriteCoin` ADD COLUMN `coinType` TEXT NOT NULL DEFAULT ''")
+                database.execSQL("ALTER TABLE `FavoriteCoin` ADD COLUMN `coinType` TEXT DEFAULT ''")
             }
         }
     }
