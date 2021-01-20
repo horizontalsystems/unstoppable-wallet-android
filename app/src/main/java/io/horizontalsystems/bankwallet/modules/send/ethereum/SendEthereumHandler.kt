@@ -49,7 +49,7 @@ class SendEthereumHandler(
         }
 
         try {
-            addressModule.validAddress()
+            addressModule.validateAddress()
         } catch (e: Exception) {
             addressError = e
         }

@@ -60,7 +60,7 @@ class SendAddressPresenter(val moduleDelegate: SendAddressModule.IAddressModuleD
     override var currentAddress: Address? = null
 
     override fun validAddress(): Address {
-        return currentAddress ?: throw SendAddressModule.ValidationError.InvalidAddress()
+        return currentAddress ?: throw SendAddressModule.ValidationError.EmptyValue()
     }
 
     override fun validateAddress() {

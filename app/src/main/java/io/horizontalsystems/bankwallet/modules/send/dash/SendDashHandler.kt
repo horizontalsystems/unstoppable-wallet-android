@@ -27,7 +27,7 @@ class SendDashHandler(
         }
 
         try {
-            addressModule.validAddress()
+            addressModule.validateAddress()
         } catch (e: Exception) {
             addressError = e
         }
