@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,20 +15,22 @@ import kotlinx.android.synthetic.main.view_holder_coin_rate.*
 
 class MarketTopItemsAdapter(
         private val listener: Listener,
-        private val viewModel: MarketTopViewModel,
+        private val itemsLiveData: LiveData<List<MarketTopViewItem>>,
+        private val loadingLiveData: LiveData<Boolean>,
+        private val errorLiveData: LiveData<String?>,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketTopViewItem, ViewHolderMarketTopItem>(coinRateDiff) {
 
     init {
-        viewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
+        itemsLiveData.observe(viewLifecycleOwner, {
             submitList(it)
         })
-        viewModel.errorLiveData.observe(viewLifecycleOwner, { error ->
+        errorLiveData.observe(viewLifecycleOwner, { error ->
             if (error != null) {
                 submitList(listOf())
             }
         })
-        viewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
+        loadingLiveData.observe(viewLifecycleOwner, { loading ->
             if (loading) {
                 submitList(listOf())
             }
@@ -47,10 +50,6 @@ class MarketTopItemsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int) = Unit
-
-    fun refresh() {
-        viewModel.refresh()
-    }
 
     companion object {
         private val coinRateDiff = object : DiffUtil.ItemCallback<MarketTopViewItem>() {
