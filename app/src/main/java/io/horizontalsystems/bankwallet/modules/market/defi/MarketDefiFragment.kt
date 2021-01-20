@@ -16,7 +16,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_rates.*
 
-class MarketDefiFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, MarketTopItemsAdapter.Listener {
+class MarketDefiFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, ViewHolderMarketTopItem.Listener {
 
     private lateinit var marketTopHeaderAdapter: MarketTopHeaderAdapter
     private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
