@@ -14,7 +14,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_rate.*
 
 class MarketTopItemsAdapter(
-        private val listener: Listener,
+        private val listener: ViewHolderMarketTopItem.Listener,
         private val itemsLiveData: LiveData<List<MarketTopViewItem>>,
         private val loadingLiveData: LiveData<Boolean>,
         private val errorLiveData: LiveData<String?>,
@@ -35,10 +35,6 @@ class MarketTopItemsAdapter(
                 submitList(listOf())
             }
         })
-    }
-
-    interface Listener {
-        fun onItemClick(marketTopViewItem: MarketTopViewItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketTopItem {
@@ -68,8 +64,12 @@ class MarketTopItemsAdapter(
     }
 }
 
-class ViewHolderMarketTopItem(override val containerView: View, listener: MarketTopItemsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderMarketTopItem(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     private var item: MarketTopViewItem? = null
+
+    interface Listener {
+        fun onItemClick(marketTopViewItem: MarketTopViewItem)
+    }
 
     init {
         containerView.setOnClickListener {
