@@ -146,7 +146,18 @@ object CoinInfoMap {
             "FUN" to CoinInfo(BigDecimal(10_999_873_621), null, "https://www.funfair.io"),
             "GNO" to CoinInfo(BigDecimal(10_000_000), null, "https://gnosis.io"),
             "GRID" to CoinInfo(BigDecimal(300_000_000), null, "https://gridplus.io"),
-            )
+            "HUSD" to CoinInfo(BigDecimal(290_254_402), null, "https://www.stcoins.com"),
+            "IOTX" to CoinInfo(BigDecimal(10_000_000_000), null, "https://iotex.io"),
+            "LPT" to CoinInfo(BigDecimal(22_906_951), null, "https://livepeer.org"),
+            "MCX" to CoinInfo(BigDecimal(1_000_000_000), null, "https://machix.com"),
+            "MBC" to CoinInfo(BigDecimal(100_000_000), null, "https://marble.cards"),
+            "MATIC" to CoinInfo(BigDecimal(10_000_000_000), null, "https://matic.network"),
+            "MLN" to CoinInfo(BigDecimal(1_524_032), null, "https://melonprotocol.com"),
+            "MET" to CoinInfo(BigDecimal(12_707_811), null, "https://www.metronome.io"),
+            "MTA" to CoinInfo(BigDecimal(99_465_667), null, "https://mstable.org"),
+            "MUSD" to CoinInfo(BigDecimal(33_211_938), null, "https://mstable.org"),
+
+  )
 }
 
 data class CoinInfo(val supply: BigDecimal?, val startDate: String?, val website: String?)
