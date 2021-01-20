@@ -72,6 +72,7 @@
     <attr name="ShadingBottomGradient" format="reference" />
     <attr name="SecondaryButtonStartGradient" format="reference|color" />
     <attr name="SecondaryButtonEndGradient" format="reference|color" />
+    <attr name="MarketCircleGradient" format="reference" />
 
     <!--  New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />

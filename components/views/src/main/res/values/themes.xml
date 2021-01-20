@@ -52,6 +52,7 @@
         <item name="ShadingBottomGradient">@drawable/rates_gradient_light</item>
         <item name="SecondaryButtonStartGradient">#ffffffff</item>
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
+        <item name="MarketCircleGradient">@drawable/market_circle_light</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_l</item>
