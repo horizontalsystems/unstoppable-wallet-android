@@ -33,7 +33,9 @@
         android:layout_height="52dp"
         android:layout_marginTop="13dp"
         android:alpha="0"
+        app:cardBackgroundColor="@color/transparent"
         app:cardCornerRadius="26dp"
+        app:cardElevation="0dp"
         app:gradient="@drawable/gradient_price"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@+id/value" />
@@ -44,7 +46,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
-        android:elevation="2dp"
         android:textColor="?ColorRemus"
         app:layout_constraintBottom_toBottomOf="@id/diffCircle"
         app:layout_constraintStart_toStartOf="@id/diffCircle"
