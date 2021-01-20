@@ -103,7 +103,10 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun animateBgChange(arrayOf: Array<Drawable?>, diff: Float) {
-        val transition = TransitionDrawable(arrayOf)
+        val transition = TransitionDrawable(arrayOf).apply {
+            isCrossFadeEnabled = true
+        }
+
         setGradient(transition)
         matrixImage.setTranslateY(diff)
         transition.startTransition(alphaDuration.toInt())
