@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 
 class RateListPresenter(
@@ -74,13 +73,11 @@ class RateListPresenter(
         syncListsAndShow()
     }
 
-    override fun didFetchedTopMarketList(items: List<CoinMarket>) {
+    override fun didFetchedTopMarketList(items: List<TopMarketRanked>) {
         loading = false
 
         topMarketInfos.clear()
-        topMarketInfos.addAll(items.mapIndexed { index, coinMarket ->
-            TopMarketRanked(coinMarket.coin.code, coinMarket.coin.title, coinMarket.marketInfo,index + 1, coinMarket.coin.type)
-        })
+        topMarketInfos.addAll(items)
 
         sortTopList()
 
@@ -110,7 +107,7 @@ class RateListPresenter(
             topMarketInfos.forEachIndexed { index, topMarket ->
                 if (topMarket.coinCode == coinCode) {
                     if (portfolioMarketInfo.timestamp > topMarket.marketInfo.timestamp) {
-                        topMarketInfos[index] = TopMarketRanked(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo, topMarket.rank, topMarket.coinType)
+                        topMarketInfos[index] = TopMarketRanked(topMarket.coinCode, topMarket.coinName, portfolioMarketInfo, topMarket.coinType, topMarket.rank)
                     } else {
                         portfolioMarketInfos[coinCode] = topMarket.marketInfo
                     }
