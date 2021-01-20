@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top100
+package io.horizontalsystems.bankwallet.modules.market.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,16 +13,13 @@ import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModul
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
 import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_rates.*
 
-class MarketTop100Fragment : BaseFragment(), MarketTopHeaderAdapter.Listener, ViewHolderMarketTopItem.Listener {
+class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener {
 
     private lateinit var marketMetricsAdapter: MarketMetricsAdapter
-    private lateinit var marketTopHeaderAdapter: MarketTopHeaderAdapter
     private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
@@ -37,11 +34,10 @@ class MarketTop100Fragment : BaseFragment(), MarketTopHeaderAdapter.Listener, Vi
         super.onViewCreated(view, savedInstanceState)
 
         marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
-        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel, viewLifecycleOwner)
         marketTopItemsAdapter = MarketTopItemsAdapter(this, marketTopViewModel.marketTopViewItemsLiveData, viewLifecycleOwner)
         marketLoadingAdapter = MarketLoadingAdapter(marketTopViewModel, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, marketTopHeaderAdapter, marketLoadingAdapter, marketTopItemsAdapter)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, marketLoadingAdapter, marketTopItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
@@ -55,31 +51,6 @@ class MarketTop100Fragment : BaseFragment(), MarketTopHeaderAdapter.Listener, Vi
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
     }
-
-    override fun onClickSortingField() {
-        val items = marketTopViewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == marketTopViewModel.sortingField)
-        }
-
-        SelectorDialog
-                .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    marketTopViewModel.sortingField = marketTopViewModel.sortingFields[position]
-                }
-                .show(childFragmentManager, "sorting_field_selector")
-    }
-
-    override fun onClickPeriod() {
-        val items = marketTopViewModel.periods.map {
-            SelectorItem(getString(it.titleResId), it == marketTopViewModel.period)
-        }
-
-        SelectorDialog
-                .newInstance(items, getString(R.string.Market_Period_PopupTitle)) { position ->
-                    marketTopViewModel.period = marketTopViewModel.periods[position]
-                }
-                .show(childFragmentManager, "sorting_period_selector")
-    }
-
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
         val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null, marketTopViewItem.coinType)

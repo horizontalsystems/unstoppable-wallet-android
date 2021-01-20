@@ -17,7 +17,7 @@ class MarketCategoriesService(private val storage: IMarketStorage) {
     val currentCategoryChangedObservable = PublishSubject.create<Unit>()
 
     enum class Category {
-        Top100, DeFi, Favorites;
+        Overview, DeFi, Favorites;
 
         companion object {
             private val map = values().associateBy(Category::name)
