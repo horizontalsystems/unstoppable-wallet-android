@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_input_amount.view.*
 
 class AmountInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -94,7 +95,12 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
     fun setSecondaryEnabled(enabled: Boolean){
         secondaryArea.isEnabled = enabled
         context?.let { ctx ->
-            val color = ctx.getColor(if (enabled) R.color.grey else R.color.grey_50)
+            val color = if (enabled) {
+                LayoutHelper.getAttr(R.attr.ColorBran, ctx.theme, ctx.getColor(R.color.grey))
+            } else {
+                ctx.getColor(R.color.grey_50)
+            }
+
             txtHintInfo.setTextColor(color)
         }
     }
