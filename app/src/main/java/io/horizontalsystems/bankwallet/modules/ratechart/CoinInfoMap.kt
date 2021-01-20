@@ -156,8 +156,27 @@ object CoinInfoMap {
             "MET" to CoinInfo(BigDecimal(12_707_811), null, "https://www.metronome.io"),
             "MTA" to CoinInfo(BigDecimal(99_465_667), null, "https://mstable.org"),
             "MUSD" to CoinInfo(BigDecimal(33_211_938), null, "https://mstable.org"),
-
-  )
+            "NMR" to CoinInfo(BigDecimal(11_000_000), null, "https://erasure.world"),
+            "OCEAN" to CoinInfo(BigDecimal(1_410_000_000), null, "https://oceanprotocol.com"),
+            "PNK" to CoinInfo(BigDecimal(764_626_704), null, "https://kleros.io"),
+            "POA" to CoinInfo(BigDecimal(283_697_411), null, "https://poa.net"),
+            "QNT" to CoinInfo(BigDecimal(14_612_493), null, "https://www.quant.network"),
+            "QSP" to CoinInfo(BigDecimal(976_442_388), null, "https://quantstamp.com"),
+            "RDN" to CoinInfo(BigDecimal(100_000_000), null, "https://raiden.network"),
+            "REPv2" to CoinInfo(null, null, "https://www.augur.net"),
+            "RLC" to CoinInfo(BigDecimal(86_999_785), null, "http://iex.ec"),
+            "RPL" to CoinInfo(BigDecimal(17_922_515), null, "https://www.rocketpool.net"),
+            "SAN" to CoinInfo(BigDecimal(83_337_000), null, "https://santiment.net"),
+            "SRM" to CoinInfo(BigDecimal(10_000_000), null, "https://projectserum.com"),
+            "SPANK" to CoinInfo(BigDecimal(1_000_000_000), null, "https://spankchain.com"),
+            "STORJ" to CoinInfo(BigDecimal(424_999_998), null, "https://storj.io"),
+            "TRB" to CoinInfo(BigDecimal(1_707_842), null, "https://tellor.io"),
+            "TRST" to CoinInfo(BigDecimal(100_000_000), null, "https://www.wetrust.io"),
+            "UBT" to CoinInfo(BigDecimal(150_000_000), null, "https://unibright.io"),
+            "SOCKS" to CoinInfo(null, null, "https://unisocks.exchange"),
+            "UMA" to CoinInfo(BigDecimal(101_172_570), null, "https://umaproject.org"),
+            "VERI" to CoinInfo(BigDecimal(1_000_000), null, "http://veritas.veritaseum.com"),
+            )
 }
 
 data class CoinInfo(val supply: BigDecimal?, val startDate: String?, val website: String?)
