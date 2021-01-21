@@ -42,6 +42,7 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
                 MainSettingsFragment()
         ), childFragmentManager, viewLifecycleOwner.lifecycle)
 
+        view.viewPager.isUserInputEnabled = false
         view.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
