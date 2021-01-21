@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 28, exportSchema = false, entities = [
+@Database(version = 25, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -67,10 +67,7 @@ abstract class AppDatabase : RoomDatabase() {
                             updateEthereumCommunicationMode,
                             addBirthdayHeightToAccount,
                             addBep2SymbolToRecord,
-                            addFavoriteCoinsTable,
-                            addColumnCoinTypeToFavoriteCoins,
-                            addCoinTypeBlockchainSettingForBitcoinCash,
-                            deleteEosColumnFromAccountRecord
+                            MIGRATION_24_25
                     )
                     .build()
         }
@@ -437,14 +434,12 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private val addFavoriteCoinsTable: Migration = object : Migration(24, 25) {
+        private val MIGRATION_24_25: Migration = object : Migration(24, 25) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                // addFavoriteCoinsTable 24, 25
                 database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteCoin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `code` TEXT NOT NULL)")
-            }
-        }
 
-        private val addCoinTypeBlockchainSettingForBitcoinCash: Migration = object : Migration(25, 26) {
-            override fun migrate(database: SupportSQLiteDatabase) {
+                // addCoinTypeBlockchainSettingForBitcoinCash 25, 26
                 val walletsCursor = database.query("SELECT * FROM EnabledWallet WHERE coinId = 'BCH'")
                 while (walletsCursor.count > 0) {
                     database.execSQL("""
@@ -453,11 +448,8 @@ abstract class AppDatabase : RoomDatabase() {
                                         """.trimIndent())
                     return
                 }
-            }
-        }
 
-        private val deleteEosColumnFromAccountRecord: Migration = object : Migration(26, 27) {
-            override fun migrate(database: SupportSQLiteDatabase) {
+                // deleteEosColumnFromAccountRecord 26, 27
                 database.execSQL("ALTER TABLE AccountRecord RENAME TO TempAccountRecord")
                 database.execSQL("""
                 CREATE TABLE AccountRecord (
@@ -480,12 +472,6 @@ abstract class AppDatabase : RoomDatabase() {
                     WHERE `type` != 'eos'
                 """.trimIndent())
                 database.execSQL("DROP TABLE TempAccountRecord")
-            }
-        }
-
-        private val addColumnCoinTypeToFavoriteCoins: Migration = object : Migration(27, 28) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE `FavoriteCoin` ADD COLUMN `coinType` TEXT DEFAULT ''")
             }
         }
     }
