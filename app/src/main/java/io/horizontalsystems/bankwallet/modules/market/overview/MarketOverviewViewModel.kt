@@ -23,7 +23,10 @@ class MarketOverviewViewModel(
         }
     var period by service::period
 
-    val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+    val topGainersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+    val topLoosersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+    val topByVolumeViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
 
@@ -49,13 +52,15 @@ class MarketOverviewViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        val viewItems = sort(service.marketTopItems, sortingField).map {
-            val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
+        topGainersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopGainers).subList(0, 3).map(this::convertItemToViewItem))
+        topLoosersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopLosers).subList(0, 3).map(this::convertItemToViewItem))
+        topByVolumeViewItemsLiveData.postValue(sort(service.marketTopItems, Field.HighestVolume).subList(0, 3).map(this::convertItemToViewItem))
+    }
 
-            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, it.coinType)
-        }
+    private fun convertItemToViewItem(it: MarketTopItem): MarketTopViewItem {
+        val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
 
-        marketTopViewItemsLiveData.postValue(viewItems)
+        return MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, it.coinType)
     }
 
     private fun convertErrorMessage(it: Throwable): String {

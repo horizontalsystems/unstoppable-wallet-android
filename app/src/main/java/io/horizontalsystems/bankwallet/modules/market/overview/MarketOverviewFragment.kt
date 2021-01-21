@@ -13,15 +13,11 @@ import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModul
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
 import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
+import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_rates.*
 
 class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener {
-
-    private lateinit var marketMetricsAdapter: MarketMetricsAdapter
-    private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
-    private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
@@ -33,10 +29,36 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
-        marketTopItemsAdapter = MarketTopItemsAdapter(this, marketOverviewViewModel.marketTopViewItemsLiveData, viewLifecycleOwner)
+        val marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
+        val topGainersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
+                SettingsMenuItem(R.string.RateList_TopWinners, R.drawable.ic_circle_up_20, value = getString(R.string.Market_SeeAll)) {
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, marketLoadingAdapter, marketTopItemsAdapter)
+                }
+        )
+        val topGainersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topGainersViewItemsLiveData, viewLifecycleOwner)
+
+        val topLosersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
+                SettingsMenuItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, value = getString(R.string.Market_SeeAll)) {
+
+                }
+        )
+        val topLosersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topLoosersViewItemsLiveData, viewLifecycleOwner)
+
+        val topByVolumeHeaderAdapter = MarketOverviewSectionHeaderAdapter(
+                SettingsMenuItem(R.string.RateList_TopByVolume, R.drawable.ic_chart_20, value = getString(R.string.Market_SeeAll)) {
+
+                }
+        )
+        val topByVolumeAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topByVolumeViewItemsLiveData, viewLifecycleOwner)
+
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter,
+                topGainersHeaderAdapter,
+                topGainersAdapter,
+                topLosersHeaderAdapter,
+                topLosersAdapter,
+                topByVolumeHeaderAdapter,
+                topByVolumeAdapter,
+        )
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {

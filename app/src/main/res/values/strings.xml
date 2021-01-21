@@ -108,6 +108,7 @@
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
+    <string name="Market_SeeAll">See All</string>
 
     <!--Balance-->
 
@@ -651,6 +652,7 @@
     <string name="RateList_Rank">Rank</string>
     <string name="RateList_TopWinners">Top Winners</string>
     <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_TopByVolume">Top by Volume</string>
 
     <!-- Balance Sync Error -->
 
