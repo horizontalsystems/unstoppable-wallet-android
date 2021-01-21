@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.CoinMarket
-import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -15,14 +14,6 @@ class MarketTopService(
         private val marketListDataSource: IMarketListDataSource,
         private val rateManager: IRateManager
 ) : Clearable {
-
-    val periods: Array<Period> = Period.values()
-    var period: Period = Period.Period24h
-        set(value) {
-            field = value
-
-            fetch()
-        }
 
     val sortingFields: Array<Field> = marketListDataSource.sortingFields
 
@@ -63,7 +54,7 @@ class MarketTopService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = marketListDataSource.getListAsync(currencyManager.baseCurrency.code, convertPeriod(period))
+        topItemsDisposable = marketListDataSource.getListAsync(currencyManager.baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     marketTopItems = it.mapIndexed { index, topMarket ->
@@ -94,10 +85,4 @@ class MarketTopService(
                     topMarket.marketInfo.rateDiffPeriod,
                     topMarket.marketInfo.marketCap?.toDouble()
             )
-
-    private fun convertPeriod(period: Period) = when (period) {
-        Period.Period24h -> TimePeriod.HOUR_24
-        Period.PeriodWeek -> TimePeriod.DAY_7
-        Period.PeriodMonth -> TimePeriod.DAY_30
-    }
 }

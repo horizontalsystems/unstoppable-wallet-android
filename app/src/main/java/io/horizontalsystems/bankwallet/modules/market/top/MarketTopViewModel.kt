@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
@@ -18,7 +17,6 @@ class MarketTopViewModel(
 ) : ViewModel() {
 
     val sortingFields: Array<Field> by service::sortingFields
-    val periods by service::periods
 
     var sortingField: Field = sortingFields.first()
         set(value) {
@@ -26,7 +24,6 @@ class MarketTopViewModel(
 
             syncViewItemsBySortingField()
         }
-    var period by service::period
 
     val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val loadingLiveData = MutableLiveData(false)
