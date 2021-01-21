@@ -20,7 +20,7 @@ class MarketListFavoritesDataSource(
 
     override fun getListAsync(currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
         val coins = marketFavoritesManager.getAll().map { favoriteCoin ->
-            Coin(favoriteCoin.code, type = favoriteCoin.coinType?.let { xRateManager.convertCoinTypeToXRateKitCoinType(it) })
+            Coin(favoriteCoin.code)
         }
 
         return xRateManager.getCoinMarketList(coins, currencyCode, fetchDiffPeriod)

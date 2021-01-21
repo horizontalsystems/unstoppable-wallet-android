@@ -92,9 +92,7 @@ class MarketTopService(
                     topMarket.marketInfo.volume.toDouble(),
                     topMarket.marketInfo.rate,
                     topMarket.marketInfo.rateDiffPeriod,
-                    topMarket.marketInfo.marketCap?.toDouble(),
-                    topMarket.marketInfo.liquidity,
-                    topMarket.coin.type?.let { rateManager.convertXRateCoinTypeToCoinType(it) }
+                    topMarket.marketInfo.marketCap?.toDouble()
             )
 
     private fun convertPeriod(period: Period) = when (period) {

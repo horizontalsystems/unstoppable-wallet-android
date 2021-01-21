@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
@@ -21,7 +20,6 @@ class RateChartPresenter(
         private val coinCode: String,
         private val coinTitle: String,
         private val coinId: String?,
-        private val coinType: CoinType?,
         private val currency: Currency,
         private val factory: RateChartViewFactory)
     : ViewModel(), ViewDelegate, InteractorDelegate {
@@ -91,11 +89,11 @@ class RateChartPresenter(
     }
 
     override fun onFavoriteClick() {
-        interactor.favorite(coinCode, coinType)
+        interactor.favorite(coinCode)
     }
 
     override fun onUnfavoriteClick() {
-        interactor.unfavorite(coinCode, coinType)
+        interactor.unfavorite(coinCode)
     }
 
     override fun toggleEma() {
@@ -129,7 +127,7 @@ class RateChartPresenter(
     }
 
     override fun updateFavoriteNotificationItemState() {
-        view.setIsFavorite(interactor.isCoinFavorite(coinCode, coinType))
+        view.setIsFavorite(interactor.isCoinFavorite(coinCode))
     }
 
     private fun fetchChartInfo() {

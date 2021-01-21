@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -81,18 +80,18 @@ class RateChartInteractor(
         return priceAlertManager.getPriceAlert(coinCode)
     }
 
-    override fun isCoinFavorite(coinCode: String, coinType: CoinType?): Boolean {
-        return marketFavoritesManager.isCoinInFavorites(coinCode, coinType)
+    override fun isCoinFavorite(coinCode: String): Boolean {
+        return marketFavoritesManager.isCoinInFavorites(coinCode)
     }
 
-    override fun favorite(coinCode: String, coinType: CoinType?) {
-        marketFavoritesManager.add(coinCode, coinType)
+    override fun favorite(coinCode: String) {
+        marketFavoritesManager.add(coinCode)
 
         delegate?.updateFavoriteNotificationItemState()
     }
 
-    override fun unfavorite(coinCode: String, coinType: CoinType?) {
-        marketFavoritesManager.remove(coinCode, coinType)
+    override fun unfavorite(coinCode: String) {
+        marketFavoritesManager.remove(coinCode)
 
         delegate?.updateFavoriteNotificationItemState()
     }

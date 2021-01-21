@@ -60,7 +60,7 @@ class MarketOverviewViewModel(
     private fun convertItemToViewItem(it: MarketTopItem): MarketTopViewItem {
         val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
 
-        return MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, it.coinType)
+        return MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
     }
 
     private fun convertErrorMessage(it: Throwable): String {

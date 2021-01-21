@@ -18,7 +18,7 @@ object RateListModule {
     }
 
     interface IRouter {
-        fun openChart(coinCode: String, coinTitle: String, coinType: CoinType?)
+        fun openChart(coinCode: String, coinTitle: String)
         fun openSortingTypeDialog(sortType: TopListSortType)
     }
 
@@ -87,12 +87,11 @@ class RateListSorter {
     }
 }
 
-data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean, val rank: Int? = null, val coinType: CoinType?)
+data class CoinItem(val coinCode: String, val coinName: String, var rate: String?, var diff: BigDecimal?, val coin: Coin? = null, var timestamp: Long, var rateDimmed: Boolean, val rank: Int? = null)
 
 data class TopMarketRanked(
         val coinCode: String,
         val coinName: String,
         val marketInfo: MarketInfo,
-        val coinType: CoinType?,
         val rank: Int
 )

@@ -50,10 +50,7 @@ class RatesInteractor(
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     val topMarketItems = it.mapIndexed { index, coinMarket ->
-                        val coinType = coinMarket.coin.type?.let {
-                            xRateManager.convertXRateCoinTypeToCoinType(it)
-                        }
-                        TopMarketRanked(coinMarket.coin.code, coinMarket.coin.title, coinMarket.marketInfo, coinType, index + 1)
+                        TopMarketRanked(coinMarket.coin.code, coinMarket.coin.title, coinMarket.marketInfo, index + 1)
                     }
                     delegate?.didFetchedTopMarketList(topMarketItems)
                 }, {

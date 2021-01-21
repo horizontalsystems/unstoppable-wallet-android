@@ -63,7 +63,7 @@ class MarketTopViewModel(
         val viewItems = sort(service.marketTopItems, sortingField).map {
             val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
 
-            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, it.coinType)
+            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
         }
 
         marketTopViewItemsLiveData.postValue(viewItems)
@@ -106,8 +106,7 @@ data class MarketTopViewItem(
         val coinCode: String,
         val coinName: String,
         val rate: String,
-        val diff: BigDecimal,
-        val coinType: CoinType?
+        val diff: BigDecimal
 ) {
     fun areItemsTheSame(other: MarketTopViewItem): Boolean {
         return coinCode == other.coinCode && coinName == other.coinName

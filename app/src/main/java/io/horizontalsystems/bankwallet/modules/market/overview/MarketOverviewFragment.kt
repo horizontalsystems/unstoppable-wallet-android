@@ -77,7 +77,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
     }
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
-        val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null, marketTopViewItem.coinType)
+        val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }

@@ -114,10 +114,6 @@ class RateManager(
         return kit.getTopCoinMarketsAsync(currencyCode = currency, fetchDiffPeriod = fetchDiffPeriod)
     }
 
-    override fun getTopDefiMarketList(currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
-        return kit.getTopDefiMarketsAsync(currencyCode = currency, fetchDiffPeriod = fetchDiffPeriod)
-    }
-
     override fun getCoinMarketList(coins: List<Coin>, currency: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return kit.getCoinMarketsAsync(coins, currency, fetchDiffPeriod)
     }
@@ -146,7 +142,7 @@ class RateManager(
         }
     }
 
-    override fun convertCoinTypeToXRateKitCoinType(coinType: io.horizontalsystems.bankwallet.entities.CoinType): CoinType {
+    private fun convertCoinTypeToXRateKitCoinType(coinType: io.horizontalsystems.bankwallet.entities.CoinType): CoinType {
         return when (coinType) {
             is Bitcoin -> CoinType.Bitcoin
             is BitcoinCash -> CoinType.BitcoinCash
@@ -156,20 +152,6 @@ class RateManager(
             is Zcash -> CoinType.Zcash
             is Binance -> CoinType.Binance
             is Erc20 -> CoinType.Erc20(coinType.address)
-        }
-    }
-
-    override fun convertXRateCoinTypeToCoinType(coinType: CoinType): io.horizontalsystems.bankwallet.entities.CoinType? {
-        return when (coinType) {
-            is CoinType.Bitcoin -> Bitcoin
-            is CoinType.BitcoinCash -> BitcoinCash
-            is CoinType.Dash -> Dash
-            is CoinType.Ethereum -> Ethereum
-            is CoinType.Litecoin -> Litecoin
-            is CoinType.Zcash -> Zcash
-            is CoinType.Binance -> Binance("")
-            is CoinType.Erc20 -> Erc20(coinType.address)
-            else -> null
         }
     }
 
