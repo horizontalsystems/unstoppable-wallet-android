@@ -40,13 +40,13 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
         val topGainersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topGainersViewItemsLiveData, viewLifecycleOwner)
 
         val topLosersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
-                marketOverviewViewModel.topLoosersViewItemsLiveData,
+                marketOverviewViewModel.topLosersViewItemsLiveData,
                 viewLifecycleOwner,
                 SettingsMenuItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, value = getString(R.string.Market_SeeAll)) {
 
                 }
         )
-        val topLosersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topLoosersViewItemsLiveData, viewLifecycleOwner)
+        val topLosersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topLosersViewItemsLiveData, viewLifecycleOwner)
 
         val topByVolumeHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topByVolumeViewItemsLiveData,

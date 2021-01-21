@@ -12,17 +12,8 @@ class MarketOverviewViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val sortingFields: Array<Field> by service::sortingFields
-
-    var sortingField: Field = sortingFields.first()
-        set(value) {
-            field = value
-
-            syncViewItemsBySortingField()
-        }
-
     val topGainersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
-    val topLoosersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+    val topLosersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val topByVolumeViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
 
     val loadingLiveData = MutableLiveData(false)
@@ -51,7 +42,7 @@ class MarketOverviewViewModel(
 
     private fun syncViewItemsBySortingField() {
         topGainersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopGainers).subList(0, 3).map(this::convertItemToViewItem))
-        topLoosersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopLosers).subList(0, 3).map(this::convertItemToViewItem))
+        topLosersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopLosers).subList(0, 3).map(this::convertItemToViewItem))
         topByVolumeViewItemsLiveData.postValue(sort(service.marketTopItems, Field.HighestVolume).subList(0, 3).map(this::convertItemToViewItem))
     }
 
