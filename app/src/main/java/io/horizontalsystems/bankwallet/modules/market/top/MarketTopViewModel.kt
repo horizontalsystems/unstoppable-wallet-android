@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
-import java.util.Comparator
+import java.util.*
 
 class MarketTopViewModel(
         private val service: MarketTopService,
@@ -72,6 +72,10 @@ class MarketTopViewModel(
     }
 
     fun refresh() {
+        service.refresh()
+    }
+
+    fun onErrorClick() {
         service.refresh()
     }
 
