@@ -24,7 +24,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
-    private val marketTopViewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
+    private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rates, container, false)
@@ -34,22 +34,17 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
         super.onViewCreated(view, savedInstanceState)
 
         marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
-        marketTopItemsAdapter = MarketTopItemsAdapter(this, marketTopViewModel.marketTopViewItemsLiveData, viewLifecycleOwner)
-        marketLoadingAdapter = MarketLoadingAdapter(marketTopViewModel, viewLifecycleOwner)
+        marketTopItemsAdapter = MarketTopItemsAdapter(this, marketOverviewViewModel.marketTopViewItemsLiveData, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter, marketLoadingAdapter, marketTopItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
             marketMetricsAdapter.refresh()
-            marketTopViewModel.refresh()
+            marketOverviewViewModel.refresh()
 
             pullToRefresh.isRefreshing = false
         }
-
-        marketTopViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
-            HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
-        })
     }
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
