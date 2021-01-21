@@ -15,7 +15,7 @@ object MarketTopModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val service = MarketTopService(App.currencyManager, MarketListTopDataSource(App.xRateManager), App.xRateManager)
-            return MarketTopViewModel(service, listOf(service)) as T
+            return MarketTopViewModel(service, App.connectivityManager, listOf(service)) as T
         }
 
     }

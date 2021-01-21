@@ -4,13 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.util.*
 
 class MarketTopViewModel(
         private val service: MarketTopService,
+        private val connectivityManager: ConnectivityManager,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -28,6 +31,7 @@ class MarketTopViewModel(
     val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
+    val networkNotAvailable = SingleLiveEvent<Unit>()
 
     private val disposable = CompositeDisposable()
 
@@ -43,6 +47,11 @@ class MarketTopViewModel(
 
     private fun syncState(state: MarketTopService.State) {
         loadingLiveData.postValue(state is MarketTopService.State.Loading)
+
+        if (state is MarketTopService.State.Error && !connectivityManager.isConnected) {
+            networkNotAvailable.postValue(Unit)
+        }
+
         errorLiveData.postValue((state as? MarketTopService.State.Error)?.error?.let { convertErrorMessage(it) })
 
         if (state is MarketTopService.State.Loaded) {
