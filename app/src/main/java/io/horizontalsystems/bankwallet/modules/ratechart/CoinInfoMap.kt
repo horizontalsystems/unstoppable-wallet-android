@@ -176,7 +176,22 @@ object CoinInfoMap {
             "SOCKS" to CoinInfo(null, null, "https://unisocks.exchange"),
             "UMA" to CoinInfo(BigDecimal(101_172_570), null, "https://umaproject.org"),
             "VERI" to CoinInfo(BigDecimal(1_000_000), null, "http://veritas.veritaseum.com"),
-            )
+            "SPDR" to CoinInfo(BigDecimal(1_000_000_000), null, "https://spiderdao.io"),
+            "LGCY" to CoinInfo(BigDecimal(100_000_000_000), null, "https://lgcy.network"),
+            "KP3R" to CoinInfo(BigDecimal(201_643), null, "https://keep3r.network"),
+            "RFuel" to CoinInfo(BigDecimal(109_375_001), null, "https://riodefi.com"),
+            "ZCN" to CoinInfo(BigDecimal(400_000_000), null, "https://0chain.net"),
+            "HEGIC" to CoinInfo(BigDecimal(3_012_009_888), null, "https://www.hegic.co"),
+            "AUC" to CoinInfo(BigDecimal(65_829_631), null, "https://auctus.org"),
+            "Nsure" to CoinInfo(BigDecimal(45_000_000), null, "https://nsure.network"),
+            "BOND" to CoinInfo(BigDecimal(10_000_000), null, "https://barnbridge.com"),
+            "HLAND" to CoinInfo(BigDecimal(2_057), null, "https://htw.land"),
+            "SWFL" to CoinInfo(null, null, "https://swapfol.io"),
+            "WHITE" to CoinInfo(BigDecimal(8_888), null, "https://www.whiteheart.finance"),
+            "DEFO" to CoinInfo(BigDecimal(2_057), null, "https://htw.land"),
+            "API3" to CoinInfo(BigDecimal(100_000_000), null, "https://api3.org"),
+            "NEST" to CoinInfo(BigDecimal(10_000_000_000), null, "https://nestprotocol.org"),
+    )
 }
 
 data class CoinInfo(val supply: BigDecimal?, val startDate: String?, val website: String?)
