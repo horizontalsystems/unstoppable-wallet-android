@@ -31,6 +31,8 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
 
         val marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
         val topGainersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
+                marketOverviewViewModel.topGainersViewItemsLiveData,
+                viewLifecycleOwner,
                 SettingsMenuItem(R.string.RateList_TopWinners, R.drawable.ic_circle_up_20, value = getString(R.string.Market_SeeAll)) {
 
                 }
@@ -38,6 +40,8 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
         val topGainersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topGainersViewItemsLiveData, viewLifecycleOwner)
 
         val topLosersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
+                marketOverviewViewModel.topLoosersViewItemsLiveData,
+                viewLifecycleOwner,
                 SettingsMenuItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, value = getString(R.string.Market_SeeAll)) {
 
                 }
@@ -45,13 +49,16 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
         val topLosersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topLoosersViewItemsLiveData, viewLifecycleOwner)
 
         val topByVolumeHeaderAdapter = MarketOverviewSectionHeaderAdapter(
+                marketOverviewViewModel.topByVolumeViewItemsLiveData,
+                viewLifecycleOwner,
                 SettingsMenuItem(R.string.RateList_TopByVolume, R.drawable.ic_chart_20, value = getString(R.string.Market_SeeAll)) {
 
                 }
         )
         val topByVolumeAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topByVolumeViewItemsLiveData, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketMetricsAdapter,
+        coinRatesRecyclerView.adapter = ConcatAdapter(
+                marketMetricsAdapter,
                 topGainersHeaderAdapter,
                 topGainersAdapter,
                 topLosersHeaderAdapter,
