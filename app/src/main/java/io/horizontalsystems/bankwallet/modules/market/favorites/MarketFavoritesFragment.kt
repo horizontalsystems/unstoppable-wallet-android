@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_rates.*
 
 class MarketFavoritesFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, MarketTopItemsAdapter.Listener {
@@ -43,6 +44,9 @@ class MarketFavoritesFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
             pullToRefresh.isRefreshing = false
         }
 
+        marketTopViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
+            HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
+        })
     }
 
     override fun onClickSortingField() {
