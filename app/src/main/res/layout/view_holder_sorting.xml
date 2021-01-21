@@ -26,17 +26,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Highest Cap" />
 
-    <Button
-        android:id="@+id/period"
-        style="@style/ButtonSecondaryTransparentEndIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:drawableEnd="@drawable/ic_down_arrow_20"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="24h" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

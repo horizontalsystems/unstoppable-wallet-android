@@ -29,12 +29,6 @@ enum class Field(@StringRes val titleResId: Int) {
     TopGainers(R.string.RateList_TopWinners), TopLosers(R.string.RateList_TopLosers),
 }
 
-enum class Period(@StringRes val titleResId: Int) {
-    Period24h(R.string.Market_Period_24h),
-    PeriodWeek(R.string.Market_Period_1week),
-    PeriodMonth(R.string.Market_Period_1month)
-}
-
 data class MarketTopItem(
         val rank: Int,
         val coinCode: String,

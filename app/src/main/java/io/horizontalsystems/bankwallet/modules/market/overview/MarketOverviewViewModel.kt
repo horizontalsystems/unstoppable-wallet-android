@@ -13,7 +13,6 @@ class MarketOverviewViewModel(
 ) : ViewModel() {
 
     val sortingFields: Array<Field> by service::sortingFields
-    val periods by service::periods
 
     var sortingField: Field = sortingFields.first()
         set(value) {
@@ -21,7 +20,6 @@ class MarketOverviewViewModel(
 
             syncViewItemsBySortingField()
         }
-    var period by service::period
 
     val topGainersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val topLoosersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()

@@ -67,19 +67,6 @@ class MarketFavoritesFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onClickPeriod() {
-        val items = marketTopViewModel.periods.map {
-            SelectorItem(getString(it.titleResId), it == marketTopViewModel.period)
-        }
-
-        SelectorDialog
-                .newInstance(items, getString(R.string.Market_Period_PopupTitle)) { position ->
-                    marketTopViewModel.period = marketTopViewModel.periods[position]
-                }
-                .show(childFragmentManager, "sorting_period_selector")
-    }
-
-
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
         val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null)
 
