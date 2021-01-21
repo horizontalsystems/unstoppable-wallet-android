@@ -16,7 +16,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
             val dimRate = (marketInfo?.rate != null && marketInfo.isExpired())
             val timestamp = marketInfo?.timestamp ?: 0L
 
-            CoinItem(coin.code, coin.title, rate(rateCurrencyValue), diff, coin, timestamp, rateDimmed = dimRate, coinType = coin.type)
+            CoinItem(coin.code, coin.title, rate(rateCurrencyValue), diff, coin, timestamp, rateDimmed = dimRate)
         }
     }
 
@@ -29,8 +29,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
                     topMarket.marketInfo.rateDiff,
                     timestamp = topMarket.marketInfo.timestamp,
                     rateDimmed = topMarket.marketInfo.isExpired(),
-                    rank = topMarket.rank,
-                    coinType = topMarket.coinType
+                    rank = topMarket.rank
             )
         }
     }

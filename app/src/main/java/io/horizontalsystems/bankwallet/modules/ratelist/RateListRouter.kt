@@ -5,11 +5,11 @@ import io.horizontalsystems.core.SingleLiveEvent
 
 class RateListRouter : RateListModule.IRouter {
 
-    var openChartLiveEvent = SingleLiveEvent<Triple<String, String, CoinType?>>()
+    var openChartLiveEvent = SingleLiveEvent<Pair<String, String>>()
     val openSortingTypeDialogLiveEvent = SingleLiveEvent<TopListSortType>()
 
-    override fun openChart(coinCode: String, coinTitle: String, coinType: CoinType?) {
-        openChartLiveEvent.postValue(Triple(coinCode, coinTitle, coinType))
+    override fun openChart(coinCode: String, coinTitle: String) {
+        openChartLiveEvent.postValue(Pair(coinCode, coinTitle))
     }
 
     override fun openSortingTypeDialog(sortType: TopListSortType) {

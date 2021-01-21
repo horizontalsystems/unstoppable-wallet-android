@@ -42,7 +42,5 @@ data class MarketTopItem(
         val volume: Double,
         val rate: BigDecimal,
         val diff: BigDecimal,
-        val marketCap: Double?,
-        val liquidity: BigDecimal?,
-        val coinType: CoinType?
+        val marketCap: Double?
 )

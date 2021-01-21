@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -51,9 +50,8 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         }
 
         val coinTitle = arguments?.getString(COIN_TITLE_KEY) ?: ""
-        val coinType: CoinType? = arguments?.getParcelable(COIN_TYPE_KEY)
 
-        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId, coinType)).get(RateChartPresenter::class.java)
+        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         toolbar.title = coinTitle
@@ -344,14 +342,12 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"
         private const val COIN_ID_KEY = "coin_id_key"
-        private const val COIN_TYPE_KEY = "coin_type_key"
 
-        fun prepareParams(coinCode: String, coinTitle: String, coinId: String?, coinType: CoinType?) : Bundle {
+        fun prepareParams(coinCode: String, coinTitle: String, coinId: String?) : Bundle {
             return bundleOf(
                     COIN_CODE_KEY to coinCode,
                     COIN_TITLE_KEY to coinTitle,
-                    COIN_ID_KEY to coinId,
-                    COIN_TYPE_KEY to coinType,
+                    COIN_ID_KEY to coinId
             )
         }
     }
