@@ -19,6 +19,7 @@ class MarketDefiFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, Mark
 
     private lateinit var marketTopHeaderAdapter: MarketTopHeaderAdapter
     private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
+    private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
     private val marketTopViewModel by viewModels<MarketTopViewModel> { MarketDefiModule.Factory() }
 
@@ -31,8 +32,9 @@ class MarketDefiFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, Mark
 
         marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel, viewLifecycleOwner)
         marketTopItemsAdapter = MarketTopItemsAdapter(this, marketTopViewModel, viewLifecycleOwner)
+        marketLoadingAdapter = MarketLoadingAdapter(marketTopViewModel, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketTopHeaderAdapter, marketTopItemsAdapter)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketTopHeaderAdapter, marketLoadingAdapter, marketTopItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {

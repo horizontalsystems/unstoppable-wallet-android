@@ -22,6 +22,16 @@ class MarketTopItemsAdapter(
         viewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
             submitList(it)
         })
+        viewModel.errorLiveData.observe(viewLifecycleOwner, { error ->
+            if (error != null) {
+                submitList(listOf())
+            }
+        })
+        viewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
+            if (loading) {
+                submitList(listOf())
+            }
+        })
     }
 
     interface Listener {
@@ -77,7 +87,7 @@ class ViewHolderMarketTopItem(override val containerView: View, listener: Market
 //            coinIcon.isVisible = true
 //            coinIcon.setCoinImage(item.coin.code, item.coin.type)
 //        } else {
-            coinIcon.isVisible = false
+        coinIcon.isVisible = false
 //        }
 
         if (item.rank != prev?.rank) {
