@@ -81,8 +81,6 @@ class MarketOverviewViewModel(
     private fun sort(items: List<MarketTopItem>, sortingField: Field) = when (sortingField) {
         Field.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
         Field.LowestCap -> items.sortedByNullLast { it.marketCap }
-        Field.HighestLiquidity -> items.sortedByDescendingNullLast { it.liquidity }
-        Field.LowestLiquidity -> items.sortedByNullLast { it.liquidity }
         Field.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
         Field.LowestVolume -> items.sortedByNullLast { it.volume }
         Field.HighestPrice -> items.sortedByDescendingNullLast { it.rate }

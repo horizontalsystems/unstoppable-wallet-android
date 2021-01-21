@@ -36,8 +36,7 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
         viewModel.categoryLiveData.observe(viewLifecycleOwner, { category: MarketCategoriesService.Category ->
             val contentFragment = when (category) {
                 MarketCategoriesService.Category.Overview -> 0
-                MarketCategoriesService.Category.DeFi -> 1
-                MarketCategoriesService.Category.Favorites -> 2
+                MarketCategoriesService.Category.Favorites -> 1
             }
 
             viewPager.setCurrentItem(contentFragment, false)
