@@ -24,7 +24,6 @@ object MarketTopModule {
 
 enum class Field(@StringRes val titleResId: Int) {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
-    HighestLiquidity(R.string.Market_Field_HighestLiquidity), LowestLiquidity(R.string.Market_Field_LowestLiquidity),
     HighestVolume(R.string.Market_Field_HighestVolume), LowestVolume(R.string.Market_Field_LowestVolume),
     HighestPrice(R.string.Market_Field_HighestPrice), LowestPrice(R.string.Market_Field_LowestPrice),
     TopGainers(R.string.RateList_TopWinners), TopLosers(R.string.RateList_TopLosers),
