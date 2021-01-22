@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.NoFeeSendTransactionError
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.FeeState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -100,7 +101,7 @@ class SendBitcoinHandler(
             mutableListOf<SendModule.Input>().apply {
                 add(SendModule.Input.Amount)
                 add(SendModule.Input.Address())
-                add(SendModule.Input.Fee(true))
+                add(SendModule.Input.Fee)
                 if (coinType is CoinType.Bitcoin && interactor.isLockTimeEnabled)
                     add(SendModule.Input.Hodler)
                 add(SendModule.Input.ProceedButton)
@@ -130,8 +131,6 @@ class SendBitcoinHandler(
 
             add(SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
 
-            add(SendModule.SendConfirmationDurationViewItem(feeModule.duration))
-
             lockTimeInterval?.let {
                 add(SendModule.SendConfirmationLockTimeViewItem(it))
             }
@@ -140,7 +139,8 @@ class SendBitcoinHandler(
     }
 
     override fun sendSingle(logger: AppLogger): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeModule.feeRate, hodlerModule?.pluginData(), logger)
+        val feeRate = feeModule.feeRate ?: throw NoFeeSendTransactionError()
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeRate, hodlerModule?.pluginData(), logger)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate
