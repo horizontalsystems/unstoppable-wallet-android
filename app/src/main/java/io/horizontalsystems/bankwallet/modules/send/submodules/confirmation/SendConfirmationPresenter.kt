@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationAmountViewItem
-import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationDurationViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationFeeViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationMemoViewItem
 import io.horizontalsystems.hodler.LockTimeInterval
@@ -44,9 +43,6 @@ class SendConfirmationPresenter(
                 }
                 is SendConfirmationMemoViewItem -> {
                     memo = item.memo
-                }
-                is SendConfirmationDurationViewItem -> {
-                    duration = item.duration
                 }
                 is SendModule.SendConfirmationLockTimeViewItem -> {
                     lockTimeInterval = item.lockTimeInterval

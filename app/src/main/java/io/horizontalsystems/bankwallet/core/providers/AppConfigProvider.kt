@@ -20,9 +20,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val companyRedditLink: String = "https://reddit.com/r/UNSTOPPABLEWallet/"
     override val reportEmail = "unstoppable.support@protonmail.com"
     override val walletHelpTelegramGroup = "UnstoppableWallet"
-    override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
-    override val ipfsMainGateway = "ipfs-ext.horizontalsystems.xyz"
-    override val ipfsFallbackGateway = "ipfs.io"
+    override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
 
     override val cryptoCompareApiKey = App.instance.getString(R.string.cryptoCompareApiKey)
     override val infuraProjectId = App.instance.getString(R.string.infuraProjectId)

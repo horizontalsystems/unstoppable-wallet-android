@@ -176,8 +176,6 @@ object SendModule {
 
     data class SendConfirmationMemoViewItem(val memo: String?) : SendConfirmationViewItem()
 
-    data class SendConfirmationDurationViewItem(val duration: Long?) : SendConfirmationViewItem()
-
     data class SendConfirmationLockTimeViewItem(val lockTimeInterval: LockTimeInterval) : SendConfirmationViewItem()
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
@@ -274,7 +272,7 @@ object SendModule {
     sealed class Input {
         object Amount : Input()
         class Address(val editable: Boolean = false) : Input()
-        class Fee(val isAdjustable: Boolean) : Input()
+        object Fee : Input()
         class Memo(val maxLength: Int) : Input()
         object ProceedButton : Input()
         object Hodler : Input()

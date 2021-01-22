@@ -64,40 +64,14 @@
         tools:text=" | $0.40" />
 
     <!--Fee END-->
-    <!--Duration END-->
+    <!--Speed START-->
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/durationViews"
+        android:id="@+id/speedViews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="txDurationTitle,txDuration" />
-
-    <TextView
-        android:id="@+id/txDurationTitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:includeFontPadding="false"
-        android:text="@string/Send_DialogDuration"
-        android:textColor="@color/grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txFeeTitle" />
-
-    <TextView
-        android:id="@+id/txDuration"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txDurationTitle"
-        tools:text="~10 minutes" />
-
-    <!--Duration END-->
-    <!--Speed START-->
+        app:constraint_referenced_ids="speedLayoutFrame,border1,feeInfoImageClickArea,feeInfoButton,txSpeedMenuTitle,txSpeedMenuClickArea,txSpeedMenu,txSpeedMenuArrow" />
 
     <View
         android:id="@+id/speedLayoutFrame"
@@ -106,14 +80,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txDurationTitle" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/speedViews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:constraint_referenced_ids="speedLayoutFrame,border1,feeInfoImageClickArea,feeInfoButton,txSpeedMenuTitle,txSpeedMenuClickArea,txSpeedMenu,txSpeedMenuArrow" />
+        app:layout_constraintTop_toBottomOf="@+id/txFeeTitle" />
 
     <View
         android:id="@+id/border1"

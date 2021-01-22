@@ -23,6 +23,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 import kotlin.jvm.Throws
 
@@ -264,12 +265,10 @@ interface IAppConfigProvider {
     val companyRedditLink: String
     val reportEmail: String
     val walletHelpTelegramGroup: String
-    val ipfsId: String
-    val ipfsMainGateway: String
-    val ipfsFallbackGateway: String
     val cryptoCompareApiKey: String
     val infuraProjectId: String
     val infuraProjectSecret: String
+    val btcCoreRpcUrl: String
     val etherscanApiKey: String
     val guidesUrl: String
     val faqUrl: String
@@ -368,7 +367,17 @@ interface IAppNumberFormatter {
 }
 
 interface IFeeRateProvider {
-    fun feeRates(): Single<List<FeeRateInfo>>
+    val feeRatePriorityList: List<FeeRatePriority>
+    val recommendedFeeRate: Single<BigInteger>
+    val defaultFeeRatePriority: FeeRatePriority
+        get() = FeeRatePriority.RECOMMENDED
+
+    fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
+        if (feeRatePriority is FeeRatePriority.Custom){
+            return Single.just(feeRatePriority.value.toBigInteger())
+        }
+        return recommendedFeeRate
+    }
 }
 
 interface IAddressParser {

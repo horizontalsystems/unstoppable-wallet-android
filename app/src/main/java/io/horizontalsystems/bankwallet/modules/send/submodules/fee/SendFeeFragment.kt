@@ -18,13 +18,11 @@ import io.horizontalsystems.bankwallet.ui.FeeSelectorView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.ethereumkit.api.models.ApiError
 import io.horizontalsystems.seekbar.FeeSeekBar
 import kotlinx.android.synthetic.main.view_send_fee.*
 
 class SendFeeFragment(
-        private val feeIsAdjustable: Boolean,
         private val coin: Coin,
         private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
         private val sendHandler: SendModule.ISendHandler,
@@ -44,7 +42,7 @@ class SendFeeFragment(
         val presenterView = presenter.view as SendFeeView
 
         txError.isVisible = false
-        speedViews.isVisible = feeIsAdjustable
+
         txSpeedMenuClickArea.setOnClickListener {
             presenter.onClickFeeRatePriority()
         }
@@ -56,22 +54,18 @@ class SendFeeFragment(
 
         customFeeSeekBar.setListener(object : FeeSeekBar.Listener {
             override fun onSelect(value: Int) {
-                presenter.onChangeFeeRateValue(value.toLong())
+                presenter.onChangeFeeRateValue(value)
             }
+        })
+
+        presenterView.showAdjustableFeeMenu.observe(viewLifecycleOwner, Observer { visible ->
+            speedViews.isVisible = visible
         })
 
         presenterView.primaryFee.observe(viewLifecycleOwner, Observer { txFeePrimary.text = " $it" })
 
         presenterView.secondaryFee.observe(viewLifecycleOwner, Observer { fiatFee ->
             fiatFee?.let { txFeeSecondary.text = " | $it" }
-        })
-
-        presenterView.duration.observe(viewLifecycleOwner, { duration ->
-            duration?.let {
-                val txDurationString = DateHelper.getTxDurationString(requireContext(), duration)
-                txDuration.text = requireContext().getString(R.string.Duration_Within, txDurationString)
-            }
-            durationViews.isVisible = duration != null
         })
 
         presenterView.feePriority.observe(viewLifecycleOwner, Observer { feePriority ->
@@ -82,29 +76,22 @@ class SendFeeFragment(
 
         presenterView.showFeePriorityOptions.observe(viewLifecycleOwner, Observer { feeRates ->
             val selectorItems = feeRates.map { feeRateViewItem ->
-                val feeRateInfo = feeRateViewItem.feeRateInfo
-                val selected = feeRateViewItem.selected
                 val caption = context?.let { context ->
-                    var text = TextHelper.getFeeRatePriorityString(context, feeRateInfo.priority)
-                    feeRateInfo.duration?.let {
-                        text += " (~${DateHelper.getTxDurationString(context, feeRateInfo.duration)})"
-                    }
-                    text
+                    TextHelper.getFeeRatePriorityString(context, feeRateViewItem.feeRatePriority)
                 } ?: ""
 
-                SelectorItem(caption, selected)
+                SelectorItem(caption, feeRateViewItem.selected)
             }
 
             SelectorDialog
                     .newInstance(selectorItems, getString(R.string.Send_DialogSpeed)) { position ->
-                        presenter.onChangeFeeRate(feeRates[position].feeRateInfo)
+                        presenter.onChangeFeeRate(feeRates[position].feeRatePriority)
                     }
                     .show(parentFragmentManager, "fee_rate_priority_selector")
         })
 
         presenterView.showCustomFeePriority.observe(viewLifecycleOwner, Observer { isVisible ->
             customFeeSeekBar.isVisible = isVisible
-            durationViews.isVisible = !isVisible
         })
 
         presenterView.setCustomFeeParams.observe(viewLifecycleOwner, Observer { (value, range, label) ->

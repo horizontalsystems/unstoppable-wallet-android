@@ -62,7 +62,7 @@ class SendDashHandler(
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
             SendModule.Input.Address(),
-            SendModule.Input.Fee(false),
+            SendModule.Input.Fee,
             SendModule.Input.ProceedButton)
 
     override fun onModulesDidLoad() {

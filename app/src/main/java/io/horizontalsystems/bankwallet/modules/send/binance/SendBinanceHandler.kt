@@ -49,7 +49,7 @@ class SendBinanceHandler(
             SendModule.Input.Amount,
             SendModule.Input.Address(),
             SendModule.Input.Memo(120),
-            SendModule.Input.Fee(false),
+            SendModule.Input.Fee,
             SendModule.Input.ProceedButton)
 
 

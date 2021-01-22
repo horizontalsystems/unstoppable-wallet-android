@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.ethereum
 
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.NoFeeSendTransactionError
 import io.horizontalsystems.bankwallet.entities.FeeState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
@@ -35,7 +36,7 @@ class SendEthereumHandler(
         get() = listOf(
                 SendModule.Input.Amount,
                 SendModule.Input.Address(),
-                SendModule.Input.Fee(true),
+                SendModule.Input.Fee,
                 SendModule.Input.ProceedButton)
 
     private fun syncValidation(): Boolean {
@@ -126,13 +127,14 @@ class SendEthereumHandler(
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
-                SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
-                SendModule.SendConfirmationDurationViewItem(feeModule.duration))
+                SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo)
+        )
     }
 
     override fun sendSingle(logger: AppLogger): Single<Unit> {
+        val feeRate = feeModule.feeRate ?: throw NoFeeSendTransactionError()
         return when (val gasLimit = estimateGasLimitState) {
-            is FeeState.Value -> interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeModule.feeRate, gasLimit.value, logger)
+            is FeeState.Value -> interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeRate, gasLimit.value, logger)
             else -> Single.error(Exception("SendTransactionError.NoFee"))
         }
     }
