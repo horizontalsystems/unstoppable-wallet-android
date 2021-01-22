@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewItem
 import io.horizontalsystems.bankwallet.modules.market.top.ViewHolderMarketTopItem
 
@@ -23,7 +21,7 @@ class MarketOverviewItemsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketTopItem {
-        return ViewHolderMarketTopItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
+        return ViewHolderMarketTopItem.create(parent, listener)
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int, payloads: MutableList<Any>) {
