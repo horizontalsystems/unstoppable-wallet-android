@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.top
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -19,6 +20,12 @@ class MarketTopViewModel(
     val sortingFields: Array<Field> by service::sortingFields
 
     var sortingField: Field = sortingFields.first()
+        set(value) {
+            field = value
+
+            syncViewItemsBySortingField()
+        }
+    var additionalField: AdditionalField = AdditionalField.MarketCap
         set(value) {
             field = value
 
@@ -59,8 +66,24 @@ class MarketTopViewModel(
     private fun syncViewItemsBySortingField() {
         val viewItems = sort(service.marketTopItems, sortingField).map {
             val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
+            val xxx = when (additionalField) {
+                AdditionalField.MarketCap -> {
+                    val marketCapFormatted = it.marketCap?.let { marketCap ->
+                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
+                        App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
+                    }
 
-            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff)
+                    MarketTopViewItem.Xxx.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
+                }
+                AdditionalField.Volume -> {
+                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
+                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
+
+                    MarketTopViewItem.Xxx.Volume(volumeFormatted)
+                }
+                AdditionalField.PriceDiff -> MarketTopViewItem.Xxx.Diff(it.diff)
+            }
+            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, xxx)
         }
 
         marketTopViewItemsLiveData.postValue(viewItems)
@@ -103,8 +126,15 @@ data class MarketTopViewItem(
         val coinCode: String,
         val coinName: String,
         val rate: String,
-        val diff: BigDecimal
+        val diff: BigDecimal,
+        val xxx: Xxx
 ) {
+    sealed class Xxx {
+        class MarketCap(val value: String) : Xxx()
+        class Volume(val value: String) : Xxx()
+        class Diff(val value: BigDecimal) : Xxx()
+    }
+
     fun areItemsTheSame(other: MarketTopViewItem): Boolean {
         return coinCode == other.coinCode && coinName == other.coinName
     }

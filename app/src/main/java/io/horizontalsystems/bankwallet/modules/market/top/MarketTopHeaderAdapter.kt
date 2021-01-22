@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_sorting.*
+import java.lang.IllegalStateException
 
 class MarketTopHeaderAdapter(
         private val listener: Listener,
@@ -24,6 +25,7 @@ class MarketTopHeaderAdapter(
 
     interface Listener {
         fun onClickSortingField()
+        fun onSelectAdditionalField(additionalField: AdditionalField)
     }
 
     override fun getItemCount() = 1
@@ -42,6 +44,16 @@ class MarketTopHeaderAdapter(
         init {
             sortingField.setOnSingleClickListener {
                 listener.onClickSortingField()
+            }
+            additionalFieldSelector.setOnCheckedChangeListener { group, checkedId ->
+                val additionalField = when (checkedId) {
+                    R.id.fieldMarketCap -> AdditionalField.MarketCap
+                    R.id.fieldVolume -> AdditionalField.Volume
+                    R.id.fieldPriceDiff -> AdditionalField.PriceDiff
+                    else -> throw IllegalStateException("")
+                }
+
+                listener.onSelectAdditionalField(additionalField)
             }
         }
 

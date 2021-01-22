@@ -80,9 +80,9 @@ class MarketTopService(
                     rank,
                     topMarket.coin.code,
                     topMarket.coin.title,
-                    topMarket.marketInfo.volume.toDouble(),
+                    topMarket.marketInfo.volume,
                     topMarket.marketInfo.rate,
                     topMarket.marketInfo.rateDiffPeriod,
-                    topMarket.marketInfo.marketCap?.toDouble()
+                    topMarket.marketInfo.marketCap
             )
 }

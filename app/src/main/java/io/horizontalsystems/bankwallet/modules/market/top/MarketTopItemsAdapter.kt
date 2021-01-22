@@ -3,15 +3,18 @@ package io.horizontalsystems.bankwallet.modules.market.top
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.setCoinImage
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_coin_rate.*
+import kotlinx.android.synthetic.main.view_holder_market_item.*
+import java.math.BigDecimal
 
 class MarketTopItemsAdapter(
         private val listener: ViewHolderMarketTopItem.Listener,
@@ -38,7 +41,7 @@ class MarketTopItemsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketTopItem {
-        return ViewHolderMarketTopItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin_rate, parent, false), listener)
+        return ViewHolderMarketTopItem.create(parent, listener)
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int, payloads: MutableList<Any>) {
@@ -82,44 +85,60 @@ class ViewHolderMarketTopItem(override val containerView: View, private val list
     fun bind(item: MarketTopViewItem, prev: MarketTopViewItem?) {
         this.item = item
 
-//        if (item.coin != null) {
-//            coinIcon.isVisible = true
-//            coinIcon.setCoinImage(item.coin.code, item.coin.type)
-//        } else {
-        coinIcon.isVisible = false
-//        }
+        icon.setCoinImage(item.coinCode)
 
         if (item.rank != prev?.rank) {
-            if (item.rank != null) {
-                rank.isVisible = true
-                rank.text = item.rank.toString()
-            } else {
-                rank.isVisible = false
-            }
+            rank.text = item.rank.toString()
         }
 
         if (item.coinName != prev?.coinName) {
-            titleText.text = item.coinName
+            title.text = item.coinName
         }
 
         if (item.coinCode != prev?.coinCode) {
-            subtitleText.text = item.coinCode
+            subtitle.text = item.coinCode
         }
-
 
         if (item.rate != prev?.rate) {
-            txValueInFiat.isActivated = true
-//        txValueInFiat.isActivated = !item.rateDimmed //change color via state: activated/not activated
-            txValueInFiat.text = item.rate
+            rate.text = item.rate
         }
 
-        if (item.diff != prev?.diff) {
-            txDiff.isVisible = item.diff != null
-            txDiffNa.isVisible = item.diff == null
+        if (item.xxx != prev?.xxx) {
+            val xxx = item.xxx
 
-            if (item.diff != null) {
-                txDiff.diff = item.diff
+            xxxCaption.text = when (xxx) {
+                is MarketTopViewItem.Xxx.MarketCap -> "MCap"
+                is MarketTopViewItem.Xxx.Volume -> "Vol"
+                is MarketTopViewItem.Xxx.Diff -> ""
             }
+
+            when (xxx) {
+                is MarketTopViewItem.Xxx.MarketCap -> {
+                    xxxValue.text = xxx.value
+                    xxxValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+                }
+                is MarketTopViewItem.Xxx.Volume -> {
+                    xxxValue.text = xxx.value
+                    xxxValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+                }
+                is MarketTopViewItem.Xxx.Diff -> {
+                    val v = xxx.value
+                    val sign = if (v >= BigDecimal.ZERO) "+" else "-"
+                    xxxValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
+
+                    val textColor = if (v >= BigDecimal.ZERO) R.attr.ColorRemus else R.attr.ColorLucian
+                    LayoutHelper.getAttr(textColor, containerView.context.theme)?.let {
+                        xxxValue.setTextColor(it)
+                    }
+                }
+            }
+        }
+
+    }
+
+    companion object {
+        fun create(parent: ViewGroup, listener: Listener): ViewHolderMarketTopItem {
+            return ViewHolderMarketTopItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener)
         }
     }
 }

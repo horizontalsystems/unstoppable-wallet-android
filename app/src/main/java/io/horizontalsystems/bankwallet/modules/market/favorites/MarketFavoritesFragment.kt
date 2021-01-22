@@ -67,6 +67,10 @@ class MarketFavoritesFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
+    override fun onSelectAdditionalField(additionalField: AdditionalField) {
+        marketTopViewModel.additionalField = additionalField
+    }
+
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
         val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null)
 
