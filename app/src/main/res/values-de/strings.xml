@@ -64,26 +64,24 @@
     <string name="Backup_Button_Backup">Sicherung</string>
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Market-->
+    <string name="Market_Field_MarketCap">MCap</string>
+    <string name="Market_Field_Volume">Volume</string>
+    <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Market</string>
     <string name="Market_Search">Search</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
-    <string name="Market_Field_HighestLiquidity">Highest Liquidity</string>
-    <string name="Market_Field_LowestLiquidity">Lowest Liquidity</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
-    <string name="Market_Period_24h">24 hours</string>
-    <string name="Market_Period_1week">1 week</string>
-    <string name="Market_Period_1month">1 month</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_Period_PopupTitle">Changes</string>
     <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
+    <string name="Market_SeeAll">See All</string>
     <!--Balance-->
     <string name="Balance_Title">Guthaben</string>
     <string name="Balance_Deposit">Anfordern</string>
@@ -505,6 +503,7 @@
     <string name="RateList_Rank">Position</string>
     <string name="RateList_TopWinners">Top Gewinner</string>
     <string name="RateList_TopLosers">Top Verlierer</string>
+    <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync-Fehler</string>
     <string name="BalanceSyncError_ButtonRetry">Wiederholen</string>
