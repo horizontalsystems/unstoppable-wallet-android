@@ -124,6 +124,13 @@ class SendEthereumHandler(
         }
     }
 
+    private fun syncCurrencyAmount() {
+        amountModule.fiatAmount?.let {
+            feeModule.setFiatAmount(it)
+            syncState()
+        }
+    }
+
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
@@ -158,6 +165,7 @@ class SendEthereumHandler(
     // SendAmountModule.IAmountModuleDelegate
 
     override fun onChangeAmount() {
+        syncCurrencyAmount()
         if (syncValidation()) {
             syncEstimateGasLimit()
         }
@@ -165,6 +173,10 @@ class SendEthereumHandler(
 
     override fun onChangeInputType(inputType: SendModule.InputType) {
         feeModule.setInputType(inputType)
+    }
+
+    override fun onRateUpdated() {
+        syncCurrencyAmount()
     }
 
     // SendAddressModule.IAddressModuleDelegate

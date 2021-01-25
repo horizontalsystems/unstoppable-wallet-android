@@ -55,6 +55,13 @@ class SendBitcoinHandler(
         }
     }
 
+    private fun syncCurrencyAmount() {
+        amountModule.fiatAmount?.let {
+            feeModule.setFiatAmount(it)
+            syncState()
+        }
+    }
+
     // SendModule.ISendHandler
 
     override lateinit var amountModule: SendAmountModule.IAmountModule
@@ -159,10 +166,15 @@ class SendBitcoinHandler(
     override fun onChangeAmount() {
         syncState()
         syncValidation()
+        syncCurrencyAmount()
     }
 
     override fun onChangeInputType(inputType: SendModule.InputType) {
         feeModule.setInputType(inputType)
+    }
+
+    override fun onRateUpdated() {
+        syncCurrencyAmount()
     }
 
     // SendAddressModule.ModuleDelegate

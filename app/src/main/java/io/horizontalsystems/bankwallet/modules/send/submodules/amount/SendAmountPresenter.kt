@@ -130,6 +130,7 @@ class SendAmountPresenter(
         }
 
         moduleDelegate?.onChangeInputType(inputType)
+        moduleDelegate?.onRateUpdated()
 
         syncAmountType()
         syncAmount()
@@ -208,6 +209,8 @@ class SendAmountPresenter(
             null -> SendModule.InputType.COIN
             else -> interactor.defaultInputType
         }
+
+        moduleDelegate?.onRateUpdated()
 
         syncAmount()
         syncAvailableBalance()

@@ -72,6 +72,7 @@ object SendAmountModule {
     interface IAmountModuleDelegate {
         fun onChangeAmount()
         fun onChangeInputType(inputType: SendModule.InputType)
+        fun onRateUpdated(){}
     }
 
     open class ValidationError : Exception() {
