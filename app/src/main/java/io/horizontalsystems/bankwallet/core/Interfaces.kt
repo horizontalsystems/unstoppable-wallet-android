@@ -274,6 +274,7 @@ interface IAppConfigProvider {
     val faqUrl: String
     val fiatDecimal: Int
     val maxDecimal: Int
+    val feeRateAdjustForCurrencies: List<String>
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
     val otherCoins: List<Coin>

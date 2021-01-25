@@ -98,7 +98,7 @@ object SendFeeModule {
             val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
             val interactor = SendFeeInteractor(baseCurrency, App.xRateManager, feeRateProvider, feeCoin)
 
-            val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData, customPriorityUnit, FeeRateAdjustmentHelper())
+            val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData, customPriorityUnit, FeeRateAdjustmentHelper(App.appConfigProvider))
 
             presenter.moduleDelegate = feeModuleDelegate
             interactor.delegate = presenter

@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 
-class FeeRateAdjustmentHelper {
+class FeeRateAdjustmentHelper(private val appConfigProvider: IAppConfigProvider) {
 
     private val amountRules = listOf(
             Rule(10001..Long.MAX_VALUE, 1.25f),
@@ -20,14 +21,13 @@ class FeeRateAdjustmentHelper {
 
     fun applyRule(coinType: CoinType, currencyValue: CurrencyValue?, feeRate: Long): Long {
 
+        val coinRules = rulesByCoin[coinType] ?: return feeRate  //Binance, BCH, Dash, Litecoin has static fee
+
         val fallbackRate = (feeRate * 1.10F).toLong()
 
         currencyValue ?: return fallbackRate
 
-        val coinRules = rulesByCoin[coinType] ?: return fallbackRate
-
-        if (!currencyValue.currency.code.contains("USD")
-                && !currencyValue.currency.code.contains("EUR")) {
+        if (!appConfigProvider.feeRateAdjustForCurrencies.contains(currencyValue.currency.code)){
             return fallbackRate
         }
 
