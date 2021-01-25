@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
@@ -69,6 +70,7 @@ object SendFeeModule {
         fun setAvailableFeeBalance(availableFeeBalance: BigDecimal)
         fun setInputType(inputType: SendModule.InputType)
         fun fetchFeeRate()
+        fun setFiatAmount(amount: CurrencyValue)
     }
 
     interface IFeeModuleDelegate {
@@ -96,7 +98,7 @@ object SendFeeModule {
             val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
             val interactor = SendFeeInteractor(baseCurrency, App.xRateManager, feeRateProvider, feeCoin)
 
-            val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData, customPriorityUnit)
+            val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData, customPriorityUnit, FeeRateAdjustmentHelper())
 
             presenter.moduleDelegate = feeModuleDelegate
             interactor.delegate = presenter

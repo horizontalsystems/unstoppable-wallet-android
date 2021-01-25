@@ -18,7 +18,8 @@ class SendFeePresenter(
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
         private val feeCoinData: Pair<Coin, String>?,
-        private val customPriorityUnit: CustomPriorityUnit?)
+        private val customPriorityUnit: CustomPriorityUnit?,
+        private val feeRateAdjustmentHelper: FeeRateAdjustmentHelper)
     : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule, SendFeeModule.IInteractorDelegate {
 
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
@@ -31,6 +32,7 @@ class SendFeePresenter(
 
     private var error: Exception? = null
 
+    private var fiatAmount: CurrencyValue? = null
     private var customFeeRate: BigInteger? = null
     private var fetchedFeeRate: BigInteger? = null
     private var feeRatePriority: FeeRatePriority? = interactor.defaultFeeRatePriority
@@ -86,6 +88,12 @@ class SendFeePresenter(
         view.setCustomFeeParams(units, priority.range, customPriorityUnit.getLabel())
     }
 
+    private fun getSmartFee(): Long? {
+        return fetchedFeeRate?.let {
+            feeRateAdjustmentHelper.applyRule(coin.type, fiatAmount, it.toLong())
+        }
+    }
+
     // SendFeeModule.IFeeModule
 
     override val isValid: Boolean
@@ -134,7 +142,7 @@ class SendFeePresenter(
         }
 
     override val feeRate: Long?
-        get() = (customFeeRate ?: fetchedFeeRate)?.toLong()
+        get() = customFeeRate?.toLong() ?: getSmartFee()
 
     override fun setLoading(loading: Boolean) {
         view.setLoading(loading)
@@ -168,6 +176,10 @@ class SendFeePresenter(
     override fun setInputType(inputType: SendModule.InputType) {
         this.inputType = inputType
         syncFees()
+    }
+
+    override fun setFiatAmount(amount: CurrencyValue) {
+        fiatAmount = amount
     }
 
     // SendFeeModule.IViewDelegate
