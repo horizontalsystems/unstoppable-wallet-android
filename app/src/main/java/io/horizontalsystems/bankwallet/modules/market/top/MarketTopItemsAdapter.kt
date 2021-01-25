@@ -103,32 +103,32 @@ class ViewHolderMarketTopItem(override val containerView: View, private val list
             rate.text = item.rate
         }
 
-        if (item.xxx != prev?.xxx) {
-            val xxx = item.xxx
+        if (item.marketDataValue != prev?.marketDataValue) {
+            val marketField = item.marketDataValue
 
-            xxxCaption.text = when (xxx) {
-                is MarketTopViewItem.Xxx.MarketCap -> "MCap"
-                is MarketTopViewItem.Xxx.Volume -> "Vol"
-                is MarketTopViewItem.Xxx.Diff -> ""
+            marketFieldCaption.text = when (marketField) {
+                is MarketTopViewItem.MarketDataValue.MarketCap -> "MCap"
+                is MarketTopViewItem.MarketDataValue.Volume -> "Vol"
+                is MarketTopViewItem.MarketDataValue.Diff -> ""
             }
 
-            when (xxx) {
-                is MarketTopViewItem.Xxx.MarketCap -> {
-                    xxxValue.text = xxx.value
-                    xxxValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+            when (marketField) {
+                is MarketTopViewItem.MarketDataValue.MarketCap -> {
+                    marketFieldValue.text = marketField.value
+                    marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
                 }
-                is MarketTopViewItem.Xxx.Volume -> {
-                    xxxValue.text = xxx.value
-                    xxxValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+                is MarketTopViewItem.MarketDataValue.Volume -> {
+                    marketFieldValue.text = marketField.value
+                    marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
                 }
-                is MarketTopViewItem.Xxx.Diff -> {
-                    val v = xxx.value
+                is MarketTopViewItem.MarketDataValue.Diff -> {
+                    val v = marketField.value
                     val sign = if (v >= BigDecimal.ZERO) "+" else "-"
-                    xxxValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
+                    marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
 
                     val textColor = if (v >= BigDecimal.ZERO) R.attr.ColorRemus else R.attr.ColorLucian
                     LayoutHelper.getAttr(textColor, containerView.context.theme)?.let {
-                        xxxValue.setTextColor(it)
+                        marketFieldValue.setTextColor(it)
                     }
                 }
             }

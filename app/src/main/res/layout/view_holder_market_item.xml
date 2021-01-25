@@ -74,14 +74,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:textColor="?ColorLeah"
-        app:layout_constraintBottom_toTopOf="@id/xxxValue"
+        app:layout_constraintBottom_toTopOf="@id/marketFieldValue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="$17,315.48" />
 
     <TextView
-        android:id="@+id/xxxValue"
+        android:id="@+id/marketFieldValue"
         style="@style/CaptionSB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -93,14 +93,14 @@
         tools:text="$105,239 B" />
 
     <TextView
-        android:id="@+id/xxxCaption"
+        android:id="@+id/marketFieldCaption"
         style="@style/CaptionSB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:textColor="?ColorJacob"
-        app:layout_constraintEnd_toStartOf="@id/xxxValue"
-        app:layout_constraintTop_toTopOf="@id/xxxValue"
+        app:layout_constraintEnd_toStartOf="@id/marketFieldValue"
+        app:layout_constraintTop_toTopOf="@id/marketFieldValue"
         tools:text="Vol" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

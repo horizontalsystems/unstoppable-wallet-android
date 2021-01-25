@@ -25,7 +25,7 @@ class MarketTopViewModel(
 
             syncViewItemsBySortingField()
         }
-    var additionalField: AdditionalField = AdditionalField.MarketCap
+    var marketField: MarketField = MarketField.MarketCap
         set(value) {
             field = value
 
@@ -66,24 +66,24 @@ class MarketTopViewModel(
     private fun syncViewItemsBySortingField() {
         val viewItems = sort(service.marketTopItems, sortingField).map {
             val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
-            val xxx = when (additionalField) {
-                AdditionalField.MarketCap -> {
+            val marketDataValue = when (marketField) {
+                MarketField.MarketCap -> {
                     val marketCapFormatted = it.marketCap?.let { marketCap ->
                         val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
                         App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
                     }
 
-                    MarketTopViewItem.Xxx.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
+                    MarketTopViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
                 }
-                AdditionalField.Volume -> {
+                MarketField.Volume -> {
                     val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
                     val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
 
-                    MarketTopViewItem.Xxx.Volume(volumeFormatted)
+                    MarketTopViewItem.MarketDataValue.Volume(volumeFormatted)
                 }
-                AdditionalField.PriceDiff -> MarketTopViewItem.Xxx.Diff(it.diff)
+                MarketField.PriceDiff -> MarketTopViewItem.MarketDataValue.Diff(it.diff)
             }
-            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, xxx)
+            MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
         }
 
         marketTopViewItemsLiveData.postValue(viewItems)
@@ -127,12 +127,12 @@ data class MarketTopViewItem(
         val coinName: String,
         val rate: String,
         val diff: BigDecimal,
-        val xxx: Xxx
+        val marketDataValue: MarketDataValue
 ) {
-    sealed class Xxx {
-        class MarketCap(val value: String) : Xxx()
-        class Volume(val value: String) : Xxx()
-        class Diff(val value: BigDecimal) : Xxx()
+    sealed class MarketDataValue {
+        class MarketCap(val value: String) : MarketDataValue()
+        class Volume(val value: String) : MarketDataValue()
+        class Diff(val value: BigDecimal) : MarketDataValue()
     }
 
     fun areItemsTheSame(other: MarketTopViewItem): Boolean {

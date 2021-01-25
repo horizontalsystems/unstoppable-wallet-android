@@ -25,7 +25,7 @@ class MarketTopHeaderAdapter(
 
     interface Listener {
         fun onClickSortingField()
-        fun onSelectAdditionalField(additionalField: AdditionalField)
+        fun onSelectMarketField(marketField: MarketField)
     }
 
     override fun getItemCount() = 1
@@ -45,15 +45,15 @@ class MarketTopHeaderAdapter(
             sortingField.setOnSingleClickListener {
                 listener.onClickSortingField()
             }
-            additionalFieldSelector.setOnCheckedChangeListener { group, checkedId ->
-                val additionalField = when (checkedId) {
-                    R.id.fieldMarketCap -> AdditionalField.MarketCap
-                    R.id.fieldVolume -> AdditionalField.Volume
-                    R.id.fieldPriceDiff -> AdditionalField.PriceDiff
+            marketFieldSelector.setOnCheckedChangeListener { group, checkedId ->
+                val marketField = when (checkedId) {
+                    R.id.fieldMarketCap -> MarketField.MarketCap
+                    R.id.fieldVolume -> MarketField.Volume
+                    R.id.fieldPriceDiff -> MarketField.PriceDiff
                     else -> throw IllegalStateException("")
                 }
 
-                listener.onSelectAdditionalField(additionalField)
+                listener.onSelectMarketField(marketField)
             }
         }
 

@@ -67,8 +67,8 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onSelectAdditionalField(additionalField: AdditionalField) {
-        marketTopViewModel.additionalField = additionalField
+    override fun onSelectMarketField(marketField: MarketField) {
+        marketTopViewModel.marketField = marketField
     }
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
