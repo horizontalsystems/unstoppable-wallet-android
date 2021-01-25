@@ -28,7 +28,7 @@ enum class Field(@StringRes val titleResId: Int) {
     TopGainers(R.string.RateList_TopWinners), TopLosers(R.string.RateList_TopLosers),
 }
 
-enum class AdditionalField(@StringRes val titleResId: Int) {
+enum class MarketField(@StringRes val titleResId: Int) {
     MarketCap(R.string.Market_Field_MarketCap),
     Volume(R.string.Market_Field_Volume),
     PriceDiff(R.string.Market_Field_PriceDiff)

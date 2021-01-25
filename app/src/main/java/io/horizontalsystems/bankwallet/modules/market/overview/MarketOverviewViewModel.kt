@@ -42,33 +42,33 @@ class MarketOverviewViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        topGainersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopGainers).subList(0, 3).map { this.convertItemToViewItem(it, AdditionalField.PriceDiff) })
-        topLosersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopLosers).subList(0, 3).map { this.convertItemToViewItem(it, AdditionalField.PriceDiff) })
-        topByVolumeViewItemsLiveData.postValue(sort(service.marketTopItems, Field.HighestVolume).subList(0, 3).map { this.convertItemToViewItem(it, AdditionalField.Volume) })
+        topGainersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopGainers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
+        topLosersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopLosers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
+        topByVolumeViewItemsLiveData.postValue(sort(service.marketTopItems, Field.HighestVolume).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.Volume) })
     }
 
-    private fun convertItemToViewItem(it: MarketTopItem, additionalField: AdditionalField): MarketTopViewItem {
+    private fun convertItemToViewItem(it: MarketTopItem, marketField: MarketField): MarketTopViewItem {
         val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
-        val xxx = when (additionalField) {
-            AdditionalField.MarketCap -> {
+        val marketDataValue = when (marketField) {
+            MarketField.MarketCap -> {
                 val marketCapFormatted = it.marketCap?.let { marketCap ->
                     val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
                     App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
                 }
 
-                MarketTopViewItem.Xxx.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
+                MarketTopViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
             }
-            AdditionalField.Volume -> {
+            MarketField.Volume -> {
                 val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
                 val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
 
-                MarketTopViewItem.Xxx.Volume(volumeFormatted)
+                MarketTopViewItem.MarketDataValue.Volume(volumeFormatted)
             }
-            AdditionalField.PriceDiff -> MarketTopViewItem.Xxx.Diff(it.diff)
+            MarketField.PriceDiff -> MarketTopViewItem.MarketDataValue.Diff(it.diff)
         }
 
 
-        return MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, xxx)
+        return MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
     }
 
     private fun convertErrorMessage(it: Throwable): String {
