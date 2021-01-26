@@ -104,16 +104,16 @@ class SendFeePresenter(
             false
         }
 
-    override val feeRateState: FeeState
+    override val feeRateState: FeeRateState
         get() {
             if (error != null) {
-                return FeeState.Error(error as Exception)
+                return FeeRateState.Error(error as Exception)
             }
             feeRate?.let {
-                return FeeState.Value(it)
+                return FeeRateState.Value(it)
             }
 
-            return FeeState.Loading
+            return FeeRateState.Loading
         }
 
 

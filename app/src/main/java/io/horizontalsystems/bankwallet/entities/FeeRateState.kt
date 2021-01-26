@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.entities
 
-sealed class FeeState {
+sealed class FeeRateState {
 
-    object Loading : FeeState()
-    class Value(val value: Long) : FeeState()
-    class Error(val error: Exception) : FeeState()
+    object Loading : FeeRateState()
+    class Value(val value: Long) : FeeRateState()
+    class Error(val error: Exception) : FeeRateState()
 
     val isLoading: Boolean
         get() = this is Loading
