@@ -37,6 +37,7 @@ class MarketTopService(
 
         marketListDataSource.dataUpdatedAsync
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe {
                     fetch()
                 }
@@ -56,6 +57,7 @@ class MarketTopService(
 
         topItemsDisposable = marketListDataSource.getListAsync(currencyManager.baseCurrency.code)
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe({
                     marketTopItems = it.mapIndexed { index, topMarket ->
                         convertToMarketTopItem(index + 1, topMarket)

@@ -8,12 +8,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketInternalNavigationViewModel
 import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.navGraphViewModels
 import kotlinx.android.synthetic.main.fragment_rates.*
 
 class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, ViewHolderMarketTopItem.Listener {
@@ -22,7 +24,12 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
     private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
+    enum class Mode {
+        TopGainers, TopLosers, TopByVolume
+    }
+
     private val marketTopViewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
+    private val navigationViewModel by navGraphViewModels<MarketInternalNavigationViewModel>(R.id.mainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rates, container, false)
@@ -31,7 +38,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel, viewLifecycleOwner)
+        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel.sortingField, marketTopViewModel.marketField)
         marketTopItemsAdapter = MarketTopItemsAdapter(
                 this,
                 marketTopViewModel.marketTopViewItemsLiveData,
@@ -53,6 +60,24 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
         marketTopViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
+
+        navigationViewModel.discoveryModeLiveEvent.observe(viewLifecycleOwner) {
+            when (it) {
+                Mode.TopGainers -> {
+                    marketTopHeaderAdapter.update(sortingField = Field.HighestCap, marketField = MarketField.MarketCap)
+                    marketTopViewModel.update(sortingField = Field.HighestCap, marketField = MarketField.MarketCap)
+                }
+                Mode.TopLosers ->  {
+                    marketTopHeaderAdapter.update(sortingField = Field.LowestCap, marketField = MarketField.MarketCap)
+                    marketTopViewModel.update(sortingField = Field.LowestCap, marketField = MarketField.MarketCap)
+                }
+                Mode.TopByVolume ->  {
+                    marketTopHeaderAdapter.update(sortingField = Field.HighestVolume, marketField = MarketField.Volume)
+                    marketTopViewModel.update(sortingField = Field.HighestVolume, marketField = MarketField.Volume)
+                }
+                else -> Unit
+            }
+        }
     }
 
     override fun onClickSortingField() {
@@ -62,13 +87,16 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    marketTopViewModel.sortingField = marketTopViewModel.sortingFields[position]
+                    val selectedSortingField = marketTopViewModel.sortingFields[position]
+
+                    marketTopHeaderAdapter.update(sortingField = selectedSortingField)
+                    marketTopViewModel.update(sortingField = selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
     override fun onSelectMarketField(marketField: MarketField) {
-        marketTopViewModel.marketField = marketField
+        marketTopViewModel.update(marketField = marketField)
     }
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
