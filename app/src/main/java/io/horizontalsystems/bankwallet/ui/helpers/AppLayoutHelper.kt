@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.helpers
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.entities.CoinType
@@ -9,24 +8,26 @@ import io.horizontalsystems.views.R
 
 object AppLayoutHelper {
     fun getCoinDrawable(context: Context, coinCode: String, coinType: CoinType? = null): Drawable? {
+        val coinDrawableResId = getCoinDrawableResId(context, coinCode)
+
+        val resId = when {
+            coinDrawableResId != null -> coinDrawableResId
+            coinType is CoinType.Erc20 -> R.drawable.ic_erc20
+            coinType is CoinType.Binance -> R.drawable.ic_bep2
+            else -> null
+        }
+
+        return resId?.let { ContextCompat.getDrawable(context, it) }
+    }
+
+    fun getCoinDrawableResId(context: Context, coinCode: String): Int? {
         val coinResourceName = "coin_${coinCode.replace("-", "_").toLowerCase()}"
         val imgRes = context.resources.getIdentifier(coinResourceName, "drawable", context.packageName)
 
-        try {
-            return ContextCompat.getDrawable(context, imgRes)
-        } catch (e: Resources.NotFoundException) {
-            //icon resource not existing
+        return when {
+            imgRes != 0 -> imgRes
+            else -> null
         }
-
-        if (coinType is CoinType.Erc20) {
-            return ContextCompat.getDrawable(context, R.drawable.ic_erc20)
-        }
-
-        if (coinType is CoinType.Binance) {
-            return ContextCompat.getDrawable(context, R.drawable.ic_bep2)
-        }
-
-        return null
     }
 
     fun getStatusBarHeight(context: Context): Int {
