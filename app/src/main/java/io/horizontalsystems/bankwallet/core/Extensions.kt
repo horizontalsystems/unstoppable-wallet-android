@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,9 +20,7 @@ import io.horizontalsystems.views.SingleClickListener
 fun ImageView.setCoinImage(coinCode: String, coinType: CoinType? = null) {
     setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinCode, coinType))
 
-    val greyColor = ContextCompat.getColor(context, io.horizontalsystems.views.R.color.grey)
-    val tintColorStateList = ColorStateList.valueOf(greyColor)
-    imageTintList = tintColorStateList
+    imageTintList = ColorStateList.valueOf(context.getColor(R.color.grey))
 }
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
