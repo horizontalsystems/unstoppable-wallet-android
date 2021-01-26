@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.ethereum
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.NoFeeSendTransactionError
-import io.horizontalsystems.bankwallet.entities.FeeState
+import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -20,7 +20,7 @@ class SendEthereumHandler(
         private val router: SendModule.IRouter)
     : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
-    private var estimateGasLimitState: FeeState = FeeState.Value(0)
+    private var estimateGasLimitState: FeeRateState = FeeRateState.Value(0)
     private var disposable: Disposable? = null
 
     override lateinit var amountModule: SendAmountModule.IAmountModule
@@ -73,22 +73,22 @@ class SendEthereumHandler(
         if (loading)
             return
 
-        if (feeModule.feeRateState is FeeState.Error) {
+        if (feeModule.feeRateState is FeeRateState.Error) {
 
             feeModule.setFee(BigDecimal.ZERO)
-            processFee((feeModule.feeRateState as FeeState.Error).error)
+            processFee((feeModule.feeRateState as FeeRateState.Error).error)
 
-        } else if (estimateGasLimitState is FeeState.Error) {
+        } else if (estimateGasLimitState is FeeRateState.Error) {
 
             feeModule.setFee(BigDecimal.ZERO)
-            processFee((estimateGasLimitState as FeeState.Error).error)
+            processFee((estimateGasLimitState as FeeRateState.Error).error)
 
-        } else if (feeModule.feeRateState is FeeState.Value && estimateGasLimitState is FeeState.Value) {
+        } else if (feeModule.feeRateState is FeeRateState.Value && estimateGasLimitState is FeeRateState.Value) {
 
-            amountModule.setAvailableBalance(interactor.availableBalance((feeModule.feeRateState as FeeState.Value).value, (estimateGasLimitState as FeeState.Value).value))
+            amountModule.setAvailableBalance(interactor.availableBalance((feeModule.feeRateState as FeeRateState.Value).value, (estimateGasLimitState as FeeRateState.Value).value))
 
             feeModule.setError(null)
-            feeModule.setFee(interactor.fee((feeModule.feeRateState as FeeState.Value).value, (estimateGasLimitState as FeeState.Value).value))
+            feeModule.setFee(interactor.fee((feeModule.feeRateState as FeeRateState.Value).value, (estimateGasLimitState as FeeRateState.Value).value))
         }
     }
 
@@ -105,7 +105,7 @@ class SendEthereumHandler(
                 null
             }
 
-            estimateGasLimitState = FeeState.Loading
+            estimateGasLimitState = FeeRateState.Loading
 
             syncState()
 
@@ -141,7 +141,7 @@ class SendEthereumHandler(
     override fun sendSingle(logger: AppLogger): Single<Unit> {
         val feeRate = feeModule.feeRate ?: throw NoFeeSendTransactionError()
         return when (val gasLimit = estimateGasLimitState) {
-            is FeeState.Value -> interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeRate, gasLimit.value, logger)
+            is FeeRateState.Value -> interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeRate, gasLimit.value, logger)
             else -> Single.error(Exception("SendTransactionError.NoFee"))
         }
     }
@@ -200,14 +200,14 @@ class SendEthereumHandler(
     }
 
     private fun onReceiveGasLimit(gasLimit: Long) {
-        estimateGasLimitState = FeeState.Value(gasLimit)
+        estimateGasLimitState = FeeRateState.Value(gasLimit)
 
         syncState()
         syncValidation()
     }
 
     private fun onGasLimitError(error: Exception) {
-        estimateGasLimitState = FeeState.Error(error)
+        estimateGasLimitState = FeeRateState.Error(error)
 
         syncState()
         syncValidation()

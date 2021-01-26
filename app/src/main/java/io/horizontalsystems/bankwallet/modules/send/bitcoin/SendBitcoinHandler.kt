@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.bitcoin
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.NoFeeSendTransactionError
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.FeeState
+import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -90,14 +90,14 @@ class SendBitcoinHandler(
         if (loading)
             return
 
-        if (feeModule.feeRateState is FeeState.Error) {
+        if (feeModule.feeRateState is FeeRateState.Error) {
 
             feeModule.setFee(BigDecimal.ZERO)
-            feeModule.setError((feeModule.feeRateState as FeeState.Error).error)
+            feeModule.setError((feeModule.feeRateState as FeeRateState.Error).error)
 
-        } else if (feeModule.feeRateState is FeeState.Value) {
+        } else if (feeModule.feeRateState is FeeRateState.Value) {
 
-            val feeRateValue = (feeModule.feeRateState as FeeState.Value).value
+            val feeRateValue = (feeModule.feeRateState as FeeRateState.Value).value
             feeModule.setError(null)
             interactor.fetchAvailableBalance(feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
             interactor.fetchFee(amountModule.currentAmount, feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())

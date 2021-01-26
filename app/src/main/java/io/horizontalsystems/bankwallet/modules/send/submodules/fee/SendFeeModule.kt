@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.FeeState
+import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import java.math.BigDecimal
@@ -59,7 +59,7 @@ object SendFeeModule {
 
     interface IFeeModule {
         val isValid: Boolean
-        val feeRateState: FeeState
+        val feeRateState: FeeRateState
         val feeRate: Long?
         val primaryAmountInfo: AmountInfo
         val secondaryAmountInfo: AmountInfo?
