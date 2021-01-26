@@ -11,11 +11,13 @@ import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategorie
 import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
 import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
+import io.horizontalsystems.core.navGraphViewModels
 import kotlinx.android.synthetic.main.fragment_market.*
 
 class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     private val filterAdapter = FilterAdapter(this)
     private val viewModel by viewModels<MarketCategoriesViewModel> { MarketCategoriesModule.Factory() }
+    private val navigationViewModel by navGraphViewModels<MarketInternalNavigationViewModel>(R.id.mainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market, container, false)
@@ -42,6 +44,13 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
 
             viewPager.setCurrentItem(contentFragment, false)
         })
+
+        navigationViewModel.navigateToDiscoveryLiveEvent.observe(viewLifecycleOwner) {
+            navigationViewModel.setDiscoveryMode(it)
+
+            viewModel.currentCategory = MarketCategoriesService.Category.Discovery
+            filterAdapter.setFilters(viewModel.categories.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(viewModel.currentCategory.name))
+        }
     }
 
     override fun updateFilter(query: String) {

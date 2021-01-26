@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.*
 
@@ -20,17 +21,20 @@ class MarketTopViewModel(
     val sortingFields: Array<Field> by service::sortingFields
 
     var sortingField: Field = sortingFields.first()
-        set(value) {
-            field = value
+        private set
 
-            syncViewItemsBySortingField()
-        }
-    var marketField: MarketField = MarketField.MarketCap
-        set(value) {
-            field = value
+    var marketField: MarketField = MarketField.PriceDiff
+        private set
 
-            syncViewItemsBySortingField()
+    fun update(sortingField: Field? = null, marketField: MarketField? = null) {
+        sortingField?.let {
+            this.sortingField = it
         }
+        marketField?.let {
+            this.marketField = it
+        }
+        syncViewItemsBySortingField()
+    }
 
     val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val loadingLiveData = MutableLiveData(false)
@@ -41,6 +45,8 @@ class MarketTopViewModel(
 
     init {
         service.stateObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe {
                     syncState(it)
                 }

@@ -31,7 +31,7 @@ class MarketFavoritesFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel, viewLifecycleOwner)
+        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel.sortingField, marketTopViewModel.marketField)
         marketTopItemsAdapter = MarketTopItemsAdapter(
                 this,
                 marketTopViewModel.marketTopViewItemsLiveData,
@@ -62,13 +62,16 @@ class MarketFavoritesFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    marketTopViewModel.sortingField = marketTopViewModel.sortingFields[position]
+                    val selectedSortingField = marketTopViewModel.sortingFields[position]
+
+                    marketTopHeaderAdapter.update(sortingField = selectedSortingField)
+                    marketTopViewModel.update(sortingField = selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
     override fun onSelectMarketField(marketField: MarketField) {
-        marketTopViewModel.marketField = marketField
+        marketTopViewModel.update(marketField = marketField)
     }
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
