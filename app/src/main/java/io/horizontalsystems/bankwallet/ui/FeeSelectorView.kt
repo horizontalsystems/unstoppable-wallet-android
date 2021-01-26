@@ -37,6 +37,8 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
                 customFeeSeekBarListener(value)
             }
         })
+
+        clipChildren = false
     }
 
     fun setFeeText(value: String) {
