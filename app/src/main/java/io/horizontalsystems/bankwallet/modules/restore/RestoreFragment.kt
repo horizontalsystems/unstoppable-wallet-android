@@ -102,7 +102,7 @@ class RestoreFragment : BaseFragment() {
             is RestoreViewModel.Screen.SelectCoins -> {
                 setSelectCoinsListener()
 
-                RestoreSelectCoinsFragment.instance(screen.predefinedAccountType)
+                RestoreSelectCoinsFragment.instance(screen.predefinedAccountType, screen.accountType)
             }
         }
     }

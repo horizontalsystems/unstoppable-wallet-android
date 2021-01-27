@@ -36,7 +36,7 @@ class RestoreViewModel(
 
         if (selectCoins) {
             service.predefinedAccountType?.let {
-                openScreenLiveEvent.postValue(Screen.SelectCoins(it))
+                openScreenLiveEvent.postValue(Screen.SelectCoins(it, accountType))
             }
         } else {
             restore(coinToEnable?.let { listOf(it) } ?: listOf())
@@ -66,6 +66,6 @@ class RestoreViewModel(
     sealed class Screen {
         object SelectPredefinedAccountType : Screen()
         class RestoreAccountType(val predefinedAccountType: PredefinedAccountType) : Screen()
-        class SelectCoins(val predefinedAccountType: PredefinedAccountType) : Screen()
+        class SelectCoins(val predefinedAccountType: PredefinedAccountType, val accountType: AccountType) : Screen()
     }
 }
