@@ -16,13 +16,14 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.navGraphViewModels
-import kotlinx.android.synthetic.main.fragment_rates.*
+import kotlinx.android.synthetic.main.fragment_market_discovery.*
 
-class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, ViewHolderMarketTopItem.Listener {
+class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener, ViewHolderMarketTopItem.Listener, MarketCategoriesAdapter.Listener {
 
     private lateinit var marketTopHeaderAdapter: MarketTopHeaderAdapter
     private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
+    private lateinit var marketCategoriesAdapter: MarketCategoriesAdapter
 
     enum class Mode {
         TopGainers, TopLosers, TopByVolume
@@ -32,7 +33,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
     private val navigationViewModel by navGraphViewModels<MarketInternalNavigationViewModel>(R.id.mainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_rates, container, false)
+        return inflater.inflate(R.layout.fragment_market_discovery, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,17 +68,20 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
                     marketTopHeaderAdapter.update(sortingField = Field.HighestCap, marketField = MarketField.MarketCap)
                     marketTopViewModel.update(sortingField = Field.HighestCap, marketField = MarketField.MarketCap)
                 }
-                Mode.TopLosers ->  {
+                Mode.TopLosers -> {
                     marketTopHeaderAdapter.update(sortingField = Field.LowestCap, marketField = MarketField.MarketCap)
                     marketTopViewModel.update(sortingField = Field.LowestCap, marketField = MarketField.MarketCap)
                 }
-                Mode.TopByVolume ->  {
+                Mode.TopByVolume -> {
                     marketTopHeaderAdapter.update(sortingField = Field.HighestVolume, marketField = MarketField.Volume)
                     marketTopViewModel.update(sortingField = Field.HighestVolume, marketField = MarketField.Volume)
                 }
                 else -> Unit
             }
+            marketCategoriesAdapter.selectCategory(null)
         }
+
+        marketCategoriesAdapter = MarketCategoriesAdapter(requireContext(), tabLayout, marketTopViewModel.marketCategories, this)
     }
 
     override fun onClickSortingField() {
@@ -103,5 +107,9 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
         val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
+    }
+
+    override fun onSelect(marketCategory: MarketCategory) {
+
     }
 }
