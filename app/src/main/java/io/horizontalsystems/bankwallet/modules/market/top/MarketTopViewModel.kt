@@ -42,7 +42,7 @@ class MarketTopViewModel(
     val networkNotAvailable = SingleLiveEvent<Unit>()
 
     val marketCategories = listOf(
-            MarketCategory.Rating, MarketCategory.Blockchain, MarketCategory.Privacy, MarketCategory.Scaling,
+            MarketCategory.Rated, MarketCategory.Blockchains, MarketCategory.Privacy, MarketCategory.Scaling,
             MarketCategory.Infrastructure, MarketCategory.RiskManagement, MarketCategory.Oracles, MarketCategory.PredictionMarkets,
             MarketCategory.DefiAggregators, MarketCategory.Dexes, MarketCategory.Synthetics, MarketCategory.Metals,
             MarketCategory.Lending, MarketCategory.GamingAndVr, MarketCategory.FundRaising, MarketCategory.InternetOfThings,

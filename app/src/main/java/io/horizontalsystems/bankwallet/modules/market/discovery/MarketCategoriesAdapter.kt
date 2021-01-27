@@ -22,6 +22,9 @@ class MarketCategoriesAdapter(
         private val listener: Listener,
 ) : TabLayout.OnTabSelectedListener {
 
+    private val itemViewMaxLength = LayoutHelper.dp(212f, context)
+    private val itemViewMinLength = LayoutHelper.dp(100f, context)
+
     init {
         marketCategories.forEach { category ->
             tabLayout.newTab()
@@ -40,8 +43,9 @@ class MarketCategoriesAdapter(
 
     fun selectCategory(category: MarketCategory?) {
         val index = marketCategories.indexOf(category)
-        val tab = tabLayout.getTabAt(index)
-        tabLayout.selectTab(tab)
+        tabLayout.apply {
+            selectTab(getTabAt(index))
+        }
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
@@ -68,11 +72,10 @@ class MarketCategoriesAdapter(
 
         //expand layout
         tab.view.let { containerView ->
-            ValueAnimator.ofInt(containerView.width, LayoutHelper.dp(212f, context)).apply {
+            ValueAnimator.ofInt(containerView.width, itemViewMaxLength).apply {
                 addUpdateListener { valueAnimator ->
-                    val value = valueAnimator.animatedValue
                     val params = containerView.layoutParams
-                    params.width = value as Int
+                    params.width = valueAnimator.animatedValue as Int
                     containerView.layoutParams = params
                 }
                 duration = 100
@@ -89,7 +92,7 @@ class MarketCategoriesAdapter(
             addUpdateListener { valueAnimator ->
                 descriptionTextView.alpha = valueAnimator.animatedValue as Float
             }
-            duration = 600
+            duration = 500
             start()
         }
     }
@@ -116,7 +119,7 @@ class MarketCategoriesAdapter(
 
         //shrink layout
         val containerView = tab.view as ViewGroup
-        val shrinkWidth = max(titleTextView.width + LayoutHelper.dp(24f, context), LayoutHelper.dp(100f, context))
+        val shrinkWidth = max(titleTextView.width + LayoutHelper.dp(24f, context), itemViewMinLength)
         val params = containerView.layoutParams
         params.width = LayoutHelper.dp(shrinkWidth.toFloat(), context)
         containerView.layoutParams = params
