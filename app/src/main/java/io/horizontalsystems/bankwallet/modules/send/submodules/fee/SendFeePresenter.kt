@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -32,10 +33,10 @@ class SendFeePresenter(
 
     private var error: Exception? = null
 
-    private var fiatAmount: CurrencyValue? = null
     private var customFeeRate: BigInteger? = null
     private var fetchedFeeRate: BigInteger? = null
     private var feeRatePriority: FeeRatePriority? = interactor.defaultFeeRatePriority
+    private var feeRateAdjustmentInfo: FeeRateAdjustmentInfo = FeeRateAdjustmentInfo(SendAmountInfo.NotEntered, null, baseCurrency, null)
 
     private val coin: Coin
         get() = feeCoinData?.first ?: baseCoin
@@ -90,7 +91,7 @@ class SendFeePresenter(
 
     private fun getSmartFee(): Long? {
         return fetchedFeeRate?.let {
-            feeRateAdjustmentHelper.applyRule(coin.type, fiatAmount, it.toLong())
+            feeRateAdjustmentHelper.applyRule(coin.type, feeRateAdjustmentInfo, it.toLong())
         }
     }
 
@@ -178,8 +179,16 @@ class SendFeePresenter(
         syncFees()
     }
 
-    override fun setFiatAmount(amount: CurrencyValue) {
-        fiatAmount = amount
+    override fun setBalance(balance: BigDecimal) {
+        feeRateAdjustmentInfo.balance = balance
+    }
+
+    override fun setRate(rate: BigDecimal?) {
+        feeRateAdjustmentInfo.xRate = rate
+    }
+
+    override fun setAmountInfo(sendAmountInfo: SendAmountInfo) {
+        feeRateAdjustmentInfo.amountInfo = sendAmountInfo
     }
 
     // SendFeeModule.IViewDelegate

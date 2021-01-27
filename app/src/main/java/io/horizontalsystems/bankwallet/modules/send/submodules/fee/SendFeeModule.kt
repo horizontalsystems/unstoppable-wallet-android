@@ -7,10 +7,11 @@ import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -70,7 +71,9 @@ object SendFeeModule {
         fun setAvailableFeeBalance(availableFeeBalance: BigDecimal)
         fun setInputType(inputType: SendModule.InputType)
         fun fetchFeeRate()
-        fun setFiatAmount(amount: CurrencyValue)
+        fun setBalance(balance: BigDecimal)
+        fun setRate(rate: BigDecimal?)
+        fun setAmountInfo(sendAmountInfo: SendAmountInfo)
     }
 
     interface IFeeModuleDelegate {
@@ -109,3 +112,10 @@ object SendFeeModule {
     }
 
 }
+
+class FeeRateAdjustmentInfo(
+        var amountInfo: SendAmountInfo,
+        var xRate: BigDecimal?,
+        val currency: Currency,
+        var balance: BigDecimal?
+)

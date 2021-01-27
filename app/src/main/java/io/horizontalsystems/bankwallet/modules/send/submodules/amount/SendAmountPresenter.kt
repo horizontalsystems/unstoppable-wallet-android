@@ -31,7 +31,9 @@ class SendAmountPresenter(
     private var minimumAmount: BigDecimal? = null
     private var maximumAmount: BigDecimal? = null
     private var minimumRequiredBalance: BigDecimal = BigDecimal.ZERO
-    private var xRate: BigDecimal? = null
+
+    override var xRate: BigDecimal? = null
+    override var sendAmountInfo: SendAmountInfo = SendAmountInfo.NotEntered
 
     override var inputType = SendModule.InputType.COIN
         private set
@@ -91,6 +93,7 @@ class SendAmountPresenter(
 
     override fun setAmount(amount: BigDecimal) {
         this.amount = amount
+        sendAmountInfo = SendAmountInfo.Entered(amount)
 
         syncAmount()
         syncHint()
@@ -130,7 +133,7 @@ class SendAmountPresenter(
         }
 
         moduleDelegate?.onChangeInputType(inputType)
-        moduleDelegate?.onRateUpdated()
+        moduleDelegate?.onRateUpdated(xRate)
 
         syncAmountType()
         syncAmount()
@@ -163,6 +166,8 @@ class SendAmountPresenter(
         } else {
             this.amount = presenterHelper.getCoinAmount(amount, inputType, xRate)
 
+            sendAmountInfo = this.amount?.let { SendAmountInfo.Entered(it) } ?: SendAmountInfo.NotEntered
+
             syncHint()
             syncError()
 
@@ -172,6 +177,7 @@ class SendAmountPresenter(
 
     override fun onMaxClick() {
         amount = availableBalance?.subtract(minimumRequiredBalance)
+        sendAmountInfo = SendAmountInfo.Max
 
         syncAmount()
         syncHint()
@@ -210,7 +216,7 @@ class SendAmountPresenter(
             else -> interactor.defaultInputType
         }
 
-        moduleDelegate?.onRateUpdated()
+        moduleDelegate?.onRateUpdated(rate)
 
         syncAmount()
         syncAvailableBalance()

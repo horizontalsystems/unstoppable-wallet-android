@@ -197,6 +197,7 @@ interface IReceiveAdapter {
 }
 
 interface ISendBitcoinAdapter {
+    val balance: BigDecimal
     fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun minimumSendAmount(address: String?): BigDecimal
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
@@ -214,6 +215,7 @@ interface ISendDashAdapter {
 }
 
 interface ISendEthereumAdapter {
+    val balance: BigDecimal
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
     val minimumSendAmount: BigDecimal

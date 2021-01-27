@@ -125,10 +125,8 @@ class SendEthereumHandler(
     }
 
     private fun syncCurrencyAmount() {
-        amountModule.fiatAmount?.let {
-            feeModule.setFiatAmount(it)
-            syncState()
-        }
+        feeModule.setAmountInfo(amountModule.sendAmountInfo)
+        syncState()
     }
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
@@ -147,10 +145,12 @@ class SendEthereumHandler(
     }
 
     override fun onModulesDidLoad() {
+        feeModule.setBalance(interactor.balance)
         feeModule.fetchFeeRate()
+        feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
+
         amountModule.setMinimumRequiredBalance(interactor.minimumRequiredBalance)
         amountModule.setMinimumAmount(interactor.minimumAmount)
-        feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
         syncState()
         syncEstimateGasLimit()
     }
@@ -175,8 +175,8 @@ class SendEthereumHandler(
         feeModule.setInputType(inputType)
     }
 
-    override fun onRateUpdated() {
-        syncCurrencyAmount()
+    override fun onRateUpdated(rate: BigDecimal?) {
+        feeModule.setRate(rate)
     }
 
     // SendAddressModule.IAddressModuleDelegate
