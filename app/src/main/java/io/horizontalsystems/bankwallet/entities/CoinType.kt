@@ -21,7 +21,19 @@ sealed class CoinType : Parcelable {
     object Ethereum : CoinType()
 
     @Parcelize
-    class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType()
+    class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType() {
+        override fun equals(other: Any?): Boolean {
+            if (other is Erc20) {
+                return other.address == address
+            }
+
+            return super.equals(other)
+        }
+
+        override fun hashCode(): Int {
+            return address.hashCode()
+        }
+    }
 
     @Parcelize
     class Binance(val symbol: String) : CoinType()

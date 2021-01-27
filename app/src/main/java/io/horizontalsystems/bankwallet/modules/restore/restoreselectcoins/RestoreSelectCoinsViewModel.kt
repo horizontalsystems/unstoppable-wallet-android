@@ -15,10 +15,9 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class RestoreSelectCoinsViewModel(
-        private val service: RestoreSelectCoinsModule.IService,
-        private val blockchainSettingsService: BlockchainSettingsService,
-        private val clearables: List<Clearable>
-) : ViewModel() {
+        private val service: RestoreSelectCoinsService,
+        private val clearables: List<Clearable>)
+    : ViewModel() {
 
     val viewStateLiveData = MutableLiveData<CoinViewState>()
     val enabledCoinsLiveData = SingleLiveEvent<List<Coin>>()
@@ -28,35 +27,29 @@ class RestoreSelectCoinsViewModel(
     private var filter: String? = null
 
     init {
-        Handler().postDelayed({
-            syncViewState()
+        syncViewState()
 
-            service.stateObservable
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        syncViewState(it)
-                    }
-                    .let { disposables.add(it) }
+        service.stateObservable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncViewState(it)
+                }
+                .let {
+                    disposables.add(it)
+                }
 
-            service.canRestore
-                    .subscribe {
-                        canRestoreLiveData.postValue(it)
-                    }.let { disposables.add(it) }
+        service.canRestore
+                .subscribe {
+                    canRestoreLiveData.postValue(it)
+                }.let { disposables.add(it) }
 
-            blockchainSettingsService.approveEnableCoinAsync
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        service.enable(it)
-                    }
-                    .let { disposables.add(it) }
-
-            blockchainSettingsService.rejectEnableCoinAsync
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        syncViewState()
-                    }
-                    .let { disposables.add(it) }
-        }, 700)
+        service.cancelEnableCoinAsync
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncViewState()
+                }.let {
+                    disposables.add(it)
+                }
     }
 
     override fun onCleared() {
@@ -68,7 +61,7 @@ class RestoreSelectCoinsViewModel(
     }
 
     fun enable(coin: Coin) {
-        blockchainSettingsService.approveEnable(coin, AccountOrigin.Restored)
+        service.enable(coin)
     }
 
     fun disable(coin: Coin) {

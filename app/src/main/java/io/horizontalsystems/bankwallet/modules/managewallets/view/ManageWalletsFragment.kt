@@ -13,12 +13,15 @@ import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
 import io.horizontalsystems.bankwallet.modules.addtoken.TokenType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
@@ -29,6 +32,7 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
     private val vmFactory by lazy { ManageWalletsModule.Factory() }
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val blockchainSettingsViewModel by viewModels<BlockchainSettingsViewModel> { vmFactory }
+    private val enableCoinsViewModel by viewModels<EnableCoinsViewModel> { vmFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +83,7 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
 
     override fun select(coin: Coin) {
         NoAccountDialog.show(childFragmentManager, coin)
+        viewModel.onAddAccount(coin)
     }
 
     // CoinListBaseFragment
@@ -116,6 +121,36 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         blockchainSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
             hideKeyboard()
             showBottomSelectorDialog(config)
+        })
+
+        enableCoinsViewModel.confirmationLiveData.observe(viewLifecycleOwner, Observer { tokenType ->
+            activity?.let {
+                EnableCoinsDialog.show(it, tokenType, object: EnableCoinsDialog.Listener {
+                    override fun onClickEnable() {
+                        enableCoinsViewModel.onConfirmEnable()
+                    }
+                })
+            }
+        })
+
+        enableCoinsViewModel.hudStateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                EnableCoinsViewModel.HudState.Hidden -> {
+                }
+                EnableCoinsViewModel.HudState.Loading -> {
+                    HudHelper.showInProcessMessage(requireView(), R.string.EnalbeToken_Enabling)
+                }
+                EnableCoinsViewModel.HudState.Error -> {
+                    HudHelper.showErrorMessage(requireView(), R.string.Error)
+                }
+                is EnableCoinsViewModel.HudState.Success -> {
+                    if (state.count == 0) {
+                        HudHelper.showSuccessMessage(requireView(), R.string.EnalbeToken_NoCoins)
+                    } else {
+                        HudHelper.showSuccessMessage(requireView(), getString(R.string.EnalbeToken_EnabledCoins, state.count))
+                    }
+                }
+            }
         })
     }
 

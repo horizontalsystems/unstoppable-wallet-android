@@ -13,10 +13,10 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class ManageWalletsViewModel(
-        private val service: ManageWalletsModule.IManageWalletsService,
+        private val service: ManageWalletsService,
         private val blockchainSettingsService: BlockchainSettingsService,
-        private val clearables: List<Clearable>
-) : ViewModel() {
+        private val clearables: List<Clearable>)
+    : ViewModel() {
 
     val viewStateLiveData = MutableLiveData<CoinViewState>()
 
@@ -24,31 +24,28 @@ class ManageWalletsViewModel(
     private var filter: String? = null
 
     init {
-        Handler().postDelayed({
-            syncViewState()
+        syncViewState()
 
-            service.stateAsync
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        syncViewState(it)
-                    }
-                    .let { disposables.add(it) }
+        service.stateAsync
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncViewState(it)
+                }
+                .let { disposables.add(it) }
 
-            blockchainSettingsService.approveEnableCoinAsync
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        service.enable(it)
-                    }
-                    .let { disposables.add(it) }
+        service.enableCoinAsync
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncViewState()
+                }
+                .let { disposables.add(it) }
 
-            blockchainSettingsService.rejectEnableCoinAsync
-                    .subscribeOn(Schedulers.io())
-                    .subscribe {
-                        syncViewState()
-                    }
-                    .let { disposables.add(it) }
-
-        }, 500)
+        service.cancelEnableCoinAsync
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncViewState()
+                }
+                .let { disposables.add(it) }
     }
 
     override fun onCleared() {
@@ -60,8 +57,7 @@ class ManageWalletsViewModel(
     }
 
     fun enable(coin: Coin) {
-        val account = service.account(coin) ?: return
-        blockchainSettingsService.approveEnable(coin, account.origin)
+        service.enable(coin)
     }
 
     fun disable(coin: Coin) {
@@ -71,6 +67,10 @@ class ManageWalletsViewModel(
     fun updateFilter(newText: String?) {
         filter = newText
         syncViewState()
+    }
+
+    fun onAddAccount(coin: Coin) {
+        service.storeCoinToEnable(coin)
     }
 
     private fun syncViewState(updatedState: ManageWalletsModule.State? = null) {

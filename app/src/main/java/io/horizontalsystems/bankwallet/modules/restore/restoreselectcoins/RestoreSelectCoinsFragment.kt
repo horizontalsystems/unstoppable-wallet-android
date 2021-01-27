@@ -5,14 +5,20 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
@@ -43,11 +49,44 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY) ?: throw Exception("Parameter missing")
+        val accountType = arguments?.getParcelable<AccountType>(ACCOUNT_TYPE_KEY) ?: throw Exception("Parameter missing")
 
-        val vmFactory by lazy { RestoreSelectCoinsModule.Factory(predefinedAccountType) }
+        val vmFactory by lazy { RestoreSelectCoinsModule.Factory(predefinedAccountType, accountType) }
 
         viewModel = ViewModelProvider(this, vmFactory).get(RestoreSelectCoinsViewModel::class.java)
         blockchainSettingsViewModel = ViewModelProvider(this, vmFactory).get(BlockchainSettingsViewModel::class.java)
+
+        val enableCoinsViewModel by viewModels<EnableCoinsViewModel> { vmFactory }
+
+        enableCoinsViewModel.confirmationLiveData.observe(viewLifecycleOwner, Observer { tokenType ->
+            activity?.let {
+                EnableCoinsDialog.show(it, tokenType, object : EnableCoinsDialog.Listener {
+                    override fun onClickEnable() {
+                        enableCoinsViewModel.onConfirmEnable()
+                    }
+                })
+            }
+        })
+
+        enableCoinsViewModel.hudStateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                EnableCoinsViewModel.HudState.Hidden -> {
+                }
+                EnableCoinsViewModel.HudState.Loading -> {
+                    HudHelper.showInProcessMessage(requireView(), R.string.EnalbeToken_Enabling, SnackbarDuration.INDEFINITE)
+                }
+                EnableCoinsViewModel.HudState.Error -> {
+                    HudHelper.showErrorMessage(requireView(), R.string.Error)
+                }
+                is EnableCoinsViewModel.HudState.Success -> {
+                    if (state.count == 0) {
+                        HudHelper.showSuccessMessage(requireView(), R.string.EnalbeToken_NoCoins)
+                    } else {
+                        HudHelper.showSuccessMessage(requireView(), getString(R.string.EnalbeToken_EnabledCoins, state.count))
+                    }
+                }
+            }
+        })
 
         observe()
     }
@@ -101,17 +140,17 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         })
     }
 
-
     companion object {
         const val PREDEFINED_ACCOUNT_TYPE_KEY = "predefined_account_type_key"
+        const val ACCOUNT_TYPE_KEY = "account_type_key"
 
-        fun instance(predefinedAccountType: PredefinedAccountType): RestoreSelectCoinsFragment {
+        fun instance(predefinedAccountType: PredefinedAccountType, accountType: AccountType): RestoreSelectCoinsFragment {
             return RestoreSelectCoinsFragment().apply {
                 arguments = Bundle(1).apply {
                     putParcelable(PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
+                    putParcelable(ACCOUNT_TYPE_KEY, accountType)
                 }
             }
         }
     }
-
 }
