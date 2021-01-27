@@ -75,7 +75,7 @@
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
-    <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_Sort_PopupTitle">Сортировать по</string>
     <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
@@ -186,8 +186,8 @@
     <string name="Swap_Approve">Подтвердить</string>
     <string name="Swap_Approving">Подтверждение...</string>
     <string name="Swap_Swapping">Обмен</string>
-    <string name="Swap_MaximumPaid">Maximum Amount</string>
-    <string name="Swap_MinimumGot">Guaranteed Amount</string>
+    <string name="Swap_MaximumPaid">Максимальная Выплата</string>
+    <string name="Swap_MinimumGot">Гарантированная Сумма</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Дополнительные Настройки</string>
     <string name="SwapSettings_SlippageTitle">Допустимость Отклонений</string>
