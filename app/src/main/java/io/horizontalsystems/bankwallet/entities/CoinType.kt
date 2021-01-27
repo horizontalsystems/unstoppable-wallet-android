@@ -36,7 +36,19 @@ sealed class CoinType : Parcelable {
     }
 
     @Parcelize
-    class Binance(val symbol: String) : CoinType()
+    class Binance(val symbol: String) : CoinType() {
+        override fun equals(other: Any?): Boolean {
+            if (other is Binance) {
+                return other.symbol == symbol
+            }
+
+            return super.equals(other)
+        }
+
+        override fun hashCode(): Int {
+            return symbol.hashCode()
+        }
+    }
 
     @Parcelize
     object Zcash : CoinType()

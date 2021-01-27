@@ -193,7 +193,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:8f1213e'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:8fc7398'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:a5a3643'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:a1db536'
+    implementation 'com.github.horizontalsystems:binance-chain-kit-android:d424ffe'
     implementation 'com.github.horizontalsystems:xrates-kit-android:d343dea'
 
 

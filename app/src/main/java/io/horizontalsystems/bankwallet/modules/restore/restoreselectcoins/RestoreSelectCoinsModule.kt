@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsBep2Provider
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsErc20Provider
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
@@ -30,7 +31,7 @@ object RestoreSelectCoinsModule {
         : ViewModelProvider.Factory {
 
         private val enableCoinsService by lazy {
-            EnableCoinsService(App.buildConfigProvider, EnableCoinsErc20Provider(App.networkManager), App.coinManager)
+            EnableCoinsService(App.buildConfigProvider, EnableCoinsErc20Provider(App.networkManager), EnableCoinsBep2Provider(App.buildConfigProvider),  App.coinManager)
         }
 
         private val blockchainSettingsService by lazy {
