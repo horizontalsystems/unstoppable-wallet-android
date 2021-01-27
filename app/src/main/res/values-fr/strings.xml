@@ -187,8 +187,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_Approve">Approuver</string>
     <string name="Swap_Approving">En cours d\'approbation...</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_MaximumPaid">Maximum Amount</string>
-    <string name="Swap_MinimumGot">Guaranteed Amount</string>
+    <string name="Swap_MaximumPaid">Montant maximum payé</string>
+    <string name="Swap_MinimumGot">Montant garanti</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuration avancée</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
