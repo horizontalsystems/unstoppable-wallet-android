@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -14,6 +14,7 @@ import io.reactivex.subjects.PublishSubject
 class EnableCoinsService(
         private val appConfigProvider: IBuildConfigProvider,
         private val ethereumProvider: EnableCoinsErc20Provider,
+        private val binanceProvider: EnableCoinsBep2Provider,
         private val coinManager: ICoinManager) {
 
     val enableCoinsAsync = PublishSubject.create<List<Coin>>()
@@ -25,7 +26,7 @@ class EnableCoinsService(
             stateAsync.onNext(value)
         }
 
-    private var disposable: Disposable? = null
+    private var disposables = CompositeDisposable()
 
     fun handle(coinType: CoinType, accountType: AccountType) {
         val tokenType = resolveTokenType(coinType, accountType) ?: return
@@ -43,6 +44,7 @@ class EnableCoinsService(
                 fetchErc20Tokens(state.tokenType.words)
             }
             is TokenType.Bep2 -> {
+                fetchBep2Tokens(state.tokenType.words)
             }
         }
     }
@@ -56,7 +58,7 @@ class EnableCoinsService(
 
         if (coinType is CoinType.Binance && accountType is AccountType.Mnemonic) {
             if (coinType.symbol == "BNB" && accountType.words.size == 24) {
-                return TokenType.Erc20(accountType.words)
+                return TokenType.Bep2(accountType.words)
             }
         }
 
@@ -74,8 +76,8 @@ class EnableCoinsService(
             val address = EthereumKit.address(words, networkType)
 
             state = State.Loading()
-            disposable?.dispose()
-            disposable = ethereumProvider.contractAddressesSingle(address.hex)
+            disposables.dispose()
+            disposables.add(ethereumProvider.contractAddressesSingle(address.hex)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe({ addresses ->
@@ -83,6 +85,26 @@ class EnableCoinsService(
                     }, {
                         state = State.Failure(it)
                     })
+            )
+        } catch (err: Throwable) {
+            state = State.Failure(err)
+        }
+    }
+
+    private fun fetchBep2Tokens(words: List<String>) {
+        state = State.Loading()
+
+        try {
+            disposables.dispose()
+            disposables.add(binanceProvider.getTokenSymbolsAsync(words)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe({ symbols ->
+                        handleFetchBep2(symbols)
+                    }, {
+                        state = State.Failure(it)
+                    })
+            )
         } catch (err: Throwable) {
             state = State.Failure(err)
         }
@@ -91,6 +113,21 @@ class EnableCoinsService(
     private fun handleFetchErc20(addresses: List<String>) {
         val coins = addresses.mapNotNull { address ->
             coinManager.coins.find { it.type == CoinType.Erc20(address) }
+        }
+
+        state = State.Success(coins)
+        enableCoinsAsync.onNext(coins)
+    }
+
+    private fun handleFetchBep2(symbols: List<String>) {
+        val coins = symbols.mapNotNull { symbol ->
+            if (symbol == "BNB") {
+                null
+            } else {
+                coinManager.coins.find {
+                    it.type == CoinType.Binance(symbol)
+                }
+            }
         }
 
         state = State.Success(coins)

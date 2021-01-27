@@ -84,7 +84,11 @@ class ManageWalletsService(
     }
 
     private fun enable(coins: List<Coin>) {
-        walletManager.save(coins.mapNotNull { wallet(it) })
+        val nonEnabledCoins = coins.filter {
+            !wallets.keys.contains(it)
+        }
+
+        walletManager.save(nonEnabledCoins.mapNotNull { wallet(it) })
     }
 
     private fun wallet(coin: Coin): Wallet? {
