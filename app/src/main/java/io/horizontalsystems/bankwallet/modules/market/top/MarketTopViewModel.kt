@@ -41,6 +41,15 @@ class MarketTopViewModel(
     val errorLiveData = MutableLiveData<String?>(null)
     val networkNotAvailable = SingleLiveEvent<Unit>()
 
+    val marketCategories = listOf(
+            MarketCategory.Rating, MarketCategory.Blockchain, MarketCategory.Privacy, MarketCategory.Scaling,
+            MarketCategory.Infrastructure, MarketCategory.RiskManagement, MarketCategory.Oracles, MarketCategory.PredictionMarkets,
+            MarketCategory.DefiAggregators, MarketCategory.Dexes, MarketCategory.Synthetics, MarketCategory.Metals,
+            MarketCategory.Lending, MarketCategory.GamingAndVr, MarketCategory.FundRaising, MarketCategory.InternetOfThings,
+            MarketCategory.B2B, MarketCategory.NFT, MarketCategory.Wallets, MarketCategory.Staking,
+            MarketCategory.Stablecoins, MarketCategory.TokenizedBitcoin, MarketCategory.AlgoStablecoins, MarketCategory.ExchangeTokens
+    )
+
     private val disposable = CompositeDisposable()
 
     init {
