@@ -38,7 +38,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
         val topGainersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topGainersViewItemsLiveData,
                 viewLifecycleOwner,
-                SettingsMenuItem(R.string.RateList_TopWinners, R.drawable.ic_circle_up_20, value = getString(R.string.Market_SeeAll)) {
+                MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopWinners, R.drawable.ic_circle_up_20, getString(R.string.Market_SeeAll)) {
                     navigationViewModel.navigateToDiscovery(MarketDiscoveryFragment.Mode.TopGainers)
                 }
         )
@@ -47,7 +47,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
         val topLosersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topLosersViewItemsLiveData,
                 viewLifecycleOwner,
-                SettingsMenuItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, value = getString(R.string.Market_SeeAll)) {
+                MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, getString(R.string.Market_SeeAll)) {
                     navigationViewModel.navigateToDiscovery(MarketDiscoveryFragment.Mode.TopLosers)
                 }
         )
@@ -56,7 +56,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener 
         val topByVolumeHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topByVolumeViewItemsLiveData,
                 viewLifecycleOwner,
-                SettingsMenuItem(R.string.RateList_TopByVolume, R.drawable.ic_chart_20, value = getString(R.string.Market_SeeAll)) {
+                MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopByVolume, R.drawable.ic_chart_20, getString(R.string.Market_SeeAll)) {
                     navigationViewModel.navigateToDiscovery(MarketDiscoveryFragment.Mode.TopByVolume)
                 }
         )
