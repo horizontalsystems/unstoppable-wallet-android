@@ -47,6 +47,8 @@ object SendAmountModule {
 
     interface IAmountModule {
 
+        val xRate: BigDecimal?
+        val sendAmountInfo: SendAmountInfo
         val currentAmount: BigDecimal
         val inputType: SendModule.InputType
         val coinAmount: CoinValue
@@ -72,7 +74,7 @@ object SendAmountModule {
     interface IAmountModuleDelegate {
         fun onChangeAmount()
         fun onChangeInputType(inputType: SendModule.InputType)
-        fun onRateUpdated(){}
+        fun onRateUpdated(rate: BigDecimal?) {}
     }
 
     open class ValidationError : Exception() {
@@ -106,4 +108,10 @@ object SendAmountModule {
         }
     }
 
+}
+
+sealed class SendAmountInfo {
+    object Max : SendAmountInfo()
+    class Entered(val amount: BigDecimal) : SendAmountInfo()
+    object NotEntered : SendAmountInfo()
 }

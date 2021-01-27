@@ -53,6 +53,7 @@ object SendModule {
     }
 
     interface ISendBitcoinInteractor {
+        val balance: BigDecimal
         val isLockTimeEnabled: Boolean
 
         fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
@@ -84,6 +85,7 @@ object SendModule {
     }
 
     interface ISendEthereumInteractor {
+        val balance: BigDecimal
         val ethereumBalance: BigDecimal
         val minimumRequiredBalance: BigDecimal
         val minimumAmount: BigDecimal

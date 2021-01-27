@@ -56,10 +56,8 @@ class SendBitcoinHandler(
     }
 
     private fun syncCurrencyAmount() {
-        amountModule.fiatAmount?.let {
-            feeModule.setFiatAmount(it)
-            syncState()
-        }
+        feeModule.setAmountInfo(amountModule.sendAmountInfo)
+        syncState()
     }
 
     // SendModule.ISendHandler
@@ -115,6 +113,7 @@ class SendBitcoinHandler(
             }
 
     override fun onModulesDidLoad() {
+        feeModule.setBalance(interactor.balance)
         feeModule.fetchFeeRate()
 
         syncState()
@@ -173,8 +172,8 @@ class SendBitcoinHandler(
         feeModule.setInputType(inputType)
     }
 
-    override fun onRateUpdated() {
-        syncCurrencyAmount()
+    override fun onRateUpdated(rate: BigDecimal?) {
+        feeModule.setRate(rate)
     }
 
     // SendAddressModule.ModuleDelegate

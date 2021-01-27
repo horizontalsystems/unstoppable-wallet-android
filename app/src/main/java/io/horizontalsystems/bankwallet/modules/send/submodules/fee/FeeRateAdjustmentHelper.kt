@@ -2,7 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
+import java.math.BigDecimal
 
 class FeeRateAdjustmentHelper(private val appConfigProvider: IAppConfigProvider) {
 
@@ -19,21 +20,31 @@ class FeeRateAdjustmentHelper(private val appConfigProvider: IAppConfigProvider)
             CoinType.Ethereum to amountRules
     )
 
-    fun applyRule(coinType: CoinType, currencyValue: CurrencyValue?, feeRate: Long): Long {
+    fun applyRule(coinType: CoinType, feeRateAdjustmentInfo: FeeRateAdjustmentInfo, feeRate: Long): Long {
 
         val coinRules = rulesByCoin[coinType] ?: return feeRate  //Binance, BCH, Dash, Litecoin has static fee
 
         val fallbackRate = (feeRate * 1.10F).toLong()
 
-        currencyValue ?: return fallbackRate
-
-        if (!appConfigProvider.feeRateAdjustForCurrencies.contains(currencyValue.currency.code)){
+        if (!appConfigProvider.feeRateAdjustForCurrencies.contains(feeRateAdjustmentInfo.currency.code)){
             return fallbackRate
         }
 
+        val resolvedCoinAmount: BigDecimal? = when (val amountInfo = feeRateAdjustmentInfo.amountInfo) {
+            SendAmountInfo.Max -> feeRateAdjustmentInfo.balance
+            is SendAmountInfo.Entered -> amountInfo.amount
+            SendAmountInfo.NotEntered -> feeRateAdjustmentInfo.balance
+        }
+
+        val xRate = feeRateAdjustmentInfo.xRate ?: return fallbackRate
+
+        val coinAmount = resolvedCoinAmount ?: return fallbackRate
+
+        val fiatAmount = coinAmount * xRate
+
         var coefficient = 1.10F
 
-        coinRules.firstOrNull { it.range.contains(currencyValue.value.toLong()) }?.let {
+        coinRules.firstOrNull { it.range.contains(fiatAmount.toLong()) }?.let {
             coefficient = it.coefficient
         }
 
