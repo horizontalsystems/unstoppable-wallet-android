@@ -475,6 +475,13 @@
     <string name="AddTokenDialog_Subtitle">Добавить Токен</string>
     <string name="AddTokenDialog_Erc20Tokens">Токен ERC20</string>
     <string name="AddTokenDialog_BinanceTokens">Токен BEP2</string>
+    <!-- Enable Token -->
+    <string name="EnalbeToken_Title">Enable Token</string>
+    <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
+    <string name="EnalbeToken_Enabling">Enabling</string>
+    <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
+    <string name="EnalbeToken_NoCoins">No coins found with balance</string>
+    <string name="EnalbeToken_EnableKey">Enable</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Название Токена</string>
     <string name="AddToken_Symbol">Символ</string>
