@@ -476,6 +476,13 @@
     <string name="AddTokenDialog_Subtitle">토큰 추가 중</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 토큰</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 토큰</string>
+    <!-- Enable Token -->
+    <string name="EnalbeToken_Title">Enable Token</string>
+    <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
+    <string name="EnalbeToken_Enabling">Enabling</string>
+    <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
+    <string name="EnalbeToken_NoCoins">No coins found with balance</string>
+    <string name="EnalbeToken_EnableKey">Enable</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">코인 이름</string>
     <string name="AddToken_Symbol">심볼</string>
