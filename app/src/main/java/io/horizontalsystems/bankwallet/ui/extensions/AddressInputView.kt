@@ -144,11 +144,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     fun setEditable(isEditable: Boolean) {
-        if (isEditable) {
-            input.keyListener = null
-        } else {
-            input.keyListener = input.tag as KeyListener
-        }
+        input.isEnabled = isEditable
     }
 
     private fun setDeleteButtonVisibility(visible: Boolean) {

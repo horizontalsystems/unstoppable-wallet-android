@@ -38,7 +38,7 @@ class AddTokenFragment : BaseFragment() {
 
         toolbar.title = getString(model.titleTextRes)
 
-        addressInputView.setEditable(true)
+        addressInputView.setEditable(false)
         addressInputView.setHint(getString(model.hintTextRes))
 
         btnAddToken.setOnClickListener {
