@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,9 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_loading.*
 
 class MarketLoadingAdapter(
-        private val marketTopViewModel: MarketTopViewModel,
+        loadingLiveData: LiveData<Boolean>,
+        errorLiveData: LiveData<String?>,
+        private val onErrorClick: () -> Unit,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketLoadingState, ViewHolderMarketLoading>(marketStateDiff) {
 
@@ -22,18 +25,18 @@ class MarketLoadingAdapter(
     private var error: String? = null
 
     init {
-        marketTopViewModel.loadingLiveData.observe(viewLifecycleOwner, {
+        loadingLiveData.observe(viewLifecycleOwner, {
             loading = it
             syncState()
         })
-        marketTopViewModel.errorLiveData.observe(viewLifecycleOwner, {
+        errorLiveData.observe(viewLifecycleOwner, {
             error = it
             syncState()
         })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketLoading {
-        return ViewHolderMarketLoading(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_loading, parent, false), marketTopViewModel::onErrorClick)
+        return ViewHolderMarketLoading.create(parent, onErrorClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketLoading, position: Int) {
@@ -115,6 +118,12 @@ class ViewHolderMarketLoading(override val containerView: View, onErrorClick: ()
                 error.isVisible = true
                 error.setText(item.message)
             }
+        }
+    }
+
+    companion object {
+        fun create(parent: ViewGroup, onErrorClick: () -> Unit): ViewHolderMarketLoading {
+            return ViewHolderMarketLoading(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_loading, parent, false), onErrorClick)
         }
     }
 
