@@ -127,7 +127,9 @@ class MarketCategoriesAdapter(
         tab.view.isActivated = false
     }
 
-    override fun onTabReselected(tab: TabLayout.Tab) {}
+    override fun onTabReselected(tab: TabLayout.Tab) {
+        tabLayout.selectTab(null)
+    }
 
     private fun TabLayout.Tab.setDescription(@StringRes descriptionResId: Int): TabLayout.Tab {
         view.findViewById<TextView>(R.id.description).setText(descriptionResId)
