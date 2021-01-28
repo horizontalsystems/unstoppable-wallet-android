@@ -98,7 +98,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/speedLayoutFrame"
         app:layout_constraintStart_toStartOf="@+id/speedLayoutFrame"
         app:layout_constraintTop_toTopOf="@+id/speedLayoutFrame"
-        app:tint="?ColorJacob" />
+        app:tint="@color/jacob" />
 
     <TextView
         android:id="@+id/txSpeedMenuTitle"
@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:includeFontPadding="false"
-        android:textColor="?ColorLeah"
+        android:textColor="@color/leah"
         app:layout_constraintBottom_toBottomOf="@+id/speedLayoutFrame"
         app:layout_constraintEnd_toStartOf="@+id/txSpeedMenuArrow"
         app:layout_constraintTop_toTopOf="@+id/speedLayoutFrame"
@@ -159,11 +159,11 @@
         android:progressTint="@color/transparent"
         android:thumb="@drawable/seekbar_thumb"
         android:visibility="gone"
-        app:bubbleBackground="?ColorClaude"
+        app:bubbleBackground="@color/claude"
         app:bubbleHint="@string/Send_TxSpeed_CustomFeeHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/speedLayoutFrame"
-        app:textColor="?ColorLeah" />
+        app:textColor="@color/leah" />
 
 </merge>

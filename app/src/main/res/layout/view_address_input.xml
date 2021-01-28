@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:textColor="?ColorLucian"
+                android:textColor="@color/lucian"
                 android:visibility="gone"
                 tools:text="@string/Send_Error_IncorrectAddress" />
         </LinearLayout>

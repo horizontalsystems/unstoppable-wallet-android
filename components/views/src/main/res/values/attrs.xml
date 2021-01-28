@@ -75,27 +75,8 @@
     <attr name="SecondaryButtonEndGradient" format="reference|color" />
     <attr name="MarketCircleGradient" format="reference" />
 
-    <!--  New themed colors for text and icons -->
-    <attr name="ColorJacob" format="reference|color" />
-    <attr name="ColorJacobPressed" format="reference|color" />
-    <attr name="ColorRemus" format="reference|color" />
-    <attr name="ColorLucian" format="reference|color" />
-    <attr name="ColorLucianPressed" format="reference|color" />
-    <attr name="ColorOz" format="reference|color" />
-    <attr name="ColorLeah" format="reference|color" />
-    <attr name="ColorBran" format="reference|color" />
-
     <!--  New themed colors for backgrounds -->
-    <attr name="ColorJeremy" format="reference|color" />
-    <attr name="ColorElena" format="reference|color" />
-    <attr name="ColorLawrence" format="reference|color" />
-    <attr name="ColorLawrencePressed" format="reference|color" />
-    <attr name="ColorClaude" format="reference|color" />
     <attr name="ColorGwen" format="reference" />
-    <attr name="ColorNina" format="reference" />
-    <attr name="ColorTyler" format="reference" />
-    <attr name="ColorRaina" format="reference" />
-    <attr name="ColorAndy" format="reference" />
 
     <!--  New themed gradient colors -->
     <attr name="ColorGradientWhite" format="reference" />

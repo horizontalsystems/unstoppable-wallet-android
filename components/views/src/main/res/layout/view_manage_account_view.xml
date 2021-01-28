@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:textColor="?ColorOz"
+        android:textColor="@color/oz"
         app:layout_constraintBottom_toBottomOf="@+id/frame"
         app:layout_constraintEnd_toStartOf="@id/attentionIcon"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_attention_20"
-        app:tint="?ColorLucian"
+        app:tint="@color/lucian"
         app:layout_constraintBottom_toBottomOf="@+id/frame"
         app:layout_constraintEnd_toStartOf="@id/rightArrow"
         app:layout_constraintTop_toTopOf="@+id/frame" />

@@ -12,7 +12,7 @@
     <item
         android:id="@+id/menuUnfavorite"
         android:icon="@drawable/ic_rate_24"
-        app:iconTint="?ColorJacob"
+        app:iconTint="@color/jacob"
         android:title="@string/Charts_Unfavorite"
         app:showAsAction="always" />
 

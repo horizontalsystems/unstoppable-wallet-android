@@ -5,6 +5,6 @@
     <size
         android:width="20dp"
         android:height="4dp" />
-    <solid android:color="?ColorJacob" />
+    <solid android:color="@color/jacob" />
 
 </shape>

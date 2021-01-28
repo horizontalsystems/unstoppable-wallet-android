@@ -95,9 +95,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             LayoutHelper.getAttr(R.attr.SwipeRefreshBackgroundColor, theme)?.let { color ->
                 pullToRefresh.setProgressBackgroundColorSchemeColor(color)
             }
-            LayoutHelper.getAttr(R.attr.ColorOz, theme)?.let { color ->
-                pullToRefresh.setColorSchemeColors(color)
-            }
+            pullToRefresh.setColorSchemeColors(requireContext().getColor(R.color.oz))
         }
     }
 

@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.parcel.Parcelize
@@ -41,8 +40,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sentToSelfIcon.isVisible = false
-        primaryValue.setTextColor(LayoutHelper.getAttr(R.attr.ColorJacob, requireContext().theme)
-                ?: requireContext().getColor(R.color.yellow_d))
+        primaryValue.setTextColor(requireContext().getColor(R.color.jacob))
 
         val vmFactory = WalletConnectRequestModule.Factory(baseViewModel.sharedSendEthereumTransactionRequest!!)
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?ColorLawrence">
+    android:background="@color/lawrence">
 
     <TextView
         android:id="@+id/titleTextView"
@@ -15,7 +15,7 @@
         android:layout_marginTop="13dp"
         android:ellipsize="end"
         android:lines="1"
-        android:textColor="?ColorOz"
+        android:textColor="@color/oz"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/estimatedLabel"
         app:layout_constraintHorizontal_bias="0"
@@ -50,7 +50,7 @@
         android:drawableEnd="@drawable/ic_down_arrow_20"
         android:drawablePadding="8dp"
         android:text="@string/Swap_TokenSelectorTitle"
-        android:textColor="?ColorJacob"
+        android:textColor="@color/jacob"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

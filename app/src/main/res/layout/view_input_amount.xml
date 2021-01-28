@@ -87,7 +87,7 @@
         android:layout_marginTop="8dp"
         android:singleLine="true"
         android:ellipsize="middle"
-        android:textColor="?ColorBran"
+        android:textColor="@color/bran"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/amountDivider"

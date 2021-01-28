@@ -100,10 +100,10 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
     private fun setTokenCode(code: String?) {
         if (code != null) {
             selectedToken.text = code
-            selectedToken.setTextColor(LayoutHelper.getAttr(R.attr.ColorLeah, context.theme, context.getColor(R.color.steel_light)))
+            selectedToken.setTextColor(context.getColor(R.color.leah))
         } else {
             selectedToken.text = context.getString(R.string.Swap_TokenSelectorTitle)
-            selectedToken.setTextColor(LayoutHelper.getAttr(R.attr.ColorJacob, context.theme, context.getColor(R.color.yellow_d)))
+            selectedToken.setTextColor(context.getColor(R.color.jacob))
         }
     }
 
@@ -112,13 +112,10 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private fun setBalanceError(show: Boolean) {
-        val color = if (show) {
-            LayoutHelper.getAttr(R.attr.ColorLucian, context.theme, context.getColor(R.color.red_d))
-        } else {
-            context.getColor(R.color.grey)
-        }
-        balanceTitle.setTextColor(color)
-        balanceValue.setTextColor(color)
+        val color = if (show) R.color.lucian else R.color.grey
+
+        balanceTitle.setTextColor(context.getColor(color))
+        balanceValue.setTextColor(context.getColor(color))
     }
 
     private fun setEstimated(show: Boolean) {

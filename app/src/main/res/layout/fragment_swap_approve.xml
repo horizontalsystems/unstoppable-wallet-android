@@ -63,7 +63,7 @@
                     android:background="@null"
                     android:inputType="number|numberDecimal"
                     android:maxLines="1"
-                    android:textColor="?ColorOz"
+                    android:textColor="@color/oz"
                     tools:layout_editor_absoluteX="16dp"
                     tools:text="2.003434" />
 
@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textColor="?ColorLucian"
+                    android:textColor="@color/lucian"
                     tools:text="You already have an allowance for this amount" />
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
-                android:textColor="?ColorLucian"
+                android:textColor="@color/lucian"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/feeSelectorView"

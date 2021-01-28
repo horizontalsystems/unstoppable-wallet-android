@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/StatusInfo_Pending"
-                android:textColor="?ColorJacob" />
+                android:textColor="@color/jacob" />
 
             <TextView
                 style="@style/Body"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/StatusInfo_PendingDescription"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
             <TextView
                 style="@style/Headline2"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:text="@string/StatusInfo_Pending"
-                android:textColor="?ColorJacob" />
+                android:textColor="@color/jacob" />
 
             <TextView
                 style="@style/Body"
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/StatusInfo_ReceivingDescription"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
             <TextView
                 style="@style/Headline2"
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:text="@string/StatusInfo_Confirmed"
-                android:textColor="?ColorJacob" />
+                android:textColor="@color/jacob" />
 
             <TextView
                 style="@style/Body"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/StatusInfo_ConfirmedDescription"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
             <TextView
                 style="@style/Headline2"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:text="@string/StatusInfo_Failed"
-                android:textColor="?ColorJacob" />
+                android:textColor="@color/jacob" />
 
             <TextView
                 style="@style/Body"
@@ -92,7 +92,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="44dp"
                 android:text="@string/StatusInfo_FailedDescription"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
         </LinearLayout>
 

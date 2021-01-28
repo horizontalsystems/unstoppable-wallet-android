@@ -7,7 +7,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?ColorLawrence"
+        android:background="@color/lawrence"
         app:layout_constraintBottom_toTopOf="@+id/border2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         android:ellipsize="end"
         android:gravity="end"
         android:lines="1"
-        android:textColor="?ColorJacob"
+        android:textColor="@color/jacob"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/sentToSelfIcon"
         app:layout_constraintStart_toStartOf="@+id/guideline"

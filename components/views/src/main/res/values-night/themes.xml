@@ -55,27 +55,8 @@
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
         <item name="MarketCircleGradient">@drawable/market_circle_dark</item>
 
-        <!-- New colors: for icons & text -->
-        <item name="ColorJacob">@color/yellow_d</item>
-        <item name="ColorJacobPressed">@color/yellow_l</item>
-        <item name="ColorRemus">@color/green_d</item>
-        <item name="ColorLucian">@color/red_d</item>
-        <item name="ColorLucianPressed">@color/red_l</item>
-        <item name="ColorOz">@color/light</item>
-        <item name="ColorLeah">@color/steel_light</item>
-        <item name="ColorBran">@color/light_grey</item>
-
         <!-- New colors: for backgrounds -->
-        <item name="ColorJeremy">@color/steel_20</item>
-        <item name="ColorElena">@color/steel_20</item>
-        <item name="ColorLawrence">@color/steel_dark</item>
-        <item name="ColorLawrencePressed">@color/steel_dark_pressed</item>
-        <item name="ColorClaude">@color/dark</item>
         <item name="ColorGwen">@color/dark</item>
-        <item name="ColorNina">@color/white_50</item>
-        <item name="ColorTyler">@color/dark</item>
-        <item name="ColorRaina">@color/steel_10</item>
-        <item name="ColorAndy">@color/black_50</item>
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white_20</item>
         <item name="ColorWindowBackground">@color/dark</item>

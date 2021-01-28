@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="24dp"
-            android:textColor="?ColorOz"
+            android:textColor="@color/oz"
             app:layout_constraintBottom_toBottomOf="@id/dappIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/dappIcon"

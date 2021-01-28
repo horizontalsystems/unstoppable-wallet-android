@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/FeeInfo_Description"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
             <TextView
                 style="@style/Headline2"
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/FeeInfo_Slow"
-                android:textColor="?ColorJacob" />
+                android:textColor="@color/jacob" />
 
             <TextView
                 style="@style/Body"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/FeeInfo_SlowDescription"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
             <TextView
                 style="@style/Headline2"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/FeeInfo_Average"
-                android:textColor="?ColorJacob" />
+                android:textColor="@color/jacob" />
 
             <TextView
                 style="@style/Body"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/FeeInfo_AverageDescription"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
             <TextView
                 style="@style/Headline2"
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/FeeInfo_Fast"
-                android:textColor="?ColorJacob" />
+                android:textColor="@color/jacob" />
 
             <TextView
                 style="@style/Body"
@@ -79,7 +79,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="32dp"
                 android:text="@string/FeeInfo_FastDescription"
-                android:textColor="?ColorBran" />
+                android:textColor="@color/bran" />
 
         </LinearLayout>
 

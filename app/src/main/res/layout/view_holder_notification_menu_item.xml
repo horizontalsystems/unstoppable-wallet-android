@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
-        android:textColor="?ColorOz"
+        android:textColor="@color/oz"
         tools:text="10%" />
 
     <ImageView
@@ -26,7 +26,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:src="@drawable/ic_checkmark_20"
-        app:tint="?ColorJacob"
+        app:tint="@color/jacob"
         android:visibility="invisible"
         tools:visibility="visible" />
 

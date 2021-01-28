@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -50,11 +49,8 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
     }
 
     fun getBalanceTextColor(context: Context) : Int {
-        return if (upToDate) {
-            LayoutHelper.getAttr(R.attr.ColorJacob, context.theme, context.getColor(R.color.yellow_d))
-        } else {
-            context.getColor(R.color.yellow_50)
-        }
+        val color = if (upToDate) R.color.jacob else R.color.yellow_50
+        return context.getColor(color)
     }
 
 }

@@ -77,7 +77,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/frame"
         app:layout_constraintEnd_toStartOf="@+id/arrowIcon"
         app:layout_constraintTop_toTopOf="@+id/frame"
-        app:tint="?ColorLucian" />
+        app:tint="@color/lucian" />
 
     <ImageView
         android:id="@+id/arrowIcon"

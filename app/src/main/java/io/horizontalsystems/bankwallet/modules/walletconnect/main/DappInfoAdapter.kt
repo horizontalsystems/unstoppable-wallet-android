@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_dapp_item.*
 
@@ -26,9 +25,7 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
                     ?: dappItemData.value
 
             dappItemData.valueColor?.let { color ->
-                LayoutHelper.getAttr(color, containerView.context.theme)?.let {
-                    value.setTextColor(it)
-                }
+                value.setTextColor(containerView.context.getColor(color))
             }
         }
 
@@ -57,9 +54,9 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
             }
 
             val color = when (value) {
-                WalletConnectMainViewModel.Status.OFFLINE -> R.attr.ColorLucian
-                WalletConnectMainViewModel.Status.ONLINE -> R.attr.ColorRemus
-                WalletConnectMainViewModel.Status.CONNECTING -> R.attr.ColorLeah
+                WalletConnectMainViewModel.Status.OFFLINE -> R.color.lucian
+                WalletConnectMainViewModel.Status.ONLINE -> R.color.remus
+                WalletConnectMainViewModel.Status.CONNECTING -> R.color.leah
                 null -> null
             }
 
