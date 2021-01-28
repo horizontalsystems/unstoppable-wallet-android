@@ -16,6 +16,7 @@ class MarketOverviewViewModel(
     val topGainersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val topLosersViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
     val topByVolumeViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+    val showPoweredByLiveData = MutableLiveData(false)
 
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
@@ -39,6 +40,8 @@ class MarketOverviewViewModel(
         if (state is MarketTopService.State.Loaded) {
             syncViewItemsBySortingField()
         }
+
+        showPoweredByLiveData.postValue(service.marketTopItems.isNotEmpty())
     }
 
     private fun syncViewItemsBySortingField() {

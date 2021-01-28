@@ -155,6 +155,7 @@
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">See All</string>
+    <string name="Market_PoweredByApi" translatable="false">Powered by CoinGeko API</string>
 
     <!--Balance-->
 
