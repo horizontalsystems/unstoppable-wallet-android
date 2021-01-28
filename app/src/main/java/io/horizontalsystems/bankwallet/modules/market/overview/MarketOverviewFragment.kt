@@ -14,21 +14,19 @@ import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapt
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
 import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewItem
-import io.horizontalsystems.bankwallet.modules.market.top.ViewHolderMarketTopItem
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
-import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.navGraphViewModels
-import kotlinx.android.synthetic.main.fragment_rates.*
+import kotlinx.android.synthetic.main.fragment_overview.*
 
-class MarketOverviewFragment : BaseFragment(), ViewHolderMarketTopItem.Listener {
+class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.Listener {
 
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
     private val navigationViewModel by navGraphViewModels<MarketInternalNavigationViewModel>(R.id.mainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_rates, container, false)
+        return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
