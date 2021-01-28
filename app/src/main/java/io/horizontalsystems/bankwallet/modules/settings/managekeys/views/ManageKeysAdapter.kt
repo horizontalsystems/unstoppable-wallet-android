@@ -89,12 +89,8 @@ class ManageKeysAdapter(private val listener: Listener) : RecyclerView.Adapter<M
             val padding = if (hasAccount) LayoutHelper.dp(1f, containerView.context) else 0
             containerView.setPadding(padding, 0, padding, padding)
 
-            val tintColor = if (hasAccount) {
-                LayoutHelper.getAttr(R.attr.ColorJacob, containerView.context.theme, containerView.context.getColor(R.color.yellow_d))
-            } else {
-                containerView.context.getColor(R.color.grey)
-            }
-            headerIcon.imageTintList = ColorStateList.valueOf(tintColor)
+            val color = if (hasAccount) R.color.jacob else R.color.grey
+            headerIcon.imageTintList = ColorStateList.valueOf(containerView.context.getColor(color))
         }
     }
 

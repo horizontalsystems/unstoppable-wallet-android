@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewMod
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_swap.*
 
 class SwapFragment : BaseFragment() {
@@ -163,16 +162,16 @@ class SwapFragment : BaseFragment() {
         }
     }
 
-    private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?) =
-            when (priceImpactLevel) {
-                SwapTradeService.PriceImpactLevel.Normal -> LayoutHelper.getAttr(R.attr.ColorRemus, ctx.theme)
-                        ?: ctx.getColor(R.color.green_d)
-                SwapTradeService.PriceImpactLevel.Warning -> LayoutHelper.getAttr(R.attr.ColorJacob, ctx.theme)
-                        ?: ctx.getColor(R.color.yellow_d)
-                SwapTradeService.PriceImpactLevel.Forbidden -> LayoutHelper.getAttr(R.attr.ColorLucian, ctx.theme)
-                        ?: ctx.getColor(R.color.red_d)
-                else -> ctx.getColor(R.color.grey)
-            }
+    private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?): Int {
+        val color = when (priceImpactLevel) {
+            SwapTradeService.PriceImpactLevel.Normal -> R.color.remus
+            SwapTradeService.PriceImpactLevel.Warning -> R.color.jacob
+            SwapTradeService.PriceImpactLevel.Forbidden -> R.color.lucian
+            else -> R.color.grey
+        }
+
+        return ctx.getColor(color)
+    }
 
     companion object {
         const val fromCoinKey = "fromCoinKey"

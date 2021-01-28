@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_balance_item.*
 
@@ -194,12 +193,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
     }
 
     private fun getRateDiffTextColor(dimmed: Boolean): Int {
-        return if (dimmed) {
-            containerView.context.getColor(R.color.grey_50)
-        } else {
-            LayoutHelper.getAttr(R.attr.ColorLeah, containerView.context.theme)
-                    ?: containerView.context.getColor(R.color.grey)
-        }
+        return containerView.context.getColor(if (dimmed) R.color.grey_50 else R.color.leah)
     }
 
     private fun getRateDiffTintList(dimmed: Boolean): ColorStateList? {

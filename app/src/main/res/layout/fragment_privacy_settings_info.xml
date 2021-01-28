@@ -56,7 +56,7 @@
                 android:layout_marginTop="36dp"
                 android:layout_marginEnd="13dp"
                 android:text="@string/SettingsPrivacy_Info_BlockchainTx_Title"
-                android:textColor="?ColorJacob"
+                android:textColor="@color/jacob"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtPrivacySettingsInfoDetails" />
@@ -82,7 +82,7 @@
                 android:layout_marginTop="36dp"
                 android:layout_marginEnd="13dp"
                 android:text="@string/SettingsPrivacy_Info_BlockchainConnection_Title"
-                android:textColor="?ColorJacob"
+                android:textColor="@color/jacob"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtBlockchainTxDescription" />
@@ -108,7 +108,7 @@
                 android:layout_marginTop="36dp"
                 android:layout_marginEnd="13dp"
                 android:text="@string/SettingsPrivacy_Info_BlockchainRestore_Title"
-                android:textColor="?ColorJacob"
+                android:textColor="@color/jacob"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtBlockchainConnDescription" />

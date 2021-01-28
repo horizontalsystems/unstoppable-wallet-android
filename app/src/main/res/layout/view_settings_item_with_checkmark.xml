@@ -50,7 +50,7 @@
         android:maxLines="1"
         android:src="@drawable/ic_checkmark_20"
         android:visibility="invisible"
-        app:tint="?ColorJacob"
+        app:tint="@color/jacob"
         tools:visibility="visible" />
 
     <View

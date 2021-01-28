@@ -115,19 +115,21 @@ fun Score.getTextColor(context: Context): Int {
 }
 
 fun Score.getBackgroundTintColor(context: Context): Int {
-    return when (this) {
+    val color = when (this) {
         is Score.Rating -> {
             when (rating.toUpperCase(Locale.ENGLISH)) {
-                "A" -> LayoutHelper.getAttr(R.attr.ColorJacob, context.theme, context.getColor(R.color.yellow_d))
-                "B" -> context.getColor(R.color.issykBlue)
-                "C" -> context.getColor(R.color.grey)
-                else -> context.getColor(R.color.light_grey)
+                "A" -> R.color.jacob
+                "B" -> R.color.issykBlue
+                "C" -> R.color.grey
+                else -> R.color.light_grey
             }
         }
         is Score.Rank -> {
-            LayoutHelper.getAttr(R.attr.ColorJeremy, context.theme, context.getColor(R.color.steel_20))
+            R.color.jeremy
         }
     }
+
+    return context.getColor(color)
 }
 
 data class MarketViewItem(

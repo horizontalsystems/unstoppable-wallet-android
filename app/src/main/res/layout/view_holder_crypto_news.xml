@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/ColorLawrence"
+    android:background="@color/lawrence"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground">
 
@@ -26,7 +26,7 @@
         android:maxLines="2"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:textColor="?attr/ColorLeah"
+        android:textColor="@color/leah"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="In what seems to be another episode in a long-running campaign, the Russian telecom regulator has restricted access to at least six websites posting content related to cryptocurrencies" />

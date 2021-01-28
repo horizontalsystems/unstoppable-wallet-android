@@ -8,7 +8,7 @@
         android:id="@+id/backgroundView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="?ColorLawrence"/>
+        android:background="@color/lawrence"/>
 
     <TextView
         android:id="@+id/itemTitle"
@@ -45,7 +45,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:src="@drawable/ic_checkmark_20"
-        app:tint="?ColorJacob"
+        app:tint="@color/jacob"
         android:visibility="invisible"
         tools:visibility="visible" />
 

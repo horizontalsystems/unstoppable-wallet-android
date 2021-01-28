@@ -27,7 +27,6 @@ import io.horizontalsystems.core.navGraphViewModels
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarGravity
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_transaction_info.*
 
 class TransactionInfoFragment : BottomSheetDialogFragment() {
@@ -153,7 +152,7 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
         context?.let { ctx ->
             val builder = CustomTabsIntent.Builder()
 
-            val color = LayoutHelper.getAttr(R.attr.ColorTyler, ctx.theme) ?: ctx.getColor(R.color.dark)
+            val color = ctx.getColor(R.color.tyler)
 
             val params = CustomTabColorSchemeParams.Builder()
                     .setNavigationBarColor(color)

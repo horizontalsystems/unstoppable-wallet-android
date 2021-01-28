@@ -28,7 +28,7 @@ class MarketCategoriesAdapter(
     private val itemViewMaxLength = LayoutHelper.dp(212f, context)
     private val itemViewMinLength = LayoutHelper.dp(98f, context)
     private val activeColor = context.getColor(R.color.yellow_d)
-    private val inactiveColor = LayoutHelper.getAttr(R.attr.ColorLawrence, context.theme, context.getColor(R.color.grey))
+    private val inactiveColor = context.getColor(R.color.lawrence)
 
     init {
         marketCategories.forEach { category ->

@@ -22,7 +22,7 @@
         android:layout_marginTop="11dp"
         android:layout_marginBottom="11dp"
         tools:text="@string/RateList_portfolio"
-        android:textColor="?ColorOz"
+        android:textColor="@color/oz"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

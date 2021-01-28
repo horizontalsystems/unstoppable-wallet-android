@@ -95,7 +95,7 @@
         android:includeFontPadding="false"
         android:lines="1"
         android:textAlignment="textEnd"
-        android:textColor="?ColorRemus"
+        android:textColor="@color/remus"
         app:layout_constraintEnd_toStartOf="@+id/doubleSpendIcon"
         app:layout_constraintStart_toEndOf="@+id/barrierLeft"
         app:layout_constraintTop_toTopOf="@+id/txDate"

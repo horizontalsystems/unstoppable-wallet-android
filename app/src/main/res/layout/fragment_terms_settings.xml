@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/SettingsTerms_Text"
-                android:textColor="?ColorBran"
+                android:textColor="@color/bran"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -155,7 +155,7 @@
                 android:layout_marginTop="46dp"
                 android:text="@string/SettingsTerms_BottomThankYou"
                 android:textAlignment="center"
-                android:textColor="?ColorJacob"
+                android:textColor="@color/jacob"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
                 app:layout_constraintTop_toBottomOf="@+id/checkboxPin" />

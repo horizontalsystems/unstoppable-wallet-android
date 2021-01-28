@@ -58,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
             app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
             app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
-            app:tint="?ColorLucian" />
+            app:tint="@color/lucian" />
 
         <TextView
             android:id="@+id/coinName"
@@ -190,7 +190,7 @@
                 android:layout_marginTop="11dp"
                 android:layout_marginEnd="12dp"
                 android:includeFontPadding="false"
-                android:textColor="?ColorJacob"
+                android:textColor="@color/jacob"
                 tools:text="$52.50" />
 
             <TextView
@@ -271,7 +271,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="8dp"
-                    android:textColor="?ColorLeah"
+                    android:textColor="@color/leah"
                     tools:text="$52.50" />
             </FrameLayout>
 

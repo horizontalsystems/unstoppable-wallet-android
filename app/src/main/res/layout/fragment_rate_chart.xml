@@ -60,8 +60,8 @@
                 app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
                 app:layout_constraintEnd_toEndOf="@+id/endGuideline"
                 app:layout_constraintTop_toTopOf="@+id/coinRateLast"
-                app:negativeColor="?ColorLeah"
-                app:positiveColor="?ColorLeah"
+                app:negativeColor="@color/leah"
+                app:positiveColor="@color/leah"
                 tools:text="-18" />
 
             <HorizontalScrollView
@@ -168,7 +168,7 @@
                     style="@style/CaptionSB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?ColorOz"
+                    android:textColor="@color/oz"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="$9530.12" />
@@ -213,7 +213,7 @@
                     style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?ColorLucian"
+                    android:textColor="@color/lucian"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/pointInfoPrice"
@@ -224,7 +224,7 @@
                     style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?ColorJacob"
+                    android:textColor="@color/jacob"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -248,15 +248,15 @@
                 android:layout_width="0dp"
                 android:layout_height="232dp"
                 android:layout_marginTop="4dp"
-                app:cursorColor="?ColorOz"
-                app:curvePressedColor="?ColorOz"
-                app:gridDashColor="?ColorNina"
-                app:gridTextColor="?ColorNina"
+                app:cursorColor="@color/oz"
+                app:curvePressedColor="@color/oz"
+                app:gridDashColor="@color/nina"
+                app:gridTextColor="@color/nina"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
                 app:partialChartColor="@color/grey_50"
-                app:timelineTextColor="?ColorNina"
+                app:timelineTextColor="@color/nina"
                 app:trendDownColor="@color/red_d"
                 app:trendUpColor="@color/green_d" />
 

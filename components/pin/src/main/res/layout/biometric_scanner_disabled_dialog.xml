@@ -44,7 +44,7 @@
         android:src="@drawable/ic_fingerprint"
         app:layout_constraintStart_toStartOf="@+id/txtDescription"
         app:layout_constraintTop_toBottomOf="@+id/txtDescription"
-        app:tint="?ColorLucian" />
+        app:tint="@color/lucian" />
 
     <TextView
         style="@style/Body"
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/UnlockPin_BiometricScannerDisabled_Info"
-        android:textColor="?ColorLucian"
+        android:textColor="@color/lucian"
         app:layout_constraintBottom_toBottomOf="@+id/fingerprintIcon"
         app:layout_constraintStart_toEndOf="@+id/fingerprintIcon" />
 
@@ -69,7 +69,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
         android:text="@string/UnlockPin_BiometricScannerDisabled_Button"
-        android:textColor="?ColorJacob"
+        android:textColor="@color/jacob"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fingerprintIcon" />

@@ -4,13 +4,13 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:bottomLeftRadius="16dp" android:bottomRightRadius="16dp" />
-            <solid android:color="?ColorLawrencePressed" />
+            <solid android:color="@color/lawrence_pressed" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <corners android:bottomLeftRadius="16dp" android:bottomRightRadius="16dp" />
-            <solid android:color="?ColorLawrence" />
+            <solid android:color="@color/lawrence" />
         </shape>
     </item>
 </selector>

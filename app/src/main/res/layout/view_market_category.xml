@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="94dp"
     android:background="@drawable/rounded_16"
-    android:backgroundTint="?ColorLawrence"
+    android:backgroundTint="@color/lawrence"
     android:maxWidth="212dp"
     android:maxHeight="94dp"
     android:minWidth="98dp"

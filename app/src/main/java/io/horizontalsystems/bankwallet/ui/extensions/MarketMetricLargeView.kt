@@ -6,7 +6,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_market_metric_large.view.*
 import java.math.BigDecimal
 
@@ -46,10 +45,8 @@ class MarketMetricLargeView @JvmOverloads constructor(context: Context, attrs: A
         val sign = if (v >= BigDecimal.ZERO) "+" else "-"
         diffPercentage.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
 
-        val textColor = if (v >= BigDecimal.ZERO) R.attr.ColorRemus else R.attr.ColorLucian
-        LayoutHelper.getAttr(textColor, context.theme)?.let {
-            diffPercentage.setTextColor(it)
-        }
+        val color = if (v >= BigDecimal.ZERO) R.color.remus else R.color.lucian
+        diffPercentage.setTextColor(context.getColor(color))
     }
 }
 

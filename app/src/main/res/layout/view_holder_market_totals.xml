@@ -8,7 +8,7 @@
     android:layout_marginTop="12dp"
     android:layout_marginEnd="16dp"
     android:background="@drawable/background_round_16"
-    android:backgroundTint="?ColorLawrence"
+    android:backgroundTint="@color/lawrence"
     android:padding="16dp">
 
     <ImageView

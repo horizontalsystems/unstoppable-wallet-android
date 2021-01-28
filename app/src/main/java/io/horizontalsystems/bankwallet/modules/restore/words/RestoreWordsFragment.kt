@@ -20,7 +20,6 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_restore_words.*
 import kotlinx.android.synthetic.main.view_input_address.view.*
 
@@ -80,7 +79,6 @@ class RestoreWordsFragment : BaseFragment() {
     }
 
     private fun observeEvents() {
-        val redColor = context?.let { LayoutHelper.getAttr(R.attr.ColorLucian, it.theme, it.getColor(R.color.red_d)) } ?: R.color.red_d
 
         viewModel.accountTypeLiveEvent.observe(viewLifecycleOwner, Observer { accountType ->
             hideKeyboard()
@@ -94,7 +92,7 @@ class RestoreWordsFragment : BaseFragment() {
             val spannableString = SpannableString(wordsInput.text.toString())
 
             invalidRanges.forEach { range ->
-                val spannableColorSpan = ForegroundColorSpan(redColor)
+                val spannableColorSpan = ForegroundColorSpan(requireContext().getColor(R.color.lucian))
                 if (range.last < wordsInput.text.length) {
                     spannableString.setSpan(spannableColorSpan, range.first, range.last + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }

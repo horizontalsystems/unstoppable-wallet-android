@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:arrow="true"
-        app:textColor="?ColorOz"
+        app:textColor="@color/oz"
         app:title="@string/ManageKeys_AddressFormat" />
 
     <io.horizontalsystems.views.ManageAccountView
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         app:arrow="true"
         app:attention="true"
-        app:textColor="?ColorOz"
+        app:textColor="@color/oz"
         app:title="@string/ManageKeys_Backup" />
 
     <io.horizontalsystems.views.ManageAccountView
@@ -83,14 +83,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:arrow="true"
-        app:textColor="?ColorOz"
+        app:textColor="@color/oz"
         app:title="@string/ManageKeys_Show" />
 
     <io.horizontalsystems.views.ManageAccountView
         android:id="@+id/createButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:textColor="?ColorJacob"
+        app:textColor="@color/jacob"
         app:title="@string/ManageKeys_Create" />
 
     <io.horizontalsystems.views.ManageAccountView
@@ -98,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:roundBottom="true"
-        app:textColor="?ColorJacob"
+        app:textColor="@color/jacob"
         app:title="@string/ManageKeys_Restore" />
 
     <io.horizontalsystems.views.ManageAccountView
@@ -106,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:roundBottom="true"
-        app:textColor="?ColorLucian"
+        app:textColor="@color/lucian"
         app:title="@string/ManageKeys_Unlink" />
 
 </LinearLayout>

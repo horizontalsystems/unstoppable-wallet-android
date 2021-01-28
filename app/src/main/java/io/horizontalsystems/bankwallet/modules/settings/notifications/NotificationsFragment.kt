@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsViewDropdown
-import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.*
@@ -106,12 +105,8 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
 
         viewModel.setDeactivateButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             context?.let {
-                val color = when {
-                            enabled -> LayoutHelper.getAttr(R.attr.ColorLucian, it.theme) ?: it.getColor(R.color.red_d)
-                            else -> it.getColor(R.color.grey_50)
-                        }
-
-                deactivateAllText.setTextColor(color)
+                val color = if (enabled) R.color.lucian else R.color.grey_50
+                deactivateAllText.setTextColor(it.getColor(color))
             }
 
             deactivateAll.isEnabled = enabled

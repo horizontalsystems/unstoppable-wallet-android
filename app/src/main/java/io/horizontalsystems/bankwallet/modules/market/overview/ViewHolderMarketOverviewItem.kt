@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.getTextColor
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_overview_item.*
 import java.math.BigDecimal
@@ -93,10 +92,8 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
                     val sign = if (v >= BigDecimal.ZERO) "+" else "-"
                     marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
 
-                    val textColor = if (v >= BigDecimal.ZERO) R.attr.ColorRemus else R.attr.ColorLucian
-                    LayoutHelper.getAttr(textColor, containerView.context.theme)?.let {
-                        marketFieldValue.setTextColor(it)
-                    }
+                    val color = if (v >= BigDecimal.ZERO) R.color.remus else R.color.lucian
+                    marketFieldValue.setTextColor(containerView.resources.getColor(color, containerView.context.theme))
                 }
             }
         }

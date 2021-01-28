@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="7dp"
-        android:textColor="?ColorOz"
+        android:textColor="@color/oz"
         app:layout_constraintBottom_toTopOf="@+id/subtitleText"
         app:layout_constraintStart_toEndOf="@+id/rank"
         app:layout_constraintTop_toTopOf="parent"
@@ -73,8 +73,8 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/titleText"
-        app:negativeColor="?ColorLucian"
-        app:positiveColor="?ColorRemus"
+        app:negativeColor="@color/lucian"
+        app:positiveColor="@color/remus"
         tools:text="+ 0.87%" />
 
     <TextView

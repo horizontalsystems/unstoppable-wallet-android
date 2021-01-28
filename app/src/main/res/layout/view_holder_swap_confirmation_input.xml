@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="12dp"
         android:layout_marginStart="16dp"
-        android:textColor="?ColorOz"
+        android:textColor="@color/oz"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Pay Ethereum" />
@@ -33,7 +33,7 @@
         style="@style/Subhead1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?ColorOz"
+        android:textColor="@color/oz"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/payTitle"
         app:layout_constraintEnd_toEndOf="parent"

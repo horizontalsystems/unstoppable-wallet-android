@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_swap_allowance.view.*
 
 class SwapAllowanceView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -31,12 +30,8 @@ class SwapAllowanceView @JvmOverloads constructor(context: Context, attrs: Attri
         })
 
         viewModel.isErrorLiveData().observe(lifecycleOwner, { error ->
-            val color = if (error)
-                LayoutHelper.getAttr(R.attr.ColorLucian, context.theme)
-                        ?: context.getColor(R.color.red_d)
-            else
-                context.getColor(R.color.grey)
-            allowance.setTextColor(color)
+            val color = if (error) R.color.lucian else R.color.grey
+            allowance.setTextColor(context.getColor(color))
         })
     }
 

@@ -13,7 +13,7 @@
         android:text="@string/TransactionInfo_Status_Confirmed"
         android:textColor="?TextColorBarsToDark"
         app:drawableEndCompat="@drawable/ic_checkmark_20"
-        app:drawableTint="?ColorRemus"
+        app:drawableTint="@color/remus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Transactions_Failed"
-        android:textColor="?ColorLucian"
+        android:textColor="@color/lucian"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
