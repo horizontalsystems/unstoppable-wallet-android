@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketInternalNavigationViewModel
 import io.horizontalsystems.bankwallet.modules.market.discovery.MarketDiscoveryFragment
+import io.horizontalsystems.bankwallet.modules.market.discovery.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
@@ -60,6 +61,8 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         )
         val topByVolumeAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topByVolumeViewItemsLiveData, viewLifecycleOwner)
 
+        val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner)
+
         coinRatesRecyclerView.adapter = ConcatAdapter(
                 marketMetricsAdapter,
                 topGainersHeaderAdapter,
@@ -68,6 +71,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 topLosersAdapter,
                 topByVolumeHeaderAdapter,
                 topByVolumeAdapter,
+                poweredByAdapter
         )
         coinRatesRecyclerView.itemAnimator = null
 
