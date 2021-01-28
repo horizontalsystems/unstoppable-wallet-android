@@ -26,8 +26,6 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        configureSearchMenu(toolbar.menu, R.string.Market_Search)
-
         recyclerTags.adapter = filterAdapter
 
         filterAdapter.setFilters(marketTabsViewModel.tabs.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(marketTabsViewModel.currentTab.name))

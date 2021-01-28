@@ -17,7 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/market_menu"
             app:title="@string/Market_Title">
 
         </androidx.appcompat.widget.Toolbar>
