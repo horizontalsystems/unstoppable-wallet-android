@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
-import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesModule
-import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
-import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesViewModel
+import io.horizontalsystems.bankwallet.modules.market.tabs.MarketTabsModule
+import io.horizontalsystems.bankwallet.modules.market.tabs.MarketTabsService
+import io.horizontalsystems.bankwallet.modules.market.tabs.MarketTabsViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import io.horizontalsystems.core.navGraphViewModels
 import kotlinx.android.synthetic.main.fragment_market.*
 
 class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     private val filterAdapter = FilterAdapter(this)
-    private val viewModel by viewModels<MarketCategoriesViewModel> { MarketCategoriesModule.Factory() }
+    private val marketTabsViewModel by viewModels<MarketTabsViewModel> { MarketTabsModule.Factory() }
     private val navigationViewModel by navGraphViewModels<MarketInternalNavigationViewModel>(R.id.mainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,16 +30,16 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
 
         recyclerTags.adapter = filterAdapter
 
-        filterAdapter.setFilters(viewModel.categories.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(viewModel.currentCategory.name))
+        filterAdapter.setFilters(marketTabsViewModel.tabs.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(marketTabsViewModel.currentTab.name))
 
         viewPager.adapter = MarketTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         viewPager.isUserInputEnabled = false
 
-        viewModel.categoryLiveData.observe(viewLifecycleOwner, { category: MarketCategoriesService.Category ->
-            val contentFragment = when (category) {
-                MarketCategoriesService.Category.Overview -> 0
-                MarketCategoriesService.Category.Discovery -> 1
-                MarketCategoriesService.Category.Favorites -> 2
+        marketTabsViewModel.tabLiveData.observe(viewLifecycleOwner, { tab: MarketTabsService.Tab ->
+            val contentFragment = when (tab) {
+                MarketTabsService.Tab.Overview -> 0
+                MarketTabsService.Tab.Discovery -> 1
+                MarketTabsService.Tab.Favorites -> 2
             }
 
             viewPager.setCurrentItem(contentFragment, false)
@@ -48,8 +48,8 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
         navigationViewModel.navigateToDiscoveryLiveEvent.observe(viewLifecycleOwner) {
             navigationViewModel.setDiscoveryMode(it)
 
-            viewModel.currentCategory = MarketCategoriesService.Category.Discovery
-            filterAdapter.setFilters(viewModel.categories.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(viewModel.currentCategory.name))
+            marketTabsViewModel.currentTab = MarketTabsService.Tab.Discovery
+            filterAdapter.setFilters(marketTabsViewModel.tabs.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(marketTabsViewModel.currentTab.name))
         }
     }
 
@@ -58,8 +58,8 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     }
 
     override fun onFilterItemClick(item: FilterAdapter.FilterItem?, itemPosition: Int, itemWidth: Int) {
-        MarketCategoriesService.Category.fromString(item?.filterId)?.let {
-            viewModel.currentCategory = it
+        MarketTabsService.Tab.fromString(item?.filterId)?.let {
+            marketTabsViewModel.currentTab = it
         }
     }
 }

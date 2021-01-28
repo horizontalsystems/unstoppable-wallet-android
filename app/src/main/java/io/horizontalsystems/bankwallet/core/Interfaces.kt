@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
-import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
+import io.horizontalsystems.bankwallet.modules.market.tabs.MarketTabsService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -72,7 +72,7 @@ interface IChartTypeStorage {
 }
 
 interface IMarketStorage {
-    var currentCategory: MarketCategoriesService.Category?
+    var currentTab: MarketTabsService.Tab?
 }
 
 interface IAccountManager {

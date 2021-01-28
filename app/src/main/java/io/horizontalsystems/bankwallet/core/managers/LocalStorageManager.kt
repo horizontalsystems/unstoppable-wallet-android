@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
-import io.horizontalsystems.bankwallet.modules.market.categories.MarketCategoriesService
+import io.horizontalsystems.bankwallet.modules.market.tabs.MarketTabsService
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThemeStorage
@@ -303,9 +303,9 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putString(CHECKED_TERMS, termsString).apply()
         }
 
-    override var currentCategory: MarketCategoriesService.Category?
+    override var currentTab: MarketTabsService.Tab?
         get() = preferences.getString(MARKET_CURRENT_CATEGORY, null)?.let {
-            MarketCategoriesService.Category.fromString(it)
+            MarketTabsService.Tab.fromString(it)
         }
         set(value) {
             preferences.edit().putString(MARKET_CURRENT_CATEGORY, value?.name).apply()
