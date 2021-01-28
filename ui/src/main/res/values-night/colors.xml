@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Paired Colors-->
+    <color name="jacob">@color/yellow_d</color>
+    <color name="remus">@color/green_d</color>
+    <color name="lucian">@color/red_d</color>
+    <color name="oz">@color/light</color>
+    <color name="tyler">@color/dark</color>
+    <color name="cassandra">@color/dark</color>
+    <color name="bran">@color/light_grey</color>
+
+    <color name="claude">@color/dark</color>
+    <color name="leah">@color/steel_light</color>
+    <color name="lawrence">@color/steel_dark</color>
+    <color name="lawrence_pressed">#353842</color>
+    <color name="elena">@color/steel_dark</color>
+    <color name="jeremy">@color/steel_20</color>
+
+    <color name="andy">@color/black_50</color>
+    <color name="nina">@color/white_50</color>
+    <color name="raina">@color/steel_10</color>
+</resources>
