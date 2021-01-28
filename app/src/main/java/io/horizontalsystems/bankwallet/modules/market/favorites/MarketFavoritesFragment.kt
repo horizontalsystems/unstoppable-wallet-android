@@ -39,7 +39,7 @@ class MarketFavoritesFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
                 marketTopViewModel.errorLiveData,
                 viewLifecycleOwner
         )
-        marketLoadingAdapter = MarketLoadingAdapter(marketTopViewModel, viewLifecycleOwner)
+        marketLoadingAdapter = MarketLoadingAdapter(marketTopViewModel.loadingLiveData, marketTopViewModel.errorLiveData, marketTopViewModel::onErrorClick, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketTopHeaderAdapter, marketLoadingAdapter, marketTopItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
