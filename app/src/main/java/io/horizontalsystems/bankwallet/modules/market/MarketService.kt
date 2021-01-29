@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.market.tabs
+package io.horizontalsystems.bankwallet.modules.market
 
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.reactivex.subjects.PublishSubject
 
-class MarketTabsService(private val storage: IMarketStorage) {
+class MarketService(private val storage: IMarketStorage) {
 
     val tabs = Tab.values()
     var currentTab: Tab
