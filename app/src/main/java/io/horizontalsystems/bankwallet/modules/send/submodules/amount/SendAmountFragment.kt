@@ -92,7 +92,7 @@ class SendAmountFragment(
     private fun setValidationError(error: SendAmountModule.ValidationError?) {
         processSpinner.isInvisible = true
         txtHintError.isVisible = error != null
-        background.isSelected = error != null
+        background.hasError = error != null
 
         txtHintError.text = when (error) {
             is SendAmountModule.ValidationError.InsufficientBalance -> {

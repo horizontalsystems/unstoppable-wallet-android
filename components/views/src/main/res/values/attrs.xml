@@ -37,6 +37,10 @@
     <declare-styleable name="ChartIndicatorView">
         <attr name="title" />
     </declare-styleable>
+    <declare-styleable name="ViewState">
+        <attr name="state_error" format="boolean" />
+        <attr name="state_warning" format="boolean" />
+    </declare-styleable>
 
     <!--  Custom view themes/styles -->
     <attr name="BallanceCoinNameColor" format="reference|color" />

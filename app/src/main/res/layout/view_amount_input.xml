@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
+    <io.horizontalsystems.views.ViewState
         android:id="@+id/background"
         android:layout_width="0dp"
         android:layout_height="84dp"
