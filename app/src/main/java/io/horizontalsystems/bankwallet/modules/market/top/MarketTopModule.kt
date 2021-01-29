@@ -21,7 +21,7 @@ object MarketTopModule {
 
 }
 
-enum class Field(@StringRes val titleResId: Int) {
+enum class SortingField(@StringRes val titleResId: Int) {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
     HighestVolume(R.string.Market_Field_HighestVolume), LowestVolume(R.string.Market_Field_LowestVolume),
     HighestPrice(R.string.Market_Field_HighestPrice), LowestPrice(R.string.Market_Field_LowestPrice),

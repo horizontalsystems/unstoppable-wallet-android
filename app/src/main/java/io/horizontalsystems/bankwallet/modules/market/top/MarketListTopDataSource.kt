@@ -7,15 +7,15 @@ import io.reactivex.Single
 
 class MarketListTopDataSource(private val xRateManager: IRateManager) : IMarketListDataSource {
 
-    override val sortingFields: Array<Field> = arrayOf(
-            Field.HighestCap,
-            Field.LowestCap,
-            Field.HighestVolume,
-            Field.LowestVolume,
-            Field.HighestPrice,
-            Field.LowestPrice,
-            Field.TopGainers,
-            Field.TopLosers,
+    override val sortingFields: Array<SortingField> = arrayOf(
+            SortingField.HighestCap,
+            SortingField.LowestCap,
+            SortingField.HighestVolume,
+            SortingField.LowestVolume,
+            SortingField.HighestPrice,
+            SortingField.LowestPrice,
+            SortingField.TopGainers,
+            SortingField.TopLosers,
     )
 
     override val dataUpdatedAsync: Observable<Unit> = Observable.empty()

@@ -18,15 +18,15 @@ class MarketTopViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val sortingFields: Array<Field> by service::sortingFields
+    val sortingFields: Array<SortingField> by service::sortingFields
 
-    var sortingField: Field = sortingFields.first()
+    var sortingField: SortingField = sortingFields.first()
         private set
 
     var marketField: MarketField = MarketField.PriceDiff
         private set
 
-    fun update(sortingField: Field? = null, marketField: MarketField? = null) {
+    fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
         sortingField?.let {
             this.sortingField = it
         }
@@ -123,15 +123,15 @@ class MarketTopViewModel(
         service.refresh()
     }
 
-    private fun sort(items: List<MarketTopItem>, sortingField: Field) = when (sortingField) {
-        Field.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
-        Field.LowestCap -> items.sortedByNullLast { it.marketCap }
-        Field.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
-        Field.LowestVolume -> items.sortedByNullLast { it.volume }
-        Field.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
-        Field.LowestPrice -> items.sortedByNullLast { it.rate }
-        Field.TopGainers -> items.sortedByDescendingNullLast { it.diff }
-        Field.TopLosers -> items.sortedByNullLast { it.diff }
+    private fun sort(items: List<MarketTopItem>, sortingField: SortingField) = when (sortingField) {
+        SortingField.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
+        SortingField.LowestCap -> items.sortedByNullLast { it.marketCap }
+        SortingField.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
+        SortingField.LowestVolume -> items.sortedByNullLast { it.volume }
+        SortingField.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
+        SortingField.LowestPrice -> items.sortedByNullLast { it.rate }
+        SortingField.TopGainers -> items.sortedByDescendingNullLast { it.diff }
+        SortingField.TopLosers -> items.sortedByNullLast { it.diff }
     }
 
 }

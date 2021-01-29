@@ -2,24 +2,22 @@ package io.horizontalsystems.bankwallet.modules.market
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.core.SingleLiveEvent
 
 class MarketViewModel(private val service: MarketService) : ViewModel() {
 
-    val tabs by service::tabs
-    var currentTab by service::currentTab
-    val tabLiveData = MutableLiveData(currentTab)
+    val tabs = MarketModule.Tab.values()
+    var currentTabLiveData = MutableLiveData(service.currentTab ?: MarketModule.Tab.Overview)
+    val discoveryListTypeLiveEvent = SingleLiveEvent<MarketModule.ListType>()
 
-    private val disposable = CompositeDisposable()
+    fun onSelect(tab: MarketModule.Tab) {
+        service.currentTab = tab
+        currentTabLiveData.value = tab
+    }
 
-    init {
-        service.currentTabChangedObservable
-                .subscribe {
-                    tabLiveData.postValue(service.currentTab)
-                }
-                .let {
-                    disposable.add(it)
-                }
+    fun onClickSeeAll(listType: MarketModule.ListType) {
+        discoveryListTypeLiveEvent.value = listType
+        onSelect(MarketModule.Tab.Discovery)
     }
 
 }

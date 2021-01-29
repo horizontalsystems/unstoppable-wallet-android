@@ -8,8 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketInternalNavigationViewModel
-import io.horizontalsystems.bankwallet.modules.market.discovery.MarketDiscoveryFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.discovery.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
@@ -24,7 +24,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
 
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
-    private val navigationViewModel by navGraphViewModels<MarketInternalNavigationViewModel>(R.id.mainFragment)
+    private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_overview, container, false)
@@ -38,7 +38,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 marketOverviewViewModel.topGainersViewItemsLiveData,
                 viewLifecycleOwner,
                 MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopWinners, R.drawable.ic_circle_up_20, getString(R.string.Market_SeeAll)) {
-                    navigationViewModel.navigateToDiscovery(MarketDiscoveryFragment.Mode.TopGainers)
+                    marketViewModel.onClickSeeAll(MarketModule.ListType.TopGainers)
                 }
         )
         val topGainersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topGainersViewItemsLiveData, viewLifecycleOwner)
@@ -47,7 +47,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 marketOverviewViewModel.topLosersViewItemsLiveData,
                 viewLifecycleOwner,
                 MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, getString(R.string.Market_SeeAll)) {
-                    navigationViewModel.navigateToDiscovery(MarketDiscoveryFragment.Mode.TopLosers)
+                    marketViewModel.onClickSeeAll(MarketModule.ListType.TopLosers)
                 }
         )
         val topLosersAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topLosersViewItemsLiveData, viewLifecycleOwner)
@@ -56,7 +56,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 marketOverviewViewModel.topByVolumeViewItemsLiveData,
                 viewLifecycleOwner,
                 MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopByVolume, R.drawable.ic_chart_20, getString(R.string.Market_SeeAll)) {
-                    navigationViewModel.navigateToDiscovery(MarketDiscoveryFragment.Mode.TopByVolume)
+                    marketViewModel.onClickSeeAll(MarketModule.ListType.TopByVolume)
                 }
         )
         val topByVolumeAdapter = MarketOverviewItemsAdapter(this, marketOverviewViewModel.topByVolumeViewItemsLiveData, viewLifecycleOwner)
