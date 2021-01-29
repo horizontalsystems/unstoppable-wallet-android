@@ -114,8 +114,8 @@ class RateManager(
         return kit.getTopCoinMarketsAsync(currency)
     }
 
-    override fun getCoinMarketList(coins: List<Coin>, currency: String): Single<List<CoinMarket>> {
-        return kit.getCoinMarketsAsync(coins, currency)
+    override fun getCoinMarketList(coinCodes: List<String>, currency: String): Single<List<CoinMarket>> {
+        return kit.getCoinMarketsAsync(coinCodes, currency)
     }
 
     override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket> {

@@ -302,7 +302,7 @@ interface IRateManager {
     fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun getTopMarketList(currency: String): Single<List<CoinMarket>>
-    fun getCoinMarketList(coins: List<io.horizontalsystems.xrateskit.entities.Coin>, currency: String): Single<List<CoinMarket>>
+    fun getCoinMarketList(coinCodes: List<String>, currency: String): Single<List<CoinMarket>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun refresh()
 }
