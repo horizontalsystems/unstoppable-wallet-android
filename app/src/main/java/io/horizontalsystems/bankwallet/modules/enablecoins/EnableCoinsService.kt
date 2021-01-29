@@ -76,7 +76,7 @@ class EnableCoinsService(
             val address = EthereumKit.address(words, networkType)
 
             state = State.Loading()
-            disposables.dispose()
+            disposables.clear()
             disposables.add(ethereumProvider.contractAddressesSingle(address.hex)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
@@ -95,7 +95,7 @@ class EnableCoinsService(
         state = State.Loading()
 
         try {
-            disposables.dispose()
+            disposables.clear()
             disposables.add(binanceProvider.getTokenSymbolsAsync(words)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
