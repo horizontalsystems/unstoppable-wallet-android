@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.top
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +19,9 @@ import java.math.BigDecimal
 
 class MarketTopItemsAdapter(
         private val listener: ViewHolderMarketTopItem.Listener,
-        private val itemsLiveData: LiveData<List<MarketTopViewItem>>,
-        private val loadingLiveData: LiveData<Boolean>,
-        private val errorLiveData: LiveData<String?>,
+        itemsLiveData: LiveData<List<MarketTopViewItem>>,
+        loadingLiveData: LiveData<Boolean>,
+        errorLiveData: LiveData<String?>,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketTopViewItem, ViewHolderMarketTopItem>(coinRateDiff) {
 
@@ -86,12 +87,17 @@ class ViewHolderMarketTopItem(override val containerView: View, private val list
         this.item = item
 
         if (item.coinCode != prev?.coinCode) {
-            val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.coinCode) ?: R.drawable.coin_placeholder
+            val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.coinCode)
+                    ?: R.drawable.coin_placeholder
             icon.setImageResource(drawableResId)
         }
 
-        if (item.rank != prev?.rank) {
-            rank.text = item.rank.toString()
+        if (item.score != prev?.score) {
+            item.score.apply {
+                rank.text = getText()
+                rank.setTextColor(getTextColor(containerView.context))
+                rank.backgroundTintList = ColorStateList.valueOf(getBackgroundTintColor(containerView.context))
+            }
         }
 
         if (item.coinName != prev?.coinName) {

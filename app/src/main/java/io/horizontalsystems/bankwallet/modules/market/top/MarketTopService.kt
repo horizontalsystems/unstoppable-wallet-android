@@ -23,7 +23,6 @@ class MarketTopService(
         data class Error(val error: Throwable) : State()
     }
 
-
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
     val currency by currencyManager::baseCurrency
 
@@ -79,7 +78,7 @@ class MarketTopService(
 
     private fun convertToMarketTopItem(rank: Int, topMarket: CoinMarket) =
             MarketTopItem(
-                    rank,
+                    Score.Rank(rank),
                     topMarket.coin.code,
                     topMarket.coin.title,
                     topMarket.marketInfo.volume,

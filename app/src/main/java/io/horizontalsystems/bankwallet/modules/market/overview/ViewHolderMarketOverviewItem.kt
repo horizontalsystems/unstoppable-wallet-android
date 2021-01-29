@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.top.getBackgroundTintColor
+import io.horizontalsystems.bankwallet.modules.market.top.getText
+import io.horizontalsystems.bankwallet.modules.market.top.getTextColor
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -41,8 +45,12 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
             icon.setImageResource(drawableResId)
         }
 
-        if (item.rank != prev?.rank) {
-            rank.text = item.rank.toString()
+        if (item.score != prev?.score) {
+            item.score.apply {
+                rank.text = getText()
+                rank.setTextColor(getTextColor(containerView.context))
+                rank.backgroundTintList = ColorStateList.valueOf(getBackgroundTintColor(containerView.context))
+            }
         }
 
         if (item.coinName != prev?.coinName) {

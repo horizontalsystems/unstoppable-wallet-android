@@ -1,25 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.market.top
 
+import android.content.Context
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.views.helpers.LayoutHelper
 import java.math.BigDecimal
-
-object MarketTopModule {
-
-    class Factory : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = MarketTopService(App.currencyManager, MarketListTopDataSource(App.xRateManager), App.xRateManager)
-            return MarketTopViewModel(service, App.connectivityManager, listOf(service)) as T
-        }
-
-    }
-
-}
+import java.util.*
 
 enum class SortingField(@StringRes val titleResId: Int) {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
@@ -34,8 +20,43 @@ enum class MarketField(@StringRes val titleResId: Int) {
     PriceDiff(R.string.Market_Field_PriceDiff)
 }
 
+sealed class Score {
+    class Rank(val rank: Int) : Score()
+    class Rating(val rating: String) : Score()
+}
+
+fun Score.getText(): String {
+    return when (this) {
+        is Score.Rank -> this.rank.toString()
+        is Score.Rating -> this.rating
+    }
+}
+
+fun Score.getTextColor(context: Context): Int {
+    return when (this) {
+        is Score.Rating -> context.getColor(R.color.dark)
+        is Score.Rank -> context.getColor(R.color.grey)
+    }
+}
+
+fun Score.getBackgroundTintColor(context: Context): Int {
+    return when (this) {
+        is Score.Rating -> {
+            when (rating.toUpperCase(Locale.ENGLISH)) {
+                "A" -> LayoutHelper.getAttr(R.attr.ColorJacob, context.theme, context.getColor(R.color.yellow_d))
+                "B" -> context.getColor(R.color.issykBlue)
+                "C" -> context.getColor(R.color.grey)
+                else -> context.getColor(R.color.light_grey)
+            }
+        }
+        is Score.Rank -> {
+            LayoutHelper.getAttr(R.attr.ColorJeremy, context.theme, context.getColor(R.color.steel_20))
+        }
+    }
+}
+
 data class MarketTopItem(
-        val rank: Int,
+        val score: Score,
         val coinCode: String,
         val coinName: String,
         val volume: BigDecimal,
