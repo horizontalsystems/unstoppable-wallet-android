@@ -18,11 +18,9 @@ class MarketListFavoritesDataSource(
     override val dataUpdatedAsync: Observable<Unit> by marketFavoritesManager::dataUpdatedAsync
 
     override fun getListAsync(currencyCode: String): Single<List<CoinMarket>> {
-        val coins = marketFavoritesManager.getAll().map { favoriteCoin ->
-            Coin(favoriteCoin.code)
-        }
+        val coinCodes = marketFavoritesManager.getAll().map { it.code }
 
-        return xRateManager.getCoinMarketList(coins, currencyCode)
+        return xRateManager.getCoinMarketList(coinCodes, currencyCode)
     }
 
 }
