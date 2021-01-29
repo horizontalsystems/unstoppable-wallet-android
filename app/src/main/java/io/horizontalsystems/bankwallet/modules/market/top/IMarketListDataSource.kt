@@ -5,7 +5,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 interface IMarketListDataSource {
-    val sortingFields: Array<Field>
+    val sortingFields: Array<SortingField>
     val dataUpdatedAsync: Observable<Unit>
 
     fun getListAsync(currencyCode: String): Single<List<CoinMarket>>

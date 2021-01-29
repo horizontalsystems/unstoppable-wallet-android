@@ -45,9 +45,9 @@ class MarketOverviewViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        topGainersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopGainers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
-        topLosersViewItemsLiveData.postValue(sort(service.marketTopItems, Field.TopLosers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
-        topByVolumeViewItemsLiveData.postValue(sort(service.marketTopItems, Field.HighestVolume).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.Volume) })
+        topGainersViewItemsLiveData.postValue(sort(service.marketTopItems, SortingField.TopGainers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
+        topLosersViewItemsLiveData.postValue(sort(service.marketTopItems, SortingField.TopLosers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
+        topByVolumeViewItemsLiveData.postValue(sort(service.marketTopItems, SortingField.HighestVolume).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.Volume) })
     }
 
     private fun convertItemToViewItem(it: MarketTopItem, marketField: MarketField): MarketTopViewItem {
@@ -89,15 +89,15 @@ class MarketOverviewViewModel(
         service.refresh()
     }
 
-    private fun sort(items: List<MarketTopItem>, sortingField: Field) = when (sortingField) {
-        Field.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
-        Field.LowestCap -> items.sortedByNullLast { it.marketCap }
-        Field.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
-        Field.LowestVolume -> items.sortedByNullLast { it.volume }
-        Field.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
-        Field.LowestPrice -> items.sortedByNullLast { it.rate }
-        Field.TopGainers -> items.sortedByDescendingNullLast { it.diff }
-        Field.TopLosers -> items.sortedByNullLast { it.diff }
+    private fun sort(items: List<MarketTopItem>, sortingField: SortingField) = when (sortingField) {
+        SortingField.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
+        SortingField.LowestCap -> items.sortedByNullLast { it.marketCap }
+        SortingField.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
+        SortingField.LowestVolume -> items.sortedByNullLast { it.volume }
+        SortingField.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
+        SortingField.LowestPrice -> items.sortedByNullLast { it.rate }
+        SortingField.TopGainers -> items.sortedByDescendingNullLast { it.diff }
+        SortingField.TopLosers -> items.sortedByNullLast { it.diff }
     }
 
 }

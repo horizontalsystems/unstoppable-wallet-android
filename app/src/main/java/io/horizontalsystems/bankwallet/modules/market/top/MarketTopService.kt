@@ -15,7 +15,7 @@ class MarketTopService(
         private val rateManager: IRateManager
 ) : Clearable {
 
-    val sortingFields: Array<Field> = marketListDataSource.sortingFields
+    val sortingFields: Array<SortingField> = marketListDataSource.sortingFields
 
     sealed class State {
         object Loading : State()

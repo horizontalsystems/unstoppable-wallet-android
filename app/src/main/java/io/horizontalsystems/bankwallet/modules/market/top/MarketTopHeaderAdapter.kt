@@ -12,7 +12,7 @@ import java.lang.IllegalStateException
 
 class MarketTopHeaderAdapter(
         private val listener: Listener,
-        sortingField: Field,
+        sortingField: SortingField,
         marketField: MarketField
 ) : RecyclerView.Adapter<MarketTopHeaderAdapter.ViewHolderHeader>() {
 
@@ -22,7 +22,7 @@ class MarketTopHeaderAdapter(
     var marketField = marketField
         private set
 
-    fun update(sortingField: Field? = null, marketField: MarketField? = null) {
+    fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
         sortingField?.let {
             this.sortingField = it
         }
@@ -68,7 +68,7 @@ class MarketTopHeaderAdapter(
             }
         }
 
-        fun bind(fieldToSort: Field, marketField: MarketField) {
+        fun bind(fieldToSort: SortingField, marketField: MarketField) {
             val sortingFieldText = containerView.context.getString(fieldToSort.titleResId)
             if (sortingField.text != sortingFieldText) {
                 sortingField.text = sortingFieldText
