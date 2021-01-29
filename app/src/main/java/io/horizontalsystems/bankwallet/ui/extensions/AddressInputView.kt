@@ -96,6 +96,7 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
                 addTextChangedListener(textWatcher)
             }
         }
+
         setDeleteButtonVisibility(!text.isNullOrBlank())
     }
 
@@ -107,20 +108,17 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
         error.text = caution?.text
         error.isVisible = caution != null
 
-        // Highlights background with border color
-        // todo: need to implement custom states
         when (caution?.type) {
             Caution.Type.Error -> {
-                inputBackground.isSelected = true
+                inputBackground.hasError = true
                 error.setTextColor(context.getColor(R.color.red_d))
             }
             Caution.Type.Warning -> {
-                inputBackground.isActivated = true
+                inputBackground.hasWarning = true
                 error.setTextColor(context.getColor(R.color.yellow_d))
             }
             else -> {
-                inputBackground.isSelected = false
-                inputBackground.isActivated = false
+                inputBackground.clearStates()
             }
         }
     }
