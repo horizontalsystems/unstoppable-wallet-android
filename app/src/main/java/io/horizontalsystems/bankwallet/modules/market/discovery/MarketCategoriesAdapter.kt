@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.top.MarketCategory
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlin.math.max
 
@@ -42,6 +41,8 @@ class MarketCategoriesAdapter(
     }
 
     fun selectCategory(category: MarketCategory?) {
+        listener.onSelect(category)
+
         val index = marketCategories.indexOf(category)
         tabLayout.apply {
             selectTab(getTabAt(index))
@@ -49,9 +50,7 @@ class MarketCategoriesAdapter(
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
-        marketCategories.getOrNull(tab.position)?.let {
-            listener.onSelect(it)
-        }
+        listener.onSelect(marketCategories.getOrNull(tab.position))
 
         //hide icon
         tab.view.findViewById<ImageView>(android.R.id.icon).apply {
@@ -129,6 +128,7 @@ class MarketCategoriesAdapter(
 
     override fun onTabReselected(tab: TabLayout.Tab) {
         tabLayout.selectTab(null)
+        listener.onSelect(null)
     }
 
     private fun TabLayout.Tab.setDescription(@StringRes descriptionResId: Int): TabLayout.Tab {
@@ -137,7 +137,7 @@ class MarketCategoriesAdapter(
     }
 
     interface Listener {
-        fun onSelect(marketCategory: MarketCategory)
+        fun onSelect(marketCategory: MarketCategory?)
     }
 
 }

@@ -71,7 +71,7 @@ class MarketOverviewViewModel(
         }
 
 
-        return MarketTopViewItem(it.rank, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
+        return MarketTopViewItem(it.score, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
     }
 
     private fun convertErrorMessage(it: Throwable): String {

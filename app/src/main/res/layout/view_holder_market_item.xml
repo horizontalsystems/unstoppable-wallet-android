@@ -62,6 +62,7 @@
         android:paddingEnd="4dp"
         android:paddingBottom="2dp"
         android:textColor="@color/grey"
+        android:includeFontPadding="false"
         app:layout_constraintBottom_toBottomOf="@id/subtitle"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toTopOf="@id/subtitle"

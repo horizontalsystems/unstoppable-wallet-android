@@ -25,7 +25,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
     private lateinit var marketCategoriesAdapter: MarketCategoriesAdapter
 
-    private val marketTopViewModel by viewModels<MarketTopViewModel> { MarketTopModule.Factory() }
+    private val marketDiscoveryViewModel by viewModels<MarketDiscoveryViewModel> { MarketDiscoveryModule.Factory() }
     private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,56 +35,56 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketTopViewModel.sortingField, marketTopViewModel.marketField)
+        marketTopHeaderAdapter = MarketTopHeaderAdapter(this, marketDiscoveryViewModel.sortingField, marketDiscoveryViewModel.marketField)
         marketTopItemsAdapter = MarketTopItemsAdapter(
                 this,
-                marketTopViewModel.marketTopViewItemsLiveData,
-                marketTopViewModel.loadingLiveData,
-                marketTopViewModel.errorLiveData,
+                marketDiscoveryViewModel.marketTopViewItemsLiveData,
+                marketDiscoveryViewModel.loadingLiveData,
+                marketDiscoveryViewModel.errorLiveData,
                 viewLifecycleOwner
         )
-        marketLoadingAdapter = MarketLoadingAdapter(marketTopViewModel.loadingLiveData, marketTopViewModel.errorLiveData, marketTopViewModel::onErrorClick, viewLifecycleOwner)
+        marketLoadingAdapter = MarketLoadingAdapter(marketDiscoveryViewModel.loadingLiveData, marketDiscoveryViewModel.errorLiveData, marketDiscoveryViewModel::onErrorClick, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketTopHeaderAdapter, marketLoadingAdapter, marketTopItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
-            marketTopViewModel.refresh()
+            marketDiscoveryViewModel.refresh()
 
             pullToRefresh.isRefreshing = false
         }
 
-        marketTopViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
+        marketDiscoveryViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
 
         marketViewModel.discoveryListTypeLiveEvent.observe(viewLifecycleOwner) {
             marketTopHeaderAdapter.update(sortingField = it.sortingField, marketField = it.marketField)
-            marketTopViewModel.update(sortingField = it.sortingField, marketField = it.marketField)
+            marketDiscoveryViewModel.update(sortingField = it.sortingField, marketField = it.marketField)
 
             marketCategoriesAdapter.selectCategory(null)
         }
 
-        marketCategoriesAdapter = MarketCategoriesAdapter(requireContext(), tabLayout, marketTopViewModel.marketCategories, this)
+        marketCategoriesAdapter = MarketCategoriesAdapter(requireContext(), tabLayout, marketDiscoveryViewModel.marketCategories, this)
     }
 
     override fun onClickSortingField() {
-        val items = marketTopViewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == marketTopViewModel.sortingField)
+        val items = marketDiscoveryViewModel.sortingFields.map {
+            SelectorItem(getString(it.titleResId), it == marketDiscoveryViewModel.sortingField)
         }
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = marketTopViewModel.sortingFields[position]
+                    val selectedSortingField = marketDiscoveryViewModel.sortingFields[position]
 
                     marketTopHeaderAdapter.update(sortingField = selectedSortingField)
-                    marketTopViewModel.update(sortingField = selectedSortingField)
+                    marketDiscoveryViewModel.update(sortingField = selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
     override fun onSelectMarketField(marketField: MarketField) {
-        marketTopViewModel.update(marketField = marketField)
+        marketDiscoveryViewModel.update(marketField = marketField)
     }
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
@@ -93,7 +93,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketTopHeaderAdapter.Listener,
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }
 
-    override fun onSelect(marketCategory: MarketCategory) {
-
+    override fun onSelect(marketCategory: MarketCategory?) {
+        marketDiscoveryViewModel.onSelectMarketCategory(marketCategory)
     }
 }
