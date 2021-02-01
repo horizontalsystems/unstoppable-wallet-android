@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.entities
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
+import java.util.*
 
 sealed class CoinType : Parcelable {
     @Parcelize
@@ -24,14 +25,14 @@ sealed class CoinType : Parcelable {
     class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType() {
         override fun equals(other: Any?): Boolean {
             if (other is Erc20) {
-                return other.address == address
+                return other.address.equals(address, ignoreCase = true)
             }
 
             return super.equals(other)
         }
 
         override fun hashCode(): Int {
-            return address.hashCode()
+            return address.toLowerCase(Locale.ENGLISH).hashCode()
         }
     }
 
@@ -39,7 +40,7 @@ sealed class CoinType : Parcelable {
     class Binance(val symbol: String) : CoinType() {
         override fun equals(other: Any?): Boolean {
             if (other is Binance) {
-                return other.symbol == symbol
+                return other.symbol.equals(symbol, ignoreCase = true)
             }
 
             return super.equals(other)
