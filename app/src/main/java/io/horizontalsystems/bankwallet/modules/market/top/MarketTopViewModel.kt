@@ -128,7 +128,7 @@ class MarketTopViewModel(
 }
 
 data class MarketTopViewItem(
-        val score: Score,
+        val score: Score?,
         val coinCode: String,
         val coinName: String,
         val rate: String,

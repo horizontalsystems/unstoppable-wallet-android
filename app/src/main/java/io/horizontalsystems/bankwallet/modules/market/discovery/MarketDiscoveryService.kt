@@ -112,14 +112,14 @@ class MarketDiscoveryService(
                 .flatMap { coinCodes ->
                     xRateManager.getCoinMarketList(coinCodes, currency.code)
                             .map { coinMarkets ->
-                                coinMarkets.mapIndexed { index, coinMarket ->
-                                    convertToMarketItem(Score.Rank(index + 1), coinMarket)
+                                coinMarkets.map { coinMarket ->
+                                    convertToMarketItem(null, coinMarket)
                                 }
                             }
                 }
     }
 
-    private fun convertToMarketItem(score: Score, coinMarket: CoinMarket) =
+    private fun convertToMarketItem(score: Score?, coinMarket: CoinMarket) =
             MarketTopItem(
                     score,
                     coinMarket.coin.code,

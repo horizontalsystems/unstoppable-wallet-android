@@ -56,7 +56,7 @@ fun Score.getBackgroundTintColor(context: Context): Int {
 }
 
 data class MarketTopItem(
-        val score: Score,
+        val score: Score?,
         val coinCode: String,
         val coinName: String,
         val volume: BigDecimal,

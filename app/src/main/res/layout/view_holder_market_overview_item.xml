@@ -52,6 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/rank"
         app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_goneMarginLeft="0dp"
         tools:text="BTC" />
 
     <TextView
@@ -61,6 +62,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_4"
         android:backgroundTint="?ColorJeremy"
+        android:includeFontPadding="false"
         android:paddingStart="4dp"
         android:paddingTop="2dp"
         android:paddingEnd="4dp"

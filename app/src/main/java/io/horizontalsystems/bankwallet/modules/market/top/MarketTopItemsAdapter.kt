@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
@@ -92,11 +93,16 @@ class ViewHolderMarketTopItem(override val containerView: View, private val list
             icon.setImageResource(drawableResId)
         }
 
-        if (item.score != prev?.score) {
-            item.score.apply {
-                rank.text = getText()
-                rank.setTextColor(getTextColor(containerView.context))
-                rank.backgroundTintList = ColorStateList.valueOf(getBackgroundTintColor(containerView.context))
+        if (prev == null || item.score != prev.score) {
+            if (item.score == null) {
+                rank.isVisible = false
+            } else {
+                item.score.apply {
+                    rank.text = getText()
+                    rank.setTextColor(getTextColor(containerView.context))
+                    rank.backgroundTintList = ColorStateList.valueOf(getBackgroundTintColor(containerView.context))
+                }
+                rank.isVisible = true
             }
         }
 
