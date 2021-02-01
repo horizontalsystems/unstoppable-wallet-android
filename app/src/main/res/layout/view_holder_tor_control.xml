@@ -25,19 +25,12 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/clickable_background_color_lawrence"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_single"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectionSettingsTitle" />
-
-    <View
-        android:id="@+id/topShade"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/torControlView" />
 
     <ImageView
         android:id="@+id/controlIcon"
@@ -48,7 +41,7 @@
         android:src="@drawable/ic_tor_connection_24"
         app:tint="?ColorJacob"
         app:layout_constraintBottom_toBottomOf="@+id/torControlView"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/torControlView"
         app:layout_constraintTop_toTopOf="@+id/torControlView" />
 
     <ProgressBar
@@ -100,16 +93,7 @@
         android:visibility="visible"
         app:layout_constraintTop_toTopOf="@+id/torControlView"
         app:layout_constraintBottom_toBottomOf="@+id/torControlView"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <View
-        android:id="@+id/bottomShade"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintBottom_toBottomOf="@+id/torControlView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/torControlView" />
 
     <TextView
         android:id="@+id/torConnectionDescription"

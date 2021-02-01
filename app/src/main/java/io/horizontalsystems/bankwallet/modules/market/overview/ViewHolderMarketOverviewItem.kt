@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewItem
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_overview_item.*
@@ -93,9 +94,10 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
 
     private fun getBackground(listPosition: ListPosition): Int {
         return when (listPosition) {
-            ListPosition.First -> R.drawable.overview_item_background_top
-            ListPosition.Middle -> R.drawable.overview_item_background_middle
-            ListPosition.Last -> R.drawable.overview_item_background_bottom
+            ListPosition.First -> R.drawable.rounded_lawrence_background_top
+            ListPosition.Middle -> R.drawable.rounded_lawrence_background_middle
+            ListPosition.Last -> R.drawable.rounded_lawrence_background_bottom
+            ListPosition.Single -> R.drawable.rounded_lawrence_background_single
         }
     }
 
@@ -104,8 +106,4 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
             return ViewHolderMarketOverviewItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_overview_item, parent, false), listener)
         }
     }
-}
-
-enum class ListPosition {
-    First, Middle, Last
 }

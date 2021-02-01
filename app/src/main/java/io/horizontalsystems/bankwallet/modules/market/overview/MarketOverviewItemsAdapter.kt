@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewItem
+import io.horizontalsystems.views.ListPosition
 
 class MarketOverviewItemsAdapter(
         private val listener: ViewHolderMarketOverviewItem.Listener,

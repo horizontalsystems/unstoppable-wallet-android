@@ -58,7 +58,6 @@ class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: Attr
             showTitle(attributes.getString(R.styleable.SettingsViewSwitch_title))
             showSubtitle(attributes.getString(R.styleable.SettingsViewSwitch_subtitle))
             showIcon(attributes.getDrawable(R.styleable.SettingsViewSwitch_icon))
-            showBottomBorder(attributes.getBoolean(R.styleable.SettingsViewSwitch_bottomBorder, false))
         } finally {
             attributes.recycle()
         }
