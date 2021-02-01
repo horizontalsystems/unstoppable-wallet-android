@@ -29,7 +29,6 @@
     <declare-styleable name="SettingItemWithCheckmark">
         <attr name="title" />
         <attr name="subtitle" />
-        <attr name="bottomBorder" />
     </declare-styleable>
     <declare-styleable name="SwapCardView">
         <attr name="title" />

@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <io.horizontalsystems.views.SettingsView
-        android:id="@+id/settingView"
+    <io.horizontalsystems.views.SettingsViewDropdown
+        android:id="@+id/dropdownView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

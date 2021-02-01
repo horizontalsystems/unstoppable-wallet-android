@@ -5,7 +5,6 @@
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="value" format="string" />
-        <attr name="bottomBorder" format="boolean" />
         <attr name="showArrow" format="boolean" />
     </declare-styleable>
     <declare-styleable name="SettingsViewDropdown">
@@ -13,13 +12,11 @@
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="value" />
-        <attr name="bottomBorder" />
     </declare-styleable>
     <declare-styleable name="SettingsViewSwitch">
         <attr name="icon" />
         <attr name="title" />
         <attr name="subtitle" />
-        <attr name="bottomBorder" />
     </declare-styleable>
     <declare-styleable name="ManageAccountView">
         <attr name="title" />

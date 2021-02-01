@@ -14,6 +14,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
+import io.horizontalsystems.views.ListPosition
 import kotlinx.android.synthetic.main.fragment_settings_security.*
 
 class SecuritySettingsFragment : BaseFragment() {
@@ -65,7 +66,10 @@ class SecuritySettingsFragment : BaseFragment() {
 
         viewModel.editPinVisibleLiveData.observe(viewLifecycleOwner, Observer { pinEnabled ->
             changePin.isVisible = pinEnabled
-            enablePin.showBottomBorder(!pinEnabled)
+            enablePin.setListPosition(if (pinEnabled) ListPosition.First else ListPosition.Single)
+            if (pinEnabled) {
+                changePin.setListPosition(ListPosition.Last)
+            }
         })
 
         viewModel.biometricSettingsVisibleLiveData.observe(viewLifecycleOwner, Observer { enabled ->

@@ -3,6 +3,7 @@ package io.horizontalsystems.views
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -11,7 +12,7 @@ import kotlinx.android.synthetic.main.view_settings_item.view.*
 abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val singleLineHeight = 44f
+    private val singleLineHeight = 48f
     private val doubleLineHeight = 60f
 
     fun showSubtitle(text: String?) {
@@ -29,8 +30,13 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
         settingsIcon.setImageDrawable(drawable)
     }
 
-    fun showBottomBorder(visible: Boolean) {
-        bottomBorder.isVisible = visible
+    fun setListPosition(listPosition: ListPosition){
+        findViewById<View>(R.id.frame)?.let {
+            it.setBackgroundResource(listPosition.getBackground())
+        }
+        findViewById<View>(R.id.bottomBorder)?.let {
+            it.isVisible = listPosition == ListPosition.First || listPosition == ListPosition.Middle
+        }
     }
 
     override fun onAttachedToWindow() {
@@ -38,6 +44,22 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
 
         if (!settingsSubtitle.text.isNullOrBlank()) {
             layoutParams.height = LayoutHelper.dp(doubleLineHeight, context)
+        }
+    }
+}
+
+sealed class ListPosition{
+    object First: ListPosition()
+    object Middle: ListPosition()
+    object Last: ListPosition()
+    object Single: ListPosition()
+
+    fun getBackground(): Int {
+        return when (this) {
+            First -> R.drawable.rounded_lawrence_background_top
+            Middle -> R.drawable.rounded_lawrence_background_middle
+            Last -> R.drawable.rounded_lawrence_background_bottom
+            Single -> R.drawable.rounded_lawrence_background_single
         }
     }
 }

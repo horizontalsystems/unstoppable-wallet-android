@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.views.ListPosition
 
 object PrivacySettingsModule {
 
@@ -102,5 +103,6 @@ sealed class PrivacySettingsType {
 data class PrivacySettingsViewItem(
         val coin: Coin,
         val settingType: PrivacySettingsType,
-        var enabled: Boolean = true
+        var enabled: Boolean = true,
+        val listPosition: ListPosition
 )

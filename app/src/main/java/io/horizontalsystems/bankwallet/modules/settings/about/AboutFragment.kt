@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -16,11 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_about.*
@@ -41,19 +40,19 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             findNavController().popBackStack()
         }
 
-        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email) {
+        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email, listPosition = ListPosition.First) {
             sendEmail(viewModel.reportEmail)
         }
-        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status) {
+        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, listPosition = ListPosition.Middle) {
             findNavController().navigate(R.id.aboutAppFragment_to_appStatusFragment, null, navOptions())
         }
-        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20) {
+        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20, listPosition = ListPosition.Middle) {
             findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
         }
-        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20) {
+        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20, listPosition = ListPosition.Middle) {
             viewModel.onRateUsClicked()
         }
-        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, isLast = true) {
+        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, listPosition = ListPosition.Last) {
             viewModel.onTellFriendsTap()
         }
 

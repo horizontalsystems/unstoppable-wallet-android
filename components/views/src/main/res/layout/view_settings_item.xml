@@ -7,21 +7,14 @@
         android:id="@+id/frame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/clickable_background_color_lawrence"
-        android:minHeight="44dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_single"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_height="44dp" />
-
-    <View
-        android:id="@+id/topShade"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="@+id/frame"
-        app:layout_constraintStart_toStartOf="@+id/frame"
-        app:layout_constraintTop_toTopOf="@+id/frame" />
+        tools:layout_height="48dp" />
 
     <!-- Cell Left -->
 
@@ -38,18 +31,18 @@
     <TextView
         android:id="@+id/settingsTitle"
         style="@style/Body"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        app:layout_constrainedWidth="true"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?TextColorBarsToDark"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
         app:layout_constraintBottom_toTopOf="@+id/settingsSubtitle"
         app:layout_constraintStart_toEndOf="@+id/settingsIcon"
         app:layout_constraintTop_toTopOf="@+id/frame"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Label" />
+        tools:text="Label With Long text" />
 
     <TextView
         android:id="@+id/settingsSubtitle"
@@ -105,7 +98,7 @@
         android:background="@color/steel_20"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/frame"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/frame"
+        app:layout_constraintStart_toStartOf="@+id/frame" />
 
 </merge>
