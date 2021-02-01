@@ -1,15 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
-import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -86,16 +84,16 @@ class RestoreSelectCoinsViewModel(
 
         viewStateLiveData.postValue(CoinViewState(
                 filteredFeatureCoins.mapIndexed { index, item ->
-                    viewItem(item, filteredFeatureCoins.size - 1 == index)
+                    viewItem(item, ListPosition.getListPosition(filteredFeatureCoins.size, index))
                 },
                 filteredItems.mapIndexed { index, item ->
-                    viewItem(item, filteredItems.size - 1 == index)
+                    viewItem(item, ListPosition.getListPosition(filteredItems.size, index))
                 }
         ))
     }
 
-    private fun viewItem(item: RestoreSelectCoinsService.Item, last: Boolean): CoinViewItem {
-        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last)
+    private fun viewItem(item: RestoreSelectCoinsService.Item, listPosition: ListPosition): CoinViewItem {
+        return CoinViewItem.ToggleVisible(item.coin, item.enabled, listPosition)
     }
 
     private fun filtered(items: List<RestoreSelectCoinsService.Item>): List<RestoreSelectCoinsService.Item> {

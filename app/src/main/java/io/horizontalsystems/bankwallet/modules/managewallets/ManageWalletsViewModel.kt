@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
-import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
@@ -8,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
+import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -82,18 +82,18 @@ class ManageWalletsViewModel(
 
         viewStateLiveData.postValue(CoinViewState(
                 filteredFeatureCoins.mapIndexed { index, item ->
-                    viewItem(item, filteredFeatureCoins.size - 1 == index)
+                    viewItem(item, ListPosition.getListPosition(filteredFeatureCoins.size, index))
                 },
                 filteredItems.mapIndexed { index, item ->
-                    viewItem(item, filteredItems.size - 1 == index)
+                    viewItem(item, ListPosition.getListPosition(filteredItems.size, index))
                 }
         ))
     }
 
-    private fun viewItem(item: ManageWalletsModule.Item, last: Boolean): CoinViewItem {
+    private fun viewItem(item: ManageWalletsModule.Item, listPosition: ListPosition): CoinViewItem {
         return when (val itemState = item.state) {
-            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, last)
-            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, last)
+            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, listPosition)
+            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, listPosition)
         }
     }
 

@@ -62,4 +62,15 @@ sealed class ListPosition{
             Single -> R.drawable.rounded_lawrence_background_single
         }
     }
+
+    companion object{
+        fun getListPosition(size: Int, position: Int): ListPosition {
+            return when  {
+                size == 1 -> Single
+                position == 0 -> First
+                position == size - 1 -> Last
+                else -> Middle
+            }
+        }
+    }
 }
