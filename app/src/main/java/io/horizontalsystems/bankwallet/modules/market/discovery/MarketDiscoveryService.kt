@@ -39,7 +39,7 @@ class MarketDiscoveryService(
         }
 
     val marketCategories = listOf(
-            MarketCategory.Rated, MarketCategory.Blockchains, MarketCategory.Privacy, MarketCategory.Scaling,
+            /*MarketCategory.Rated, */MarketCategory.Blockchains, MarketCategory.Privacy, MarketCategory.Scaling,
             MarketCategory.Infrastructure, MarketCategory.RiskManagement, MarketCategory.Oracles, MarketCategory.PredictionMarkets,
             MarketCategory.DefiAggregators, MarketCategory.Dexes, MarketCategory.Synthetics, MarketCategory.Metals,
             MarketCategory.Lending, MarketCategory.GamingAndVr, MarketCategory.FundRaising, MarketCategory.InternetOfThings,
