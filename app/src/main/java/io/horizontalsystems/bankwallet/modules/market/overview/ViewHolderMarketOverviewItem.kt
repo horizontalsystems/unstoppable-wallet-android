@@ -46,10 +46,15 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
         }
 
         if (item.score != prev?.score) {
-            item.score.apply {
-                rank.text = getText()
-                rank.setTextColor(getTextColor(containerView.context))
-                rank.backgroundTintList = ColorStateList.valueOf(getBackgroundTintColor(containerView.context))
+            if (item.score == null) {
+                rank.isVisible = false
+            } else {
+                item.score.apply {
+                    rank.text = getText()
+                    rank.setTextColor(getTextColor(containerView.context))
+                    rank.backgroundTintList = ColorStateList.valueOf(getBackgroundTintColor(containerView.context))
+                }
+                rank.isVisible = true
             }
         }
 
