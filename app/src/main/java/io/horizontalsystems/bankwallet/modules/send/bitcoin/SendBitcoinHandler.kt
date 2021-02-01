@@ -145,8 +145,10 @@ class SendBitcoinHandler(
     }
 
     override fun sendSingle(logger: AppLogger): Single<Unit> {
-        val feeRate = feeModule.feeRate ?: throw NoFeeSendTransactionError()
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeRate, hodlerModule?.pluginData(), logger)
+        return when (val feeRate = feeModule.feeRate) {
+            null -> Single.error(NoFeeSendTransactionError())
+            else -> interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeRate, hodlerModule?.pluginData(), logger)
+        }
     }
 
     // SendModule.ISendBitcoinInteractorDelegate
