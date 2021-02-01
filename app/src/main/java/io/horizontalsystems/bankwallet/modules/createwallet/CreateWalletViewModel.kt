@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -88,16 +89,16 @@ class CreateWalletViewModel(
 
         viewStateLiveData.postValue(CoinViewState(
                 filteredFeatureCoins.mapIndexed { index, item ->
-                    viewItem(item, filteredFeatureCoins.size - 1 == index)
+                    viewItem(item, ListPosition.getListPosition(filteredFeatureCoins.size, index))
                 },
                 filteredItems.mapIndexed { index, item ->
-                    viewItem(item, filteredItems.size - 1 == index)
+                    viewItem(item, ListPosition.getListPosition(filteredItems.size, index))
                 }
         ))
     }
 
-    private fun viewItem(item: CreateWalletService.Item, last: Boolean): CoinViewItem {
-        return CoinViewItem.ToggleVisible(item.coin, item.enabled, last)
+    private fun viewItem(item: CreateWalletService.Item, listPosition: ListPosition): CoinViewItem {
+        return CoinViewItem.ToggleVisible(item.coin, item.enabled, listPosition)
     }
 
     private fun filtered(items: List<CreateWalletService.Item>): List<CreateWalletService.Item> {

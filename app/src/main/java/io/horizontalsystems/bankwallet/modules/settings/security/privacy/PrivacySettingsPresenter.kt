@@ -28,17 +28,9 @@ class PrivacySettingsPresenter(
                         coin,
                         RestoreModeSettingType(initialSyncSetting.syncMode),
                         changeable,
-                        listPosition = getListPosition(interactor.syncSettings().size, index)
+                        listPosition = ListPosition.getListPosition(interactor.syncSettings().size, index)
                 )
             }
-
-    private fun getListPosition(size: Int, position: Int): ListPosition {
-       return when{
-            position == 0 -> ListPosition.First
-            position == size - 1 -> ListPosition.Last
-            else -> ListPosition.Middle
-        }
-    }
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
             PrivacySettingsViewItem(interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = ethereumCommunicationModeCanBeChanged(), listPosition = ListPosition.First),
